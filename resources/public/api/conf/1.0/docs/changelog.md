@@ -1,1 +1,1 @@
-You can find the changelog in the [mtd-api](https://github.com/hmrc/mtd-api/wiki/Changelog) GitHub wiki.
+You can find the changelog in the [individuals-reliefs-api](https://github.com/hmrc/individuals-reliefs-api/wiki/Changelog) GitHub wiki.
