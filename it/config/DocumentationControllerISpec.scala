@@ -38,7 +38,7 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
     |      }
     |   ],
     |   "api":{
-    |      "name":"Individual Relief (MTD)",
+    |      "name":"Individuals Reliefs (MTD)",
     |      "description":"An API for providing individual relief data",
     |      "context":"individuals/reliefs",
     |      "categories":[
