@@ -21,7 +21,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
 
-val appName = "individuals-reliefs-api"
+val appName = "individuals-relief-api"
 
 lazy val ItTest = config("it") extend Test
 
