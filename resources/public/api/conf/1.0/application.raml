@@ -29,7 +29,7 @@ uses:
   errors: errors.raml
   headers: headers.raml
 
-'/individuals/reliefs':
+'/individuals/reliefs/investment':
   /{nino}:
     uriParameters:
       nino:
@@ -54,3 +54,4 @@ uses:
           example: "2017-18"
       /{taxYear}:
         delete: !include reliefInvestments_delete.raml
+        put: !include amend_relief_investments.raml

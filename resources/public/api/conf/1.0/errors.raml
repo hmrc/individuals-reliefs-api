@@ -113,3 +113,14 @@ traits:
                 description: A self-employment ID can only be supplied for a self-employment business type
                 value:
                   code: RULE_SELF_EMPLOYMENT_ID
+  formatValue:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatValue:
+                description: One or more values have been added with the incorrect format
+                value:
+                  code: FORMAT_VALUE
