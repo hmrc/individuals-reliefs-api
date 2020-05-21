@@ -12,6 +12,7 @@
             <td><p>Simulate success response with self-employment loss.</p></td>
         </tr>
     </tbody>
+<<<<<<< 10e4ee5b095513fe2b2b7845aff7006bcbabf907
         <tbody>
             <tr>
                 <td><p>NOT_FOUND</p></td>
@@ -19,3 +20,6 @@
             </tr>            
         </tbody>
 </table>
+=======
+</table>
+>>>>>>> [MTDSA-5525] - Amend Relief Investments RAML
