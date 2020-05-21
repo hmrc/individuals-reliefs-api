@@ -148,19 +148,19 @@ class BodgeValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           ValueFormatErrorGenerator.generate(Seq(
-            "vctSubscription[0].amountInvested",
-            "vctSubscription[0].reliefClaimed",
-            "vctSubscription[1].amountInvested",
-            "vctSubscription[1].reliefClaimed",
-            "eisSubscription[0].amountInvested",
-            "eisSubscription[0].reliefClaimed",
-            "communityInvestment[0].amountInvested",
-            "communityInvestment[0].reliefClaimed",
-            "seedEnterpriseInvestment[0].amountInvested",
-            "seedEnterpriseInvestment[0].reliefClaimed",
-            "socialEnterpriseInvestment[0].amountInvested",
-            "socialEnterpriseInvestment[0].reliefClaimed"
-          ))
+            "vctSubscription/[0]/amountInvested",
+            "vctSubscription/[0]/reliefClaimed",
+            "vctSubscription/[1]/amountInvested",
+            "vctSubscription/[1]/reliefClaimed",
+            "eisSubscription/[0]/amountInvested",
+            "eisSubscription/[0]/reliefClaimed",
+            "communityInvestment/[0]/amountInvested",
+            "communityInvestment/[0]/reliefClaimed",
+            "seedEnterpriseInvestment/[0]/amountInvested",
+            "seedEnterpriseInvestment/[0]/reliefClaimed",
+            "socialEnterpriseInvestment/[0]/amountInvested",
+            "socialEnterpriseInvestment/[0]/reliefClaimed"
+          ).sorted)
         )
       }
     }
@@ -226,13 +226,13 @@ class BodgeValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           ValueFormatErrorGenerator.generate(Seq(
-            "vctSubscription[0].reliefClaimed",
-            "vctSubscription[1].amountInvested",
-            "eisSubscription[0].amountInvested",
-            "communityInvestment[0].reliefClaimed",
-            "seedEnterpriseInvestment[0].amountInvested",
-            "socialEnterpriseInvestment[0].reliefClaimed"
-          ))
+            "vctSubscription/[0]/reliefClaimed",
+            "vctSubscription/[1]/amountInvested",
+            "eisSubscription/[0]/amountInvested",
+            "communityInvestment/[0]/reliefClaimed",
+            "seedEnterpriseInvestment/[0]/amountInvested",
+            "socialEnterpriseInvestment/[0]/reliefClaimed"
+          ).sorted)
         )
       }
     }
