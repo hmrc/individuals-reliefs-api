@@ -160,7 +160,7 @@ class BodgeValidatorSpec extends UnitSpec {
             "seedEnterpriseInvestment[0].reliefClaimed",
             "socialEnterpriseInvestment[0].amountInvested",
             "socialEnterpriseInvestment[0].reliefClaimed"
-          ))
+          ).sorted)
         )
       }
     }
@@ -232,7 +232,7 @@ class BodgeValidatorSpec extends UnitSpec {
             "communityInvestment[0].reliefClaimed",
             "seedEnterpriseInvestment[0].amountInvested",
             "socialEnterpriseInvestment[0].reliefClaimed"
-          ))
+          ).sorted)
         )
       }
     }

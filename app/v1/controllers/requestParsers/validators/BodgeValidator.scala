@@ -36,51 +36,26 @@ class BodgeValidator extends Validator[AmendReliefInvestmentsRawData] {
   private def bodyFieldValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendReliefInvestmentsBody]
 
-    // for every object in vctSubscription, add index and validate relevant fields
-    // need index to show which object in the array contains the borked field(s)
-    // SomeValidation.validate isn't accurate for the story, it just returns the path you put in if the input value <= 0
-    val vctSubscriptionValueErrors: Seq[String] = body.vctSubscription.zipWithIndex.flatMap {
-      case (item, i) =>
-        item.amountInvested.map(SomeValidation.validate(_, s"vctSubscription[$i].amountInvested")).getOrElse(Nil) ++
-        item.reliefClaimed.map(SomeValidation.validate(_, s"vctSubscription[$i].reliefClaimed")).getOrElse(Nil)
+    def toFieldNameMap[T <: Product](r: T): Map[String, Any] = {
+      r.getClass.getDeclaredFields.map(_.getName).zip(r.productIterator.to).toMap
     }
 
-    // same with eisSubscription
-    val eisSubscriptionValueErrors: Seq[String] = body.eisSubscription.zipWithIndex.flatMap {
-      case (item, i) =>
-        item.amountInvested.map(SomeValidation.validate(_, s"eisSubscription[$i].amountInvested")).getOrElse(Nil) ++
-        item.reliefClaimed.map(SomeValidation.validate(_, s"eisSubscription[$i].reliefClaimed")).getOrElse(Nil)
-    }
+    def generateFailedPaths[T <: Product](r: T): Seq[String] = {
+      val map: Map[String, Any] = toFieldNameMap(r)
 
-    // same with communityInvestment
-    val communityInvestmentValueErrors: Seq[String] = body.communityInvestment.zipWithIndex.flatMap {
-      case (item, i) =>
-        item.amountInvested.map(SomeValidation.validate(_, s"communityInvestment[$i].amountInvested")).getOrElse(Nil) ++
-        item.reliefClaimed.map(SomeValidation.validate(_, s"communityInvestment[$i].reliefClaimed")).getOrElse(Nil)
-    }
-
-    // same with seedEnterpriseInvestment
-    val seedEnterpriseInvestmentValueErrors: Seq[String] = body.seedEnterpriseInvestment.zipWithIndex.flatMap {
-      case (item, i) =>
-        item.amountInvested.map(SomeValidation.validate(_, s"seedEnterpriseInvestment[$i].amountInvested")).getOrElse(Nil) ++
-        item.reliefClaimed.map(SomeValidation.validate(_, s"seedEnterpriseInvestment[$i].reliefClaimed")).getOrElse(Nil)
-    }
-
-    // same with socialEnterpriseInvestment
-    val socialEnterpriseInvestmentValueErrors: Seq[String] = body.socialEnterpriseInvestment.zipWithIndex.flatMap {
-      case (item, i) =>
-        item.amountInvested.map(SomeValidation.validate(_, s"socialEnterpriseInvestment[$i].amountInvested")).getOrElse(Nil) ++
-        item.reliefClaimed.map(SomeValidation.validate(_, s"socialEnterpriseInvestment[$i].reliefClaimed")).getOrElse(Nil)
-    }
+      map.collect {
+        case (objectName, list: List[T]) =>
+          list.zipWithIndex.flatMap {
+            case (innerObject, i) =>
+              toFieldNameMap(innerObject).collect {
+                case (fieldName, Some(value: BigDecimal)) => SomeValidation.validate(value, s"$objectName[$i].$fieldName")
+              }
+          }
+      }
+    }.flatten.flatten.toSeq.sorted
 
     val formatValueErrors = {
-      // combine all the validations above together
-      (vctSubscriptionValueErrors
-        ++ eisSubscriptionValueErrors
-        ++ communityInvestmentValueErrors
-        ++ seedEnterpriseInvestmentValueErrors
-        ++ socialEnterpriseInvestmentValueErrors
-        ) match {
+      generateFailedPaths(body) match {
         case Nil =>
           // if the combined list is empty, return an empty list
           Nil
