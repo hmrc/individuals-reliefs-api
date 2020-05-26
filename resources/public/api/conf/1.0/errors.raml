@@ -124,3 +124,36 @@ traits:
                 description: One or more values have been added with the incorrect format
                 value:
                   code: FORMAT_VALUE
+  formatName:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatName:
+                description: The provided name is not valid
+                value:
+                  code: FORMAT_NAME
+  formatUniqueInvestmentReference:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatUniqueInvestmentReference:
+                description: The format of unique investment reference is invalid
+                value:
+                  code: FORMAT_UNIQUE_INVESTMENT_REFERENCE
+  formatDateOfInvestment:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatDateOfInvestment:
+                description: The format of the investment date is invalid
+                value:
+                  code: FORMAT_DATE_OF_INVESTMENT
