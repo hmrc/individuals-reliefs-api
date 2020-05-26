@@ -81,7 +81,7 @@ class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
     val request = AmendReliefInvestmentsRequest(nino, taxYear, body)
 
     "put a body and return 204 no body" in new Test {
-      val outcome = Right(ResponseWrapper(correlationId, Unit))
+      val outcome = Right(ResponseWrapper(correlationId, ()))
 
       MockedHttpClient
         .put(
