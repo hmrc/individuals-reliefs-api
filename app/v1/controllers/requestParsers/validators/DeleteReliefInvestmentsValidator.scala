@@ -18,16 +18,21 @@ package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
 import v1.models.errors.MtdError
+import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRawData
 
-class DeleteReliefInvestmentsValidator extends Validator[???] {
+class DeleteReliefInvestmentsValidator extends Validator[DeleteReliefInvestmentsRawData] {
 
   private val validationSet = List(parameterFormatValidation)
 
-  private def parameterFormatValidation: ??? => List[List[MtdError]] = data => {
+  private def parameterFormatValidation: DeleteReliefInvestmentsRawData => List[List[MtdError]] = data => {
     List(
-      NinoValidation.validate(nino = ???),
-      TaxYearValidation.validate(taxYear = ???)
+      NinoValidation.validate(data.nino),
+      TaxYearValidation.validate(data.taxYear)
     )
+  }
+
+  override def validate(data: DeleteReliefInvestmentsRawData): List[MtdError] = {
+    run(validationSet, data).distinct
   }
 
 }
