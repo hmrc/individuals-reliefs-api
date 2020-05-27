@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers
+package v1.mocks.validators
 
-import javax.inject.Inject
-import uk.gov.hmrc.domain.Nino
+import org.scalamock.handlers.CallHandler1
+import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.validators.AmendReliefInvestmentValidator
-import v1.models.requestData.DesTaxYear
-import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest}
+import v1.models.errors.MtdError
+import v1.models.requestData.amendReliefInvestments.AmendReliefInvestmentsRawData
 
-class AmendReliefInvestmentDataParser @Inject()(val validator: AmendReliefInvestmentValidator)
-  extends RequestParser[AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest] {
+class MockAmendReliefInvestmentValidator extends MockFactory {
 
-  override protected def requestFor(data: AmendReliefInvestmentsRawData): AmendReliefInvestmentsRequest =
-    AmendReliefInvestmentsRequest(Nino(data.nino), DesTaxYear.toString, data.body.as[AmendReliefInvestmentsBody])
+  val mockValidator: AmendReliefInvestmentValidator = mock[AmendReliefInvestmentValidator]
 
+  object MockAmendReliefInvestmentValidator {
+
+    def validate(data: AmendReliefInvestmentsRawData): CallHandler1[AmendReliefInvestmentsRawData, List[MtdError]] = {
+      (mockValidator
+        .validate(_: AmendReliefInvestmentsRawData))
+        .expects(data)
+    }
+  }
 }
