@@ -28,7 +28,6 @@ class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
   val taxYear = "2017-18"
   val nino = Nino("AA123456A")
-  val calcId = "041f7e4d-87b9-4d4a-a296-3cfbdf92f7e2"
   val body = AmendReliefInvestmentsBody(
     Seq(VctSubscriptionsItem(
       Some("VCTREF"),
