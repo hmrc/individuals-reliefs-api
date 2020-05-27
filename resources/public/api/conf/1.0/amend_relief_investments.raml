@@ -5,6 +5,7 @@ is:
   - errors.formatNino
   - errors.formatTaxYear
   - errors.ruleTaxYearNotSupported
+  - errors.ruleTaxYearRangeInvalid
   - errors.formatValue
   - errors.incorrectOrEmptyBody
   - errors.clientOrAgentNotAuthorised
@@ -12,7 +13,7 @@ is:
   - errors.formatUniqueInvestmentReference
   - errors.formatName
   - errors.notFound
-displayName: Amend relief investments
+displayName: Amend Relief Investments [test only]
 description: This endpoint allows a developer to amend relief investments from; VCT subscriptions, EIS subscriptions, Community Investments, Seed Enterprise Investments and Social Enterprise Investments. A National Insurance number and tax year must be provided.
 (annotations.sandboxData): !include scenarios/amend_relief_investments.md
 (annotations.scope): "write:self-assessment"
