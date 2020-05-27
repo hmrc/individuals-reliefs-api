@@ -18,9 +18,11 @@ package v1.controllers
 
 import cats.data.EitherT
 import javax.inject.{Inject, Singleton}
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.DeleteReliefInvestmentsRequestParser
+import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRawData
 import v1.services.{EnrolmentsAuthService, MtdIdLookupService}
 
@@ -59,11 +61,9 @@ class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAut
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     (errorWrapper.error: @unchecked) match {
-      case NinoFormatError | DeductionIdFormatError | BadRequestError => BadRequest(Json.toJson(errorWrapper))
-      case CoronaVirusDetectedError | DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case NinoFormatError | BadRequestError | TaxYearFormatError => BadRequest(Json.toJson(errorWrapper))
+      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }
-} {
-
 }
