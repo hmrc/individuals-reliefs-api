@@ -16,44 +16,62 @@
 
 package v1.services
 
-import mocks.MockAppConfig
+import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
-import v1.connectors.{ConnectorSpec, DeleteReliefInvestmentsConnector}
-import v1.mocks.MockHttpClient
+import uk.gov.hmrc.http.HeaderCarrier
+import v1.controllers.EndpointLogContext
+import v1.mocks.connectors.MockDeleteReliefInvestmentsConnector
+import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRequest
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteReliefInvestmentsServiceSpec extends ConnectorSpec {
+class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
 
-  val nino = Nino("AA123456A")
-  val taxYear = "2019-20"
+  val validNino = Nino("AA123456A")
+  val validTaxYear = "2019-20"
 
+  val requestData = DeleteReliefInvestmentsRequest(validNino, validTaxYear)
 
-  class Test extends MockHttpClient with MockAppConfig {
-    val connector: DeleteReliefInvestmentsConnector = new DeleteReliefInvestmentsConnector(http = mockHttpClient, appConfig = mockAppConfig)
-    val desRequestHeaders: Seq[(String, String)] = Seq("Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-    MockedAppConfig.desBaseUrl returns baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnvironment returns "des-environment"
+  trait Test extends MockDeleteReliefInvestmentsConnector {
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    val service = new DeleteReliefInvestmentsService(
+      connector = mockDeleteReliefInvestmentsConnector
+    )
   }
 
-  "delete" should {
-    val request = DeleteReliefInvestmentsRequest(nino, taxYear)
+  "service" when {
+    "a service call is successful" should {
+      "return a mapped result" in new Test {
+        MockDeleteReliefInvestmentsConnector.deleteReliefInvestments(requestData)
+          .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
 
-    "return a result" when {
-      "the downstream call is successful" in new Test {
-        val outcome = Right(ResponseWrapper(correlationId, ()))
-
-        MockedHttpClient.
-          delete(
-            url = s"$baseUrl/reliefs/investment/${request.nino}/${request.taxYear}",
-            requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
-          ).returns(Future.successful(outcome))
-
-        await(connector.deleteReliefInvestments(request)) shouldBe outcome
+        await(service.delete(requestData)) shouldBe Right(ResponseWrapper("resultId", ()))
       }
     }
+    "a service call is unsuccessful" should {
+      def serviceError(desErrorCode: String, error: MtdError): Unit =
+        s"return ${error.code} error when $desErrorCode error is returned from the connector" in new Test {
+
+          MockDeleteReliefInvestmentsConnector.deleteReliefInvestments(requestData)
+            .returns(Future.successful(Left(ResponseWrapper("resultId", DesErrors.single(DesErrorCode(desErrorCode))))))
+
+          await(service.delete(requestData)) shouldBe Left(ErrorWrapper(Some("resultId"), error))
+        }
+
+      val input = Seq(
+        ("NOT_FOUND", NotFoundError),
+        ("SERVER_ERROR", DownstreamError),
+        ("SERVICE_UNAVAILABLE", DownstreamError),
+        ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
+      )
+
+      input.foreach(args => (serviceError _).tupled(args))
+    }
   }
+
 }
