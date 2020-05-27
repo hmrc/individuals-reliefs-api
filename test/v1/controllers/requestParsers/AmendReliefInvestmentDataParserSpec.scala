@@ -20,16 +20,12 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockAmendReliefInvestmentValidator
-import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest}
+import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.requestData.amendReliefInvestments._
 
 class AmendReliefInvestmentDataParserSpec extends UnitSpec {
   private val nino = "AA123456A"
   private val taxYear = "2018-19"
-  private val requestData =
-    AmendReliefInvestmentsBody(Seq("VCTREF", "VCT Fund X", "2018-04-16", 23312.00, 1334.00), Seq("XTAL", "EIS Fund X", true, "2020-12-12", 23312.00, 43432.00),
-                               Seq("CIREF", "CI X", "2020-12-12", 6442.00, 2344.00),
-                               Seq("123412/1A", "Company Inc", "2020-12-12", 123123.22, 3432.00),
-                               Seq("123412/1A", "SE Inc", "2020-12-12", 123123.22, 3432.00))
   private val requestBodyJson = Json.parse(
     """
       |{
@@ -98,12 +94,30 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
         MockAmendReliefInvestmentValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(AmendReliefInvestmentsRequest(Nino(nino),taxYear,AmendReliefInvestmentsBody(Seq("VCTREF", "VCT Fund X", "2018-04-16", 23312.00, 1334.00), Seq("XTAL", "EIS Fund X", true, "2020-12-12", 23312.00, 43432.00),
-            Seq("CIREF", "CI X", "2020-12-12", 6442.00, 2344.00),
-            Seq("123412/1A", "Company Inc", "2020-12-12", 123123.22, 3432.00),
-            Seq("123412/1A", "SE Inc", "2020-12-12", 123123.22, 3432.00))))
+          Right(AmendReliefInvestmentsRequest(Nino(nino),taxYear,AmendReliefInvestmentsBody(Seq(VctSubscriptionsItem(Some("VCTREF"), Some("VCT Fund X"), Some("2018-04-16"), Some(23312.00), Some(1334.00))),
+            Seq(EisSubscriptionsItem(Some("XTAL"), Some("EIS Fund X"), Some(true), Some("2020-12-12"), Some(23312.00), Some(43432.00))),
+            Seq(CommunityInvestmentItem(Some("CIREF"), Some("CI X"), Some("2020-12-12"), Some(6442.00), Some(2344.00))),
+            Seq(SeedEnterpriseInvestmentItem(Some("123412/1A"), Some("Company Inc"), Some("2020-12-12"), Some(123123.22), Some(3432.00))),
+            Seq(SocialEnterpriseInvestmentItem(Some("123412/1A"), Some("SE Inc"), Some("2020-12-12"), Some(123123.22), Some(3432.00))))))
+      }
+    }
+    "return an ErrorWrapper" when {
+
+      "a single validation error occurs" in new Test {
+        MockAmendReliefInvestmentValidator.validate(inputData)
+          .returns(List(NinoFormatError))
+
+        parser.parseRequest(inputData) shouldBe
+          Left(ErrorWrapper(None, NinoFormatError, None))
+      }
+
+      "multiple validation errors occur" in new Test {
+        MockAmendReliefInvestmentValidator.validate(inputData)
+          .returns(List(NinoFormatError, TaxYearFormatError))
+
+        parser.parseRequest(inputData) shouldBe
+          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
     }
   }
-
 }

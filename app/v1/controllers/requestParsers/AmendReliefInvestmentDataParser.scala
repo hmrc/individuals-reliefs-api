@@ -26,6 +26,6 @@ class AmendReliefInvestmentDataParser @Inject()(val validator: AmendReliefInvest
   extends RequestParser[AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest] {
 
   override protected def requestFor(data: AmendReliefInvestmentsRawData): AmendReliefInvestmentsRequest =
-    AmendReliefInvestmentsRequest(Nino(data.nino), DesTaxYear.toString, data.body.as[AmendReliefInvestmentsBody])
+    AmendReliefInvestmentsRequest(Nino(data.nino), data.taxYear, data.body.as[AmendReliefInvestmentsBody])
 
 }
