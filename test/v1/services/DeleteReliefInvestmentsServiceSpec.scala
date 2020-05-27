@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.services
 
 import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
+import v1.connectors.{ConnectorSpec, DeleteReliefInvestmentsConnector}
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRequest
 
 import scala.concurrent.Future
 
-class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
+class DeleteReliefInvestmentsServiceSpec extends ConnectorSpec {
 
   val nino = Nino("AA123456A")
   val taxYear = "2019-20"
