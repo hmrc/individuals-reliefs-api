@@ -29,12 +29,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MockDeleteService extends MockFactory {
 
-  val mockDeleteService: DeleteReliefInvestmentsService = mock[DeleteReliefInvestmentsService]
+  val mockDeleteReliefInvestmentsService: DeleteReliefInvestmentsService = mock[DeleteReliefInvestmentsService]
 
   object MockDeleteService {
 
     def delete(requestData: DeleteReliefInvestmentsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
-      (mockDeleteService
+      (mockDeleteReliefInvestmentsService
         .delete(_: DeleteReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
         .expects(requestData, *, *, *)
     }
