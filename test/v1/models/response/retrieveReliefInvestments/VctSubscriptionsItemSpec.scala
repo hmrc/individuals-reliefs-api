@@ -44,7 +44,7 @@ class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        vctSubscriptionsItem shouldBe json.as[VctSubscriptionsItem]
+        json.as[VctSubscriptionsItem] shouldBe vctSubscriptionsItem
       }
     }
   }

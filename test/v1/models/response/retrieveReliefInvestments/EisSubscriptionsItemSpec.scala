@@ -46,7 +46,7 @@ class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        eisSubscriptionsItem shouldBe json.as[EisSubscriptionsItem]
+        json.as[EisSubscriptionsItem] shouldBe eisSubscriptionsItem
       }
     }
   }

@@ -44,7 +44,7 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        socialEnterpriseInvestmentItem shouldBe json.as[SocialEnterpriseInvestmentItem]
+        json.as[SocialEnterpriseInvestmentItem] shouldBe socialEnterpriseInvestmentItem
       }
     }
   }

@@ -44,7 +44,7 @@ class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        seedEnterpriseInvestmentItem shouldBe json.as[SeedEnterpriseInvestmentItem]
+        json.as[SeedEnterpriseInvestmentItem] shouldBe seedEnterpriseInvestmentItem
       }
     }
   }

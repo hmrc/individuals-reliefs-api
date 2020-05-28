@@ -116,7 +116,7 @@ class RetrieveReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidator
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        retrieveReliefInvestmentsBody shouldBe json.as[RetrieveReliefInvestmentsBody]
+        json.as[RetrieveReliefInvestmentsBody] shouldBe retrieveReliefInvestmentsBody
       }
     }
   }
