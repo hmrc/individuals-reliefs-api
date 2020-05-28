@@ -19,7 +19,6 @@ package v1.services
 import cats.data.EitherT
 import cats.implicits._
 import javax.inject.{Inject, Singleton}
-import services.AmendReliefInvestmentsServiceOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.AmendReliefInvestmentsConnector
