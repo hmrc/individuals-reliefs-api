@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package v1
+package v1.models.response.retrieveReliefInvestments
 
-import v1.models.errors.ErrorWrapper
-import v1.models.outcomes.ResponseWrapper
+import play.api.libs.json.{Json, OFormat}
 
-package object services {
+case class CommunityInvestmentItem(uniqueInvestmentRef: Option[String],
+                                   name: Option[String],
+                                   dateOfInvestment: Option[String],
+                                   amountInvested: Option[BigDecimal],
+                                   reliefClaimed: Option[BigDecimal])
 
-  private type ServiceOutcome[A] = Either[ErrorWrapper, ResponseWrapper[A]]
-
-  type AmendReliefInvestmentsServiceOutcome = ServiceOutcome[Unit]
-
-  type DeleteReliefInvestmentsServiceOutcome = ServiceOutcome[Unit]
-
+object CommunityInvestmentItem {
+  implicit val format: OFormat[CommunityInvestmentItem] = Json.format[CommunityInvestmentItem]
 }

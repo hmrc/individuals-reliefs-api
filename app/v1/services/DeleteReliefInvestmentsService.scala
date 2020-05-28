@@ -21,34 +21,30 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.connectors.AmendReliefInvestmentsConnector
+import v1.connectors.DeleteReliefInvestmentsConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors._
-import v1.models.requestData.amendReliefInvestments.AmendReliefInvestmentsRequest
+import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRequest
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendReliefInvestmentsService @Inject()(amendReliefInvestmentsConnector: AmendReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
+class DeleteReliefInvestmentsService @Inject()(connector: DeleteReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
 
-  def doServiceThing(request: AmendReliefInvestmentsRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[AmendReliefInvestmentsServiceOutcome] = {
-
+  def delete(request: DeleteReliefInvestmentsRequest)(
+            implicit hc: HeaderCarrier,
+            ec: ExecutionContext,
+            logContext: EndpointLogContext): Future[DeleteReliefInvestmentsServiceOutcome] = {
     val result = for {
-      desResponseWrapper <- EitherT(amendReliefInvestmentsConnector.doConnectorThing(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.deleteReliefInvestments(request)).leftMap(mapDesErrors(desErrorMap))
     } yield desResponseWrapper
-
     result.value
   }
 
-  private def desErrorMap =
+  private def desErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_STATUS" -> NinoFormatError,
-      "CLIENT_OR_AGENT_NOT_AUTHORISED" -> UnauthorisedError,
       "FORMAT_TAX_YEAR" -> TaxYearFormatError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,

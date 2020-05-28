@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-package v1
+package v1.models.requestData.retrieveReliefInvestments
 
-import v1.models.errors.ErrorWrapper
-import v1.models.outcomes.ResponseWrapper
+import v1.models.requestData.RawData
 
-package object services {
-
-  private type ServiceOutcome[A] = Either[ErrorWrapper, ResponseWrapper[A]]
-
-  type AmendReliefInvestmentsServiceOutcome = ServiceOutcome[Unit]
-
-  type DeleteReliefInvestmentsServiceOutcome = ServiceOutcome[Unit]
+case class RetrieveReliefInvestmentsRawData(nino: String, taxYear: String) extends RawData {
 
 }
