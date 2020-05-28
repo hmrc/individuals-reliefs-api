@@ -16,12 +16,19 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-object SomeValidation {
-  def validate(field: BigDecimal, path: String): List[String] = {
-    if(field > 0) {
-      Nil
-    } else {
-      List(path)
-    }
+import v1.models.errors.MtdError
+import java.time.LocalDate
+
+import scala.util.{Success, Failure, Try}
+
+object DateValidation {
+
+  def validate(date: String, error: MtdError): List[MtdError] = Try {
+    if(date.nonEmpty) LocalDate.parse(date, dateFormat)
+  } match {
+    case Success(_) => NoValidationErrors
+    case Failure(_) => List(error)
   }
+
+
 }

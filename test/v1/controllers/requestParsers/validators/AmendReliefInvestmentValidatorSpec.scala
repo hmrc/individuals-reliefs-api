@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.ValueFormatErrorGenerator
+import v1.models.errors.{FormatDateOfInvestmentError, ValueFormatErrorGenerator}
 import v1.models.requestData.amendReliefInvestments.AmendReliefInvestmentsRawData
 
 class AmendReliefInvestmentValidatorSpec extends UnitSpec {
@@ -234,6 +234,118 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             "socialEnterpriseInvestment/[0]/reliefClaimed"
           ).sorted)
         )
+      }
+    }
+    "return a format date of investment error with multiple incorrect date of investments" when {
+      "the provided date of investment's format is incorrect" in {
+        val badJson =Json.parse(
+          """
+            |{
+            |  "vctSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "VCTREF",
+            |      "name": "VCT Fund X",
+            |      "dateOfInvestment": "04-16-2018",
+            |      "amountInvested": 23312.00,
+            |      "reliefClaimed": 1334.00
+            |      }
+            |  ],
+            |  "eisSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "XTAL",
+            |      "name": "EIS Fund X",
+            |      "knowledgeIntensive": true,
+            |      "dateOfInvestment": "04-16-2018",
+            |      "amountInvested": 23312.00,
+            |      "reliefClaimed": 43432.00
+            |    }
+            |  ],
+            |  "communityInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "CIREF",
+            |      "name": "CI X",
+            |      "dateOfInvestment": "04-16-2018",
+            |      "amountInvested": 6442.00,
+            |      "reliefClaimed": 2344.00
+            |    }
+            |  ],
+            |  "seedEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "companyName": "Company Inc",
+            |      "dateOfInvestment": "04-16-2018",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ],
+            |  "socialEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "socialEnterpriseName": "SE Inc",
+            |      "dateOfInvestment": "04-16-2018",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ]
+            |}
+        """.stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe FormatDateOfInvestmentError
+      }
+    }
+    "return a format date of investment error with a single incorrect date of investments" when {
+      "the provided date of investment's format is incorrect" in {
+        val badJson = Json.parse(
+          """
+            |{
+            |  "vctSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "VCTREF",
+            |      "name": "VCT Fund X",
+            |      "dateOfInvestment": "04-16-2018",
+            |      "amountInvested": 23312.00,
+            |      "reliefClaimed": 1334.00
+            |      }
+            |  ],
+            |  "eisSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "XTAL",
+            |      "name": "EIS Fund X",
+            |      "knowledgeIntensive": true,
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 23312.00,
+            |      "reliefClaimed": 43432.00
+            |    }
+            |  ],
+            |  "communityInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "CIREF",
+            |      "name": "CI X",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 6442.00,
+            |      "reliefClaimed": 2344.00
+            |    }
+            |  ],
+            |  "seedEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "companyName": "Company Inc",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ],
+            |  "socialEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "socialEnterpriseName": "SE Inc",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ]
+            |}
+        """.stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe FormatDateOfInvestmentError
       }
     }
   }
