@@ -17,6 +17,7 @@
 package v1.controllers
 
 import cats.data.EitherT
+import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -24,7 +25,7 @@ import utils.Logging
 import v1.controllers.requestParsers.DeleteReliefInvestmentsRequestParser
 import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRawData
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{DeleteReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAuthService,
                                                   val lookupService: MtdIdLookupService,
                                                   requestDataParser: DeleteReliefInvestmentsRequestParser,
-                                                  service: ???,
+                                                  service: DeleteReliefInvestmentsService,
                                                   cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
