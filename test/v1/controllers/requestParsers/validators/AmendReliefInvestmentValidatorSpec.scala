@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{FormatDateOfInvestmentError, ValueFormatErrorGenerator}
+import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, ValueFormatErrorGenerator}
 import v1.models.requestData.amendReliefInvestments.AmendReliefInvestmentsRawData
 
 class AmendReliefInvestmentValidatorSpec extends UnitSpec {
@@ -289,11 +289,19 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ]
             |}
         """.stripMargin)
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe FormatDateOfInvestmentError
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+          FormatDateOfInvestmentErrorGenerator.generate(Seq(
+            "vctSubscription/[0]/dateOfInvestment",
+            "eisSubscription/[0]/dateOfInvestment",
+            "communityInvestment/[0]/dateOfInvestment",
+            "seedEnterpriseInvestment/[0]/dateOfInvestment",
+            "socialEnterpriseInvestment/[0]/dateOfInvestment"
+          ).sorted)
+        )
       }
     }
-    "return a format date of investment error with a single incorrect date of investments" when {
-      "the provided date of investment's format is incorrect" in {
+    "return a multiple diffrent errors" when {
+      "the provided data has multiple diffrent errors" in {
         val badJson = Json.parse(
           """
             |{
@@ -311,7 +319,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "uniqueInvestmentRef": "XTAL",
             |      "name": "EIS Fund X",
             |      "knowledgeIntensive": true,
-            |      "dateOfInvestment": "2018-04-16",
+            |      "dateOfInvestment": "12-12-2018",
             |      "amountInvested": 23312.00,
             |      "reliefClaimed": 43432.00
             |    }
@@ -320,7 +328,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |    {
             |      "uniqueInvestmentRef": "CIREF",
             |      "name": "CI X",
-            |      "dateOfInvestment": "2018-04-16",
+            |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 6442.00,
             |      "reliefClaimed": 2344.00
             |    }
@@ -329,23 +337,32 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "companyName": "Company Inc",
-            |      "dateOfInvestment": "2018-04-16",
+            |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 123123.22,
-            |      "reliefClaimed": 3432.00
+            |      "reliefClaimed": 0
             |    }
             |  ],
             |  "socialEnterpriseInvestment": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "socialEnterpriseName": "SE Inc",
-            |      "dateOfInvestment": "2018-04-16",
-            |      "amountInvested": 123123.22,
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 0,
             |      "reliefClaimed": 3432.00
             |    }
             |  ]
             |}
         """.stripMargin)
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe FormatDateOfInvestmentError
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+          ValueFormatErrorGenerator.generate(Seq(
+            "seedEnterpriseInvestment/[0]/reliefClaimed",
+            "socialEnterpriseInvestment/[0]/amountInvested"
+          ).sorted),
+          FormatDateOfInvestmentErrorGenerator.generate(Seq(
+            "vctSubscription/[0]/dateOfInvestment",
+            "eisSubscription/[0]/dateOfInvestment"
+          ).sorted)
+        )
       }
     }
   }

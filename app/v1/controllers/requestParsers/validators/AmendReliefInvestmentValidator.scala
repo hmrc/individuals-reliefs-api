@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations.{DateValidation, JsonFormatValidation, NinoValidation, NoValidationErrors, NumberValidation, TaxYearValidation}
-import v1.models.errors.{FormatDateOfInvestmentError, MtdError, RuleIncorrectOrEmptyBodyError, ValueFormatErrorGenerator}
+import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, MtdError, RuleIncorrectOrEmptyBodyError, ValueFormatErrorGenerator}
 import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData}
 
 
@@ -30,7 +30,6 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear),
       JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError),
-      dateValidations[AmendReliefInvestmentsBody](data.body)
     )
   }
 
@@ -67,21 +66,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
       }
     }
 
-    List(
-      // all other errors you'd do on these things I guess
-      // I support you'd do this kind of validation on all fields (FORMAT_NAME, etc), not just the VALUE ones...
-      // check with BA, I don't remember off the top of my head
-      formatValueErrors
-    )
-  }
-
-
-  def dateValidations[T <: Product](r: T) = {
-    def toFieldNameMap[T <: Product](r: T): Map[String, Any] = {
-      r.getClass.getDeclaredFields.map(_.getName).zip(r.productIterator.to).toMap
-    }
-
-    val res = {
+    def dateValidations[T <: Product](r: T): Seq[String] = {
       val map: Map[String, Any] = toFieldNameMap(r)
 
       map.collect {
@@ -89,12 +74,31 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
           list.zipWithIndex.flatMap {
             case (innerObject, i) =>
               toFieldNameMap(innerObject).collect {
-                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "date" => DateValidation.validate(value, FormatDateOfInvestmentError)
+                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "date" => DateValidation.validate(value, s"$objectName/[$i]/$fieldName")
               }
           }
-      }.flatten.flatten.toSeq
+      }.flatten.flatten.toSeq.sorted
+
     }
-    if (res.contains(FormatDateOfInvestmentError)) FormatDateOfInvestmentError else Nil
+
+    val dateFormatErrors = {
+      dateValidations(body) match {
+        case Nil =>
+          // if the combined list is empty, return an empty list
+          Nil
+        case paths =>
+          // if the combined list is not empty, return it in the paths of the FORMAT_VALUE error
+          List(FormatDateOfInvestmentErrorGenerator.generate(paths))
+      }
+    }
+
+    List(
+      // all other errors you'd do on these things I guess
+      // I support you'd do this kind of validation on all fields (FORMAT_NAME, etc), not just the VALUE ones...
+      // check with BA, I don't remember off the top of my head
+      formatValueErrors,
+      dateFormatErrors
+    )
   }
 
   override def validate(data: AmendReliefInvestmentsRawData): List[MtdError] = {

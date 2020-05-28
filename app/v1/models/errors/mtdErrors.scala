@@ -26,10 +26,12 @@ object MtdError {
 
 object NinoFormatError extends MtdError("FORMAT_NINO", "The provided NINO is invalid")
 object TaxYearFormatError extends MtdError("FORMAT_TAX_YEAR", "The provided tax year is invalid")
-object FormatDateOfInvestmentError extends MtdError("FORMAT_DATE_OF_INVESTMENT", "The format of the investment date is invalid")
 
 object ValueFormatErrorGenerator {
-  def generate(paths: Seq[String]): MtdError = MtdError("FORMAT_VALUE", "The field should be between 0 and 99999999999.99", Some(paths))
+  def generate(paths: Seq[String]): MtdError = MtdError("FORMAT_VALUE", "The field should be between 1 and 99999999999.99", Some(paths))
+}
+object FormatDateOfInvestmentErrorGenerator {
+  def generate(paths: Seq[String]): MtdError = MtdError("FORMAT_DATE_OF_INVESTMENT", "The format of the investment date is invalid", Some(paths))
 }
 
 // Rule Errors
