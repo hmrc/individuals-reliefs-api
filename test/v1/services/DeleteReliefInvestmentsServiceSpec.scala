@@ -65,6 +65,7 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
 
       val input = Seq(
         ("NOT_FOUND", NotFoundError),
+        ("FORMAT_TAX_YEAR", TaxYearFormatError),
         ("SERVER_ERROR", DownstreamError),
         ("SERVICE_UNAVAILABLE", DownstreamError),
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
