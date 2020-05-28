@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
-import v1.models.errors.{NinoFormatError, TaxYearFormatError}
+import v1.models.errors.{NinoFormatError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRawData
 
 class DeleteReliefInvestmentsValidatorSpec extends UnitSpec {
@@ -41,6 +41,11 @@ class DeleteReliefInvestmentsValidatorSpec extends UnitSpec {
     "return TaxYearFormatError" when {
       "an invalid tax year is supplied" in {
         validator.validate(DeleteReliefInvestmentsRawData(validNino, "201831")) shouldBe List(TaxYearFormatError)
+      }
+    }
+    "return RuleTaxYearRangeInvalidError" when {
+      "the tax year range exceeds 1" in {
+        validator.validate(DeleteReliefInvestmentsRawData(validNino, "2019-21")) shouldBe List(RuleTaxYearRangeInvalidError)
       }
     }
     "return multiple errors" when {
