@@ -31,7 +31,7 @@ class DeleteReliefInvestmentsConnector @Inject()(val http: HttpClient,
  def deleteReliefInvestments(request: DeleteReliefInvestmentsRequest)
                             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[Unit]] = {
    delete(
-     DesUri[Unit](s"individuals/reliefs/investment/${request.nino}/${request.taxYear}")
+     DesUri[Unit](s"reliefs/investment/${request.nino}/${request.taxYear}")
    )
  }
 }
