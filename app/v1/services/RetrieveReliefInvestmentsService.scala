@@ -21,34 +21,35 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.connectors.SampleConnector
+import v1.connectors.RetrieveReliefInvestmentsConnector
 import v1.controllers.EndpointLogContext
-import v1.models.domain.SampleResponse
-import v1.models.errors.{DownstreamError, ErrorWrapper, NotFoundError}
-import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.SampleRequestData
+import v1.models.errors._
 import v1.models.requestData.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveReliefInvestmentsService @Inject()(RetrieveReliefInvestmentsConnector: RetrieveReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
+class RetrieveReliefInvestmentsService @Inject()(retrieveReliefInvestmentsConnector: RetrieveReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
 
-  def doServiceThing(request: RetrieveReliefInvestmentsRequest)(
+  def retrieveReliefInvestments(request: RetrieveReliefInvestmentsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[Either[ErrorWrapper, ResponseWrapper[SampleResponse]]] = {
+    logContext: EndpointLogContext): Future[RetrieveReliefInvestmentsServiceOutcome] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(sampleConnector.doConnectorThing(request)).leftMap(mapDesErrors(desErrorMap))
-    } yield desResponseWrapper.map(des => SampleResponse(des.responseData)) // *If* need to convert to Mtd
+      desResponseWrapper <- EitherT(retrieveReliefInvestmentsConnector.retrieveReliefInvestments(request)).leftMap(mapDesErrors(desErrorMap))
+    } yield desResponseWrapper
 
     result.value
   }
 
   private def desErrorMap =
     Map(
+      "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+      "FORMAT_STATUS" -> NinoFormatError,
+      "FORMAT_TAX_YEAR" -> TaxYearFormatError,
+      "CLIENT_OR_AGENT_NOT_AUTHORISED" -> UnauthorisedError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError

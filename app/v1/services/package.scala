@@ -27,4 +27,6 @@ package object services {
 
   type DeleteReliefInvestmentsServiceOutcome = ServiceOutcome[Unit]
 
+  type RetrieveReliefInvestmentsServiceOutcome = ServiceOutcome[Unit]
+
 }

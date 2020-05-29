@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.mocks.connectors
 
-import config.AppConfig
-import javax.inject.{Inject, Singleton}
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.{DesOutcome, RetrieveReliefInvestmentsConnector}
 import v1.models.requestData.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class RetrieveReliefInvestmentsConnector @Inject()(val http: HttpClient,
-                                                   val appConfig: AppConfig) extends BaseDesConnector {
+trait MockRetrieveReliefInvestmentsConnector extends MockFactory {
 
-  def retrieveReliefInvestments(request: RetrieveReliefInvestmentsRequest)(
-    implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[Unit]] =
+  val mockRetrieveReliefInvestmentsConnector: RetrieveReliefInvestmentsConnector = mock[RetrieveReliefInvestmentsConnector]
 
-    get(
-      DesUri[Unit](s"reliefs/investment/${request.nino}/${request.taxYear}")
-    )
+  object MockRetrieveReliefInvestmentsConnector {
+
+    def doConnectorThing(requestData: RetrieveReliefInvestmentsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+      (mockRetrieveReliefInvestmentsConnector
+        .retrieveReliefInvestments(_: RetrieveReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(requestData, *, *)
+    }
+  }
+
 }
