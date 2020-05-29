@@ -300,8 +300,8 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         )
       }
     }
-    "return a multiple diffrent errors" when {
-      "the provided data has multiple diffrent errors" in {
+    "return a multiple different errors" when {
+      "the provided data has multiple different errors" in {
         val badJson = Json.parse(
           """
             |{
