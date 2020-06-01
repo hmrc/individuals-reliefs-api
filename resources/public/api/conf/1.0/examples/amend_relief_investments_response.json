@@ -1,0 +1,14 @@
+{
+  "links":[
+    {
+      "href":"/individuals/reliefs/investment/{nino}/{taxYear}",
+      "rel":"self",
+      "method":"GET"
+    },
+    {
+      "href":"/individuals/reliefs/investment/{nino}/{taxYear}",
+      "rel":"delete-relief-investments",
+      "method":"DELETE"
+    }
+  ]
+}

@@ -124,3 +124,58 @@ traits:
                 description: A self-employment ID can only be supplied for a self-employment business type
                 value:
                   code: RULE_SELF_EMPLOYMENT_ID
+  formatValue:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatValue:
+                description: One or more values have been added with the incorrect format
+                value:
+                  code: FORMAT_VALUE
+  formatName:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatName:
+                description: The provided name is not valid
+                value:
+                  code: FORMAT_NAME
+  formatUniqueInvestmentReference:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatUniqueInvestmentReference:
+                description: The format of unique investment reference is invalid
+                value:
+                  code: FORMAT_UNIQUE_INVESTMENT_REFERENCE
+  formatDateOfInvestment:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatDateOfInvestment:
+                description: The format of the investment date is invalid
+                value:
+                  code: FORMAT_DATE_OF_INVESTMENT
+  ruleTaxYearRangeInvalid:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleTaxYearRangeInvalid:
+                description: Tax year range invalid. A tax year range of one year is required.
+                value:
+                  code: RULE_TAX_YEAR_RANGE_INVALID
