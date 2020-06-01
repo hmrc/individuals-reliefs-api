@@ -26,7 +26,7 @@ class NameValidationSpec extends UnitSpec with JsonErrorValidators {
       "when a valid name is supplied" in {
 
         val validName = "Company Inc"
-        val validationResult = NameValidation.validate(validName, "vctSubscription/[1]/name")
+        val validationResult = NameValidation.validate(validName, "vctSubscription/1/name")
         validationResult.isEmpty shouldBe true
       }
     }
@@ -35,10 +35,10 @@ class NameValidationSpec extends UnitSpec with JsonErrorValidators {
       "when an invalid name is supplied" in {
 
         val invalidName = "AA1234*&^%$£BBCBCBC"
-        val validationResult = NameValidation.validate(invalidName, "vctSubscription/[1]/name")
+        val validationResult = NameValidation.validate(invalidName, "vctSubscription/1/name")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe "vctSubscription/[1]/name"
+        validationResult.head shouldBe "vctSubscription/1/name"
       }
     }
   }

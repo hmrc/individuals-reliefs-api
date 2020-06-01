@@ -148,18 +148,18 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           ValueFormatErrorGenerator.generate(Seq(
-            "vctSubscription/[0]/amountInvested",
-            "vctSubscription/[0]/reliefClaimed",
-            "vctSubscription/[1]/amountInvested",
-            "vctSubscription/[1]/reliefClaimed",
-            "eisSubscription/[0]/amountInvested",
-            "eisSubscription/[0]/reliefClaimed",
-            "communityInvestment/[0]/amountInvested",
-            "communityInvestment/[0]/reliefClaimed",
-            "seedEnterpriseInvestment/[0]/amountInvested",
-            "seedEnterpriseInvestment/[0]/reliefClaimed",
-            "socialEnterpriseInvestment/[0]/amountInvested",
-            "socialEnterpriseInvestment/[0]/reliefClaimed"
+            "vctSubscription/0/amountInvested",
+            "vctSubscription/0/reliefClaimed",
+            "vctSubscription/1/amountInvested",
+            "vctSubscription/1/reliefClaimed",
+            "eisSubscription/0/amountInvested",
+            "eisSubscription/0/reliefClaimed",
+            "communityInvestment/0/amountInvested",
+            "communityInvestment/0/reliefClaimed",
+            "seedEnterpriseInvestment/0/amountInvested",
+            "seedEnterpriseInvestment/0/reliefClaimed",
+            "socialEnterpriseInvestment/0/amountInvested",
+            "socialEnterpriseInvestment/0/reliefClaimed"
           ).sorted)
         )
       }
@@ -226,12 +226,12 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           ValueFormatErrorGenerator.generate(Seq(
-            "vctSubscription/[0]/reliefClaimed",
-            "vctSubscription/[1]/amountInvested",
-            "eisSubscription/[0]/amountInvested",
-            "communityInvestment/[0]/reliefClaimed",
-            "seedEnterpriseInvestment/[0]/amountInvested",
-            "socialEnterpriseInvestment/[0]/reliefClaimed"
+            "vctSubscription/0/reliefClaimed",
+            "vctSubscription/1/amountInvested",
+            "eisSubscription/0/amountInvested",
+            "communityInvestment/0/reliefClaimed",
+            "seedEnterpriseInvestment/0/amountInvested",
+            "socialEnterpriseInvestment/0/reliefClaimed"
           ).sorted)
         )
       }
@@ -291,11 +291,11 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           FormatDateOfInvestmentErrorGenerator.generate(Seq(
-            "vctSubscription/[0]/dateOfInvestment",
-            "eisSubscription/[0]/dateOfInvestment",
-            "communityInvestment/[0]/dateOfInvestment",
-            "seedEnterpriseInvestment/[0]/dateOfInvestment",
-            "socialEnterpriseInvestment/[0]/dateOfInvestment"
+            "vctSubscription/0/dateOfInvestment",
+            "eisSubscription/0/dateOfInvestment",
+            "communityInvestment/0/dateOfInvestment",
+            "seedEnterpriseInvestment/0/dateOfInvestment",
+            "socialEnterpriseInvestment/0/dateOfInvestment"
           ).sorted)
         )
       }
@@ -355,11 +355,11 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           FormatNameErrorGenerator.generate(Seq(
-            "vctSubscription/[0]/name",
-            "eisSubscription/[0]/name",
-            "communityInvestment/[0]/name",
-            "seedEnterpriseInvestment/[0]/companyName",
-            "socialEnterpriseInvestment/[0]/socialEnterpriseName"
+            "vctSubscription/0/name",
+            "eisSubscription/0/name",
+            "communityInvestment/0/name",
+            "seedEnterpriseInvestment/0/companyName",
+            "socialEnterpriseInvestment/0/socialEnterpriseName"
           ).sorted)
         )
       }
@@ -419,11 +419,11 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           FormatInvestmentRefErrorGenerator.generate(Seq(
-           "vctSubscription/[0]/uniqueInvestmentRef",
-           "eisSubscription/[0]/uniqueInvestmentRef",
-           "communityInvestment/[0]/uniqueInvestmentRef",
-           "seedEnterpriseInvestment/[0]/uniqueInvestmentRef",
-           "socialEnterpriseInvestment/[0]/uniqueInvestmentRef"
+           "vctSubscription/0/uniqueInvestmentRef",
+           "eisSubscription/0/uniqueInvestmentRef",
+           "communityInvestment/0/uniqueInvestmentRef",
+           "seedEnterpriseInvestment/0/uniqueInvestmentRef",
+           "socialEnterpriseInvestment/0/uniqueInvestmentRef"
           ).sorted)
         )
       }
@@ -483,12 +483,12 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           ValueFormatErrorGenerator.generate(Seq(
-            "seedEnterpriseInvestment/[0]/reliefClaimed",
-            "socialEnterpriseInvestment/[0]/amountInvested"
+            "seedEnterpriseInvestment/0/reliefClaimed",
+            "socialEnterpriseInvestment/0/amountInvested"
           ).sorted),
           FormatDateOfInvestmentErrorGenerator.generate(Seq(
-            "vctSubscription/[0]/dateOfInvestment",
-            "eisSubscription/[0]/dateOfInvestment"
+            "vctSubscription/0/dateOfInvestment",
+            "eisSubscription/0/dateOfInvestment"
           ).sorted)
         )
       }

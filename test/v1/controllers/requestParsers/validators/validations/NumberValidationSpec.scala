@@ -25,7 +25,7 @@ class NumberValidationSpec extends UnitSpec {
       "when a valid number is supplied" in {
 
         val validNumber = 9000.42
-        val validationResult = NumberValidation.validate(validNumber, "vctSubscription/[1]/amountInvested")
+        val validationResult = NumberValidation.validate(validNumber, "vctSubscription/1/amountInvested")
         validationResult.isEmpty shouldBe true
 
       }
@@ -35,10 +35,10 @@ class NumberValidationSpec extends UnitSpec {
       "when an invalid number is supplied" in {
 
         val validNumber = -9000.42
-        val validationResult = NumberValidation.validate(validNumber, "vctSubscription/[1]/amountInvested")
+        val validationResult = NumberValidation.validate(validNumber, "vctSubscription/1/amountInvested")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe "vctSubscription/[1]/amountInvested"
+        validationResult.head shouldBe "vctSubscription/1/amountInvested"
       }
     }
   }

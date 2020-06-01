@@ -25,7 +25,7 @@ class DateValidationSpec extends UnitSpec {
       "when a valid date is supplied" in {
 
         val validDate = "2018-04-06"
-        val validationResult = DateValidation.validate(validDate, "vctSubscription/[0]/dateOfInvestment")
+        val validationResult = DateValidation.validate(validDate, "vctSubscription/0/dateOfInvestment")
         validationResult.isEmpty shouldBe true
       }
     }
@@ -34,10 +34,10 @@ class DateValidationSpec extends UnitSpec {
       "when a invalid date is supplied" in {
 
         val invalidDate = "04-06-2018"
-        val validationResult = DateValidation.validate(invalidDate, "vctSubscription/[0]/dateOfInvestment")
+        val validationResult = DateValidation.validate(invalidDate, "vctSubscription/0/dateOfInvestment")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe "vctSubscription/[0]/dateOfInvestment"
+        validationResult.head shouldBe "vctSubscription/0/dateOfInvestment"
       }
     }
   }

@@ -19,7 +19,6 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.AmendReliefInvestmentValidator
-import v1.models.requestData.DesTaxYear
 import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest}
 
 class AmendReliefInvestmentDataParser @Inject()(val validator: AmendReliefInvestmentValidator)

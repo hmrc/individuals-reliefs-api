@@ -41,7 +41,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
       r.getClass.getDeclaredFields.map(_.getName).zip(r.productIterator.to).toMap
     }
 
-    def generateFailedPaths[T <: Product](r: T): Seq[String] = {
+    def valueValidations[T <: Product](r: T): Seq[String] = {
       val map: Map[String, Any] = toFieldNameMap(r)
 
       map.collect {
@@ -49,14 +49,14 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
           list.zipWithIndex.flatMap {
             case (innerObject, i) =>
               toFieldNameMap(innerObject).collect {
-                case (fieldName, Some(value: BigDecimal)) => NumberValidation.validate(value, s"$objectName/[$i]/$fieldName")
+                case (fieldName, Some(value: BigDecimal)) => NumberValidation.validate(value, s"$objectName/$i/$fieldName")
               }
           }
       }
     }.flatten.flatten.toSeq.sorted
 
     val formatValueErrors = {
-      generateFailedPaths(body) match {
+      valueValidations(body) match {
         case Nil =>
           Nil
         case paths =>
@@ -72,7 +72,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
           list.zipWithIndex.flatMap {
             case (innerObject, i) =>
               toFieldNameMap(innerObject).collect {
-                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "date" => DateValidation.validate(value, s"$objectName/[$i]/$fieldName")
+                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "date" => DateValidation.validate(value, s"$objectName/$i/$fieldName")
               }
           }
       }.flatten.flatten.toSeq.sorted
@@ -96,7 +96,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
           list.zipWithIndex.flatMap {
             case (innerObject, i) =>
               toFieldNameMap(innerObject).collect {
-                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "name" || fieldName.takeRight(4) == "Name" => NameValidation.validate(value, s"$objectName/[$i]/$fieldName")
+                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "name" || fieldName.takeRight(4) == "Name" => NameValidation.validate(value, s"$objectName/$i/$fieldName")
               }
           }
       }.flatten.flatten.toSeq.sorted
@@ -120,7 +120,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
           list.zipWithIndex.flatMap {
             case (innerObject, i) =>
               toFieldNameMap(innerObject).collect {
-                case (fieldName: String, Some(value: String)) if fieldName.takeRight(3) == "Ref" => InvestmentRefValidation.validate(value, s"$objectName/[$i]/$fieldName")
+                case (fieldName: String, Some(value: String)) if fieldName.takeRight(3) == "Ref" => InvestmentRefValidation.validate(value, s"$objectName/$i/$fieldName")
               }
           }
       }.flatten.flatten.toSeq.sorted

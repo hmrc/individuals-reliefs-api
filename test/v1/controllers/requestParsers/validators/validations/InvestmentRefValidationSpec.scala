@@ -27,7 +27,7 @@ class InvestmentRefValidationSpec extends UnitSpec with JsonErrorValidators {
       " a valid unique investment reference is supplied" in {
 
         val validRef = "123412/1A"
-        val validationResult = InvestmentRefValidation.validate(validRef,"vctSubscription/[0]/uniqueInvestmentRef")
+        val validationResult = InvestmentRefValidation.validate(validRef,"vctSubscription/0/uniqueInvestmentRef")
         validationResult.isEmpty shouldBe true
       }
     }
@@ -36,10 +36,10 @@ class InvestmentRefValidationSpec extends UnitSpec with JsonErrorValidators {
       "when an invalid name is supplied" in {
 
         val invalidRef = "AA1234*&^%$£BBCBCBC"
-        val validationResult = InvestmentRefValidation.validate(invalidRef, "vctSubscription/[0]/uniqueInvestmentRef")
+        val validationResult = InvestmentRefValidation.validate(invalidRef, "vctSubscription/0/uniqueInvestmentRef")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe "vctSubscription/[0]/uniqueInvestmentRef"
+        validationResult.head shouldBe "vctSubscription/0/uniqueInvestmentRef"
       }
     }
   }
