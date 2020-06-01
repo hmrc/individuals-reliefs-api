@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators
+package v1.controllers.requestParsers.validators.validations
 
-import java.time.format.DateTimeFormatter
-
-package object validations {
-
-  val NoValidationErrors = List()
-  val dateFormat = DateTimeFormatter ofPattern "yyyy-MM-dd"
-
+object NumberValidation {
+  def validate(field: BigDecimal, path: String): List[String] = {
+    if(field >= 1 && field<100000000000.00 && field.scale == 2) {
+      Nil
+    } else {
+      List(path)
+    }
+  }
 }

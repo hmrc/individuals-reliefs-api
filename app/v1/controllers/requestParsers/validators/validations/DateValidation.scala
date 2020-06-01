@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators
+package v1.controllers.requestParsers.validators.validations
 
-import java.time.format.DateTimeFormatter
+import java.time.LocalDate
 
-package object validations {
+import scala.util.{Failure, Success, Try}
 
-  val NoValidationErrors = List()
-  val dateFormat = DateTimeFormatter ofPattern "yyyy-MM-dd"
+object DateValidation {
+
+  def validate(date: String, path: String): List[String] = Try {
+    if(date.nonEmpty) LocalDate.parse(date, dateFormat)
+  } match {
+    case Success(_) => Nil
+    case Failure(_) => List(path)
+  }
+
 
 }

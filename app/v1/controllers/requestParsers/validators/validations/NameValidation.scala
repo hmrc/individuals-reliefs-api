@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators
+package v1.controllers.requestParsers.validators.validations
 
-import java.time.format.DateTimeFormatter
 
-package object validations {
+object NameValidation {
 
-  val NoValidationErrors = List()
-  val dateFormat = DateTimeFormatter ofPattern "yyyy-MM-dd"
+  private val nameRegex =
+    "^[A-Za-z0-9 ]+$"
 
+  def validate(name: String, path: String): List[String] = {
+    if (name.matches(nameRegex)) Nil else List(path)
+  }
 }
