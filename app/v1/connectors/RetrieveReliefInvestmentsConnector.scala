@@ -22,6 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
 import v1.models.requestData.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.response.retrieveReliefInvestments._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,9 +31,11 @@ class RetrieveReliefInvestmentsConnector @Inject()(val http: HttpClient,
                                                    val appConfig: AppConfig) extends BaseDesConnector {
 
   def retrieveReliefInvestments(request: RetrieveReliefInvestmentsRequest)(
-    implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[Unit]] =
+    implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[RetrieveReliefInvestmentsBody]] = {
 
+    val url = s"reliefs/investment/${request.nino}/${request.taxYear}"
     get(
-      DesUri[Unit](s"reliefs/investment/${request.nino}/${request.taxYear}")
+      DesUri[RetrieveReliefInvestmentsBody](s"$url")
     )
+  }
 }

@@ -38,12 +38,12 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
 
   private val fullResponseModel = RetrieveReliefInvestmentsBody(
     Seq(VctSubscriptionsItem(
-    Some("VCTREF"),
-    Some("VCT Fund X"),
-    Some("2018-04-16"),
-    Some(BigDecimal(23312.00)),
-    Some(BigDecimal(1334.00))
-  )),
+      Some("VCTREF"),
+      Some("VCT Fund X"),
+      Some("2018-04-16"),
+      Some(BigDecimal(23312.00)),
+      Some(BigDecimal(1334.00))
+    )),
     Seq(EisSubscriptionsItem(
       Some("XTAL"),
       Some("EIS Fund X"),
@@ -86,10 +86,10 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
   }
 
   "service" when {
-    "service call successsful" must {
+    "service call successful" must {
       "return mapped result" in new Test {
-        MockRetrieveReliefInvestmentsConnector.doConnectorThing(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, DesSampleResponse("result")))))
+        MockRetrieveReliefInvestmentsConnector.retrieveReliefInvestments(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, fullResponseModel))))
 
         await(service.retrieveReliefInvestments(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
       }
@@ -101,7 +101,7 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockRetrieveReliefInvestmentsConnector.doConnectorThing(requestData)
+            MockRetrieveReliefInvestmentsConnector.retrieveReliefInvestments(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
             await(service.retrieveReliefInvestments(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
