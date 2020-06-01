@@ -16,8 +16,8 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{DateValidation, JsonFormatValidation, NinoValidation, NoValidationErrors, NumberValidation, TaxYearValidation}
-import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, MtdError, RuleIncorrectOrEmptyBodyError, ValueFormatErrorGenerator}
+import v1.controllers.requestParsers.validators.validations.{DateValidation, InvestmentRefValidation, JsonFormatValidation, NameValidation, NinoValidation, NoValidationErrors, NumberValidation, TaxYearValidation}
+import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, FormatInvestmentRefErrorGenerator, FormatNameErrorGenerator, MtdError, RuleIncorrectOrEmptyBodyError, ValueFormatErrorGenerator}
 import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData}
 
 
@@ -58,10 +58,8 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
     val formatValueErrors = {
       generateFailedPaths(body) match {
         case Nil =>
-          // if the combined list is empty, return an empty list
           Nil
         case paths =>
-          // if the combined list is not empty, return it in the paths of the FORMAT_VALUE error
           List(ValueFormatErrorGenerator.generate(paths))
       }
     }
@@ -84,12 +82,58 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
     val dateFormatErrors = {
       dateValidations(body) match {
         case Nil =>
-          // if the combined list is empty, return an empty list
           Nil
         case paths =>
-          // if the combined list is not empty, return it in the paths of the FORMAT_VALUE error
           List(FormatDateOfInvestmentErrorGenerator.generate(paths))
       }
+    }
+
+    def nameValidations[T <: Product](r: T): Seq[String] = {
+      val map: Map[String, Any] = toFieldNameMap(r)
+
+      map.collect {
+        case (objectName, list: List[T]) =>
+          list.zipWithIndex.flatMap {
+            case (innerObject, i) =>
+              toFieldNameMap(innerObject).collect {
+                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "name" || fieldName.takeRight(4) == "Name" => NameValidation.validate(value, s"$objectName/[$i]/$fieldName")
+              }
+          }
+      }.flatten.flatten.toSeq.sorted
+    }
+
+    val nameFormatErrors = {
+      nameValidations(body) match {
+        case Nil =>
+          Nil
+        case paths =>
+          List(FormatNameErrorGenerator.generate(paths))
+      }
+
+    }
+
+    def investmentRefValidations[T <: Product](r: T): Seq[String] = {
+      val map: Map[String, Any] = toFieldNameMap(r)
+
+      map.collect {
+        case (objectName, list: List[T]) =>
+          list.zipWithIndex.flatMap {
+            case (innerObject, i) =>
+              toFieldNameMap(innerObject).collect {
+                case (fieldName: String, Some(value: String)) if fieldName.takeRight(3) == "Ref" => InvestmentRefValidation.validate(value, s"$objectName/[$i]/$fieldName")
+              }
+          }
+      }.flatten.flatten.toSeq.sorted
+    }
+
+    val investmentRefFormatErrors = {
+      investmentRefValidations(body) match {
+        case Nil =>
+          Nil
+        case paths =>
+          List(FormatInvestmentRefErrorGenerator.generate(paths))
+      }
+
     }
 
     List(
@@ -97,7 +141,9 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
       // I support you'd do this kind of validation on all fields (FORMAT_NAME, etc), not just the VALUE ones...
       // check with BA, I don't remember off the top of my head
       formatValueErrors,
-      dateFormatErrors
+      dateFormatErrors,
+      nameFormatErrors,
+      investmentRefFormatErrors
     )
   }
 

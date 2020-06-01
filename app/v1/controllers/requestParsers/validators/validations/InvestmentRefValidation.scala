@@ -17,12 +17,12 @@
 package v1.controllers.requestParsers.validators.validations
 
 
-object NameValidation {
+object InvestmentRefValidation {
 
-  private val nameRegex =
-    "^[A-Za-z0-9 ]{1,}+$"
+  private val investRegex =
+    "^[A-Z/a-z/0-9]+$"
 
   def validate(name: String, path: String): List[String] = {
-    if (name.matches(nameRegex)) Nil else List(path)
+    if (name.matches(investRegex)) Nil else List(path)
   }
 }

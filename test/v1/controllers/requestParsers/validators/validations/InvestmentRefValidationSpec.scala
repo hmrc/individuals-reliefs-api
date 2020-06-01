@@ -17,16 +17,17 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
+
 import v1.models.utils.JsonErrorValidators
 
-class NameValidationSpec extends UnitSpec with JsonErrorValidators {
+class InvestmentRefValidationSpec extends UnitSpec with JsonErrorValidators {
 
   "validate" should {
     "return no errors" when {
-      "when a valid name is supplied" in {
+      " a valid unique investment reference is supplied" in {
 
-        val validName = "Company Inc"
-        val validationResult = NameValidation.validate(validName, "vctSubscription/[1]/name")
+        val validRef = "123412/1A"
+        val validationResult = InvestmentRefValidation.validate(validRef,"vctSubscription/[0]/uniqueInvestmentRef")
         validationResult.isEmpty shouldBe true
       }
     }
@@ -34,12 +35,13 @@ class NameValidationSpec extends UnitSpec with JsonErrorValidators {
     "return an error" when {
       "when an invalid name is supplied" in {
 
-        val invalidName = "AA1234*&^%$£BBCBCBC"
-        val validationResult = NameValidation.validate(invalidName, "vctSubscription/[1]/name")
+        val invalidRef = "AA1234*&^%$£BBCBCBC"
+        val validationResult = InvestmentRefValidation.validate(invalidRef, "vctSubscription/[0]/uniqueInvestmentRef")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe "vctSubscription/[1]/name"
+        validationResult.head shouldBe "vctSubscription/[0]/uniqueInvestmentRef"
       }
     }
   }
+
 }
