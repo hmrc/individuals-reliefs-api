@@ -53,7 +53,8 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
           )
           .returns(Future.successful(outcome))
 
-      await(connector.retrieveReliefInvestments(request)) shouldBe outcome
+        await(connector.retrieveReliefInvestments(request)) shouldBe outcome
+      }
     }
   }
 }
