@@ -47,17 +47,17 @@
   ],
   "links":[
     {
-      "href":"/reliefs/investment/{nino}/{taxYear}",
+      "href":"/individuals/reliefs/investment/TC663795B/2019-20",
       "rel":"self",
       "method":"GET"
     },
     {
-      "href":"/reliefs/investment/{nino}/{taxYear}",
+      "href":"/individuals/reliefs/investment/TC663795B/2019-20",
       "rel":"amend-relief-investments",
       "method":"PUT"
     },
     {
-      "href":"/reliefs/investment/{nino}/{taxYear}",
+      "href":"/individuals/reliefs/investment/TC663795B/2019-20",
       "rel":"delete-relief-investments",
       "method":"DELETE"
     }
