@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{DateValidation, InvestmentRefValidation, JsonFormatValidation, NameValidation, NinoValidation, NoValidationErrors, NumberValidation, TaxYearValidation}
+import v1.controllers.requestParsers.validators.validations.{DateValidation, InvestmentRefValidation, JsonFormatValidation, NameValidation, NinoValidation, NumberValidation, TaxYearValidation}
 import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, FormatInvestmentRefErrorGenerator, FormatNameErrorGenerator, MtdError, RuleIncorrectOrEmptyBodyError, ValueFormatErrorGenerator}
 import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData}
 
@@ -137,9 +137,6 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
     }
 
     List(
-      // all other errors you'd do on these things I guess
-      // I support you'd do this kind of validation on all fields (FORMAT_NAME, etc), not just the VALUE ones...
-      // check with BA, I don't remember off the top of my head
       formatValueErrors,
       dateFormatErrors,
       nameFormatErrors,

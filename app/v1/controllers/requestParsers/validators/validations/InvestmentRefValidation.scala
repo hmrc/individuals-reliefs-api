@@ -20,7 +20,7 @@ package v1.controllers.requestParsers.validators.validations
 object InvestmentRefValidation {
 
   private val investRegex =
-    "^[A-Z/a-z/0-9]+$"
+    "^[A-Za-z0-9/]{1,}+$"
 
   def validate(name: String, path: String): List[String] = {
     if (name.matches(investRegex)) Nil else List(path)

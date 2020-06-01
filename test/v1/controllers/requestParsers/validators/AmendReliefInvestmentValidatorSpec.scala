@@ -317,7 +317,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  "eisSubscription":[
             |    {
             |      "uniqueInvestmentRef": "XTAL",
-            |      "name": "AA1234*&^%$£BBCBCBC",
+            |      "name": "",
             |      "knowledgeIntensive": true,
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 23312.00,
@@ -380,7 +380,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "eisSubscription":[
             |    {
-            |      "uniqueInvestmentRef": "bad ref",
+            |      "uniqueInvestmentRef": "bad***ref",
             |      "name": "EIS Fund X",
             |      "knowledgeIntensive": true,
             |      "dateOfInvestment": "2020-12-12",
@@ -390,7 +390,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "communityInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "bad ref",
+            |      "uniqueInvestmentRef": "",
             |      "name": "CI X",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 6442.00,
@@ -410,7 +410,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |    {
             |      "uniqueInvestmentRef": "bad ref",
             |      "socialEnterpriseName": "SE Inc",
-            |      "dateOfInvestment": "2020-12-12",
+            |      "dateOfInvestment": "",
             |      "amountInvested": 123123.22,
             |      "reliefClaimed": 3432.00
             |    }
