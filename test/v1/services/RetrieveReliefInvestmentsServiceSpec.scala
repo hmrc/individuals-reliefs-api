@@ -21,7 +21,6 @@ import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockRetrieveReliefInvestmentsConnector
-import v1.models.des.DesSampleResponse
 import v1.models.response.retrieveReliefInvestments._
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper

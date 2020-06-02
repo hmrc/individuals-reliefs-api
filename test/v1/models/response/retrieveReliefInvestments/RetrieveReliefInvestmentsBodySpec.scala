@@ -62,7 +62,7 @@ class RetrieveReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidator
   val json = Json.parse(
     """
       |{
-      |  "vctSubscription":[
+      |  "vctSubscriptionsItems":[
       |    {
       |      "uniqueInvestmentRef": "VCTREF",
       |      "name": "VCT Fund X",
@@ -71,7 +71,7 @@ class RetrieveReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidator
       |      "reliefClaimed": 1334.00
       |      }
       |  ],
-      |  "eisSubscription":[
+      |  "eisSubscriptionsItems":[
       |    {
       |      "uniqueInvestmentRef": "XTAL",
       |      "name": "EIS Fund X",
@@ -81,7 +81,7 @@ class RetrieveReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidator
       |      "reliefClaimed": 43432.00
       |    }
       |  ],
-      |  "communityInvestment": [
+      |  "communityInvestmentItems": [
       |    {
       |      "uniqueInvestmentRef": "CIREF",
       |      "name": "CI X",
@@ -90,7 +90,7 @@ class RetrieveReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidator
       |      "reliefClaimed": 2344.00
       |    }
       |  ],
-      |  "seedEnterpriseInvestment": [
+      |  "seedEnterpriseInvestmentItems": [
       |    {
       |      "uniqueInvestmentRef": "123412/1A",
       |      "companyName": "Company Inc",
@@ -99,7 +99,7 @@ class RetrieveReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidator
       |      "reliefClaimed": 3432.00
       |    }
       |  ],
-      |  "socialEnterpriseInvestment": [
+      |  "socialEnterpriseInvestmentItems": [
       |    {
       |      "uniqueInvestmentRef": "123412/1A",
       |      "socialEnterpriseName": "SE Inc",
