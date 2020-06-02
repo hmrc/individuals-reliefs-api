@@ -18,11 +18,11 @@ package v1.models.requestData.amendReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AmendReliefInvestmentsBody(vctSubscription: Seq[VctSubscriptionsItem],
-                                      eisSubscription: Seq[EisSubscriptionsItem],
-                                      communityInvestment: Seq[CommunityInvestmentItem],
-                                      seedEnterpriseInvestment: Seq[SeedEnterpriseInvestmentItem],
-                                      socialEnterpriseInvestment: Seq[SocialEnterpriseInvestmentItem])
+case class AmendReliefInvestmentsBody(vctSubscriptionsItems: Seq[VctSubscriptionsItem],
+                                      eisSubscriptionsItems: Seq[EisSubscriptionsItem],
+                                      communityInvestmentItems: Seq[CommunityInvestmentItem],
+                                      seedEnterpriseInvestmentItems: Seq[SeedEnterpriseInvestmentItem],
+                                      socialEnterpriseInvestmentItems: Seq[SocialEnterpriseInvestmentItem])
 
 object AmendReliefInvestmentsBody {
   implicit val format: OFormat[AmendReliefInvestmentsBody] = Json.format[AmendReliefInvestmentsBody]
