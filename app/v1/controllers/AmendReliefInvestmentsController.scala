@@ -18,14 +18,14 @@ package v1.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import play.api.http.MimeTypes
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.AmendReliefInvestmentsRequestParser
 import v1.hateoas.HateoasFactory
-import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors._
 import v1.models.requestData.amendReliefInvestments.AmendReliefInvestmentsRawData
 import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
 import v1.services.{AmendReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
