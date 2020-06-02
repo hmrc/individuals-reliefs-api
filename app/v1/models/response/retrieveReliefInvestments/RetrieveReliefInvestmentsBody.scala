@@ -18,11 +18,11 @@ package v1.models.response.retrieveReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-case class RetrieveReliefInvestmentsBody(vctSubscription: Seq[VctSubscriptionsItem],
-                                         eisSubscription: Seq[EisSubscriptionsItem],
-                                         communityInvestment: Seq[CommunityInvestmentItem],
-                                         seedEnterpriseInvestment: Seq[SeedEnterpriseInvestmentItem],
-                                         socialEnterpriseInvestment: Seq[SocialEnterpriseInvestmentItem])
+case class RetrieveReliefInvestmentsBody(vctSubscriptionsItems: Seq[VctSubscriptionsItem],
+                                         eisSubscriptionsItems: Seq[EisSubscriptionsItem],
+                                         communityInvestmentItems: Seq[CommunityInvestmentItem],
+                                         seedEnterpriseInvestmentItems: Seq[SeedEnterpriseInvestmentItem],
+                                         socialEnterpriseInvestmentItems: Seq[SocialEnterpriseInvestmentItem])
 
 object RetrieveReliefInvestmentsBody {
   implicit val format: OFormat[RetrieveReliefInvestmentsBody] = Json.format[RetrieveReliefInvestmentsBody]
