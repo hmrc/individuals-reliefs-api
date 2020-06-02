@@ -1,3 +1,4 @@
 POST       /:nino/:taxYear/sample-endpoint                  v1.controllers.SampleController.handleRequest(nino: String, taxYear: String)
 
 DELETE     /investment/:nino/:taxYear                       v1.controllers.DeleteReliefInvestmentsController.handleRequest(nino: String, taxYear: String)
+GET        /investment/:nino/:taxYear                       v1.controllers.RetrieveReliefInvestmentsController.handleRequest(nino: String, taxYear:String)
