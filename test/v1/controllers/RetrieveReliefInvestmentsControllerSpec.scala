@@ -24,6 +24,8 @@ import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveInvestmentsRequestParser
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveReliefInvestmentsService}
 import v1.models.errors._
+import v1.models.hateoas.Method.GET
+import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.requestData.retrieveReliefInvestments.{RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest}
 import v1.models.response.retrieveReliefInvestments._
@@ -62,6 +64,8 @@ class RetrieveReliefInvestmentsControllerSpec
 
   private val rawData = RetrieveReliefInvestmentsRawData(nino, taxYear)
   private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), taxYear)
+
+  private val testHateoasLink = Link(href = s"individuals/reliefs/innvestment/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveReliefInvestmentsBody(
     Seq(VctSubscriptionsItem(
@@ -114,8 +118,11 @@ class RetrieveReliefInvestmentsControllerSpec
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
+        MockHateoasFactory
+          .wrap(responseBody, RetrieveReliefInvestmentsHateoasData(nino, taxYear))
+          .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
+        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
       }

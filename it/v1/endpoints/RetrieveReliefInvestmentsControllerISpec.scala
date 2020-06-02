@@ -22,6 +22,7 @@ import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
+import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
 class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
@@ -80,77 +81,77 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         |      "reliefClaimed": 3432.00
         |    }
         |  ],
-        |      "links": [{
-        |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
-        |      "method": "GET",
-        |      "rel": "self"
+        |  "links": [{
+        |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
+        |    "method": "GET",
+        |    "rel": "self"
         |    },
-        |    {
-        |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
-        |      "method": "PUT",
-        |      "rel": "amend-relief-investments"
-        |    },
-        |    {
-        |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
-        |      "method": "DELETE",
-        |      "rel": "delete-relief-investments"
-        |    }
-        |  ]
+        |  {
+        |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
+        |    "method": "PUT",
+        |    "rel": "amend-relief-investments"
+        |  },
+        |  {
+        |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
+        |    "method": "DELETE",
+        |    "rel": "delete-relief-investments"
+        |  }
+        |]
         |}
         |""".stripMargin
     )
 
     val desResponseBody = Json.parse(
-      """
-        |{
-        |  "vctSubscription":[
-        |    {
-        |      "uniqueInvestmentRef": "VCTREF",
-        |      "name": "VCT Fund X",
-        |      "dateOfInvestment": "2018-04-16",
-        |      "amountInvested": 23312.00,
-        |      "reliefClaimed": 1334.00
-        |      }
-        |  ],
-        |  "eisSubscription":[
-        |    {
-        |      "uniqueInvestmentRef": "XTAL",
-        |      "name": "EIS Fund X",
-        |      "knowledgeIntensive": true,
-        |      "dateOfInvestment": "2020-12-12",
-        |      "amountInvested": 23312.00,
-        |      "reliefClaimed": 43432.00
-        |    }
-        |  ],
-        |  "communityInvestment": [
-        |    {
-        |      "uniqueInvestmentRef": "CIREF",
-        |      "name": "CI X",
-        |      "dateOfInvestment": "2020-12-12",
-        |      "amountInvested": 6442.00,
-        |      "reliefClaimed": 2344.00
-        |    }
-        |  ],
-        |  "seedEnterpriseInvestment": [
-        |    {
-        |      "uniqueInvestmentRef": "123412/1A",
-        |      "companyName": "Company Inc",
-        |      "dateOfInvestment": "2020-12-12",
-        |      "amountInvested": 123123.22,
-        |      "reliefClaimed": 3432.00
-        |    }
-        |  ],
-        |  "socialEnterpriseInvestment": [
-        |    {
-        |      "uniqueInvestmentRef": "123412/1A",
-        |      "socialEnterpriseName": "SE Inc",
-        |      "dateOfInvestment": "2020-12-12",
-        |      "amountInvested": 123123.22,
-        |      "reliefClaimed": 3432.00
-        |    }
-        |  ]
-        |}
-        |""".stripMargin
+      s"""
+         |{
+         |  "vctSubscription":[
+         |    {
+         |      "uniqueInvestmentRef": "VCTREF",
+         |      "name": "VCT Fund X",
+         |      "dateOfInvestment": "2018-04-16",
+         |      "amountInvested": 23312.00,
+         |      "reliefClaimed": 1334.00
+         |      }
+         |  ],
+         |  "eisSubscription":[
+         |    {
+         |      "uniqueInvestmentRef": "XTAL",
+         |      "name": "EIS Fund X",
+         |      "knowledgeIntensive": true,
+         |      "dateOfInvestment": "2020-12-12",
+         |      "amountInvested": 23312.00,
+         |      "reliefClaimed": 43432.00
+         |    }
+         |  ],
+         |  "communityInvestment": [
+         |    {
+         |      "uniqueInvestmentRef": "CIREF",
+         |      "name": "CI X",
+         |      "dateOfInvestment": "2020-12-12",
+         |      "amountInvested": 6442.00,
+         |      "reliefClaimed": 2344.00
+         |    }
+         |  ],
+         |  "seedEnterpriseInvestment": [
+         |    {
+         |      "uniqueInvestmentRef": "123412/1A",
+         |      "companyName": "Company Inc",
+         |      "dateOfInvestment": "2020-12-12",
+         |      "amountInvested": 123123.22,
+         |      "reliefClaimed": 3432.00
+         |    }
+         |  ],
+         |  "socialEnterpriseInvestment": [
+         |    {
+         |      "uniqueInvestmentRef": "123412/1A",
+         |      "socialEnterpriseName": "SE Inc",
+         |      "dateOfInvestment": "2020-12-12",
+         |      "amountInvested": 123123.22,
+         |      "reliefClaimed": 3432.00
+         |    }
+         |  ]
+         |}
+         |""".stripMargin
     )
 
     def uri: String = s"/investment/$nino/$taxYear"
@@ -173,7 +174,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
     """.stripMargin
   }
 
-  "Calling the delete endpoint" should {
+  "Calling the retrieve endpoint" should {
 
     "return a 200 status code" when {
 
@@ -206,7 +207,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
-              MtdIdLookupStub.ninoFound(nino)
+              MtdIdLookupStub.ninoFound(requestNino)
             }
 
             val response: WSResponse = await(request().delete())

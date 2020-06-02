@@ -24,9 +24,9 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.RetrieveReliefInvestmentsRequestParser
 import v1.hateoas.HateoasFactory
-import v1.models.des.RetrieveReliefInvestmentsHateoasData
 import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.requestData.retrieveReliefInvestments.RetrieveReliefInvestmentsRawData
+import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsHateoasData
 import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveReliefInvestmentsService}
 
 import scala.concurrent.{ExecutionContext, Future}
