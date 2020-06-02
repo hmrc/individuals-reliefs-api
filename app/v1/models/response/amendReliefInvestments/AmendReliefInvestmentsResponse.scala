@@ -30,8 +30,8 @@ object AmendReliefInvestmentsResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: AmendReliefInvestmentsHateoasData): Seq[Link] = {
       import data._
       Seq(
-        amendReliefInvestments(appConfig, nino, date),
         retrieveReliefInvestments(appConfig, nino, date),
+        amendReliefInvestments(appConfig, nino, date),
         deleteReliefInvestments(appConfig, nino, date)
       )
     }

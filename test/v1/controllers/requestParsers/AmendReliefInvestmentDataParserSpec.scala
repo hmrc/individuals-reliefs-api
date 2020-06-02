@@ -84,7 +84,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
     AmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
 
   trait Test extends MockAmendReliefInvestmentValidator {
-    lazy val parser = new AmendReliefInvestmentDataParser(mockValidator)
+    lazy val parser = new AmendReliefInvestmentsRequestParser(mockValidator)
   }
 
   "parse" should {

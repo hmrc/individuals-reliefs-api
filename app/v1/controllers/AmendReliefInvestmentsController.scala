@@ -32,6 +32,8 @@ import v1.services.{AmendReliefInvestmentsService, EnrolmentsAuthService, MtdIdL
 
 import scala.concurrent.{ExecutionContext, Future}
 
+import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsResponse.AmendOrderLinksFactory
+
 @Singleton
 class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuthService,
                                                  val lookupService: MtdIdLookupService,
@@ -44,7 +46,7 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendReliefInvestmentsController", endpointName = "amendReliefInvestments")
 
-  def amend(nino: String, date: String): Action[JsValue] =
+  def handleRequest(nino: String, date: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       val rawData = AmendReliefInvestmentsRawData(nino, date, request.body)
       val result =
@@ -57,7 +59,6 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
-          NoContent.withApiHeaders(serviceResponse.correlationId)
 
           val response = Json.toJson(vendorResponse)
 
