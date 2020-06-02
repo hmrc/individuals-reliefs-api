@@ -59,6 +59,12 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
           NoContent.withApiHeaders(serviceResponse.correlationId)
 
+          val response = Json.toJson(vendorResponse)
+
+          Ok(response)
+            .withApiHeaders(serviceResponse.correlationId)
+            .as(MimeTypes.JSON)
+
         }
       result.leftMap { errorWrapper =>
         val correlationId = getCorrelationId(errorWrapper)
