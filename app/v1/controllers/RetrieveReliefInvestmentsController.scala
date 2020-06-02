@@ -23,9 +23,11 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.RetrieveReliefInvestmentsRequestParser
+import v1.hateoas.HateoasFactory
+import v1.models.des.RetrieveReliefInvestmentsHateoasData
 import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.requestData.retrieveReliefInvestments.RetrieveReliefInvestmentsRawData
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveReliefInvestmentsService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,7 +35,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveReliefInvestmentsController @Inject()(val authService: EnrolmentsAuthService,
                                                     val lookupService: MtdIdLookupService,
                                                     requestDataParser: RetrieveReliefInvestmentsRequestParser,
-                                                    service: ???,
+                                                    service: RetrieveReliefInvestmentsService,
+                                                    hateoasFactory: HateoasFactory,
                                                     cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
@@ -46,14 +49,18 @@ class RetrieveReliefInvestmentsController @Inject()(val authService: EnrolmentsA
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](requestDataParser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.retrieve(parsedRequest))
+          serviceResponse <- EitherT(service.retrieveReliefInvestments(parsedRequest))
+          vendorResponse <- EitherT.fromEither[Future](
+            hateoasFactory.wrap(serviceResponse.responseData, RetrieveReliefInvestmentsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
-          OK(Json.toJson(serviceResponse.responseData))
+
+          Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
         }
+
       result.leftMap { errorWrapper =>
         val correlationId = getCorrelationId(errorWrapper)
         errorResult(errorWrapper).withApiHeaders(correlationId)
