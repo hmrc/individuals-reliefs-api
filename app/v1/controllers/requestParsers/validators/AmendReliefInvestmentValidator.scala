@@ -16,136 +16,64 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{DateValidation, InvestmentRefValidation, JsonFormatValidation, NameValidation, NinoValidation, NumberValidation, TaxYearValidation}
+import v1.controllers.requestParsers.validators.validations.{DateValidation, InvestmentRefValidation, JsonFormatValidation, NameValidation, NinoValidation, NoValidationErrors, NumberValidation, TaxYearValidation}
 import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, FormatInvestmentRefErrorGenerator, FormatNameErrorGenerator, MtdError, RuleIncorrectOrEmptyBodyError, ValueFormatErrorGenerator}
-import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData}
+import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest, CommunityInvestmentItem, EisSubscriptionsItem, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
 
 
 class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRawData] {
 
-  private val validationSet = List(parameterFormatValidation, bodyFieldValidation)
+  private val validationSet = List(parameterFormatValidation, bodyFormatValidator, bodyValueValidator)
 
   private def parameterFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = (data: AmendReliefInvestmentsRawData) => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear),
-      JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError),
     )
   }
 
   //noinspection ScalaStyle
-  private def bodyFieldValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[AmendReliefInvestmentsBody]
-
-    def toFieldNameMap[T <: Product](r: T): Map[String, Any] = {
-      r.getClass.getDeclaredFields.map(_.getName).zip(r.productIterator.to).toMap
-    }
-
-    def valueValidations[T <: Product](r: T): Seq[String] = {
-      val map: Map[String, Any] = toFieldNameMap(r)
-
-      map.collect {
-        case (objectName, list: List[T]) =>
-          list.zipWithIndex.flatMap {
-            case (innerObject, i) =>
-              toFieldNameMap(innerObject).collect {
-                case (fieldName, Some(value: BigDecimal)) => NumberValidation.validate(value, s"$objectName/$i/$fieldName")
-              }
-          }
-      }
-    }.flatten.flatten.toSeq.sorted
-
-    val formatValueErrors = {
-      valueValidations(body) match {
-        case Nil =>
-          Nil
-        case paths =>
-          List(ValueFormatErrorGenerator.generate(paths))
-      }
-    }
-
-    def dateValidations[T <: Product](r: T): Seq[String] = {
-      val map: Map[String, Any] = toFieldNameMap(r)
-
-      map.collect {
-        case (objectName, list: List[T]) =>
-          list.zipWithIndex.flatMap {
-            case (innerObject, i) =>
-              toFieldNameMap(innerObject).collect {
-                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "date" => DateValidation.validate(value, s"$objectName/$i/$fieldName")
-              }
-          }
-      }.flatten.flatten.toSeq.sorted
-
-    }
-
-    val dateFormatErrors = {
-      dateValidations(body) match {
-        case Nil =>
-          Nil
-        case paths =>
-          List(FormatDateOfInvestmentErrorGenerator.generate(paths))
-      }
-    }
-
-    def nameValidations[T <: Product](r: T): Seq[String] = {
-      val map: Map[String, Any] = toFieldNameMap(r)
-
-      map.collect {
-        case (objectName, list: List[T]) =>
-          list.zipWithIndex.flatMap {
-            case (innerObject, i) =>
-              toFieldNameMap(innerObject).collect {
-                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "name" || fieldName.takeRight(4) == "Name" => NameValidation.validate(value, s"$objectName/$i/$fieldName")
-              }
-          }
-      }.flatten.flatten.toSeq.sorted
-    }
-
-    val nameFormatErrors = {
-      nameValidations(body) match {
-        case Nil =>
-          Nil
-        case paths =>
-          List(FormatNameErrorGenerator.generate(paths))
-      }
-
-    }
-
-    def investmentRefValidations[T <: Product](r: T): Seq[String] = {
-      val map: Map[String, Any] = toFieldNameMap(r)
-
-      map.collect {
-        case (objectName, list: List[T]) =>
-          list.zipWithIndex.flatMap {
-            case (innerObject, i) =>
-              toFieldNameMap(innerObject).collect {
-                case (fieldName: String, Some(value: String)) if fieldName.takeRight(3) == "Ref" => InvestmentRefValidation.validate(value, s"$objectName/$i/$fieldName")
-              }
-          }
-      }.flatten.flatten.toSeq.sorted
-    }
-
-    val investmentRefFormatErrors = {
-      investmentRefValidations(body) match {
-        case Nil =>
-          Nil
-        case paths =>
-          List(FormatInvestmentRefErrorGenerator.generate(paths))
-      }
-
-    }
-
+  private def bodyFormatValidator: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     List(
-      formatValueErrors,
-      dateFormatErrors,
-      nameFormatErrors,
-      investmentRefFormatErrors
+      JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError)
     )
   }
 
-  override def validate(data: AmendReliefInvestmentsRawData): List[MtdError] = {
-    run(validationSet, data).distinct
+  private def bodyValueValidator: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
+    val requestBodyData = data.body.as[AmendReliefInvestmentsBody]
+
+    List(flattenErrors(
+      List(
+        requestBodyData.vctSubscription.map(validateVct).getOrElse(NoValidationErrors)
+      )
+    ))
+  }
+
+  private def validateVct(vct: VctSubscriptionsItem): List[MtdError] = {
+    List(
+      InvestmentRefValidation.validateOptional(
+        vct.uniqueInvestmentRef),
+      NumberValidation.validateOptional(
+        vct.amountInvested),
+      NumberValidation.validateOptional(
+        vct.reliefClaimed),
+      DateValidation.validateOptional(
+        vct.dateOfInvestment),
+      NameValidation.validateOptional(
+        vct.name)
+    ).flatten
+  }
+
+  private def flattenErrors(errors: List[List[MtdError]]): List[MtdError] = {
+    errors.flatten.groupBy(_.message).map {case (_, errors) =>
+
+      val baseError = errors.head.copy(paths = Some(Seq.empty[String]))
+
+      errors.fold(baseError)(
+        (error1, error2) =>
+          error1.copy(paths = Some(error1.paths.getOrElse(Seq.empty[String]) ++ error2.paths.getOrElse(Seq.empty[String])))
+      )
+    }.toList
   }
 
 }

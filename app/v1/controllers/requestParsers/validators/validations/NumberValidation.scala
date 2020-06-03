@@ -16,12 +16,23 @@
 
 package v1.controllers.requestParsers.validators.validations
 
+import v1.models.errors.{MtdError, NinoFormatError}
+
 object NumberValidation {
-  def validate(field: BigDecimal, path: String): List[String] = {
+
+ def validateOptional(field: Option[BigDecimal]): List[MtdError] = field match {
+   case None => NoValidationErrors
+   case Some(value) => validate(
+     Some(value) = field
+   )
+ }
+
+
+  def validate(field: BigDecimal): List[MtdError] = {
     if(field >= 1 && field<100000000000.00 && field.scale == 2) {
       Nil
     } else {
-      List(path)
+      List(NinoFormatError)
     }
   }
 }
