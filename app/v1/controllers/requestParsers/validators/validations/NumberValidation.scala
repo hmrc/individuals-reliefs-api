@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{FormatValueErrorGenerator, MtdError, NinoFormatError}
+import v1.models.errors.{FormatValueErrorGenerator, MtdError}
 
 object NumberValidation {
 
@@ -29,7 +29,7 @@ object NumberValidation {
 
 
   def validate(field: BigDecimal, path: String): List[MtdError] = {
-    if (field >= 1 && field < 100000000000.00 && field.scale == 2) {
+    if (field >= 1 && field < 100000000000.00 && field.scale <= 2) {
       Nil
     } else {
       List(
