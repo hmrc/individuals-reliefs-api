@@ -50,13 +50,13 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
           case (item, i) => validateEisSubscription(item, i)
         }),
         body.communityInvestmentItems.map(_.zipWithIndex.flatMap {
-          case (item, i) => validateComInv(item, i)
+          case (item, i) => validateCommunityInvestment(item, i)
         }),
         body.seedEnterpriseInvestmentItems.map(_.zipWithIndex.flatMap {
-          case (item, i) => validateSei(item, i)
+          case (item, i) => validateSeedEnterpriseInvestment(item, i)
         }),
         body.socialEnterpriseInvestmentItems.map(_.zipWithIndex.flatMap {
-          case (item, i) => validateSocei(item, i)
+          case (item, i) => validatesocialEnterpriseInvestment(item, i)
         })
       ).map(_.getOrElse(NoValidationErrors).toList)
     ))
@@ -113,7 +113,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
   }
 
 
-  private def validateComInv(communityInvestmentItem: CommunityInvestmentItem, arrayIndex: Int): List[MtdError] = {
+  private def validateCommunityInvestment(communityInvestmentItem: CommunityInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
       InvestmentRefValidation.validateOptional(
         investmentRef = communityInvestmentItem.uniqueInvestmentRef,
@@ -138,7 +138,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
     ).flatten
   }
 
-  private def validateSei(seedEnterpriseInvestmentItem: SeedEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
+  private def validateSeedEnterpriseInvestment(seedEnterpriseInvestmentItem: SeedEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
       InvestmentRefValidation.validateOptional(
         investmentRef = seedEnterpriseInvestmentItem.uniqueInvestmentRef,
@@ -164,7 +164,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
   }
 
 
-  private def validateSocei(socialEnterpriseInvestmentItem: SocialEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
+  private def validatesocialEnterpriseInvestment(socialEnterpriseInvestmentItem: SocialEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
       InvestmentRefValidation.validateOptional(
         investmentRef = socialEnterpriseInvestmentItem.uniqueInvestmentRef,
