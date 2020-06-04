@@ -48,3 +48,7 @@ uses:
         delete: !include reliefInvestments_delete.raml
         put: !include reliefInvestments_amend.raml
         get: !include reliefInvestments_retrieve.raml
+  /others:
+    /{nino}:
+      /{taxYear}:
+        put: !include reliefOther_amend.raml
