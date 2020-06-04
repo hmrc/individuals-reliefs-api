@@ -2,17 +2,17 @@
   "links":[
     {
       "href":"/individuals/reliefs/other/{nino}/{taxYear}",
-      "rel":"self",
+      "rel":"amend-reliefs-other",
       "method":"PUT"
     },
     {
       "href":"/individuals/reliefs/other/{nino}/{taxYear}",
-      "rel":"retrieve-other-reliefs",
+      "rel":"self",
       "method":"GET"
     },
     {
       "href":"/individuals/reliefs/other/{nino}/{taxYear}",
-      "rel":"delete-other-reliefs",
+      "rel":"delete-reliefs-other",
       "method":"DELETE"
     }
   ]
