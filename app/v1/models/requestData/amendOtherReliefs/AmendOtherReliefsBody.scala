@@ -24,7 +24,7 @@ case class AmendOtherReliefsBody(nonDeductableLoanInterest: Option[NonDeductable
                                  maintenancePayments: Option[Seq[MaintenancePayments]],
                                  postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
                                  annualPaymentsMade: Option[AnnualPaymentsMade],
-                                 qualifyingLoanInterestPayments: Option[QualifyingLoanInterestPayments])
+                                 qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]])
 
 
 object AmendOtherReliefsBody {
