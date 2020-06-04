@@ -24,6 +24,7 @@
       ]
     },
     "payrollGiving": {
+      "description": "Details of payroll giving relief claimed.",
       "type": "object",
       "properties": {
         "customerReference": {
@@ -42,6 +43,7 @@
       ]
     },
     "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      "description": "Details of qualifying shares and securities distributed that qualify for relief.",
       "type": "object",
       "properties": {
         "customerReference": {
@@ -60,6 +62,7 @@
       ]
     },
     "maintenancePayments": {
+      "description": "Details of maintenance payments made to an ex-spouse.",
       "type": "array",
       "items": {
         "type": "object",
@@ -90,6 +93,7 @@
       }
     },
     "postCessationTradeReliefAndCertainOtherLosses": {
+      "description": "Details of trade reliefs and other losses post cessation of a business.",
       "type": "array",
       "items": {
         "type": "object",
@@ -128,6 +132,7 @@
       }
     },
     "annualPaymentsMade": {
+      "description": "Details of annual payments made.",
       "type": "object",
       "properties": {
         "customerReference": {
@@ -146,6 +151,7 @@
       ]
     },
     "qualifyingLoanInterestPayments": {
+      "description": "Details of qualifying loan interest payments made.",
       "type": "array",
       "items": {
         "type": "object",
