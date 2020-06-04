@@ -117,6 +117,35 @@ class ValidatorSpec extends UnitSpec with MockFactory {
     }
   }
 
+  "flattenErrors" should {
+    "flatten errors" when {
+      "errors with the same message are passed in" in new Test {
+        val errors = List(
+          List(MtdError("CODE", "MSG1", Some(Seq("path 1")))),
+          List(MtdError("CODE", "MSG1", Some(Seq("path 2")))),
+          List(MtdError("CODE", "MSG2", Some(Seq("path 1")))),
+        )
+
+        validator.flattenErrors(errors) shouldBe List(MtdError("CODE", "MSG1", Some(Seq("path 1", "path 2"))), MtdError("CODE", "MSG2", Some(Seq("path 1"))))
+      }
+    }
+    "flatten nothing" when {
+      "no errors with the same message are passed in" in new Test {
+        val errors = List(
+          List(MtdError("CODE", "MSG1", Some(Seq("path 1")))),
+          List(MtdError("CODE", "MSG2", Some(Seq("path 2")))),
+          List(MtdError("CODE", "MSG3", Some(Seq("path 3")))),
+        )
+
+        validator.flattenErrors(errors).sortBy(_.message) shouldBe List(
+          MtdError("CODE", "MSG1", Some(Seq("path 1"))),
+          MtdError("CODE", "MSG2", Some(Seq("path 2"))),
+          MtdError("CODE", "MSG3", Some(Seq("path 3")))
+        )
+      }
+    }
+  }
+
 }
 
 class MockFunctionObject(name: String) {

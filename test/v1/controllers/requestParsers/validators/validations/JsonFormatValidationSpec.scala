@@ -24,14 +24,16 @@ import v1.models.utils.JsonErrorValidators
 class JsonFormatValidationSpec extends UnitSpec with JsonErrorValidators {
 
   case class TestDataObject(fieldOne: String, fieldTwo: String)
+  case class TestDataObjectTwo(fieldOne: Option[String])
 
   implicit val testDataObjectReads: Reads[TestDataObject] = Json.reads[TestDataObject]
+  implicit val testDataObjectTwoReads: Reads[TestDataObjectTwo] = Json.reads[TestDataObjectTwo]
 
   val someError = MtdError("SOME_CODE", "some message")
 
   "validate" should {
     "return no errors" when {
-      "when a valid JSON object with all the necessary fields is supplied" in {
+      "a valid JSON object with all the necessary fields is supplied" in {
 
         val validJson = Json.parse("""{ "fieldOne" : "Something", "fieldTwo" : "SomethingElse" }""")
 
@@ -40,13 +42,21 @@ class JsonFormatValidationSpec extends UnitSpec with JsonErrorValidators {
       }
     }
 
-    "return an error " when {
-      "when a required field is missing" in {
+    "return an error" when {
+      "a required field is missing" in {
 
         // fieldTwo is missing
         val json = Json.parse("""{ "fieldOne" : "Something" }""")
 
         val validationResult = JsonFormatValidation.validate[TestDataObject](json, someError)
+        validationResult shouldBe List(someError)
+      }
+      "all case class fields are optional but no fields are provided" in {
+
+        // fieldTwo is missing
+        val json = Json.parse("""{}""")
+
+        val validationResult = JsonFormatValidation.validate[TestDataObjectTwo](json, someError)
         validationResult shouldBe List(someError)
       }
 

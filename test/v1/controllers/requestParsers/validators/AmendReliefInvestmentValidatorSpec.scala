@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, FormatInvestmentRefErrorGenerator, FormatNameErrorGenerator, ValueFormatErrorGenerator}
+import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, FormatInvestmentRefErrorGenerator, FormatNameErrorGenerator, FormatValueErrorGenerator}
 import v1.models.requestData.amendReliefInvestments.AmendReliefInvestmentsRawData
 
 class AmendReliefInvestmentValidatorSpec extends UnitSpec {
@@ -28,7 +28,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
   private val requestBodyJson = Json.parse(
     """
       |{
-      |  "vctSubscription":[
+      |  "vctSubscriptionsItems":[
       |    {
       |      "uniqueInvestmentRef": "VCTREF",
       |      "name": "VCT Fund X",
@@ -37,7 +37,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
       |      "reliefClaimed": 1334.00
       |      }
       |  ],
-      |  "eisSubscription":[
+      |  "eisSubscriptionsItems":[
       |    {
       |      "uniqueInvestmentRef": "XTAL",
       |      "name": "EIS Fund X",
@@ -47,7 +47,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
       |      "reliefClaimed": 43432.00
       |    }
       |  ],
-      |  "communityInvestment": [
+      |  "communityInvestmentItems": [
       |    {
       |      "uniqueInvestmentRef": "CIREF",
       |      "name": "CI X",
@@ -56,7 +56,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
       |      "reliefClaimed": 2344.00
       |    }
       |  ],
-      |  "seedEnterpriseInvestment": [
+      |  "seedEnterpriseInvestmentItems": [
       |    {
       |      "uniqueInvestmentRef": "123412/1A",
       |      "companyName": "Company Inc",
@@ -65,7 +65,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
       |      "reliefClaimed": 3432.00
       |    }
       |  ],
-      |  "socialEnterpriseInvestment": [
+      |  "socialEnterpriseInvestmentItems": [
       |    {
       |      "uniqueInvestmentRef": "123412/1A",
       |      "socialEnterpriseName": "SE Inc",
@@ -91,7 +91,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         val badJson = Json.parse(
           """
             |{
-            |  "vctSubscription":[
+            |  "vctSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "VCTREF",
             |      "name": "VCT Fund X",
@@ -107,7 +107,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": -1.00
             |      }
             |  ],
-            |  "eisSubscription":[
+            |  "eisSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "XTAL",
             |      "name": "EIS Fund X",
@@ -117,7 +117,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": -1.00
             |    }
             |  ],
-            |  "communityInvestment": [
+            |  "communityInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "CIREF",
             |      "name": "CI X",
@@ -126,7 +126,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": -1.00
             |    }
             |  ],
-            |  "seedEnterpriseInvestment": [
+            |  "seedEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "companyName": "Company Inc",
@@ -135,7 +135,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": -1.00
             |    }
             |  ],
-            |  "socialEnterpriseInvestment": [
+            |  "socialEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "socialEnterpriseName": "SE Inc",
@@ -147,20 +147,20 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |}
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          ValueFormatErrorGenerator.generate(Seq(
-            "vctSubscription/0/amountInvested",
-            "vctSubscription/0/reliefClaimed",
-            "vctSubscription/1/amountInvested",
-            "vctSubscription/1/reliefClaimed",
-            "eisSubscription/0/amountInvested",
-            "eisSubscription/0/reliefClaimed",
-            "communityInvestment/0/amountInvested",
-            "communityInvestment/0/reliefClaimed",
-            "seedEnterpriseInvestment/0/amountInvested",
-            "seedEnterpriseInvestment/0/reliefClaimed",
-            "socialEnterpriseInvestment/0/amountInvested",
-            "socialEnterpriseInvestment/0/reliefClaimed"
-          ).sorted)
+          FormatValueErrorGenerator.generate(Seq(
+            "/vctSubscriptionsItems/0/amountInvested",
+            "/vctSubscriptionsItems/0/reliefClaimed",
+            "/vctSubscriptionsItems/1/amountInvested",
+            "/vctSubscriptionsItems/1/reliefClaimed",
+            "/eisSubscriptionsItems/0/amountInvested",
+            "/eisSubscriptionsItems/0/reliefClaimed",
+            "/communityInvestmentItems/0/amountInvested",
+            "/communityInvestmentItems/0/reliefClaimed",
+            "/seedEnterpriseInvestmentItems/0/amountInvested",
+            "/seedEnterpriseInvestmentItems/0/reliefClaimed",
+            "/socialEnterpriseInvestmentItems/0/amountInvested",
+            "/socialEnterpriseInvestmentItems/0/reliefClaimed"
+          ))
         )
       }
     }
@@ -169,7 +169,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         val badJson = Json.parse(
           """
             |{
-            |  "vctSubscription":[
+            |  "vctSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "VCTREF",
             |      "name": "VCT Fund X",
@@ -185,7 +185,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 1.00
             |      }
             |  ],
-            |  "eisSubscription":[
+            |  "eisSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "XTAL",
             |      "name": "EIS Fund X",
@@ -195,7 +195,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 1.00
             |    }
             |  ],
-            |  "communityInvestment": [
+            |  "communityInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "CIREF",
             |      "name": "CI X",
@@ -204,7 +204,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": -1.00
             |    }
             |  ],
-            |  "seedEnterpriseInvestment": [
+            |  "seedEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "companyName": "Company Inc",
@@ -213,7 +213,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 1.00
             |    }
             |  ],
-            |  "socialEnterpriseInvestment": [
+            |  "socialEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "socialEnterpriseName": "SE Inc",
@@ -225,14 +225,14 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |}
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          ValueFormatErrorGenerator.generate(Seq(
-            "vctSubscription/0/reliefClaimed",
-            "vctSubscription/1/amountInvested",
-            "eisSubscription/0/amountInvested",
-            "communityInvestment/0/reliefClaimed",
-            "seedEnterpriseInvestment/0/amountInvested",
-            "socialEnterpriseInvestment/0/reliefClaimed"
-          ).sorted)
+          FormatValueErrorGenerator.generate(Seq(
+            "/vctSubscriptionsItems/0/reliefClaimed",
+            "/vctSubscriptionsItems/1/amountInvested",
+            "/eisSubscriptionsItems/0/amountInvested",
+            "/communityInvestmentItems/0/reliefClaimed",
+            "/seedEnterpriseInvestmentItems/0/amountInvested",
+            "/socialEnterpriseInvestmentItems/0/reliefClaimed"
+          ))
         )
       }
     }
@@ -241,7 +241,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         val badJson =Json.parse(
           """
             |{
-            |  "vctSubscription":[
+            |  "vctSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "VCTREF",
             |      "name": "VCT Fund X",
@@ -250,7 +250,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 1334.00
             |      }
             |  ],
-            |  "eisSubscription":[
+            |  "eisSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "XTAL",
             |      "name": "EIS Fund X",
@@ -260,7 +260,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 43432.00
             |    }
             |  ],
-            |  "communityInvestment": [
+            |  "communityInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "CIREF",
             |      "name": "CI X",
@@ -269,7 +269,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 2344.00
             |    }
             |  ],
-            |  "seedEnterpriseInvestment": [
+            |  "seedEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "companyName": "Company Inc",
@@ -278,7 +278,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 3432.00
             |    }
             |  ],
-            |  "socialEnterpriseInvestment": [
+            |  "socialEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "socialEnterpriseName": "SE Inc",
@@ -291,12 +291,12 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           FormatDateOfInvestmentErrorGenerator.generate(Seq(
-            "vctSubscription/0/dateOfInvestment",
-            "eisSubscription/0/dateOfInvestment",
-            "communityInvestment/0/dateOfInvestment",
-            "seedEnterpriseInvestment/0/dateOfInvestment",
-            "socialEnterpriseInvestment/0/dateOfInvestment"
-          ).sorted)
+            "/vctSubscriptionsItems/0/dateOfInvestment",
+            "/eisSubscriptionsItems/0/dateOfInvestment",
+            "/communityInvestmentItems/0/dateOfInvestment",
+            "/seedEnterpriseInvestmentItems/0/dateOfInvestment",
+            "/socialEnterpriseInvestmentItems/0/dateOfInvestment"
+          ))
         )
       }
     }
@@ -305,7 +305,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         val badJson = Json.parse(
           """
             |{
-            |  "vctSubscription":[
+            |  "vctSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "VCTREF",
             |      "name": "AA1234*&^%$£BBCBCBC",
@@ -314,7 +314,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 1334.00
             |      }
             |  ],
-            |  "eisSubscription":[
+            |  "eisSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "XTAL",
             |      "name": "",
@@ -324,7 +324,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 43432.00
             |    }
             |  ],
-            |  "communityInvestment": [
+            |  "communityInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "CIREF",
             |      "name": "AA1234*&^%$£BBCBCBC",
@@ -333,7 +333,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 2344.00
             |    }
             |  ],
-            |  "seedEnterpriseInvestment": [
+            |  "seedEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "companyName": "AA1234*&^%$£BBCBCBC",
@@ -342,7 +342,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 3432.00
             |    }
             |  ],
-            |  "socialEnterpriseInvestment": [
+            |  "socialEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "socialEnterpriseName": "AA1234*&^%$£BBCBCBC",
@@ -355,12 +355,12 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           FormatNameErrorGenerator.generate(Seq(
-            "vctSubscription/0/name",
-            "eisSubscription/0/name",
-            "communityInvestment/0/name",
-            "seedEnterpriseInvestment/0/companyName",
-            "socialEnterpriseInvestment/0/socialEnterpriseName"
-          ).sorted)
+            "/vctSubscriptionsItems/0/name",
+            "/eisSubscriptionsItems/0/name",
+            "/communityInvestmentItems/0/name",
+            "/seedEnterpriseInvestmentItems/0/companyName",
+            "/socialEnterpriseInvestmentItems/0/socialEnterpriseName"
+          ))
         )
       }
     }
@@ -369,7 +369,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         val badJson = Json.parse(
           """
             |{
-            |  "vctSubscription":[
+            |  "vctSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "bad ref",
             |      "name": "VCT Fund X",
@@ -378,7 +378,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 1334.00
             |      }
             |  ],
-            |  "eisSubscription":[
+            |  "eisSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "bad***ref",
             |      "name": "EIS Fund X",
@@ -388,7 +388,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 43432.00
             |    }
             |  ],
-            |  "communityInvestment": [
+            |  "communityInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "",
             |      "name": "CI X",
@@ -397,7 +397,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 2344.00
             |    }
             |  ],
-            |  "seedEnterpriseInvestment": [
+            |  "seedEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "bad ref",
             |      "companyName": "Company Inc",
@@ -406,7 +406,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 3432.00
             |    }
             |  ],
-            |  "socialEnterpriseInvestment": [
+            |  "socialEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "bad ref",
             |      "socialEnterpriseName": "SE Inc",
@@ -419,12 +419,12 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           FormatInvestmentRefErrorGenerator.generate(Seq(
-           "vctSubscription/0/uniqueInvestmentRef",
-           "eisSubscription/0/uniqueInvestmentRef",
-           "communityInvestment/0/uniqueInvestmentRef",
-           "seedEnterpriseInvestment/0/uniqueInvestmentRef",
-           "socialEnterpriseInvestment/0/uniqueInvestmentRef"
-          ).sorted)
+            "/vctSubscriptionsItems/0/uniqueInvestmentRef",
+            "/eisSubscriptionsItems/0/uniqueInvestmentRef",
+            "/communityInvestmentItems/0/uniqueInvestmentRef",
+            "/seedEnterpriseInvestmentItems/0/uniqueInvestmentRef",
+            "/socialEnterpriseInvestmentItems/0/uniqueInvestmentRef"
+          ))
         )
       }
     }
@@ -433,7 +433,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         val badJson = Json.parse(
           """
             |{
-            |  "vctSubscription":[
+            |  "vctSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "VCTREF",
             |      "name": "VCT Fund X",
@@ -442,7 +442,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 1334.00
             |      }
             |  ],
-            |  "eisSubscription":[
+            |  "eisSubscriptionsItems":[
             |    {
             |      "uniqueInvestmentRef": "XTAL",
             |      "name": "EIS Fund X",
@@ -452,7 +452,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 43432.00
             |    }
             |  ],
-            |  "communityInvestment": [
+            |  "communityInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "CIREF",
             |      "name": "CI X",
@@ -461,7 +461,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 2344.00
             |    }
             |  ],
-            |  "seedEnterpriseInvestment": [
+            |  "seedEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "companyName": "Company Inc",
@@ -470,7 +470,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "reliefClaimed": 0
             |    }
             |  ],
-            |  "socialEnterpriseInvestment": [
+            |  "socialEnterpriseInvestmentItems": [
             |    {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "socialEnterpriseName": "SE Inc",
@@ -482,14 +482,14 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |}
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          ValueFormatErrorGenerator.generate(Seq(
-            "seedEnterpriseInvestment/0/reliefClaimed",
-            "socialEnterpriseInvestment/0/amountInvested"
-          ).sorted),
+          FormatValueErrorGenerator.generate(Seq(
+            "/seedEnterpriseInvestmentItems/0/reliefClaimed",
+            "/socialEnterpriseInvestmentItems/0/amountInvested"
+          )),
           FormatDateOfInvestmentErrorGenerator.generate(Seq(
-            "vctSubscription/0/dateOfInvestment",
-            "eisSubscription/0/dateOfInvestment"
-          ).sorted)
+            "/vctSubscriptionsItems/0/dateOfInvestment",
+            "/eisSubscriptionsItems/0/dateOfInvestment"
+          ))
         )
       }
     }

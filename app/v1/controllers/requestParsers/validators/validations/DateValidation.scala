@@ -18,22 +18,26 @@ package v1.controllers.requestParsers.validators.validations
 
 import java.time.LocalDate
 
-import v1.models.errors.{FormatDateOfInvestmentError, MtdError}
+import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, MtdError}
 
 import scala.util.{Failure, Success, Try}
 
 object DateValidation {
 
-  def validateOptional(date: Option[String]): List[MtdError] = date match {
-    case None => NoValidationErrors
-    case Some(value) => validate(date=value)
+  def validateOptional(date: Option[String], path: String): List[MtdError] = {
+    date match {
+      case None => NoValidationErrors
+      case Some(value) => validate(value, path)
+    }
   }
 
-  def validate(date: String): List[MtdError] = Try {
+  private def validate(date: String, path: String): List[MtdError] = Try {
     if(date.nonEmpty) LocalDate.parse(date, dateFormat)
   } match {
     case Success(_) => Nil
-    case Failure(_) => List(FormatDateOfInvestmentError)
+    case Failure(_) => List(
+      FormatDateOfInvestmentErrorGenerator.generate(Seq(path))
+    )
   }
 
 

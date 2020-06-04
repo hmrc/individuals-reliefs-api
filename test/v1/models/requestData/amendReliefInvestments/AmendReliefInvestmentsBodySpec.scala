@@ -22,47 +22,47 @@ import v1.models.utils.JsonErrorValidators
 
 class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
   val amendReliefInvestmentsBody = AmendReliefInvestmentsBody(
-    Seq(VctSubscriptionsItem(
+    Some(Seq(VctSubscriptionsItem(
       Some("VCTREF"),
       Some("VCT Fund X"),
       Some("2018-04-16"),
       Some(BigDecimal(23312.00)),
       Some(BigDecimal(1334.00))
-    )),
-    Seq(EisSubscriptionsItem(
+    ))),
+    Some(Seq(EisSubscriptionsItem(
       Some("XTAL"),
       Some("EIS Fund X"),
       Some(true),
       Some("2020-12-12"),
       Some(BigDecimal(23312.00)),
       Some(BigDecimal(43432.00))
-    )),
-    Seq(CommunityInvestmentItem(
+    ))),
+    Some(Seq(CommunityInvestmentItem(
       Some("CIREF"),
       Some("CI X"),
       Some("2020-12-12"),
       Some(BigDecimal(6442.00)),
       Some(BigDecimal(2344.00))
-    )),
-    Seq(SeedEnterpriseInvestmentItem(
+    ))),
+    Some(Seq(SeedEnterpriseInvestmentItem(
       Some("123412/1A"),
       Some("Company Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
       Some(BigDecimal(3432.00))
-    )),
-    Seq(SocialEnterpriseInvestmentItem(
+    ))),
+    Some(Seq(SocialEnterpriseInvestmentItem(
       Some("123412/1A"),
       Some("SE Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
       Some(BigDecimal(3432.00))
-    ))
+    )))
   )
   val json = Json.parse(
     """
       |{
-      |  "vctSubscription":[
+      |  "vctSubscriptionsItems":[
       |    {
       |      "uniqueInvestmentRef": "VCTREF",
       |      "name": "VCT Fund X",
@@ -71,7 +71,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       |      "reliefClaimed": 1334.00
       |      }
       |  ],
-      |  "eisSubscription":[
+      |  "eisSubscriptionsItems":[
       |    {
       |      "uniqueInvestmentRef": "XTAL",
       |      "name": "EIS Fund X",
@@ -81,7 +81,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       |      "reliefClaimed": 43432.00
       |    }
       |  ],
-      |  "communityInvestment": [
+      |  "communityInvestmentItems": [
       |    {
       |      "uniqueInvestmentRef": "CIREF",
       |      "name": "CI X",
@@ -90,7 +90,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       |      "reliefClaimed": 2344.00
       |    }
       |  ],
-      |  "seedEnterpriseInvestment": [
+      |  "seedEnterpriseInvestmentItems": [
       |    {
       |      "uniqueInvestmentRef": "123412/1A",
       |      "companyName": "Company Inc",
@@ -99,7 +99,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       |      "reliefClaimed": 3432.00
       |    }
       |  ],
-      |  "socialEnterpriseInvestment": [
+      |  "socialEnterpriseInvestmentItems": [
       |    {
       |      "uniqueInvestmentRef": "123412/1A",
       |      "socialEnterpriseName": "SE Inc",
