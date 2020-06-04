@@ -17,7 +17,6 @@
 package v1.models.response.amendReliefInvestments
 
 import config.AppConfig
-import play.api.libs.json.{Json, OWrites}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 

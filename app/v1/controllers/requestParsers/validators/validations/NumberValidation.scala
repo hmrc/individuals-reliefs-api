@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{FormatValueErrorGenerator, MtdError}
+import v1.models.errors.{ValueFormatError, MtdError}
 
 object NumberValidation {
 
@@ -33,7 +33,7 @@ object NumberValidation {
       Nil
     } else {
       List(
-        FormatValueErrorGenerator.generate(Seq(path))
+        ValueFormatError.copy(paths = Some(Seq(path)))
       )
     }
   }

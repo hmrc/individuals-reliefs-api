@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.FormatInvestmentRefErrorGenerator
+import v1.models.errors.InvestmentRefFormatError
 import v1.models.utils.JsonErrorValidators
 
 class InvestmentRefValidationSpec extends UnitSpec with JsonErrorValidators {
@@ -42,7 +42,7 @@ class InvestmentRefValidationSpec extends UnitSpec with JsonErrorValidators {
         val validationResult = InvestmentRefValidation.validateOptional(invalidRef, "/vctSubscription/0/uniqueInvestmentRef")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe  FormatInvestmentRefErrorGenerator.generate(Seq("/vctSubscription/0/uniqueInvestmentRef"))
+        validationResult.head shouldBe  InvestmentRefFormatError.copy(paths = Some(Seq("/vctSubscription/0/uniqueInvestmentRef")))
       }
     }
   }

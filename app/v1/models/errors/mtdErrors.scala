@@ -24,24 +24,16 @@ object MtdError {
   implicit val writes: Writes[MtdError] = Json.writes[MtdError]
 }
 
+object MtdErrorWithCustomMessage {
+  def unapply(arg: MtdError): Option[String] = Some(arg.code)
+}
+
 object NinoFormatError extends MtdError("FORMAT_NINO", "The provided NINO is invalid")
 object TaxYearFormatError extends MtdError("FORMAT_TAX_YEAR", "The provided tax year is invalid")
-
-object FormatValueErrorGenerator {
-  def generate(paths: Seq[String]): MtdError = MtdError("FORMAT_VALUE", "The field should be between 1 and 99999999999.99", Some(paths))
-}
-
-object FormatDateOfInvestmentErrorGenerator {
-  def generate(paths: Seq[String]): MtdError = MtdError("FORMAT_DATE_OF_INVESTMENT", "The format of the investment date is invalid", Some(paths))
-}
-
-object FormatNameErrorGenerator {
-  def generate(paths: Seq[String]): MtdError = MtdError("FORMAT_NAME", "The format of the name is invalid", Some(paths))
-}
-
-object FormatInvestmentRefErrorGenerator {
-  def generate(paths: Seq[String]): MtdError = MtdError("FORMAT_UNIQUE_INVESTMENT_REFERENCE", "The format of unique investment reference is invalid", Some(paths))
-}
+object ValueFormatError extends MtdError("FORMAT_VALUE", "The field should be between 1 and 99999999999.99")
+object DateOfInvestmentFormatError extends MtdError("FORMAT_DATE_OF_INVESTMENT", "The format of the investment date is invalid")
+object NameFormatError extends MtdError("FORMAT_NAME", "The format of the name is invalid")
+object InvestmentRefFormatError extends MtdError("FORMAT_UNIQUE_INVESTMENT_REFERENCE", "The format of unique investment reference is invalid")
 
 
 // Rule Errors

@@ -20,17 +20,17 @@ import cats.data.EitherT
 import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{Action, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.AmendReliefInvestmentsRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.requestData.amendReliefInvestments.AmendReliefInvestmentsRawData
 import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
+import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsResponse.AmendOrderLinksFactory
 import v1.services.{AmendReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
-import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsResponse.AmendOrderLinksFactory
 
 @Singleton
 class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuthService,
@@ -69,8 +69,16 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
     }
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
+
     (errorWrapper.error: @unchecked) match {
-      case NinoFormatError | BadRequestError | ValueFormatErrorGenerator => BadRequest(Json.toJson(errorWrapper))
+      case NinoFormatError |
+           BadRequestError |
+           TaxYearFormatError |
+           MtdErrorWithCustomMessage(ValueFormatError.code) |
+           MtdErrorWithCustomMessage(DateOfInvestmentFormatError.code) |
+           MtdErrorWithCustomMessage(NameFormatError.code) |
+           MtdErrorWithCustomMessage(InvestmentRefFormatError.code) =>
+        BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }

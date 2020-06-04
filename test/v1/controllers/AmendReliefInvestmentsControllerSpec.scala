@@ -62,9 +62,6 @@ class AmendReliefInvestmentsControllerSpec
   private val taxYear = "2019-20"
   private val correlationId = "X-123"
 
-  private val rawData = AmendReliefInvestmentsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendReliefInvestmentsRequest(Nino(nino), taxYear, requestBody)
-
   private val testHateoasLink = Link(href = s"individuals/reliefs/innvestment/$nino/$taxYear", method = PUT, rel = "self")
 
   private val requestJson = Json.parse(
@@ -121,43 +118,46 @@ class AmendReliefInvestmentsControllerSpec
   )
 
   private val requestBody = AmendReliefInvestmentsBody(
-    Seq(VctSubscriptionsItem(
+    Some(Seq(VctSubscriptionsItem(
       Some("VCTREF"),
       Some("VCT Fund X"),
       Some("2018-04-16"),
       Some(BigDecimal(23312.00)),
       Some(BigDecimal(1334.00))
-    )),
-    Seq(EisSubscriptionsItem(
+    ))),
+    Some(Seq(EisSubscriptionsItem(
       Some("XTAL"),
       Some("EIS Fund X"),
       Some(true),
       Some("2020-12-12"),
       Some(BigDecimal(23312.00)),
       Some(BigDecimal(43432.00))
-    )),
-    Seq(CommunityInvestmentItem(
+    ))),
+    Some(Seq(CommunityInvestmentItem(
       Some("CIREF"),
       Some("CI X"),
       Some("2020-12-12"),
       Some(BigDecimal(6442.00)),
       Some(BigDecimal(2344.00))
-    )),
-    Seq(SeedEnterpriseInvestmentItem(
+    ))),
+    Some(Seq(SeedEnterpriseInvestmentItem(
       Some("123412/1A"),
       Some("Company Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
       Some(BigDecimal(3432.00))
-    )),
-    Seq(SocialEnterpriseInvestmentItem(
+    ))),
+    Some(Seq(SocialEnterpriseInvestmentItem(
       Some("123412/1A"),
       Some("SE Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
       Some(BigDecimal(3432.00))
-    ))
+    )))
   )
+
+  private val rawData = AmendReliefInvestmentsRawData(nino, taxYear, requestJson)
+  private val requestData = AmendReliefInvestmentsRequest(Nino(nino), taxYear, requestBody)
 
   "handleRequest" should {
     "return Ok" when {
@@ -200,18 +200,18 @@ class AmendReliefInvestmentsControllerSpec
         val input = Seq(
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
-          (ValueFormatErrorGenerator.generate(Seq(
+          (ValueFormatError.copy(paths = Some(Seq(
             "vctSubscriptionsItems/0/amountInvested",
-            "vctSubscriptionsItems/0/reliefClaimed")),BAD_REQUEST),
-          (FormatDateOfInvestmentErrorGenerator.generate(Seq(
+            "vctSubscriptionsItems/0/reliefClaimed"))), BAD_REQUEST),
+          (DateOfInvestmentFormatError.copy(paths = Some(Seq(
             "vctSubscriptionsItems/0/dateOfInvestment",
-            "eisSubscriptionsItems/0/dateOfInvestment")),BAD_REQUEST),
-          (FormatNameErrorGenerator.generate(Seq(
+            "eisSubscriptionsItems/0/dateOfInvestment"))), BAD_REQUEST),
+          (NameFormatError.copy(paths = Some(Seq(
             "vctSubscriptionsItems/0/name",
-            "eisSubscriptionsItems/0/name")),BAD_REQUEST),
-          (FormatInvestmentRefErrorGenerator.generate(Seq(
+            "eisSubscriptionsItems/0/name"))), BAD_REQUEST),
+          (InvestmentRefFormatError.copy(paths = Some(Seq(
             "vctSubscriptionsItems/0/uniqueInvestmentRef",
-            "eisSubscriptionsItems/0/uniqueInvestmentRef")),BAD_REQUEST)
+            "eisSubscriptionsItems/0/uniqueInvestmentRef"))), BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
