@@ -18,19 +18,11 @@ package v1.models.requestData.amendReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-<<<<<<< 51a07afa401168acc7808503d7b41d7419bd9f27
-case class AmendReliefInvestmentsBody(vctSubscriptionsItems: Seq[VctSubscriptionsItem],
-                                      eisSubscriptionsItems: Seq[EisSubscriptionsItem],
-                                      communityInvestmentItems: Seq[CommunityInvestmentItem],
-                                      seedEnterpriseInvestmentItems: Seq[SeedEnterpriseInvestmentItem],
-                                      socialEnterpriseInvestmentItems: Seq[SocialEnterpriseInvestmentItem])
-=======
 case class AmendReliefInvestmentsBody(vctSubscriptionsItems: Option[Seq[VctSubscriptionsItem]],
                                       eisSubscriptionsItems: Option[Seq[EisSubscriptionsItem]],
                                       communityInvestmentItems: Option[Seq[CommunityInvestmentItem]],
                                       seedEnterpriseInvestmentItems: Option[Seq[SeedEnterpriseInvestmentItem]],
                                       socialEnterpriseInvestmentItems: Option[Seq[SocialEnterpriseInvestmentItem]])
->>>>>>> amend parser and validator alignment finished
 
 object AmendReliefInvestmentsBody {
   implicit val format: OFormat[AmendReliefInvestmentsBody] = Json.format[AmendReliefInvestmentsBody]
