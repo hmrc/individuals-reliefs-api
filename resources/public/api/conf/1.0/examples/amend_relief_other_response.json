@@ -1,0 +1,19 @@
+{
+  "links":[
+    {
+      "href":"/individuals/reliefs/other/{nino}/{taxYear}",
+      "rel":"self",
+      "method":"PUT"
+    },
+    {
+      "href":"/individuals/reliefs/other/{nino}/{taxYear}",
+      "rel":"retrieve-other-reliefs",
+      "method":"GET"
+    },
+    {
+      "href":"/individuals/reliefs/other/{nino}/{taxYear}",
+      "rel":"delete-other-reliefs",
+      "method":"DELETE"
+    }
+  ]
+}

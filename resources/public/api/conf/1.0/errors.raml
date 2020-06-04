@@ -168,3 +168,25 @@ traits:
                 description: The format of the investment date is invalid
                 value:
                   code: FORMAT_DATE_OF_INVESTMENT
+  formatDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatDate:
+                description: The supplied date format is invalid
+                value:
+                  code: FORMAT_DATE
+  formatCustomerRef:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatCustomerRef:
+                description: The format of customerReference is not valid
+                value:
+                  code: FORMAT_CUSTOMER_REF
