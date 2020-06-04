@@ -18,13 +18,13 @@ package v1.models.requestData.amendOtherReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AmendOtherReliefsBody(nonDeductableLoanInterest: NonDeductableLoanInterest,
-                                 payrollGiving: PayrollGiving,
-                                 qualifyingDistributionRedemptionOfSharesAndSecurities: QualifyingDistributionRedemptionOfSharesAndSecurities,
-                                 maintenancePayments: Seq[MaintenancePayments],
-                                 postCessationTradeReliefAndCertainOtherLosses: Seq[PostCessationTradeReliefAndCertainOtherLosses],
-                                 annualPaymentsMade: AnnualPaymentsMade,
-                                 qualifyingLoanInterestPayments: QualifyingLoanInterestPayments)
+case class AmendOtherReliefsBody(nonDeductableLoanInterest: Option[NonDeductableLoanInterest],
+                                 payrollGiving: Option[PayrollGiving],
+                                 qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
+                                 maintenancePayments: Option[Seq[MaintenancePayments]],
+                                 postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
+                                 annualPaymentsMade: Option[AnnualPaymentsMade],
+                                 qualifyingLoanInterestPayments: Option[QualifyingLoanInterestPayments])
 
 
 object AmendOtherReliefsBody {

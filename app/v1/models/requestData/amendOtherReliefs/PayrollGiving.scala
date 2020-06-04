@@ -18,7 +18,7 @@ package v1.models.requestData.amendOtherReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class PayrollGiving(customerReference: String, reliefClaimed: BigDecimal)
+case class PayrollGiving(customerReference: Option[String], reliefClaimed: BigDecimal)
 
 
 object PayrollGiving {

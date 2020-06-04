@@ -18,7 +18,7 @@ package v1.models.requestData.amendOtherReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class NonDeductableLoanInterest(customerReference: String, reliefClaimed: BigDecimal)
+case class NonDeductableLoanInterest(customerReference: Option[String], reliefClaimed: BigDecimal)
 
 
 object NonDeductableLoanInterest {

@@ -19,9 +19,9 @@ package v1.models.requestData.amendOtherReliefs
 import play.api.libs.json.{Json, OFormat}
 
 case class MaintenancePayments(customerReference: String,
-                               exSpouseName: String,
-                               exSpouseDateOfBirth: String,
-                               amount: BigDecimal)
+                               exSpouseName: Option[String],
+                               exSpouseDateOfBirth: Option[String],
+                               amount: Option[BigDecimal])
 
 
 object MaintenancePayments {

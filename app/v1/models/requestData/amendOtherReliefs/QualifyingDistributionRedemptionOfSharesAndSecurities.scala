@@ -18,7 +18,7 @@ package v1.models.requestData.amendOtherReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class QualifyingDistributionRedemptionOfSharesAndSecurities(customerReference: String, amount:BigDecimal)
+case class QualifyingDistributionRedemptionOfSharesAndSecurities(customerReference: Option[String], amount:BigDecimal)
 
 
 object QualifyingDistributionRedemptionOfSharesAndSecurities {
