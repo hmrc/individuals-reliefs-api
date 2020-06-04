@@ -21,10 +21,7 @@ import play.api.libs.json.{Json, OWrites}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class AmendReliefInvestmentsResponse()
-
 object AmendReliefInvestmentsResponse extends HateoasLinks {
-  implicit val writes: OWrites[AmendReliefInvestmentsResponse] = OWrites[AmendReliefInvestmentsResponse](_ => Json.obj())
 
   implicit object AmendOrderLinksFactory extends HateoasLinksFactory[Unit, AmendReliefInvestmentsHateoasData] {
     override def links(appConfig: AppConfig, data: AmendReliefInvestmentsHateoasData): Seq[Link] = {

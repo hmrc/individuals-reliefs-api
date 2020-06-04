@@ -20,10 +20,7 @@ object RelType {
   val SAMPLE_ENDPOINT_REL = "sample-rel"
 
   val SELF = "self"
-<<<<<<< HEAD
   val RETRIEVE_RELIEF_INVESTMENTS = "retrieve-relief-investments"
-=======
->>>>>>> controller started
   val AMEND_RELIEF_INVESTMENTS = "amend-relief-investments"
   val DELETE_RELIEF_INVESTMENTS = "delete-relief-investments"
 }

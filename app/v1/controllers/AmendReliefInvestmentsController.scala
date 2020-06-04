@@ -19,9 +19,8 @@ package v1.controllers
 import cats.data.EitherT
 import cats.implicits._
 import javax.inject.{Inject, Singleton}
-import play.api.http.MimeTypes
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.AmendReliefInvestmentsRequestParser
 import v1.hateoas.HateoasFactory
@@ -31,7 +30,6 @@ import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasDa
 import v1.services.{AmendReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
-
 import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsResponse.AmendOrderLinksFactory
 
 @Singleton
@@ -46,27 +44,24 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendReliefInvestmentsController", endpointName = "amendReliefInvestments")
 
-  def handleRequest(nino: String, date: String): Action[JsValue] =
+  def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
-      val rawData = AmendReliefInvestmentsRawData(nino, date, request.body)
+      val rawData = AmendReliefInvestmentsRawData(nino, taxYear, request.body)
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](amendReliefInvestmentsParser.parseRequest(rawData))
           serviceResponse <- EitherT(amendReliefInvestmentsService.doServiceThing(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, AmendReliefInvestmentsHateoasData(nino, date)).asRight[ErrorWrapper])
+            hateoasFactory.wrap(serviceResponse.responseData, AmendReliefInvestmentsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          val response = Json.toJson(vendorResponse)
-
-          Ok(response)
+          Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
-            .as(MimeTypes.JSON)
-
         }
+
       result.leftMap { errorWrapper =>
         val correlationId = getCorrelationId(errorWrapper)
         errorResult(errorWrapper).withApiHeaders(correlationId)
