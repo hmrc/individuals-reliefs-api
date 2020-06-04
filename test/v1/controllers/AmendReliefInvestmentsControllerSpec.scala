@@ -169,11 +169,11 @@ class AmendReliefInvestmentsControllerSpec
 
         MockAmendReliefService
           .doServiceThing(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, null))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap(null, AmendReliefInvestmentsHateoasData(nino, taxYear))
-          .returns(HateoasWrapper(null, Seq(testHateoasLink)))
+          .wrap((), AmendReliefInvestmentsHateoasData(nino, taxYear))
+          .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
         status(result) shouldBe OK
@@ -200,8 +200,18 @@ class AmendReliefInvestmentsControllerSpec
         val input = Seq(
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST)
+          (ValueFormatErrorGenerator.generate(Seq(
+            "vctSubscriptionsItems/0/amountInvested",
+            "vctSubscriptionsItems/0/reliefClaimed")),BAD_REQUEST),
+          (FormatDateOfInvestmentErrorGenerator.generate(Seq(
+            "vctSubscriptionsItems/0/dateOfInvestment",
+            "eisSubscriptionsItems/0/dateOfInvestment")),BAD_REQUEST),
+          (FormatNameErrorGenerator.generate(Seq(
+            "vctSubscriptionsItems/0/name",
+            "eisSubscriptionsItems/0/name")),BAD_REQUEST),
+          (FormatInvestmentRefErrorGenerator.generate(Seq(
+            "vctSubscriptionsItems/0/uniqueInvestmentRef",
+            "eisSubscriptionsItems/0/uniqueInvestmentRef")),BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -229,10 +239,10 @@ class AmendReliefInvestmentsControllerSpec
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (UnauthorisedError, UNAUTHORIZED),
+          (TaxYearFormatError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

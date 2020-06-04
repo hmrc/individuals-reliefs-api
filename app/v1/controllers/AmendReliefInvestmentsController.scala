@@ -70,7 +70,7 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     (errorWrapper.error: @unchecked) match {
-      case NinoFormatError | BadRequestError => BadRequest(Json.toJson(errorWrapper))
+      case NinoFormatError | BadRequestError | ValueFormatErrorGenerator => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
