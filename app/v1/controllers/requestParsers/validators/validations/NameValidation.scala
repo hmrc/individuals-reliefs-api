@@ -16,13 +16,24 @@
 
 package v1.controllers.requestParsers.validators.validations
 
+import v1.models.errors.{FormatNameErrorGenerator, MtdError}
+
 
 object NameValidation {
 
   private val nameRegex =
     "^[A-Za-z0-9 ]+$"
 
-  def validate(name: String, path: String): List[String] = {
-    if (name.matches(nameRegex)) Nil else List(path)
+  def validateOptional(name: Option[String], path: String): List[MtdError] = {
+    name match {
+      case None => NoValidationErrors
+      case Some(value) => validate(value, path)
+    }
+  }
+
+  private def validate(name: String, path: String): List[MtdError] = {
+    if (name.matches(nameRegex)) Nil else List(
+      FormatNameErrorGenerator.generate(Seq(path))
+    )
   }
 }

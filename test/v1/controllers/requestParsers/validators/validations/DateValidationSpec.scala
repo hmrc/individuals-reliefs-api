@@ -17,27 +17,31 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
+import v1.models.errors.FormatDateOfInvestmentErrorGenerator
 
 class DateValidationSpec extends UnitSpec {
 
+  val validDate: Option[String] = Some("2018-04-06")
+  val invalidDate: Option[String] = Some("04-06-2018")
+
   "validate" should {
     "return no errors" when {
-      "when a valid date is supplied" in {
-
-        val validDate = "2018-04-06"
-        val validationResult = DateValidation.validate(validDate, "vctSubscription/0/dateOfInvestment")
+      "a valid date is supplied" in {
+        val validationResult = DateValidation.validateOptional(validDate, "/vctSubscription/0/dateOfInvestment")
+        validationResult.isEmpty shouldBe true
+      }
+      "no valid date is supplied" in {
+        val validationResult = DateValidation.validateOptional(None, "/vctSubscription/0/dateOfInvestment")
         validationResult.isEmpty shouldBe true
       }
     }
 
     "return an error" when {
-      "when a invalid date is supplied" in {
-
-        val invalidDate = "04-06-2018"
-        val validationResult = DateValidation.validate(invalidDate, "vctSubscription/0/dateOfInvestment")
+      "a invalid date is supplied" in {
+        val validationResult = DateValidation.validateOptional(invalidDate, "/vctSubscription/0/dateOfInvestment")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe "vctSubscription/0/dateOfInvestment"
+        validationResult.head shouldBe FormatDateOfInvestmentErrorGenerator.generate(Seq("/vctSubscription/0/dateOfInvestment"))
       }
     }
   }

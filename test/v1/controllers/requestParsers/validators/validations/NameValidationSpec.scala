@@ -17,28 +17,31 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.utils.JsonErrorValidators
+import v1.models.errors.FormatNameErrorGenerator
 
-class NameValidationSpec extends UnitSpec with JsonErrorValidators {
+class NameValidationSpec extends UnitSpec {
+
+  val validName: Option[String] = Some("Company Inc")
+  val invalidName: Option[String] = Some("AA1234*&^%$£BBCBCBC")
 
   "validate" should {
     "return no errors" when {
-      "when a valid name is supplied" in {
-
-        val validName = "Company Inc"
-        val validationResult = NameValidation.validate(validName, "vctSubscription/1/name")
+      "a valid name is supplied" in {
+        val validationResult = NameValidation.validateOptional(validName, "/vctSubscription/1/name")
+        validationResult.isEmpty shouldBe true
+      }
+      "no name is supplied" in {
+        val validationResult = NameValidation.validateOptional(None, "/vctSubscription/1/name")
         validationResult.isEmpty shouldBe true
       }
     }
 
     "return an error" when {
-      "when an invalid name is supplied" in {
-
-        val invalidName = "AA1234*&^%$£BBCBCBC"
-        val validationResult = NameValidation.validate(invalidName, "vctSubscription/1/name")
+      "an invalid name is supplied" in {
+        val validationResult = NameValidation.validateOptional(invalidName, "/vctSubscription/1/name")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe "vctSubscription/1/name"
+        validationResult.head shouldBe FormatNameErrorGenerator.generate(Seq("/vctSubscription/1/name"))
       }
     }
   }

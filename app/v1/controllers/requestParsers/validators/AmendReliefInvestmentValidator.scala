@@ -16,136 +16,181 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{DateValidation, InvestmentRefValidation, JsonFormatValidation, NameValidation, NinoValidation, NumberValidation, TaxYearValidation}
-import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, FormatInvestmentRefErrorGenerator, FormatNameErrorGenerator, MtdError, RuleIncorrectOrEmptyBodyError, ValueFormatErrorGenerator}
-import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData}
+import v1.controllers.requestParsers.validators.validations._
+import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
+import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, CommunityInvestmentItem, EisSubscriptionsItem, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
 
 
 class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRawData] {
 
-  private val validationSet = List(parameterFormatValidation, bodyFieldValidation)
+  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
 
   private def parameterFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = (data: AmendReliefInvestmentsRawData) => {
     List(
       NinoValidation.validate(data.nino),
-      TaxYearValidation.validate(data.taxYear),
-      JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError),
+      TaxYearValidation.validate(data.taxYear)
     )
   }
 
-  //noinspection ScalaStyle
+  private def bodyFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
+    List(
+      JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError)
+    )
+  }
+
   private def bodyFieldValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendReliefInvestmentsBody]
 
-    def toFieldNameMap[T <: Product](r: T): Map[String, Any] = {
-      r.getClass.getDeclaredFields.map(_.getName).zip(r.productIterator.to).toMap
-    }
-
-    def valueValidations[T <: Product](r: T): Seq[String] = {
-      val map: Map[String, Any] = toFieldNameMap(r)
-
-      map.collect {
-        case (objectName, list: List[T]) =>
-          list.zipWithIndex.flatMap {
-            case (innerObject, i) =>
-              toFieldNameMap(innerObject).collect {
-                case (fieldName, Some(value: BigDecimal)) => NumberValidation.validate(value, s"$objectName/$i/$fieldName")
-              }
-          }
-      }
-    }.flatten.flatten.toSeq.sorted
-
-    val formatValueErrors = {
-      valueValidations(body) match {
-        case Nil =>
-          Nil
-        case paths =>
-          List(ValueFormatErrorGenerator.generate(paths))
-      }
-    }
-
-    def dateValidations[T <: Product](r: T): Seq[String] = {
-      val map: Map[String, Any] = toFieldNameMap(r)
-
-      map.collect {
-        case (objectName, list: List[T]) =>
-          list.zipWithIndex.flatMap {
-            case (innerObject, i) =>
-              toFieldNameMap(innerObject).collect {
-                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "date" => DateValidation.validate(value, s"$objectName/$i/$fieldName")
-              }
-          }
-      }.flatten.flatten.toSeq.sorted
-
-    }
-
-    val dateFormatErrors = {
-      dateValidations(body) match {
-        case Nil =>
-          Nil
-        case paths =>
-          List(FormatDateOfInvestmentErrorGenerator.generate(paths))
-      }
-    }
-
-    def nameValidations[T <: Product](r: T): Seq[String] = {
-      val map: Map[String, Any] = toFieldNameMap(r)
-
-      map.collect {
-        case (objectName, list: List[T]) =>
-          list.zipWithIndex.flatMap {
-            case (innerObject, i) =>
-              toFieldNameMap(innerObject).collect {
-                case (fieldName: String, Some(value: String)) if fieldName.take(4) == "name" || fieldName.takeRight(4) == "Name" => NameValidation.validate(value, s"$objectName/$i/$fieldName")
-              }
-          }
-      }.flatten.flatten.toSeq.sorted
-    }
-
-    val nameFormatErrors = {
-      nameValidations(body) match {
-        case Nil =>
-          Nil
-        case paths =>
-          List(FormatNameErrorGenerator.generate(paths))
-      }
-
-    }
-
-    def investmentRefValidations[T <: Product](r: T): Seq[String] = {
-      val map: Map[String, Any] = toFieldNameMap(r)
-
-      map.collect {
-        case (objectName, list: List[T]) =>
-          list.zipWithIndex.flatMap {
-            case (innerObject, i) =>
-              toFieldNameMap(innerObject).collect {
-                case (fieldName: String, Some(value: String)) if fieldName.takeRight(3) == "Ref" => InvestmentRefValidation.validate(value, s"$objectName/$i/$fieldName")
-              }
-          }
-      }.flatten.flatten.toSeq.sorted
-    }
-
-    val investmentRefFormatErrors = {
-      investmentRefValidations(body) match {
-        case Nil =>
-          Nil
-        case paths =>
-          List(FormatInvestmentRefErrorGenerator.generate(paths))
-      }
-
-    }
-
-    List(
-      formatValueErrors,
-      dateFormatErrors,
-      nameFormatErrors,
-      investmentRefFormatErrors
-    )
+    List(flattenErrors(
+      List(
+        body.vctSubscriptionsItems.map(_.zipWithIndex.flatMap {
+          case (item, i) => validateVctSubscription(item, i)
+        }),
+        body.eisSubscriptionsItems.map(_.zipWithIndex.flatMap {
+          case (item, i) => validateEisSubscription(item, i)
+        }),
+        body.communityInvestmentItems.map(_.zipWithIndex.flatMap {
+          case (item, i) => validateCommunityInvestment(item, i)
+        }),
+        body.seedEnterpriseInvestmentItems.map(_.zipWithIndex.flatMap {
+          case (item, i) => validateSeedEnterpriseInvestment(item, i)
+        }),
+        body.socialEnterpriseInvestmentItems.map(_.zipWithIndex.flatMap {
+          case (item, i) => validatesocialEnterpriseInvestment(item, i)
+        })
+      ).map(_.getOrElse(NoValidationErrors).toList)
+    ))
   }
+
+  private def validateVctSubscription(vctSubscriptionsItem: VctSubscriptionsItem, arrayIndex: Int): List[MtdError] = {
+    List(
+      InvestmentRefValidation.validateOptional(
+        investmentRef = vctSubscriptionsItem.uniqueInvestmentRef,
+        path = s"/vctSubscriptionsItems/$arrayIndex/uniqueInvestmentRef"
+      ),
+      NameValidation.validateOptional(
+        name = vctSubscriptionsItem.name,
+        path = s"/vctSubscriptionsItems/$arrayIndex/name"
+      ),
+      DateValidation.validateOptional(
+        date = vctSubscriptionsItem.dateOfInvestment,
+        path = s"/vctSubscriptionsItems/$arrayIndex/dateOfInvestment"
+      ),
+      NumberValidation.validateOptional(
+        field = vctSubscriptionsItem.amountInvested,
+        path = s"/vctSubscriptionsItems/$arrayIndex/amountInvested"
+      ),
+      NumberValidation.validateOptional(
+        field = vctSubscriptionsItem.reliefClaimed,
+        path = s"/vctSubscriptionsItems/$arrayIndex/reliefClaimed"
+      ),
+    ).flatten
+  }
+
+  private def validateEisSubscription(eisSubscriptionsItem: EisSubscriptionsItem, arrayIndex: Int): List[MtdError] = {
+    List(
+      InvestmentRefValidation.validateOptional(
+        investmentRef = eisSubscriptionsItem.uniqueInvestmentRef,
+        path = s"/eisSubscriptionsItems/$arrayIndex/uniqueInvestmentRef"
+      ),
+      NameValidation.validateOptional(
+        name = eisSubscriptionsItem.name,
+        path = s"/eisSubscriptionsItems/$arrayIndex/name"
+      ),
+      DateValidation.validateOptional(
+        date = eisSubscriptionsItem.dateOfInvestment,
+        path = s"/eisSubscriptionsItems/$arrayIndex/dateOfInvestment"
+      ),
+      NumberValidation.validateOptional(
+        field = eisSubscriptionsItem.amountInvested,
+        path = s"/eisSubscriptionsItems/$arrayIndex/amountInvested"
+      ),
+      NumberValidation.validateOptional(
+        field = eisSubscriptionsItem.reliefClaimed,
+        path = s"/eisSubscriptionsItems/$arrayIndex/reliefClaimed"
+      ),
+    ).flatten
+  }
+
+
+  private def validateCommunityInvestment(communityInvestmentItem: CommunityInvestmentItem, arrayIndex: Int): List[MtdError] = {
+    List(
+      InvestmentRefValidation.validateOptional(
+        investmentRef = communityInvestmentItem.uniqueInvestmentRef,
+        path = s"/communityInvestmentItems/$arrayIndex/uniqueInvestmentRef"
+      ),
+      NameValidation.validateOptional(
+        name = communityInvestmentItem.name,
+        path = s"/communityInvestmentItems/$arrayIndex/name"
+      ),
+      DateValidation.validateOptional(
+        date = communityInvestmentItem.dateOfInvestment,
+        path = s"/communityInvestmentItems/$arrayIndex/dateOfInvestment"
+      ),
+      NumberValidation.validateOptional(
+        field = communityInvestmentItem.amountInvested,
+        path = s"/communityInvestmentItems/$arrayIndex/amountInvested"
+      ),
+      NumberValidation.validateOptional(
+        field = communityInvestmentItem.reliefClaimed,
+        path = s"/communityInvestmentItems/$arrayIndex/reliefClaimed"
+      ),
+    ).flatten
+  }
+
+  private def validateSeedEnterpriseInvestment(seedEnterpriseInvestmentItem: SeedEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
+    List(
+      InvestmentRefValidation.validateOptional(
+        investmentRef = seedEnterpriseInvestmentItem.uniqueInvestmentRef,
+        path = s"/seedEnterpriseInvestmentItems/$arrayIndex/uniqueInvestmentRef"
+      ),
+      NameValidation.validateOptional(
+        name = seedEnterpriseInvestmentItem.companyName,
+        path = s"/seedEnterpriseInvestmentItems/$arrayIndex/companyName"
+      ),
+      DateValidation.validateOptional(
+        date = seedEnterpriseInvestmentItem.dateOfInvestment,
+        path = s"/seedEnterpriseInvestmentItems/$arrayIndex/dateOfInvestment"
+      ),
+      NumberValidation.validateOptional(
+        field = seedEnterpriseInvestmentItem.amountInvested,
+        path = s"/seedEnterpriseInvestmentItems/$arrayIndex/amountInvested"
+      ),
+      NumberValidation.validateOptional(
+        field = seedEnterpriseInvestmentItem.reliefClaimed,
+        path = s"/seedEnterpriseInvestmentItems/$arrayIndex/reliefClaimed"
+      ),
+    ).flatten
+  }
+
+
+  private def validatesocialEnterpriseInvestment(socialEnterpriseInvestmentItem: SocialEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
+    List(
+      InvestmentRefValidation.validateOptional(
+        investmentRef = socialEnterpriseInvestmentItem.uniqueInvestmentRef,
+        path = s"/socialEnterpriseInvestmentItems/$arrayIndex/uniqueInvestmentRef"
+      ),
+      NameValidation.validateOptional(
+        name = socialEnterpriseInvestmentItem.socialEnterpriseName,
+        path = s"/socialEnterpriseInvestmentItems/$arrayIndex/socialEnterpriseName"
+      ),
+      DateValidation.validateOptional(
+        date = socialEnterpriseInvestmentItem.dateOfInvestment,
+        path = s"/socialEnterpriseInvestmentItems/$arrayIndex/dateOfInvestment"
+      ),
+      NumberValidation.validateOptional(
+        field = socialEnterpriseInvestmentItem.amountInvested,
+        path = s"/socialEnterpriseInvestmentItems/$arrayIndex/amountInvested"
+      ),
+      NumberValidation.validateOptional(
+        field = socialEnterpriseInvestmentItem.reliefClaimed,
+        path = s"/socialEnterpriseInvestmentItems/$arrayIndex/reliefClaimed"
+      ),
+    ).flatten
+  }
+
 
   override def validate(data: AmendReliefInvestmentsRawData): List[MtdError] = {
-    run(validationSet, data).distinct
+   run(validationSet, data).distinct
   }
-
 }
