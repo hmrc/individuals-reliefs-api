@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{MtdError, formatUniqueInvestmentReferenceError}
+import v1.models.errors.{FormatInvestmentRefErrorGenerator, MtdError}
 
 
 object InvestmentRefValidation {
@@ -24,13 +24,16 @@ object InvestmentRefValidation {
   private val investRegex =
     "^[A-Za-z0-9/]+$"
 
-  def validateOptional(name: Option[String]): List[MtdError] = name match {
-    case None => NoValidationErrors
-    case Some(value) => validate(name = value)
+  def validateOptional(investmentRef: Option[String], path: String): List[MtdError] = {
+    investmentRef match {
+      case None => NoValidationErrors
+      case Some(value) =>  validate(value, path)
+    }
   }
 
-
-  def validate(name: String): List[MtdError] = {
-    if (name.matches(investRegex)) Nil else List(formatUniqueInvestmentReferenceError)
+  private def validate(name: String, path: String): List[MtdError] = {
+    if (name.matches(investRegex)) Nil else List(
+      FormatInvestmentRefErrorGenerator.generate(Seq(path))
+    )
   }
 }

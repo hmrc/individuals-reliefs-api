@@ -17,28 +17,31 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
+import v1.models.errors.FormatValueErrorGenerator
 
 class NumberValidationSpec extends UnitSpec {
 
+  val validNumber: BigDecimal = 9000.42
+  val invalidNumber: BigDecimal = -9000.42
+
   "validate" should {
     "return no errors" when {
-      "when a valid number is supplied" in {
-
-        val validNumber = 9000.42
-        val validationResult = NumberValidation.validate(validNumber, "vctSubscription/1/amountInvested")
+      "a valid number is supplied" in {
+        val validationResult = NumberValidation.validate(validNumber, "/vctSubscription/1/amountInvested")
         validationResult.isEmpty shouldBe true
-
+      }
+      "no number is supplied" in {
+        val validationResult = NumberValidation.validate(validNumber, "/vctSubscription/1/amountInvested")
+        validationResult.isEmpty shouldBe true
       }
     }
 
     "return an error" when {
-      "when an invalid number is supplied" in {
-
-        val validNumber = -9000.42
-        val validationResult = NumberValidation.validate(validNumber, "vctSubscription/1/amountInvested")
+      "an invalid number is supplied" in {
+        val validationResult = NumberValidation.validate(invalidNumber, "/vctSubscription/1/amountInvested")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe "vctSubscription/1/amountInvested"
+        validationResult.head shouldBe FormatValueErrorGenerator.generate(Seq("/vctSubscription/1/amountInvested"))
       }
     }
   }
