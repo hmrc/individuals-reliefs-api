@@ -16,27 +16,28 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
+import v1.controllers.requestParsers.validators.validations.{JsonFormatValidation, NinoValidation, TaxYearValidation}
+import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 
 class AmendOtherReliefsValidatior extends Validator[???] {
 
   private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
 
-  private def parameterFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = (data: AmendReliefInvestmentsRawData) => {
+  private def parameterFormatValidation: RawData??? => List[List[MtdError]] = (data: RawData???) => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear)
     )
   }
 
-  private def bodyFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
+  private def bodyFormatValidation: RawData??? => List[List[MtdError]] = { data =>
     List(
-      JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError)
+      JsonFormatValidation.validate[Body???](data.body, RuleIncorrectOrEmptyBodyError)
     )
   }
 
-  private def bodyFieldValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[AmendReliefInvestmentsBody]
+  private def bodyFieldValidation: RawData??? => List[List[MtdError]] = { data =>
+    val body = data.body.as[Body???]
 
     List(flattenErrors(
       List(
