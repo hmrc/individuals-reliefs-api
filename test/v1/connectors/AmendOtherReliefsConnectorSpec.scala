@@ -16,12 +16,72 @@
 
 package v1.connectors
 
+import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
+import v1.mocks.MockHttpClient
+import v1.models.outcomes.ResponseWrapper
+import v1.models.requestData.amendOtherReliefs._
+
+import scala.concurrent.Future
 
 class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
   val taxYear = "2017-18"
   val nino = Nino("AA123456A")
-  val body = AmendOtherReliefsBody()
+  val body = AmendOtherReliefsBody(
+    Some(NonDeductableLoanInterest(
+      Some("myref"),
+      763.00)),
+    Some(PayrollGiving(
+      Some("myref"),
+      154.00)),
+    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(
+      Some("myref"),
+      222.22)),
+    Some(Seq(MaintenancePayments(
+      "myref",
+      Some("Hilda"),
+      Some("2000-01-01"),
+      Some(222.22)))),
+    Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
+      "myref",
+      Some("ACME Inc"),
+      Some("2019-08-10"),
+      Some("Widgets Manufacturer"),
+      Some("AB12412/A12"),
+      Some(222.22)))),
+    Some(AnnualPaymentsMade(
+      Some("myref"),
+      763.00)),
+    Some(Seq(QualifyingLoanInterestPayments(
+      "myref",
+      Some("Maurice"),
+      763.00)))
+  )
 
+  class Test extends MockHttpClient with MockAppConfig {
+    val connector: AmendOtherReliefsConnector = new AmendOtherReliefsConnector(http = mockHttpClient, appConfig = mockAppConfig)
+
+    val desRequestHeaders: Seq[(String, String)] = Seq("Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
+    MockedAppConfig.desBaseUrl returns baseUrl
+    MockedAppConfig.desToken returns "des-token"
+    MockedAppConfig.desEnvironment returns "des-environment"
+  }
+
+  "doConnector" must {
+    val request = AmendOtherReliefsRequest(nino, taxYear, body)
+
+    "put a body and return 204 no body" in new Test {
+      val outcome = Right(ResponseWrapper(correlationId, ()))
+      MockedHttpClient
+        .put(
+          url = s"$baseUrl/reliefs/other/$nino/$taxYear",
+          body = body,
+          requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
+        )
+        .returns(Future.successful(outcome))
+
+      await(connector.doConnectorThing(request)) shouldBe outcome
+    }
+  }
 }
