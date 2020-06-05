@@ -74,6 +74,7 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
       case NinoFormatError |
            BadRequestError |
            TaxYearFormatError |
+           RuleIncorrectOrEmptyBodyError |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            MtdErrorWithCustomMessage(DateOfInvestmentFormatError.code) |
            MtdErrorWithCustomMessage(NameFormatError.code) |

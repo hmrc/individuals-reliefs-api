@@ -22,7 +22,41 @@ case class AmendReliefInvestmentsBody(vctSubscriptionsItems: Option[Seq[VctSubsc
                                       eisSubscriptionsItems: Option[Seq[EisSubscriptionsItem]],
                                       communityInvestmentItems: Option[Seq[CommunityInvestmentItem]],
                                       seedEnterpriseInvestmentItems: Option[Seq[SeedEnterpriseInvestmentItem]],
-                                      socialEnterpriseInvestmentItems: Option[Seq[SocialEnterpriseInvestmentItem]])
+                                      socialEnterpriseInvestmentItems: Option[Seq[SocialEnterpriseInvestmentItem]]) {
+  private def isEmpty: Boolean = vctSubscriptionsItems.isEmpty &&
+    eisSubscriptionsItems.isEmpty &&
+    communityInvestmentItems.isEmpty &&
+    seedEnterpriseInvestmentItems.isEmpty &&
+    socialEnterpriseInvestmentItems.isEmpty
+
+  private def vctSubscriptionContainsEmptyObjectsOrIsEmpty: Boolean =
+    (vctSubscriptionsItems.isDefined && vctSubscriptionsItems.get.isEmpty) ||
+      vctSubscriptionsItems.isDefined && vctSubscriptionsItems.get.exists(_.isEmpty)
+
+  private def eisSubscriptionContainsEmptyObjectsOrIsEmpty: Boolean =
+    (eisSubscriptionsItems.isDefined && eisSubscriptionsItems.get.isEmpty) ||
+      eisSubscriptionsItems.isDefined && eisSubscriptionsItems.get.exists(_.isEmpty)
+
+  private def communityInvestmentContainsEmptyObjectsOrIsEmpty: Boolean =
+    (communityInvestmentItems.isDefined && communityInvestmentItems.get.isEmpty) ||
+      communityInvestmentItems.isDefined && communityInvestmentItems.get.exists(_.isEmpty)
+
+  private def seedEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty: Boolean =
+    (seedEnterpriseInvestmentItems.isDefined && seedEnterpriseInvestmentItems.get.isEmpty) ||
+      seedEnterpriseInvestmentItems.isDefined && seedEnterpriseInvestmentItems.get.exists(_.isEmpty)
+
+  private def socialEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty: Boolean =
+    (socialEnterpriseInvestmentItems.isDefined && socialEnterpriseInvestmentItems.get.isEmpty) ||
+      socialEnterpriseInvestmentItems.isDefined && socialEnterpriseInvestmentItems.get.exists(_.isEmpty)
+
+  def isIncorrectOrEmptyBody: Boolean = isEmpty || {
+    vctSubscriptionContainsEmptyObjectsOrIsEmpty ||
+      eisSubscriptionContainsEmptyObjectsOrIsEmpty ||
+      communityInvestmentContainsEmptyObjectsOrIsEmpty ||
+      seedEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty ||
+      socialEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty
+  }
+}
 
 object AmendReliefInvestmentsBody {
   implicit val format: OFormat[AmendReliefInvestmentsBody] = Json.format[AmendReliefInvestmentsBody]

@@ -22,7 +22,13 @@ case class VctSubscriptionsItem(uniqueInvestmentRef: Option[String],
                                 name: Option[String],
                                 dateOfInvestment: Option[String],
                                 amountInvested: Option[BigDecimal],
-                                reliefClaimed: Option[BigDecimal])
+                                reliefClaimed: Option[BigDecimal]) {
+  def isEmpty: Boolean = uniqueInvestmentRef.isEmpty &&
+    name.isEmpty &&
+    dateOfInvestment.isEmpty &&
+    amountInvested.isEmpty &&
+    reliefClaimed.isEmpty
+}
 
 object VctSubscriptionsItem {
   implicit val format: OFormat[VctSubscriptionsItem] = Json.format[VctSubscriptionsItem]

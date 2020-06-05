@@ -23,7 +23,7 @@ import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody,
 
 class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRawData] {
 
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
+  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, incorrectOfEmptyBodySubmittedValidation, bodyFieldValidation)
 
   private def parameterFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = (data: AmendReliefInvestmentsRawData) => {
     List(
@@ -36,6 +36,11 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
     List(
       JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError)
     )
+  }
+
+  private def incorrectOfEmptyBodySubmittedValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
+    val body = data.body.as[AmendReliefInvestmentsBody]
+    if(body.isIncorrectOrEmptyBody) List(List(RuleIncorrectOrEmptyBodyError)) else NoValidationErrors
   }
 
   private def bodyFieldValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>

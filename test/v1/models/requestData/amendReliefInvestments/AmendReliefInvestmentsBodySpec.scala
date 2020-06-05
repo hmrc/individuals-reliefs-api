@@ -127,4 +127,25 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+  "isIncorrectOrEmptyBodyError" should {
+    "return false" when {
+      "all arrays are provided, none are empty, no objects in the arrays are empty" in {
+
+      }
+      "only some arrays are provided, none are empty, no objects in the arrays are empty" in {
+
+      }
+    }
+    "return true" when {
+      "no arrays are provided" in {
+
+      }
+      "at least one empty array is provided" in {
+
+      }
+      "at least one array contains an empty object" in {
+
+      }
+    }
+  }
 }

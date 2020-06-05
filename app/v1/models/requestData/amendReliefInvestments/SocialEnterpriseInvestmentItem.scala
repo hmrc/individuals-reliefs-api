@@ -22,7 +22,13 @@ case class SocialEnterpriseInvestmentItem(uniqueInvestmentRef: Option[String],
                                           socialEnterpriseName: Option[String],
                                           dateOfInvestment: Option[String],
                                           amountInvested: Option[BigDecimal],
-                                          reliefClaimed: Option[BigDecimal])
+                                          reliefClaimed: Option[BigDecimal]) {
+  def isEmpty: Boolean = uniqueInvestmentRef.isEmpty &&
+    socialEnterpriseName.isEmpty &&
+    dateOfInvestment.isEmpty &&
+    amountInvested.isEmpty &&
+    reliefClaimed.isEmpty
+}
 
 object SocialEnterpriseInvestmentItem {
   implicit val format: OFormat[SocialEnterpriseInvestmentItem] = Json.format[SocialEnterpriseInvestmentItem]

@@ -23,7 +23,13 @@ case class EisSubscriptionsItem(uniqueInvestmentRef: Option[String],
                                 knowledgeIntensive: Option[Boolean],
                                 dateOfInvestment: Option[String],
                                 amountInvested: Option[BigDecimal],
-                                reliefClaimed: Option[BigDecimal])
+                                reliefClaimed: Option[BigDecimal]) {
+  def isEmpty: Boolean = uniqueInvestmentRef.isEmpty &&
+    name.isEmpty &&
+    dateOfInvestment.isEmpty &&
+    amountInvested.isEmpty &&
+    reliefClaimed.isEmpty
+}
 
 object EisSubscriptionsItem {
   implicit val format: OFormat[EisSubscriptionsItem] = Json.format[EisSubscriptionsItem]
