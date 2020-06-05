@@ -586,7 +586,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "companyName": "Company Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 123123.22,
-            |      "reliefClaimed": 0
+            |      "reliefClaimed": -1
             |    }
             |  ],
             |  "socialEnterpriseInvestment": [
@@ -594,7 +594,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |      "uniqueInvestmentRef": "123412/1A",
             |      "socialEnterpriseName": "SE Inc",
             |      "dateOfInvestment": "2020-12-12",
-            |      "amountInvested": 0,
+            |      "amountInvested": -1,
             |      "reliefClaimed": 3432.00
             |    }
             |  ]
