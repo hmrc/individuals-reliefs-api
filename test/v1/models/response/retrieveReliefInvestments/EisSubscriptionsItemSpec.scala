@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   val eisSubscriptionsItem = EisSubscriptionsItem(
-    Some("XTAL"),
+    "XTAL",
     Some("EIS Fund X"),
     Some(true),
     Some("EIS Fund X"),

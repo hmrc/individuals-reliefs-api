@@ -18,7 +18,7 @@ package v1.models.response.retrieveReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-case class SocialEnterpriseInvestmentItem(uniqueInvestmentRef: Option[String],
+case class SocialEnterpriseInvestmentItem(uniqueInvestmentRef: String,
                                           socialEnterpriseName: Option[String],
                                           dateOfInvestment: Option[String],
                                           amountInvested: Option[BigDecimal],

@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
   val socialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
-    Some("VCTREF"),
+    "VCTREF",
     Some("VCT Fund X"),
     Some("2018-04-16"),
     Some(BigDecimal(23312.00)),
