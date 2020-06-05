@@ -23,14 +23,14 @@ import v1.models.utils.JsonErrorValidators
 class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
   val amendReliefInvestmentsBody = AmendReliefInvestmentsBody(
     Some(Seq(VctSubscriptionsItem(
-      Some("VCTREF"),
+      "VCTREF",
       Some("VCT Fund X"),
       Some("2018-04-16"),
       Some(BigDecimal(23312.00)),
       Some(BigDecimal(1334.00))
     ))),
     Some(Seq(EisSubscriptionsItem(
-      Some("XTAL"),
+      "XTAL",
       Some("EIS Fund X"),
       Some(true),
       Some("2020-12-12"),
@@ -38,21 +38,21 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       Some(BigDecimal(43432.00))
     ))),
     Some(Seq(CommunityInvestmentItem(
-      Some("CIREF"),
+      "CIREF",
       Some("CI X"),
       Some("2020-12-12"),
       Some(BigDecimal(6442.00)),
       Some(BigDecimal(2344.00))
     ))),
     Some(Seq(SeedEnterpriseInvestmentItem(
-      Some("123412/1A"),
+      "123412/1A",
       Some("Company Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
       Some(BigDecimal(3432.00))
     ))),
     Some(Seq(SocialEnterpriseInvestmentItem(
-      Some("123412/1A"),
+      "123412/1A",
       Some("SE Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
@@ -62,7 +62,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
   val json = Json.parse(
     """
       |{
-      |  "vctSubscriptionsItems":[
+      |  "vctSubscription":[
       |    {
       |      "uniqueInvestmentRef": "VCTREF",
       |      "name": "VCT Fund X",
@@ -71,7 +71,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       |      "reliefClaimed": 1334.00
       |      }
       |  ],
-      |  "eisSubscriptionsItems":[
+      |  "eisSubscription":[
       |    {
       |      "uniqueInvestmentRef": "XTAL",
       |      "name": "EIS Fund X",
@@ -81,7 +81,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       |      "reliefClaimed": 43432.00
       |    }
       |  ],
-      |  "communityInvestmentItems": [
+      |  "communityInvestment": [
       |    {
       |      "uniqueInvestmentRef": "CIREF",
       |      "name": "CI X",
@@ -90,7 +90,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       |      "reliefClaimed": 2344.00
       |    }
       |  ],
-      |  "seedEnterpriseInvestmentItems": [
+      |  "seedEnterpriseInvestment": [
       |    {
       |      "uniqueInvestmentRef": "123412/1A",
       |      "companyName": "Company Inc",
@@ -99,7 +99,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       |      "reliefClaimed": 3432.00
       |    }
       |  ],
-      |  "socialEnterpriseInvestmentItems": [
+      |  "socialEnterpriseInvestment": [
       |    {
       |      "uniqueInvestmentRef": "123412/1A",
       |      "socialEnterpriseName": "SE Inc",
@@ -132,14 +132,14 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
       "all arrays are provided, none are empty, no objects in the arrays are empty" in {
         val model = AmendReliefInvestmentsBody(
           Some(Seq(VctSubscriptionsItem(
-            Some("VCTREF"),
+            "VCTREF",
             Some("VCT Fund X"),
             Some("2018-04-16"),
             Some(BigDecimal(23312.00)),
             Some(BigDecimal(1334.00))
           ))),
           Some(Seq(EisSubscriptionsItem(
-            Some("XTAL"),
+            "XTAL",
             Some("EIS Fund X"),
             Some(true),
             Some("2020-12-12"),
@@ -147,21 +147,21 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
             Some(BigDecimal(43432.00))
           ))),
           Some(Seq(CommunityInvestmentItem(
-            Some("CIREF"),
+            "CIREF",
             Some("CI X"),
             Some("2020-12-12"),
             Some(BigDecimal(6442.00)),
             Some(BigDecimal(2344.00))
           ))),
           Some(Seq(SeedEnterpriseInvestmentItem(
-            Some("123412/1A"),
+            "123412/1A",
             Some("Company Inc"),
             Some("2020-12-12"),
             Some(BigDecimal(123123.22)),
             Some(BigDecimal(3432.00))
           ))),
           Some(Seq(SocialEnterpriseInvestmentItem(
-            Some("123412/1A"),
+            "123412/1A",
             Some("SE Inc"),
             Some("2020-12-12"),
             Some(BigDecimal(123123.22)),
@@ -174,7 +174,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
         val model = AmendReliefInvestmentsBody(
           None,
           Some(Seq(EisSubscriptionsItem(
-            Some("XTAL"),
+            "XTAL",
             Some("EIS Fund X"),
             Some(true),
             Some("2020-12-12"),
@@ -182,7 +182,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
             Some(BigDecimal(43432.00))
           ))),
           Some(Seq(CommunityInvestmentItem(
-            Some("CIREF"),
+            "CIREF",
             Some("CI X"),
             Some("2020-12-12"),
             Some(BigDecimal(6442.00)),
@@ -190,7 +190,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
           ))),
           None,
           Some(Seq(SocialEnterpriseInvestmentItem(
-            Some("123412/1A"),
+            "123412/1A",
             Some("SE Inc"),
             Some("2020-12-12"),
             Some(BigDecimal(123123.22)),
@@ -215,7 +215,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
         val model = AmendReliefInvestmentsBody(
           Some(Seq()),
           Some(Seq(EisSubscriptionsItem(
-            Some("XTAL"),
+            "XTAL",
             Some("EIS Fund X"),
             Some(true),
             Some("2020-12-12"),
@@ -224,61 +224,14 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
           ))),
           Some(Seq()),
           Some(Seq(SeedEnterpriseInvestmentItem(
-            Some("123412/1A"),
+            "123412/1A",
             Some("Company Inc"),
             Some("2020-12-12"),
             Some(BigDecimal(123123.22)),
             Some(BigDecimal(3432.00))
           ))),
           Some(Seq(SocialEnterpriseInvestmentItem(
-            Some("123412/1A"),
-            Some("SE Inc"),
-            Some("2020-12-12"),
-            Some(BigDecimal(123123.22)),
-            Some(BigDecimal(3432.00))
-          )))
-        )
-        model.isIncorrectOrEmptyBody shouldBe true
-      }
-      "at least one array contains an empty object" in {
-        val model = AmendReliefInvestmentsBody(
-          Some(Seq(VctSubscriptionsItem(
-            None,
-            None,
-            None,
-            None,
-            None
-          ), VctSubscriptionsItem(
-            Some("VCTREF"),
-            Some("VCT Fund X"),
-            Some("2018-04-16"),
-            Some(BigDecimal(23312.00)),
-            Some(BigDecimal(1334.00))
-          ))),
-          Some(Seq(EisSubscriptionsItem(
-            Some("XTAL"),
-            Some("EIS Fund X"),
-            Some(true),
-            Some("2020-12-12"),
-            Some(BigDecimal(23312.00)),
-            Some(BigDecimal(43432.00))
-          ))),
-          Some(Seq(CommunityInvestmentItem(
-            Some("CIREF"),
-            Some("CI X"),
-            Some("2020-12-12"),
-            Some(BigDecimal(6442.00)),
-            Some(BigDecimal(2344.00))
-          ))),
-          Some(Seq(SeedEnterpriseInvestmentItem(
-            Some("123412/1A"),
-            Some("Company Inc"),
-            Some("2020-12-12"),
-            Some(BigDecimal(123123.22)),
-            Some(BigDecimal(3432.00))
-          ))),
-          Some(Seq(SocialEnterpriseInvestmentItem(
-            Some("123412/1A"),
+            "123412/1A",
             Some("SE Inc"),
             Some("2020-12-12"),
             Some(BigDecimal(123123.22)),

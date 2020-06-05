@@ -35,7 +35,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
     val responseBody = Json.parse(
       s"""
         |{
-        |  "vctSubscriptionsItems":[
+        |  "vctSubscription":[
         |    {
         |      "uniqueInvestmentRef": "VCTREF",
         |      "name": "VCT Fund X",
@@ -44,7 +44,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         |      "reliefClaimed": 1334.00
         |      }
         |  ],
-        |  "eisSubscriptionsItems":[
+        |  "eisSubscription":[
         |    {
         |      "uniqueInvestmentRef": "XTAL",
         |      "name": "EIS Fund X",
@@ -54,7 +54,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         |      "reliefClaimed": 43432.00
         |    }
         |  ],
-        |  "communityInvestmentItems": [
+        |  "communityInvestment": [
         |    {
         |      "uniqueInvestmentRef": "CIREF",
         |      "name": "CI X",
@@ -63,7 +63,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         |      "reliefClaimed": 2344.00
         |    }
         |  ],
-        |  "seedEnterpriseInvestmentItems": [
+        |  "seedEnterpriseInvestment": [
         |    {
         |      "uniqueInvestmentRef": "123412/1A",
         |      "companyName": "Company Inc",
@@ -72,7 +72,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         |      "reliefClaimed": 3432.00
         |    }
         |  ],
-        |  "socialEnterpriseInvestmentItems": [
+        |  "socialEnterpriseInvestment": [
         |    {
         |      "uniqueInvestmentRef": "123412/1A",
         |      "socialEnterpriseName": "SE Inc",
@@ -104,7 +104,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
     val desResponseBody = Json.parse(
       s"""
          |{
-         |  "vctSubscriptionsItems":[
+         |  "vctSubscription":[
          |    {
          |      "uniqueInvestmentRef": "VCTREF",
          |      "name": "VCT Fund X",
@@ -113,7 +113,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |      "reliefClaimed": 1334.00
          |      }
          |  ],
-         |  "eisSubscriptionsItems":[
+         |  "eisSubscription":[
          |    {
          |      "uniqueInvestmentRef": "XTAL",
          |      "name": "EIS Fund X",
@@ -123,7 +123,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |      "reliefClaimed": 43432.00
          |    }
          |  ],
-         |  "communityInvestmentItems": [
+         |  "communityInvestment": [
          |    {
          |      "uniqueInvestmentRef": "CIREF",
          |      "name": "CI X",
@@ -132,7 +132,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |      "reliefClaimed": 2344.00
          |    }
          |  ],
-         |  "seedEnterpriseInvestmentItems": [
+         |  "seedEnterpriseInvestment": [
          |    {
          |      "uniqueInvestmentRef": "123412/1A",
          |      "companyName": "Company Inc",
@@ -141,7 +141,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |      "reliefClaimed": 3432.00
          |    }
          |  ],
-         |  "socialEnterpriseInvestmentItems": [
+         |  "socialEnterpriseInvestment": [
          |    {
          |      "uniqueInvestmentRef": "123412/1A",
          |      "socialEnterpriseName": "SE Inc",

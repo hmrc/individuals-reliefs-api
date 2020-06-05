@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
   val socialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
-    Some("VCTREF"),
+    "VCTREF",
     Some("VCT Fund X"),
     Some("2018-04-16"),
     Some(BigDecimal(23312.00)),
@@ -52,32 +52,6 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
     "passed valid model" should {
       "return valid json" in {
         Json.toJson(socialEnterpriseInvestmentItem) shouldBe json
-      }
-    }
-  }
-  "isEmpty" when {
-    "passed an empty model" should {
-      "return true" in {
-        val model = SocialEnterpriseInvestmentItem(
-          None,
-          None,
-          None,
-          None,
-          None
-        )
-        model.isEmpty shouldBe true
-      }
-    }
-    "passed a non-empty model" should {
-      "return false" in {
-        val model = SocialEnterpriseInvestmentItem(
-          None,
-          Some("name"),
-          None,
-          None,
-          None
-        )
-        model.isEmpty shouldBe false
       }
     }
   }

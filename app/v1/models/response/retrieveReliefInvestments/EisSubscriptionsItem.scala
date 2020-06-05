@@ -18,7 +18,7 @@ package v1.models.response.retrieveReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-case class EisSubscriptionsItem(uniqueInvestmentRef: Option[String],
+case class EisSubscriptionsItem(uniqueInvestmentRef: String,
                                 name: Option[String],
                                 knowledgeIntensive: Option[Boolean],
                                 dateOfInvestment: Option[String],

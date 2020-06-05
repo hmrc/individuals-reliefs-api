@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
   val seedEnterpriseInvestmentItem = SeedEnterpriseInvestmentItem(
-    Some("123412/1A"),
+    "123412/1A",
     Some("Company Inc"),
     Some("2020-12-12"),
     Some(BigDecimal(123123.22)),
@@ -52,32 +52,6 @@ class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators
     "passed valid model" should {
       "return valid json" in {
         Json.toJson(seedEnterpriseInvestmentItem) shouldBe json
-      }
-    }
-  }
-  "isEmpty" when {
-    "passed an empty model" should {
-      "return true" in {
-        val model = SeedEnterpriseInvestmentItem(
-          None,
-          None,
-          None,
-          None,
-          None
-        )
-        model.isEmpty shouldBe true
-      }
-    }
-    "passed a non-empty model" should {
-      "return false" in {
-        val model = SeedEnterpriseInvestmentItem(
-          None,
-          Some("name"),
-          None,
-          None,
-          None
-        )
-        model.isEmpty shouldBe false
       }
     }
   }

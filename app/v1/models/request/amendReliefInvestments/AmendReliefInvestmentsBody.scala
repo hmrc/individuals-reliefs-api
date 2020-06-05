@@ -18,43 +18,38 @@ package v1.models.request.amendReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AmendReliefInvestmentsBody(vctSubscriptionsItems: Option[Seq[VctSubscriptionsItem]],
-                                      eisSubscriptionsItems: Option[Seq[EisSubscriptionsItem]],
-                                      communityInvestmentItems: Option[Seq[CommunityInvestmentItem]],
-                                      seedEnterpriseInvestmentItems: Option[Seq[SeedEnterpriseInvestmentItem]],
-                                      socialEnterpriseInvestmentItems: Option[Seq[SocialEnterpriseInvestmentItem]]) {
-  private def isEmpty: Boolean = vctSubscriptionsItems.isEmpty &&
-    eisSubscriptionsItems.isEmpty &&
-    communityInvestmentItems.isEmpty &&
-    seedEnterpriseInvestmentItems.isEmpty &&
-    socialEnterpriseInvestmentItems.isEmpty
+case class AmendReliefInvestmentsBody(vctSubscription: Option[Seq[VctSubscriptionsItem]],
+                                      eisSubscription: Option[Seq[EisSubscriptionsItem]],
+                                      communityInvestment: Option[Seq[CommunityInvestmentItem]],
+                                      seedEnterpriseInvestment: Option[Seq[SeedEnterpriseInvestmentItem]],
+                                      socialEnterpriseInvestment: Option[Seq[SocialEnterpriseInvestmentItem]]) {
+  private def isEmpty: Boolean = vctSubscription.isEmpty &&
+    eisSubscription.isEmpty &&
+    communityInvestment.isEmpty &&
+    seedEnterpriseInvestment.isEmpty &&
+    socialEnterpriseInvestment.isEmpty
 
-  private def vctSubscriptionContainsEmptyObjectsOrIsEmpty: Boolean =
-    (vctSubscriptionsItems.isDefined && vctSubscriptionsItems.get.isEmpty) ||
-      vctSubscriptionsItems.isDefined && vctSubscriptionsItems.get.exists(_.isEmpty)
+  private def vctSubscriptionIsEmpty: Boolean =
+    vctSubscription.isDefined && vctSubscription.get.isEmpty
 
-  private def eisSubscriptionContainsEmptyObjectsOrIsEmpty: Boolean =
-    (eisSubscriptionsItems.isDefined && eisSubscriptionsItems.get.isEmpty) ||
-      eisSubscriptionsItems.isDefined && eisSubscriptionsItems.get.exists(_.isEmpty)
+  private def eisSubscriptionIsEmpty: Boolean =
+    eisSubscription.isDefined && eisSubscription.get.isEmpty
 
-  private def communityInvestmentContainsEmptyObjectsOrIsEmpty: Boolean =
-    (communityInvestmentItems.isDefined && communityInvestmentItems.get.isEmpty) ||
-      communityInvestmentItems.isDefined && communityInvestmentItems.get.exists(_.isEmpty)
+  private def communityInvestmentIsEmpty: Boolean =
+    communityInvestment.isDefined && communityInvestment.get.isEmpty
 
-  private def seedEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty: Boolean =
-    (seedEnterpriseInvestmentItems.isDefined && seedEnterpriseInvestmentItems.get.isEmpty) ||
-      seedEnterpriseInvestmentItems.isDefined && seedEnterpriseInvestmentItems.get.exists(_.isEmpty)
+  private def seedEnterpriseInvestmentIsEmpty: Boolean =
+    seedEnterpriseInvestment.isDefined && seedEnterpriseInvestment.get.isEmpty
 
-  private def socialEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty: Boolean =
-    (socialEnterpriseInvestmentItems.isDefined && socialEnterpriseInvestmentItems.get.isEmpty) ||
-      socialEnterpriseInvestmentItems.isDefined && socialEnterpriseInvestmentItems.get.exists(_.isEmpty)
+  private def socialEnterpriseInvestmentIsEmpty: Boolean =
+    socialEnterpriseInvestment.isDefined && socialEnterpriseInvestment.get.isEmpty
 
   def isIncorrectOrEmptyBody: Boolean = isEmpty || {
-    vctSubscriptionContainsEmptyObjectsOrIsEmpty ||
-      eisSubscriptionContainsEmptyObjectsOrIsEmpty ||
-      communityInvestmentContainsEmptyObjectsOrIsEmpty ||
-      seedEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty ||
-      socialEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty
+    vctSubscriptionIsEmpty ||
+      eisSubscriptionIsEmpty ||
+      communityInvestmentIsEmpty ||
+      seedEnterpriseInvestmentIsEmpty ||
+      socialEnterpriseInvestmentIsEmpty
   }
 }
 

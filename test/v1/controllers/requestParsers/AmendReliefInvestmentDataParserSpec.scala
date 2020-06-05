@@ -29,7 +29,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
   private val requestBodyJson = Json.parse(
     """
       |{
-      |  "vctSubscriptionsItems":[
+      |  "vctSubscription":[
       |    {
       |      "uniqueInvestmentRef": "VCTREF",
       |      "name": "VCT Fund X",
@@ -38,7 +38,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
       |      "reliefClaimed": 1334.00
       |      }
       |  ],
-      |  "eisSubscriptionsItems":[
+      |  "eisSubscription":[
       |    {
       |      "uniqueInvestmentRef": "XTAL",
       |      "name": "EIS Fund X",
@@ -48,7 +48,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
       |      "reliefClaimed": 43432.00
       |    }
       |  ],
-      |  "communityInvestmentItems": [
+      |  "communityInvestment": [
       |    {
       |      "uniqueInvestmentRef": "CIREF",
       |      "name": "CI X",
@@ -57,7 +57,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
       |      "reliefClaimed": 2344.00
       |    }
       |  ],
-      |  "seedEnterpriseInvestmentItems": [
+      |  "seedEnterpriseInvestment": [
       |    {
       |      "uniqueInvestmentRef": "123412/1A",
       |      "companyName": "Company Inc",
@@ -66,7 +66,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
       |      "reliefClaimed": 3432.00
       |    }
       |  ],
-      |  "socialEnterpriseInvestmentItems": [
+      |  "socialEnterpriseInvestment": [
       |    {
       |      "uniqueInvestmentRef": "123412/1A",
       |      "socialEnterpriseName": "SE Inc",
@@ -95,11 +95,11 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
 
         parser.parseRequest(inputData) shouldBe
           Right(AmendReliefInvestmentsRequest(Nino(nino),taxYear,AmendReliefInvestmentsBody(
-            Some(Seq(VctSubscriptionsItem(Some("VCTREF"), Some("VCT Fund X"), Some("2018-04-16"), Some(23312.00), Some(1334.00)))),
-            Some(Seq(EisSubscriptionsItem(Some("XTAL"), Some("EIS Fund X"), Some(true), Some("2020-12-12"), Some(23312.00), Some(43432.00)))),
-            Some(Seq(CommunityInvestmentItem(Some("CIREF"), Some("CI X"), Some("2020-12-12"), Some(6442.00), Some(2344.00)))),
-            Some(Seq(SeedEnterpriseInvestmentItem(Some("123412/1A"), Some("Company Inc"), Some("2020-12-12"), Some(123123.22), Some(3432.00)))),
-            Some(Seq(SocialEnterpriseInvestmentItem(Some("123412/1A"), Some("SE Inc"), Some("2020-12-12"), Some(123123.22), Some(3432.00))))
+            Some(Seq(VctSubscriptionsItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(23312.00), Some(1334.00)))),
+            Some(Seq(EisSubscriptionsItem("XTAL", Some("EIS Fund X"), Some(true), Some("2020-12-12"), Some(23312.00), Some(43432.00)))),
+            Some(Seq(CommunityInvestmentItem("CIREF", Some("CI X"), Some("2020-12-12"), Some(6442.00), Some(2344.00)))),
+            Some(Seq(SeedEnterpriseInvestmentItem("123412/1A", Some("Company Inc"), Some("2020-12-12"), Some(123123.22), Some(3432.00)))),
+            Some(Seq(SocialEnterpriseInvestmentItem("123412/1A", Some("SE Inc"), Some("2020-12-12"), Some(123123.22), Some(3432.00))))
           )))
       }
     }

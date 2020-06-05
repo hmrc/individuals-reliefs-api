@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   val eisSubscriptionsItem = EisSubscriptionsItem(
-    Some("XTAL"),
+    "XTAL",
     Some("EIS Fund X"),
     Some(true),
     Some("EIS Fund X"),
@@ -54,34 +54,6 @@ class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
     "passed valid model" should {
       "return valid json" in {
         Json.toJson(eisSubscriptionsItem) shouldBe json
-      }
-    }
-  }
-  "isEmpty" when {
-    "passed an empty model" should {
-      "return true" in {
-        val model = EisSubscriptionsItem(
-          None,
-          None,
-          None,
-          None,
-          None,
-          None
-        )
-        model.isEmpty shouldBe true
-      }
-    }
-    "passed a non-empty model" should {
-      "return false" in {
-        val model = EisSubscriptionsItem(
-          None,
-          Some("name"),
-          None,
-          None,
-          None,
-          None
-        )
-        model.isEmpty shouldBe false
       }
     }
   }
