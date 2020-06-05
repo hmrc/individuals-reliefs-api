@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.FormatNameErrorGenerator
+import v1.models.errors.NameFormatError
 
 class NameValidationSpec extends UnitSpec {
 
@@ -41,7 +41,7 @@ class NameValidationSpec extends UnitSpec {
         val validationResult = NameValidation.validateOptional(invalidName, "/vctSubscription/1/name")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe FormatNameErrorGenerator.generate(Seq("/vctSubscription/1/name"))
+        validationResult.head shouldBe NameFormatError.copy(paths = Some(Seq("/vctSubscription/1/name")))
       }
     }
   }

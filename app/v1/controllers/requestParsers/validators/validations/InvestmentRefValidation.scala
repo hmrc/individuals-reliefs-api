@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{FormatInvestmentRefErrorGenerator, MtdError}
+import v1.models.errors.{InvestmentRefFormatError, MtdError}
 
 
 object InvestmentRefValidation {
@@ -33,7 +33,7 @@ object InvestmentRefValidation {
 
   private def validate(name: String, path: String): List[MtdError] = {
     if (name.matches(investRegex)) Nil else List(
-      FormatInvestmentRefErrorGenerator.generate(Seq(path))
+      InvestmentRefFormatError.copy(paths = Some(Seq(path)))
     )
   }
 }

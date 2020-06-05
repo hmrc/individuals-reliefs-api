@@ -19,9 +19,9 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.AmendReliefInvestmentValidator
-import v1.models.requestData.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest}
+import v1.models.request.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest}
 
-class AmendReliefInvestmentDataParser @Inject()(val validator: AmendReliefInvestmentValidator)
+class AmendReliefInvestmentsRequestParser @Inject()(val validator: AmendReliefInvestmentValidator)
   extends RequestParser[AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest] {
 
   override protected def requestFor(data: AmendReliefInvestmentsRawData): AmendReliefInvestmentsRequest =

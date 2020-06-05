@@ -16,10 +16,10 @@
 
 package v1.models.domain
 
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.{Json, OFormat}
 
 case class SampleRequestBody(data: String)
 
 object SampleRequestBody {
-  implicit val reads: Reads[SampleRequestBody] = Json.reads[SampleRequestBody]
+  implicit val format: OFormat[SampleRequestBody] = Json.format[SampleRequestBody]
 }

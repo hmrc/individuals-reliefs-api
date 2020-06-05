@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendReliefInvestments
+package v1.models.request.retrieveReliefInvestments
 
-import play.api.libs.json.JsValue
-import v1.models.requestData.RawData
+import uk.gov.hmrc.domain.Nino
 
-case class AmendReliefInvestmentsRawData(nino: String, taxYear: String, body: JsValue) extends RawData
+case class RetrieveReliefInvestmentsRequest(nino: Nino, taxYear: String) {
+
+}

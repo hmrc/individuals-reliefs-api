@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendReliefInvestments
+package v1.models.request.amendReliefInvestments
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
-  val socialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
+class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
+  val vctSubscriptionsItem = VctSubscriptionsItem(
     Some("VCTREF"),
     Some("VCT Fund X"),
     Some("2018-04-16"),
@@ -32,7 +32,7 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
     """
       |{
       |  "uniqueInvestmentRef": "VCTREF",
-      |  "socialEnterpriseName": "VCT Fund X",
+      |  "name": "VCT Fund X",
       |  "dateOfInvestment": "2018-04-16",
       |  "amountInvested": 23312.00,
       |  "reliefClaimed": 1334.00
@@ -44,14 +44,40 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        socialEnterpriseInvestmentItem shouldBe json.as[SocialEnterpriseInvestmentItem]
+        vctSubscriptionsItem shouldBe json.as[VctSubscriptionsItem]
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(socialEnterpriseInvestmentItem) shouldBe json
+        Json.toJson(vctSubscriptionsItem) shouldBe json
+      }
+    }
+  }
+  "isEmpty" when {
+    "passed an empty model" should {
+      "return true" in {
+        val model = VctSubscriptionsItem(
+          None,
+          None,
+          None,
+          None,
+          None
+        )
+        model.isEmpty shouldBe true
+      }
+    }
+    "passed a non-empty model" should {
+      "return false" in {
+        val model = VctSubscriptionsItem(
+          None,
+          Some("name"),
+          None,
+          None,
+          None
+        )
+        model.isEmpty shouldBe false
       }
     }
   }

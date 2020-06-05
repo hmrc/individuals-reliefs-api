@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.FormatValueErrorGenerator
+import v1.models.errors.ValueFormatError
 
 class NumberValidationSpec extends UnitSpec {
 
@@ -41,7 +41,7 @@ class NumberValidationSpec extends UnitSpec {
         val validationResult = NumberValidation.validateOptional(invalidNumber, "/vctSubscription/1/amountInvested")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe FormatValueErrorGenerator.generate(Seq("/vctSubscription/1/amountInvested"))
+        validationResult.head shouldBe ValueFormatError.copy(paths = Some(Seq("/vctSubscription/1/amountInvested")))
       }
     }
   }

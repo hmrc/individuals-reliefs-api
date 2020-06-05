@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.requestData
+package v1.models.request.deleteReliefInvestments
 
-import play.api.libs.json.JsValue
+import uk.gov.hmrc.domain.Nino
 
-case class SampleRawData(nino: String, taxYear: String, body: JsValue) extends RawData
+case class DeleteReliefInvestmentsRequest(nino: Nino, taxYear: String)

@@ -18,8 +18,8 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, FormatInvestmentRefErrorGenerator, FormatNameErrorGenerator, FormatValueErrorGenerator}
-import v1.models.requestData.amendReliefInvestments.AmendReliefInvestmentsRawData
+import v1.models.errors.{DateOfInvestmentFormatError, InvestmentRefFormatError, NameFormatError, NinoFormatError, RuleIncorrectOrEmptyBodyError, RuleTaxYearRangeInvalidError, TaxYearFormatError, ValueFormatError}
+import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
 
 class AmendReliefInvestmentValidatorSpec extends UnitSpec {
 
@@ -86,6 +86,125 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
       }
     }
 
+    "return FORMAT_NINO error" when {
+      "a bad nino is provided" in {
+        validator.validate(AmendReliefInvestmentsRawData("BALONEY", validTaxYear, requestBodyJson)) shouldBe List(NinoFormatError)
+      }
+    }
+
+    "return FORMAT_TAX_YEAR error" when {
+      "a bad tax year is provided" in {
+        validator.validate(AmendReliefInvestmentsRawData(validNino, "BALONEY", requestBodyJson)) shouldBe List(TaxYearFormatError)
+      }
+    }
+
+    "return RULE_TAX_YEAR_RANGE_INVALID error" when {
+      "an invalid tax year range is provided" in {
+        validator.validate(AmendReliefInvestmentsRawData(validNino, "2019-21", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
+      }
+    }
+
+    "return RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED error" when {
+      "no JSON fields are provided" in {
+        val json = Json.parse("""{}""".stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
+      "at least one empty array is provided" in {
+        val json = Json.parse(
+          """
+            |{
+            |  "vctSubscriptionsItems":[],
+            |  "eisSubscriptionsItems":[
+            |    {
+            |      "uniqueInvestmentRef": "XTAL",
+            |      "name": "EIS Fund X",
+            |      "knowledgeIntensive": true,
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 23312.00,
+            |      "reliefClaimed": 43432.00
+            |    }
+            |  ],
+            |  "communityInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "CIREF",
+            |      "name": "CI X",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 6442.00,
+            |      "reliefClaimed": 2344.00
+            |    }
+            |  ],
+            |  "seedEnterpriseInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "companyName": "Company Inc",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ],
+            |  "socialEnterpriseInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "socialEnterpriseName": "SE Inc",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ]
+            |}
+        """.stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
+      "at least one array contains an empty object" in {
+        val json = Json.parse(
+          """
+            |{
+            |  "vctSubscriptionsItems":[
+            |    {}
+            |  ],
+            |  "eisSubscriptionsItems":[
+            |    {
+            |      "uniqueInvestmentRef": "XTAL",
+            |      "name": "EIS Fund X",
+            |      "knowledgeIntensive": true,
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 23312.00,
+            |      "reliefClaimed": 43432.00
+            |    }
+            |  ],
+            |  "communityInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "CIREF",
+            |      "name": "CI X",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 6442.00,
+            |      "reliefClaimed": 2344.00
+            |    }
+            |  ],
+            |  "seedEnterpriseInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "companyName": "Company Inc",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ],
+            |  "socialEnterpriseInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "socialEnterpriseName": "SE Inc",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ]
+            |}
+        """.stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
+    }
+
     "return every field in a FORMAT_VALUE error" when {
       "all fields are below 0" in {
         val badJson = Json.parse(
@@ -147,7 +266,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |}
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          FormatValueErrorGenerator.generate(Seq(
+          ValueFormatError.copy(paths = Some(Seq(
             "/vctSubscriptionsItems/0/amountInvested",
             "/vctSubscriptionsItems/0/reliefClaimed",
             "/vctSubscriptionsItems/1/amountInvested",
@@ -160,7 +279,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             "/seedEnterpriseInvestmentItems/0/reliefClaimed",
             "/socialEnterpriseInvestmentItems/0/amountInvested",
             "/socialEnterpriseInvestmentItems/0/reliefClaimed"
-          ))
+          )))
         )
       }
     }
@@ -225,14 +344,14 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |}
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          FormatValueErrorGenerator.generate(Seq(
+          ValueFormatError.copy(paths = Some(Seq(
             "/vctSubscriptionsItems/0/reliefClaimed",
             "/vctSubscriptionsItems/1/amountInvested",
             "/eisSubscriptionsItems/0/amountInvested",
             "/communityInvestmentItems/0/reliefClaimed",
             "/seedEnterpriseInvestmentItems/0/amountInvested",
             "/socialEnterpriseInvestmentItems/0/reliefClaimed"
-          ))
+          )))
         )
       }
     }
@@ -290,13 +409,13 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |}
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          FormatDateOfInvestmentErrorGenerator.generate(Seq(
+          DateOfInvestmentFormatError.copy(paths = Some(Seq(
             "/vctSubscriptionsItems/0/dateOfInvestment",
             "/eisSubscriptionsItems/0/dateOfInvestment",
             "/communityInvestmentItems/0/dateOfInvestment",
             "/seedEnterpriseInvestmentItems/0/dateOfInvestment",
             "/socialEnterpriseInvestmentItems/0/dateOfInvestment"
-          ))
+          )))
         )
       }
     }
@@ -354,13 +473,13 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |}
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          FormatNameErrorGenerator.generate(Seq(
+          NameFormatError.copy(paths = Some(Seq(
             "/vctSubscriptionsItems/0/name",
             "/eisSubscriptionsItems/0/name",
             "/communityInvestmentItems/0/name",
             "/seedEnterpriseInvestmentItems/0/companyName",
             "/socialEnterpriseInvestmentItems/0/socialEnterpriseName"
-          ))
+          )))
         )
       }
     }
@@ -418,13 +537,13 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |}
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          FormatInvestmentRefErrorGenerator.generate(Seq(
+          InvestmentRefFormatError.copy(paths = Some(Seq(
             "/vctSubscriptionsItems/0/uniqueInvestmentRef",
             "/eisSubscriptionsItems/0/uniqueInvestmentRef",
             "/communityInvestmentItems/0/uniqueInvestmentRef",
             "/seedEnterpriseInvestmentItems/0/uniqueInvestmentRef",
             "/socialEnterpriseInvestmentItems/0/uniqueInvestmentRef"
-          ))
+          )))
         )
       }
     }
@@ -482,14 +601,14 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |}
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          FormatValueErrorGenerator.generate(Seq(
+          ValueFormatError.copy(paths = Some(Seq(
             "/seedEnterpriseInvestmentItems/0/reliefClaimed",
             "/socialEnterpriseInvestmentItems/0/amountInvested"
-          )),
-          FormatDateOfInvestmentErrorGenerator.generate(Seq(
+          ))),
+          DateOfInvestmentFormatError.copy(paths = Some(Seq(
             "/vctSubscriptionsItems/0/dateOfInvestment",
             "/eisSubscriptionsItems/0/dateOfInvestment"
-          ))
+          )))
         )
       }
     }

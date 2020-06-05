@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendReliefInvestments
+package v1.models.request.retrieveReliefInvestments
 
-import play.api.libs.json.{Json, OFormat}
+import v1.models.request.RawData
 
-case class EisSubscriptionsItem(uniqueInvestmentRef: Option[String],
-                                name: Option[String],
-                                knowledgeIntensive: Option[Boolean],
-                                dateOfInvestment: Option[String],
-                                amountInvested: Option[BigDecimal],
-                                reliefClaimed: Option[BigDecimal])
+case class RetrieveReliefInvestmentsRawData(nino: String, taxYear: String) extends RawData {
 
-object EisSubscriptionsItem {
-  implicit val format: OFormat[EisSubscriptionsItem] = Json.format[EisSubscriptionsItem]
 }

@@ -23,7 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockRetrieveReliefInvestmentsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments._
 
 import scala.concurrent.ExecutionContext.Implicits.global
