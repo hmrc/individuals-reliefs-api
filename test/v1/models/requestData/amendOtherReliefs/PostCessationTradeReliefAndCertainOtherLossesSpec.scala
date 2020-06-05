@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with JsonErrorValidators {
   val postCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
-    "myref",
+    "myRef",
     Some("ACME Inc"),
     Some("2019-08-10"),
     Some("Widgets Manufacturer"),
@@ -30,14 +30,29 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
     Some(222.22)
   )
 
+  val noOptionsPostCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
+    "myRef",
+    None,
+    None,
+    None,
+    None,
+    None
+  )
+
   val json = Json.parse(
     """{
-      |        "customerReference": "myref",
+      |        "customerReference": "myRef",
       |        "businessName": "ACME Inc",
       |        "dateBusinessCeased": "2019-08-10",
       |        "natureOfTrade": "Widgets Manufacturer",
       |        "incomeSource": "AB12412/A12",
       |        "amount": 222.22
+      |      }""".stripMargin
+  )
+
+  val noOptionsJson = Json.parse(
+    """{
+      |        "customerReference": "myRef"
       |      }""".stripMargin
   )
 
@@ -48,10 +63,24 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
       }
     }
   }
+  "reads from a JSON with no optional fields supplied" when {
+    "passed a JSON with no optional fields" should {
+      "return a model with no optional fields" in {
+        noOptionsPostCessationTradeReliefAndCertainOtherLosses shouldBe noOptionsJson.as[PostCessationTradeReliefAndCertainOtherLosses]
+      }
+    }
+  }
   "writes" when {
     "passed valid model" should {
-      "return valid json" in {
+      "return valid JSON" in {
         Json.toJson(postCessationTradeReliefAndCertainOtherLosses) shouldBe json
+      }
+    }
+  }
+  "writes from a model with no optional fields" when {
+    "passed a model with no optional fields" should {
+      "return a JSON with no optional fields" in {
+        Json.toJson(noOptionsPostCessationTradeReliefAndCertainOtherLosses) shouldBe noOptionsJson
       }
     }
   }

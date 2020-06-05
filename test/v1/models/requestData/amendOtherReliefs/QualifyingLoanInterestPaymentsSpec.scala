@@ -23,15 +23,28 @@ import v1.models.utils.JsonErrorValidators
 class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidators {
 
   val qualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
-    "myref",
+    "myRef",
     Some("Maurice"),
+    763.00
+  )
+
+  val noLendernameQualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
+    "myRef",
+    None,
     763.00
   )
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myref",
+      |        "customerReference": "myRef",
       |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }""".stripMargin
+  )
+
+  val noLenderNameJson = Json.parse(
+    """{
+      |        "customerReference": "myRef",
       |        "reliefClaimed": 763.00
       |      }""".stripMargin
   )
@@ -43,10 +56,24 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
       }
     }
   }
+  "reads from a JSON with no lender name" when {
+    "passed a JSON with no customer lender name" should {
+      "return a model with no customer lender name" in {
+        noLendernameQualifyingLoanInterestPayments shouldBe noLenderNameJson.as[QualifyingLoanInterestPayments]
+      }
+    }
+  }
   "writes" when {
     "passed valid model" should {
-      "return valid json" in {
+      "return valid JSON" in {
         Json.toJson(qualifyingLoanInterestPayments) shouldBe json
+      }
+    }
+  }
+  "writes from a model with no lender name" when {
+    "passed a model with no customer lender name" should {
+      "return a JSON with no customer lender name" in {
+        Json.toJson(noLendernameQualifyingLoanInterestPayments) shouldBe noLenderNameJson
       }
     }
   }

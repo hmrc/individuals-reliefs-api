@@ -22,20 +22,34 @@ import v1.models.utils.JsonErrorValidators
 
 class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators{
   val maintenancePayments = MaintenancePayments(
-    "myref",
+    "myRef",
     Some("Hilda"),
     Some("2000-01-01"),
     Some(222.22))
 
+  val noOptionsMaintenancePayments = MaintenancePayments(
+    "myRef",
+    None,
+    None,
+    None
+  )
+
   val json = Json.parse(
   """
     |    {
-    |        "customerReference": "myref",
+    |        "customerReference": "myRef",
     |        "exSpouseName" : "Hilda",
     |        "exSpouseDateOfBirth": "2000-01-01",
     |        "amount": 222.22
     |      }
     |  """.stripMargin)
+
+  val noOptionsJson = Json.parse(
+    """
+      |    {
+      |        "customerReference": "myRef"
+      |      }
+      |  """.stripMargin)
 
   "reads" when {
     "passed valid JSON" should {
@@ -44,10 +58,24 @@ class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators{
       }
     }
   }
+  "reads from a json with no optional fields supplied" when {
+    "passed a JSON with no optional fields" should {
+      "return a model with no optional fields" in {
+        noOptionsMaintenancePayments shouldBe noOptionsJson.as[MaintenancePayments]
+      }
+    }
+  }
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
         Json.toJson(maintenancePayments) shouldBe json
+      }
+    }
+  }
+  "writes from a model with no optional fields" when {
+    "passed a model with no optional fields" should {
+      "return a json with no optional fields" in {
+        Json.toJson(noOptionsMaintenancePayments) shouldBe noOptionsJson
       }
     }
   }

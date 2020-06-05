@@ -21,11 +21,19 @@ import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
-  val annualPaymentsMade = AnnualPaymentsMade(Some("myref"), 763.00)
+  val annualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)
+
+  val noRefAnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myref",
+      |        "customerReference": "myRef",
+      |        "reliefClaimed": 763.00
+      |      }""".stripMargin
+  )
+
+  val noRefJson = Json.parse(
+    """{
       |        "reliefClaimed": 763.00
       |      }""".stripMargin
   )
@@ -37,10 +45,24 @@ class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+  "reads from a JSON with no reference" when {
+    "passed a JSON with no customer reference" should {
+      "return a model with no customer reference " in {
+        noRefAnnualPaymentsMade shouldBe noRefJson.as[AnnualPaymentsMade]
+      }
+    }
+  }
   "writes" when {
     "passed valid model" should {
-      "return valid json" in {
+      "return valid JSON" in {
         Json.toJson(annualPaymentsMade) shouldBe json
+      }
+    }
+  }
+  "writes from a model with no reference" when {
+    "passed a model with no customer reference" should {
+      "return a JSON with no customer reference" in {
+        Json.toJson(noRefAnnualPaymentsMade) shouldBe noRefJson
       }
     }
   }

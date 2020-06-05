@@ -26,6 +26,11 @@ class NonDeductableLoanInterestSpec extends UnitSpec with JsonErrorValidators {
     763.00
   )
 
+  val noRefNoneDeductableLoanInterest = NonDeductableLoanInterest(
+    None,
+    763.00
+  )
+
   val json = Json.parse(
     """{
       |        "customerReference": "myref",
@@ -33,6 +38,11 @@ class NonDeductableLoanInterestSpec extends UnitSpec with JsonErrorValidators {
       |      }""".stripMargin
   )
 
+  val noRefJson = Json.parse(
+    """{
+      |        "reliefClaimed": 763.00
+      |      }""".stripMargin
+  )
 
   "reads" when {
     "passed valid JSON" should {
@@ -41,10 +51,24 @@ class NonDeductableLoanInterestSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+  "reads from a JSON with no reference" when {
+    "passed a JSON with no reference" should {
+      "return a model with no reference" in {
+        noRefNoneDeductableLoanInterest shouldBe noRefJson.as[NonDeductableLoanInterest]
+      }
+    }
+  }
   "writes" when {
     "passed valid model" should {
-      "return valid json" in {
+      "return valid JSON" in {
         Json.toJson(nonDeductableLoanInterest) shouldBe json
+      }
+    }
+  }
+  "writes from a model with no reference" when {
+    "passed a model with no customer reference" should {
+      "return a JSON with no customer reference" in {
+        Json.toJson(noRefNoneDeductableLoanInterest) shouldBe noRefJson
       }
     }
   }

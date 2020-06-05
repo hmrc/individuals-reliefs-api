@@ -27,9 +27,20 @@ class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec
     222.22
   )
 
+  val noRefQualifyingDistributionRedemptionOfSharesAndSecurities = QualifyingDistributionRedemptionOfSharesAndSecurities(
+    None,
+    222.22
+  )
+
   val json = Json.parse(
     """{
       |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      }""".stripMargin
+  )
+
+  val noRefJson = Json.parse(
+    """{
       |        "amount": 222.22
       |      }""".stripMargin
   )
@@ -42,10 +53,24 @@ class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec
       }
     }
   }
+  "reads from a JSON with no reference" when {
+    "passed a JSON with no customer reference" should {
+      "return a model with no customer reference " in {
+        noRefQualifyingDistributionRedemptionOfSharesAndSecurities shouldBe noRefJson.as[QualifyingDistributionRedemptionOfSharesAndSecurities]
+      }
+    }
+  }
   "writes" when {
     "passed valid model" should {
-      "return valid json" in {
+      "return valid JSON" in {
         Json.toJson(qualifyingDistributionRedemptionOfSharesAndSecurities) shouldBe json
+      }
+    }
+  }
+  "writes from a model with no reference" when {
+    "passed a model with no customer reference" should {
+      "return a JSON with no customer reference" in {
+        Json.toJson(noRefQualifyingDistributionRedemptionOfSharesAndSecurities) shouldBe noRefJson
       }
     }
   }

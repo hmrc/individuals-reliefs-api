@@ -52,6 +52,16 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
      763.00)))
  )
 
+  val emptyAmendOtherReliefsBody = AmendOtherReliefsBody(
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,
+    None
+  )
+
   val json = Json.parse(
     """{
       |  "nonDeductableLoanInterest": {
@@ -98,6 +108,8 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
       |}""".stripMargin
   )
 
+  val emptyJson = Json.parse("""{}""")
+
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
@@ -105,10 +117,22 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+  "read from empty JSON" should {
+    "convert empty MTD JSON into an empty AmendSecuritiesItems object" in {
+      emptyAmendOtherReliefsBody shouldBe emptyJson.as[AmendOtherReliefsBody]
+    }
+  }
   "writes" when {
     "passed valid model" should {
-      "return valid json" in {
+      "return valid JSON" in {
         Json.toJson(amendOtherReliefsBody) shouldBe json
+      }
+    }
+  }
+  "write from an empty body" when {
+    "passed an empty model" should {
+      "return an empty JSON" in {
+        Json.toJson(emptyAmendOtherReliefsBody) shouldBe emptyJson
       }
     }
   }

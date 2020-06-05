@@ -22,13 +22,24 @@ import v1.models.utils.JsonErrorValidators
 
 class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
   val payrollGiving = PayrollGiving(
-    Some("myref"),
+    Some("myRef"),
+    154.00
+  )
+
+  val noRefPayrollGiving = PayrollGiving(
+    None,
     154.00
   )
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myref",
+      |        "customerReference": "myRef",
+      |        "reliefClaimed": 154.00
+      |      }""".stripMargin
+  )
+
+  val noRefJson = Json.parse(
+    """{
       |        "reliefClaimed": 154.00
       |      }""".stripMargin
   )
@@ -40,10 +51,24 @@ class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+  "reads from a JSON with no reference" when {
+    "passed a JSON with no customer reference" should {
+      "return a model with no customer reference " in {
+        noRefPayrollGiving shouldBe noRefJson.as[PayrollGiving]
+      }
+    }
+  }
   "writes" when {
     "passed valid model" should {
-      "return valid json" in {
+      "return valid JSON" in {
         Json.toJson(payrollGiving) shouldBe json
+      }
+    }
+  }
+  "writes from a model with no reference" when {
+    "passed a model with no customer reference" should {
+      "return a JSON with no customer reference" in {
+        Json.toJson(noRefPayrollGiving) shouldBe noRefJson
       }
     }
   }
