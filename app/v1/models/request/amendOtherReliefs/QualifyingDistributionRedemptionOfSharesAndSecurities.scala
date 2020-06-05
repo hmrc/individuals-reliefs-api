@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendOtherReliefs
+package v1.models.request.amendOtherReliefs
 
-import play.api.libs.json.JsValue
-import v1.models.requestData.RawData
+import play.api.libs.json.{Json, OFormat}
 
-case class AmendOtherReliefsRawData(nino: String, taxYear: String, body: JsValue) extends RawData
+case class QualifyingDistributionRedemptionOfSharesAndSecurities(customerReference: Option[String], amount:BigDecimal)
+
+
+object QualifyingDistributionRedemptionOfSharesAndSecurities {
+  implicit val format: OFormat[QualifyingDistributionRedemptionOfSharesAndSecurities] = Json.format[QualifyingDistributionRedemptionOfSharesAndSecurities]
+}

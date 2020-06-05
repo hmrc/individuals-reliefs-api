@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendOtherReliefs
+package v1.models.request.amendOtherReliefs
 
-import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.domain.Nino
 
-case class QualifyingLoanInterestPayments(customerReference: String, lenderName: Option[String], reliefClaimed: BigDecimal)
-
-object QualifyingLoanInterestPayments {
-  implicit val format: OFormat[QualifyingLoanInterestPayments] = Json.format[QualifyingLoanInterestPayments]
-}
+case class AmendOtherReliefsRequest(nino: Nino, taxYear: String, body: AmendOtherReliefsBody)

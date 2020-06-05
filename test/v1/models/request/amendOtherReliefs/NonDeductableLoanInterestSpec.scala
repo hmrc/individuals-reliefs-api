@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendOtherReliefs
+package v1.models.request.amendOtherReliefs
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
-  val annualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)
+class NonDeductableLoanInterestSpec extends UnitSpec with JsonErrorValidators {
+  val nonDeductableLoanInterest = NonDeductableLoanInterest(
+    Some("myref"),
+    763.00
+  )
 
-  val noRefAnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
+  val noRefNoneDeductableLoanInterest = NonDeductableLoanInterest(
+    None,
+    763.00
+  )
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myRef",
+      |        "customerReference": "myref",
       |        "reliefClaimed": 763.00
       |      }""".stripMargin
   )
@@ -41,29 +47,30 @@ class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        annualPaymentsMade shouldBe json.as[AnnualPaymentsMade]
+        nonDeductableLoanInterest shouldBe json.as[NonDeductableLoanInterest]
       }
     }
   }
   "reads from a JSON with no reference" when {
-    "passed a JSON with no customer reference" should {
-      "return a model with no customer reference " in {
-        noRefAnnualPaymentsMade shouldBe noRefJson.as[AnnualPaymentsMade]
+    "passed a JSON with no reference" should {
+      "return a model with no reference" in {
+        noRefNoneDeductableLoanInterest shouldBe noRefJson.as[NonDeductableLoanInterest]
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(annualPaymentsMade) shouldBe json
+        Json.toJson(nonDeductableLoanInterest) shouldBe json
       }
     }
   }
   "writes from a model with no reference" when {
     "passed a model with no customer reference" should {
       "return a JSON with no customer reference" in {
-        Json.toJson(noRefAnnualPaymentsMade) shouldBe noRefJson
+        Json.toJson(noRefNoneDeductableLoanInterest) shouldBe noRefJson
       }
     }
   }
 }
+

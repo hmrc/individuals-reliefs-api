@@ -14,61 +14,61 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendOtherReliefs
+package v1.models.request.amendOtherReliefs
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class NonDeductableLoanInterestSpec extends UnitSpec with JsonErrorValidators {
-  val nonDeductableLoanInterest = NonDeductableLoanInterest(
-    Some("myref"),
-    763.00
+class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
+  val payrollGiving = PayrollGiving(
+    Some("myRef"),
+    154.00
   )
 
-  val noRefNoneDeductableLoanInterest = NonDeductableLoanInterest(
+  val noRefPayrollGiving = PayrollGiving(
     None,
-    763.00
+    154.00
   )
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myref",
-      |        "reliefClaimed": 763.00
+      |        "customerReference": "myRef",
+      |        "reliefClaimed": 154.00
       |      }""".stripMargin
   )
 
   val noRefJson = Json.parse(
     """{
-      |        "reliefClaimed": 763.00
+      |        "reliefClaimed": 154.00
       |      }""".stripMargin
   )
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        nonDeductableLoanInterest shouldBe json.as[NonDeductableLoanInterest]
+        payrollGiving shouldBe json.as[PayrollGiving]
       }
     }
   }
   "reads from a JSON with no reference" when {
-    "passed a JSON with no reference" should {
-      "return a model with no reference" in {
-        noRefNoneDeductableLoanInterest shouldBe noRefJson.as[NonDeductableLoanInterest]
+    "passed a JSON with no customer reference" should {
+      "return a model with no customer reference " in {
+        noRefPayrollGiving shouldBe noRefJson.as[PayrollGiving]
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(nonDeductableLoanInterest) shouldBe json
+        Json.toJson(payrollGiving) shouldBe json
       }
     }
   }
   "writes from a model with no reference" when {
     "passed a model with no customer reference" should {
       "return a JSON with no customer reference" in {
-        Json.toJson(noRefNoneDeductableLoanInterest) shouldBe noRefJson
+        Json.toJson(noRefPayrollGiving) shouldBe noRefJson
       }
     }
   }
