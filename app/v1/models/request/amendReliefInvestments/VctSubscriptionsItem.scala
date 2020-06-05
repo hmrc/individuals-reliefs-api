@@ -18,17 +18,11 @@ package v1.models.request.amendReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-case class VctSubscriptionsItem(uniqueInvestmentRef: Option[String],
+case class VctSubscriptionsItem(uniqueInvestmentRef: String,
                                 name: Option[String],
                                 dateOfInvestment: Option[String],
                                 amountInvested: Option[BigDecimal],
-                                reliefClaimed: Option[BigDecimal]) {
-  def isEmpty: Boolean = uniqueInvestmentRef.isEmpty &&
-    name.isEmpty &&
-    dateOfInvestment.isEmpty &&
-    amountInvested.isEmpty &&
-    reliefClaimed.isEmpty
-}
+                                reliefClaimed: Option[BigDecimal])
 
 object VctSubscriptionsItem {
   implicit val format: OFormat[VctSubscriptionsItem] = Json.format[VctSubscriptionsItem]

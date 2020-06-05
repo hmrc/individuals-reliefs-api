@@ -22,24 +22,20 @@ import v1.models.utils.JsonErrorValidators
 
 class InvestmentRefValidationSpec extends UnitSpec with JsonErrorValidators {
 
-  val validRef: Option[String] = Some("123412/1A")
-  val invalidRef: Option[String] = Some("AA1234*&^%$£BBCBCBC")
+  val validRef: String = "123412/1A"
+  val invalidRef: String = "AA1234*&^%$£BBCBCBC"
 
   "validate" should {
     "return no errors" when {
       "a valid unique investment reference is supplied" in {
-        val validationResult = InvestmentRefValidation.validateOptional(validRef,"/vctSubscription/0/uniqueInvestmentRef")
-        validationResult.isEmpty shouldBe true
-      }
-      "no unique investment reference is supplied" in {
-        val validationResult = InvestmentRefValidation.validateOptional(None,"/vctSubscription/0/uniqueInvestmentRef")
+        val validationResult = InvestmentRefValidation.validate(validRef,"/vctSubscription/0/uniqueInvestmentRef")
         validationResult.isEmpty shouldBe true
       }
     }
 
     "return an error" when {
       "when an invalid name is supplied" in {
-        val validationResult = InvestmentRefValidation.validateOptional(invalidRef, "/vctSubscription/0/uniqueInvestmentRef")
+        val validationResult = InvestmentRefValidation.validate(invalidRef, "/vctSubscription/0/uniqueInvestmentRef")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
         validationResult.head shouldBe  InvestmentRefFormatError.copy(paths = Some(Seq("/vctSubscription/0/uniqueInvestmentRef")))

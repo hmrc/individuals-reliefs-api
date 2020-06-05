@@ -69,7 +69,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def validateVctSubscription(vctSubscriptionsItem: VctSubscriptionsItem, arrayIndex: Int): List[MtdError] = {
     List(
-      InvestmentRefValidation.validateOptional(
+      InvestmentRefValidation.validate(
         investmentRef = vctSubscriptionsItem.uniqueInvestmentRef,
         path = s"/vctSubscription/$arrayIndex/uniqueInvestmentRef"
       ),
@@ -94,7 +94,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def validateEisSubscription(eisSubscriptionsItem: EisSubscriptionsItem, arrayIndex: Int): List[MtdError] = {
     List(
-      InvestmentRefValidation.validateOptional(
+      InvestmentRefValidation.validate(
         investmentRef = eisSubscriptionsItem.uniqueInvestmentRef,
         path = s"/eisSubscription/$arrayIndex/uniqueInvestmentRef"
       ),
@@ -120,7 +120,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def validateCommunityInvestment(communityInvestmentItem: CommunityInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
-      InvestmentRefValidation.validateOptional(
+      InvestmentRefValidation.validate(
         investmentRef = communityInvestmentItem.uniqueInvestmentRef,
         path = s"/communityInvestment/$arrayIndex/uniqueInvestmentRef"
       ),
@@ -145,7 +145,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def validateSeedEnterpriseInvestment(seedEnterpriseInvestmentItem: SeedEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
-      InvestmentRefValidation.validateOptional(
+      InvestmentRefValidation.validate(
         investmentRef = seedEnterpriseInvestmentItem.uniqueInvestmentRef,
         path = s"/seedEnterpriseInvestment/$arrayIndex/uniqueInvestmentRef"
       ),
@@ -171,7 +171,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def validatesocialEnterpriseInvestment(socialEnterpriseInvestmentItem: SocialEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
-      InvestmentRefValidation.validateOptional(
+      InvestmentRefValidation.validate(
         investmentRef = socialEnterpriseInvestmentItem.uniqueInvestmentRef,
         path = s"/socialEnterpriseInvestment/$arrayIndex/uniqueInvestmentRef"
       ),

@@ -29,32 +29,27 @@ case class AmendReliefInvestmentsBody(vctSubscription: Option[Seq[VctSubscriptio
     seedEnterpriseInvestment.isEmpty &&
     socialEnterpriseInvestment.isEmpty
 
-  private def vctSubscriptionContainsEmptyObjectsOrIsEmpty: Boolean =
-    (vctSubscription.isDefined && vctSubscription.get.isEmpty) ||
-      vctSubscription.isDefined && vctSubscription.get.exists(_.isEmpty)
+  private def vctSubscriptionIsEmpty: Boolean =
+    vctSubscription.isDefined && vctSubscription.get.isEmpty
 
-  private def eisSubscriptionContainsEmptyObjectsOrIsEmpty: Boolean =
-    (eisSubscription.isDefined && eisSubscription.get.isEmpty) ||
-      eisSubscription.isDefined && eisSubscription.get.exists(_.isEmpty)
+  private def eisSubscriptionIsEmpty: Boolean =
+    eisSubscription.isDefined && eisSubscription.get.isEmpty
 
-  private def communityInvestmentContainsEmptyObjectsOrIsEmpty: Boolean =
-    (communityInvestment.isDefined && communityInvestment.get.isEmpty) ||
-      communityInvestment.isDefined && communityInvestment.get.exists(_.isEmpty)
+  private def communityInvestmentIsEmpty: Boolean =
+    communityInvestment.isDefined && communityInvestment.get.isEmpty
 
-  private def seedEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty: Boolean =
-    (seedEnterpriseInvestment.isDefined && seedEnterpriseInvestment.get.isEmpty) ||
-      seedEnterpriseInvestment.isDefined && seedEnterpriseInvestment.get.exists(_.isEmpty)
+  private def seedEnterpriseInvestmentIsEmpty: Boolean =
+    seedEnterpriseInvestment.isDefined && seedEnterpriseInvestment.get.isEmpty
 
-  private def socialEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty: Boolean =
-    (socialEnterpriseInvestment.isDefined && socialEnterpriseInvestment.get.isEmpty) ||
-      socialEnterpriseInvestment.isDefined && socialEnterpriseInvestment.get.exists(_.isEmpty)
+  private def socialEnterpriseInvestmentIsEmpty: Boolean =
+    socialEnterpriseInvestment.isDefined && socialEnterpriseInvestment.get.isEmpty
 
   def isIncorrectOrEmptyBody: Boolean = isEmpty || {
-    vctSubscriptionContainsEmptyObjectsOrIsEmpty ||
-      eisSubscriptionContainsEmptyObjectsOrIsEmpty ||
-      communityInvestmentContainsEmptyObjectsOrIsEmpty ||
-      seedEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty ||
-      socialEnterpriseInvestmentContainsEmptyObjectsOrIsEmpty
+    vctSubscriptionIsEmpty ||
+      eisSubscriptionIsEmpty ||
+      communityInvestmentIsEmpty ||
+      seedEnterpriseInvestmentIsEmpty ||
+      socialEnterpriseInvestmentIsEmpty
   }
 }
 

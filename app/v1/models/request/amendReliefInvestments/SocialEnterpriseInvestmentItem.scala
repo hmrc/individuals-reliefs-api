@@ -18,17 +18,11 @@ package v1.models.request.amendReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-case class SocialEnterpriseInvestmentItem(uniqueInvestmentRef: Option[String],
+case class SocialEnterpriseInvestmentItem(uniqueInvestmentRef: String,
                                           socialEnterpriseName: Option[String],
                                           dateOfInvestment: Option[String],
                                           amountInvested: Option[BigDecimal],
-                                          reliefClaimed: Option[BigDecimal]) {
-  def isEmpty: Boolean = uniqueInvestmentRef.isEmpty &&
-    socialEnterpriseName.isEmpty &&
-    dateOfInvestment.isEmpty &&
-    amountInvested.isEmpty &&
-    reliefClaimed.isEmpty
-}
+                                          reliefClaimed: Option[BigDecimal])
 
 object SocialEnterpriseInvestmentItem {
   implicit val format: OFormat[SocialEnterpriseInvestmentItem] = Json.format[SocialEnterpriseInvestmentItem]
