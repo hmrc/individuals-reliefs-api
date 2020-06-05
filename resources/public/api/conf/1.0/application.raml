@@ -51,4 +51,5 @@ uses:
   /other:
     /{nino}:
       /{taxYear}:
+        delete: !include reliefOther_delete.raml
         put: !include reliefOther_amend.raml
