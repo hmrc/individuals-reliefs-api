@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.deleteOtherReliefs
+package v1.models.request.deleteOtherReliefs
 
-import v1.models.requestData.RawData
+import v1.models.request.RawData
 
 case class DeleteOtherReliefsRawData(nino: String, taxYear: String) extends RawData

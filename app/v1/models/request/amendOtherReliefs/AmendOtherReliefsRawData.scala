@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendOtherReliefs
+package v1.models.request.amendOtherReliefs
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.JsValue
+import v1.models.request.RawData
 
-case class PayrollGiving(customerReference: Option[String], reliefClaimed: BigDecimal)
-
-
-object PayrollGiving {
-  implicit val format: OFormat[PayrollGiving] = Json.format[PayrollGiving]
-}
+case class AmendOtherReliefsRawData(nino: String, taxYear: String, body: JsValue) extends RawData

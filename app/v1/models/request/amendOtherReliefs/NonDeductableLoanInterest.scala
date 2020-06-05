@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendOtherReliefs
+package v1.models.request.amendOtherReliefs
 
-import uk.gov.hmrc.domain.Nino
+import play.api.libs.json.{Json, OFormat}
 
-case class AmendOtherReliefsRequest(nino: Nino, taxYear: String, body: AmendOtherReliefsBody)
+case class NonDeductableLoanInterest(customerReference: Option[String], reliefClaimed: BigDecimal)
+
+
+object NonDeductableLoanInterest {
+  implicit val format: OFormat[NonDeductableLoanInterest] = Json.format[NonDeductableLoanInterest]
+}

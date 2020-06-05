@@ -14,63 +14,55 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendOtherReliefs
+package v1.models.request.amendOtherReliefs
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec with JsonErrorValidators {
+class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
+  val annualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)
 
-  val qualifyingDistributionRedemptionOfSharesAndSecurities = QualifyingDistributionRedemptionOfSharesAndSecurities(
-    Some("myref"),
-    222.22
-  )
-
-  val noRefQualifyingDistributionRedemptionOfSharesAndSecurities = QualifyingDistributionRedemptionOfSharesAndSecurities(
-    None,
-    222.22
-  )
+  val noRefAnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myref",
-      |        "amount": 222.22
+      |        "customerReference": "myRef",
+      |        "reliefClaimed": 763.00
       |      }""".stripMargin
   )
 
   val noRefJson = Json.parse(
     """{
-      |        "amount": 222.22
+      |        "reliefClaimed": 763.00
       |      }""".stripMargin
   )
-
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        qualifyingDistributionRedemptionOfSharesAndSecurities shouldBe json.as[QualifyingDistributionRedemptionOfSharesAndSecurities]
+        annualPaymentsMade shouldBe json.as[AnnualPaymentsMade]
       }
     }
   }
   "reads from a JSON with no reference" when {
     "passed a JSON with no customer reference" should {
       "return a model with no customer reference " in {
-        noRefQualifyingDistributionRedemptionOfSharesAndSecurities shouldBe noRefJson.as[QualifyingDistributionRedemptionOfSharesAndSecurities]
+        noRefAnnualPaymentsMade shouldBe noRefJson.as[AnnualPaymentsMade]
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(qualifyingDistributionRedemptionOfSharesAndSecurities) shouldBe json
+        Json.toJson(annualPaymentsMade) shouldBe json
       }
     }
   }
   "writes from a model with no reference" when {
     "passed a model with no customer reference" should {
       "return a JSON with no customer reference" in {
-        Json.toJson(noRefQualifyingDistributionRedemptionOfSharesAndSecurities) shouldBe noRefJson
+        Json.toJson(noRefAnnualPaymentsMade) shouldBe noRefJson
       }
     }
   }

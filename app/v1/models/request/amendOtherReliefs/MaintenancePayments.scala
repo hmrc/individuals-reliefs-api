@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.deleteOtherReliefs
+package v1.models.request.amendOtherReliefs
 
-import uk.gov.hmrc.domain.Nino
+import play.api.libs.json.{Json, OFormat}
 
-case class DeleteOtherReliefsRequest(nino: Nino, taxYear: String)
+case class MaintenancePayments(customerReference: String,
+                               exSpouseName: Option[String],
+                               exSpouseDateOfBirth: Option[String],
+                               amount: Option[BigDecimal])
+
+
+object MaintenancePayments {
+  implicit val format: OFormat[MaintenancePayments] = Json.format[MaintenancePayments]
+}
