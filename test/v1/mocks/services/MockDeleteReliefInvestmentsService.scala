@@ -27,7 +27,7 @@ import v1.services.DeleteReliefInvestmentsService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteService extends MockFactory {
+trait MockDeleteReliefInvestmentsService extends MockFactory {
 
   val mockService: DeleteReliefInvestmentsService = mock[DeleteReliefInvestmentsService]
 
