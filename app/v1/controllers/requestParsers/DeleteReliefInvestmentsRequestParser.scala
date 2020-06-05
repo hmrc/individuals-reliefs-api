@@ -19,7 +19,7 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.DeleteReliefInvestmentsValidator
-import v1.models.requestData.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest}
+import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest}
 
 class DeleteReliefInvestmentsRequestParser @Inject()(val validator: DeleteReliefInvestmentsValidator)
   extends RequestParser[DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest] {

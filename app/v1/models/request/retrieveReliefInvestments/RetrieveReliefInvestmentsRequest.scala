@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.retrieveReliefInvestments
+package v1.models.request.retrieveReliefInvestments
 
-import v1.models.requestData.RawData
+import uk.gov.hmrc.domain.Nino
 
-case class RetrieveReliefInvestmentsRawData(nino: String, taxYear: String) extends RawData {
+case class RetrieveReliefInvestmentsRequest(nino: Nino, taxYear: String) {
 
 }

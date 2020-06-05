@@ -14,9 +14,22 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendReliefInvestments
+package v1.models.request
 
-import play.api.libs.json.JsValue
-import v1.models.requestData.RawData
+/**
+  * Represents a tax year for DES
+  *
+  * @param value the tax year string (where 2018 represents 2017-18)
+  */
+case class DesTaxYear(value: String) extends AnyVal {
+  override def toString: String = value
+}
 
-case class AmendReliefInvestmentsRawData(nino: String, taxYear: String, body: JsValue) extends RawData
+object DesTaxYear {
+
+  /**
+    * @param taxYear tax year in MTD format (e.g. 2017-18)
+    */
+  def fromMtd(taxYear: String): DesTaxYear =
+    DesTaxYear(taxYear.take(2) + taxYear.drop(5))
+}

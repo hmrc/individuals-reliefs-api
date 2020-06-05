@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.validators.DeleteReliefInvestmentsValidator
 import v1.models.errors.MtdError
-import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRawData
+import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRawData
 
 class MockDeleteReliefInvestmentsValidator extends MockFactory {
 

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendReliefInvestments
+package v1.models.request.amendReliefInvestments
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
-  val vctSubscriptionsItem = VctSubscriptionsItem(
+class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
+  val communityInvestmentItem = CommunityInvestmentItem(
     Some("VCTREF"),
     Some("VCT Fund X"),
     Some("2018-04-16"),
@@ -44,14 +44,40 @@ class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        vctSubscriptionsItem shouldBe json.as[VctSubscriptionsItem]
+        communityInvestmentItem shouldBe json.as[CommunityInvestmentItem]
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(vctSubscriptionsItem) shouldBe json
+        Json.toJson(communityInvestmentItem) shouldBe json
+      }
+    }
+  }
+  "isEmpty" when {
+    "passed an empty model" should {
+      "return true" in {
+        val model = CommunityInvestmentItem(
+          None,
+          None,
+          None,
+          None,
+          None
+        )
+        model.isEmpty shouldBe true
+      }
+    }
+    "passed a non-empty model" should {
+      "return false" in {
+        val model = CommunityInvestmentItem(
+          None,
+          Some("name"),
+          None,
+          None,
+          None
+        )
+        model.isEmpty shouldBe false
       }
     }
   }

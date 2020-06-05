@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.deleteReliefInvestments
+package v1.models.request.amendReliefInvestments
 
-import v1.models.requestData.RawData
+import uk.gov.hmrc.domain.Nino
 
-case class DeleteReliefInvestmentsRawData(nino: String, taxYear: String) extends RawData
+case class AmendReliefInvestmentsRequest(nino: Nino, taxYear: String, body: AmendReliefInvestmentsBody)

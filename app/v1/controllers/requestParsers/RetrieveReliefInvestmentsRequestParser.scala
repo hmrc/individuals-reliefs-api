@@ -19,7 +19,7 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.RetrieveReliefInvestmentsValidator
-import v1.models.requestData.retrieveReliefInvestments.{RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest}
+import v1.models.request.retrieveReliefInvestments.{RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest}
 
 class RetrieveReliefInvestmentsRequestParser @Inject()(val validator: RetrieveReliefInvestmentsValidator)
   extends RequestParser[RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest] {

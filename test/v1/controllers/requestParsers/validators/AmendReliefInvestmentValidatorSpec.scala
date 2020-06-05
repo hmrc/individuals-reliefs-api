@@ -18,8 +18,8 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{DateOfInvestmentFormatError, InvestmentRefFormatError, NameFormatError, ValueFormatError}
-import v1.models.requestData.amendReliefInvestments.AmendReliefInvestmentsRawData
+import v1.models.errors.{DateOfInvestmentFormatError, InvestmentRefFormatError, NameFormatError, NinoFormatError, RuleIncorrectOrEmptyBodyError, RuleTaxYearRangeInvalidError, TaxYearFormatError, ValueFormatError}
+import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
 
 class AmendReliefInvestmentValidatorSpec extends UnitSpec {
 
@@ -83,6 +83,125 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
     "return no errors" when {
       "a valid request is supplied" in {
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, requestBodyJson)) shouldBe Nil
+      }
+    }
+
+    "return FORMAT_NINO error" when {
+      "a bad nino is provided" in {
+        validator.validate(AmendReliefInvestmentsRawData("BALONEY", validTaxYear, requestBodyJson)) shouldBe List(NinoFormatError)
+      }
+    }
+
+    "return FORMAT_TAX_YEAR error" when {
+      "a bad tax year is provided" in {
+        validator.validate(AmendReliefInvestmentsRawData(validNino, "BALONEY", requestBodyJson)) shouldBe List(TaxYearFormatError)
+      }
+    }
+
+    "return RULE_TAX_YEAR_RANGE_INVALID error" when {
+      "an invalid tax year range is provided" in {
+        validator.validate(AmendReliefInvestmentsRawData(validNino, "2019-21", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
+      }
+    }
+
+    "return RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED error" when {
+      "no JSON fields are provided" in {
+        val json = Json.parse("""{}""".stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
+      "at least one empty array is provided" in {
+        val json = Json.parse(
+          """
+            |{
+            |  "vctSubscriptionsItems":[],
+            |  "eisSubscriptionsItems":[
+            |    {
+            |      "uniqueInvestmentRef": "XTAL",
+            |      "name": "EIS Fund X",
+            |      "knowledgeIntensive": true,
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 23312.00,
+            |      "reliefClaimed": 43432.00
+            |    }
+            |  ],
+            |  "communityInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "CIREF",
+            |      "name": "CI X",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 6442.00,
+            |      "reliefClaimed": 2344.00
+            |    }
+            |  ],
+            |  "seedEnterpriseInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "companyName": "Company Inc",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ],
+            |  "socialEnterpriseInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "socialEnterpriseName": "SE Inc",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ]
+            |}
+        """.stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
+      "at least one array contains an empty object" in {
+        val json = Json.parse(
+          """
+            |{
+            |  "vctSubscriptionsItems":[
+            |    {}
+            |  ],
+            |  "eisSubscriptionsItems":[
+            |    {
+            |      "uniqueInvestmentRef": "XTAL",
+            |      "name": "EIS Fund X",
+            |      "knowledgeIntensive": true,
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 23312.00,
+            |      "reliefClaimed": 43432.00
+            |    }
+            |  ],
+            |  "communityInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "CIREF",
+            |      "name": "CI X",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 6442.00,
+            |      "reliefClaimed": 2344.00
+            |    }
+            |  ],
+            |  "seedEnterpriseInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "companyName": "Company Inc",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ],
+            |  "socialEnterpriseInvestmentItems": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "socialEnterpriseName": "SE Inc",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 123123.22,
+            |      "reliefClaimed": 3432.00
+            |    }
+            |  ]
+            |}
+        """.stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
     }
 

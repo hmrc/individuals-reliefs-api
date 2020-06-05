@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendReliefInvestments
+package v1.models.request.amendReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-case class SeedEnterpriseInvestmentItem(uniqueInvestmentRef: Option[String],
-                                        companyName: Option[String],
-                                        dateOfInvestment: Option[String],
-                                        amountInvested: Option[BigDecimal],
-                                        reliefClaimed: Option[BigDecimal]) {
+case class VctSubscriptionsItem(uniqueInvestmentRef: Option[String],
+                                name: Option[String],
+                                dateOfInvestment: Option[String],
+                                amountInvested: Option[BigDecimal],
+                                reliefClaimed: Option[BigDecimal]) {
   def isEmpty: Boolean = uniqueInvestmentRef.isEmpty &&
-    companyName.isEmpty &&
+    name.isEmpty &&
     dateOfInvestment.isEmpty &&
     amountInvested.isEmpty &&
     reliefClaimed.isEmpty
 }
 
-object SeedEnterpriseInvestmentItem {
-  implicit val format: OFormat[SeedEnterpriseInvestmentItem] = Json.format[SeedEnterpriseInvestmentItem]
+object VctSubscriptionsItem {
+  implicit val format: OFormat[VctSubscriptionsItem] = Json.format[VctSubscriptionsItem]
 }

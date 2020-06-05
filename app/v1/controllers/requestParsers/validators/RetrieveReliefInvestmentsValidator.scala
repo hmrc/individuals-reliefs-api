@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
 import v1.models.errors.MtdError
-import v1.models.requestData.retrieveReliefInvestments.RetrieveReliefInvestmentsRawData
+import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRawData
 
 class RetrieveReliefInvestmentsValidator extends Validator[RetrieveReliefInvestmentsRawData] {
 

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendReliefInvestments
+package v1.models.request
 
-import uk.gov.hmrc.domain.Nino
+import play.api.libs.json.JsValue
 
-case class AmendReliefInvestmentsRequest(nino: Nino, taxYear: String, body: AmendReliefInvestmentsBody)
+case class SampleRawData(nino: String, taxYear: String, body: JsValue) extends RawData

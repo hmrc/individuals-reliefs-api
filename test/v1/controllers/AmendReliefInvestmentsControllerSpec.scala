@@ -27,7 +27,7 @@ import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.PUT
 import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.amendReliefInvestments._
+import v1.models.request.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest, CommunityInvestmentItem, EisSubscriptionsItem, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
 import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global

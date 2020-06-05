@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.requestData.amendReliefInvestments
+package v1.models.request.amendReliefInvestments
 
 import play.api.libs.json.Json
 import support.UnitSpec
@@ -54,6 +54,34 @@ class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
     "passed valid model" should {
       "return valid json" in {
         Json.toJson(eisSubscriptionsItem) shouldBe json
+      }
+    }
+  }
+  "isEmpty" when {
+    "passed an empty model" should {
+      "return true" in {
+        val model = EisSubscriptionsItem(
+          None,
+          None,
+          None,
+          None,
+          None,
+          None
+        )
+        model.isEmpty shouldBe true
+      }
+    }
+    "passed a non-empty model" should {
+      "return false" in {
+        val model = EisSubscriptionsItem(
+          None,
+          Some("name"),
+          None,
+          None,
+          None,
+          None
+        )
+        model.isEmpty shouldBe false
       }
     }
   }
