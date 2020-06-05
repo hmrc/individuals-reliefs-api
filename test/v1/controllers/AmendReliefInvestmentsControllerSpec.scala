@@ -67,7 +67,7 @@ class AmendReliefInvestmentsControllerSpec
   private val requestJson = Json.parse(
     """|
        |{
-       |  "vctSubscriptionsItems":[
+       |  "vctSubscription":[
        |    {
        |      "uniqueInvestmentRef": "VCTREF",
        |      "name": "VCT Fund X",
@@ -76,7 +76,7 @@ class AmendReliefInvestmentsControllerSpec
        |      "reliefClaimed": 1334.00
        |      }
        |  ],
-       |  "eisSubscriptionsItems":[
+       |  "eisSubscription":[
        |    {
        |      "uniqueInvestmentRef": "XTAL",
        |      "name": "EIS Fund X",
@@ -86,7 +86,7 @@ class AmendReliefInvestmentsControllerSpec
        |      "reliefClaimed": 43432.00
        |    }
        |  ],
-       |  "communityInvestmentItems": [
+       |  "communityInvestment": [
        |    {
        |      "uniqueInvestmentRef": "CIREF",
        |      "name": "CI X",
@@ -95,7 +95,7 @@ class AmendReliefInvestmentsControllerSpec
        |      "reliefClaimed": 2344.00
        |    }
        |  ],
-       |  "seedEnterpriseInvestmentItems": [
+       |  "seedEnterpriseInvestment": [
        |    {
        |      "uniqueInvestmentRef": "123412/1A",
        |      "companyName": "Company Inc",
@@ -104,7 +104,7 @@ class AmendReliefInvestmentsControllerSpec
        |      "reliefClaimed": 3432.00
        |    }
        |  ],
-       |  "socialEnterpriseInvestmentItems": [
+       |  "socialEnterpriseInvestment": [
        |    {
        |      "uniqueInvestmentRef": "123412/1A",
        |      "socialEnterpriseName": "SE Inc",
@@ -201,17 +201,17 @@ class AmendReliefInvestmentsControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (ValueFormatError.copy(paths = Some(Seq(
-            "vctSubscriptionsItems/0/amountInvested",
-            "vctSubscriptionsItems/0/reliefClaimed"))), BAD_REQUEST),
+            "vctSubscription/0/amountInvested",
+            "vctSubscription/0/reliefClaimed"))), BAD_REQUEST),
           (DateOfInvestmentFormatError.copy(paths = Some(Seq(
-            "vctSubscriptionsItems/0/dateOfInvestment",
-            "eisSubscriptionsItems/0/dateOfInvestment"))), BAD_REQUEST),
+            "vctSubscription/0/dateOfInvestment",
+            "eisSubscription/0/dateOfInvestment"))), BAD_REQUEST),
           (NameFormatError.copy(paths = Some(Seq(
-            "vctSubscriptionsItems/0/name",
-            "eisSubscriptionsItems/0/name"))), BAD_REQUEST),
+            "vctSubscription/0/name",
+            "eisSubscription/0/name"))), BAD_REQUEST),
           (InvestmentRefFormatError.copy(paths = Some(Seq(
-            "vctSubscriptionsItems/0/uniqueInvestmentRef",
-            "eisSubscriptionsItems/0/uniqueInvestmentRef"))), BAD_REQUEST)
+            "vctSubscription/0/uniqueInvestmentRef",
+            "eisSubscription/0/uniqueInvestmentRef"))), BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
