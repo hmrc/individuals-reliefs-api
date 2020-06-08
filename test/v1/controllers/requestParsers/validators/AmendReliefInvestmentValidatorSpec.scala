@@ -473,13 +473,13 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |}
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq(
-            "/seedEnterpriseInvestment/0/reliefClaimed",
-            "/socialEnterpriseInvestment/0/amountInvested"
-          ))),
           DateOfInvestmentFormatError.copy(paths = Some(Seq(
             "/vctSubscription/0/dateOfInvestment",
             "/eisSubscription/0/dateOfInvestment"
+          ))),
+          ValueFormatError.copy(paths = Some(Seq(
+            "/seedEnterpriseInvestment/0/reliefClaimed",
+            "/socialEnterpriseInvestment/0/amountInvested"
           )))
         )
       }

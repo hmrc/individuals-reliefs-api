@@ -213,8 +213,19 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         )
 
         val allInvalidValueRequestError: List[MtdError] = List(
+          DateOfInvestmentFormatError.copy(
+            message = "The format of the investment date is invalid",
+              paths = Some(List(
+              "/vctSubscription/0/dateOfInvestment",
+              "/vctSubscription/1/dateOfInvestment",
+              "/eisSubscription/0/dateOfInvestment",
+              "/communityInvestment/0/dateOfInvestment",
+              "/seedEnterpriseInvestment/0/dateOfInvestment",
+              "/socialEnterpriseInvestment/0/dateOfInvestment"
+            ))
+          ),
           ValueFormatError.copy(
-            message = "The field should be between 1 and 99999999999.99",
+            message = "The field should be between 0 and 99999999999.99",
             paths = Some(List(
               "/vctSubscription/0/amountInvested",
               "/vctSubscription/0/reliefClaimed",
@@ -228,17 +239,6 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
               "/seedEnterpriseInvestment/0/reliefClaimed",
               "/socialEnterpriseInvestment/0/amountInvested",
               "/socialEnterpriseInvestment/0/reliefClaimed"
-            ))
-          ),
-          DateOfInvestmentFormatError.copy(
-            message = "The format of the investment date is invalid",
-              paths = Some(List(
-              "/vctSubscription/0/dateOfInvestment",
-              "/vctSubscription/1/dateOfInvestment",
-              "/eisSubscription/0/dateOfInvestment",
-              "/communityInvestment/0/dateOfInvestment",
-              "/seedEnterpriseInvestment/0/dateOfInvestment",
-              "/socialEnterpriseInvestment/0/dateOfInvestment"
             ))
           )
         )
@@ -383,7 +383,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
       )
 
       val allValueFormatError: MtdError = ValueFormatError.copy(
-        message = "The field should be between 1 and 99999999999.99",
+        message = "The field should be between 0 and 99999999999.99",
         paths = Some(Seq(
           "/vctSubscription/0/amountInvested",
           "/vctSubscription/0/reliefClaimed",
