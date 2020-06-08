@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.DeleteOtherReliefsRequestParser
 import v1.models.errors._
-import v1.models.requestData.deleteOtherReliefs.DeleteOtherReliefsRawData
+import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRawData
 import v1.services.{DeleteOtherReliefsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.DeleteOtherReliefsRequestParser
 import v1.models.errors.ErrorWrapper
-import v1.models.requestData.deleteOtherReliefs.{DeleteOtherReliefsRawData, DeleteOtherReliefsRequest}
+import v1.models.request.deleteOtherReliefs.{DeleteOtherReliefsRawData, DeleteOtherReliefsRequest}
 
 trait MockDeleteOtherReliefsRequestParser extends MockFactory {
 

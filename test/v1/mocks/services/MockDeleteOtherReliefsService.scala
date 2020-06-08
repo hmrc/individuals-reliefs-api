@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.deleteOtherReliefs.DeleteOtherReliefsRequest
+import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRequest
 import v1.services.DeleteOtherReliefsService
 
 import scala.concurrent.{ExecutionContext, Future}
