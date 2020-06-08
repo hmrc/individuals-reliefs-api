@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers
+package v1.mocks.validators
 
-import javax.inject.Inject
-import uk.gov.hmrc.domain.Nino
+import org.scalamock.handlers.CallHandler1
+import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.validators.AmendOtherReliefsValidator
-import v1.models.requestData.amendOtherReliefs.{AmendOtherReliefsBody, AmendOtherReliefsRawData, AmendOtherReliefsRequest}
+import v1.models.errors.MtdError
+import v1.models.requestData.amendOtherReliefs.AmendOtherReliefsRawData
 
-class AmendOtherReliefsRequestParser @Inject()(val validator: AmendOtherReliefsValidator)
-  extends RequestParser[AmendOtherReliefsRawData, AmendOtherReliefsRequest] {
+class MockAmendOtherReliefsValidator extends MockFactory {
 
-  override protected def requestFor(data: AmendOtherReliefsRawData): AmendOtherReliefsRequest =
-    AmendOtherReliefsRequest(Nino(data.nino), data.taxYear, data.body.as[AmendOtherReliefsBody])
+  val mockValidator: AmendOtherReliefsValidator = mock[AmendOtherReliefsValidator]
 
+  object MockAmendOtherReliefsValidator {
+
+    def validate(data: AmendOtherReliefsRawData): CallHandler1[AmendOtherReliefsRawData, List[MtdError]] = {
+      (mockValidator
+        .validate(_: AmendOtherReliefsRawData))
+        .expects(data)
+    }
+  }
 }

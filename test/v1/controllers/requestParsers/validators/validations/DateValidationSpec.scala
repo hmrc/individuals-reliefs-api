@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.DateOfInvestmentFormatError
+import v1.models.errors.{DateOfInvestmentFormatError, ReliefDateFormatError}
 
 class DateValidationSpec extends UnitSpec {
 
@@ -28,20 +28,32 @@ class DateValidationSpec extends UnitSpec {
     "return no errors" when {
       "a valid date is supplied" in {
         val validationResult = DateValidation.validateOptional(validDate, "/vctSubscription/0/dateOfInvestment")
+        val validationFormatDateResult = DateValidation.validateFormatDateOptional(validDate, "maintenancePayments/exSpouseDateOfBirth")
+
         validationResult.isEmpty shouldBe true
+        validationFormatDateResult.isEmpty shouldBe true
       }
       "no valid date is supplied" in {
         val validationResult = DateValidation.validateOptional(None, "/vctSubscription/0/dateOfInvestment")
+        val validationFormatDateResult = DateValidation.validateFormatDateOptional(None, "maintenancePayments/exSpouseDateOfBirth")
+
         validationResult.isEmpty shouldBe true
+        validationFormatDateResult.isEmpty shouldBe true
       }
     }
 
     "return an error" when {
       "a invalid date is supplied" in {
         val validationResult = DateValidation.validateOptional(invalidDate, "/vctSubscription/0/dateOfInvestment")
+        val validationFormatDateResult = DateValidation.validateFormatDateOptional(invalidDate, "maintenancePayments/exSpouseDateOfBirth")
+
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
         validationResult.head shouldBe DateOfInvestmentFormatError.copy(paths = Some(Seq("/vctSubscription/0/dateOfInvestment")))
+
+        validationFormatDateResult.isEmpty shouldBe false
+        validationFormatDateResult.length shouldBe 1
+        validationFormatDateResult.head shouldBe ReliefDateFormatError.copy(paths = Some((Seq("maintenancePayments/exSpouseDateOfBirth"))))
       }
     }
   }
