@@ -200,6 +200,7 @@ class AmendReliefInvestmentsControllerSpec
         val input = Seq(
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
+          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
           (ValueFormatError.copy(paths = Some(Seq(
             "vctSubscription/0/amountInvested",
             "vctSubscription/0/reliefClaimed"))), BAD_REQUEST),
