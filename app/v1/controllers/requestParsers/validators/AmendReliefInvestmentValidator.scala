@@ -63,7 +63,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         body.socialEnterpriseInvestment.map(_.zipWithIndex.flatMap {
           case (item, i) => validatesocialEnterpriseInvestment(item, i)
         })
-      ).map(a => a.getOrElse(NoValidationErrors).toList)
+      ).map(_.getOrElse(NoValidationErrors).toList)
     ))
   }
 
