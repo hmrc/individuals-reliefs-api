@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{DateOfInvestmentFormatError, InvestmentRefFormatError, NameFormatError, NinoFormatError, RuleIncorrectOrEmptyBodyError, RuleTaxYearRangeInvalidError, TaxYearFormatError, ValueFormatError}
+import v1.models.errors._
 import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
 
 class AmendReliefInvestmentValidatorSpec extends UnitSpec {

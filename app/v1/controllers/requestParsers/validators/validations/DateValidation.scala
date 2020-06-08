@@ -32,7 +32,7 @@ object DateValidation {
   }
 
   private def validate(date: String, path: String): List[MtdError] = Try {
-    if(date.nonEmpty) LocalDate.parse(date, dateFormat)
+    LocalDate.parse(date, dateFormat)
   } match {
     case Success(_) => Nil
     case Failure(_) => List(
