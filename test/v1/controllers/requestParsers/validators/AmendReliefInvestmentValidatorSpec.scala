@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{DateOfInvestmentFormatError, InvestmentRefFormatError, NameFormatError, NinoFormatError, RuleIncorrectOrEmptyBodyError, RuleTaxYearRangeInvalidError, TaxYearFormatError, ValueFormatError}
+import v1.models.errors._
 import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
 
 class AmendReliefInvestmentValidatorSpec extends UnitSpec {
@@ -415,134 +415,6 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             "/communityInvestment/0/dateOfInvestment",
             "/seedEnterpriseInvestment/0/dateOfInvestment",
             "/socialEnterpriseInvestment/0/dateOfInvestment"
-          )))
-        )
-      }
-    }
-    "return a format name error with multiple incorrect names" when {
-      "the provided name's formats are incorrect" in {
-        val badJson = Json.parse(
-          """
-            |{
-            |  "vctSubscription":[
-            |    {
-            |      "uniqueInvestmentRef": "VCTREF",
-            |      "name": "AA1234*&^%$£BBCBCBC",
-            |      "dateOfInvestment": "2018-04-16",
-            |      "amountInvested": 23312.00,
-            |      "reliefClaimed": 1334.00
-            |      }
-            |  ],
-            |  "eisSubscription":[
-            |    {
-            |      "uniqueInvestmentRef": "XTAL",
-            |      "name": "",
-            |      "knowledgeIntensive": true,
-            |      "dateOfInvestment": "2020-12-12",
-            |      "amountInvested": 23312.00,
-            |      "reliefClaimed": 43432.00
-            |    }
-            |  ],
-            |  "communityInvestment": [
-            |    {
-            |      "uniqueInvestmentRef": "CIREF",
-            |      "name": "AA1234*&^%$£BBCBCBC",
-            |      "dateOfInvestment": "2020-12-12",
-            |      "amountInvested": 6442.00,
-            |      "reliefClaimed": 2344.00
-            |    }
-            |  ],
-            |  "seedEnterpriseInvestment": [
-            |    {
-            |      "uniqueInvestmentRef": "123412/1A",
-            |      "companyName": "AA1234*&^%$£BBCBCBC",
-            |      "dateOfInvestment": "2020-12-12",
-            |      "amountInvested": 123123.22,
-            |      "reliefClaimed": 3432.00
-            |    }
-            |  ],
-            |  "socialEnterpriseInvestment": [
-            |    {
-            |      "uniqueInvestmentRef": "123412/1A",
-            |      "socialEnterpriseName": "AA1234*&^%$£BBCBCBC",
-            |      "dateOfInvestment": "2020-12-12",
-            |      "amountInvested": 123123.22,
-            |      "reliefClaimed": 3432.00
-            |    }
-            |  ]
-            |}
-        """.stripMargin)
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          NameFormatError.copy(paths = Some(Seq(
-            "/vctSubscription/0/name",
-            "/eisSubscription/0/name",
-            "/communityInvestment/0/name",
-            "/seedEnterpriseInvestment/0/companyName",
-            "/socialEnterpriseInvestment/0/socialEnterpriseName"
-          )))
-        )
-      }
-    }
-    "return a unique investment reference error" when {
-      "the provided unique investment reference is incorrect" in {
-        val badJson = Json.parse(
-          """
-            |{
-            |  "vctSubscription":[
-            |    {
-            |      "uniqueInvestmentRef": "bad ref",
-            |      "name": "VCT Fund X",
-            |      "dateOfInvestment": "2018-04-16",
-            |      "amountInvested": 23312.00,
-            |      "reliefClaimed": 1334.00
-            |      }
-            |  ],
-            |  "eisSubscription":[
-            |    {
-            |      "uniqueInvestmentRef": "bad***ref",
-            |      "name": "EIS Fund X",
-            |      "knowledgeIntensive": true,
-            |      "dateOfInvestment": "2020-12-12",
-            |      "amountInvested": 23312.00,
-            |      "reliefClaimed": 43432.00
-            |    }
-            |  ],
-            |  "communityInvestment": [
-            |    {
-            |      "uniqueInvestmentRef": "",
-            |      "name": "CI X",
-            |      "dateOfInvestment": "2020-12-12",
-            |      "amountInvested": 6442.00,
-            |      "reliefClaimed": 2344.00
-            |    }
-            |  ],
-            |  "seedEnterpriseInvestment": [
-            |    {
-            |      "uniqueInvestmentRef": "bad ref",
-            |      "companyName": "Company Inc",
-            |      "dateOfInvestment": "2020-12-12",
-            |      "amountInvested": 123123.22,
-            |      "reliefClaimed": 3432.00
-            |    }
-            |  ],
-            |  "socialEnterpriseInvestment": [
-            |    {
-            |      "uniqueInvestmentRef": "bad ref",
-            |      "socialEnterpriseName": "SE Inc",
-            |      "dateOfInvestment": "",
-            |      "amountInvested": 123123.22,
-            |      "reliefClaimed": 3432.00
-            |    }
-            |  ]
-            |}
-        """.stripMargin)
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          InvestmentRefFormatError.copy(paths = Some(Seq(
-            "/vctSubscription/0/uniqueInvestmentRef",
-            "/eisSubscription/0/uniqueInvestmentRef",
-            "/communityInvestment/0/uniqueInvestmentRef",
-            "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
-            "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
           )))
         )
       }

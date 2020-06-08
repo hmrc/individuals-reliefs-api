@@ -206,13 +206,7 @@ class AmendReliefInvestmentsControllerSpec
             "vctSubscription/0/reliefClaimed"))), BAD_REQUEST),
           (DateOfInvestmentFormatError.copy(paths = Some(Seq(
             "vctSubscription/0/dateOfInvestment",
-            "eisSubscription/0/dateOfInvestment"))), BAD_REQUEST),
-          (NameFormatError.copy(paths = Some(Seq(
-            "vctSubscription/0/name",
-            "eisSubscription/0/name"))), BAD_REQUEST),
-          (InvestmentRefFormatError.copy(paths = Some(Seq(
-            "vctSubscription/0/uniqueInvestmentRef",
-            "eisSubscription/0/uniqueInvestmentRef"))), BAD_REQUEST)
+            "eisSubscription/0/dateOfInvestment"))), BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))

@@ -240,28 +240,6 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
               "/seedEnterpriseInvestment/0/dateOfInvestment",
               "/socialEnterpriseInvestment/0/dateOfInvestment"
             ))
-          ),
-          InvestmentRefFormatError.copy(
-            message = "The format of unique investment reference is invalid",
-            paths = Some(List(
-              "/vctSubscription/0/uniqueInvestmentRef",
-              "/vctSubscription/1/uniqueInvestmentRef",
-              "/eisSubscription/0/uniqueInvestmentRef",
-              "/communityInvestment/0/uniqueInvestmentRef",
-              "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
-              "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
-            ))
-          ),
-          NameFormatError.copy(
-            message = "The format of the name is invalid",
-            paths = Some(List(
-              "/vctSubscription/0/name",
-              "/vctSubscription/1/name",
-              "/eisSubscription/0/name",
-              "/communityInvestment/0/name",
-              "/seedEnterpriseInvestment/0/companyName",
-              "/socialEnterpriseInvestment/0/socialEnterpriseName"
-            ))
           )
         )
 
@@ -493,146 +471,6 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           "/socialEnterpriseInvestment/0/dateOfInvestment"
         ))
       )
-      val allInvalidNameFormatRequestBodyJson: JsValue = Json.parse(
-        """|{
-           |  "vctSubscription":[
-           |    {
-           |      "uniqueInvestmentRef": "VCTREF",
-           |      "name": "VCT Fund!!!! X",
-           |      "dateOfInvestment": "2018-04-16",
-           |      "amountInvested": 23312.00,
-           |      "reliefClaimed": 1334.00
-           |    },
-           |    {
-           |      "uniqueInvestmentRef": "VCTREF",
-           |      "name": "VCT Fund X!!!!",
-           |      "dateOfInvestment": "2018-04-16",
-           |      "amountInvested": 23312.00,
-           |      "reliefClaimed": 1334.00
-           |    }
-           |  ],
-           |  "eisSubscription":[
-           |    {
-           |      "uniqueInvestmentRef": "XTAL",
-           |      "name": "EIS Fu!!!!nd X",
-           |      "knowledgeIntensive": true,
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 23312.00,
-           |      "reliefClaimed": 43432.00
-           |    }
-           |  ],
-           |  "communityInvestment": [
-           |    {
-           |      "uniqueInvestmentRef": "CIREF",
-           |      "name": "CI !!!X",
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 6442.00,
-           |      "reliefClaimed": 2344.00
-           |    }
-           |  ],
-           |  "seedEnterpriseInvestment": [
-           |    {
-           |      "uniqueInvestmentRef": "123412/1A",
-           |      "companyName": "Company I!!!nc",
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 123123.22,
-           |      "reliefClaimed": 3432.00
-           |    }
-           |  ],
-           |  "socialEnterpriseInvestment": [
-           |    {
-           |      "uniqueInvestmentRef": "123412/1A",
-           |      "socialEnterpriseName": "S!!!!E Inc",
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 123123.22,
-           |      "reliefClaimed": 3432.00
-           |    }
-           |  ]
-           |}
-           |""".stripMargin
-      )
-
-      val allNameFormatError: MtdError = NameFormatError.copy(
-        message = "The format of the name is invalid",
-        paths = Some(List(
-          "/vctSubscription/0/name",
-          "/vctSubscription/1/name",
-          "/eisSubscription/0/name",
-          "/communityInvestment/0/name",
-          "/seedEnterpriseInvestment/0/companyName",
-          "/socialEnterpriseInvestment/0/socialEnterpriseName"
-        ))
-      )
-      val allInvalidInvestmentRefRequestBodyJson: JsValue = Json.parse(
-        """|{
-           |  "vctSubscription":[
-           |    {
-           |      "uniqueInvestmentRef": "VC???TREF",
-           |      "name": "VCT Fund X",
-           |      "dateOfInvestment": "2018-04-16",
-           |      "amountInvested": 23312.00,
-           |      "reliefClaimed": 1334.00
-           |    },
-           |    {
-           |      "uniqueInvestmentRef": "VC???TREF",
-           |      "name": "VCT Fund X",
-           |      "dateOfInvestment": "2018-04-16",
-           |      "amountInvested": 23312.00,
-           |      "reliefClaimed": 1334.00
-           |    }
-           |  ],
-           |  "eisSubscription":[
-           |    {
-           |      "uniqueInvestmentRef": "X????TAL",
-           |      "name": "EIS Fund X",
-           |      "knowledgeIntensive": true,
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 23312.00,
-           |      "reliefClaimed": 43432.00
-           |    }
-           |  ],
-           |  "communityInvestment": [
-           |    {
-           |      "uniqueInvestmentRef": "CIRE??F",
-           |      "name": "CI X",
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 6442.00,
-           |      "reliefClaimed": 2344.00
-           |    }
-           |  ],
-           |  "seedEnterpriseInvestment": [
-           |    {
-           |      "uniqueInvestmentRef": "1234/??12/1A",
-           |      "companyName": "Company Inc",
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 123123.22,
-           |      "reliefClaimed": 3432.00
-           |    }
-           |  ],
-           |  "socialEnterpriseInvestment": [
-           |    {
-           |      "uniqueInvestmentRef": "123412???/1A",
-           |      "socialEnterpriseName": "SE Inc",
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 123123.22,
-           |      "reliefClaimed": 3432.00
-           |    }
-           |  ]
-           |}
-           |""".stripMargin
-      )
-
-      val allInvalidInvestmentRefRequestError: MtdError = InvestmentRefFormatError.copy(
-        message = "The format of unique investment reference is invalid",
-        paths = Some(List(
-          "/vctSubscription/0/uniqueInvestmentRef",
-          "/vctSubscription/1/uniqueInvestmentRef",
-          "/eisSubscription/0/uniqueInvestmentRef",
-          "/communityInvestment/0/uniqueInvestmentRef",
-          "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
-          "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
-        ))
-      )
 
       "validation error" when {
         def validationErrorTest(requestNino: String, requestTaxYear: String, requestBody: JsValue, expectedStatus: Int, expectedBody: MtdError): Unit = {
@@ -659,9 +497,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           ("AA123456A", "20177", validRequestBodyJson,  BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2017-19", validRequestBodyJson,  BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "2017-18", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
-          ("AA123456A", "2017-18", allInvalidDateOfInvestmentrequestBodyJson, BAD_REQUEST, allDateOfInvestmentFormatError),
-          ("AA123456A", "2017-18", allInvalidNameFormatRequestBodyJson, BAD_REQUEST, allNameFormatError),
-          ("AA123456A", "2017-18", allInvalidInvestmentRefRequestBodyJson, BAD_REQUEST, allInvalidInvestmentRefRequestError))
+          ("AA123456A", "2017-18", allInvalidDateOfInvestmentrequestBodyJson, BAD_REQUEST, allDateOfInvestmentFormatError))
 
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
