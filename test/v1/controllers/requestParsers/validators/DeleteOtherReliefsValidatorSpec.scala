@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
 import v1.models.errors.{NinoFormatError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
-import v1.models.requestData.deleteOtherReliefs.DeleteOtherReliefsRawData
+import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRawData
 
 class DeleteOtherReliefsValidatorSpec extends UnitSpec {
 
