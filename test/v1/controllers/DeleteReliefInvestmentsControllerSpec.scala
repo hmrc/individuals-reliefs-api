@@ -25,12 +25,12 @@ import v1.mocks.requestParsers.MockDeleteReliefInvestmentsRequestParser
 import v1.mocks.services.{MockAuditService, MockDeleteReliefInvestmentsService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.deleteOtherReliefs.{DeleteOtherReliefsRawData, DeleteOtherReliefsRequest}
+import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteReliefInvestmentsReliefInvestmentsOtherReliefsControllerSpec
+class DeleteReliefInvestmentsControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -42,11 +42,11 @@ class DeleteReliefInvestmentsReliefInvestmentsOtherReliefsControllerSpec
   trait Test {
     val hc = HeaderCarrier()
 
-    val controller = new DeleteOtherReliefsController(
+    val controller = new DeleteReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      requestDataParser = mockRequestDataParser,
-      service = mockDeleteOtherReliefsService,
+      parser = mockRequestDataParser,
+      service = mockService,
       cc = cc
     )
 
@@ -58,14 +58,14 @@ class DeleteReliefInvestmentsReliefInvestmentsOtherReliefsControllerSpec
   private val taxYear = "2019-20"
   private val correlationId = "X-123"
 
-  private val rawData = DeleteOtherReliefsRawData(nino, taxYear)
-  private val requestData = DeleteOtherReliefsRequest(Nino(nino), taxYear)
+  private val rawData = DeleteReliefInvestmentsRawData(nino, taxYear)
+  private val requestData = DeleteReliefInvestmentsRequest(Nino(nino), taxYear)
 
   "handleRequest" should {
     "return NoContent" when {
       "the request received is valid" in new Test {
 
-        MockDeleteOtherReliefsRequestParser
+        MockDeleteReliefInvestmentsRequestParser
           .parse(rawData)
           .returns(Right(requestData))
 
@@ -84,7 +84,7 @@ class DeleteReliefInvestmentsReliefInvestmentsOtherReliefsControllerSpec
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
-            MockDeleteOtherReliefsRequestParser
+            MockDeleteReliefInvestmentsRequestParser
               .parse(rawData)
               .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
 
@@ -110,7 +110,7 @@ class DeleteReliefInvestmentsReliefInvestmentsOtherReliefsControllerSpec
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
-            MockDeleteOtherReliefsRequestParser
+            MockDeleteReliefInvestmentsRequestParser
               .parse(rawData)
               .returns(Right(requestData))
 
