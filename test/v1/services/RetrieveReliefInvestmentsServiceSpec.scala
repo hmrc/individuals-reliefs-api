@@ -23,7 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockRetrieveReliefInvestmentsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -37,14 +37,14 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
 
   private val fullResponseModel = RetrieveReliefInvestmentsBody(
     Seq(VctSubscriptionsItem(
-      Some("VCTREF"),
+      "VCTREF",
       Some("VCT Fund X"),
       Some("2018-04-16"),
       Some(BigDecimal(23312.00)),
       Some(BigDecimal(1334.00))
     )),
     Seq(EisSubscriptionsItem(
-      Some("XTAL"),
+      "XTAL",
       Some("EIS Fund X"),
       Some(true),
       Some("2020-12-12"),
@@ -52,21 +52,21 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
       Some(BigDecimal(43432.00))
     )),
     Seq(CommunityInvestmentItem(
-      Some("CIREF"),
+      "CIREF",
       Some("CI X"),
       Some("2020-12-12"),
       Some(BigDecimal(6442.00)),
       Some(BigDecimal(2344.00))
     )),
     Seq(SeedEnterpriseInvestmentItem(
-      Some("123412/1A"),
+      "123412/1A",
       Some("Company Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
       Some(BigDecimal(3432.00))
     )),
     Seq(SocialEnterpriseInvestmentItem(
-      Some("123412/1A"),
+      "123412/1A",
       Some("SE Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),

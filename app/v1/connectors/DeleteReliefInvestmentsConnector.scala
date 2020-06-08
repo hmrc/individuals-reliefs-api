@@ -20,8 +20,8 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRequest
 import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 

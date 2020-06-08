@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators.validations
 
 import java.time.LocalDate
 
-import v1.models.errors.{FormatDateOfInvestmentErrorGenerator, MtdError}
+import v1.models.errors.{DateOfInvestmentFormatError, MtdError}
 
 import scala.util.{Failure, Success, Try}
 
@@ -36,7 +36,7 @@ object DateValidation {
   } match {
     case Success(_) => Nil
     case Failure(_) => List(
-      FormatDateOfInvestmentErrorGenerator.generate(Seq(path))
+      DateOfInvestmentFormatError.copy(paths = Some(Seq(path)))
     )
   }
 

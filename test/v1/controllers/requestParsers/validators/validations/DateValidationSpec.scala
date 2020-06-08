@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.FormatDateOfInvestmentErrorGenerator
+import v1.models.errors.DateOfInvestmentFormatError
 
 class DateValidationSpec extends UnitSpec {
 
@@ -41,7 +41,7 @@ class DateValidationSpec extends UnitSpec {
         val validationResult = DateValidation.validateOptional(invalidDate, "/vctSubscription/0/dateOfInvestment")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe FormatDateOfInvestmentErrorGenerator.generate(Seq("/vctSubscription/0/dateOfInvestment"))
+        validationResult.head shouldBe DateOfInvestmentFormatError.copy(paths = Some(Seq("/vctSubscription/0/dateOfInvestment")))
       }
     }
   }

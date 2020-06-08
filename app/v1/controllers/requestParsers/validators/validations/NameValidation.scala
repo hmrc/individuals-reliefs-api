@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{FormatNameErrorGenerator, MtdError}
+import v1.models.errors.{NameFormatError, MtdError}
 
 
 object NameValidation {
@@ -33,7 +33,7 @@ object NameValidation {
 
   private def validate(name: String, path: String): List[MtdError] = {
     if (name.matches(nameRegex)) Nil else List(
-      FormatNameErrorGenerator.generate(Seq(path))
+      NameFormatError.copy(paths = Some(Seq(path)))
     )
   }
 }

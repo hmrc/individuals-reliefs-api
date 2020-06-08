@@ -24,7 +24,7 @@ import utils.Logging
 import v1.connectors.DeleteReliefInvestmentsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
-import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRequest
+import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}

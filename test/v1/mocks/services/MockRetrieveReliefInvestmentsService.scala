@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsBody
 import v1.services.RetrieveReliefInvestmentsService
 

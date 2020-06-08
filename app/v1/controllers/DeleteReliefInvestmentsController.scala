@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.DeleteReliefInvestmentsRequestParser
 import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
-import v1.models.requestData.deleteReliefInvestments.DeleteReliefInvestmentsRawData
+import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRawData
 import v1.services.{DeleteReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler3
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.{DesOutcome, RetrieveReliefInvestmentsConnector}
-import v1.models.requestData.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments._
 
 import scala.concurrent.{ExecutionContext, Future}
