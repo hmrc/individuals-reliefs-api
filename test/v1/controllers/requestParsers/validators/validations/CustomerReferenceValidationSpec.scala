@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.FormatCustomerReferenceErrorGenerator
+import v1.models.errors.CustomerReferenceFormatError
 
 class CustomerReferenceValidationSpec extends UnitSpec {
 
@@ -40,7 +40,7 @@ class CustomerReferenceValidationSpec extends UnitSpec {
         val validationResult = CustomerReferenceValidation.validateOptional(invalidReference, "/annualPaymentsMade/customerReference")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe FormatCustomerReferenceErrorGenerator.generate(Seq("/annualPaymentsMade/customerReference"))
+        validationResult.head shouldBe CustomerReferenceFormatError.copy(paths = Some(Seq("/annualPaymentsMade/customerReference")))
       }
     }
   }

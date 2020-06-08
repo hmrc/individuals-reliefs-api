@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
-import v1.models.requestData.amendOtherReliefs._
+import v1.models.request.amendOtherReliefs._
 
 class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
 

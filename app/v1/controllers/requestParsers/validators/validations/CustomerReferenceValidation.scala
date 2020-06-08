@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{FormatCustomerReferenceErrorGenerator, FormatDateErrorGenerator, MtdError}
+import v1.models.errors.{CustomerReferenceFormatError, MtdError}
 
 object CustomerReferenceValidation {
 
@@ -32,7 +32,7 @@ object CustomerReferenceValidation {
       NoValidationErrors
     } else {
       List(
-        FormatCustomerReferenceErrorGenerator.generate(Seq(path))
+        CustomerReferenceFormatError.copy(paths = Some(Seq(path)))
       )
     }
   }

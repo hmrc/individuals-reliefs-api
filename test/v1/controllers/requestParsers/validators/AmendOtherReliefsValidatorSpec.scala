@@ -18,8 +18,8 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{FormatCustomerReferenceErrorGenerator, FormatDateErrorGenerator, FormatValueErrorGenerator, NinoFormatError, RuleIncorrectOrEmptyBodyError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
-import v1.models.requestData.amendOtherReliefs.AmendOtherReliefsRawData
+import v1.models.errors.{CustomerReferenceFormatError, ReliefDateFormatError, ValueFormatError, NinoFormatError, RuleIncorrectOrEmptyBodyError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.request.amendOtherReliefs.AmendOtherReliefsRawData
 
 class AmendOtherReliefsValidatorSpec extends UnitSpec {
 
@@ -196,7 +196,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, annualPaymentsMadeJson)) shouldBe Nil
       }
       "a valid request with the qualifyingLoanInterestPayments field is supplied" in {
-        validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, nonDeductableLoanInterestJson)) shouldBe Nil
+        validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, qualifyingLoanInterestPaymentsJson)) shouldBe Nil
       }
     }
 
@@ -270,7 +270,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             |}
             |""".stripMargin)
           validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-            FormatCustomerReferenceErrorGenerator.generate(Seq(
+            CustomerReferenceFormatError.copy(paths = Some(Seq(
               "/nonDeductableLoanInterest/customerReference",
               "/payrollGiving/customerReference",
               "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
@@ -278,7 +278,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
               "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
               "/annualPaymentsMade/customerReference",
               "/qualifyingLoanInterestPayments/0/customerReference"
-            ))
+            )))
           )
       }
     }
@@ -337,7 +337,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             |}
             |""".stripMargin)
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          FormatValueErrorGenerator.generate(Seq(
+          ValueFormatError.copy(paths = Some(Seq(
             "/nonDeductableLoanInterest/reliefClaimed",
             "/payrollGiving/reliefClaimed",
             "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
@@ -346,7 +346,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
             "/annualPaymentsMade/reliefClaimed",
             "/qualifyingLoanInterestPayments/0/reliefClaimed"
-          ))
+          )))
         )
       }
       "only some fields are below 0" in {
@@ -403,12 +403,12 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             |}
             |""".stripMargin)
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          FormatValueErrorGenerator.generate(Seq(
+          ValueFormatError.copy(paths = Some(Seq(
             "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
             "/maintenancePayments/0/amount",
             "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
             "/annualPaymentsMade/reliefClaimed"
-          ))
+          )))
         )
       }
     }
@@ -461,10 +461,10 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             |}
             |""".stripMargin)
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          FormatDateErrorGenerator.generate(Seq(
+          ReliefDateFormatError.copy(paths = Some(Seq(
             "/maintenancePayments/0/exSpouseDateOfBirth",
             "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
-          ))
+          )))
         )
       }
     }
@@ -518,7 +518,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             |""".stripMargin)
 
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          FormatCustomerReferenceErrorGenerator.generate(Seq(
+          CustomerReferenceFormatError.copy(paths = Some(Seq(
             "/nonDeductableLoanInterest/customerReference",
             "/payrollGiving/customerReference",
             "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
@@ -526,8 +526,8 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
             "/annualPaymentsMade/customerReference",
             "/qualifyingLoanInterestPayments/0/customerReference"
-          )),
-          FormatValueErrorGenerator.generate(Seq(
+          ))),
+          ValueFormatError.copy(paths = Some(Seq(
             "/nonDeductableLoanInterest/reliefClaimed",
             "/payrollGiving/reliefClaimed",
             "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
@@ -535,11 +535,11 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
             "/annualPaymentsMade/reliefClaimed",
             "/qualifyingLoanInterestPayments/0/reliefClaimed"
-          )),
-          FormatDateErrorGenerator.generate(Seq(
+          ))),
+          ReliefDateFormatError.copy(paths = Some(Seq(
             "/maintenancePayments/0/exSpouseDateOfBirth",
             "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
-          ))
+          )))
         )
       }
     }

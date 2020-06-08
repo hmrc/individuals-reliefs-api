@@ -21,7 +21,7 @@ import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockAmendOtherReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
-import v1.models.requestData.amendOtherReliefs._
+import v1.models.request.amendOtherReliefs._
 
 class AmendOtherReliefRequestParserSpec extends UnitSpec {
   private val nino = "AA123456A"
