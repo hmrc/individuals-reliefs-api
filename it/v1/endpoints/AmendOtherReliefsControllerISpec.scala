@@ -23,6 +23,7 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
 import v1.models.errors._
+import v1.models.errors.{BadRequestError, ErrorWrapper, MtdError, ValueFormatError}
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
 class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
@@ -105,6 +106,30 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
     def uri: String = s"/other/$nino/$taxYear"
 
     def desUri: String = s"/reliefs/other/$nino/$taxYear"
+      """
+        |{
+        |   "links":[
+        |      {
+        |         "href":"/individuals/reliefs/other/{nino}/{taxYear}",
+        |         "rel":"amend-reliefs-other",
+        |         "method":"PUT"
+        |      },
+        |      {
+        |         "href":"/individuals/reliefs/other/{nino}/{taxYear}",
+        |         "rel":"self",
+        |         "method":"GET"
+        |      },
+        |      {
+        |         "href":"/individuals/reliefs/other/{nino}/{taxYear}",
+        |         "rel":"delete-reliefs-other",
+        |         "method":"DELETE"
+        |      }
+        |   ]
+        |}""".stripMargin)
+
+    def uri: String = s"/reliefs/other/$nino/$taxYear"
+
+    def desUri: String = s"/individuals/reliefs/other/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 
@@ -523,3 +548,4 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
     }
   }
 }
+
