@@ -30,13 +30,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveReliefInvestmentsService extends MockFactory {
 
-  val mockRetrieveReliefInvestmentsService: RetrieveReliefInvestmentsService = mock[RetrieveReliefInvestmentsService]
+  val mockService: RetrieveReliefInvestmentsService = mock[RetrieveReliefInvestmentsService]
 
   object MockRetrieveReliefService {
 
     def retrieve(requestData: RetrieveReliefInvestmentsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveReliefInvestmentsBody]]]] = {
-      (mockRetrieveReliefInvestmentsService
-        .retrieveReliefInvestments(_: RetrieveReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
+      (mockService
+        .retrieve(_: RetrieveReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
         .expects(requestData, *, *, *)
     }
   }

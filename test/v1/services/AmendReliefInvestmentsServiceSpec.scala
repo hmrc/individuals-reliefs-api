@@ -80,7 +80,7 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new AmendReliefInvestmentsService(
-      connector = mockAmendReliefInvestmentsConnector
+      connector = mockConnector
     )
   }
 

@@ -80,17 +80,17 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
     val service = new RetrieveReliefInvestmentsService(
-      connector = mockRetrieveReliefInvestmentsConnector
+      connector = mockConnector
     )
   }
 
   "service" when {
     "service call successful" must {
       "return mapped result" in new Test {
-        MockRetrieveReliefInvestmentsConnector.retrieveReliefInvestments(requestData)
+        MockRetrieveReliefInvestmentsConnector.retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, fullResponseModel))))
 
-        await(service.retrieveReliefInvestments(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
+        await(service.retrieve(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
       }
     }
 
@@ -100,10 +100,10 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockRetrieveReliefInvestmentsConnector.retrieveReliefInvestments(requestData)
+            MockRetrieveReliefInvestmentsConnector.retrieve(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.retrieveReliefInvestments(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+            await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
           }
 
         val input = Seq(

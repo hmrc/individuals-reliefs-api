@@ -48,8 +48,8 @@ class RetrieveReliefInvestmentsControllerSpec
     val controller = new RetrieveReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      requestDataParser = mockRequestDataParser,
-      service = mockRetrieveReliefInvestmentsService,
+      parser = mockRequestDataParser,
+      service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
     )
