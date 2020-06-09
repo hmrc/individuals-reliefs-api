@@ -22,7 +22,7 @@ import v1.controllers.requestParsers.DeleteReliefInvestmentsRequestParser
 import v1.models.errors.ErrorWrapper
 import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest}
 
-trait MockDeleteRequestParser extends MockFactory {
+trait MockDeleteReliefInvestmentsRequestParser extends MockFactory {
 
   val mockRequestDataParser: DeleteReliefInvestmentsRequestParser = mock[DeleteReliefInvestmentsRequestParser]
 

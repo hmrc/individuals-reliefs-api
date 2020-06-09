@@ -21,32 +21,32 @@ import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.hateoas.MockHateoasFactory
-import v1.mocks.requestParsers.MockDeleteReliefInvestmentsRequestParser
-import v1.mocks.services.{MockAuditService, MockDeleteReliefInvestmentsService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.mocks.requestParsers.MockDeleteOtherReliefsRequestParser
+import v1.mocks.services.{MockAuditService, MockDeleteOtherReliefsService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest}
+import v1.models.request.deleteOtherReliefs.{DeleteOtherReliefsRawData, DeleteOtherReliefsRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteReliefInvestmentsControllerSpec
+class DeleteOtherReliefsControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockDeleteReliefInvestmentsService
-    with MockDeleteReliefInvestmentsRequestParser
+    with MockDeleteOtherReliefsService
+    with MockDeleteOtherReliefsRequestParser
     with MockHateoasFactory
     with MockAuditService {
 
   trait Test {
     val hc = HeaderCarrier()
 
-    val controller = new DeleteReliefInvestmentsController(
+    val controller = new DeleteOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
-      service = mockService,
+      requestDataParser = mockRequestDataParser,
+      service = mockDeleteOtherReliefsService,
       cc = cc
     )
 
@@ -58,14 +58,14 @@ class DeleteReliefInvestmentsControllerSpec
   private val taxYear = "2019-20"
   private val correlationId = "X-123"
 
-  private val rawData = DeleteReliefInvestmentsRawData(nino, taxYear)
-  private val requestData = DeleteReliefInvestmentsRequest(Nino(nino), taxYear)
+  private val rawData = DeleteOtherReliefsRawData(nino, taxYear)
+  private val requestData = DeleteOtherReliefsRequest(Nino(nino), taxYear)
 
   "handleRequest" should {
     "return NoContent" when {
       "the request received is valid" in new Test {
 
-        MockDeleteReliefInvestmentsRequestParser
+        MockDeleteOtherReliefsRequestParser
           .parse(rawData)
           .returns(Right(requestData))
 
@@ -84,7 +84,7 @@ class DeleteReliefInvestmentsControllerSpec
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
-            MockDeleteReliefInvestmentsRequestParser
+            MockDeleteOtherReliefsRequestParser
               .parse(rawData)
               .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
 
@@ -110,7 +110,7 @@ class DeleteReliefInvestmentsControllerSpec
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
-            MockDeleteReliefInvestmentsRequestParser
+            MockDeleteOtherReliefsRequestParser
               .parse(rawData)
               .returns(Right(requestData))
 
@@ -131,7 +131,8 @@ class DeleteReliefInvestmentsControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (UnauthorisedError, FORBIDDEN)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

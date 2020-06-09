@@ -22,20 +22,20 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
-import v1.services.DeleteReliefInvestmentsService
+import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRequest
+import v1.services.DeleteOtherReliefsService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteService extends MockFactory {
+trait MockDeleteOtherReliefsService extends MockFactory {
 
-  val mockService: DeleteReliefInvestmentsService = mock[DeleteReliefInvestmentsService]
+  val mockDeleteOtherReliefsService: DeleteOtherReliefsService = mock[DeleteOtherReliefsService]
 
   object MockDeleteService {
 
-    def delete(requestData: DeleteReliefInvestmentsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
-      (mockService
-        .delete(_: DeleteReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
+    def delete(requestData: DeleteOtherReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+      (mockDeleteOtherReliefsService
+        .delete(_: DeleteOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
         .expects(requestData, *, *, *)
     }
   }
