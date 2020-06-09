@@ -45,7 +45,7 @@ class DeleteOtherReliefsControllerSpec
     val controller = new DeleteOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      requestDataParser = mockRequestDataParser,
+      parser = mockRequestDataParser,
       service = mockDeleteOtherReliefsService,
       cc = cc
     )

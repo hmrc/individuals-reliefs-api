@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators.validations
 
 import java.time.LocalDate
 
-import v1.models.errors.{DateOfInvestmentFormatError, MtdError, ReliefDateFormatError}
+import v1.models.errors.MtdError
 
 import scala.util.{Failure, Success, Try}
 
