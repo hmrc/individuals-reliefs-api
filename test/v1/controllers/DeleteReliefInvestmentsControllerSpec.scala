@@ -45,8 +45,8 @@ class DeleteReliefInvestmentsControllerSpec
     val controller = new DeleteReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      requestDataParser = mockRequestDataParser,
-      service = mockDeleteReliefInvestmentsService,
+      parser = mockRequestDataParser,
+      service = mockService,
       cc = cc
     )
 

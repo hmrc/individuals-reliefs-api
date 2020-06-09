@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveReliefInvestmentsService @Inject()(connector: RetrieveReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
 
-  def retrieveReliefInvestments(request: RetrieveReliefInvestmentsRequest)(
+  def retrieve(request: RetrieveReliefInvestmentsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext): Future[RetrieveReliefInvestmentsServiceOutcome] = {

@@ -26,13 +26,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MockDeleteOtherReliefsConnector extends MockFactory {
 
-  val mockDeleteOtherReliefsConnector: DeleteOtherReliefsConnector = mock[DeleteOtherReliefsConnector]
+  val mockConnector: DeleteOtherReliefsConnector = mock[DeleteOtherReliefsConnector]
 
   object MockDeleteOtherReliefsConnector {
 
-    def deleteOtherReliefs(requestData: DeleteOtherReliefsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
-      (mockDeleteOtherReliefsConnector
-        .deleteOtherReliefs(_: DeleteOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext))
+    def delete(requestData: DeleteOtherReliefsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+      (mockConnector
+        .delete(_: DeleteOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext))
         .expects(requestData, *, *)
     }
   }

@@ -37,7 +37,7 @@ class DeleteReliefInvestmentsService @Inject()(connector: DeleteReliefInvestment
             ec: ExecutionContext,
             logContext: EndpointLogContext): Future[DeleteReliefInvestmentsServiceOutcome] = {
     val result = for {
-      desResponseWrapper <- EitherT(connector.deleteReliefInvestments(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.delete(request)).leftMap(mapDesErrors(desErrorMap))
     } yield desResponseWrapper
     result.value
   }

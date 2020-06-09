@@ -48,8 +48,8 @@ class AmendReliefInvestmentsControllerSpec
     val controller = new AmendReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      amendReliefInvestmentsParser = mockAmendReliefInvestmentsRequestParser,
-      amendReliefInvestmentsService = mockAmendReliefInvestmentsService,
+      parser = mockAmendReliefInvestmentsRequestParser,
+      service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc
     )
@@ -168,7 +168,7 @@ class AmendReliefInvestmentsControllerSpec
           .returns(Right(requestData))
 
         MockAmendReliefService
-          .doServiceThing(requestData)
+          .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
@@ -221,7 +221,7 @@ class AmendReliefInvestmentsControllerSpec
               .returns(Right(requestData))
 
             MockAmendReliefService
-              .doServiceThing(requestData)
+              .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))

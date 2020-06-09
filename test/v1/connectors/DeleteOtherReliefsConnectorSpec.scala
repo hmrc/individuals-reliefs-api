@@ -51,7 +51,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
             requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
           ).returns(Future.successful(outcome))
 
-        await(connector.deleteOtherReliefs(request)) shouldBe outcome
+        await(connector.delete(request)) shouldBe outcome
       }
     }
   }

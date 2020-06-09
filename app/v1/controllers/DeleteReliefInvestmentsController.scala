@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAuthService,
                                                   val lookupService: MtdIdLookupService,
-                                                  requestDataParser: DeleteReliefInvestmentsRequestParser,
+                                                  parser: DeleteReliefInvestmentsRequestParser,
                                                   service: DeleteReliefInvestmentsService,
                                                   cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
@@ -45,7 +45,7 @@ class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAut
       val rawData = DeleteReliefInvestmentsRawData(nino, taxYear)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](requestDataParser.parseRequest(rawData))
+          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.delete(parsedRequest))
         } yield {
           logger.info(

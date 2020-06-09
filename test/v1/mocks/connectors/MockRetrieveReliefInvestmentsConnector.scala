@@ -27,13 +27,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveReliefInvestmentsConnector extends MockFactory {
 
-  val mockRetrieveReliefInvestmentsConnector: RetrieveReliefInvestmentsConnector = mock[RetrieveReliefInvestmentsConnector]
+  val mockConnector: RetrieveReliefInvestmentsConnector = mock[RetrieveReliefInvestmentsConnector]
 
   object MockRetrieveReliefInvestmentsConnector {
 
-    def retrieveReliefInvestments(requestData: RetrieveReliefInvestmentsRequest):
+    def retrieve(requestData: RetrieveReliefInvestmentsRequest):
     CallHandler3[RetrieveReliefInvestmentsRequest, HeaderCarrier, ExecutionContext, Future[DesOutcome[RetrieveReliefInvestmentsBody]]] = {
-      (mockRetrieveReliefInvestmentsConnector
+      (mockConnector
         .retrieve(_: RetrieveReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext))
         .expects(requestData, *, *)
     }

@@ -35,8 +35,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuthService,
                                                  val lookupService: MtdIdLookupService,
-                                                 amendReliefInvestmentsParser: AmendReliefInvestmentsRequestParser,
-                                                 amendReliefInvestmentsService: AmendReliefInvestmentsService,
+                                                 parser: AmendReliefInvestmentsRequestParser,
+                                                 service: AmendReliefInvestmentsService,
                                                  hateoasFactory: HateoasFactory,
                                                  cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
@@ -49,8 +49,8 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
       val rawData = AmendReliefInvestmentsRawData(nino, taxYear, request.body)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](amendReliefInvestmentsParser.parseRequest(rawData))
-          serviceResponse <- EitherT(amendReliefInvestmentsService.amend(parsedRequest))
+          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          serviceResponse <- EitherT(service.amend(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory.wrap(serviceResponse.responseData, AmendReliefInvestmentsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
         } yield {
