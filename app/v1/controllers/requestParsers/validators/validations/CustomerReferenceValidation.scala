@@ -16,27 +16,24 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import java.time.LocalDate
+import v1.models.errors.{CustomerReferenceFormatError, MtdError}
 
-import v1.models.errors.MtdError
+object CustomerReferenceValidation {
 
-import scala.util.{Failure, Success, Try}
-
-object DateValidation {
-
-  def validateOptional(date: Option[String], path: String, error: MtdError): List[MtdError] = {
-    date match {
+  def validateOptional(field: Option[String], path: String): List[MtdError] = {
+    field match {
       case None => NoValidationErrors
-      case Some(value) => validate(value, path, error)
+      case Some(value) => validate(value, path)
     }
   }
 
-  private def validate(date: String, path: String, error: MtdError): List[MtdError] = Try {
-    LocalDate.parse(date, dateFormat)
-  } match {
-    case Success(_) => Nil
-    case Failure(_) => List(
-      error.copy(paths = Some(Seq(path)))
-    )
+  private def validate(customerRef: String, path: String): List[MtdError] = {
+    if (customerRef.length <= 25) {
+      NoValidationErrors
+    } else {
+      List(
+        CustomerReferenceFormatError.copy(paths = Some(Seq(path)))
+      )
+    }
   }
 }

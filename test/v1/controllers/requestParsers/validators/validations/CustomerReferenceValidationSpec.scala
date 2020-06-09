@@ -17,34 +17,30 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.{DateOfInvestmentFormatError, ReliefDateFormatError}
+import v1.models.errors.CustomerReferenceFormatError
 
-class DateValidationSpec extends UnitSpec {
+class CustomerReferenceValidationSpec extends UnitSpec {
 
-  val validDate: Option[String] = Some("2018-04-06")
-  val invalidDate: Option[String] = Some("04-06-2018")
+  val validReference = Some("HJ812JJMNS89SJ09KLJNBH89O")
+  val invalidReference = Some("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
   "validate" should {
     "return no errors" when {
-      "a valid date is supplied" in {
-        val validationResult = DateValidation.validateOptional(validDate, "/vctSubscription/0/dateOfInvestment", DateOfInvestmentFormatError)
-
+      "a valid reference is supplied" in {
+        val validationResult = CustomerReferenceValidation.validateOptional(validReference, "/annualPaymentsMade/customerReference")
         validationResult.isEmpty shouldBe true
       }
-      "no valid date is supplied" in {
-        val validationResult = DateValidation.validateOptional(None, "/maintenancePayments/0/exSpouseDateOfBirth", ReliefDateFormatError)
-
+      "no reference is supplied" in {
+        val validationResult = CustomerReferenceValidation.validateOptional(None, "/annualPaymentsMade/customerReference")
         validationResult.isEmpty shouldBe true
       }
     }
-
     "return an error" when {
-      "a invalid date is supplied" in {
-        val validationResult = DateValidation.validateOptional(invalidDate, "/vctSubscription/0/dateOfInvestment", DateOfInvestmentFormatError)
-
+      "an invalid reference is supplied" in {
+        val validationResult = CustomerReferenceValidation.validateOptional(invalidReference, "/annualPaymentsMade/customerReference")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe DateOfInvestmentFormatError.copy(paths = Some(Seq("/vctSubscription/0/dateOfInvestment")))
+        validationResult.head shouldBe CustomerReferenceFormatError.copy(paths = Some(Seq("/annualPaymentsMade/customerReference")))
       }
     }
   }
