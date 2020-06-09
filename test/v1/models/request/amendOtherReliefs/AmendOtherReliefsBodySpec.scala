@@ -136,4 +136,106 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+  "isIncorrectOrEmptyBodyError" should {
+    "return false" when {
+      "all arrays are provided, none are empty, no objects in the arrays are empty" in {
+        val model = AmendOtherReliefsBody(
+          Some(NonDeductableLoanInterest(
+            Some("myref"),
+            763.00)),
+          Some(PayrollGiving(
+            Some("myref"),
+            154.00)),
+          Some(QualifyingDistributionRedemptionOfSharesAndSecurities(
+            Some("myref"),
+            222.22)),
+          Some(Seq(MaintenancePayments(
+            "myref",
+            Some("Hilda"),
+            Some("2000-01-01"),
+            Some(222.22)))),
+          Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
+            "myref",
+            Some("ACME Inc"),
+            Some("2019-08-10"),
+            Some("Widgets Manufacturer"),
+            Some("AB12412/A12"),
+            Some(222.22)))),
+          Some(AnnualPaymentsMade(
+            Some("myref"),
+            763.00)),
+          Some(Seq(QualifyingLoanInterestPayments(
+            "myref",
+            Some("Maurice"),
+            763.00)))
+        )
+        model.isIncorrectOrEmptyBody shouldBe false
+      }
+      "only some arrays are provided, none are empty, no objects in the arrays are empty" in {
+        val model = AmendOtherReliefsBody(
+          None,
+          Some(PayrollGiving(
+            Some("myref"),
+            154.00)),
+          Some(QualifyingDistributionRedemptionOfSharesAndSecurities(
+            Some("myref"),
+            222.22)),
+          None,
+          Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
+            "myref",
+            Some("ACME Inc"),
+            Some("2019-08-10"),
+            Some("Widgets Manufacturer"),
+            Some("AB12412/A12"),
+            Some(222.22)))),
+          Some(AnnualPaymentsMade(
+            Some("myref"),
+            763.00)),
+          Some(Seq(QualifyingLoanInterestPayments(
+            "myref",
+            Some("Maurice"),
+            763.00)))
+        )
+        model.isIncorrectOrEmptyBody shouldBe false
+      }
+    }
+    "return true" when {
+      "no arrays are provided" in {
+        val model = AmendOtherReliefsBody(
+          None,
+          None,
+          None,
+          None,
+          None,
+          None,
+          None
+        )
+        model.isIncorrectOrEmptyBody shouldBe true
+      }
+      "at least one empty array is provided" in {
+        val model = AmendOtherReliefsBody(
+          Some(NonDeductableLoanInterest(
+            Some("myref"),
+            763.00)),
+          Some(PayrollGiving(
+            Some("myref"),
+            154.00)),
+          Some(QualifyingDistributionRedemptionOfSharesAndSecurities(
+            Some("myref"),
+            222.22)),
+          Some(Seq(MaintenancePayments(
+            "myref",
+            Some("Hilda"),
+            Some("2000-01-01"),
+            Some(222.22)))),
+          Some(Seq()),
+          Some(AnnualPaymentsMade(
+            Some("myref"),
+            763.00)),
+          Some(Seq())
+        )
+        model.isIncorrectOrEmptyBody shouldBe true
+      }
+    }
+  }
 }
