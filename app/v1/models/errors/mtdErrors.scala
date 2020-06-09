@@ -30,7 +30,7 @@ object MtdErrorWithCustomMessage {
 
 object NinoFormatError extends MtdError("FORMAT_NINO", "The provided NINO is invalid")
 object TaxYearFormatError extends MtdError("FORMAT_TAX_YEAR", "The provided tax year is invalid")
-object ValueFormatError extends MtdError("FORMAT_VALUE", "The field should be between 1 and 99999999999.99")
+object ValueFormatError extends MtdError("FORMAT_VALUE", "The field should be between 0 and 99999999999.99")
 object DateOfInvestmentFormatError extends MtdError("FORMAT_DATE_OF_INVESTMENT", "The format of the investment date is invalid")
 object NameFormatError extends MtdError("FORMAT_NAME", "The format of the name is invalid")
 object InvestmentRefFormatError extends MtdError("FORMAT_UNIQUE_INVESTMENT_REFERENCE", "The format of unique investment reference is invalid")
