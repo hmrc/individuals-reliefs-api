@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveReliefInvestmentsConnector @Inject()(val http: HttpClient,
                                                    val appConfig: AppConfig) extends BaseDesConnector {
 
-  def retrieveReliefInvestments(request: RetrieveReliefInvestmentsRequest)(
+  def retrieve(request: RetrieveReliefInvestmentsRequest)(
     implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[RetrieveReliefInvestmentsBody]] = {
 
     val url = s"reliefs/investment/${request.nino}/${request.taxYear}"

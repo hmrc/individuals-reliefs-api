@@ -24,21 +24,21 @@ import utils.Logging
 import v1.connectors.AmendOtherReliefsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
-import v1.models.requestData.amendOtherReliefs.AmendOtherReliefsRequest
+import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequest
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendOtherReliefsService @Inject()(amendOtherReliefsConnector: AmendOtherReliefsConnector) extends DesResponseMappingSupport with Logging {
+class AmendOtherReliefsService @Inject()(connector: AmendOtherReliefsConnector) extends DesResponseMappingSupport with Logging {
 
-  def doServiceThing(request: AmendOtherReliefsRequest)(
+  def amend(request: AmendOtherReliefsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext): Future[AmendOtherReliefsServiceOutcome] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(amendOtherReliefsConnector.doConnectorThing(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDesErrors(desErrorMap))
     } yield desResponseWrapper
 
     result.value

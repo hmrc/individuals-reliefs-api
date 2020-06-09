@@ -90,7 +90,7 @@ class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
         )
         .returns(Future.successful(outcome))
 
-      await(connector.doConnectorThing(request)) shouldBe outcome
+      await(connector.amend(request)) shouldBe outcome
     }
   }
 }

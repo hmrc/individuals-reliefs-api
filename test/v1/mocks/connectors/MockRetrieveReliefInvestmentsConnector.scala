@@ -34,7 +34,7 @@ trait MockRetrieveReliefInvestmentsConnector extends MockFactory {
     def retrieveReliefInvestments(requestData: RetrieveReliefInvestmentsRequest):
     CallHandler3[RetrieveReliefInvestmentsRequest, HeaderCarrier, ExecutionContext, Future[DesOutcome[RetrieveReliefInvestmentsBody]]] = {
       (mockRetrieveReliefInvestmentsConnector
-        .retrieveReliefInvestments(_: RetrieveReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext))
+        .retrieve(_: RetrieveReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext))
         .expects(requestData, *, *)
     }
   }

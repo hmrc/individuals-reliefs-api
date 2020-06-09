@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.{AmendOtherReliefsConnector, DesOutcome}
-import v1.models.requestData.amendOtherReliefs.AmendOtherReliefsRequest
+import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,9 +30,9 @@ trait MockAmendOtherReliefsConnector extends MockFactory {
 
   object MockAmendOtherReliefsConnector {
 
-    def doConnectorThing(requestData: AmendOtherReliefsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+    def amend(requestData: AmendOtherReliefsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
       (mockAmendOtherReliefsConnector
-        .doConnectorThing(_: AmendOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext))
+        .amend(_: AmendOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext))
         .expects(requestData, *, *)
     }
   }

@@ -20,7 +20,7 @@ import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.amendOtherReliefs._
+import v1.models.request.amendOtherReliefs._
 
 import scala.concurrent.Future
 
@@ -81,7 +81,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
         )
         .returns(Future.successful(outcome))
 
-      await(connector.doConnectorThing(request)) shouldBe outcome
+      await(connector.amend(request)) shouldBe outcome
     }
   }
 }

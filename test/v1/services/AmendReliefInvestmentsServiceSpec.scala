@@ -80,17 +80,17 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new AmendReliefInvestmentsService(
-      amendReliefInvestmentsConnector = mockAmendReliefInvestmentsConnector
+      connector = mockAmendReliefInvestmentsConnector
     )
   }
 
   "service" when {
     "service call successsful" must {
       "return mapped result" in new Test {
-        MockAmendReliefInvestmentsConnector.doConnectorThing(requestData)
+        MockAmendReliefInvestmentsConnector.amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        await(service.doServiceThing(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
+        await(service.amend(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
       }
     }
 
@@ -100,10 +100,10 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockAmendReliefInvestmentsConnector.doConnectorThing(requestData)
+            MockAmendReliefInvestmentsConnector.amend(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.doServiceThing(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+            await(service.amend(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
           }
 
         val input = Seq(

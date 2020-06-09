@@ -30,7 +30,7 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveReliefInvestmentsService @Inject()(retrieveReliefInvestmentsConnector: RetrieveReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
+class RetrieveReliefInvestmentsService @Inject()(connector: RetrieveReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
 
   def retrieveReliefInvestments(request: RetrieveReliefInvestmentsRequest)(
     implicit hc: HeaderCarrier,
@@ -38,7 +38,7 @@ class RetrieveReliefInvestmentsService @Inject()(retrieveReliefInvestmentsConnec
     logContext: EndpointLogContext): Future[RetrieveReliefInvestmentsServiceOutcome] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(retrieveReliefInvestmentsConnector.retrieveReliefInvestments(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
     } yield desResponseWrapper
 
     result.value

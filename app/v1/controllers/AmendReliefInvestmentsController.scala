@@ -50,7 +50,7 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](amendReliefInvestmentsParser.parseRequest(rawData))
-          serviceResponse <- EitherT(amendReliefInvestmentsService.doServiceThing(parsedRequest))
+          serviceResponse <- EitherT(amendReliefInvestmentsService.amend(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory.wrap(serviceResponse.responseData, AmendReliefInvestmentsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
         } yield {

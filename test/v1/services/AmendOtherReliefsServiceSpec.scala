@@ -23,7 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendOtherReliefsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.amendOtherReliefs._
+import v1.models.request.amendOtherReliefs._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -72,17 +72,17 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new AmendOtherReliefsService(
-      amendOtherReliefsConnector = mockAmendOtherReliefsConnector
+      connector = mockAmendOtherReliefsConnector
     )
   }
 
   "service" when {
     "service call successful" must {
       "return mapped result" in new Test {
-        MockAmendOtherReliefsConnector.doConnectorThing(requestData)
+        MockAmendOtherReliefsConnector.amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        await(service.doServiceThing(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
+        await(service.amend(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
       }
     }
   }
@@ -93,10 +93,10 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
       def serviceError(desErrorCode: String, error: MtdError): Unit =
         s"a $desErrorCode error is returned from the service" in new Test {
 
-          MockAmendOtherReliefsConnector.doConnectorThing(requestData)
+          MockAmendOtherReliefsConnector.amend(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.doServiceThing(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.amend(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
         }
 
       val input = Seq(
