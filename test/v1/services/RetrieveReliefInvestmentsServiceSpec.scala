@@ -80,7 +80,7 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
     val service = new RetrieveReliefInvestmentsService(
-      retrieveReliefInvestmentsConnector = mockRetrieveReliefInvestmentsConnector
+      connector = mockRetrieveReliefInvestmentsConnector
     )
   }
 

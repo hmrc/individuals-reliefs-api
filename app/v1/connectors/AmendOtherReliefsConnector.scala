@@ -21,21 +21,20 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
-import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
-import v1.models.response.retrieveReliefInvestments._
+import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveReliefInvestmentsConnector @Inject()(val http: HttpClient,
-                                                   val appConfig: AppConfig) extends BaseDesConnector {
+class AmendOtherReliefsConnector @Inject()(val http: HttpClient,
+                                           val appConfig: AppConfig) extends BaseDesConnector {
+  def amend(request: AmendOtherReliefsRequest)(
+    implicit hc: HeaderCarrier,
+    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
 
-  def retrieve(request: RetrieveReliefInvestmentsRequest)(
-    implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[RetrieveReliefInvestmentsBody]] = {
-
-    val url = s"reliefs/investment/${request.nino}/${request.taxYear}"
-    get(
-      DesUri[RetrieveReliefInvestmentsBody](s"$url")
+    put(
+      body = request.body,
+      DesUri[Unit](s"reliefs/other/${request.nino}/${request.taxYear}")
     )
   }
 }

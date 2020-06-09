@@ -21,24 +21,24 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.connectors.RetrieveReliefInvestmentsConnector
+import v1.connectors.AmendOtherReliefsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
-import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequest
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveReliefInvestmentsService @Inject()(connector: RetrieveReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
+class AmendOtherReliefsService @Inject()(connector: AmendOtherReliefsConnector) extends DesResponseMappingSupport with Logging {
 
-  def retrieveReliefInvestments(request: RetrieveReliefInvestmentsRequest)(
+  def amend(request: AmendOtherReliefsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[RetrieveReliefInvestmentsServiceOutcome] = {
+    logContext: EndpointLogContext): Future[AmendOtherReliefsServiceOutcome] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDesErrors(desErrorMap))
     } yield desResponseWrapper
 
     result.value
@@ -47,9 +47,7 @@ class RetrieveReliefInvestmentsService @Inject()(connector: RetrieveReliefInvest
   private def desErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_NINO" -> NinoFormatError,
       "FORMAT_TAX_YEAR" -> TaxYearFormatError,
-      "CLIENT_OR_AGENT_NOT_AUTHORISED" -> UnauthorisedError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError

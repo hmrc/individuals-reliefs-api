@@ -30,15 +30,15 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendReliefInvestmentsService @Inject()(amendReliefInvestmentsConnector: AmendReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
+class AmendReliefInvestmentsService @Inject()(connector: AmendReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
 
-  def doServiceThing(request: AmendReliefInvestmentsRequest)(
+  def amend(request: AmendReliefInvestmentsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext): Future[AmendReliefInvestmentsServiceOutcome] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(amendReliefInvestmentsConnector.doConnectorThing(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDesErrors(desErrorMap))
     } yield desResponseWrapper
 
     result.value

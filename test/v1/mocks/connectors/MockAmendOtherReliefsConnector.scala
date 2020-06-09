@@ -19,20 +19,20 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{AmendReliefInvestmentsConnector, DesOutcome}
-import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRequest
+import v1.connectors.{AmendOtherReliefsConnector, DesOutcome}
+import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAmendReliefInvestmentsConnector extends MockFactory {
+trait MockAmendOtherReliefsConnector extends MockFactory {
 
-  val mockAmendReliefInvestmentsConnector: AmendReliefInvestmentsConnector = mock[AmendReliefInvestmentsConnector]
+  val mockAmendOtherReliefsConnector: AmendOtherReliefsConnector = mock[AmendOtherReliefsConnector]
 
-  object MockAmendReliefInvestmentsConnector {
+  object MockAmendOtherReliefsConnector {
 
-    def amend(requestData: AmendReliefInvestmentsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
-      (mockAmendReliefInvestmentsConnector
-        .amend(_: AmendReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext))
+    def amend(requestData: AmendOtherReliefsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+      (mockAmendOtherReliefsConnector
+        .amend(_: AmendOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext))
         .expects(requestData, *, *)
     }
   }
