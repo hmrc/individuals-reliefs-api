@@ -219,6 +219,92 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
       "an empty JSON body is submitted" in {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, emptyJson)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
+      "at least one empty array is provided" in {
+        val json = Json.parse(
+            """
+              |{
+              |  "nonDeductableLoanInterest": {
+              |    "customerReference": "myref",
+              |    "reliefClaimed": 763.00
+              |  },
+              |  "payrollGiving": {
+              |    "customerReference": "myref",
+              |    "reliefClaimed": 154.00
+              |  },
+              |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+              |    "customerReference": "myref",
+              |    "amount": 222.22
+              |  },
+              |  "maintenancePayments": [],
+              |  "postCessationTradeReliefAndCertainOtherLosses": [
+              |    {
+              |      "customerReference": "myref",
+              |      "businessName": "ACME Inc",
+              |      "dateBusinessCeased": "2019-08-10",
+              |      "natureOfTrade": "Widgets Manufacturer",
+              |      "incomeSource": "AB12412/A12",
+              |      "amount": 222.22
+              |    }
+              |  ],
+              |  "annualPaymentsMade": {
+              |    "customerReference": "myref",
+              |    "reliefClaimed": 763.00
+              |  },
+              |  "qualifyingLoanInterestPayments": [
+              |    {
+              |      "customerReference": "myref",
+              |      "lenderName": "Maurice",
+              |      "reliefClaimed": 763.00
+              |    }
+              |  ]
+              |}
+              |""".stripMargin)
+        validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
+      "at least one array contains an empty object" in {
+        val json = Json.parse(
+          """
+            |{
+            |  "nonDeductableLoanInterest": {
+            |    "customerReference": "myref",
+            |    "reliefClaimed": 763.00
+            |  },
+            |  "payrollGiving": {
+            |    "customerReference": "myref",
+            |    "reliefClaimed": 154.00
+            |  },
+            |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+            |    "customerReference": "myref",
+            |    "amount": 222.22
+            |  },
+            |  "maintenancePayments": [
+            |    {}
+            |  ],
+            |  "postCessationTradeReliefAndCertainOtherLosses": [
+            |    {
+            |      "customerReference": "myref",
+            |      "businessName": "ACME Inc",
+            |      "dateBusinessCeased": "2019-08-10",
+            |      "natureOfTrade": "Widgets Manufacturer",
+            |      "incomeSource": "AB12412/A12",
+            |      "amount": 222.22
+            |    }
+            |  ],
+            |  "annualPaymentsMade": {
+            |    "customerReference": "myref",
+            |    "reliefClaimed": 763.00
+            |  },
+            |  "qualifyingLoanInterestPayments": [
+            |    {
+            |      "customerReference": "myref",
+            |      "lenderName": "Maurice",
+            |      "reliefClaimed": 763.00
+            |    }
+            |  ]
+            |}
+            |""".stripMargin)
+        validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
+      }
     }
 
     "return a customerReference format error" when {

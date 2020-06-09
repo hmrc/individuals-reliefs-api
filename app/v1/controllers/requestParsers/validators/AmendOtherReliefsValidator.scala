@@ -17,12 +17,12 @@
 package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
+import v1.models.errors.{MtdError, ReliefDateFormatError, RuleIncorrectOrEmptyBodyError}
 import v1.models.request.amendOtherReliefs._
 
 class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
 
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
+  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, incorrectOrEmptyBodySubmittedValidation, bodyFieldValidation)
 
   private def parameterFormatValidation: AmendOtherReliefsRawData => List[List[MtdError]] = (data: AmendOtherReliefsRawData) => {
     List(
@@ -35,6 +35,11 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
     List(
       JsonFormatValidation.validate[AmendOtherReliefsBody](data.body, RuleIncorrectOrEmptyBodyError)
     )
+  }
+
+  private def incorrectOrEmptyBodySubmittedValidation: AmendOtherReliefsRawData => List[List[MtdError]] = { data =>
+    val body = data.body.as[AmendOtherReliefsBody]
+    if(body.isIncorrectOrEmptyBody) List(List(RuleIncorrectOrEmptyBodyError)) else NoValidationErrors
   }
 
   private def bodyFieldValidation: AmendOtherReliefsRawData => List[List[MtdError]] = { data =>
@@ -105,9 +110,10 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
         field = Some(maintenancePayments.customerReference),
         path = s"/maintenancePayments/$arrayIndex/customerReference"
       ),
-      DateValidation.validateFormatDateOptional(
+      DateValidation.validateOptional(
         date = maintenancePayments.exSpouseDateOfBirth,
-        path = s"/maintenancePayments/$arrayIndex/exSpouseDateOfBirth"
+        path = s"/maintenancePayments/$arrayIndex/exSpouseDateOfBirth",
+        error = ReliefDateFormatError
       ),
       NumberValidation.validateOptional(
         field = maintenancePayments.amount,
@@ -123,9 +129,10 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
         field = Some(postCessationTradeReliefAndCertainOtherLosses.customerReference),
         path = s"/postCessationTradeReliefAndCertainOtherLosses/$arrayIndex/customerReference"
       ),
-      DateValidation.validateFormatDateOptional(
+      DateValidation.validateOptional(
         date = postCessationTradeReliefAndCertainOtherLosses.dateBusinessCeased,
-        path = s"/postCessationTradeReliefAndCertainOtherLosses/$arrayIndex/dateBusinessCeased"
+        path = s"/postCessationTradeReliefAndCertainOtherLosses/$arrayIndex/dateBusinessCeased",
+        error = ReliefDateFormatError
       ),
       NumberValidation.validateOptional(
         field = postCessationTradeReliefAndCertainOtherLosses.amount,

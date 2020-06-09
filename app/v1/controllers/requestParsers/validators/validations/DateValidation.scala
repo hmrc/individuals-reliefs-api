@@ -24,37 +24,19 @@ import scala.util.{Failure, Success, Try}
 
 object DateValidation {
 
-  def validateOptional(date: Option[String], path: String): List[MtdError] = {
+  def validateOptional(date: Option[String], path: String, error: MtdError): List[MtdError] = {
     date match {
       case None => NoValidationErrors
-      case Some(value) => validate(value, path)
+      case Some(value) => validate(value, path, error)
     }
   }
 
-  private def validate(date: String, path: String): List[MtdError] = Try {
+  private def validate(date: String, path: String, error: MtdError): List[MtdError] = Try {
     LocalDate.parse(date, dateFormat)
   } match {
     case Success(_) => Nil
     case Failure(_) => List(
-      DateOfInvestmentFormatError.copy(paths = Some(Seq(path)))
+      error.copy(paths = Some(Seq(path)))
     )
   }
-
-  def validateFormatDateOptional(date: Option[String], path: String): List[MtdError] = {
-    date match {
-      case None => NoValidationErrors
-      case Some(value) => validateFormatDate(value, path)
-    }
-  }
-
-  private def validateFormatDate(date: String, path: String): List[MtdError] = Try {
-    if(date.nonEmpty) LocalDate.parse(date, dateFormat)
-  } match {
-    case Success(_) => Nil
-    case Failure(_) => List(
-      ReliefDateFormatError.copy(paths = Some(Seq(path)))
-    )
-  }
-
-
 }
