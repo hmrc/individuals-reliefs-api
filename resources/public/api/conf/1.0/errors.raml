@@ -58,28 +58,6 @@ traits:
                 description: An empty or non-matching body was submitted
                 value:
                   code: RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED
-  ruleTaxYearNotSupported:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              rule_TaxYearNotSupported:
-                description: The specified tax year is not supported. That is, the tax year specified is before the minimum tax year value.
-                value:
-                  code: RULE_TAX_YEAR_NOT_SUPPORTED
-  ruleTaxYearRangeExceeded:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              ruleTaxYearRangeExceeded:
-                description: Tax year range exceeded. A tax year range of one year is required.
-                value:
-                  code: RULE_TAX_YEAR_RANGE_EXCEEDED
   ruleTaxYearRangeInvalid:
     responses:
       400:
@@ -91,39 +69,6 @@ traits:
                 description: Tax year range invalid. A tax year range of one year is required.
                 value:
                   code: RULE_TAX_YEAR_RANGE_INVALID
-  ruleTaxYearNotEnded:
-      responses:
-        400:
-          body:
-            application/json:
-              type: types.errorResponse
-              examples:
-                ruleTaxYearNotEnded:
-                  description: A brought forward loss is entered before the end of the tax year in which it was generated.
-                  value:
-                    code: RULE_TAX_YEAR_NOT_ENDED
-  formatSelfEmploymentId:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              formatSelfEmploymentId:
-                description: The format of the self-employment ID is not valid.
-                value:
-                  code: FORMAT_SELF_EMPLOYMENT_ID
-  ruleSelfEmploymentId:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              ruleSelfEmploymentId:
-                description: A self-employment ID can only be supplied for a self-employment business type
-                value:
-                  code: RULE_SELF_EMPLOYMENT_ID
   formatValue:
     responses:
       400:
@@ -135,28 +80,6 @@ traits:
                 description: One or more values have been added with the incorrect format
                 value:
                   code: FORMAT_VALUE
-  formatName:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              formatName:
-                description: The provided name is not valid
-                value:
-                  code: FORMAT_NAME
-  formatUniqueInvestmentReference:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              formatUniqueInvestmentReference:
-                description: The format of unique investment reference is invalid
-                value:
-                  code: FORMAT_UNIQUE_INVESTMENT_REFERENCE
   formatDateOfInvestment:
     responses:
       400:
