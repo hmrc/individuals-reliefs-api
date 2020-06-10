@@ -77,7 +77,7 @@
             "type": "string"
           },
           "exSpouseDateOfBirth": {
-            "description": "The date the ex-spouse was born.",
+            "description": "The date ex-spouse was born.\n\nDate in the format: YYYY-MM-DD",
             "type": "string",
             "example": "2018-04-06"
           },
