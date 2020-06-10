@@ -110,26 +110,26 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         |{
         |   "links":[
         |      {
-        |         "href":"/individuals/reliefs/other/{nino}/{taxYear}",
+        |         "href":"/individuals/reliefs/other/$nino/$taxYear",
         |         "rel":"amend-reliefs-other",
         |         "method":"PUT"
         |      },
         |      {
-        |         "href":"/individuals/reliefs/other/{nino}/{taxYear}",
+        |         "href":"/individuals/reliefs/other/$nino/$taxYear",
         |         "rel":"self",
         |         "method":"GET"
         |      },
         |      {
-        |         "href":"/individuals/reliefs/other/{nino}/{taxYear}",
+        |         "href":"/individuals/reliefs/other/$nino/$taxYear",
         |         "rel":"delete-reliefs-other",
         |         "method":"DELETE"
         |      }
         |   ]
         |}""".stripMargin)
 
-    def uri: String = s"/reliefs/other/$nino/$taxYear"
+    def uri: String = s"/other/$nino/$taxYear"
 
-    def desUri: String = s"/individuals/reliefs/other/$nino/$taxYear"
+    def desUri: String = s"/reliefs/other/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 
