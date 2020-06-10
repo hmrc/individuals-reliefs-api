@@ -16,7 +16,10 @@
 
 package v1.models.response.retrieveOtherReliefs
 
+import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
+import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
+import v1.models.hateoas.{HateoasData, Link}
 
 case class RetrieveOtherReliefsBody(nonDeductableLoanInterest: Option[NonDeductableLoanInterest],
                                  payrollGiving: Option[PayrollGiving],
@@ -26,6 +29,19 @@ case class RetrieveOtherReliefsBody(nonDeductableLoanInterest: Option[NonDeducta
                                  annualPaymentsMade: Option[AnnualPaymentsMade],
                                  qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]])
 
-object RetrieveOtherReliefsBody {
+object RetrieveOtherReliefsBody extends HateoasLinks {
   implicit val format: OFormat[RetrieveOtherReliefsBody] = Json.format[RetrieveOtherReliefsBody]
+
+  implicit object RetrieveOtherOrderLinksFactory extends HateoasLinksFactory[RetrieveOtherReliefsBody, RetrieveOtherReliefsHateoasData] {
+    override def links(appConfig: AppConfig, data: RetrieveOtherReliefsHateoasData): Seq[Link] = {
+      import data._
+      Seq(
+        retrieveOtherReliefs(appConfig, nino, taxYear),
+        amendOtherReliefs(appConfig, nino, taxYear),
+        deleteOtherReliefs(appConfig, nino, taxYear)
+      )
+    }
+  }
 }
+
+case class RetrieveOtherReliefsHateoasData(nino: String, taxYear: String) extends HateoasData

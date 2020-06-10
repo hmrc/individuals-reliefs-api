@@ -4,5 +4,5 @@ DELETE     /investment/:nino/:taxYear                       v1.controllers.Delet
 GET        /investment/:nino/:taxYear                       v1.controllers.RetrieveReliefInvestmentsController.handleRequest(nino: String, taxYear:String)
 PUT        /investment/:nino/:taxYear                       v1.controllers.AmendReliefInvestmentsController.handleRequest(nino: String, taxYear: String)
 
-
 DELETE     /other/:nino/:taxYear                            v1.controllers.DeleteOtherReliefsController.handleRequest(nino: String, taxYear: String)
+GET        /other/:nino/:taxYear                            v1.controllers.RetrieveOtherReliefsController.handleRequest(nino: String, taxYear: String)
