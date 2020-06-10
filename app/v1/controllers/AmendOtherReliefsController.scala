@@ -52,8 +52,12 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amend(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
+<<<<<<< ad68f2112883a35cd843257bd392929d83a048b3
             hateoasFactory.wrap(serviceResponse.responseData, AmendOtherReliefsHateoasData(nino, taxYear)).asRight[ErrorWrapper]
           )
+=======
+            hateoasFactory.wrap(serviceResponse.responseData, AmendOtherReliefsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
+>>>>>>> continued amend other reliefs ITs
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -77,8 +81,12 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
            RuleIncorrectOrEmptyBodyError |
            RuleTaxYearRangeInvalidError |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
+<<<<<<< ad68f2112883a35cd843257bd392929d83a048b3
            MtdErrorWithCustomMessage(ReliefDateFormatError.code) |
            MtdErrorWithCustomMessage(CustomerReferenceFormatError.code) =>
+=======
+           MtdErrorWithCustomMessage(ReliefDateFormatError.code) =>
+>>>>>>> continued amend other reliefs ITs
         BadRequest(Json.toJson(errorWrapper: ErrorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
