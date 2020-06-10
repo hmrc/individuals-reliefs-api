@@ -17,6 +17,7 @@
 package v1.controllers
 
 import cats.data.EitherT
+import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -26,7 +27,7 @@ import v1.hateoas.HateoasFactory
 import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRawData
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsHateoasData
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveOtherReliefsService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveOtherReliefsController @Inject()(val authService: EnrolmentsAuthService,
                                                val lookupService: MtdIdLookupService,
                                                parser: RetrieveOtherReliefsRequestParser,
-                                               service: Service???,
+                                               service: RetrieveOtherReliefsService,
                                                hateoasFactory: HateoasFactory,
                                                cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {

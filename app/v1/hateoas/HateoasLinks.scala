@@ -30,6 +30,9 @@ trait HateoasLinks {
   private def reliefInvestmentsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/investment/$nino/$taxYear"
 
+  private def otherReliefsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
+    s"/${appConfig.apiGatewayContext}/other/$nino/$taxYear"
+
   //API resource links
   def sampleLink(appConfig: AppConfig, nino: String): Link =
     Link(href = sampleUri(appConfig, nino), method = GET, rel = SAMPLE_ENDPOINT_REL)
@@ -44,11 +47,11 @@ trait HateoasLinks {
     Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEF_INVESTMENTS)
 
   def retrieveOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
   def amendOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_OTHER_RELIEFS)
+    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_OTHER_RELIEFS)
 
   def deleteOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_OTHER_RELIEFS)
+    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_OTHER_RELIEFS)
 }
