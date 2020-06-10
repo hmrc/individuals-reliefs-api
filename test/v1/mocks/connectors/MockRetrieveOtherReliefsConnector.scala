@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.mocks.connectors
 
-import config.AppConfig
-import javax.inject.{Inject, Singleton}
+import org.scalamock.handlers.CallHandler3
+import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.{DesOutcome, RetrieveOtherReliefsConnector}
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsBody
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class RetrieveOtherReliefsConnector @Inject()(val http: HttpClient,
-                                              val appConfig: AppConfig) extends BaseDesConnector {
+trait MockRetrieveOtherReliefsConnector extends MockFactory {
 
-  def retrieve(request: RetrieveOtherReliefsRequest)(
-    implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[RetrieveOtherReliefsBody]] = {
+  val mockConnector: RetrieveOtherReliefsConnector = mock[RetrieveOtherReliefsConnector]
 
-    val url = s"reliefs/other/${request.nino}/${request.taxYear}"
-    get(
-      DesUri[RetrieveOtherReliefsBody](s"$url")
-    )
+  object MockRetrieveOtherReliefsConnector {
+
+    def retrieve(requestData: RetrieveOtherReliefsRequest):
+    CallHandler3[RetrieveOtherReliefsRequest, HeaderCarrier, ExecutionContext, Future[DesOutcome[RetrieveOtherReliefsBody]]] = {
+      (mockConnector
+        .retrieve(_: RetrieveOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(requestData, *, *)
+    }
   }
 }

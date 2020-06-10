@@ -17,22 +17,25 @@
 package v1.services
 
 import cats.data.EitherT
-import javax.inject.Inject
+import cats.implicits._
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveOtherReliefsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors.{DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError, UnauthorisedError}
+import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class RetrieveOtherReliefsService @Inject()(connector: RetrieveOtherReliefsConnector) extends DesResponseMappingSupport with Logging {
 
-  def retrieve(request: Request???)(
+  def retrieve(request: RetrieveOtherReliefsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[RetrieveReliefInvestmentsServiceOutcome] = {
+    logContext: EndpointLogContext): Future[RetrieveOtherReliefsServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
