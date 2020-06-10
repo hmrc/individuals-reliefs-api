@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Amend Other Reliefs",
+  "description": "Allows the amendments of other reliefs",
+  "type": "object",
+  "properties": {
+    "nonDeductableLoanInterest": {
+      "description": "Details of non-deductable loan interest claimed",
+      "type": "object",
+      "properties": {
+        "customerReference": {
+          "description": "A reference or friendly name used by the customer.",
+          "type": "string",
+          "example": "INPOLY123A"
+        },
+        "reliefClaimed": {
+          "description": "The amount of relief being claimed for the tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "type": "number",
+          "example": "2000.99"
+        }
+      },
+      "required": [
+        "reliefClaimed"
+      ]
+    },
+    "payrollGiving": {
+      "description": "Details of payroll giving relief claimed.",
+      "type": "object",
+      "properties": {
+        "customerReference": {
+          "description": "A reference or friendly name used by the customer.",
+          "type": "string",
+          "example": "INPOLY123A"
+        },
+        "reliefClaimed": {
+          "description": "The amount of relief being claimed for the tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "type": "number",
+          "example": "2000.99"
+        }
+      },
+      "required": [
+        "reliefClaimed"
+      ]
+    },
+    "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      "description": "Details of qualifying shares and securities distributed that qualify for relief.",
+      "type": "object",
+      "properties": {
+        "customerReference": {
+          "description": "A reference or friendly name used by the customer.",
+          "type": "string",
+          "example": "INPOLY123A"
+        },
+        "amount": {
+          "description": "The amount of relief claimed on redemption of bonus shares.",
+          "type": "number",
+          "example": "2000.99"
+        }
+      },
+      "required": [
+        "amount"
+      ]
+    },
+    "maintenancePayments": {
+      "description": "Details of maintenance payments made to an ex-spouse.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "customerReference": {
+            "description": "A reference or friendly name used by the customer.",
+            "type": "string",
+            "example": "INPOLY123A"
+          },
+          "exSpouseName": {
+            "description": "The name of the ex-spouse who receives the payment.",
+            "type": "string"
+          },
+          "exSpouseDateOfBirth": {
+            "description": "The date the ex-spouse was born.",
+            "type": "string",
+            "example": "2018-04-06"
+          },
+          "amount": {
+            "description": "The amount paid to a former spouse or civil partner who was born before 6 April 1935. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+            "type": "number",
+            "example": "2000.99"
+          }
+        },
+        "required": [
+          "customerReference"
+        ]
+      }
+    },
+    "postCessationTradeReliefAndCertainOtherLosses": {
+      "description": "Details of trade reliefs and other losses post cessation of a business.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "customerReference": {
+            "description": "A reference or friendly name used by the customer.",
+            "type": "string",
+            "example": "INPOLY123A"
+          },
+          "businessName": {
+            "description": "The name of the business that has ceased trading.",
+            "type": "string"
+          },
+          "dateBusinessCeased": {
+            "description": "The date the business ceased trading. Date in the format: YYYY-MM-DD",
+            "type": "string",
+            "example": "2018-04-06"
+          },
+          "natureOfTrade": {
+            "description": "The trading nature of the business.",
+            "type": "string"
+          },
+          "incomeSource": {
+            "description": "Income source identifier or UTR (Unique Taxpayer Reference).",
+            "type": "string"
+          },
+          "amount": {
+            "description": "The amount which can be deducted from chargeable gains. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+            "type": "number",
+            "example": "2000.99"
+          }
+        },
+        "required": [
+          "customerReference"
+        ]
+      }
+    },
+    "annualPaymentsMade": {
+      "description": "Details of annual payments made.",
+      "type": "object",
+      "properties": {
+        "customerReference": {
+          "description": "A reference or friendly name used by the customer.",
+          "type": "string",
+          "example": "INPOLY123A"
+        },
+        "reliefClaimed": {
+          "description": "The amount of relief being claimed for the tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "type": "number",
+          "example": "2000.99"
+        }
+      },
+      "required": [
+        "reliefClaimed"
+      ]
+    },
+    "qualifyingLoanInterestPayments": {
+      "description": "Details of qualifying loan interest payments made.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "customerReference": {
+            "description": "A reference or friendly name used by the customer.",
+            "type": "string",
+            "example": "INPOLY123A"
+          },
+          "lenderName": {
+            "description": "The name of the individual, public group, private group, or financial institution that made the funds available.",
+            "type": "string"
+          },
+          "reliefClaimed": {
+            "description": "The amount of relief being claimed for the tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+            "type": "number",
+            "example": "2000.99"
+          }
+        },
+        "required": [
+          "customerReference",
+          "reliefClaimed"
+        ]
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "/individuals/reliefs/other/TC663795B/2019-20"
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "type": "string",
+            "enum": [
+              "self",
+              "amend-reliefs-other",
+              "delete-reliefs-other"
+            ]
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint",
+            "type": "string",
+            "enum": [
+              "GET",
+              "PUT",
+              "DELETE"
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ]
+      }
+    }
+  }
+}
