@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Amend Relief Investments",
-  "description": "Allows the amendments of relief investments",
+  "title": "Retrieve Relief Investments",
+  "description": "Allows the retrieval of relief investments",
   "type": "object",
   "properties": {
     "vctSubscription": {
