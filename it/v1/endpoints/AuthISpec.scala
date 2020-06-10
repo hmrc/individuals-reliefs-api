@@ -22,7 +22,6 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.models.request.DesTaxYear
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
 class AuthISpec extends IntegrationBaseSpec {
@@ -30,35 +29,71 @@ class AuthISpec extends IntegrationBaseSpec {
   private trait Test {
     val nino          = "AA123456A"
     val taxYear       = "2017-18"
-    val data        = "someData"
-    val correlationId = "X-123"
-
-    val requestJson: String =
-      s"""
-         |{
-         |"data": "$data"
-         |}
-    """.stripMargin
 
     def setupStubs(): StubMapping
 
     def request(): WSRequest = {
       setupStubs()
-      buildRequest(s"/$nino/$taxYear/sample-endpoint")
+      buildRequest(s"/investment/$nino/$taxYear")
         .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))
     }
 
-    def desUri: String = s"/income-tax/nino/$nino/taxYear/${DesTaxYear.fromMtd(taxYear)}/someService"
+    def desUri: String = s"/reliefs/investment/$nino/$taxYear"
 
     val desResponse: JsValue = Json.parse(
       """
-        | {
-        | "responseData" : "someResponse"
-        | }
+        |{
+        |  "vctSubscription":[
+        |    {
+        |      "uniqueInvestmentRef": "VCTREF",
+        |      "name": "VCT Fund X",
+        |      "dateOfInvestment": "2018-04-16",
+        |      "amountInvested": 23312.00,
+        |      "reliefClaimed": 1334.00
+        |      }
+        |  ],
+        |  "eisSubscription":[
+        |    {
+        |      "uniqueInvestmentRef": "XTAL",
+        |      "name": "EIS Fund X",
+        |      "knowledgeIntensive": true,
+        |      "dateOfInvestment": "2020-12-12",
+        |      "amountInvested": 23312.00,
+        |      "reliefClaimed": 43432.00
+        |    }
+        |  ],
+        |  "communityInvestment": [
+        |    {
+        |      "uniqueInvestmentRef": "CIREF",
+        |      "name": "CI X",
+        |      "dateOfInvestment": "2020-12-12",
+        |      "amountInvested": 6442.00,
+        |      "reliefClaimed": 2344.00
+        |    }
+        |  ],
+        |  "seedEnterpriseInvestment": [
+        |    {
+        |      "uniqueInvestmentRef": "123412/1A",
+        |      "companyName": "Company Inc",
+        |      "dateOfInvestment": "2020-12-12",
+        |      "amountInvested": 123123.22,
+        |      "reliefClaimed": 3432.00
+        |    }
+        |  ],
+        |  "socialEnterpriseInvestment": [
+        |    {
+        |      "uniqueInvestmentRef": "123412/1A",
+        |      "socialEnterpriseName": "SE Inc",
+        |      "dateOfInvestment": "2020-12-12",
+        |      "amountInvested": 123123.22,
+        |      "reliefClaimed": 3432.00
+        |    }
+        |  ]
+        |}
     """.stripMargin)
   }
 
-  "Calling the sample endpoint" when {
+  "Calling the investment endpoint" when {
 
     "the NINO cannot be converted to a MTD ID" should {
 
@@ -70,23 +105,23 @@ class AuthISpec extends IntegrationBaseSpec {
           MtdIdLookupStub.internalServerError(nino)
         }
 
-        val response: WSResponse = await(request().post(Json.parse(requestJson)))
+        val response: WSResponse = await(request().get())
         response.status shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
 
     "an MTD ID is successfully retrieve from the NINO and the user is authorised" should {
 
-      "return 201" in new Test {
+      "return 200" in new Test {
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.POST, desUri, Status.OK, desResponse)
+          DesStub.onSuccess(DesStub.GET, desUri, Status.OK, desResponse)
         }
 
-        val response: WSResponse = await(request().post(Json.parse(requestJson)))
-        response.status shouldBe Status.CREATED
+        val response: WSResponse = await(request().get())
+        response.status shouldBe Status.OK
       }
     }
 
@@ -101,7 +136,7 @@ class AuthISpec extends IntegrationBaseSpec {
           AuthStub.unauthorisedNotLoggedIn()
         }
 
-        val response: WSResponse = await(request().post(Json.parse(requestJson)))
+        val response: WSResponse = await(request().get())
         response.status shouldBe Status.FORBIDDEN
       }
     }
@@ -117,7 +152,7 @@ class AuthISpec extends IntegrationBaseSpec {
           AuthStub.unauthorisedOther()
         }
 
-        val response: WSResponse = await(request().post(Json.parse(requestJson)))
+        val response: WSResponse = await(request().get())
         response.status shouldBe Status.FORBIDDEN
       }
     }
