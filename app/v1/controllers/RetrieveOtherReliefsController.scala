@@ -21,6 +21,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
+import v1.controllers.requestParsers.RetrieveOtherReliefsRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRawData
@@ -32,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveOtherReliefsController @Inject()(val authService: EnrolmentsAuthService,
                                                val lookupService: MtdIdLookupService,
-                                               parser: RequestParser???,
+                                               parser: RetrieveOtherReliefsRequestParser,
                                                service: Service???,
                                                hateoasFactory: HateoasFactory,
                                                cc: ControllerComponents)(implicit ec: ExecutionContext)
