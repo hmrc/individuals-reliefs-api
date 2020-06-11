@@ -22,23 +22,21 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import utils.Logging
-//import v1.controllers.requestParsers.AmendForeignReliefsRequestParser
+import v1.controllers.requestParsers.AmendForeignReliefsRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
-//import v1.models.request.amendForeignReliefs.AmendForeignReliefsRawData
-//import v1.models.response.amendForeignReliefs.AmendForeignReliefsHateoasData
-//import v1.models.response.amendForeignReliefs.AmendForeignReliefsResponse.AmendOrderLinksFactory
-import v1.services.{
-//  AmendForeignReliefsService,
-  EnrolmentsAuthService, MtdIdLookupService}
+import v1.models.request.amendForeignReliefs.AmendForeignReliefsRawData
+import v1.models.response.amendForeignReliefs.AmendForeignReliefsHateoasData
+import v1.models.response.amendForeignReliefs.AmendForeignReliefsResponse.AmendOrderLinksFactory
+import v1.services.{AmendForeignReliefsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthService,
                                               val lookupService: MtdIdLookupService,
-//                                              parser: AmendForeignReliefsRequestParser,
-//                                              service: AmendForeignReliefsService,
+                                              parser: AmendForeignReliefsRequestParser,
+                                              service: AmendForeignReliefsService,
                                               hateoasFactory: HateoasFactory,
                                               cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
@@ -46,7 +44,44 @@ class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthSer
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendForeignReliefsController", endpointName = "amendForeignReliefs")
 
-  def handleRequest(nino: String, taxYear: String): Action[JsValue] = ???
+  def handleRequest(nino: String, taxYear: String): Action[JsValue] =
+    authorisedAction(nino).async(parse.json) { implicit request =>
+      val rawData = AmendForeignReliefsRawData(nino, taxYear, request.body)
+      val result =
+        for {
+          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          serviceResponse <- EitherT(service.amend(parsedRequest))
+          vendorResponse <- EitherT.fromEither[Future](
+            hateoasFactory.wrap(serviceResponse.responseData, AmendForeignReliefsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
+        } yield {
+          logger.info(
+            s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
+              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
+
+          Ok(Json.toJson(vendorResponse))
+            .withApiHeaders(serviceResponse.correlationId)
+        }
+
+      result.leftMap { errorWrapper =>
+        val correlationId = getCorrelationId(errorWrapper)
+        errorResult(errorWrapper).withApiHeaders(correlationId)
+      }.merge
+    }
+
+  private def errorResult(errorWrapper: ErrorWrapper) = {
+
+    (errorWrapper.error: @unchecked) match {
+      case NinoFormatError |
+           BadRequestError |
+           TaxYearFormatError |
+           RuleIncorrectOrEmptyBodyError |
+           RuleTaxYearRangeInvalidError |
+           MtdErrorWithCustomMessage(ValueFormatError.code) => BadRequest(Json.toJson(errorWrapper))
+      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case UnauthorisedError => Unauthorized(Json.toJson(errorWrapper))
+    }
+  }
 
 
 }
