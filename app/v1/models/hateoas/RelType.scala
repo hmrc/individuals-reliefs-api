@@ -20,8 +20,9 @@ object RelType {
   val SELF = "self"
   val AMEND_RELIEF_INVESTMENTS = "amend-relief-investments"
   val DELETE_RELIEF_INVESTMENTS = "delete-relief-investments"
-  val AMEND_OTHER_RELIEFS = "amend-reliefs-other"
-  val DELETE_OTHER_RELIEFS = "delete-reliefs-other"
   val AMEND_RELIEFS_FOREIGN = "amend-reliefs-foreign"
   val DELETE_RELIEFS_FOREIGN = "delete-reliefs-foreign"
+  val AMEND_RELIEFS_OTHER = "amend-reliefs-other"
+  val DELETE_RELIEFS_OTHER = "delete-reliefs-other"
+  val RETRIEVE_RELIEFS_OTHER = "retrieve-reliefs-other"
 }

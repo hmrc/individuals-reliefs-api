@@ -43,14 +43,11 @@ trait HateoasLinks {
   def deleteReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEF_INVESTMENTS)
 
-  def retrieveOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
-
   def amendOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
   Link(href = otherReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_OTHER)
 
   def deleteOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_OTHER_RELIEFS)
+    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_OTHER)
 
   def retrieveForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
@@ -60,4 +57,7 @@ trait HateoasLinks {
 
   def deleteForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_FOREIGN)
+
+  def retrieveOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 }

@@ -82,6 +82,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
     val responseBody = Json.parse(
       s"""
+<<<<<<< 3d1fbbf29c71b565b3ee13236d8d641de077dea4
          |{
          |   "links":[
          |      {
@@ -111,18 +112,19 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         |   "links":[
         |      {
         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-        |         "rel":"amend-reliefs-other",
-        |         "method":"PUT"
+        |         "method":"PUT",
+        |         "rel":"amend-reliefs-other"
         |      },
         |      {
         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-        |         "rel":"self",
-        |         "method":"GET"
+        |         "method":"GET",
+        |         "rel":"self"
         |      },
         |      {
         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-        |         "rel":"delete-reliefs-other",
-        |         "method":"DELETE"
+        |         "method":"DELETE",
+        |         "rel":"delete-reliefs-other"
+        |
         |      }
         |   ]
         |}""".stripMargin)
