@@ -148,10 +148,6 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         val allInvalidValueRequestBodyJson: JsValue = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
-            |        "customerReference": "myihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
-            |        "reliefClaimed": -763.00
-            |      },
             |  "payrollGiving": {
             |        "customerReference": "myihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
             |        "reliefClaimed": -154.00

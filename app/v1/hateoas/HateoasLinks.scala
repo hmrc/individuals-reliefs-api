@@ -47,7 +47,7 @@ trait HateoasLinks {
     Link(href = otherReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
   def amendOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_OTHER_RELIEFS)
+  Link(href = otherReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_OTHER)
 
   def deleteOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = otherReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_OTHER_RELIEFS)
