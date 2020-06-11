@@ -16,7 +16,17 @@
 
 package v1.models.request
 
-import uk.gov.hmrc.domain.Nino
-import v1.models.domain.SampleRequestBody
+import support.UnitSpec
 
-case class SampleRequestData(nino: Nino, desTaxYear: DesTaxYear, body: SampleRequestBody)
+class DesTaxYearSpec extends UnitSpec {
+
+  val taxYearValue = DesTaxYear("2018")
+
+  "DesTaxYear" should {
+    "return a value as a string" when {
+      "toString is used" in {
+        taxYearValue.toString shouldBe "2018"
+      }
+    }
+  }
+}
