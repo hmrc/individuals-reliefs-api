@@ -57,12 +57,12 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
          |    {
          |      "href": "/individuals/reliefs/foreign/$nino/$taxYear",
          |      "method": "PUT",
-         |      "rel": "amend-foreign-investments"
+         |      "rel": "amend-foreign-reliefs"
          |    },
          |    {
          |      "href": "/individuals/reliefs/foreign/$nino/$taxYear",
          |      "method": "DELETE",
-         |      "rel": "delete-foreign-investments"
+         |      "rel": "delete-foreign-reliefs"
          |    }
          |  ]
          |}
@@ -108,31 +108,6 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
-    "return a 400 with multiple errors" when {
-      "both nino and tax year are invalid" in new Test {
-
-        override val nino: String = "INVALID_NINO"
-        override val taxYear: String = "INVALID_TAXYEAR"
-
-        val errors = Seq(NinoFormatError, TaxYearFormatError)
-
-        val wrappedErrors: ErrorWrapper = ErrorWrapper(
-          correlationId = Some(correlationId),
-          error = BadRequestError,
-          errors = Some(errors)
-        )
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-        }
-
-        val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe BAD_REQUEST
-        response.json shouldBe Json.toJson(wrappedErrors)
-      }
-    }
 
     "return error according to spec" when {
 
@@ -164,7 +139,15 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
           response.json shouldBe Json.toJson(TaxYearFormatError)
         }
         s"an invalid amount is provided" in new Test {
-          override val amount: BigDecimal = -1
+          override val requestBodyJson: JsValue = Json.parse(
+            s"""
+               |{
+               |  "foreignTaxCreditRelief": {
+               |    "amount": -1
+               |  }
+               |}
+               |""".stripMargin
+          )
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()

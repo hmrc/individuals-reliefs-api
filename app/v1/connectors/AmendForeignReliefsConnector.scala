@@ -34,7 +34,7 @@ class AmendForeignReliefsConnector @Inject()(val http: HttpClient,
 
     put(
       body = request.body,
-      DesUri[Unit](s"reliefs/Foreign/${request.nino}/${request.taxYear}")
+      DesUri[Unit](s"reliefs/foreign/${request.nino}/${request.taxYear}")
     )
   }
 }
