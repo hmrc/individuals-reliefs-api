@@ -37,4 +37,6 @@ package object services {
 
   type RetrieveOtherReliefsServiceOutcome = ServiceOutcome[RetrieveOtherReliefsBody]
 
+  type AmendForeignReliefsServiceOutcome = ServiceOutcome[Unit]
+
 }
