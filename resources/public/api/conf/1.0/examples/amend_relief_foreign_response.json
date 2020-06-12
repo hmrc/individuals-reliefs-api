@@ -1,0 +1,19 @@
+{
+  "links":[
+    {
+      "href":"/individuals/reliefs/foreign/TC663795B/2017-18",
+      "rel":"amend-reliefs-foreign",
+      "method":"PUT"
+    },
+    {
+      "href":"/individuals/reliefs/foreign/TC663795B/2017-18",
+      "rel":"self",
+      "method":"GET"
+    },
+    {
+      "href":"/individuals/reliefs/foreign/TC663795B/2017-18",
+      "rel":"delete-reliefs-foreign",
+      "method":"DELETE"
+    }
+  ]
+}
