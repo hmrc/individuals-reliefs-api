@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package v1.models.response.amendReliefInvestments
+package v1.models.response.amendOtherReliefs
 
 import config.AppConfig
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-object AmendReliefInvestmentsResponse extends HateoasLinks {
+object AmendOtherReliefsResponse extends HateoasLinks {
 
-  implicit object AmendOrderLinksFactory extends HateoasLinksFactory[Unit, AmendReliefInvestmentsHateoasData] {
-    override def links(appConfig: AppConfig, data: AmendReliefInvestmentsHateoasData): Seq[Link] = {
+  implicit object AmendOtherLinksFactory extends HateoasLinksFactory[Unit, AmendOtherReliefsHateoasData] {
+    override def links(appConfig: AppConfig, data: AmendOtherReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
-        retrieveReliefInvestments(appConfig, nino, date),
-        amendReliefInvestments(appConfig, nino, date),
-        deleteReliefInvestments(appConfig, nino, date)
+        amendOtherReliefs(appConfig, nino, date),
+        retrieveOtherReliefs(appConfig, nino, date),
+        deleteOtherReliefs(appConfig, nino, date)
       )
     }
   }
 }
 
-case class AmendReliefInvestmentsHateoasData(nino: String, date: String) extends HateoasData
+
+case class AmendOtherReliefsHateoasData(nino: String, date: String) extends HateoasData

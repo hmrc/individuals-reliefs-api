@@ -21,34 +21,35 @@ import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.hateoas.MockHateoasFactory
-import v1.mocks.requestParsers.MockAmendReliefInvestmentsRequestParser
-import v1.mocks.services.{MockAmendReliefInvestmentsService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.mocks.requestParsers.MockAmendOtherReliefsRequestParser
+import v1.mocks.services.{MockAmendOtherReliefsService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.errors._
-import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.PUT
+import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendReliefInvestments._
-import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
+import v1.models.request.amendOtherReliefs._
+import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AmendReliefInvestmentsControllerSpec
+
+class AmendOtherReliefsControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockAmendReliefInvestmentsService
-    with MockAmendReliefInvestmentsRequestParser
+    with MockAmendOtherReliefsService
+    with MockAmendOtherReliefsRequestParser
     with MockHateoasFactory
     with MockAuditService {
 
   trait Test {
     val hc = HeaderCarrier()
 
-    val controller = new AmendReliefInvestmentsController(
+    val controller = new AmendOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockAmendReliefInvestmentsRequestParser,
+      parser = mockAmendOtherReliefsRequestParser,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc
@@ -62,117 +63,103 @@ class AmendReliefInvestmentsControllerSpec
   private val taxYear = "2019-20"
   private val correlationId = "X-123"
 
-  private val testHateoasLink = Link(href = s"individuals/reliefs/innvestment/$nino/$taxYear", method = PUT, rel = "self")
+  private val testHateoasLink = Link(href = s"individuals/reliefs/other/$nino/$taxYear", method = PUT, rel = "self")
 
   private val requestJson = Json.parse(
-    """|
-       |{
-       |  "vctSubscription":[
-       |    {
-       |      "uniqueInvestmentRef": "VCTREF",
-       |      "name": "VCT Fund X",
-       |      "dateOfInvestment": "2018-04-16",
-       |      "amountInvested": 23312.00,
-       |      "reliefClaimed": 1334.00
-       |      }
-       |  ],
-       |  "eisSubscription":[
-       |    {
-       |      "uniqueInvestmentRef": "XTAL",
-       |      "name": "EIS Fund X",
-       |      "knowledgeIntensive": true,
-       |      "dateOfInvestment": "2020-12-12",
-       |      "amountInvested": 23312.00,
-       |      "reliefClaimed": 43432.00
-       |    }
-       |  ],
-       |  "communityInvestment": [
-       |    {
-       |      "uniqueInvestmentRef": "CIREF",
-       |      "name": "CI X",
-       |      "dateOfInvestment": "2020-12-12",
-       |      "amountInvested": 6442.00,
-       |      "reliefClaimed": 2344.00
-       |    }
-       |  ],
-       |  "seedEnterpriseInvestment": [
-       |    {
-       |      "uniqueInvestmentRef": "123412/1A",
-       |      "companyName": "Company Inc",
-       |      "dateOfInvestment": "2020-12-12",
-       |      "amountInvested": 123123.22,
-       |      "reliefClaimed": 3432.00
-       |    }
-       |  ],
-       |  "socialEnterpriseInvestment": [
-       |    {
-       |      "uniqueInvestmentRef": "123412/1A",
-       |      "socialEnterpriseName": "SE Inc",
-       |      "dateOfInvestment": "2020-12-12",
-       |      "amountInvested": 123123.22,
-       |      "reliefClaimed": 3432.00
-       |    }
-       |  ]
-       |}
-       |""".stripMargin
+    """
+      |{
+      |  "nonDeductableLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
+
+  private val requestBody = AmendOtherReliefsBody(
+    Some(NonDeductableLoanInterest(
+    Some("myref"),
+    763.00)),
+    Some(PayrollGiving(
+      Some("myref"),
+      154.00)),
+    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(
+      Some("myref"),
+      222.22)),
+    Some(Seq(MaintenancePayments(
+      "myref",
+      Some("Hilda"),
+      Some("2000-01-01"),
+      Some(222.22)))),
+    Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
+      "myref",
+      Some("ACME Inc"),
+      Some("2019-08-10"),
+      Some("Widgets Manufacturer"),
+      Some("AB12412/A12"),
+      Some(222.22)))),
+    Some(AnnualPaymentsMade(
+      Some("myref"),
+      763.00)),
+    Some(Seq(QualifyingLoanInterestPayments(
+      "myref",
+      Some("Maurice"),
+      763.00)))
   )
 
-  private val requestBody = AmendReliefInvestmentsBody(
-    Some(Seq(VctSubscriptionsItem(
-      "VCTREF",
-      Some("VCT Fund X"),
-      Some("2018-04-16"),
-      Some(BigDecimal(23312.00)),
-      Some(BigDecimal(1334.00))
-    ))),
-    Some(Seq(EisSubscriptionsItem(
-      "XTAL",
-      Some("EIS Fund X"),
-      Some(true),
-      Some("2020-12-12"),
-      Some(BigDecimal(23312.00)),
-      Some(BigDecimal(43432.00))
-    ))),
-    Some(Seq(CommunityInvestmentItem(
-      "CIREF",
-      Some("CI X"),
-      Some("2020-12-12"),
-      Some(BigDecimal(6442.00)),
-      Some(BigDecimal(2344.00))
-    ))),
-    Some(Seq(SeedEnterpriseInvestmentItem(
-      "123412/1A",
-      Some("Company Inc"),
-      Some("2020-12-12"),
-      Some(BigDecimal(123123.22)),
-      Some(BigDecimal(3432.00))
-    ))),
-    Some(Seq(SocialEnterpriseInvestmentItem(
-      "123412/1A",
-      Some("SE Inc"),
-      Some("2020-12-12"),
-      Some(BigDecimal(123123.22)),
-      Some(BigDecimal(3432.00))
-    )))
-  )
+  private val rawData = AmendOtherReliefsRawData(nino, taxYear, requestJson)
+  private val requestData = AmendOtherReliefsRequest(Nino(nino), taxYear, requestBody)
 
-  private val rawData = AmendReliefInvestmentsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendReliefInvestmentsRequest(Nino(nino), taxYear, requestBody)
 
   "handleRequest" should {
-    "return Ok" when {
+    "return OK" when {
       "the request received is valid" in new Test {
 
-        MockAmendReliefInvestmentsRequestParser
+        MockAmendOtherReliefsRequestParser
           .parseRequest(rawData)
           .returns(Right(requestData))
 
-        MockAmendReliefService
+        MockAmendOtherReliefsService
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), AmendReliefInvestmentsHateoasData(nino, taxYear))
+          .wrap((), AmendOtherReliefsHateoasData(nino, taxYear))
           .returns(HateoasWrapper((), Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
@@ -185,7 +172,7 @@ class AmendReliefInvestmentsControllerSpec
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
-            MockAmendReliefInvestmentsRequestParser
+            MockAmendOtherReliefsRequestParser
               .parseRequest(rawData)
               .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
 
@@ -204,23 +191,24 @@ class AmendReliefInvestmentsControllerSpec
           (ValueFormatError.copy(paths = Some(Seq(
             "vctSubscription/0/amountInvested",
             "vctSubscription/0/reliefClaimed"))), BAD_REQUEST),
-          (DateOfInvestmentFormatError.copy(paths = Some(Seq(
-            "vctSubscription/0/dateOfInvestment",
-            "eisSubscription/0/dateOfInvestment"))), BAD_REQUEST)
+          (ReliefDateFormatError, BAD_REQUEST),
+          (TaxYearFormatError, BAD_REQUEST),
+          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
+          (CustomerReferenceFormatError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
       }
 
-      "service errors occur" should {
+      "Service errors occur" should {
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
-            MockAmendReliefInvestmentsRequestParser
+            MockAmendOtherReliefsRequestParser
               .parseRequest(rawData)
               .returns(Right(requestData))
 
-            MockAmendReliefService
+            MockAmendOtherReliefsService
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
 
@@ -228,7 +216,6 @@ class AmendReliefInvestmentsControllerSpec
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
           }
         }
 
