@@ -39,4 +39,6 @@ package object services {
 
   type AmendForeignReliefsServiceOutcome = ServiceOutcome[Unit]
 
+  type DeleteForeignReliefsServiceOutcome = ServiceOutcome[Unit]
+
 }
