@@ -24,5 +24,4 @@ object RelType {
   val DELETE_RELIEFS_FOREIGN = "delete-reliefs-foreign"
   val AMEND_RELIEFS_OTHER = "amend-reliefs-other"
   val DELETE_RELIEFS_OTHER = "delete-reliefs-other"
-  val RETRIEVE_RELIEFS_OTHER = "retrieve-reliefs-other"
 }

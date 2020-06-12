@@ -191,7 +191,10 @@ class AmendOtherReliefsControllerSpec
           (ValueFormatError.copy(paths = Some(Seq(
             "vctSubscription/0/amountInvested",
             "vctSubscription/0/reliefClaimed"))), BAD_REQUEST),
-          (ReliefDateFormatError, BAD_REQUEST)
+          (ReliefDateFormatError, BAD_REQUEST),
+          (TaxYearFormatError, BAD_REQUEST),
+          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
+          (CustomerReferenceFormatError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
