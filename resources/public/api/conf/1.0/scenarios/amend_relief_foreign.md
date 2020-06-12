@@ -15,7 +15,7 @@
         <tbody>
             <tr>
                 <td><p>NOT_FOUND</p></td>
-                <td><p>Simulates the scenario where the given other reliefs could not be found</p></td>
+                <td><p>Simulates the scenario where the given foreign reliefs could not be found</p></td>
             </tr>            
         </tbody>
 </table>
