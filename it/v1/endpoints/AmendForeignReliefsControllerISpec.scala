@@ -31,7 +31,6 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
     val nino: String = "AA123456A"
     val taxYear: String = "2019-20"
-    val correlationId: String = "X-123"
 
     val amount: BigDecimal = 5000.99
 
@@ -57,12 +56,12 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
          |    {
          |      "href": "/individuals/reliefs/foreign/$nino/$taxYear",
          |      "method": "PUT",
-         |      "rel": "amend-foreign-reliefs"
+         |      "rel": "amend-reliefs-foreign"
          |    },
          |    {
          |      "href": "/individuals/reliefs/foreign/$nino/$taxYear",
          |      "method": "DELETE",
-         |      "rel": "delete-foreign-reliefs"
+         |      "rel": "delete-reliefs-foreign"
          |    }
          |  ]
          |}
