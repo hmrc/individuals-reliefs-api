@@ -30,6 +30,9 @@ trait HateoasLinks {
   private def otherReliefsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/other/$nino/$taxYear"
 
+  private def foreignReliefsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
+    s"/${appConfig.apiGatewayContext}/foreign/$nino/$taxYear"
+
   //API resource links
   def retrieveReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
@@ -48,4 +51,13 @@ trait HateoasLinks {
 
   def deleteOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = otherReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_OTHER_RELIEFS)
+
+  def retrieveForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+
+  def amendForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_FOREIGN)
+
+  def deleteForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_FOREIGN)
 }

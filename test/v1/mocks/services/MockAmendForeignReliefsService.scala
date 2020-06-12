@@ -14,27 +14,29 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.mocks.services
 
-import config.AppConfig
-import javax.inject.{Inject, Singleton}
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.controllers.EndpointLogContext
+import v1.models.errors.ErrorWrapper
+import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendForeignReliefs.AmendForeignReliefsRequest
+import v1.services.AmendForeignReliefsService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class AmendForeignReliefsConnector @Inject()(val http: HttpClient,
-                                             val appConfig: AppConfig) extends BaseDesConnector {
-  def amend(request: AmendForeignReliefsRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+trait MockAmendForeignReliefsService extends MockFactory {
 
-    put(
-      body = request.body,
-      DesUri[Unit](s"reliefs/foreign/${request.nino}/${request.taxYear}")
-    )
+  val mockService: AmendForeignReliefsService = mock[AmendForeignReliefsService]
+
+  object MockAmendReliefService {
+
+    def amend(requestData: AmendForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+      (mockService
+        .amend(_: AmendForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
+        .expects(requestData, *, *, *)
+    }
   }
 }
