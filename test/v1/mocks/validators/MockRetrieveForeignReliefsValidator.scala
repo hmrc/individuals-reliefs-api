@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators
+package v1.mocks.validators
 
-import v1.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
+import org.scalamock.handlers.CallHandler1
+import org.scalamock.scalatest.MockFactory
+import v1.controllers.requestParsers.validators.RetrieveForeignReliefsValidator
 import v1.models.errors.MtdError
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRawData
 
-class RetrieveForeignReliefsValidator extends Validator[RetrieveForeignReliefsRawData] {
+class MockRetrieveForeignReliefsValidator extends MockFactory {
 
+  val mockValidator: RetrieveForeignReliefsValidator = mock[RetrieveForeignReliefsValidator]
 
-  private val validationSet = List(parameterFormatValidation)
+  object MockRetrieveForeignReliefsValidator {
 
-  private def parameterFormatValidation: RetrieveForeignReliefsRawData => List[List[MtdError]] = data => {
-    List(
-      NinoValidation.validate(data.nino),
-      TaxYearValidation.validate(data.taxYear)
-    )
-  }
-
-  override def validate(data: RetrieveForeignReliefsRawData): List[MtdError] = {
-    run(validationSet, data).distinct
+    def validate(data: RetrieveForeignReliefsRawData): CallHandler1[RetrieveForeignReliefsRawData, List[MtdError]] = {
+      (mockValidator
+        .validate(_: RetrieveForeignReliefsRawData))
+        .expects(data)
+    }
   }
 }

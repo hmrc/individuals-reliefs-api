@@ -19,6 +19,7 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.RetrieveForeignReliefsValidator
+import v1.models.request.retrieveForeignReliefs.{RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest}
 
 class RetrieveForeignReliefsRequestParser @Inject()(val validator: RetrieveForeignReliefsValidator)
   extends RequestParser[RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest] {
