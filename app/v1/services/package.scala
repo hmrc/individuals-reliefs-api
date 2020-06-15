@@ -41,4 +41,6 @@ package object services {
 
   type DeleteForeignReliefsServiceOutcome = ServiceOutcome[Unit]
 
+  type RetrieveForeignReliefsServiceOutcome = ServiceOutcome[RetrieveForeignReliefsBody]
+
 }
