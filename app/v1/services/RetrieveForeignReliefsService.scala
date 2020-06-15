@@ -48,7 +48,6 @@ class RetrieveForeignReliefsService @Inject()(connector: RetrieveForeignReliefsC
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR" -> TaxYearFormatError,
-      "CLIENT_OR_AGENT_NOT_AUTHORISED" -> UnauthorisedError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
