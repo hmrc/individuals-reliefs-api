@@ -18,6 +18,7 @@ package v1
 
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
+import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsBody
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsBody
 import v1.models.response.retrieveReliefInvestments._
 

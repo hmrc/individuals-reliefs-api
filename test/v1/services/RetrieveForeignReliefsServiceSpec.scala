@@ -24,6 +24,7 @@ import v1.mocks.connectors.MockRetrieveForeignReliefsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
+import v1.models.response.retrieveForeignReliefs.{ForeignTaxCreditRelief, RetrieveForeignReliefsBody}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -34,7 +35,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
   private val taxYear = "2017-18"
   private val correlationId = "X-123"
 
-  private val responseModel = ???
+  private val responseModel = RetrieveForeignReliefsBody(Some(ForeignTaxCreditRelief(234567.89)))
 
   private val requestData = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
 
