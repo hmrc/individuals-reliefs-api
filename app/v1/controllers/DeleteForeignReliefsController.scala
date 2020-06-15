@@ -17,14 +17,15 @@
 package v1.controllers
 
 import cats.data.EitherT
+import cats.implicits._
 import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.DeleteForeignReliefsRequestParser
-import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError, UnauthorisedError}
+import v1.models.errors._
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRawData
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{DeleteForeignReliefsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
