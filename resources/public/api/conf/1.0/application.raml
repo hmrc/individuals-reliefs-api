@@ -53,5 +53,6 @@ uses:
   /foreign:
     /{nino}:
       /{taxYear}:
-        put: !include reliefForeign_amend.raml
         delete: !include reliefForeign_delete.raml
+        put: !include reliefForeign_amend.raml
+        get: !include reliefForeign_retrieve.raml

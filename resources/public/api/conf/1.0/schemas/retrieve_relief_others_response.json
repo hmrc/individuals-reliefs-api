@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Retrieve Other Reliefs",
-  "description": "retrie's other reliefs",
+  "description": "Allows the retrieval of other reliefs",
   "type": "object",
   "properties": {
     "nonDeductableLoanInterest": {
