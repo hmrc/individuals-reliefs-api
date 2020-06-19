@@ -26,13 +26,13 @@ object AmendOtherReliefsResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: AmendOtherReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
-        amendOtherReliefs(appConfig, nino, date),
-        retrieveOtherReliefs(appConfig, nino, date),
-        deleteOtherReliefs(appConfig, nino, date)
+        amendOtherReliefs(appConfig, nino, taxYear),
+        retrieveOtherReliefs(appConfig, nino, taxYear),
+        deleteOtherReliefs(appConfig, nino, taxYear)
       )
     }
   }
 }
 
 
-case class AmendOtherReliefsHateoasData(nino: String, date: String) extends HateoasData
+case class AmendOtherReliefsHateoasData(nino: String, taxYear: String) extends HateoasData
