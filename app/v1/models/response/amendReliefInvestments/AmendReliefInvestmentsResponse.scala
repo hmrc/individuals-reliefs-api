@@ -26,12 +26,12 @@ object AmendReliefInvestmentsResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: AmendReliefInvestmentsHateoasData): Seq[Link] = {
       import data._
       Seq(
-        retrieveReliefInvestments(appConfig, nino, date),
-        amendReliefInvestments(appConfig, nino, date),
-        deleteReliefInvestments(appConfig, nino, date)
+        retrieveReliefInvestments(appConfig, nino, taxYear),
+        amendReliefInvestments(appConfig, nino, taxYear),
+        deleteReliefInvestments(appConfig, nino, taxYear)
       )
     }
   }
 }
 
-case class AmendReliefInvestmentsHateoasData(nino: String, date: String) extends HateoasData
+case class AmendReliefInvestmentsHateoasData(nino: String, taxYear: String) extends HateoasData

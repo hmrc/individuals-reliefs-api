@@ -26,12 +26,12 @@ object AmendForeignReliefsResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: AmendForeignReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
-        retrieveForeignReliefs(appConfig, nino, date),
-        amendForeignReliefs(appConfig, nino, date),
-        deleteForeignReliefs(appConfig, nino, date)
+        retrieveForeignReliefs(appConfig, nino, taxYear),
+        amendForeignReliefs(appConfig, nino, taxYear),
+        deleteForeignReliefs(appConfig, nino, taxYear)
       )
     }
   }
 }
 
-case class AmendForeignReliefsHateoasData(nino: String, date: String) extends HateoasData
+case class AmendForeignReliefsHateoasData(nino: String, taxYear: String) extends HateoasData
