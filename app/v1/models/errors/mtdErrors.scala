@@ -38,6 +38,9 @@ object InvestmentRefFormatError extends MtdError("FORMAT_UNIQUE_INVESTMENT_REFER
 object CustomerReferenceFormatError extends MtdError("FORMAT_CUSTOMER_REF", "The provided customer reference is not valid")
 
 // Rule Errors
+object RuleTaxYearNotSupportedError
+    extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "Tax year not supported, because it precedes the earliest allowable tax year")
+
 object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED", "An empty or non-matching body was submitted")
 
 object RuleTaxYearRangeExceededError
