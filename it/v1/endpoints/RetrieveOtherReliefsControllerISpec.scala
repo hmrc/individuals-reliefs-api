@@ -191,7 +191,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
               MtdIdLookupStub.ninoFound(requestNino)
             }
 
-            val response: WSResponse = await(request().delete())
+            val response: WSResponse = await(request().get())
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
             response.header("Content-Type") shouldBe Some("application/json")
@@ -216,10 +216,10 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DesStub.onError(DesStub.DELETE, desUri, desStatus, errorBody(desCode))
+              DesStub.onError(DesStub.GET, desUri, desStatus, errorBody(desCode))
             }
 
-            val response: WSResponse = await(request().delete())
+            val response: WSResponse = await(request().get())
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
