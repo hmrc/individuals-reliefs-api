@@ -131,8 +131,7 @@ class DeleteForeignReliefsControllerSpec
             (TaxYearFormatError, BAD_REQUEST),
             (RuleTaxYearRangeInvalidError, BAD_REQUEST),
             (NotFoundError, NOT_FOUND),
-            (DownstreamError, INTERNAL_SERVER_ERROR),
-            (UnauthorisedError, FORBIDDEN)
+            (DownstreamError, INTERNAL_SERVER_ERROR)
           )
 
           input.foreach(args => (serviceErrors _).tupled(args))

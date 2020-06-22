@@ -79,7 +79,6 @@ class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthSer
            MtdErrorWithCustomMessage(ValueFormatError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case UnauthorisedError => Unauthorized(Json.toJson(errorWrapper))
     }
   }
 

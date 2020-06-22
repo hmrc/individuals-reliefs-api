@@ -48,7 +48,6 @@ class AmendReliefInvestmentsService @Inject()(connector: AmendReliefInvestmentsC
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_STATUS" -> NinoFormatError,
-      "CLIENT_OR_AGENT_NOT_AUTHORISED" -> UnauthorisedError,
       "FORMAT_TAX_YEAR" -> TaxYearFormatError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,

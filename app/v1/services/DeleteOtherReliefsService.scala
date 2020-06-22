@@ -49,7 +49,6 @@ class DeleteOtherReliefsService @Inject()(connector: DeleteOtherReliefsConnector
       "FORMAT_TAX_YEAR" -> TaxYearFormatError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError,
-      "CLIENT_OR_AGENT_NOT_AUTHORISED" -> UnauthorisedError
+      "SERVICE_UNAVAILABLE" -> DownstreamError
     )
 }

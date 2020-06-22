@@ -69,8 +69,7 @@ class DeleteOtherReliefsServiceSpec extends UnitSpec {
         ("FORMAT_TAX_YEAR", TaxYearFormatError),
         ("SERVER_ERROR", DownstreamError),
         ("SERVICE_UNAVAILABLE", DownstreamError),
-        ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
-        ("CLIENT_OR_AGENT_NOT_AUTHORISED", UnauthorisedError)
+        ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
       )
 
       input.foreach(args => (serviceError _).tupled(args))

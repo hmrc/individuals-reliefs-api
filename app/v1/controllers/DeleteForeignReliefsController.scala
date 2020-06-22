@@ -64,7 +64,6 @@ class DeleteForeignReliefsController @Inject()(val authService: EnrolmentsAuthSe
       case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearRangeInvalidError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case UnauthorisedError => Forbidden(Json.toJson(errorWrapper))
     }
   }
 }

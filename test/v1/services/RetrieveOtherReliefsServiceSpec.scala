@@ -97,7 +97,6 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
 
         val input = Seq(
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
-          ("CLIENT_OR_AGENT_NOT_AUTHORISED", UnauthorisedError),
           ("FORMAT_TAX_YEAR", TaxYearFormatError),
           ("NOT_FOUND", NotFoundError),
           ("SERVER_ERROR", DownstreamError),
