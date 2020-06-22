@@ -65,7 +65,6 @@ class DeleteOtherReliefsServiceSpec extends UnitSpec {
 
       val input = Seq(
         ("NOT_FOUND", NotFoundError),
-        ("FORMAT_STATUS", NinoFormatError),
         ("FORMAT_TAX_YEAR", TaxYearFormatError),
         ("SERVER_ERROR", DownstreamError),
         ("SERVICE_UNAVAILABLE", DownstreamError),

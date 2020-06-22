@@ -47,7 +47,6 @@ class AmendReliefInvestmentsService @Inject()(connector: AmendReliefInvestmentsC
   private def desErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_STATUS" -> NinoFormatError,
       "FORMAT_TAX_YEAR" -> TaxYearFormatError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
