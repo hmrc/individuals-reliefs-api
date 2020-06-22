@@ -108,7 +108,6 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
 
         val input = Seq(
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
-          ("FORMAT_NINO", NinoFormatError),
           ("FORMAT_TAX_YEAR", TaxYearFormatError),
           ("NOT_FOUND", NotFoundError),
           ("SERVER_ERROR", DownstreamError),
