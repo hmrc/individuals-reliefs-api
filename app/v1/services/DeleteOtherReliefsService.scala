@@ -45,11 +45,9 @@ class DeleteOtherReliefsService @Inject()(connector: DeleteOtherReliefsConnector
   private def desErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_STATUS" -> NinoFormatError,
       "FORMAT_TAX_YEAR" -> TaxYearFormatError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError,
-      "CLIENT_OR_AGENT_NOT_AUTHORISED" -> UnauthorisedError
+      "SERVICE_UNAVAILABLE" -> DownstreamError
     )
 }

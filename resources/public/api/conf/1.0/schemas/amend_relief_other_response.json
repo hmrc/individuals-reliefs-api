@@ -15,15 +15,6 @@
             "type": "string",
             "example": "/individuals/reliefs/other/TC663795B/2019-20"
           },
-          "rel": {
-            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
-            "type": "string",
-            "enum": [
-              "self",
-              "amend-reliefs-other",
-              "delete-reliefs-other"
-            ]
-          },
           "method": {
             "description": "The HTTP method type for the endpoint",
             "type": "string",
@@ -31,6 +22,15 @@
               "GET",
               "PUT",
               "DELETE"
+            ]
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "type": "string",
+            "enum": [
+              "self",
+              "amend-reliefs-other",
+              "delete-reliefs-other"
             ]
           }
         },

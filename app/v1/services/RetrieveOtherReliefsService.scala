@@ -23,7 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveOtherReliefsConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError, UnauthorisedError}
+import v1.models.errors.{DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
 import v1.support.DesResponseMappingSupport
 
@@ -48,7 +48,6 @@ class RetrieveOtherReliefsService @Inject()(connector: RetrieveOtherReliefsConne
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR" -> TaxYearFormatError,
-      "CLIENT_OR_AGENT_NOT_AUTHORISED" -> UnauthorisedError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError

@@ -82,7 +82,6 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
         BadRequest(Json.toJson(errorWrapper: ErrorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case UnauthorisedError => Unauthorized(Json.toJson(errorWrapper))
     }
   }
 }

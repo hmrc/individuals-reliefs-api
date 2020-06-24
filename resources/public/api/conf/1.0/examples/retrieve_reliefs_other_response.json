@@ -43,18 +43,18 @@
   "links":[
     {
       "href":"/individuals/reliefs/other/TC663795B/2017-18",
-      "rel":"amend-reliefs-other",
-      "method":"PUT"
+      "method":"PUT",
+      "rel":"amend-reliefs-other"
     },
     {
       "href":"/individuals/reliefs/other/TC663795B/2017-18",
-      "rel":"self",
-      "method":"GET"
+      "method":"GET",
+      "rel":"self"
     },
     {
       "href":"/individuals/reliefs/other/TC663795B/2017-18",
-      "rel":"delete-reliefs-other",
-      "method":"DELETE"
+      "method":"DELETE",
+      "rel":"delete-reliefs-other"
     }
   ]
 }

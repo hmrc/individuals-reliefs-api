@@ -223,7 +223,6 @@ class AmendOtherReliefsControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR),
-          (UnauthorisedError, UNAUTHORIZED),
           (TaxYearFormatError, BAD_REQUEST)
         )
 
