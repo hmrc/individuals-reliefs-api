@@ -21,7 +21,8 @@
       },
       "required": [
         "reliefClaimed"
-      ]
+      ],
+      "additionalProperties": false
     },
     "payrollGiving": {
       "description": "Details of payroll giving relief claimed.",
@@ -40,7 +41,8 @@
       },
       "required": [
         "reliefClaimed"
-      ]
+      ],
+      "additionalProperties": false
     },
     "qualifyingDistributionRedemptionOfSharesAndSecurities": {
       "description": "Details of qualifying shares and securities distributed that qualify for relief.",
@@ -59,7 +61,8 @@
       },
       "required": [
         "amount"
-      ]
+      ],
+      "additionalProperties": false
     },
     "maintenancePayments": {
       "description": "Details of maintenance payments made to an ex-spouse.",
@@ -89,7 +92,8 @@
         },
         "required": [
           "customerReference"
-        ]
+        ],
+        "additionalProperties": false
       }
     },
     "postCessationTradeReliefAndCertainOtherLosses": {
@@ -128,7 +132,8 @@
         },
         "required": [
           "customerReference"
-        ]
+        ],
+        "additionalProperties": false
       }
     },
     "annualPaymentsMade": {
@@ -148,7 +153,8 @@
       },
       "required": [
         "reliefClaimed"
-      ]
+      ],
+      "additionalProperties": false
     },
     "qualifyingLoanInterestPayments": {
       "description": "Details of qualifying loan interest payments made.",
@@ -174,7 +180,8 @@
         "required": [
           "customerReference",
           "reliefClaimed"
-        ]
+        ],
+        "additionalProperties": false
       }
     },
     "links": {
@@ -211,8 +218,10 @@
           "href",
           "rel",
           "method"
-        ]
+        ],
+        "additionalProperties": false
       }
     }
-  }
+  },
+  "additionalProperties": false
 }
