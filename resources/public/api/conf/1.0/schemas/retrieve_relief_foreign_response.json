@@ -16,7 +16,8 @@
       },
       "required": [
         "amount"
-      ]
+      ],
+      "additionalProperties": false
     },
     "links": {
       "type": "array",
@@ -52,8 +53,10 @@
           "href",
           "rel",
           "method"
-        ]
+        ],
+        "additionalProperties": false
       }
     }
-  }
+  },
+  "additionalProperties": false
 }

@@ -16,7 +16,9 @@
       },
       "required": [
         "amount"
-      ]
+      ],
+      "additionalProperties": false
     }
-  }
+  },
+  "additionalProperties": false
 }

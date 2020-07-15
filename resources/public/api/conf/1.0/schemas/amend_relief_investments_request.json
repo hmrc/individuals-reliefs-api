@@ -38,7 +38,8 @@
         },
         "required": [
           "uniqueInvestmentRef"
-        ]
+        ],
+        "additionalProperties": false
       }
     },
     "eisSubscription": {
@@ -80,7 +81,8 @@
         },
         "required": [
           "uniqueInvestmentRef"
-        ]
+        ],
+        "additionalProperties": false
       }
     },
     "communityInvestment": {
@@ -117,7 +119,8 @@
         },
         "required": [
           "uniqueInvestmentRef"
-        ]
+        ],
+        "additionalProperties": false
       }
     },
     "seedEnterpriseInvestment": {
@@ -154,7 +157,8 @@
         },
         "required": [
           "uniqueInvestmentRef"
-        ]
+        ],
+        "additionalProperties": false
       }
     },
     "socialEnterpriseInvestment": {
@@ -191,8 +195,10 @@
         },
         "required": [
           "uniqueInvestmentRef"
-        ]
+        ],
+        "additionalProperties": false
       }
     }
-  }
+  },
+  "additionalProperties": false
 }
