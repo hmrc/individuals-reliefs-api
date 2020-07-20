@@ -26,7 +26,7 @@ class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators
     Some("Company Inc"),
     Some("2020-12-12"),
     Some(BigDecimal(123123.22)),
-    Some(BigDecimal(3432.00))
+    BigDecimal(3432.00)
   )
   val json = Json.parse(
     """

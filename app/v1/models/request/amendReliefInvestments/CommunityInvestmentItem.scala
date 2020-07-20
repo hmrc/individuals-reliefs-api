@@ -22,7 +22,7 @@ case class CommunityInvestmentItem(uniqueInvestmentRef: String,
                                    name: Option[String],
                                    dateOfInvestment: Option[String],
                                    amountInvested: Option[BigDecimal],
-                                   reliefClaimed: Option[BigDecimal])
+                                   reliefClaimed: BigDecimal)
 
 object CommunityInvestmentItem {
   implicit val format: OFormat[CommunityInvestmentItem] = Json.format[CommunityInvestmentItem]

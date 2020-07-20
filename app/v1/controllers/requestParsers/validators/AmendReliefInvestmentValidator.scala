@@ -79,7 +79,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         path = s"/vctSubscription/$arrayIndex/amountInvested"
       ),
       NumberValidation.validateOptional(
-        field = vctSubscriptionsItem.reliefClaimed,
+        field = Some(vctSubscriptionsItem.reliefClaimed),
         path = s"/vctSubscription/$arrayIndex/reliefClaimed"
       ),
     ).flatten
@@ -97,7 +97,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         path = s"/eisSubscription/$arrayIndex/amountInvested"
       ),
       NumberValidation.validateOptional(
-        field = eisSubscriptionsItem.reliefClaimed,
+        field = Some(eisSubscriptionsItem.reliefClaimed),
         path = s"/eisSubscription/$arrayIndex/reliefClaimed"
       ),
     ).flatten
@@ -116,7 +116,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         path = s"/communityInvestment/$arrayIndex/amountInvested"
       ),
       NumberValidation.validateOptional(
-        field = communityInvestmentItem.reliefClaimed,
+        field = Some(communityInvestmentItem.reliefClaimed),
         path = s"/communityInvestment/$arrayIndex/reliefClaimed"
       ),
     ).flatten
@@ -134,7 +134,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         path = s"/seedEnterpriseInvestment/$arrayIndex/amountInvested"
       ),
       NumberValidation.validateOptional(
-        field = seedEnterpriseInvestmentItem.reliefClaimed,
+        field = Some(seedEnterpriseInvestmentItem.reliefClaimed),
         path = s"/seedEnterpriseInvestment/$arrayIndex/reliefClaimed"
       ),
     ).flatten
@@ -153,7 +153,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         path = s"/socialEnterpriseInvestment/$arrayIndex/amountInvested"
       ),
       NumberValidation.validateOptional(
-        field = socialEnterpriseInvestmentItem.reliefClaimed,
+        field = Some(socialEnterpriseInvestmentItem.reliefClaimed),
         path = s"/socialEnterpriseInvestment/$arrayIndex/reliefClaimed"
       ),
     ).flatten

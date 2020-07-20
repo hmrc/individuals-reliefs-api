@@ -26,7 +26,7 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
     Some("VCT Fund X"),
     Some("2018-04-16"),
     Some(BigDecimal(23312.00)),
-    Some(BigDecimal(1334.00))
+    BigDecimal(1334.00)
   )
   val json = Json.parse(
     """
