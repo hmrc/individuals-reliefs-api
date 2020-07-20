@@ -19,7 +19,7 @@ package v1.controllers.requestParsers.validators.validations
 import support.UnitSpec
 import v1.models.errors.CustomerReferenceFormatError
 
-class CustomerReferenceValidationSpec extends UnitSpec {
+class ReferenceValidationSpec extends UnitSpec {
 
   val validReference = Some("HJ812JJMNS89SJ09KLJNBH89O")
   val invalidReference = Some("👋")
@@ -27,17 +27,17 @@ class CustomerReferenceValidationSpec extends UnitSpec {
   "validate" should {
     "return no errors" when {
       "a valid reference is supplied" in {
-        val validationResult = CustomerReferenceValidation.validateOptional(validReference, "/annualPaymentsMade/customerReference")
+        val validationResult = ReferenceValidation.validateOptional(validReference, "/annualPaymentsMade/customerReference")
         validationResult.isEmpty shouldBe true
       }
       "no reference is supplied" in {
-        val validationResult = CustomerReferenceValidation.validateOptional(None, "/annualPaymentsMade/customerReference")
+        val validationResult = ReferenceValidation.validateOptional(None, "/annualPaymentsMade/customerReference")
         validationResult.isEmpty shouldBe true
       }
     }
     "return an error" when {
       "an invalid reference is supplied" in {
-        val validationResult = CustomerReferenceValidation.validateOptional(invalidReference, "/annualPaymentsMade/customerReference")
+        val validationResult = ReferenceValidation.validateOptional(invalidReference, "/annualPaymentsMade/customerReference")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
         validationResult.head shouldBe CustomerReferenceFormatError.copy(paths = Some(Seq("/annualPaymentsMade/customerReference")))

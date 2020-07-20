@@ -194,7 +194,6 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
         val allInvalidValueRequestError: List[MtdError] = List(
           CustomerReferenceFormatError.copy(
-            message = "The provided customer reference is not valid",
             paths = Some(List(
               "/nonDeductableLoanInterest/customerReference",
               "/payrollGiving/customerReference",
@@ -206,7 +205,6 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
             ))
           ),
           ValueFormatError.copy(
-            message = "The field should be between 0 and 99999999999.99",
             paths = Some(List(
               "/nonDeductableLoanInterest/reliefClaimed",
               "/payrollGiving/reliefClaimed",
@@ -218,8 +216,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
             ))
           ),
           ReliefDateFormatError.copy(
-            message = "The field should be in the format YYYY-MM-DD",
-            paths =Some(List(
+            paths = Some(List(
               "/maintenancePayments/0/exSpouseDateOfBirth",
               "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
             ))
@@ -246,7 +243,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
     "return an error according to spec" when {
 
-      val validRequestBodyJson =  Json.parse(
+      val validRequestBodyJson = Json.parse(
         """
           |{
           |  "nonDeductableLoanInterest": {
@@ -292,7 +289,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allInvalidvalueFormatRequestBodyJson = Json.parse(
+      val allInvalidValueFormatRequestBodyJson = Json.parse(
         """
           |{
           |  "nonDeductableLoanInterest": {
@@ -338,7 +335,53 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allDatesInvalidRequestBodyJson =  Json.parse(
+      val allInvalidNameFormatRequestBodyJson = Json.parse(
+        """
+          |{
+          |  "nonDeductableLoanInterest": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "payrollGiving": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 154.00
+          |      },
+          |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+          |        "customerReference": "myref",
+          |        "amount": 222.22
+          |      },
+          |  "maintenancePayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "exSpouseName" : "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+          |        "exSpouseDateOfBirth": "2000-01-01",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "postCessationTradeReliefAndCertainOtherLosses": [
+          |    {
+          |        "customerReference": "myref",
+          |        "businessName": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+          |        "dateBusinessCeased": "2019-08-10",
+          |        "natureOfTrade": "Widgets Manufacturer",
+          |        "incomeSource": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "annualPaymentsMade": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "qualifyingLoanInterestPayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "lenderName": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+          |        "reliefClaimed": 763.00
+          |      }
+          |  ]
+          |}""".stripMargin)
+
+      val allDatesInvalidRequestBodyJson = Json.parse(
         """
           |{
           |  "nonDeductableLoanInterest": {
@@ -384,24 +427,24 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allCustomerReferencesInvalidRequestBodyJson =  Json.parse(
+      val allCustomerReferencesInvalidRequestBodyJson = Json.parse(
         """
           |{
           |  "nonDeductableLoanInterest": {
-          |        "customerReference": "👋",
+          |        "customerReference": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
           |        "reliefClaimed": 763.00
           |      },
           |  "payrollGiving": {
-          |        "customerReference": "👋",
+          |        "customerReference": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
           |        "reliefClaimed": 154.00
           |      },
           |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-          |        "customerReference": "👋",
+          |        "customerReference": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
           |        "amount": 222.22
           |      },
           |  "maintenancePayments": [
           |    {
-          |        "customerReference": "👋",
+          |        "customerReference": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
           |        "exSpouseName" : "Hilda",
           |        "exSpouseDateOfBirth": "2000-01-01",
           |        "amount": 222.22
@@ -409,21 +452,21 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ],
           |  "postCessationTradeReliefAndCertainOtherLosses": [
           |    {
-          |        "customerReference": "👋",
+          |        "customerReference": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
           |        "businessName": "ACME Inc",
           |        "dateBusinessCeased": "2019-08-10",
-          |        "natureOfTrade": "Widgets Manufacturer",
+          |        "natureOfTrade": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
           |        "incomeSource": "AB12412/A12",
           |        "amount": 222.22
           |      }
           |  ],
           |  "annualPaymentsMade": {
-          |        "customerReference": "👋",
+          |        "customerReference": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
           |        "reliefClaimed": 763.00
           |      },
           |  "qualifyingLoanInterestPayments": [
           |    {
-          |        "customerReference": "👋",
+          |        "customerReference": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
           |        "lenderName": "Maurice",
           |        "reliefClaimed": 763.00
           |      }
@@ -431,7 +474,6 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |}""".stripMargin)
 
       val allValueFormatError: MtdError = ValueFormatError.copy(
-        message = "The field should be between 0 and 99999999999.99",
         paths = Some(Seq(
           "/nonDeductableLoanInterest/reliefClaimed",
           "/payrollGiving/reliefClaimed",
@@ -443,8 +485,16 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         ))
       )
 
+      val allNameFormatError: MtdError = NameFormatError.copy(
+        paths = Some(Seq(
+          "/maintenancePayments/0/exSpouseName",
+          "/postCessationTradeReliefAndCertainOtherLosses/0/businessName",
+          "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource",
+          "/qualifyingLoanInterestPayments/0/lenderName"
+        ))
+      )
+
       val allDateFormatError: MtdError = ReliefDateFormatError.copy(
-        message = "The field should be in the format YYYY-MM-DD",
         paths = Some(List(
           "/maintenancePayments/0/exSpouseDateOfBirth",
           "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
@@ -452,20 +502,20 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       )
 
       val allCustomerReferenceFormatErrors: MtdError = CustomerReferenceFormatError.copy(
-        message = "The provided customer reference is not valid",
         paths = Some(List(
           "/nonDeductableLoanInterest/customerReference",
           "/payrollGiving/customerReference",
           "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
           "/maintenancePayments/0/customerReference",
           "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
+          "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade",
           "/annualPaymentsMade/customerReference",
           "/qualifyingLoanInterestPayments/0/customerReference"
         ))
       )
 
       "validation error" when {
-        def validationErrorTest(requestNino:String, requestTaxYear: String, requestBody: JsValue,  expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String, requestTaxYear: String, requestBody: JsValue, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
             override val nino: String = requestNino
@@ -486,8 +536,9 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
         val input = Seq(
           ("AA1123A", "2017-18", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "20177", validRequestBodyJson,  BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2017-18", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
+          ("AA123456A", "20177", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2017-18", allInvalidValueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
+          ("AA123456A", "2017-18", allInvalidNameFormatRequestBodyJson, BAD_REQUEST, allNameFormatError),
           ("AA123456A", "2017-18", allDatesInvalidRequestBodyJson, BAD_REQUEST, allDateFormatError),
           ("AA123456A", "2017-18", allCustomerReferencesInvalidRequestBodyJson, BAD_REQUEST, allCustomerReferenceFormatErrors)
         )
@@ -517,7 +568,8 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           (BAD_REQUEST, "FORMAT_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "NOT_FOUND", NOT_FOUND, NotFoundError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError),
-          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError))
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError)
+        )
 
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }

@@ -188,13 +188,12 @@ class AmendOtherReliefsControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (ValueFormatError.copy(paths = Some(Seq(
-            "vctSubscription/0/amountInvested",
-            "vctSubscription/0/reliefClaimed"))), BAD_REQUEST),
-          (ReliefDateFormatError, BAD_REQUEST),
+          (NameFormatError.copy(paths = Some(Seq("path"))), BAD_REQUEST),
+          (ValueFormatError.copy(paths = Some(Seq("path"))), BAD_REQUEST),
+          (ReliefDateFormatError.copy(paths = Some(Seq("path"))), BAD_REQUEST),
+          (CustomerReferenceFormatError.copy(paths = Some(Seq("path"))), BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
-          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
-          (CustomerReferenceFormatError, BAD_REQUEST)
+          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))

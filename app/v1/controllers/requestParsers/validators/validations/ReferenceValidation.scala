@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators.validations
 
 import v1.models.errors.{CustomerReferenceFormatError, MtdError}
 
-object CustomerReferenceValidation {
+object ReferenceValidation {
 
   def validateOptional(field: Option[String], path: String): List[MtdError] = {
     field match {

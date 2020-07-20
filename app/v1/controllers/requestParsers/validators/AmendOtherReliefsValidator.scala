@@ -65,7 +65,7 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
 
   private def validateNonDeductableLoanInterest(nonDeductableLoanInterest: NonDeductableLoanInterest): List[MtdError] = {
     List(
-      CustomerReferenceValidation.validateOptional(
+      ReferenceValidation.validateOptional(
         field = nonDeductableLoanInterest.customerReference,
         path = s"/nonDeductableLoanInterest/customerReference"
       ),
@@ -78,7 +78,7 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
 
   private def validatePayrollGiving(payrollGiving: PayrollGiving): List[MtdError] = {
     List(
-      CustomerReferenceValidation.validateOptional(
+      ReferenceValidation.validateOptional(
         field = payrollGiving.customerReference,
         path = s"/payrollGiving/customerReference"
       ),
@@ -92,7 +92,7 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
   private def validateQualifyingDistributionRedemptionOfSharesAndSecurities
   (qualifyingDistributionRedemptionOfSharesAndSecurities: QualifyingDistributionRedemptionOfSharesAndSecurities): List[MtdError] = {
     List(
-      CustomerReferenceValidation.validateOptional(
+      ReferenceValidation.validateOptional(
         field = qualifyingDistributionRedemptionOfSharesAndSecurities.customerReference,
         path = s"/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference"
       ),
@@ -106,9 +106,13 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
 
   private def validateMaintenancePayments(maintenancePayments: MaintenancePayments, arrayIndex: Int): List[MtdError] = {
     List(
-      CustomerReferenceValidation.validateOptional(
+      ReferenceValidation.validateOptional(
         field = maintenancePayments.customerReference,
         path = s"/maintenancePayments/$arrayIndex/customerReference"
+      ),
+      NameValidation.validateOptional(
+        name = maintenancePayments.exSpouseName,
+        path = s"/maintenancePayments/$arrayIndex/exSpouseName"
       ),
       DateValidation.validateOptional(
         date = maintenancePayments.exSpouseDateOfBirth,
@@ -125,14 +129,26 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
   private def validatePostCessationTradeReliefAndCertainOtherLosses
   (postCessationTradeReliefAndCertainOtherLosses: PostCessationTradeReliefAndCertainOtherLosses, arrayIndex: Int): List[MtdError] = {
     List(
-      CustomerReferenceValidation.validateOptional(
+      ReferenceValidation.validateOptional(
         field = postCessationTradeReliefAndCertainOtherLosses.customerReference,
         path = s"/postCessationTradeReliefAndCertainOtherLosses/$arrayIndex/customerReference"
+      ),
+      NameValidation.validateOptional(
+        name = postCessationTradeReliefAndCertainOtherLosses.businessName,
+        path = s"/postCessationTradeReliefAndCertainOtherLosses/$arrayIndex/businessName"
       ),
       DateValidation.validateOptional(
         date = postCessationTradeReliefAndCertainOtherLosses.dateBusinessCeased,
         path = s"/postCessationTradeReliefAndCertainOtherLosses/$arrayIndex/dateBusinessCeased",
         error = ReliefDateFormatError
+      ),
+      ReferenceValidation.validateOptional(
+        field = postCessationTradeReliefAndCertainOtherLosses.natureOfTrade,
+        path = s"/postCessationTradeReliefAndCertainOtherLosses/$arrayIndex/natureOfTrade"
+      ),
+      NameValidation.validateOptional(
+        name = postCessationTradeReliefAndCertainOtherLosses.incomeSource,
+        path = s"/postCessationTradeReliefAndCertainOtherLosses/$arrayIndex/incomeSource"
       ),
       NumberValidation.validateOptional(
         field = postCessationTradeReliefAndCertainOtherLosses.amount,
@@ -144,7 +160,7 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
 
   private def validateAnnualPayments(annualPaymentsMade: AnnualPaymentsMade): List[MtdError] = {
     List(
-      CustomerReferenceValidation.validateOptional(
+      ReferenceValidation.validateOptional(
         field = annualPaymentsMade.customerReference,
         path = s"/annualPaymentsMade/customerReference"
       ),
@@ -157,9 +173,13 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
 
   private def validateQualifyingLoanInterestPayments(qualifyingLoanInterestPayments: QualifyingLoanInterestPayments, arrayIndex: Int): List[MtdError] = {
     List(
-      CustomerReferenceValidation.validateOptional(
+      ReferenceValidation.validateOptional(
         field = qualifyingLoanInterestPayments.customerReference,
         path = s"/qualifyingLoanInterestPayments/$arrayIndex/customerReference"
+      ),
+      NameValidation.validateOptional(
+        name = qualifyingLoanInterestPayments.lenderName,
+        path = s"/qualifyingLoanInterestPayments/$arrayIndex/lenderName"
       ),
       NumberValidation.validateOptional(
         field = Some(qualifyingLoanInterestPayments.reliefClaimed),

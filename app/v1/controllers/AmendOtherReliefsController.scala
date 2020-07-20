@@ -76,6 +76,7 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
            TaxYearFormatError |
            RuleIncorrectOrEmptyBodyError |
            RuleTaxYearRangeInvalidError |
+           MtdErrorWithCustomMessage(NameFormatError.code) |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            MtdErrorWithCustomMessage(ReliefDateFormatError.code) |
            MtdErrorWithCustomMessage(CustomerReferenceFormatError.code) =>
