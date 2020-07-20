@@ -21,13 +21,19 @@ import v1.models.errors.NameFormatError
 
 class NameValidationSpec extends UnitSpec {
 
-  val validName: Option[String] = Some("Company Inc")
-  val invalidName: Option[String] = Some("AA1234*&^%$£BBCBCBC")
+  val validNameMinLength: Option[String] = Some("a")
+  val validNameMaxLength: Option[String] = Some("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyza")
+  val invalidNameTooShort: Option[String] = Some("")
+  val invalidNameTooLong: Option[String] = Some("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab")
 
   "validate" should {
     "return no errors" when {
-      "a valid name is supplied" in {
-        val validationResult = NameValidation.validateOptional(validName, "/vctSubscription/1/name")
+      "a valid name is supplied with the minimum allowed length" in {
+        val validationResult = NameValidation.validateOptional(validNameMinLength, "/vctSubscription/1/name")
+        validationResult.isEmpty shouldBe true
+      }
+      "a valid name is supplied with the maximum allowed length" in {
+        val validationResult = NameValidation.validateOptional(validNameMaxLength, "/vctSubscription/1/name")
         validationResult.isEmpty shouldBe true
       }
       "no name is supplied" in {
@@ -37,8 +43,14 @@ class NameValidationSpec extends UnitSpec {
     }
 
     "return an error" when {
-      "an invalid name is supplied" in {
-        val validationResult = NameValidation.validateOptional(invalidName, "/vctSubscription/1/name")
+      "an invalid name is supplied less than the minimum allowed length" in {
+        val validationResult = NameValidation.validateOptional(invalidNameTooShort, "/vctSubscription/1/name")
+        validationResult.isEmpty shouldBe false
+        validationResult.length shouldBe 1
+        validationResult.head shouldBe NameFormatError.copy(paths = Some(Seq("/vctSubscription/1/name")))
+      }
+      "an invalid name is supplied greater than the maximum allowed length" in {
+        val validationResult = NameValidation.validateOptional(invalidNameTooLong, "/vctSubscription/1/name")
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
         validationResult.head shouldBe NameFormatError.copy(paths = Some(Seq("/vctSubscription/1/name")))

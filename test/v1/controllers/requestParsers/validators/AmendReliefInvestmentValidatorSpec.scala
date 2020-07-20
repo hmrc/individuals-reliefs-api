@@ -355,6 +355,152 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         )
       }
     }
+
+    "return every field in a FORMAT_NAME error" when {
+      "all name are invalid" in {
+        val badJson = Json.parse(
+          """
+            |{
+            |  "vctSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "VCTREF",
+            |      "name": "",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |      },
+            |    {
+            |      "uniqueInvestmentRef": "VCTREF",
+            |      "name": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |      }
+            |  ],
+            |  "eisSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "XTAL",
+            |      "name": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+            |      "knowledgeIntensive": true,
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "communityInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "CIREF",
+            |      "name": "",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "seedEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "companyName": "",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "socialEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "socialEnterpriseName": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ]
+            |}
+        """.stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+          NameFormatError.copy(paths = Some(Seq(
+            "/vctSubscription/0/name",
+            "/vctSubscription/1/name",
+            "/eisSubscription/0/name",
+            "/communityInvestment/0/name",
+            "/seedEnterpriseInvestment/0/companyName",
+            "/socialEnterpriseInvestment/0/socialEnterpriseName"
+          )))
+        )
+      }
+    }
+    "return only some fields in a FORMAT_NAME error" when {
+      "only some fields are invalid" in {
+        val badJson = Json.parse(
+          """
+            |{
+            |  "vctSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "VCTREF",
+            |      "name": "",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |      },
+            |    {
+            |      "uniqueInvestmentRef": "VCTREF",
+            |      "name": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |      }
+            |  ],
+            |  "eisSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "XTAL",
+            |      "name": "",
+            |      "knowledgeIntensive": true,
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "communityInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "CIREF",
+            |      "name": "",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "seedEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "companyName": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "socialEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "123412/1A",
+            |      "socialEnterpriseName": "",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ]
+            |}
+        """.stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+          NameFormatError.copy(paths = Some(Seq(
+            "/vctSubscription/0/name",
+            "/vctSubscription/1/name",
+            "/eisSubscription/0/name",
+            "/communityInvestment/0/name",
+            "/seedEnterpriseInvestment/0/companyName",
+            "/socialEnterpriseInvestment/0/socialEnterpriseName"
+          )))
+        )
+      }
+    }
+
     "return a format date of investment error with multiple incorrect date of investments" when {
       "the provided date of investment's format is incorrect" in {
         val badJson =Json.parse(

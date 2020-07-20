@@ -74,6 +74,10 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         path = s"/vctSubscription/$arrayIndex/dateOfInvestment",
         error = DateOfInvestmentFormatError
       ),
+      NameValidation.validateOptional(
+        name = vctSubscriptionsItem.name,
+        path = s"/vctSubscription/$arrayIndex/name"
+      ),
       NumberValidation.validateOptional(
         field = vctSubscriptionsItem.amountInvested,
         path = s"/vctSubscription/$arrayIndex/amountInvested"
@@ -91,6 +95,10 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         date = eisSubscriptionsItem.dateOfInvestment,
         path = s"/eisSubscription/$arrayIndex/dateOfInvestment",
         error = DateOfInvestmentFormatError
+      ),
+      NameValidation.validateOptional(
+        name = eisSubscriptionsItem.name,
+        path = s"/eisSubscription/$arrayIndex/name"
       ),
       NumberValidation.validateOptional(
         field = eisSubscriptionsItem.amountInvested,
@@ -111,6 +119,10 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         path = s"/communityInvestment/$arrayIndex/dateOfInvestment",
         error = DateOfInvestmentFormatError
       ),
+      NameValidation.validateOptional(
+        name = communityInvestmentItem.name,
+        path = s"/communityInvestment/$arrayIndex/name"
+      ),
       NumberValidation.validateOptional(
         field = communityInvestmentItem.amountInvested,
         path = s"/communityInvestment/$arrayIndex/amountInvested"
@@ -128,6 +140,10 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         date = seedEnterpriseInvestmentItem.dateOfInvestment,
         path = s"/seedEnterpriseInvestment/$arrayIndex/dateOfInvestment",
         error = DateOfInvestmentFormatError
+      ),
+      NameValidation.validateOptional(
+        name = seedEnterpriseInvestmentItem.companyName,
+        path = s"/seedEnterpriseInvestment/$arrayIndex/companyName"
       ),
       NumberValidation.validateOptional(
         field = seedEnterpriseInvestmentItem.amountInvested,
@@ -147,6 +163,10 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
         date = socialEnterpriseInvestmentItem.dateOfInvestment,
         path = s"/socialEnterpriseInvestment/$arrayIndex/dateOfInvestment",
         error = DateOfInvestmentFormatError
+      ),
+      NameValidation.validateOptional(
+        name = socialEnterpriseInvestmentItem.socialEnterpriseName,
+        path = s"/socialEnterpriseInvestment/$arrayIndex/socialEnterpriseName"
       ),
       NumberValidation.validateOptional(
         field = socialEnterpriseInvestmentItem.amountInvested,

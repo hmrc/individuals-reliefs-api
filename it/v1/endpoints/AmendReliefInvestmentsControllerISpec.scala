@@ -214,8 +214,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
         val allInvalidValueRequestError: List[MtdError] = List(
           DateOfInvestmentFormatError.copy(
-            message = "The format of the investment date is invalid",
-              paths = Some(List(
+            paths = Some(List(
               "/vctSubscription/0/dateOfInvestment",
               "/vctSubscription/1/dateOfInvestment",
               "/eisSubscription/0/dateOfInvestment",
@@ -225,7 +224,6 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
             ))
           ),
           ValueFormatError.copy(
-            message = "The field should be between 0 and 99999999999.99",
             paths = Some(List(
               "/vctSubscription/0/amountInvested",
               "/vctSubscription/0/reliefClaimed",
@@ -322,7 +320,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
            |""".stripMargin
       )
 
-      val allInvalidvalueFormatRequestBodyJson: JsValue = Json.parse(
+      val allInvalidValueFormatRequestBodyJson: JsValue = Json.parse(
         """
           |{
           |  "vctSubscription":[
@@ -383,7 +381,6 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
       )
 
       val allValueFormatError: MtdError = ValueFormatError.copy(
-        message = "The field should be between 0 and 99999999999.99",
         paths = Some(Seq(
           "/vctSubscription/0/amountInvested",
           "/vctSubscription/0/reliefClaimed",
@@ -400,9 +397,79 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         ))
       )
 
+      val allInvalidNameFormatRequestBodyJson: JsValue = Json.parse(
+        """
+          |{
+          |  "vctSubscription":[
+          |    {
+          |      "uniqueInvestmentRef": "VCTREF",
+          |      "name": "",
+          |      "dateOfInvestment": "2018-04-16",
+          |      "amountInvested": 23312.00,
+          |      "reliefClaimed": 1334.00
+          |    },
+          |    {
+          |      "uniqueInvestmentRef": "VCTREF",
+          |      "name": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+          |      "dateOfInvestment": "2018-04-16",
+          |      "amountInvested": 23312.00,
+          |      "reliefClaimed": 1334.00
+          |    }
+          |  ],
+          |  "eisSubscription":[
+          |    {
+          |      "uniqueInvestmentRef": "XTAL",
+          |      "name": "",
+          |      "knowledgeIntensive": true,
+          |      "dateOfInvestment": "2020-12-12",
+          |      "amountInvested": 23312.00,
+          |      "reliefClaimed": 43432.00
+          |    }
+          |  ],
+          |  "communityInvestment": [
+          |    {
+          |      "uniqueInvestmentRef": "CIREF",
+          |      "name": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+          |      "dateOfInvestment": "2020-12-12",
+          |      "amountInvested": 6442.00,
+          |      "reliefClaimed": 2344.00
+          |    }
+          |  ],
+          |  "seedEnterpriseInvestment": [
+          |    {
+          |      "uniqueInvestmentRef": "123412/1A",
+          |      "companyName": "",
+          |      "dateOfInvestment": "2020-12-12",
+          |      "amountInvested": 123123.22,
+          |      "reliefClaimed": 3432.00
+          |    }
+          |  ],
+          |  "socialEnterpriseInvestment": [
+          |    {
+          |      "uniqueInvestmentRef": "123412/1A",
+          |      "socialEnterpriseName": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
+          |      "dateOfInvestment": "2020-12-12",
+          |      "amountInvested": 123123.22,
+          |      "reliefClaimed": 3432.00
+          |    }
+          |  ]
+          |}
+          |""".stripMargin
+      )
+
+      val allNameFormatError: MtdError = NameFormatError.copy(
+        paths = Some(Seq(
+          "/vctSubscription/0/name",
+          "/vctSubscription/1/name",
+          "/eisSubscription/0/name",
+          "/communityInvestment/0/name",
+          "/seedEnterpriseInvestment/0/companyName",
+          "/socialEnterpriseInvestment/0/socialEnterpriseName"
+        ))
+      )
+
       val allInvalidDateOfInvestmentrequestBodyJson: JsValue = Json.parse(
-        """|
- |{
+        """|{
            |  "vctSubscription":[
            |    {
            |      "uniqueInvestmentRef": "VCTREF",
@@ -461,7 +528,6 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
       )
 
       val allDateOfInvestmentFormatError: MtdError = DateOfInvestmentFormatError.copy(
-        message = "The format of the investment date is invalid",
         paths = Some(List(
           "/vctSubscription/0/dateOfInvestment",
           "/vctSubscription/1/dateOfInvestment",
@@ -494,9 +560,10 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
         val input = Seq(
           ("AA1123A", "2017-18", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "20177", validRequestBodyJson,  BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2017-19", validRequestBodyJson,  BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2017-18", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
+          ("AA123456A", "20177", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2017-19", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2017-18", allInvalidValueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
+          ("AA123456A", "2017-18", allInvalidNameFormatRequestBodyJson, BAD_REQUEST, allNameFormatError),
           ("AA123456A", "2017-18", allInvalidDateOfInvestmentrequestBodyJson, BAD_REQUEST, allDateOfInvestmentFormatError))
 
         input.foreach(args => (validationErrorTest _).tupled(args))

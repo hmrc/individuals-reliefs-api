@@ -21,8 +21,8 @@ import v1.models.errors.{NameFormatError, MtdError}
 
 object NameValidation {
 
-  private val nameRegex =
-    "^[A-Za-z0-9 ]+$"
+  private val nameMaxLength = 105
+  private val nameMinLength = 1
 
   def validateOptional(name: Option[String], path: String): List[MtdError] = {
     name match {
@@ -32,7 +32,8 @@ object NameValidation {
   }
 
   private def validate(name: String, path: String): List[MtdError] = {
-    if (name.matches(nameRegex)) Nil else List(
+    val nameLength = name.length
+    if (nameLength >= nameMinLength && nameLength <= nameMaxLength) NoValidationErrors else List(
       NameFormatError.copy(paths = Some(Seq(path)))
     )
   }
