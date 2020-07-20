@@ -66,7 +66,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |  ],
          |  "seedEnterpriseInvestment": [
          |    {
-         |      "uniqueInvestmentRef": "123412/1A",
+         |      "uniqueInvestmentRef": "1234121A",
          |      "companyName": "Company Inc",
          |      "dateOfInvestment": "2020-12-12",
          |      "amountInvested": 123123.22,
@@ -75,7 +75,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |  ],
          |  "socialEnterpriseInvestment": [
          |    {
-         |      "uniqueInvestmentRef": "123412/1A",
+         |      "uniqueInvestmentRef": "1234121A",
          |      "socialEnterpriseName": "SE Inc",
          |      "dateOfInvestment": "2020-12-12",
          |      "amountInvested": 123123.22,
@@ -157,14 +157,14 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
             |{
             |  "vctSubscription":[
             |    {
-            |      "uniqueInvestmentRef": "VCT???REF",
+            |      "uniqueInvestmentRef": "VCTREF",
             |      "name": "VCT F!!!und X",
             |      "dateOfInvestment": "18-04-16",
             |      "amountInvested": -23312.00,
             |      "reliefClaimed": -1334.00
             |    },
             |    {
-            |      "uniqueInvestmentRef": "VCT????REF",
+            |      "uniqueInvestmentRef": "VCTREF",
             |      "name": "VCT Fund!!! X",
             |      "dateOfInvestment": "18-04-16",
             |      "amountInvested": 999999999993.00,
@@ -173,7 +173,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
             |  ],
             |  "eisSubscription":[
             |    {
-            |      "uniqueInvestmentRef": "XT????AL",
+            |      "uniqueInvestmentRef": "XTAL",
             |      "name": "EIS Fun!!!d X",
             |      "knowledgeIntensive": true,
             |      "dateOfInvestment": "20-12-12",
@@ -183,7 +183,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
             |  ],
             |  "communityInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "CIRE/????F",
+            |      "uniqueInvestmentRef": "CIREF",
             |      "name": "CI !!!X",
             |      "dateOfInvestment": "20-12-12",
             |      "amountInvested": 6442.004,
@@ -192,7 +192,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
             |  ],
             |  "seedEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412????/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "companyName": "C!!!!ompany Inc",
             |      "dateOfInvestment": "20-12-12",
             |      "amountInvested": -123123.22,
@@ -201,7 +201,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
             |  ],
             |  "socialEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "12341????2/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "socialEnterpriseName": "SE I!!!!nc",
             |      "dateOfInvestment": "20-12-12",
             |      "amountInvested": -123123.22,
@@ -300,7 +300,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
            |  ],
            |  "seedEnterpriseInvestment": [
            |    {
-           |      "uniqueInvestmentRef": "123412/1A",
+           |      "uniqueInvestmentRef": "1234121A",
            |      "companyName": "Company Inc",
            |      "dateOfInvestment": "2020-12-12",
            |      "amountInvested": 123123.22,
@@ -309,7 +309,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
            |  ],
            |  "socialEnterpriseInvestment": [
            |    {
-           |      "uniqueInvestmentRef": "123412/1A",
+           |      "uniqueInvestmentRef": "1234121A",
            |      "socialEnterpriseName": "SE Inc",
            |      "dateOfInvestment": "2020-12-12",
            |      "amountInvested": 123123.22,
@@ -360,7 +360,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           |  ],
           |  "seedEnterpriseInvestment": [
           |    {
-          |      "uniqueInvestmentRef": "123412/1A",
+          |      "uniqueInvestmentRef": "1234121A",
           |      "companyName": "Company Inc",
           |      "dateOfInvestment": "2020-12-12",
           |      "amountInvested": -123123.22,
@@ -369,7 +369,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           |  ],
           |  "socialEnterpriseInvestment": [
           |    {
-          |      "uniqueInvestmentRef": "123412/1A",
+          |      "uniqueInvestmentRef": "1234121A",
           |      "socialEnterpriseName": "SE Inc",
           |      "dateOfInvestment": "2020-12-12",
           |      "amountInvested": -123123.22,
@@ -437,7 +437,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           |  ],
           |  "seedEnterpriseInvestment": [
           |    {
-          |      "uniqueInvestmentRef": "123412/1A",
+          |      "uniqueInvestmentRef": "1234121A",
           |      "companyName": "",
           |      "dateOfInvestment": "2020-12-12",
           |      "amountInvested": 123123.22,
@@ -446,7 +446,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           |  ],
           |  "socialEnterpriseInvestment": [
           |    {
-          |      "uniqueInvestmentRef": "123412/1A",
+          |      "uniqueInvestmentRef": "1234121A",
           |      "socialEnterpriseName": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
           |      "dateOfInvestment": "2020-12-12",
           |      "amountInvested": 123123.22,
@@ -465,6 +465,77 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           "/communityInvestment/0/name",
           "/seedEnterpriseInvestment/0/companyName",
           "/socialEnterpriseInvestment/0/socialEnterpriseName"
+        ))
+      )
+
+      val allInvalidUniqueInvestmentRefFormatRequestBodyJson: JsValue = Json.parse(
+        """
+          |{
+          |  "vctSubscription":[
+          |    {
+          |      "uniqueInvestmentRef": "👋",
+          |      "name": "a",
+          |      "dateOfInvestment": "2018-04-16",
+          |      "amountInvested": 23312.00,
+          |      "reliefClaimed": 1334.00
+          |    },
+          |    {
+          |      "uniqueInvestmentRef": "👋",
+          |      "name": "a",
+          |      "dateOfInvestment": "2018-04-16",
+          |      "amountInvested": 23312.00,
+          |      "reliefClaimed": 1334.00
+          |    }
+          |  ],
+          |  "eisSubscription":[
+          |    {
+          |      "uniqueInvestmentRef": "👋",
+          |      "name": "a",
+          |      "knowledgeIntensive": true,
+          |      "dateOfInvestment": "2020-12-12",
+          |      "amountInvested": 23312.00,
+          |      "reliefClaimed": 43432.00
+          |    }
+          |  ],
+          |  "communityInvestment": [
+          |    {
+          |      "uniqueInvestmentRef": "👋",
+          |      "name": "a",
+          |      "dateOfInvestment": "2020-12-12",
+          |      "amountInvested": 6442.00,
+          |      "reliefClaimed": 2344.00
+          |    }
+          |  ],
+          |  "seedEnterpriseInvestment": [
+          |    {
+          |      "uniqueInvestmentRef": "👋",
+          |      "companyName": "a",
+          |      "dateOfInvestment": "2020-12-12",
+          |      "amountInvested": 123123.22,
+          |      "reliefClaimed": 3432.00
+          |    }
+          |  ],
+          |  "socialEnterpriseInvestment": [
+          |    {
+          |      "uniqueInvestmentRef": "👋",
+          |      "socialEnterpriseName": "a",
+          |      "dateOfInvestment": "2020-12-12",
+          |      "amountInvested": 123123.22,
+          |      "reliefClaimed": 3432.00
+          |    }
+          |  ]
+          |}
+          |""".stripMargin
+      )
+
+      val allUniqueInvestmentRefFormatError: MtdError = InvestmentRefFormatError.copy(
+        paths = Some(Seq(
+          "/vctSubscription/0/uniqueInvestmentRef",
+          "/vctSubscription/1/uniqueInvestmentRef",
+          "/eisSubscription/0/uniqueInvestmentRef",
+          "/communityInvestment/0/uniqueInvestmentRef",
+          "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
+          "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
         ))
       )
 
@@ -507,7 +578,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
            |  ],
            |  "seedEnterpriseInvestment": [
            |    {
-           |      "uniqueInvestmentRef": "123412/1A",
+           |      "uniqueInvestmentRef": "1234121A",
            |      "companyName": "Company Inc",
            |      "dateOfInvestment": "0-12-12",
            |      "amountInvested": 123123.22,
@@ -516,7 +587,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
            |  ],
            |  "socialEnterpriseInvestment": [
            |    {
-           |      "uniqueInvestmentRef": "123412/1A",
+           |      "uniqueInvestmentRef": "1234121A",
            |      "socialEnterpriseName": "SE Inc",
            |      "dateOfInvestment": "20-12-12",
            |      "amountInvested": 123123.22,
@@ -564,6 +635,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           ("AA123456A", "2017-19", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "2017-18", allInvalidValueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
           ("AA123456A", "2017-18", allInvalidNameFormatRequestBodyJson, BAD_REQUEST, allNameFormatError),
+          ("AA123456A", "2017-18", allInvalidUniqueInvestmentRefFormatRequestBodyJson, BAD_REQUEST, allUniqueInvestmentRefFormatError),
           ("AA123456A", "2017-18", allInvalidDateOfInvestmentrequestBodyJson, BAD_REQUEST, allDateOfInvestmentFormatError))
 
         input.foreach(args => (validationErrorTest _).tupled(args))

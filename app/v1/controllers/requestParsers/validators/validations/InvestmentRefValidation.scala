@@ -22,10 +22,10 @@ import v1.models.errors.{InvestmentRefFormatError, MtdError}
 object InvestmentRefValidation {
 
   private val investRegex =
-    "^[A-Za-z0-9/]+$"
+    "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
 
   def validate(investmentRef: String, path: String): List[MtdError] = {
-    if (investmentRef.matches(investRegex)) Nil else {
+    if (investmentRef.matches(investRegex)) NoValidationErrors else {
       List(
         InvestmentRefFormatError.copy(paths = Some(Seq(path)))
       )

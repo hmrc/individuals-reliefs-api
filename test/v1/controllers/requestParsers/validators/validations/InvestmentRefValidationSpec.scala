@@ -22,8 +22,8 @@ import v1.models.utils.JsonErrorValidators
 
 class InvestmentRefValidationSpec extends UnitSpec with JsonErrorValidators {
 
-  val validRef: String = "123412/1A"
-  val invalidRef: String = "AA1234*&^%$£BBCBCBC"
+  val validRef: String = "1234121Aa()^"
+  val invalidRef: String = "👋"
 
   "validate" should {
     "return no errors" when {

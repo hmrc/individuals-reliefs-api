@@ -69,14 +69,18 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def validateVctSubscription(vctSubscriptionsItem: VctSubscriptionsItem, arrayIndex: Int): List[MtdError] = {
     List(
-      DateValidation.validateOptional(
-        date = vctSubscriptionsItem.dateOfInvestment,
-        path = s"/vctSubscription/$arrayIndex/dateOfInvestment",
-        error = DateOfInvestmentFormatError
+      InvestmentRefValidation.validate(
+        investmentRef = vctSubscriptionsItem.uniqueInvestmentRef,
+        path = s"/vctSubscription/$arrayIndex/uniqueInvestmentRef"
       ),
       NameValidation.validateOptional(
         name = vctSubscriptionsItem.name,
         path = s"/vctSubscription/$arrayIndex/name"
+      ),
+      DateValidation.validateOptional(
+        date = vctSubscriptionsItem.dateOfInvestment,
+        path = s"/vctSubscription/$arrayIndex/dateOfInvestment",
+        error = DateOfInvestmentFormatError
       ),
       NumberValidation.validateOptional(
         field = vctSubscriptionsItem.amountInvested,
@@ -91,14 +95,18 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def validateEisSubscription(eisSubscriptionsItem: EisSubscriptionsItem, arrayIndex: Int): List[MtdError] = {
     List(
-      DateValidation.validateOptional(
-        date = eisSubscriptionsItem.dateOfInvestment,
-        path = s"/eisSubscription/$arrayIndex/dateOfInvestment",
-        error = DateOfInvestmentFormatError
+      InvestmentRefValidation.validate(
+        investmentRef = eisSubscriptionsItem.uniqueInvestmentRef,
+        path = s"/eisSubscription/$arrayIndex/uniqueInvestmentRef"
       ),
       NameValidation.validateOptional(
         name = eisSubscriptionsItem.name,
         path = s"/eisSubscription/$arrayIndex/name"
+      ),
+      DateValidation.validateOptional(
+        date = eisSubscriptionsItem.dateOfInvestment,
+        path = s"/eisSubscription/$arrayIndex/dateOfInvestment",
+        error = DateOfInvestmentFormatError
       ),
       NumberValidation.validateOptional(
         field = eisSubscriptionsItem.amountInvested,
@@ -114,14 +122,18 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def validateCommunityInvestment(communityInvestmentItem: CommunityInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
-      DateValidation.validateOptional(
-        date = communityInvestmentItem.dateOfInvestment,
-        path = s"/communityInvestment/$arrayIndex/dateOfInvestment",
-        error = DateOfInvestmentFormatError
+      InvestmentRefValidation.validate(
+        investmentRef = communityInvestmentItem.uniqueInvestmentRef,
+        path = s"/communityInvestment/$arrayIndex/uniqueInvestmentRef"
       ),
       NameValidation.validateOptional(
         name = communityInvestmentItem.name,
         path = s"/communityInvestment/$arrayIndex/name"
+      ),
+      DateValidation.validateOptional(
+        date = communityInvestmentItem.dateOfInvestment,
+        path = s"/communityInvestment/$arrayIndex/dateOfInvestment",
+        error = DateOfInvestmentFormatError
       ),
       NumberValidation.validateOptional(
         field = communityInvestmentItem.amountInvested,
@@ -136,14 +148,18 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def validateSeedEnterpriseInvestment(seedEnterpriseInvestmentItem: SeedEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
-      DateValidation.validateOptional(
-        date = seedEnterpriseInvestmentItem.dateOfInvestment,
-        path = s"/seedEnterpriseInvestment/$arrayIndex/dateOfInvestment",
-        error = DateOfInvestmentFormatError
+      InvestmentRefValidation.validate(
+        investmentRef = seedEnterpriseInvestmentItem.uniqueInvestmentRef,
+        path = s"/seedEnterpriseInvestment/$arrayIndex/uniqueInvestmentRef"
       ),
       NameValidation.validateOptional(
         name = seedEnterpriseInvestmentItem.companyName,
         path = s"/seedEnterpriseInvestment/$arrayIndex/companyName"
+      ),
+      DateValidation.validateOptional(
+        date = seedEnterpriseInvestmentItem.dateOfInvestment,
+        path = s"/seedEnterpriseInvestment/$arrayIndex/dateOfInvestment",
+        error = DateOfInvestmentFormatError
       ),
       NumberValidation.validateOptional(
         field = seedEnterpriseInvestmentItem.amountInvested,
@@ -159,14 +175,18 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def validatesocialEnterpriseInvestment(socialEnterpriseInvestmentItem: SocialEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
-      DateValidation.validateOptional(
-        date = socialEnterpriseInvestmentItem.dateOfInvestment,
-        path = s"/socialEnterpriseInvestment/$arrayIndex/dateOfInvestment",
-        error = DateOfInvestmentFormatError
+      InvestmentRefValidation.validate(
+        investmentRef = socialEnterpriseInvestmentItem.uniqueInvestmentRef,
+        path = s"/socialEnterpriseInvestment/$arrayIndex/uniqueInvestmentRef"
       ),
       NameValidation.validateOptional(
         name = socialEnterpriseInvestmentItem.socialEnterpriseName,
         path = s"/socialEnterpriseInvestment/$arrayIndex/socialEnterpriseName"
+      ),
+      DateValidation.validateOptional(
+        date = socialEnterpriseInvestmentItem.dateOfInvestment,
+        path = s"/socialEnterpriseInvestment/$arrayIndex/dateOfInvestment",
+        error = DateOfInvestmentFormatError
       ),
       NumberValidation.validateOptional(
         field = socialEnterpriseInvestmentItem.amountInvested,

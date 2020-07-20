@@ -58,7 +58,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
       |  ],
       |  "seedEnterpriseInvestment": [
       |    {
-      |      "uniqueInvestmentRef": "123412/1A",
+      |      "uniqueInvestmentRef": "1234121A",
       |      "companyName": "Company Inc",
       |      "dateOfInvestment": "2020-12-12",
       |      "amountInvested": 123123.22,
@@ -67,7 +67,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
       |  ],
       |  "socialEnterpriseInvestment": [
       |    {
-      |      "uniqueInvestmentRef": "123412/1A",
+      |      "uniqueInvestmentRef": "1234121A",
       |      "socialEnterpriseName": "SE Inc",
       |      "dateOfInvestment": "2020-12-12",
       |      "amountInvested": 123123.22,
@@ -135,7 +135,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "seedEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "companyName": "Company Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 123123.22,
@@ -144,7 +144,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "socialEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "socialEnterpriseName": "SE Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 123123.22,
@@ -183,7 +183,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "seedEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "companyName": "Company Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 123123.22,
@@ -192,7 +192,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "socialEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "socialEnterpriseName": "SE Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 123123.22,
@@ -247,7 +247,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "seedEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "companyName": "Company Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": -1.00,
@@ -256,7 +256,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "socialEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "socialEnterpriseName": "SE Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": -1.00,
@@ -325,7 +325,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "seedEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "companyName": "Company Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": -1.00,
@@ -334,7 +334,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "socialEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "socialEnterpriseName": "SE Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 1.00,
@@ -398,7 +398,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "seedEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "companyName": "",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 1.00,
@@ -407,7 +407,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "socialEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "socialEnterpriseName": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 1.00,
@@ -470,7 +470,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "seedEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "companyName": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 1.00,
@@ -479,7 +479,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "socialEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "socialEnterpriseName": "",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 1.00,
@@ -496,6 +496,151 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             "/communityInvestment/0/name",
             "/seedEnterpriseInvestment/0/companyName",
             "/socialEnterpriseInvestment/0/socialEnterpriseName"
+          )))
+        )
+      }
+    }
+
+    "return every field in a FORMAT_UNIQUE_INVESTMENT_REFERENCE error" when {
+      "all uniqueInvestmentRef are invalid" in {
+        val badJson = Json.parse(
+          """
+            |{
+            |  "vctSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "name": "a",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |      },
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "name": "a",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |      }
+            |  ],
+            |  "eisSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "name": "a",
+            |      "knowledgeIntensive": true,
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "communityInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "name": "a",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "seedEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "companyName": "a",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "socialEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "socialEnterpriseName": "a",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ]
+            |}
+        """.stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+          InvestmentRefFormatError.copy(paths = Some(Seq(
+            "/vctSubscription/0/uniqueInvestmentRef",
+            "/vctSubscription/1/uniqueInvestmentRef",
+            "/eisSubscription/0/uniqueInvestmentRef",
+            "/communityInvestment/0/uniqueInvestmentRef",
+            "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
+            "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
+          )))
+        )
+      }
+    }
+    "return only some fields in a FORMAT_UNIQUE_INVESTMENT_REFERENCE error" when {
+      "only some fields are invalid" in {
+        val badJson = Json.parse(
+          """
+            |{
+            |  "vctSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "name": "a",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |      },
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "name": "a",
+            |      "dateOfInvestment": "2018-04-16",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |      }
+            |  ],
+            |  "eisSubscription":[
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "name": "a",
+            |      "knowledgeIntensive": true,
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "communityInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "name": "a",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "seedEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "companyName": "a",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ],
+            |  "socialEnterpriseInvestment": [
+            |    {
+            |      "uniqueInvestmentRef": "👋",
+            |      "socialEnterpriseName": "a",
+            |      "dateOfInvestment": "2020-12-12",
+            |      "amountInvested": 1.00,
+            |      "reliefClaimed": 1.00
+            |    }
+            |  ]
+            |}
+        """.stripMargin)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+          InvestmentRefFormatError.copy(paths = Some(Seq(
+            "/vctSubscription/0/uniqueInvestmentRef",
+            "/vctSubscription/1/uniqueInvestmentRef",
+            "/eisSubscription/0/uniqueInvestmentRef",
+            "/communityInvestment/0/uniqueInvestmentRef",
+            "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
+            "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
           )))
         )
       }
@@ -536,7 +681,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "seedEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "companyName": "Company Inc",
             |      "dateOfInvestment": "04-16-2018",
             |      "amountInvested": 123123.22,
@@ -545,7 +690,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "socialEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "socialEnterpriseName": "SE Inc",
             |      "dateOfInvestment": "04-16-2018",
             |      "amountInvested": 123123.22,
@@ -600,7 +745,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "seedEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "companyName": "Company Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": 123123.22,
@@ -609,7 +754,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
             |  ],
             |  "socialEnterpriseInvestment": [
             |    {
-            |      "uniqueInvestmentRef": "123412/1A",
+            |      "uniqueInvestmentRef": "1234121A",
             |      "socialEnterpriseName": "SE Inc",
             |      "dateOfInvestment": "2020-12-12",
             |      "amountInvested": -1,
