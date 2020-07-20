@@ -22,7 +22,7 @@ import v1.models.errors.CustomerReferenceFormatError
 class CustomerReferenceValidationSpec extends UnitSpec {
 
   val validReference = Some("HJ812JJMNS89SJ09KLJNBH89O")
-  val invalidReference = Some("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+  val invalidReference = Some("👋")
 
   "validate" should {
     "return no errors" when {

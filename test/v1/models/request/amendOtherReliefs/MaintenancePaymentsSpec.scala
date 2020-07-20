@@ -22,13 +22,13 @@ import v1.models.utils.JsonErrorValidators
 
 class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators{
   val maintenancePayments = MaintenancePayments(
-    "myRef",
+    Some("myRef"),
     Some("Hilda"),
     Some("2000-01-01"),
     Some(222.22))
 
   val noOptionsMaintenancePayments = MaintenancePayments(
-    "myRef",
+    None,
     None,
     None,
     None
@@ -36,19 +36,17 @@ class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators{
 
   val json = Json.parse(
   """
-    |    {
-    |        "customerReference": "myRef",
-    |        "exSpouseName" : "Hilda",
-    |        "exSpouseDateOfBirth": "2000-01-01",
-    |        "amount": 222.22
-    |      }
+    |{
+    |  "customerReference": "myRef",
+    |  "exSpouseName" : "Hilda",
+    |  "exSpouseDateOfBirth": "2000-01-01",
+    |  "amount": 222.22
+    |}
     |  """.stripMargin)
 
   val noOptionsJson = Json.parse(
     """
-      |    {
-      |        "customerReference": "myRef"
-      |      }
+      |{}
       |  """.stripMargin)
 
   "reads" when {
@@ -76,6 +74,29 @@ class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators{
     "passed a model with no optional fields" should {
       "return a json with no optional fields" in {
         Json.toJson(noOptionsMaintenancePayments) shouldBe noOptionsJson
+      }
+    }
+  }
+
+  "isEmpty" should {
+    val emptyModel = MaintenancePayments(customerReference = None, exSpouseName = None, exSpouseDateOfBirth = None, amount = None)
+    "return true" when {
+      "all fields are None" in {
+        emptyModel.isEmpty shouldBe true
+      }
+    }
+    "return false" when {
+      "customerReference is provided" in {
+        emptyModel.copy(customerReference = Some("")).isEmpty shouldBe false
+      }
+      "exSpouseName is provided" in {
+        emptyModel.copy(exSpouseName = Some("")).isEmpty shouldBe false
+      }
+      "exSpouseDateOfBirth is provided" in {
+        emptyModel.copy(exSpouseDateOfBirth = Some("")).isEmpty shouldBe false
+      }
+      "amount is provided" in {
+        emptyModel.copy(amount = Some(0)).isEmpty shouldBe false
       }
     }
   }

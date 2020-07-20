@@ -36,7 +36,7 @@ case class AmendOtherReliefsBody(nonDeductableLoanInterest: Option[NonDeductable
     qualifyingLoanInterestPayments.isEmpty
 
   private def maintenancePaymentsIsEmpty: Boolean =
-    maintenancePayments.isDefined && maintenancePayments.get.isEmpty
+    maintenancePayments.isDefined && (maintenancePayments.get.isEmpty || maintenancePayments.get.exists(_.isEmpty))
 
   private def postCessationTradeReliefAndCertainOtherLossesIsEmpty: Boolean =
     postCessationTradeReliefAndCertainOtherLosses.isDefined && postCessationTradeReliefAndCertainOtherLosses.get.isEmpty

@@ -23,43 +23,42 @@ import v1.models.utils.JsonErrorValidators
 class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidators {
 
   val qualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
-    "myRef",
+    Some("myRef"),
     Some("Maurice"),
     763.00
   )
 
-  val noLendernameQualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
-    "myRef",
+  val noOptionalFieldsQualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
+    None,
     None,
     763.00
   )
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myRef",
-      |        "lenderName": "Maurice",
-      |        "reliefClaimed": 763.00
-      |      }""".stripMargin
+      |  "customerReference": "myRef",
+      |  "lenderName": "Maurice",
+      |  "reliefClaimed": 763.00
+      |}""".stripMargin
   )
 
-  val noLenderNameJson = Json.parse(
+  val noOptionalFieldsJson = Json.parse(
     """{
-      |        "customerReference": "myRef",
-      |        "reliefClaimed": 763.00
-      |      }""".stripMargin
+      |  "reliefClaimed": 763.00
+      |}""".stripMargin
   )
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        qualifyingLoanInterestPayments shouldBe json.as[QualifyingLoanInterestPayments]
+        json.as[QualifyingLoanInterestPayments] shouldBe qualifyingLoanInterestPayments
       }
     }
   }
   "reads from a JSON with no lender name" when {
     "passed a JSON with no customer lender name" should {
       "return a model with no customer lender name" in {
-        noLendernameQualifyingLoanInterestPayments shouldBe noLenderNameJson.as[QualifyingLoanInterestPayments]
+        noOptionalFieldsJson.as[QualifyingLoanInterestPayments] shouldBe noOptionalFieldsQualifyingLoanInterestPayments
       }
     }
   }
@@ -73,7 +72,7 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
   "writes from a model with no lender name" when {
     "passed a model with no customer lender name" should {
       "return a JSON with no customer lender name" in {
-        Json.toJson(noLendernameQualifyingLoanInterestPayments) shouldBe noLenderNameJson
+        Json.toJson(noOptionalFieldsQualifyingLoanInterestPayments) shouldBe noOptionalFieldsJson
       }
     }
   }

@@ -96,10 +96,10 @@ class AmendOtherReliefRequestParserSpec extends UnitSpec {
             Some(NonDeductableLoanInterest(Some("myref"), 763.00)),
             Some(PayrollGiving(Some("myref"), 154.00)),
             Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
-            Some(Seq(MaintenancePayments("myref", Some("Hilda"), Some("2000-01-01"), Some(222.22)))),
-            Some(Seq(PostCessationTradeReliefAndCertainOtherLosses("myref", Some("ACME Inc"), Some("2019-08-10"), Some("Widgets Manufacturer"), Some("AB12412/A12"), Some(222.22)))),
+            Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), Some(222.22)))),
+            Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(Some("myref"), Some("ACME Inc"), Some("2019-08-10"), Some("Widgets Manufacturer"), Some("AB12412/A12"), Some(222.22)))),
             Some(AnnualPaymentsMade(Some("myref"), 763.00)),
-            Some(Seq(QualifyingLoanInterestPayments("myref", Some("Maurice"), 763.00))))))
+            Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00))))))
       }
     }
     "return an ErrorWrapper" when {

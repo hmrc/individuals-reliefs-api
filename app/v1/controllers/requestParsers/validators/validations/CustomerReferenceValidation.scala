@@ -28,7 +28,9 @@ object CustomerReferenceValidation {
   }
 
   private def validate(customerRef: String, path: String): List[MtdError] = {
-    if (customerRef.length <= 25) {
+    val customerRefRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
+
+    if (customerRef.matches(customerRefRegex)) {
       NoValidationErrors
     } else {
       List(

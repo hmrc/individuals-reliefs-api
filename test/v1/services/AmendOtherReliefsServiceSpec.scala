@@ -45,12 +45,12 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
       Some("myref"),
       222.22)),
     Some(Seq(MaintenancePayments(
-      "myref",
+      Some("myRef"),
       Some("Hilda"),
       Some("2000-01-01"),
       Some(222.22)))),
     Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
-      "myref",
+      Some("myRef"),
       Some("ACME Inc"),
       Some("2019-08-10"),
       Some("Widgets Manufacturer"),
@@ -60,7 +60,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
       Some("myref"),
       763.00)),
     Some(Seq(QualifyingLoanInterestPayments(
-      "myref",
+      Some("myRef"),
       Some("Maurice"),
       763.00)))
   )

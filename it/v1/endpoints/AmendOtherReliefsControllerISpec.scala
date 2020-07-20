@@ -150,20 +150,20 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           """
             |{
             |  "nonDeductableLoanInterest": {
-            |        "customerReference": "myihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "👋",
             |        "reliefClaimed": -763.00
             |      },
             |  "payrollGiving": {
-            |        "customerReference": "myihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "👋",
             |        "reliefClaimed": -154.00
             |      },
             |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-            |        "customerReference": "myihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "👋",
             |        "amount": -222.22
             |      },
             |  "maintenancePayments": [
             |    {
-            |        "customerReference": "myihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "👋",
             |        "exSpouseName" : "Hilda",
             |        "exSpouseDateOfBirth": "2000-01",
             |        "amount": -222.22
@@ -171,7 +171,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
             |  ],
             |  "postCessationTradeReliefAndCertainOtherLosses": [
             |    {
-            |        "customerReference": "myrefmyihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "👋",
             |        "businessName": "ACME Inc",
             |        "dateBusinessCeased": "2019-08",
             |        "natureOfTrade": "Widgets Manufacturer",
@@ -180,12 +180,12 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
             |      }
             |  ],
             |  "annualPaymentsMade": {
-            |        "customerReference": "myrefmyihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "👋",
             |        "reliefClaimed": -763.00
             |      },
             |  "qualifyingLoanInterestPayments": [
             |    {
-            |        "customerReference": "myrefmyihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "👋",
             |        "lenderName": "Maurice",
             |        "reliefClaimed": -763.00
             |      }
@@ -388,20 +388,20 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         """
           |{
           |  "nonDeductableLoanInterest": {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "👋",
           |        "reliefClaimed": 763.00
           |      },
           |  "payrollGiving": {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "👋",
           |        "reliefClaimed": 154.00
           |      },
           |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "👋",
           |        "amount": 222.22
           |      },
           |  "maintenancePayments": [
           |    {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "👋",
           |        "exSpouseName" : "Hilda",
           |        "exSpouseDateOfBirth": "2000-01-01",
           |        "amount": 222.22
@@ -409,7 +409,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ],
           |  "postCessationTradeReliefAndCertainOtherLosses": [
           |    {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "👋",
           |        "businessName": "ACME Inc",
           |        "dateBusinessCeased": "2019-08-10",
           |        "natureOfTrade": "Widgets Manufacturer",
@@ -418,12 +418,12 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |      }
           |  ],
           |  "annualPaymentsMade": {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "👋",
           |        "reliefClaimed": 763.00
           |      },
           |  "qualifyingLoanInterestPayments": [
           |    {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "👋",
           |        "lenderName": "Maurice",
           |        "reliefClaimed": 763.00
           |      }

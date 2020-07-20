@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with JsonErrorValidators {
   val postCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
-    "myRef",
+    Some("myRef"),
     Some("ACME Inc"),
     Some("2019-08-10"),
     Some("Widgets Manufacturer"),
@@ -31,7 +31,7 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
   )
 
   val noOptionsPostCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
-    "myRef",
+    Some("myRef"),
     None,
     None,
     None,

@@ -18,7 +18,7 @@ package v1.models.request.amendOtherReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class PostCessationTradeReliefAndCertainOtherLosses(customerReference: String,
+case class PostCessationTradeReliefAndCertainOtherLosses(customerReference: Option[String],
                                                          businessName: Option[String],
                                                          dateBusinessCeased: Option[String],
                                                          natureOfTrade: Option[String],

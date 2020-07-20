@@ -23,13 +23,13 @@ import v1.models.utils.JsonErrorValidators
 class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidators {
 
   val qualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
-    "myRef",
+    Some("myRef"),
     Some("Maurice"),
     763.00
   )
 
   val noLendernameQualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
-    "myRef",
+    Some("myRef"),
     None,
     763.00
   )

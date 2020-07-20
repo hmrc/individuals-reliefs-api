@@ -313,20 +313,20 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
           """
             |{
             |  "nonDeductableLoanInterest": {
-            |    "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |    "customerReference": "👋",
             |    "reliefClaimed": 763.00
             |  },
             |  "payrollGiving": {
-            |    "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |    "customerReference": "👋",
             |    "reliefClaimed": 154.00
             |  },
             |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-            |    "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |    "customerReference": "👋",
             |    "amount": 222.22
             |  },
             |  "maintenancePayments": [
             |    {
-            |      "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |      "customerReference": "👋",
             |      "exSpouseName" : "Hilda",
             |      "exSpouseDateOfBirth": "2000-01-01",
             |      "amount": 222.22
@@ -334,7 +334,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             |  ],
             |  "postCessationTradeReliefAndCertainOtherLosses": [
             |    {
-            |      "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |      "customerReference": "👋",
             |      "businessName": "ACME Inc",
             |      "dateBusinessCeased": "2019-08-10",
             |      "natureOfTrade": "Widgets Manufacturer",
@@ -343,12 +343,12 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             |    }
             |  ],
             |  "annualPaymentsMade": {
-            |    "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |    "customerReference": "👋",
             |    "reliefClaimed": 763.00
             |  },
             |  "qualifyingLoanInterestPayments": [
             |    {
-            |      "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |      "customerReference": "👋",
             |      "lenderName": "Maurice",
             |      "reliefClaimed": 763.00
             |    }
@@ -560,20 +560,20 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
           """
             |{
             |  "nonDeductableLoanInterest": {
-            |    "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |    "customerReference": "👋",
             |    "reliefClaimed": -1.00
             |  },
             |  "payrollGiving": {
-            |    "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |    "customerReference": "👋",
             |    "reliefClaimed": -1.00
             |  },
             |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-            |    "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |    "customerReference": "👋",
             |    "amount": -1.00
             |  },
             |  "maintenancePayments": [
             |    {
-            |      "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |      "customerReference": "👋",
             |      "exSpouseName" : "Hilda",
             |      "exSpouseDateOfBirth": "01-01-230",
             |      "amount": -1.00
@@ -581,7 +581,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             |  ],
             |  "postCessationTradeReliefAndCertainOtherLosses": [
             |    {
-            |      "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |      "customerReference": "👋",
             |      "businessName": "ACME Inc",
             |      "dateBusinessCeased": "01-01-230",
             |      "natureOfTrade": "Widgets Manufacturer",
@@ -590,12 +590,12 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             |    }
             |  ],
             |  "annualPaymentsMade": {
-            |    "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |    "customerReference": "👋",
             |    "reliefClaimed": -1.00
             |  },
             |  "qualifyingLoanInterestPayments": [
             |    {
-            |      "customerReference": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            |      "customerReference": "👋",
             |      "lenderName": "Maurice",
             |      "reliefClaimed": -1.00
             |    }

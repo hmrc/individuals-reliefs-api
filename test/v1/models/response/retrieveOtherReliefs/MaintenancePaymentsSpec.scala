@@ -22,13 +22,13 @@ import v1.models.utils.JsonErrorValidators
 
 class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators{
   val maintenancePayments = MaintenancePayments(
-    "myRef",
+    Some("myRef"),
     Some("Hilda"),
     Some("2000-01-01"),
     Some(222.22))
 
   val noOptionsMaintenancePayments = MaintenancePayments(
-    "myRef",
+    Some("myRef"),
     None,
     None,
     None
