@@ -1,0 +1,20 @@
+is:
+  - headers.acceptJson
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.formatTaxYear
+  - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTaxYearNotSupported
+  - errors.clientOrAgentNotAuthorised
+  - errors.notFound
+displayName: Delete Pension Reliefs [test only]
+description: "This endpoint allows the developer to delete Tax relief on pension contributions for a tax year. A National Insurance number and tax year must be provided."
+(annotations.sandboxData): !include scenarios/delete_relief_pensions.md
+(annotations.scope): "write:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+responses:
+  204:
+    headers:
+      X-correlationId:
+        example: c75f40a6-a3df-4429-a697-471eeec46435
+        description: Unique ID for operation tracking <br> String, 36 characters.
