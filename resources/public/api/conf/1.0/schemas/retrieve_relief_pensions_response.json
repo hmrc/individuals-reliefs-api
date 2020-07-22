@@ -11,7 +11,7 @@
     },
     "pensionReliefs": {
       "type": "object",
-      "description": "Object that holds the key value for tax relief you get on your pension contributions.",
+      "description": "Object that holds the key value for tax relief on pension contributions.",
       "properties": {
         "regularPensionContributions": {
           "type": "number",
