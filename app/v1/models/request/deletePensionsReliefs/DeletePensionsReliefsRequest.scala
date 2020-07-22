@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.deletePensionReliefs
+package v1.models.request.deletePensionsReliefs
 
 import uk.gov.hmrc.domain.Nino
 
-case class DeletePensionReliefsRequest(nino: Nino, taxYear: String)
+case class DeletePensionsReliefsRequest(nino: Nino, taxYear: String)

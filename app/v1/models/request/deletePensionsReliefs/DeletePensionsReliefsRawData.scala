@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.deletePensionReliefs
+package v1.models.request.deletePensionsReliefs
 
 import v1.models.request.RawData
 
-case class DeletePensionReliefsRawData(nino: String, taxYear: String) extends RawData
+case class DeletePensionsReliefsRawData(nino: String, taxYear: String) extends RawData
