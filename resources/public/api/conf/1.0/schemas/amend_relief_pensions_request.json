@@ -6,7 +6,7 @@
   "properties": {
     "pensionReliefs": {
       "type": "object",
-      "description": "Object that holds the key value for tax relief you get on your pension contributions.",
+      "description": "Object that holds the key value for tax relief on pension contributions.",
       "properties": {
         "regularPensionContributions": {
           "type": "number",
@@ -15,12 +15,12 @@
         },
         "oneOffPensionContributionsPaid": {
           "type": "number",
-          "description": "The total amount of the one off pensions contribution.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "description": "The amount of the one off pensions contribution.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "1999.99"
         },
         "retirementAnnuityPayments": {
           "type": "number",
-          "description": "The total amount of retirement annuity received.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "description": "The amount of retirement annuity received.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "example": "1999.99"
         },
         "paymentToEmployersSchemeNoTaxRelief": {
