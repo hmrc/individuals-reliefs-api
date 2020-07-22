@@ -3,24 +3,24 @@ is:
   - headers.testScenarioHeader
   - errors.formatNino
   - errors.formatTaxYear
-  - errors.r
   - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTaxYearNotSupported
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Retrieve Foreign Reliefs [test only]
-description: 'This endpoint allows a developer to retrieve foreign reliefs. A National Insurance number and tax year must be provided.'
-(annotations.sandboxData): !include scenarios/retrieve_reliefs_foreign.md
+displayName: Retrieve Pension Reliefs [test only]
+description: 'This endpoint allows a developer to retrieve pension reliefs. A National Insurance number and tax year must be provided.'
+(annotations.sandboxData): !include scenarios/retrieve_relief_pensions.md
 (annotations.scope): "read:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "read:self-assessment" ] } ]
 responses:
  200:
    body:
      application/json:
-       type: !include schemas/retrieve_relief_foreign_response.json
+       type: !include schemas/retrieve_relief_pensions_response.json
        examples:
          example-1:
            description: Example response
-           value: !include examples/retrieve_reliefs_foreign_response.json
+           value: !include examples/retrieve_relief_pensions_response.json
    headers:
      X-CorrelationId:
        example: c75f40a6-a3df-4429-a697-471eeec46435
