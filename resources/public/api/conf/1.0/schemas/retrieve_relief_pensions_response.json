@@ -50,7 +50,7 @@
           "href": {
             "description": "The relative url of the endpoint",
             "type": "string",
-            "example": "/individuals/reliefs/foreign/{nino}/{taxYear}"
+            "example": "/individuals/reliefs/pensions/{nino}/{taxYear}"
           },
           "method": {
             "description": "The HTTP method type for the endpoint",
