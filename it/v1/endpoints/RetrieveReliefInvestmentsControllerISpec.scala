@@ -89,12 +89,12 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         |  {
         |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
         |    "method": "PUT",
-        |    "rel": "amend-relief-investments"
+        |    "rel": "amend-reliefs-investments"
         |  },
         |  {
         |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
         |    "method": "DELETE",
-        |    "rel": "delete-relief-investments"
+        |    "rel": "delete-reliefs-investments"
         |  }
         |]
         |}

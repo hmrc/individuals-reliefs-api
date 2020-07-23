@@ -22,7 +22,7 @@ import v1.models.hateoas.{HateoasData, Link}
 
 object AmendReliefInvestmentsResponse extends HateoasLinks {
 
-  implicit object AmendOrderLinksFactory extends HateoasLinksFactory[Unit, AmendReliefInvestmentsHateoasData] {
+  implicit object LinksFactory extends HateoasLinksFactory[Unit, AmendReliefInvestmentsHateoasData] {
     override def links(appConfig: AppConfig, data: AmendReliefInvestmentsHateoasData): Seq[Link] = {
       import data._
       Seq(

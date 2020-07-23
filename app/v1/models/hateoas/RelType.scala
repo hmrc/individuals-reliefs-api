@@ -18,8 +18,8 @@ package v1.models.hateoas
 
 object RelType {
   val SELF = "self"
-  val AMEND_RELIEF_INVESTMENTS = "amend-relief-investments"
-  val DELETE_RELIEF_INVESTMENTS = "delete-relief-investments"
+  val AMEND_RELIEF_INVESTMENTS = "amend-reliefs-investments"
+  val DELETE_RELIEF_INVESTMENTS = "delete-reliefs-investments"
   val AMEND_RELIEFS_FOREIGN = "amend-reliefs-foreign"
   val DELETE_RELIEFS_FOREIGN = "delete-reliefs-foreign"
   val AMEND_RELIEFS_OTHER = "amend-reliefs-other"

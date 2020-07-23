@@ -30,7 +30,7 @@ case class RetrieveReliefInvestmentsBody(vctSubscription: Seq[VctSubscriptionsIt
 object RetrieveReliefInvestmentsBody extends HateoasLinks {
   implicit val format: OFormat[RetrieveReliefInvestmentsBody] = Json.format[RetrieveReliefInvestmentsBody]
 
-  implicit object RetrieveOrderLinksFactory extends HateoasLinksFactory[RetrieveReliefInvestmentsBody, RetrieveReliefInvestmentsHateoasData] {
+  implicit object LinksFactory extends HateoasLinksFactory[RetrieveReliefInvestmentsBody, RetrieveReliefInvestmentsHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveReliefInvestmentsHateoasData): Seq[Link] = {
       import data._
       Seq(

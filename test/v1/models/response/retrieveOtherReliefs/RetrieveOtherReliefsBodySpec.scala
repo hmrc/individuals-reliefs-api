@@ -16,11 +16,14 @@
 
 package v1.models.response.retrieveOtherReliefs
 
+import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.models.hateoas.Link
+import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.utils.JsonErrorValidators
 
-class RetrieveOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
+class RetrieveOtherReliefsBodySpec extends UnitSpec with MockAppConfig {
   val retrieveOtherReliefsBody = RetrieveOtherReliefsBody(
     Some(NonDeductableLoanInterest(
       Some("myref"),
@@ -134,6 +137,20 @@ class RetrieveOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
       "return an empty JSON" in {
         Json.toJson(emptyAmendOtherReliefsBody) shouldBe emptyJson
       }
+    }
+  }
+  "LinksFactory" should {
+    "return the correct links" in {
+      val nino = "mynino"
+      val taxYear = "mytaxyear"
+
+      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
+      RetrieveOtherReliefsBody.LinksFactory.links(mockAppConfig, RetrieveOtherReliefsHateoasData(nino, taxYear)) shouldBe
+        Seq(
+          Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
+          Link(s"/my/context/other/$nino/$taxYear", PUT, "amend-reliefs-other"),
+          Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
+        )
     }
   }
 }

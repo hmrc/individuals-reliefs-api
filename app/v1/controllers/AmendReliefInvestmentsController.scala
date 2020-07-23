@@ -27,7 +27,7 @@ import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
 import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
-import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsResponse.AmendOrderLinksFactory
+import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsResponse.LinksFactory
 import v1.services.{AmendReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}

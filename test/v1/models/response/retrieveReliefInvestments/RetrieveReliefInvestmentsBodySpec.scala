@@ -16,11 +16,14 @@
 
 package v1.models.response.retrieveReliefInvestments
 
+import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.models.hateoas.Link
+import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.utils.JsonErrorValidators
 
-class RetrieveReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
+class RetrieveReliefInvestmentsBodySpec extends UnitSpec with MockAppConfig {
   val retrieveReliefInvestmentsBody = RetrieveReliefInvestmentsBody(
     Seq(VctSubscriptionsItem(
       "VCTREF",
@@ -125,6 +128,20 @@ class RetrieveReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidator
       "return valid json" in {
         Json.toJson(retrieveReliefInvestmentsBody) shouldBe json
       }
+    }
+  }
+  "LinksFactory" should {
+    "return the correct links" in {
+      val nino = "mynino"
+      val taxYear = "mytaxyear"
+
+      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
+      RetrieveReliefInvestmentsBody.LinksFactory.links(mockAppConfig, RetrieveReliefInvestmentsHateoasData(nino, taxYear)) shouldBe
+        Seq(
+          Link(s"/my/context/investment/$nino/$taxYear", GET, "self"),
+          Link(s"/my/context/investment/$nino/$taxYear", PUT, "amend-reliefs-investments"),
+          Link(s"/my/context/investment/$nino/$taxYear", DELETE, "delete-reliefs-investments")
+        )
     }
   }
 }
