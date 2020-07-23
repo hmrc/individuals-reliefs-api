@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrievePensionReliefs
+package v1.models.response.retrievePensionsReliefs
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class PensionReliefsSpec extends UnitSpec with JsonErrorValidators {
+class PensionsReliefsSpec extends UnitSpec with JsonErrorValidators {
 
-  val pensionReliefsItem = PensionReliefs(
+  val pensionsReliefsItem = PensionsReliefs(
     Some(1999.99),
     Some(1999.99),
     Some(1999.99),
@@ -46,14 +46,14 @@ class PensionReliefsSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        json.as[PensionReliefs] shouldBe pensionReliefsItem
+        json.as[PensionsReliefs] shouldBe pensionsReliefsItem
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(pensionReliefsItem) shouldBe json
+        Json.toJson(pensionsReliefsItem) shouldBe json
       }
     }
   }

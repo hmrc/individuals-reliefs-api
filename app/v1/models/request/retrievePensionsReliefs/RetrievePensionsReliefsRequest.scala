@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrievePensionReliefs
+package v1.models.request.retrievePensionsReliefs
 
-import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.domain.Nino
 
-case class RetrievePensionReliefsResponse(submittedOn: String, pensionReliefs: PensionReliefs)
-
-object RetrievePensionReliefsResponse {
-  implicit val format: OFormat[RetrievePensionReliefsResponse] = Json.format[RetrievePensionReliefsResponse]
-}
+case class RetrievePensionsReliefsRequest(nino: Nino, taxYear: String)

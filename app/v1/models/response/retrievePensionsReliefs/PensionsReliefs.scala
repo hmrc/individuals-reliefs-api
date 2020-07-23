@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.retrievePensionReliefs
+package v1.models.response.retrievePensionsReliefs
 
-import v1.models.request.RawData
+import play.api.libs.json.{Json, OFormat}
 
-case class RetrievePensionReliefsRawData(nino: String, taxYear: String) extends RawData
+case class PensionsReliefs(regularPensionContributions: Option[BigDecimal],
+                           oneOffPensionContributionsPaid: Option[BigDecimal],
+                           retirementAnnuityPayments: Option[BigDecimal],
+                           paymentToEmployersSchemeNoTaxRelief: Option[BigDecimal],
+                           overseasPensionSchemeContributions: Option[BigDecimal])
+object PensionsReliefs {
+  implicit val format: OFormat[PensionsReliefs] = Json.format[PensionsReliefs]
+}
