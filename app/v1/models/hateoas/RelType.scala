@@ -24,4 +24,6 @@ object RelType {
   val DELETE_RELIEFS_FOREIGN = "delete-reliefs-foreign"
   val AMEND_RELIEFS_OTHER = "amend-reliefs-other"
   val DELETE_RELIEFS_OTHER = "delete-reliefs-other"
+  val AMEND_RELIEFS_PENSIONS = "amend-reliefs-pensions"
+  val DELETE_RELIEFS_PENSIONS = "delete-reliefs-pensions"
 }
