@@ -54,12 +54,12 @@
     {
       "href":"/individuals/reliefs/investment/TC663795B/2019-20",
       "method":"PUT",
-      "rel":"amend-relief-investments"
+      "rel":"amend-reliefs-investments"
     },
     {
       "href":"/individuals/reliefs/investment/TC663795B/2019-20",
       "method":"DELETE",
-      "rel":"delete-relief-investments"
+      "rel":"delete-reliefs-investments"
     }
   ]
 }
