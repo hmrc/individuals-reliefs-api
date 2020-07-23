@@ -46,4 +46,6 @@ package object services {
 
   type AmendPensionsReliefsServiceOutcome = ServiceOutcome[Unit]
 
+  type DeletePensionsReliefsServiceOutcome = ServiceOutcome[Unit]
+
 }
