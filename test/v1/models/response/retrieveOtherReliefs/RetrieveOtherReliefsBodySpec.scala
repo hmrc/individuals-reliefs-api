@@ -21,7 +21,6 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.hateoas.Link
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
-import v1.models.utils.JsonErrorValidators
 
 class RetrieveOtherReliefsBodySpec extends UnitSpec with MockAppConfig {
   val retrieveOtherReliefsBody = RetrieveOtherReliefsBody(
