@@ -16,8 +16,10 @@
 
 package v1.controllers.requestParsers
 
-import cats.Inject
-import uk.gov.hmrc.auth.core.Nino
+import javax.inject.Inject
+import uk.gov.hmrc.domain.Nino
+import v1.controllers.requestParsers.validators.RetrievePensionsReliefsValidator
+import v1.models.request.retrievePensionsReliefs.{RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest}
 
 class RetrievePensionsReliefsRequestParser @Inject()(val validator: RetrievePensionsReliefsValidator)
   extends RequestParser[RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest] {

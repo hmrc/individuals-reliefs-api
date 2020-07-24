@@ -16,9 +16,11 @@
 
 package v1.mocks.validators
 
-import org.scalamock.handlers.{CallHandler, CallHandler1}
+import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.validators.RetrievePensionsReliefsValidator
+import v1.models.errors.MtdError
+import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRawData
 
 class MockRetrievePensionsReliefsValidator extends MockFactory {
 
@@ -26,9 +28,9 @@ class MockRetrievePensionsReliefsValidator extends MockFactory {
 
   object MockRetrievePensionsReliefsValidator {
 
-    def validate(data: RetrievePensionsReliefsRawData): CallHandler1[RetrievePensionsReliefsRawData]
-    (mockValidator
-      .validate(_: RetrievePensionsReliefsRawData))
-      .expects(data)
+    def validate(data: RetrievePensionsReliefsRawData): CallHandler1[RetrievePensionsReliefsRawData, List[MtdError]] = {
+      (mockValidator
+        .validate(_: RetrievePensionsReliefsRawData)).expects(data)
+    }
   }
 }

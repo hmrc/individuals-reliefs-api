@@ -18,13 +18,14 @@ package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
 import v1.models.errors.MtdError
+import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRawData
 
 class RetrievePensionsReliefsValidator extends Validator[RetrievePensionsReliefsRawData] {
 
 
-  private val validationSet = List(parameterForomatValidation)
+  private val validationSet = List(parameterFormatValidation)
 
-  private def parameterForomatValidation: RetrievePensionsRawData => List[List[MtdError]] = data => {
+  private def parameterFormatValidation: RetrievePensionsReliefsRawData => List[List[MtdError]] = data => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear)

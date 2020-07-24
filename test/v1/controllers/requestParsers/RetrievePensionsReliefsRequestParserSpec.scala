@@ -17,16 +17,16 @@
 package v1.controllers.requestParsers
 
 import support.UnitSpec
-import uk.gov.hmrc.auth.core.Nino
-import v1.controllers.requestParsers.validators.validations.TaxYearValidation
+import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.{MockRetrieveForeignReliefsValidator, MockRetrievePensionsReliefsValidator}
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.retrievePensionsReliefs.{RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest}
 
 class RetrievePensionsReliefsRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
   val taxYear = "2018-19"
 
-  val inputData = RetrievePensionsRawData(nino, taxYear)
+  val inputData = RetrievePensionsReliefsRawData(nino, taxYear)
 
   trait Test extends MockRetrievePensionsReliefsValidator {
     lazy val parser = new RetrievePensionsReliefsRequestParser(mockValidator)
@@ -50,7 +50,15 @@ class RetrievePensionsReliefsRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
-        Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
+        Left(ErrorWrapper(None, NinoFormatError, None))
+      }
+
+      "multiple validation errors occur" in new Test {
+        MockRetrievePensionsReliefsValidator.validate(inputData)
+          .returns(List(NinoFormatError, TaxYearFormatError))
+
+        parser.parseRequest(inputData) shouldBe
+          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

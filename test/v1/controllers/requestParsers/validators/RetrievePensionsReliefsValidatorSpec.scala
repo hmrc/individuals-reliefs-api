@@ -18,6 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
 import v1.models.errors.{NinoFormatError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRawData
 
 class RetrievePensionsReliefsValidatorSpec extends UnitSpec {
 
@@ -45,6 +46,11 @@ class RetrievePensionsReliefsValidatorSpec extends UnitSpec {
     "return RuleTaxYearRangeInvalidError" when {
       "the tax year range exceeds 1" in {
         validator.validate(RetrievePensionsReliefsRawData(validNino, "2019-21")) shouldBe List(RuleTaxYearRangeInvalidError)
+      }
+    }
+    "return RuleTaxYearNotSupportedError" when {
+      "the tax year is not supported" in {
+
       }
     }
     "return multiple errors" when {
