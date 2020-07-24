@@ -32,7 +32,7 @@ case class RetrieveOtherReliefsBody(nonDeductableLoanInterest: Option[NonDeducta
 object RetrieveOtherReliefsBody extends HateoasLinks {
   implicit val format: OFormat[RetrieveOtherReliefsBody] = Json.format[RetrieveOtherReliefsBody]
 
-  implicit object RetrieveOtherOrderLinksFactory extends HateoasLinksFactory[RetrieveOtherReliefsBody, RetrieveOtherReliefsHateoasData] {
+  implicit object LinksFactory extends HateoasLinksFactory[RetrieveOtherReliefsBody, RetrieveOtherReliefsHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveOtherReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(

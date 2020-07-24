@@ -14,50 +14,21 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveForeignReliefs
+package v1.models.response.amendForeignReliefs
 
 import mocks.MockAppConfig
-import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.hateoas.Link
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
-class RetrieveForeignReliefsBodySpec extends UnitSpec with MockAppConfig {
-  val retrieveForeignReliefsBody = RetrieveForeignReliefsBody(
-    Some(ForeignTaxCreditRelief(763.00))
-  )
-
-  val json = Json.parse(
-    """{
-      |  "foreignTaxCreditRelief": {
-      |        "amount": 763.00
-      |      }
-      |}""".stripMargin
-  )
-
-  val emptyJson = Json.parse("""{}""")
-
-  "reads" when {
-    "passed valid JSON" should {
-      "return a valid model" in {
-        retrieveForeignReliefsBody shouldBe json.as[RetrieveForeignReliefsBody]
-      }
-    }
-  }
-  "writes" when {
-    "passed valid model" should {
-      "return valid JSON" in {
-        Json.toJson(retrieveForeignReliefsBody) shouldBe json
-      }
-    }
-  }
+class AmendForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
   "LinksFactory" should {
     "return the correct links" in {
       val nino = "mynino"
       val taxYear = "mytaxyear"
 
       MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
-      RetrieveForeignReliefsBody.LinksFactory.links(mockAppConfig, RetrieveForeignReliefsHateoasData(nino, taxYear)) shouldBe
+      AmendForeignReliefsResponse.LinksFactory.links(mockAppConfig, AmendForeignReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/foreign/$nino/$taxYear", GET, "self"),
           Link(s"/my/context/foreign/$nino/$taxYear", PUT, "amend-reliefs-foreign"),
@@ -66,4 +37,3 @@ class RetrieveForeignReliefsBodySpec extends UnitSpec with MockAppConfig {
     }
   }
 }
-

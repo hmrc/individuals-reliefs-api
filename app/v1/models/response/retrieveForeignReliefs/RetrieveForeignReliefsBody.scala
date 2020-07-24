@@ -27,7 +27,7 @@ case class RetrieveForeignReliefsBody(foreignTaxCreditRelief: Option[ForeignTaxC
 object RetrieveForeignReliefsBody extends HateoasLinks {
   implicit val format: OFormat[RetrieveForeignReliefsBody] = Json.format[RetrieveForeignReliefsBody]
 
-  implicit object RetrieveForeignOrderLinksFactory extends HateoasLinksFactory[RetrieveForeignReliefsBody, RetrieveForeignReliefsHateoasData] {
+  implicit object LinksFactory extends HateoasLinksFactory[RetrieveForeignReliefsBody, RetrieveForeignReliefsHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveForeignReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(

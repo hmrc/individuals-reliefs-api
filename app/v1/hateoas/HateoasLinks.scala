@@ -33,6 +33,9 @@ trait HateoasLinks {
   private def foreignReliefsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/foreign/$nino/$taxYear"
 
+  private def pensionsReliefsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
+    s"/${appConfig.apiGatewayContext}/pensions/$nino/$taxYear"
+
   //API resource links
   def retrieveReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
@@ -42,6 +45,9 @@ trait HateoasLinks {
 
   def deleteReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEF_INVESTMENTS)
+
+  def retrieveOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
   def amendOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
   Link(href = otherReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_OTHER)
@@ -58,6 +64,12 @@ trait HateoasLinks {
   def deleteForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_FOREIGN)
 
-  def retrieveOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+  def retrievePensionsReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+
+  def amendPensionsReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_PENSIONS)
+
+  def deletePensionsReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_PENSIONS)
 }

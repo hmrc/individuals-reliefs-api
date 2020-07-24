@@ -22,37 +22,37 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import utils.Logging
-import v1.controllers.requestParsers.AmendReliefInvestmentsRequestParser
+import v1.controllers.requestParsers.AmendPensionsReliefsRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
-import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
-import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
-import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsResponse.LinksFactory
-import v1.services.{AmendReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRawData
+import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsHateoasData
+import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsResponse.LinksFactory
+import v1.services.{AmendPensionsReliefsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuthService,
-                                                 val lookupService: MtdIdLookupService,
-                                                 parser: AmendReliefInvestmentsRequestParser,
-                                                 service: AmendReliefInvestmentsService,
-                                                 hateoasFactory: HateoasFactory,
-                                                 cc: ControllerComponents)(implicit ec: ExecutionContext)
+class AmendPensionsReliefsController @Inject()(val authService: EnrolmentsAuthService,
+                                               val lookupService: MtdIdLookupService,
+                                               parser: AmendPensionsReliefsRequestParser,
+                                               service: AmendPensionsReliefsService,
+                                               hateoasFactory: HateoasFactory,
+                                               cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "AmendReliefInvestmentsController", endpointName = "amendReliefInvestments")
+    EndpointLogContext(controllerName = "AmendPensionsReliefsController", endpointName = "amendPensionsReliefs")
 
   def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
-      val rawData = AmendReliefInvestmentsRawData(nino, taxYear, request.body)
+      val rawData = AmendPensionsReliefsRawData(nino, taxYear, request.body)
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amend(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, AmendReliefInvestmentsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
+            hateoasFactory.wrap(serviceResponse.responseData, AmendPensionsReliefsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -76,11 +76,8 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
            TaxYearFormatError |
            RuleIncorrectOrEmptyBodyError |
            RuleTaxYearRangeInvalidError |
-           MtdErrorWithCustomMessage(ValueFormatError.code) |
-           MtdErrorWithCustomMessage(DateOfInvestmentFormatError.code) |
-           MtdErrorWithCustomMessage(NameFormatError.code) |
-           MtdErrorWithCustomMessage(InvestmentRefFormatError.code) =>
-        BadRequest(Json.toJson(errorWrapper))
+           RuleTaxYearNotSupportedError |
+           MtdErrorWithCustomMessage(ValueFormatError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
