@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
-import v1.models.errors.{NinoFormatError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRawData
 
 class RetrievePensionsReliefsValidatorSpec extends UnitSpec {
@@ -49,8 +49,8 @@ class RetrievePensionsReliefsValidatorSpec extends UnitSpec {
       }
     }
     "return RuleTaxYearNotSupportedError" when {
-      "the tax year is not supported" in {
-
+      "the given tax year is before the minimum tax year" in {
+        validator.validate(RetrievePensionsReliefsRawData(validNino, "2018-19")) shouldBe List(RuleTaxYearNotSupportedError)
       }
     }
     "return multiple errors" when {
