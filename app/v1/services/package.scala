@@ -20,6 +20,7 @@ import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsBody
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsBody
+import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
 import v1.models.response.retrieveReliefInvestments._
 
 package object services {
@@ -33,6 +34,8 @@ package object services {
   type DeleteReliefInvestmentsServiceOutcome = ServiceOutcome[Unit]
 
   type RetrieveReliefInvestmentsServiceOutcome = ServiceOutcome[RetrieveReliefInvestmentsBody]
+
+  type RetrievePensionsReliefsServiceOutcome = ServiceOutcome[RetrievePensionsReliefsResponse]
 
   type DeleteOtherReliefsServiceOutcome = ServiceOutcome[Unit]
 
