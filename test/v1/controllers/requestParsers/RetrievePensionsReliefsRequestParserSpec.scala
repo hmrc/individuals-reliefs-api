@@ -18,7 +18,7 @@ package v1.controllers.requestParsers
 
 import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
-import v1.mocks.validators.{MockRetrieveForeignReliefsValidator, MockRetrievePensionsReliefsValidator}
+import v1.mocks.validators.MockRetrievePensionsReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import v1.models.request.retrievePensionsReliefs.{RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest}
 
