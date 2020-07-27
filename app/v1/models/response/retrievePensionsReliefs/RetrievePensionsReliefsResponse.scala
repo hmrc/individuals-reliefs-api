@@ -21,22 +21,21 @@ import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class RetrievePensionsReliefsResponse(submittedOn: String, pensionReliefs: PensionsReliefs) extends HateoasLinks {
+case class RetrievePensionsReliefsResponse(submittedOn: String, pensionReliefs: PensionsReliefs)
 
-  implicit object LinksFactory extends HateoasLinksFactory[Unit, RetrievePensionsReliefsHateoasData] {
+object RetrievePensionsReliefsResponse extends HateoasLinks {
+  implicit val format: OFormat[RetrievePensionsReliefsResponse] = Json.format[RetrievePensionsReliefsResponse]
+
+  implicit object LinksFactory extends HateoasLinksFactory[RetrievePensionsReliefsResponse, RetrievePensionsReliefsHateoasData] {
     override def links(appConfig: AppConfig, data: RetrievePensionsReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
-        retrievePensionsReliefs(appConfig, nino, taxYear),
         amendPensionsReliefs(appConfig, nino, taxYear),
+        retrievePensionsReliefs(appConfig, nino, taxYear),
         deletePensionsReliefs(appConfig, nino, taxYear)
       )
     }
   }
-}
-
-object RetrievePensionsReliefsResponse {
-  implicit val format: OFormat[RetrievePensionsReliefsResponse] = Json.format[RetrievePensionsReliefsResponse]
 }
 
 case class RetrievePensionsReliefsHateoasData(nino: String, taxYear: String) extends HateoasData
