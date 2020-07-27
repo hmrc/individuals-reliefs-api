@@ -22,9 +22,11 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
+import v1.controllers.requestParsers.RetrievePensionsReliefsRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRawData
+import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsHateoasData
 import v1.services.{EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -49,7 +51,7 @@ class RetrievePensionsReliefsController @Inject()(val authService: EnrolmentsAut
           parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.retrieve(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, RetrieveForeignReliefsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
+            hateoasFactory.wrap(serviceResponse.responseData, RetrievePensionsReliefsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
