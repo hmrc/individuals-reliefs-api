@@ -20,13 +20,13 @@ import uk.gov.hmrc.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
-
+import mocks.MockAppConfig
+import v1.mocks.MockHttpClient
 import scala.concurrent.Future
 
 class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
-  import mocks.MockAppConfig
-  import v1.mocks.MockHttpClient
+
 
   val taxYear = "2017-18"
   val nino = Nino("AA123456A")
@@ -40,8 +40,8 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
     MockedAppConfig.desEnvironment returns "des-environment"
   }
 
-  "RetrieveReliefInvestmentsConnector" when {
-    "retrieving relief investments" must {
+  "RetrievePensionsReliefsConnector" when {
+    "retrieving pensions reliefs" must {
       val request: RetrievePensionsReliefsRequest = RetrievePensionsReliefsRequest(nino, taxYear)
 
       "return a valid response" in new Test {

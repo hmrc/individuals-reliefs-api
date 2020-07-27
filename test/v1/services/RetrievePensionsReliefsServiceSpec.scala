@@ -59,7 +59,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
   "service" when {
     "service call successful" must {
       "return mapped result" in new Test {
-        MockRetrieveReliefInvestmentsConnector.retrieve(requestData)
+        MockRetrievePensionsReliefsConnector.retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, fullResponseModel))))
 
         await(service.retrieve(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
@@ -72,7 +72,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockRetrieveReliefInvestmentsConnector.retrieve(requestData)
+            MockRetrievePensionsReliefsConnector.retrieve(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
             await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))

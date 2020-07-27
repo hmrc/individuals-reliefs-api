@@ -29,7 +29,7 @@ trait MockRetrievePensionsReliefsConnector extends MockFactory {
 
   val mockConnector: RetrievePensionsReliefsConnector = mock[RetrievePensionsReliefsConnector]
 
-  object MockRetrieveReliefInvestmentsConnector {
+  object MockRetrievePensionsReliefsConnector {
 
     def retrieve(requestData: RetrievePensionsReliefsRequest):
     CallHandler3[RetrievePensionsReliefsRequest, HeaderCarrier, ExecutionContext, Future[DesOutcome[RetrievePensionsReliefsResponse]]] = {
