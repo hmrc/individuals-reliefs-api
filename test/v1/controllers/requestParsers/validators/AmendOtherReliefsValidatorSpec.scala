@@ -24,7 +24,7 @@ import v1.models.request.amendOtherReliefs.AmendOtherReliefsRawData
 class AmendOtherReliefsValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
-  private val validTaxYear = "2018-19"
+  private val validTaxYear = "2021-22"
   private val requestBodyJson = Json.parse(
     """
       |{
