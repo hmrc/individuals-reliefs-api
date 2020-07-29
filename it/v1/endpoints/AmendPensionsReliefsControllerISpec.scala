@@ -173,7 +173,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
         }
-        s"a taxYear before 2019-20 is provided" in new Test {
+        s"a taxYear before the minimum tax year is provided" in new Test {
           override val taxYear: String = "2018-19"
 
           override def setupStubs(): StubMapping = {
