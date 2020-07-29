@@ -171,6 +171,19 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
         }
+        s"a taxYear before the minimum tax year is provided" in new Test {
+          override val taxYear: String = "2019-21"
+
+          override def setupStubs(): StubMapping = {
+            AuditStub.audit()
+            AuthStub.authorised()
+            MtdIdLookupStub.ninoFound(nino)
+          }
+
+          val response: WSResponse = await(request().put(requestBodyJson))
+          response.status shouldBe BAD_REQUEST
+          response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
+        }
 
         s"an empty body is provided" in new Test {
           override val requestBodyJson: JsValue = Json.parse("""{}""")
