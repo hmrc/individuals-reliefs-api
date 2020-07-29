@@ -172,7 +172,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
           response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
         }
         s"a taxYear before the minimum tax year is provided" in new Test {
-          override val taxYear: String = "2019-21"
+          override val taxYear: String = "2019-20"
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
