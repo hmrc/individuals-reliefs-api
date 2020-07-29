@@ -30,7 +30,7 @@ class DeleteForeignReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino = "AA123456A"
-    val taxYear = "2019-20"
+    val taxYear = "2021-22"
 
     def uri: String = s"/foreign/$nino/$taxYear"
     def desUri: String = s"/reliefs/foreign/$nino/$taxYear"

@@ -30,7 +30,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino: String = "AA123456A"
-    val taxYear: String = "2019-20"
+    val taxYear: String = "2021-22"
 
     val amount: BigDecimal = 5000.99
 
@@ -171,6 +171,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
         }
+
         s"an empty body is provided" in new Test {
           override val requestBodyJson: JsValue = Json.parse("""{}""")
 
