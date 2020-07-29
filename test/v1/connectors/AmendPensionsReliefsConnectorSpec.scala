@@ -26,7 +26,7 @@ import scala.concurrent.Future
 
 class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYear = "2019-20"
+  val taxYear = "2021-21"
   val nino = Nino("AA123456A")
   val body = AmendPensionsReliefsBody(
     PensionReliefs(
