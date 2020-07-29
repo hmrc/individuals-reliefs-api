@@ -84,7 +84,7 @@ class AmendPensionsReliefsValidatorSpec extends UnitSpec {
       "all path parameters are invalid" in {
         validator.validate(AmendPensionsReliefsRawData("Walrus", "2000", requestBodyJson)) shouldBe List(NinoFormatError, TaxYearFormatError)
       }
-      "the taxYear range is not supported" in {
+      "the taxYear is not supported" in {
         validator.validate(AmendPensionsReliefsRawData(validNino, "2017-18", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
       }
     }
