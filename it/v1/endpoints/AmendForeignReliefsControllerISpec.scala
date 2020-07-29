@@ -182,7 +182,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
           val response: WSResponse = await(request().put(requestBodyJson))
           response.status shouldBe BAD_REQUEST
-          response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
+          response.json shouldBe Json.toJson(RuleTaxYearNotSupportedError)
         }
 
         s"an empty body is provided" in new Test {
