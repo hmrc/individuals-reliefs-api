@@ -73,7 +73,7 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec {
       "the taxYear range is invalid" in {
         validator.validate(AmendForeignReliefsRawData(validNino, "2021-23", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
       }
-      "the taxYear range is not supported" in {
+      "the taxYear is not supported" in {
         validator.validate(AmendForeignReliefsRawData(validNino, "2017-18", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
       }
       "all path parameters are invalid" in {
