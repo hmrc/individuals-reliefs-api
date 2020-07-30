@@ -24,7 +24,7 @@ import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData
 
 class DeleteReliefInvestmentsRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
-  val taxYear = "2021-22"
+  val taxYear = "2018-19"
 
   val inputData = DeleteReliefInvestmentsRawData(nino, taxYear)
 
