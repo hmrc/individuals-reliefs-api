@@ -28,7 +28,7 @@
           "href": {
             "description": "The relative url of the endpoint",
             "type": "string",
-            "example": "/individuals/reliefs/foreign/TC663795B/2019-20"
+            "example": "/individuals/reliefs/foreign/TC663795B/2021-22"
           },
           "method": {
             "description": "The HTTP method type for the endpoint",

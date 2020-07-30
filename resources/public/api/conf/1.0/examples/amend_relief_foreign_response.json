@@ -1,17 +1,17 @@
 {
   "links":[
     {
-      "href":"/individuals/reliefs/foreign/TC663795B/2017-18",
+      "href":"/individuals/reliefs/foreign/TC663795B/2021-22",
       "method":"PUT",
       "rel":"amend-reliefs-foreign"
     },
     {
-      "href":"/individuals/reliefs/foreign/TC663795B/2017-18",
+      "href":"/individuals/reliefs/foreign/TC663795B/2021-22",
       "method":"GET",
       "rel":"self"
     },
     {
-      "href":"/individuals/reliefs/foreign/TC663795B/2017-18",
+      "href":"/individuals/reliefs/foreign/TC663795B/2021-22",
       "method":"DELETE",
       "rel":"delete-reliefs-foreign"
     }
