@@ -23,7 +23,7 @@ import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRawData
 class DeletePensionsReliefsValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
-  private val validTaxYear = "2021-22"
+  private val validTaxYear = "2019-20"
 
   val validator = new DeletePensionsReliefsValidator()
 
