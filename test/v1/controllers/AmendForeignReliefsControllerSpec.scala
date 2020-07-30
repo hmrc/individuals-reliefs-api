@@ -125,6 +125,7 @@ class AmendForeignReliefsControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (ValueFormatError.copy(paths = Some(Seq("/foreignTaxCreditRelief/amount"))), BAD_REQUEST)
         )
 
