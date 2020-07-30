@@ -55,7 +55,7 @@ class DeleteReliefInvestmentsControllerSpec
   }
 
   private val nino = "AA123456A"
-  private val taxYear = "2019-20"
+  private val taxYear = "2021-22"
   private val correlationId = "X-123"
 
   private val rawData = DeleteReliefInvestmentsRawData(nino, taxYear)
@@ -100,7 +100,8 @@ class DeleteReliefInvestmentsControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST)
+          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
