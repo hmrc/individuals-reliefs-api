@@ -60,7 +60,7 @@ class AmendOtherReliefsControllerSpec
   }
 
   private val nino = "AA123456A"
-  private val taxYear = "2019-20"
+  private val taxYear = "2021-22"
   private val correlationId = "X-123"
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/other/$nino/$taxYear", method = PUT, rel = "self")
@@ -193,6 +193,7 @@ class AmendOtherReliefsControllerSpec
             "vctSubscription/0/reliefClaimed"))), BAD_REQUEST),
           (ReliefDateFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
           (CustomerReferenceFormatError, BAD_REQUEST)
         )
