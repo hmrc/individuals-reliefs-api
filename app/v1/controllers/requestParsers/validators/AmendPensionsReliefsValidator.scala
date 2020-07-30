@@ -24,7 +24,6 @@ class AmendPensionsReliefsValidator extends Validator[AmendPensionsReliefsRawDat
 
   private val validationSet = List(
     parameterFormatValidation,
-    parameterRuleValidation,
     bodyFormatValidation,
     incorrectOrEmptyBodySubmittedValidation,
     bodyFieldValidation
@@ -34,12 +33,6 @@ class AmendPensionsReliefsValidator extends Validator[AmendPensionsReliefsRawDat
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear)
-    )
-  }
-
-  private def parameterRuleValidation: AmendPensionsReliefsRawData => List[List[MtdError]] = (data: AmendPensionsReliefsRawData) => {
-    List(
-      MtdTaxYearValidation.validate(data.taxYear, RuleTaxYearNotSupportedError)
     )
   }
 
