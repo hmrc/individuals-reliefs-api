@@ -49,7 +49,7 @@ class DeleteReliefInvestmentsValidatorSpec extends UnitSpec {
       }
     }
     "return RuleTaxYearNotSupportedError" when {
-      "the tax year range exceeds 1" in {
+      "the tax year is before the minimum" in {
         validator.validate(DeleteReliefInvestmentsRawData(validNino, "2019-20")) shouldBe List(RuleTaxYearNotSupportedError)
       }
     }
