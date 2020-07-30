@@ -16,24 +16,18 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation}
-import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError}
+import v1.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
+import v1.models.errors.MtdError
 import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRawData
 
 class DeletePensionsReliefsValidator extends Validator[DeletePensionsReliefsRawData] {
 
-  private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
+  private val validationSet = List(parameterFormatValidation)
 
   private def parameterFormatValidation: DeletePensionsReliefsRawData => List[List[MtdError]] = data => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear)
-    )
-  }
-
-  private def parameterRuleValidation: DeletePensionsReliefsRawData => List[List[MtdError]] = (data: DeletePensionsReliefsRawData) => {
-    List(
-      MtdTaxYearValidation.validate(data.taxYear, RuleTaxYearNotSupportedError)
     )
   }
 
