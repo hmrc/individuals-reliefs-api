@@ -25,7 +25,7 @@ import v1.models.request.amendForeignReliefs._
 
 class AmendForeignReliefsRequestParserSpec extends UnitSpec {
   private val nino = "AA123456A"
-  private val taxYear = "2021-22"
+  private val taxYear = "2018-19"
   private val requestBodyJson = Json.parse(
     """
       |{

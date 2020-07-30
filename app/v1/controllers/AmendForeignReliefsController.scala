@@ -76,7 +76,6 @@ class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthSer
            TaxYearFormatError |
            RuleIncorrectOrEmptyBodyError |
            RuleTaxYearRangeInvalidError |
-           RuleTaxYearNotSupportedError |
            MtdErrorWithCustomMessage(ValueFormatError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
