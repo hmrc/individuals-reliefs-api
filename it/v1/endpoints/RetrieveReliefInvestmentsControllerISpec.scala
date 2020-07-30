@@ -22,7 +22,7 @@ import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
 class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
@@ -218,9 +218,10 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = Seq(
-          ("Walrus", "2019-20", Status.BAD_REQUEST, NinoFormatError),
+          ("Walrus", "2021-22", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
+          ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2018-19", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
 
