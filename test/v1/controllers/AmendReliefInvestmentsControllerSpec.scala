@@ -59,7 +59,7 @@ class AmendReliefInvestmentsControllerSpec
   }
 
   private val nino = "AA123456A"
-  private val taxYear = "2021-22"
+  private val taxYear = "2019-20"
   private val correlationId = "X-123"
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/innvestment/$nino/$taxYear", method = PUT, rel = "self")
@@ -201,7 +201,6 @@ class AmendReliefInvestmentsControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (ValueFormatError.copy(paths = Some(Seq(
             "vctSubscription/0/amountInvested",

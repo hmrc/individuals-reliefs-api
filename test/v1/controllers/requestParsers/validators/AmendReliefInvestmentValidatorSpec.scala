@@ -104,12 +104,6 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
       }
     }
 
-    "return RULE_TAX_YEAR_NOT_SUPPORTED error" when {
-      "an invalid tax year range is provided" in {
-        validator.validate(AmendReliefInvestmentsRawData(validNino, "2020-21", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
-      }
-    }
-
     "return RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED error" when {
       "no JSON fields are provided" in {
         val json = Json.parse("""{}""".stripMargin)

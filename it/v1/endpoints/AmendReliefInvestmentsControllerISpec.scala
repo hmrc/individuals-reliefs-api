@@ -496,7 +496,6 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           ("AA1123A", "2021-22", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
           ("AA123456A", "20177", validRequestBodyJson,  BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2021-23", validRequestBodyJson,  BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2020-21", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2021-22", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
           ("AA123456A", "2021-22", allInvalidDateOfInvestmentrequestBodyJson, BAD_REQUEST, allDateOfInvestmentFormatError))
 
