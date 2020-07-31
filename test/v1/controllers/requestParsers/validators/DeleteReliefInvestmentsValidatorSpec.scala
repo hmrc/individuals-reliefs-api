@@ -17,13 +17,13 @@
 package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
-import v1.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors.{NinoFormatError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRawData
 
 class DeleteReliefInvestmentsValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
-  private val validTaxYear = "2021-22"
+  private val validTaxYear = "2019-20"
 
   val validator = new DeleteReliefInvestmentsValidator()
 
@@ -46,11 +46,6 @@ class DeleteReliefInvestmentsValidatorSpec extends UnitSpec {
     "return RuleTaxYearRangeInvalidError" when {
       "the tax year range exceeds 1" in {
         validator.validate(DeleteReliefInvestmentsRawData(validNino, "2019-21")) shouldBe List(RuleTaxYearRangeInvalidError)
-      }
-    }
-    "return RuleTaxYearNotSupportedError" when {
-      "the tax year is before the minimum" in {
-        validator.validate(DeleteReliefInvestmentsRawData(validNino, "2019-20")) shouldBe List(RuleTaxYearNotSupportedError)
       }
     }
     "return multiple errors" when {

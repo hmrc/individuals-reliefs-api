@@ -30,7 +30,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino = "AA123456A"
-    val taxYear = "2021-22"
+    val taxYear = "2019-20"
 
     val responseBody = Json.parse(
       s"""
@@ -142,7 +142,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = Seq(
-          ("Walrus", "2021-22", Status.BAD_REQUEST, NinoFormatError),
+          ("Walrus", "2019-20", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", Status.BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "2018-19", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),

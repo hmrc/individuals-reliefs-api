@@ -18,13 +18,13 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{CustomerReferenceFormatError, NinoFormatError, ReliefDateFormatError, RuleIncorrectOrEmptyBodyError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError, ValueFormatError}
+import v1.models.errors._
 import v1.models.request.amendOtherReliefs.AmendOtherReliefsRawData
 
 class AmendOtherReliefsValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
-  private val validTaxYear = "2021-22"
+  private val validTaxYear = "2018-19"
   private val requestBodyJson = Json.parse(
     """
       |{
@@ -208,10 +208,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
         validator.validate(AmendOtherReliefsRawData(validNino, "2000", requestBodyJson)) shouldBe List(TaxYearFormatError)
       }
       "the taxYear range is invalid" in {
-        validator.validate(AmendOtherReliefsRawData(validNino, "2021-23", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
-      }
-      "the taxYear is before the earliest possible tax year" in {
-        validator.validate(AmendOtherReliefsRawData(validNino, "2020-21", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(AmendOtherReliefsRawData(validNino, "2017-20", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
       }
       "all path parameters are invalid" in {
         validator.validate(AmendOtherReliefsRawData("Walrus", "2000", requestBodyJson)) shouldBe List(NinoFormatError, TaxYearFormatError)

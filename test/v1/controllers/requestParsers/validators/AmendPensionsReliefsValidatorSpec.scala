@@ -24,7 +24,7 @@ import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRawData
 class AmendPensionsReliefsValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
-  private val validTaxYear = "2021-22"
+  private val validTaxYear = "2019-20"
   private val requestBodyJson = Json.parse(
     """
       |{
