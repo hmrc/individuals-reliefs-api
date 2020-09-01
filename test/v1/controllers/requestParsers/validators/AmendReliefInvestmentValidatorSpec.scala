@@ -24,7 +24,7 @@ import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
 class AmendReliefInvestmentValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
-  private val validTaxYear = "2018-19"
+  private val validTaxYear = "2021-22"
   private val requestBodyJson = Json.parse(
     """
       |{
@@ -100,7 +100,13 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
 
     "return RULE_TAX_YEAR_RANGE_INVALID error" when {
       "an invalid tax year range is provided" in {
-        validator.validate(AmendReliefInvestmentsRawData(validNino, "2019-21", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, "2021-23", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
+      }
+    }
+
+    "return RULE_TAX_YEAR_NOT_SUPPORTED error" when {
+      "a tax year before the earliest allowed date is supplied" in {
+        validator.validate(AmendReliefInvestmentsRawData(validNino, "2020-21", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
       }
     }
 

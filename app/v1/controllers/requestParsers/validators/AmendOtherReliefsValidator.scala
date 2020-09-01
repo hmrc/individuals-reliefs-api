@@ -16,18 +16,31 @@
 
 package v1.controllers.requestParsers.validators
 
+import config.FixedConfig
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.{MtdError, ReliefDateFormatError, RuleIncorrectOrEmptyBodyError}
 import v1.models.request.amendOtherReliefs._
 
-class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
+class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] with FixedConfig {
 
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, incorrectOrEmptyBodySubmittedValidation, bodyFieldValidation)
+  private val validationSet = List(
+    parameterFormatValidation,
+    parameterRuleValidation,
+    bodyFormatValidation,
+    incorrectOrEmptyBodySubmittedValidation,
+    bodyFieldValidation
+  )
 
   private def parameterFormatValidation: AmendOtherReliefsRawData => List[List[MtdError]] = (data: AmendOtherReliefsRawData) => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear)
+    )
+  }
+
+  private def parameterRuleValidation: AmendOtherReliefsRawData => List[List[MtdError]] = (data: AmendOtherReliefsRawData) => {
+    List(
+      MtdTaxYearValidation.validate(data.taxYear, reliefsMinimumTaxYear)
     )
   }
 
@@ -39,7 +52,7 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] {
 
   private def incorrectOrEmptyBodySubmittedValidation: AmendOtherReliefsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendOtherReliefsBody]
-    if(body.isIncorrectOrEmptyBody) List(List(RuleIncorrectOrEmptyBodyError)) else NoValidationErrors
+    if (body.isIncorrectOrEmptyBody) List(List(RuleIncorrectOrEmptyBodyError)) else NoValidationErrors
   }
 
   private def bodyFieldValidation: AmendOtherReliefsRawData => List[List[MtdError]] = { data =>

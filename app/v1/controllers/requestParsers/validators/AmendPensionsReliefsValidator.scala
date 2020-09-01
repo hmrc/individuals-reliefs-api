@@ -16,11 +16,12 @@
 
 package v1.controllers.requestParsers.validators
 
+import config.FixedConfig
 import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError, RuleTaxYearNotSupportedError}
+import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 import v1.models.request.amendPensionsReliefs._
 
-class AmendPensionsReliefsValidator extends Validator[AmendPensionsReliefsRawData] {
+class AmendPensionsReliefsValidator extends Validator[AmendPensionsReliefsRawData] with FixedConfig {
 
   private val validationSet = List(
     parameterFormatValidation,
@@ -39,7 +40,7 @@ class AmendPensionsReliefsValidator extends Validator[AmendPensionsReliefsRawDat
 
   private def parameterRuleValidation: AmendPensionsReliefsRawData => List[List[MtdError]] = (data: AmendPensionsReliefsRawData) => {
     List(
-      MtdTaxYearValidation.validate(data.taxYear, RuleTaxYearNotSupportedError)
+      MtdTaxYearValidation.validate(data.taxYear, mtdMinimumTaxYear)
     )
   }
 

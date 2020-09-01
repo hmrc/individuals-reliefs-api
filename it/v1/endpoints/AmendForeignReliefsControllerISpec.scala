@@ -30,7 +30,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino: String = "AA123456A"
-    val taxYear: String = "2019-20"
+    val taxYear: String = "2021-22"
 
     val amount: BigDecimal = 5000.99
 
@@ -44,7 +44,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
          |""".stripMargin
     )
 
-    val responseBody = Json.parse(
+    val responseBody: JsValue = Json.parse(
       s"""
          |{
          |  "links": [
@@ -170,6 +170,20 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
           val response: WSResponse = await(request().put(requestBodyJson))
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
+        }
+
+        s"a taxYear below 2021-22 is provided" in new Test {
+          override val taxYear: String = "2020-21"
+
+          override def setupStubs(): StubMapping = {
+            AuditStub.audit()
+            AuthStub.authorised()
+            MtdIdLookupStub.ninoFound(nino)
+          }
+
+          val response: WSResponse = await(request().put(requestBodyJson))
+          response.status shouldBe BAD_REQUEST
+          response.json shouldBe Json.toJson(RuleTaxYearNotSupportedError)
         }
 
         s"an empty body is provided" in new Test {

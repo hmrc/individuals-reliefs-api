@@ -16,19 +16,26 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
+import config.FixedConfig
+import v1.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation}
 import v1.models.errors.MtdError
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRawData
 
-class RetrieveReliefInvestmentsValidator extends Validator[RetrieveReliefInvestmentsRawData] {
+class RetrieveReliefInvestmentsValidator extends Validator[RetrieveReliefInvestmentsRawData] with FixedConfig {
 
 
-  private val validationSet = List(parameterFormatValidation)
+  private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 
   private def parameterFormatValidation: RetrieveReliefInvestmentsRawData => List[List[MtdError]] = data => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear)
+    )
+  }
+
+  private def parameterRuleValidation: RetrieveReliefInvestmentsRawData => List[List[MtdError]] = (data: RetrieveReliefInvestmentsRawData) => {
+    List(
+      MtdTaxYearValidation.validate(data.taxYear, reliefsMinimumTaxYear)
     )
   }
 

@@ -16,24 +16,25 @@
 
 package v1.controllers.requestParsers.validators.validations
 
+import config.FixedConfig
 import support.UnitSpec
 import v1.models.errors.RuleTaxYearNotSupportedError
 import v1.models.utils.JsonErrorValidators
 
-class MtdTaxYearValidationSpec extends UnitSpec with JsonErrorValidators {
+class MtdTaxYearValidationSpec extends UnitSpec with JsonErrorValidators with FixedConfig {
 
   "validate" should {
     "return no errors" when {
       "a tax year greater than 2019-20 is supplied" in {
         val validTaxYear = "2020-21"
-        val validationResult = MtdTaxYearValidation.validate(validTaxYear, RuleTaxYearNotSupportedError)
+        val validationResult = MtdTaxYearValidation.validate(validTaxYear, mtdMinimumTaxYear)
         validationResult.isEmpty shouldBe true
 
       }
 
       "the minimum allowed tax year is supplied" in {
         val validTaxYear = "2019-20"
-        val validationResult = MtdTaxYearValidation.validate(validTaxYear, RuleTaxYearNotSupportedError)
+        val validationResult = MtdTaxYearValidation.validate(validTaxYear, mtdMinimumTaxYear)
         validationResult.isEmpty shouldBe true
       }
 
@@ -42,7 +43,7 @@ class MtdTaxYearValidationSpec extends UnitSpec with JsonErrorValidators {
     "return the given error" when {
       "a tax year below 2019-20 is supplied" in {
         val invalidTaxYear = "2018-19"
-        val validationResult = MtdTaxYearValidation.validate(invalidTaxYear, RuleTaxYearNotSupportedError)
+        val validationResult = MtdTaxYearValidation.validate(invalidTaxYear, mtdMinimumTaxYear)
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
         validationResult.head shouldBe RuleTaxYearNotSupportedError

@@ -65,6 +65,7 @@ class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAut
       case NinoFormatError |
            BadRequestError |
            TaxYearFormatError |
+           RuleTaxYearNotSupportedError |
            RuleTaxYearRangeInvalidError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

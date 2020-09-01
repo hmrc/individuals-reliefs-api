@@ -28,7 +28,7 @@ class AuthISpec extends IntegrationBaseSpec {
 
   private trait Test {
     val nino          = "AA123456A"
-    val taxYear       = "2017-18"
+    val taxYear       = "2021-22"
 
     def setupStubs(): StubMapping
 

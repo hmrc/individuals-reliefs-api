@@ -30,7 +30,7 @@ class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino = "AA123456A"
-    val taxYear = "2019-20"
+    val taxYear = "2021-22"
 
     def uri: String = s"/other/$nino/$taxYear"
     def desUri: String = s"/reliefs/other/$nino/$taxYear"
@@ -94,8 +94,9 @@ class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = Seq(
-          ("Walrus", "2019-20", Status.BAD_REQUEST, NinoFormatError),
+          ("Walrus", "2021-22", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", Status.BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2020-21", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
 

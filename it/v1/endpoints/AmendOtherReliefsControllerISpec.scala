@@ -31,7 +31,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino = "AA123456A"
-    val taxYear: String = "2019-20"
+    val taxYear: String = "2021-22"
     val correlationId: String = "X-123"
 
     val requestBodyJson = Json.parse(
@@ -485,11 +485,13 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = Seq(
-          ("AA1123A", "2017-18", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "20177", validRequestBodyJson,  BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2017-18", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
-          ("AA123456A", "2017-18", allDatesInvalidRequestBodyJson, BAD_REQUEST, allDateFormatError),
-          ("AA123456A", "2017-18", allCustomerReferencesInvalidRequestBodyJson, BAD_REQUEST, allCustomerReferenceFormatErrors)
+          ("AA1123A", "2021-22", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "2020-21", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2020-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "20121", validRequestBodyJson,  BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2021-22", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
+          ("AA123456A", "2021-22", allDatesInvalidRequestBodyJson, BAD_REQUEST, allDateFormatError),
+          ("AA123456A", "2021-22", allCustomerReferencesInvalidRequestBodyJson, BAD_REQUEST, allCustomerReferenceFormatErrors)
         )
 
         input.foreach(args => (validationErrorTest _).tupled(args))

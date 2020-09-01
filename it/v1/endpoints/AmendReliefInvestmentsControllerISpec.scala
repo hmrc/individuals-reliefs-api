@@ -30,10 +30,10 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino: String = "AA123456A"
-    val taxYear: String = "2019-20"
+    val taxYear: String = "2021-22"
     val correlationId: String = "X-123"
 
-    val requestBodyJson = Json.parse(
+    val requestBodyJson: JsValue = Json.parse(
       s"""
          |{
          |  "vctSubscription":[
@@ -402,7 +402,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
       val allInvalidDateOfInvestmentrequestBodyJson: JsValue = Json.parse(
         """|
- |{
+           |{
            |  "vctSubscription":[
            |    {
            |      "uniqueInvestmentRef": "VCTREF",
@@ -496,8 +496,9 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           ("AA1123A", "2021-22", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
           ("AA123456A", "20177", validRequestBodyJson,  BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2017-19", validRequestBodyJson,  BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2017-18", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
-          ("AA123456A", "2017-18", allInvalidDateOfInvestmentrequestBodyJson, BAD_REQUEST, allDateOfInvestmentFormatError))
+          ("AA123456A", "2020-21", validRequestBodyJson,  BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2021-22", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
+          ("AA123456A", "2021-22", allInvalidDateOfInvestmentrequestBodyJson, BAD_REQUEST, allDateOfInvestmentFormatError))
 
         input.foreach(args => (validationErrorTest _).tupled(args))
       }

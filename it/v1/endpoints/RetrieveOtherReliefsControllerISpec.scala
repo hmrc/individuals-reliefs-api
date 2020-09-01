@@ -19,10 +19,10 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
 class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
@@ -30,9 +30,9 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino = "AA123456A"
-    val taxYear = "2019-20"
+    val taxYear = "2021-22"
 
-    val responseBody = Json.parse(
+    val responseBody: JsValue = Json.parse(
       s"""
          |{
          |    "nonDeductableLoanInterest": {
@@ -94,7 +94,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |""".stripMargin
     )
 
-    val desResponseBody = Json.parse(
+    val desResponseBody: JsValue = Json.parse(
       s"""
          |{
          |    "nonDeductableLoanInterest": {
@@ -199,8 +199,9 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = Seq(
-          ("Walrus", "2019-20", Status.BAD_REQUEST, NinoFormatError),
+          ("Walrus", "2021-22", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", Status.BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2020-21", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
 

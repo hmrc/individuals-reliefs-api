@@ -193,6 +193,7 @@ class AmendOtherReliefsControllerSpec
             "vctSubscription/0/reliefClaimed"))), BAD_REQUEST),
           (ReliefDateFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
           (CustomerReferenceFormatError, BAD_REQUEST)
         )

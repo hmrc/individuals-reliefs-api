@@ -16,19 +16,26 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{NinoValidation, TaxYearValidation}
+import config.FixedConfig
+import v1.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation}
 import v1.models.errors.MtdError
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRawData
 
-class RetrieveOtherReliefsValidator extends Validator[RetrieveOtherReliefsRawData] {
+class RetrieveOtherReliefsValidator extends Validator[RetrieveOtherReliefsRawData] with FixedConfig {
 
 
-  private val validationSet = List(parameterFormatValidation)
+  private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 
   private def parameterFormatValidation: RetrieveOtherReliefsRawData => List[List[MtdError]] = data => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear)
+    )
+  }
+
+  private def parameterRuleValidation: RetrieveOtherReliefsRawData => List[List[MtdError]] = (data: RetrieveOtherReliefsRawData) => {
+    List(
+      MtdTaxYearValidation.validate(data.taxYear, reliefsMinimumTaxYear)
     )
   }
 

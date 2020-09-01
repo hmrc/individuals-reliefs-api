@@ -16,19 +16,26 @@
 
 package v1.controllers.requestParsers.validators
 
+import config.FixedConfig
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.{DateOfInvestmentFormatError, MtdError, RuleIncorrectOrEmptyBodyError}
 import v1.models.request.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, CommunityInvestmentItem, EisSubscriptionsItem, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
 
 
-class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRawData] {
+class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRawData] with FixedConfig {
 
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, incorrectOfEmptyBodySubmittedValidation, bodyFieldValidation)
+  private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, incorrectOfEmptyBodySubmittedValidation, bodyFieldValidation)
 
   private def parameterFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = (data: AmendReliefInvestmentsRawData) => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear)
+    )
+  }
+
+  private def parameterRuleValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = (data: AmendReliefInvestmentsRawData) => {
+    List(
+      MtdTaxYearValidation.validate(data.taxYear, reliefsMinimumTaxYear)
     )
   }
 
@@ -40,31 +47,49 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def incorrectOfEmptyBodySubmittedValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendReliefInvestmentsBody]
-    if(body.isIncorrectOrEmptyBody) List(List(RuleIncorrectOrEmptyBodyError)) else NoValidationErrors
+    if (body.isIncorrectOrEmptyBody) List(List(RuleIncorrectOrEmptyBodyError)) else NoValidationErrors
   }
 
   private def bodyFieldValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendReliefInvestmentsBody]
 
-    List(flattenErrors(
-      List(
+    val errorsO: Option[List[List[MtdError]]] = for {
+      vctSubscriptionErrors <- {
         body.vctSubscription.map(_.zipWithIndex.flatMap {
           case (item, i) => validateVctSubscription(item, i)
-        }),
+        })
+      }
+      eisSubscriptionErrors <- {
         body.eisSubscription.map(_.zipWithIndex.flatMap {
           case (item, i) => validateEisSubscription(item, i)
-        }),
+        })
+      }
+      communityInvestmentErrors <- {
         body.communityInvestment.map(_.zipWithIndex.flatMap {
           case (item, i) => validateCommunityInvestment(item, i)
-        }),
+        })
+      }
+      seedEnterpriseInvestmentErrors <- {
         body.seedEnterpriseInvestment.map(_.zipWithIndex.flatMap {
           case (item, i) => validateSeedEnterpriseInvestment(item, i)
-        }),
+        })
+      }
+      socialEnterpriseInvestmentErrors <- {
         body.socialEnterpriseInvestment.map(_.zipWithIndex.flatMap {
           case (item, i) => validatesocialEnterpriseInvestment(item, i)
         })
-      ).map(_.getOrElse(NoValidationErrors).toList)
-    ))
+      }
+    } yield {
+      List(
+        vctSubscriptionErrors,
+        eisSubscriptionErrors,
+        communityInvestmentErrors,
+        seedEnterpriseInvestmentErrors,
+        socialEnterpriseInvestmentErrors
+      ).map(_.toList)
+    }
+
+    List(errorsO.map(flattenErrors)).flatten
   }
 
   private def validateVctSubscription(vctSubscriptionsItem: VctSubscriptionsItem, arrayIndex: Int): List[MtdError] = {
@@ -161,6 +186,6 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
 
   override def validate(data: AmendReliefInvestmentsRawData): List[MtdError] = {
-   run(validationSet, data).distinct
+    run(validationSet, data).distinct
   }
 }

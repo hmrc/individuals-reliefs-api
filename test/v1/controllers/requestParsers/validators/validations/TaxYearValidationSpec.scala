@@ -26,7 +26,7 @@ class TaxYearValidationSpec extends UnitSpec with JsonErrorValidators {
     "return no errors" when {
       "when a valid tax year is supplied" in {
 
-        val validTaxYear = "2018-19"
+        val validTaxYear = "2021-22"
         val validationResult = TaxYearValidation.validate(validTaxYear)
         validationResult.isEmpty shouldBe true
 

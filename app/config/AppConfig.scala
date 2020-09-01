@@ -56,5 +56,6 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
 }
 
 trait FixedConfig {
-  val minimumTaxYear = 2020
+  val mtdMinimumTaxYear = 2020 // 2019-20
+  val reliefsMinimumTaxYear = 2022 // 2021-22
 }
