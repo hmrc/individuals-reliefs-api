@@ -37,7 +37,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -80,7 +81,9 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "knowledgeIntensive",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -118,7 +121,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -156,7 +160,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -194,7 +199,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }

@@ -4,6 +4,11 @@
   "description": "Allows the retrieval of relief investments",
   "type": "object",
   "properties": {
+    "submittedOn": {
+      "description": "The date the investment relief was added. It must be provided in the format YYYY-MM-DDThh:mm:ss.ssZ",
+      "type": "string",
+      "example": "2019-04-04T01:01:01Z"
+    },
     "vctSubscription": {
       "description": "Financial details about VCT subscriptions income",
       "type": "array",
@@ -37,7 +42,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -80,7 +86,9 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "knowledgeIntensive",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -118,7 +126,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -156,7 +165,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -194,7 +204,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -238,5 +249,8 @@
       }
     }
   },
+  "required": [
+    "submittedOn"
+  ],
   "additionalProperties": false
 }
