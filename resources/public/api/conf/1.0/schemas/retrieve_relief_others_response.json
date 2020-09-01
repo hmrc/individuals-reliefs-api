@@ -4,6 +4,11 @@
   "description": "Allows the retrieval of other reliefs",
   "type": "object",
   "properties": {
+    "submittedOn": {
+      "description": "The date the other reliefs was added. It must be provided in the format YYYY-MM-DDThh:mm:ss.ssZ",
+      "type": "string",
+      "example": "2019-04-04T01:01:01Z"
+    },
     "nonDeductableLoanInterest": {
       "description": "Details of non-deductable loan interest claimed",
       "type": "object",
@@ -91,7 +96,7 @@
           }
         },
         "required": [
-          "customerReference"
+          "amount"
         ],
         "additionalProperties": false
       }
@@ -131,7 +136,7 @@
           }
         },
         "required": [
-          "customerReference"
+          "amount"
         ],
         "additionalProperties": false
       }
@@ -178,7 +183,6 @@
           }
         },
         "required": [
-          "customerReference",
           "reliefClaimed"
         ],
         "additionalProperties": false
@@ -223,5 +227,8 @@
       }
     }
   },
+  "required": [
+    "submittedOn"
+  ],
   "additionalProperties": false
 }

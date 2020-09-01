@@ -54,7 +54,7 @@
           "example": "INPOLY123A"
         },
         "amount": {
-          "description": "The amount of relief claimed on redemption of bonus shares.",
+          "description": "The amount of relief claimed on qualifying shares and securities.",
           "type": "number",
           "example": "2000.99"
         }
@@ -91,7 +91,7 @@
           }
         },
         "required": [
-          "customerReference"
+          "amount"
         ],
         "additionalProperties": false
       }
@@ -131,7 +131,7 @@
           }
         },
         "required": [
-          "customerReference"
+          "amount"
         ],
         "additionalProperties": false
       }
@@ -178,7 +178,6 @@
           }
         },
         "required": [
-          "customerReference",
           "reliefClaimed"
         ],
         "additionalProperties": false

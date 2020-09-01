@@ -91,6 +91,61 @@ traits:
                 description: One or more values have been added with the incorrect format.
                 value:
                   code: FORMAT_VALUE
+  formatNameExSpouse:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatNameExSpouse:
+                description: The format of exSpouseName is not valid
+                value:
+                  code: FORMAT_NAME_EX_SPOUSE
+  formatNameBusiness:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatNameBusiness:
+                description: The format of businessName is not valid
+                value:
+                  code: FORMAT_NAME_BUSINESS
+  formatNatureOfTrade:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatNatureOfTrade:
+                description: The format of natureOfTrade is not valid
+                value:
+                  code: FORMAT_NATURE_OF_TRADE
+  formatIncomeSource:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatIncomeSource:
+                description: The format of incomeSource is not valid
+                value:
+                  code: FORMAT_INCOME_SOURCE
+  formatLenderName:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatLenderName:
+                description: The format of lenderName is not valid
+                value:
+                  code: FORMAT_LENDER_NAME
   formatDateOfInvestment:
     responses:
       400:
