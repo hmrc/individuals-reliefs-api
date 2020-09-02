@@ -22,38 +22,38 @@ import v1.models.utils.JsonErrorValidators
 
 class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with JsonErrorValidators {
   val postCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
-    "myRef",
+    Some("myRef"),
     Some("ACME Inc"),
     Some("2019-08-10"),
     Some("Widgets Manufacturer"),
     Some("AB12412/A12"),
-    Some(222.22)
+    222.22
   )
 
   val noOptionsPostCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
-    "myRef",
     None,
     None,
     None,
     None,
-    None
+    None,
+    222.22
   )
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myRef",
-      |        "businessName": "ACME Inc",
-      |        "dateBusinessCeased": "2019-08-10",
-      |        "natureOfTrade": "Widgets Manufacturer",
-      |        "incomeSource": "AB12412/A12",
-      |        "amount": 222.22
-      |      }""".stripMargin
+      |  "customerReference": "myRef",
+      |  "businessName": "ACME Inc",
+      |  "dateBusinessCeased": "2019-08-10",
+      |  "natureOfTrade": "Widgets Manufacturer",
+      |  "incomeSource": "AB12412/A12",
+      |  "amount": 222.22
+      |}""".stripMargin
   )
 
   val noOptionsJson = Json.parse(
     """{
-      |        "customerReference": "myRef"
-      |      }""".stripMargin
+      |  "amount": 222.22
+      |}""".stripMargin
   )
 
   "reads" when {

@@ -78,8 +78,13 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
            RuleTaxYearRangeInvalidError |
            RuleTaxYearNotSupportedError |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
-           MtdErrorWithCustomMessage(ReliefDateFormatError.code) |
-           MtdErrorWithCustomMessage(CustomerReferenceFormatError.code) =>
+           MtdErrorWithCustomMessage(DateFormatError.code) |
+           MtdErrorWithCustomMessage(CustomerReferenceFormatError.code) |
+           MtdErrorWithCustomMessage(ExSpouseNameFormatError.code) |
+           MtdErrorWithCustomMessage(BusinessNameFormatError.code) |
+           MtdErrorWithCustomMessage(NatureOfTradeFormatError.code) |
+           MtdErrorWithCustomMessage(IncomeSourceFormatError.code) |
+           MtdErrorWithCustomMessage(LenderNameFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper: ErrorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

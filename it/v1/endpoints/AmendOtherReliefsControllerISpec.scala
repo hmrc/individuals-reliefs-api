@@ -150,80 +150,86 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           """
             |{
             |  "nonDeductableLoanInterest": {
-            |        "customerReference": "myihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "",
             |        "reliefClaimed": -763.00
             |      },
             |  "payrollGiving": {
-            |        "customerReference": "myihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "",
             |        "reliefClaimed": -154.00
             |      },
             |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-            |        "customerReference": "myihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "",
             |        "amount": -222.22
             |      },
             |  "maintenancePayments": [
             |    {
-            |        "customerReference": "myihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
-            |        "exSpouseName" : "Hilda",
+            |        "customerReference": "",
+            |        "exSpouseName" : "",
             |        "exSpouseDateOfBirth": "2000-01",
             |        "amount": -222.22
             |      }
             |  ],
             |  "postCessationTradeReliefAndCertainOtherLosses": [
             |    {
-            |        "customerReference": "myrefmyihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
-            |        "businessName": "ACME Inc",
+            |        "customerReference": "",
+            |        "businessName": "",
             |        "dateBusinessCeased": "2019-08",
-            |        "natureOfTrade": "Widgets Manufacturer",
-            |        "incomeSource": "AB12412/A12",
+            |        "natureOfTrade": "",
+            |        "incomeSource": "",
             |        "amount": -222.22
             |      }
             |  ],
             |  "annualPaymentsMade": {
-            |        "customerReference": "myrefmyihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
+            |        "customerReference": "",
             |        "reliefClaimed": -763.00
             |      },
             |  "qualifyingLoanInterestPayments": [
             |    {
-            |        "customerReference": "myrefmyihadskjnadjdksnjknkqgnkxankgdankganxjkndgref",
-            |        "lenderName": "Maurice",
+            |        "customerReference": "",
+            |        "lenderName": "",
             |        "reliefClaimed": -763.00
             |      }
             |  ]
             |}""".stripMargin)
 
         val allInvalidValueRequestError: List[MtdError] = List(
-          CustomerReferenceFormatError.copy(
-            message = "The provided customer reference is not valid",
-            paths = Some(List(
-              "/nonDeductableLoanInterest/customerReference",
-              "/payrollGiving/customerReference",
-              "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
-              "/maintenancePayments/0/customerReference",
-              "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
-              "/annualPaymentsMade/customerReference",
-              "/qualifyingLoanInterestPayments/0/customerReference"
-            ))
-          ),
-          ValueFormatError.copy(
-            message = "The field should be between 0 and 99999999999.99",
-            paths = Some(List(
-              "/nonDeductableLoanInterest/reliefClaimed",
-              "/payrollGiving/reliefClaimed",
-              "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
-              "/maintenancePayments/0/amount",
-              "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
-              "/annualPaymentsMade/reliefClaimed",
-              "/qualifyingLoanInterestPayments/0/reliefClaimed"
-            ))
-          ),
-          ReliefDateFormatError.copy(
-            message = "The field should be in the format YYYY-MM-DD",
-            paths =Some(List(
-              "/maintenancePayments/0/exSpouseDateOfBirth",
-              "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
-            ))
-          )
+          LenderNameFormatError.copy(paths = Some(Seq(
+            "/qualifyingLoanInterestPayments/0/lenderName"
+          ))),
+          CustomerReferenceFormatError.copy(paths = Some(List(
+            "/nonDeductableLoanInterest/customerReference",
+            "/payrollGiving/customerReference",
+            "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
+            "/maintenancePayments/0/customerReference",
+            "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
+            "/annualPaymentsMade/customerReference",
+            "/qualifyingLoanInterestPayments/0/customerReference"
+          ))),
+          DateFormatError.copy(paths = Some(List(
+            "/maintenancePayments/0/exSpouseDateOfBirth",
+            "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
+          ))),
+          ExSpouseNameFormatError.copy(paths = Some(Seq(
+            "/maintenancePayments/0/exSpouseName"
+          ))),
+          IncomeSourceFormatError.copy(paths = Some(Seq(
+            "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
+          ))),
+          BusinessNameFormatError.copy(paths = Some(Seq(
+            "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
+          ))),
+          NatureOfTradeFormatError.copy(paths = Some(Seq(
+            "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
+          ))),
+          ValueFormatError.copy(paths = Some(List(
+            "/nonDeductableLoanInterest/reliefClaimed",
+            "/payrollGiving/reliefClaimed",
+            "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
+            "/maintenancePayments/0/amount",
+            "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
+            "/annualPaymentsMade/reliefClaimed",
+            "/qualifyingLoanInterestPayments/0/reliefClaimed"
+          )))
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(
@@ -246,7 +252,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
     "return an error according to spec" when {
 
-      val validRequestBodyJson =  Json.parse(
+      val validRequestBodyJson = Json.parse(
         """
           |{
           |  "nonDeductableLoanInterest": {
@@ -338,7 +344,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allDatesInvalidRequestBodyJson =  Json.parse(
+      val allDatesInvalidRequestBodyJson = Json.parse(
         """
           |{
           |  "nonDeductableLoanInterest": {
@@ -384,24 +390,24 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allCustomerReferencesInvalidRequestBodyJson =  Json.parse(
+      val allCustomerReferencesInvalidRequestBodyJson = Json.parse(
         """
           |{
           |  "nonDeductableLoanInterest": {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "",
           |        "reliefClaimed": 763.00
           |      },
           |  "payrollGiving": {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "",
           |        "reliefClaimed": 154.00
           |      },
           |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "",
           |        "amount": 222.22
           |      },
           |  "maintenancePayments": [
           |    {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "",
           |        "exSpouseName" : "Hilda",
           |        "exSpouseDateOfBirth": "2000-01-01",
           |        "amount": 222.22
@@ -409,7 +415,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ],
           |  "postCessationTradeReliefAndCertainOtherLosses": [
           |    {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "",
           |        "businessName": "ACME Inc",
           |        "dateBusinessCeased": "2019-08-10",
           |        "natureOfTrade": "Widgets Manufacturer",
@@ -418,20 +424,249 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |      }
           |  ],
           |  "annualPaymentsMade": {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "",
           |        "reliefClaimed": 763.00
           |      },
           |  "qualifyingLoanInterestPayments": [
           |    {
-          |        "customerReference": "reuewgjhgrjekjghukdrwhjgbjhguirughwuiguruhgerehgrhwuhf",
+          |        "customerReference": "",
           |        "lenderName": "Maurice",
           |        "reliefClaimed": 763.00
           |      }
           |  ]
           |}""".stripMargin)
 
+      val allExSpouseNamesInvalidRequestBodyJson = Json.parse(
+        """
+          |{
+          |  "nonDeductableLoanInterest": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "payrollGiving": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 154.00
+          |      },
+          |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+          |        "customerReference": "myref",
+          |        "amount": 222.22
+          |      },
+          |  "maintenancePayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "exSpouseName" : "",
+          |        "exSpouseDateOfBirth": "2000-01-01",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "postCessationTradeReliefAndCertainOtherLosses": [
+          |    {
+          |        "customerReference": "myref",
+          |        "businessName": "ACME Inc",
+          |        "dateBusinessCeased": "2019-08-10",
+          |        "natureOfTrade": "Widgets Manufacturer",
+          |        "incomeSource": "AB12412/A12",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "annualPaymentsMade": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "qualifyingLoanInterestPayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "lenderName": "Maurice",
+          |        "reliefClaimed": 763.00
+          |      }
+          |  ]
+          |}""".stripMargin)
+
+      val allBusinessNamesInvalidRequestBodyJson = Json.parse(
+        """
+          |{
+          |  "nonDeductableLoanInterest": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "payrollGiving": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 154.00
+          |      },
+          |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+          |        "customerReference": "myref",
+          |        "amount": 222.22
+          |      },
+          |  "maintenancePayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "exSpouseName" : "Hilda",
+          |        "exSpouseDateOfBirth": "2000-01-01",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "postCessationTradeReliefAndCertainOtherLosses": [
+          |    {
+          |        "customerReference": "myref",
+          |        "businessName": "",
+          |        "dateBusinessCeased": "2019-08-10",
+          |        "natureOfTrade": "Widgets Manufacturer",
+          |        "incomeSource": "AB12412/A12",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "annualPaymentsMade": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "qualifyingLoanInterestPayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "lenderName": "Maurice",
+          |        "reliefClaimed": 763.00
+          |      }
+          |  ]
+          |}""".stripMargin)
+
+      val allNatureOfTradesInvalidRequestBodyJson = Json.parse(
+        """
+          |{
+          |  "nonDeductableLoanInterest": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "payrollGiving": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 154.00
+          |      },
+          |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+          |        "customerReference": "myref",
+          |        "amount": 222.22
+          |      },
+          |  "maintenancePayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "exSpouseName" : "Hilda",
+          |        "exSpouseDateOfBirth": "2000-01-01",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "postCessationTradeReliefAndCertainOtherLosses": [
+          |    {
+          |        "customerReference": "myref",
+          |        "businessName": "ACME Inc",
+          |        "dateBusinessCeased": "2019-08-10",
+          |        "natureOfTrade": "",
+          |        "incomeSource": "AB12412/A12",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "annualPaymentsMade": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "qualifyingLoanInterestPayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "lenderName": "Maurice",
+          |        "reliefClaimed": 763.00
+          |      }
+          |  ]
+          |}""".stripMargin)
+
+      val allIncomeSourcesInvalidRequestBodyJson = Json.parse(
+        """
+          |{
+          |  "nonDeductableLoanInterest": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "payrollGiving": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 154.00
+          |      },
+          |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+          |        "customerReference": "myref",
+          |        "amount": 222.22
+          |      },
+          |  "maintenancePayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "exSpouseName" : "Hilda",
+          |        "exSpouseDateOfBirth": "2000-01-01",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "postCessationTradeReliefAndCertainOtherLosses": [
+          |    {
+          |        "customerReference": "myref",
+          |        "businessName": "ACME Inc",
+          |        "dateBusinessCeased": "2019-08-10",
+          |        "natureOfTrade": "Widgets Manufacturer",
+          |        "incomeSource": "",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "annualPaymentsMade": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "qualifyingLoanInterestPayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "lenderName": "Maurice",
+          |        "reliefClaimed": 763.00
+          |      }
+          |  ]
+          |}""".stripMargin)
+
+      val allLenderNamesInvalidRequestBodyJson = Json.parse(
+        """
+          |{
+          |  "nonDeductableLoanInterest": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "payrollGiving": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 154.00
+          |      },
+          |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+          |        "customerReference": "myref",
+          |        "amount": 222.22
+          |      },
+          |  "maintenancePayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "exSpouseName" : "Hilda",
+          |        "exSpouseDateOfBirth": "2000-01-01",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "postCessationTradeReliefAndCertainOtherLosses": [
+          |    {
+          |        "customerReference": "myref",
+          |        "businessName": "ACME Inc",
+          |        "dateBusinessCeased": "2019-08-10",
+          |        "natureOfTrade": "Widgets Manufacturer",
+          |        "incomeSource": "AB12412/A12",
+          |        "amount": 222.22
+          |      }
+          |  ],
+          |  "annualPaymentsMade": {
+          |        "customerReference": "myref",
+          |        "reliefClaimed": 763.00
+          |      },
+          |  "qualifyingLoanInterestPayments": [
+          |    {
+          |        "customerReference": "myref",
+          |        "lenderName": "",
+          |        "reliefClaimed": 763.00
+          |      }
+          |  ]
+          |}""".stripMargin)
+
       val allValueFormatError: MtdError = ValueFormatError.copy(
-        message = "The field should be between 0 and 99999999999.99",
         paths = Some(Seq(
           "/nonDeductableLoanInterest/reliefClaimed",
           "/payrollGiving/reliefClaimed",
@@ -443,8 +678,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         ))
       )
 
-      val allDateFormatError: MtdError = ReliefDateFormatError.copy(
-        message = "The field should be in the format YYYY-MM-DD",
+      val allDateFormatError: MtdError = DateFormatError.copy(
         paths = Some(List(
           "/maintenancePayments/0/exSpouseDateOfBirth",
           "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
@@ -452,7 +686,6 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       )
 
       val allCustomerReferenceFormatErrors: MtdError = CustomerReferenceFormatError.copy(
-        message = "The provided customer reference is not valid",
         paths = Some(List(
           "/nonDeductableLoanInterest/customerReference",
           "/payrollGiving/customerReference",
@@ -464,8 +697,38 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         ))
       )
 
+      val allExSpouseNameFormatErrors: MtdError = ExSpouseNameFormatError.copy(
+        paths = Some(List(
+          "/maintenancePayments/0/exSpouseName"
+        ))
+      )
+
+      val allBusinessNameFormatErrors: MtdError = BusinessNameFormatError.copy(
+        paths = Some(List(
+          "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
+        ))
+      )
+
+      val allNatureOfTradeFormatErrors: MtdError = NatureOfTradeFormatError.copy(
+        paths = Some(List(
+          "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
+        ))
+      )
+
+      val allIncomeSourceFormatErrors: MtdError = IncomeSourceFormatError.copy(
+        paths = Some(List(
+          "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
+        ))
+      )
+
+      val allLenderNameFormatErrors: MtdError = LenderNameFormatError.copy(
+        paths = Some(List(
+          "/qualifyingLoanInterestPayments/0/lenderName"
+        ))
+      )
+
       "validation error" when {
-        def validationErrorTest(requestNino:String, requestTaxYear: String, requestBody: JsValue,  expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String, requestTaxYear: String, requestBody: JsValue, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
             override val nino: String = requestNino
@@ -488,10 +751,15 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           ("AA1123A", "2021-22", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
           ("AA123456A", "2020-21", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2020-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "20121", validRequestBodyJson,  BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "20121", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2021-22", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
           ("AA123456A", "2021-22", allDatesInvalidRequestBodyJson, BAD_REQUEST, allDateFormatError),
-          ("AA123456A", "2021-22", allCustomerReferencesInvalidRequestBodyJson, BAD_REQUEST, allCustomerReferenceFormatErrors)
+          ("AA123456A", "2021-22", allCustomerReferencesInvalidRequestBodyJson, BAD_REQUEST, allCustomerReferenceFormatErrors),
+          ("AA123456A", "2021-22", allExSpouseNamesInvalidRequestBodyJson, BAD_REQUEST, allExSpouseNameFormatErrors),
+          ("AA123456A", "2021-22", allBusinessNamesInvalidRequestBodyJson, BAD_REQUEST, allBusinessNameFormatErrors),
+          ("AA123456A", "2021-22", allNatureOfTradesInvalidRequestBodyJson, BAD_REQUEST, allNatureOfTradeFormatErrors),
+          ("AA123456A", "2021-22", allIncomeSourcesInvalidRequestBodyJson, BAD_REQUEST, allIncomeSourceFormatErrors),
+          ("AA123456A", "2021-22", allLenderNamesInvalidRequestBodyJson, BAD_REQUEST, allLenderNameFormatErrors)
         )
 
         input.foreach(args => (validationErrorTest _).tupled(args))

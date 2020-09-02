@@ -29,25 +29,43 @@ object MtdErrorWithCustomMessage {
 }
 
 object NinoFormatError extends MtdError("FORMAT_NINO", "The provided NINO is invalid")
+
 object TaxYearFormatError extends MtdError("FORMAT_TAX_YEAR", "The provided tax year is invalid")
+
 object ValueFormatError extends MtdError("FORMAT_VALUE", "The field should be between 0 and 99999999999.99")
-object ReliefDateFormatError extends MtdError("FORMAT_DATE", "The field should be in the format YYYY-MM-DD")
+
+object DateFormatError extends MtdError("FORMAT_DATE", "The field should be in the format YYYY-MM-DD")
+
 object DateOfInvestmentFormatError extends MtdError("FORMAT_DATE_OF_INVESTMENT", "The format of the investment date is invalid")
+
 object NameFormatError extends MtdError("FORMAT_NAME", "The format of the name is invalid")
+
 object InvestmentRefFormatError extends MtdError("FORMAT_UNIQUE_INVESTMENT_REFERENCE", "The format of unique investment reference is invalid")
+
 object CustomerReferenceFormatError extends MtdError("FORMAT_CUSTOMER_REF", "The provided customer reference is not valid")
 
+object ExSpouseNameFormatError extends MtdError("FORMAT_NAME_EX_SPOUSE", "The provided ex spouse name is not valid")
+
+object BusinessNameFormatError extends MtdError("FORMAT_NAME_BUSINESS", "The provided business name is not valid")
+
+object NatureOfTradeFormatError extends MtdError("FORMAT_NATURE_OF_TRADE", "The provided nature of trade is not valid")
+
+object IncomeSourceFormatError extends MtdError("FORMAT_INCOME_SOURCE", "The provided income source is not valid")
+
+object LenderNameFormatError extends MtdError("FORMAT_LENDER_NAME", "The provided lender name is not valid")
+
+
 // Rule Errors
-object RuleTaxYearNotSupportedError
-    extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "Tax year not supported, because it precedes the earliest allowable tax year")
+object RuleTaxYearNotSupportedError extends MtdError(
+  "RULE_TAX_YEAR_NOT_SUPPORTED",
+  "The specified tax year is not supported. That is, the tax year specified is before the minimum tax year value"
+)
 
 object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED", "An empty or non-matching body was submitted")
 
-object RuleTaxYearRangeExceededError
-    extends MtdError("RULE_TAX_YEAR_RANGE_EXCEEDED", "Tax year range exceeded. A tax year range of one year is required.")
-
 object RuleTaxYearRangeInvalidError
   extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required.")
+
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")
 
@@ -61,12 +79,13 @@ object ServiceUnavailableError extends MtdError("SERVICE_UNAVAILABLE", "Internal
 
 //Authorisation Errors
 object UnauthorisedError extends MtdError("CLIENT_OR_AGENT_NOT_AUTHORISED", "The client and/or agent is not authorised")
+
 object InvalidBearerTokenError extends MtdError("UNAUTHORIZED", "Bearer token is missing or not authorized")
 
 // Accept header Errors
-object  InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")
+object InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")
 
-object  UnsupportedVersionError extends MtdError("NOT_FOUND", "The requested resource could not be found")
+object UnsupportedVersionError extends MtdError("NOT_FOUND", "The requested resource could not be found")
 
 object InvalidBodyTypeError extends MtdError("INVALID_BODY_TYPE", "Expecting text/json or application/json body")
 

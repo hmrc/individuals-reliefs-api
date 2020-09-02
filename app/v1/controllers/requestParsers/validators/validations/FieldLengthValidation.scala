@@ -16,23 +16,23 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{CustomerReferenceFormatError, MtdError}
+import v1.models.errors.MtdError
 
-object CustomerReferenceValidation {
+object FieldLengthValidation {
 
-  def validateOptional(field: Option[String], path: String): List[MtdError] = {
+  def validateOptional(field: Option[String], maxLength: Int = 105, path: String, error: MtdError): List[MtdError] = {
     field match {
       case None => NoValidationErrors
-      case Some(value) => validate(value, path)
+      case Some(value) => validate(value, maxLength, path, error)
     }
   }
 
-  private def validate(customerRef: String, path: String): List[MtdError] = {
-    if (customerRef.length <= 25) {
+  private def validate(field: String, maxLength: Int, path: String, error: MtdError): List[MtdError] = {
+    if (field.length > 0 && field.length <= maxLength) {
       NoValidationErrors
     } else {
       List(
-        CustomerReferenceFormatError.copy(paths = Some(Seq(path)))
+        error.copy(paths = Some(Seq(path)))
       )
     }
   }

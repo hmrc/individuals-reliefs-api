@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.{DateOfInvestmentFormatError, ReliefDateFormatError}
+import v1.models.errors.{DateOfInvestmentFormatError, DateFormatError}
 
 class DateValidationSpec extends UnitSpec {
 
@@ -32,7 +32,7 @@ class DateValidationSpec extends UnitSpec {
         validationResult.isEmpty shouldBe true
       }
       "no valid date is supplied" in {
-        val validationResult = DateValidation.validateOptional(None, "/maintenancePayments/0/exSpouseDateOfBirth", ReliefDateFormatError)
+        val validationResult = DateValidation.validateOptional(None, "/maintenancePayments/0/exSpouseDateOfBirth", DateFormatError)
 
         validationResult.isEmpty shouldBe true
       }

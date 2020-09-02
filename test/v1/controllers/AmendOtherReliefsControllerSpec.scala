@@ -122,22 +122,22 @@ class AmendOtherReliefsControllerSpec
       Some("myref"),
       222.22)),
     Some(Seq(MaintenancePayments(
-      "myref",
+      Some("myref"),
       Some("Hilda"),
       Some("2000-01-01"),
-      Some(222.22)))),
+      222.22))),
     Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
-      "myref",
+      Some("myref"),
       Some("ACME Inc"),
       Some("2019-08-10"),
       Some("Widgets Manufacturer"),
       Some("AB12412/A12"),
-      Some(222.22)))),
+      222.22))),
     Some(AnnualPaymentsMade(
       Some("myref"),
       763.00)),
     Some(Seq(QualifyingLoanInterestPayments(
-      "myref",
+      Some("myref"),
       Some("Maurice"),
       763.00)))
   )
@@ -188,14 +188,17 @@ class AmendOtherReliefsControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (ValueFormatError.copy(paths = Some(Seq(
-            "vctSubscription/0/amountInvested",
-            "vctSubscription/0/reliefClaimed"))), BAD_REQUEST),
-          (ReliefDateFormatError, BAD_REQUEST),
+          (ValueFormatError, BAD_REQUEST),
+          (DateFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
-          (CustomerReferenceFormatError, BAD_REQUEST)
+          (CustomerReferenceFormatError, BAD_REQUEST),
+          (ExSpouseNameFormatError, BAD_REQUEST),
+          (BusinessNameFormatError, BAD_REQUEST),
+          (NatureOfTradeFormatError, BAD_REQUEST),
+          (IncomeSourceFormatError, BAD_REQUEST),
+          (LenderNameFormatError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
