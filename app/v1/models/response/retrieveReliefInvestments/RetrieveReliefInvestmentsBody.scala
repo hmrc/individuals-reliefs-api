@@ -21,11 +21,14 @@ import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class RetrieveReliefInvestmentsBody(vctSubscription: Seq[VctSubscriptionsItem],
-                                         eisSubscription: Seq[EisSubscriptionsItem],
-                                         communityInvestment: Seq[CommunityInvestmentItem],
-                                         seedEnterpriseInvestment: Seq[SeedEnterpriseInvestmentItem],
-                                         socialEnterpriseInvestment: Seq[SocialEnterpriseInvestmentItem])
+case class RetrieveReliefInvestmentsBody(
+                                          submittedOn: String,
+                                          vctSubscription: Seq[VctSubscriptionsItem],
+                                          eisSubscription: Seq[EisSubscriptionsItem],
+                                          communityInvestment: Seq[CommunityInvestmentItem],
+                                          seedEnterpriseInvestment: Seq[SeedEnterpriseInvestmentItem],
+                                          socialEnterpriseInvestment: Seq[SocialEnterpriseInvestmentItem]
+                                        )
 
 object RetrieveReliefInvestmentsBody extends HateoasLinks {
   implicit val format: OFormat[RetrieveReliefInvestmentsBody] = Json.format[RetrieveReliefInvestmentsBody]
@@ -40,6 +43,7 @@ object RetrieveReliefInvestmentsBody extends HateoasLinks {
       )
     }
   }
+
 }
 
 case class RetrieveReliefInvestmentsHateoasData(nino: String, taxYear: String) extends HateoasData

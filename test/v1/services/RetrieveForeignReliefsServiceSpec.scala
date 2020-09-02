@@ -35,7 +35,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
   private val taxYear = "2017-18"
   private val correlationId = "X-123"
 
-  private val responseModel = RetrieveForeignReliefsBody(Some(ForeignTaxCreditRelief(234567.89)))
+  private val responseModel = RetrieveForeignReliefsBody("2020-06-17T10:53:38Z", Some(ForeignTaxCreditRelief(234567.89)))
 
   private val requestData = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
 

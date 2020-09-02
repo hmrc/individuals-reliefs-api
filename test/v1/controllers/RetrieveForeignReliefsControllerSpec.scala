@@ -49,6 +49,7 @@ class RetrieveForeignReliefsControllerSpec
   private val requestData = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
   private val testHateoasLink = Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
   private val responseBody = RetrieveForeignReliefsBody(
+    "2020-06-17T10:53:38Z",
     Some(ForeignTaxCreditRelief(2309.95))
   )
 

@@ -36,6 +36,7 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
   private val correlationId = "X-123"
 
   private val fullResponseModel = RetrieveReliefInvestmentsBody(
+    "2020-06-17T10:53:38Z",
     Seq(VctSubscriptionsItem(
       "VCTREF",
       Some("VCT Fund X"),

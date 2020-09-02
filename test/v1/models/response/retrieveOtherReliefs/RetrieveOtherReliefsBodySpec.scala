@@ -24,6 +24,7 @@ import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class RetrieveOtherReliefsBodySpec extends UnitSpec with MockAppConfig {
   val retrieveOtherReliefsBody = RetrieveOtherReliefsBody(
+    "2020-06-17T10:53:38Z",
     Some(NonDeductableLoanInterest(
       Some("myref"),
       763.00)),
@@ -54,18 +55,9 @@ class RetrieveOtherReliefsBodySpec extends UnitSpec with MockAppConfig {
       763.00)))
   )
 
-  val emptyAmendOtherReliefsBody = RetrieveOtherReliefsBody(
-    None,
-    None,
-    None,
-    None,
-    None,
-    None,
-    None
-  )
-
   val json = Json.parse(
     """{
+      |  "submittedOn": "2020-06-17T10:53:38Z",
       |  "nonDeductableLoanInterest": {
       |        "customerReference": "myref",
       |        "reliefClaimed": 763.00
@@ -119,22 +111,10 @@ class RetrieveOtherReliefsBodySpec extends UnitSpec with MockAppConfig {
       }
     }
   }
-  "read from empty JSON" should {
-    "convert empty MTD JSON into an empty AmendSecuritiesItems object" in {
-      emptyAmendOtherReliefsBody shouldBe emptyJson.as[RetrieveOtherReliefsBody]
-    }
-  }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
         Json.toJson(retrieveOtherReliefsBody) shouldBe json
-      }
-    }
-  }
-  "write from an empty body" when {
-    "passed an empty model" should {
-      "return an empty JSON" in {
-        Json.toJson(emptyAmendOtherReliefsBody) shouldBe emptyJson
       }
     }
   }

@@ -43,6 +43,7 @@ class AuthISpec extends IntegrationBaseSpec {
     val desResponse: JsValue = Json.parse(
       """
         |{
+        |  "submittedOn": "2020-06-17T10:53:38Z",
         |  "vctSubscription":[
         |    {
         |      "uniqueInvestmentRef": "VCTREF",

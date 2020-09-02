@@ -21,13 +21,16 @@ import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class RetrieveOtherReliefsBody(nonDeductableLoanInterest: Option[NonDeductableLoanInterest],
-                                 payrollGiving: Option[PayrollGiving],
-                                 qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
-                                 maintenancePayments: Option[Seq[MaintenancePayments]],
-                                 postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
-                                 annualPaymentsMade: Option[AnnualPaymentsMade],
-                                 qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]])
+case class RetrieveOtherReliefsBody(
+                                     submittedOn: String,
+                                     nonDeductableLoanInterest: Option[NonDeductableLoanInterest],
+                                     payrollGiving: Option[PayrollGiving],
+                                     qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
+                                     maintenancePayments: Option[Seq[MaintenancePayments]],
+                                     postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
+                                     annualPaymentsMade: Option[AnnualPaymentsMade],
+                                     qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]
+                                   )
 
 object RetrieveOtherReliefsBody extends HateoasLinks {
   implicit val format: OFormat[RetrieveOtherReliefsBody] = Json.format[RetrieveOtherReliefsBody]
@@ -42,6 +45,7 @@ object RetrieveOtherReliefsBody extends HateoasLinks {
       )
     }
   }
+
 }
 
 case class RetrieveOtherReliefsHateoasData(nino: String, taxYear: String) extends HateoasData

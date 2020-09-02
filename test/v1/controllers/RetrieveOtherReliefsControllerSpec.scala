@@ -68,6 +68,7 @@ class RetrieveOtherReliefsControllerSpec
   private val testHateoasLink = Link(href = s"individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveOtherReliefsBody(
+    "2020-06-17T10:53:38Z",
     Some(NonDeductableLoanInterest(
       Some("myref"),
       763.00)),

@@ -65,9 +65,10 @@ class RetrieveReliefInvestmentsControllerSpec
   private val rawData = RetrieveReliefInvestmentsRawData(nino, taxYear)
   private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), taxYear)
 
-  private val testHateoasLink = Link(href = s"individuals/reliefs/innvestment/$nino/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveReliefInvestmentsBody(
+    "2020-06-17T10:53:38Z",
     Seq(VctSubscriptionsItem(
       "VCTREF",
       Some("VCT Fund X"),

@@ -35,6 +35,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
     val responseBody: JsValue = Json.parse(
       s"""
         |{
+        |  "submittedOn": "2020-06-17T10:53:38Z",
         |  "vctSubscription":[
         |    {
         |      "uniqueInvestmentRef": "VCTREF",
@@ -81,22 +82,23 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         |      "reliefClaimed": 3432.00
         |    }
         |  ],
-        |  "links": [{
-        |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
-        |    "method": "GET",
-        |    "rel": "self"
+        |  "links": [
+        |    {
+        |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
+        |      "method": "GET",
+        |      "rel": "self"
         |    },
-        |  {
-        |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
-        |    "method": "PUT",
-        |    "rel": "amend-reliefs-investments"
-        |  },
-        |  {
-        |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
-        |    "method": "DELETE",
-        |    "rel": "delete-reliefs-investments"
-        |  }
-        |]
+        |    {
+        |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
+        |      "method": "PUT",
+        |      "rel": "amend-reliefs-investments"
+        |    },
+        |    {
+        |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
+        |      "method": "DELETE",
+        |      "rel": "delete-reliefs-investments"
+        |    }
+        |  ]
         |}
         |""".stripMargin
     )
@@ -104,6 +106,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
     val desResponseBody: JsValue = Json.parse(
       s"""
          |{
+         |  "submittedOn": "2020-06-17T10:53:38Z",
          |  "vctSubscription":[
          |    {
          |      "uniqueInvestmentRef": "VCTREF",
@@ -111,7 +114,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |      "dateOfInvestment": "2018-04-16",
          |      "amountInvested": 23312.00,
          |      "reliefClaimed": 1334.00
-         |      }
+         |    }
          |  ],
          |  "eisSubscription":[
          |    {

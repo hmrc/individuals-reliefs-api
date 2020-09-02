@@ -35,9 +35,10 @@ class RetrieveForeignReliefsControllerISpec extends IntegrationBaseSpec {
     val responseBody: JsValue = Json.parse(
       s"""
          |{
+         |  "submittedOn": "2020-06-17T10:53:38Z",
          |  "foreignTaxCreditRelief": {
-         |     "amount": 2309.95
-         |     },
+         |      "amount": 2309.95
+         |  },
          |  "links":[
          |      {
          |         "href":"/individuals/reliefs/foreign/$nino/$taxYear",
@@ -62,6 +63,7 @@ class RetrieveForeignReliefsControllerISpec extends IntegrationBaseSpec {
     val desResponseBody: JsValue = Json.parse(
       s"""
          |{
+         |  "submittedOn": "2020-06-17T10:53:38Z",
          |  "foreignTaxCreditRelief":{
          |    "amount" : 2309.95
          |  }

@@ -24,6 +24,7 @@ import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class RetrieveReliefInvestmentsBodySpec extends UnitSpec with MockAppConfig {
   val retrieveReliefInvestmentsBody = RetrieveReliefInvestmentsBody(
+    "2020-06-17T10:53:38Z",
     Seq(VctSubscriptionsItem(
       "VCTREF",
       Some("VCT Fund X"),
@@ -64,6 +65,7 @@ class RetrieveReliefInvestmentsBodySpec extends UnitSpec with MockAppConfig {
   val json = Json.parse(
     """
       |{
+      |  "submittedOn": "2020-06-17T10:53:38Z",
       |  "vctSubscription":[
       |    {
       |      "uniqueInvestmentRef": "VCTREF",

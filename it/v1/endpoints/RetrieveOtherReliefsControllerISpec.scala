@@ -35,6 +35,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
     val responseBody: JsValue = Json.parse(
       s"""
          |{
+         |    "submittedOn": "2020-06-17T10:53:38Z",
          |    "nonDeductableLoanInterest": {
          |        "customerReference": "INPOLY123A",
          |        "reliefClaimed": 2000.99
@@ -47,49 +48,52 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |        "customerReference": "INPOLY123A",
          |        "amount": 2000.99
          |    },
-         |    "maintenancePayments": [{
-         |        "customerReference": "INPOLY123A",
-         |        "exSpouseName": "Wilson",
-         |        "exSpouseDateOfBirth": "1985-04-06",
-         |        "amount": 2000.99
-         |    }
-         |  ],
-         |    "postCessationTradeReliefAndCertainOtherLosses": [{
-         |        "customerReference": "INPOLY123A",
-         |        "businessName": "CA Ltd",
-         |        "dateBusinessCeased": "2019-04-06",
-         |        "natureOfTrade": "Widgets Manufacturer",
-         |        "incomeSource": "AB12412/A12",
-         |        "amount": 2000.99
-         |    }
-         |  ],
+         |    "maintenancePayments": [
+         |        {
+         |            "customerReference": "INPOLY123A",
+         |            "exSpouseName": "Wilson",
+         |            "exSpouseDateOfBirth": "1985-04-06",
+         |            "amount": 2000.99
+         |        }
+         |    ],
+         |    "postCessationTradeReliefAndCertainOtherLosses": [
+         |        {
+         |            "customerReference": "INPOLY123A",
+         |            "businessName": "CA Ltd",
+         |            "dateBusinessCeased": "2019-04-06",
+         |            "natureOfTrade": "Widgets Manufacturer",
+         |            "incomeSource": "AB12412/A12",
+         |            "amount": 2000.99
+         |        }
+         |    ],
          |    "annualPaymentsMade": {
          |        "customerReference": "INPOLY123A",
          |        "reliefClaimed": 2000.99
          |    },
-         |    "qualifyingLoanInterestPayments": [{
-         |        "customerReference": "INPOLY123A",
-         |        "lenderName": "Peters",
-         |        "reliefClaimed": 2000.99
-         |    }
-         |  ],
-         |   "links":[
-         |      {
-         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      },
-         |      {
-         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-         |         "method":"PUT",
-         |         "rel":"amend-reliefs-other"
-         |      },
-         |      {
-         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-         |         "method":"DELETE",
-         |         "rel":"delete-reliefs-other"
-         |      }
-         |   ]
+         |    "qualifyingLoanInterestPayments": [
+         |        {
+         |            "customerReference": "INPOLY123A",
+         |            "lenderName": "Peters",
+         |            "reliefClaimed": 2000.99
+         |        }
+         |    ],
+         |    "links":[
+         |        {
+         |            "href":"/individuals/reliefs/other/$nino/$taxYear",
+         |            "method":"GET",
+         |            "rel":"self"
+         |        },
+         |        {
+         |            "href":"/individuals/reliefs/other/$nino/$taxYear",
+         |            "method":"PUT",
+         |            "rel":"amend-reliefs-other"
+         |        },
+         |        {
+         |            "href":"/individuals/reliefs/other/$nino/$taxYear",
+         |            "method":"DELETE",
+         |            "rel":"delete-reliefs-other"
+         |        }
+         |    ]
          |}
          |""".stripMargin
     )
@@ -97,6 +101,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
     val desResponseBody: JsValue = Json.parse(
       s"""
          |{
+         |    "submittedOn": "2020-06-17T10:53:38Z",
          |    "nonDeductableLoanInterest": {
          |        "customerReference": "INPOLY123A",
          |        "reliefClaimed": 2000.99
