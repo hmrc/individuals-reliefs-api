@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{InvestmentRefFormatError, MtdError}
+import v1.models.errors.{UniqueInvestmentRefFormatError, MtdError}
 
 
 object InvestmentRefValidation {
@@ -27,7 +27,7 @@ object InvestmentRefValidation {
   def validate(investmentRef: String, path: String): List[MtdError] = {
     if (investmentRef.matches(investRegex)) Nil else {
       List(
-        InvestmentRefFormatError.copy(paths = Some(Seq(path)))
+        UniqueInvestmentRefFormatError.copy(paths = Some(Seq(path)))
       )
     }
   }

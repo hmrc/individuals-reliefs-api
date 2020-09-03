@@ -40,7 +40,7 @@ object DateOfInvestmentFormatError extends MtdError("FORMAT_DATE_OF_INVESTMENT",
 
 object NameFormatError extends MtdError("FORMAT_NAME", "The format of the name is invalid")
 
-object InvestmentRefFormatError extends MtdError("FORMAT_UNIQUE_INVESTMENT_REFERENCE", "The format of unique investment reference is invalid")
+object UniqueInvestmentRefFormatError extends MtdError("FORMAT_UNIQUE_INVESTMENT_REFERENCE", "The format of unique investment reference is invalid")
 
 object CustomerReferenceFormatError extends MtdError("FORMAT_CUSTOMER_REF", "The provided customer reference is not valid")
 
