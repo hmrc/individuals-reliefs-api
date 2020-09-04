@@ -16,6 +16,7 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "reliefClaimed": {
@@ -36,6 +37,7 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "reliefClaimed": {
@@ -56,6 +58,7 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "amount": {
@@ -110,6 +113,7 @@
           "customerReference": {
             "description": "A reference or friendly name used by the customer.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "INPOLY123A"
           },
           "businessName": {
@@ -123,7 +127,8 @@
           },
           "natureOfTrade": {
             "description": "The trading nature of the business.",
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
           },
           "incomeSource": {
             "description": "Income source identifier or UTR (Unique Taxpayer Reference).",
@@ -148,6 +153,7 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "reliefClaimed": {
@@ -170,6 +176,7 @@
           "customerReference": {
             "description": "A reference or friendly name used by the customer.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "INPOLY123A"
           },
           "lenderName": {

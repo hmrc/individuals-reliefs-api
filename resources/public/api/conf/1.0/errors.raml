@@ -99,7 +99,7 @@ traits:
             type: types.errorResponse
             examples:
               formatNameExSpouse:
-                description: The format of exSpouseName is not valid
+                description: The format of exSpouseName is not valid.
                 value:
                   code: FORMAT_NAME_EX_SPOUSE
   formatNameBusiness:
@@ -110,7 +110,7 @@ traits:
             type: types.errorResponse
             examples:
               formatNameBusiness:
-                description: The format of businessName is not valid
+                description: The format of businessName is not valid.
                 value:
                   code: FORMAT_NAME_BUSINESS
   formatNatureOfTrade:
@@ -121,7 +121,7 @@ traits:
             type: types.errorResponse
             examples:
               formatNatureOfTrade:
-                description: The format of natureOfTrade is not valid
+                description: The format of natureOfTrade is not valid.
                 value:
                   code: FORMAT_NATURE_OF_TRADE
   formatIncomeSource:
@@ -132,7 +132,7 @@ traits:
             type: types.errorResponse
             examples:
               formatIncomeSource:
-                description: The format of incomeSource is not valid
+                description: The format of incomeSource is not valid.
                 value:
                   code: FORMAT_INCOME_SOURCE
   formatLenderName:
@@ -143,7 +143,7 @@ traits:
             type: types.errorResponse
             examples:
               formatLenderName:
-                description: The format of lenderName is not valid
+                description: The format of lenderName is not valid.
                 value:
                   code: FORMAT_LENDER_NAME
   formatDateOfInvestment:
@@ -179,3 +179,25 @@ traits:
                 description: The format of customerReference is not valid.
                 value:
                   code: FORMAT_CUSTOMER_REF
+  formatUniqueInvestmentReference:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatUniqueInvestmentReference:
+                description: The format of unique investment reference is invalid.
+                value:
+                  code: FORMAT_UNIQUE_INVESTMENT_REFERENCE
+  formatName:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatName:
+                description: The format of name is invalid.
+                value:
+                  code: FORMAT_NAME

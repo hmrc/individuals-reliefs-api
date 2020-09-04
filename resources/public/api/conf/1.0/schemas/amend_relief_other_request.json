@@ -31,6 +31,7 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "reliefClaimed": {
@@ -51,6 +52,7 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "amount": {
@@ -73,6 +75,7 @@
           "customerReference": {
             "description": "A reference or friendly name used by the customer.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "INPOLY123A"
           },
           "exSpouseName": {
@@ -105,6 +108,7 @@
           "customerReference": {
             "description": "A reference or friendly name used by the customer.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "INPOLY123A"
           },
           "businessName": {
@@ -143,6 +147,7 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "reliefClaimed": {
@@ -165,6 +170,7 @@
           "customerReference": {
             "description": "A reference or friendly name used by the customer.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "INPOLY123A"
           },
           "lenderName": {
