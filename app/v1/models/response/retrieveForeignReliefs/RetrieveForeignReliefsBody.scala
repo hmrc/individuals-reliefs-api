@@ -21,7 +21,10 @@ import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class RetrieveForeignReliefsBody(foreignTaxCreditRelief: Option[ForeignTaxCreditRelief])
+case class RetrieveForeignReliefsBody(
+                                       submittedOn: String,
+                                       foreignTaxCreditRelief: Option[ForeignTaxCreditRelief]
+                                     )
 
 
 object RetrieveForeignReliefsBody extends HateoasLinks {
@@ -37,6 +40,7 @@ object RetrieveForeignReliefsBody extends HateoasLinks {
       )
     }
   }
+
 }
 
 

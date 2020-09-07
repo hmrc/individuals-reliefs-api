@@ -20,48 +20,49 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators{
+class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
   val maintenancePayments = MaintenancePayments(
-    "myRef",
+    Some("myRef"),
     Some("Hilda"),
     Some("2000-01-01"),
-    Some(222.22))
+    222.22
+  )
 
   val noOptionsMaintenancePayments = MaintenancePayments(
-    "myRef",
     None,
     None,
-    None
+    None,
+    222.22
   )
 
   val json = Json.parse(
-  """
-    |    {
-    |        "customerReference": "myRef",
-    |        "exSpouseName" : "Hilda",
-    |        "exSpouseDateOfBirth": "2000-01-01",
-    |        "amount": 222.22
-    |      }
-    |  """.stripMargin)
+    """
+      |{
+      |  "customerReference": "myRef",
+      |  "exSpouseName" : "Hilda",
+      |  "exSpouseDateOfBirth": "2000-01-01",
+      |  "amount": 222.22
+      |}
+      |  """.stripMargin)
 
   val noOptionsJson = Json.parse(
     """
-      |    {
-      |        "customerReference": "myRef"
-      |      }
-      |  """.stripMargin)
+      |{
+      |  "amount": 222.22
+      |}
+      |""".stripMargin)
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        maintenancePayments shouldBe json.as[MaintenancePayments]
+        json.as[MaintenancePayments] shouldBe maintenancePayments
       }
     }
   }
   "reads from a json with no optional fields supplied" when {
     "passed a JSON with no optional fields" should {
       "return a model with no optional fields" in {
-        noOptionsMaintenancePayments shouldBe noOptionsJson.as[MaintenancePayments]
+        noOptionsJson.as[MaintenancePayments] shouldBe noOptionsMaintenancePayments
       }
     }
   }

@@ -16,18 +16,25 @@
 
 package v1.controllers.requestParsers.validators
 
+import config.FixedConfig
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 import v1.models.request.amendForeignReliefs._
 
-class AmendForeignReliefsValidator extends Validator[AmendForeignReliefsRawData] {
+class AmendForeignReliefsValidator extends Validator[AmendForeignReliefsRawData] with FixedConfig {
 
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
+  private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, bodyFieldValidation)
 
   private def parameterFormatValidation: AmendForeignReliefsRawData => List[List[MtdError]] = (data: AmendForeignReliefsRawData) => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear)
+    )
+  }
+
+  private def parameterRuleValidation: AmendForeignReliefsRawData => List[List[MtdError]] = (data: AmendForeignReliefsRawData) => {
+    List(
+      MtdTaxYearValidation.validate(data.taxYear, reliefsMinimumTaxYear)
     )
   }
 
@@ -40,11 +47,11 @@ class AmendForeignReliefsValidator extends Validator[AmendForeignReliefsRawData]
   private def bodyFieldValidation: AmendForeignReliefsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendForeignReliefsBody]
 
-    List(flattenErrors(
-      List(
-        body.foreignTaxCreditRelief.map(validateForeignTaxCreditRelief).getOrElse(NoValidationErrors)
-      )
-    ))
+    val errorsO: Option[List[List[MtdError]]] = for {
+      foreignTaxCreditReliefErrors <- body.foreignTaxCreditRelief.map(validateForeignTaxCreditRelief)
+    } yield List(foreignTaxCreditReliefErrors)
+
+    List(errorsO.map(flattenErrors)).flatten
   }
 
   private def validateForeignTaxCreditRelief(foreignTaxCreditRelief: ForeignTaxCreditRelief): List[MtdError] = {

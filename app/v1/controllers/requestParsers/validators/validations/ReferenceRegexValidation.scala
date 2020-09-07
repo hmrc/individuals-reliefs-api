@@ -16,16 +16,25 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError}
-import v1.models.request.DesTaxYear
+import v1.models.errors.MtdError
 
-object MtdTaxYearValidation {
+object ReferenceRegexValidation {
 
-  // @param taxYear In format YYYY-YY
-  def validate(taxYear: String, minimumYear: Int): List[MtdError] = {
+  def validateOptional(field: Option[String], path: String, error: MtdError): List[MtdError] = {
+    field match {
+      case None => NoValidationErrors
+      case Some(value) => validate(value, path, error)
+    }
+  }
 
-    val desTaxYear = Integer.parseInt(DesTaxYear.fromMtd(taxYear).value)
-
-    if (desTaxYear >= minimumYear) NoValidationErrors else List(RuleTaxYearNotSupportedError)
+  private def validate(reference: String, path: String, error: MtdError): List[MtdError] = {
+    val referenceRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
+    if (reference.matches(referenceRegex)) {
+      NoValidationErrors
+    } else {
+      List(
+        error.copy(paths = Some(Seq(path)))
+      )
+    }
   }
 }

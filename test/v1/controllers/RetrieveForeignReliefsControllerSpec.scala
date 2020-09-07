@@ -49,6 +49,7 @@ class RetrieveForeignReliefsControllerSpec
   private val requestData = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
   private val testHateoasLink = Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
   private val responseBody = RetrieveForeignReliefsBody(
+    "2020-06-17T10:53:38Z",
     Some(ForeignTaxCreditRelief(2309.95))
   )
 
@@ -110,6 +111,7 @@ class RetrieveForeignReliefsControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST)
         )
 

@@ -18,7 +18,7 @@ package v1.models.request.amendOtherReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class QualifyingLoanInterestPayments(customerReference: String, lenderName: Option[String], reliefClaimed: BigDecimal)
+case class QualifyingLoanInterestPayments(customerReference: Option[String], lenderName: Option[String], reliefClaimed: BigDecimal)
 
 object QualifyingLoanInterestPayments {
   implicit val format: OFormat[QualifyingLoanInterestPayments] = Json.format[QualifyingLoanInterestPayments]

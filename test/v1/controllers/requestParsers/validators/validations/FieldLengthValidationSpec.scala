@@ -19,28 +19,35 @@ package v1.controllers.requestParsers.validators.validations
 import support.UnitSpec
 import v1.models.errors.CustomerReferenceFormatError
 
-class CustomerReferenceValidationSpec extends UnitSpec {
+class FieldLengthValidationSpec extends UnitSpec {
 
-  val validReference = Some("HJ812JJMNS89SJ09KLJNBH89O")
-  val invalidReference = Some("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+  val validReference = Some("123")
+  val invalidReferenceTooShort = Some("")
+  val invalidReferenceTooLong = Some("1234")
 
   "validate" should {
     "return no errors" when {
       "a valid reference is supplied" in {
-        val validationResult = CustomerReferenceValidation.validateOptional(validReference, "/annualPaymentsMade/customerReference")
+        val validationResult = FieldLengthValidation.validateOptional(validReference, 3, "/field", CustomerReferenceFormatError)
         validationResult.isEmpty shouldBe true
       }
       "no reference is supplied" in {
-        val validationResult = CustomerReferenceValidation.validateOptional(None, "/annualPaymentsMade/customerReference")
+        val validationResult = FieldLengthValidation.validateOptional(None, 3, "/field", CustomerReferenceFormatError)
         validationResult.isEmpty shouldBe true
       }
     }
     "return an error" when {
-      "an invalid reference is supplied" in {
-        val validationResult = CustomerReferenceValidation.validateOptional(invalidReference, "/annualPaymentsMade/customerReference")
+      "the supplied reference is too short" in {
+        val validationResult = FieldLengthValidation.validateOptional(invalidReferenceTooShort, 3, "/field", CustomerReferenceFormatError)
         validationResult.isEmpty shouldBe false
         validationResult.length shouldBe 1
-        validationResult.head shouldBe CustomerReferenceFormatError.copy(paths = Some(Seq("/annualPaymentsMade/customerReference")))
+        validationResult.head shouldBe CustomerReferenceFormatError.copy(paths = Some(Seq("/field")))
+      }
+      "the supplied reference is too long" in {
+        val validationResult = FieldLengthValidation.validateOptional(invalidReferenceTooLong, 3, "/field", CustomerReferenceFormatError)
+        validationResult.isEmpty shouldBe false
+        validationResult.length shouldBe 1
+        validationResult.head shouldBe CustomerReferenceFormatError.copy(paths = Some(Seq("/field")))
       }
     }
   }

@@ -75,13 +75,14 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
            BadRequestError |
            TaxYearFormatError |
            RuleIncorrectOrEmptyBodyError |
+           RuleTaxYearNotSupportedError |
            RuleTaxYearRangeInvalidError |
            MtdErrorWithCustomMessage(ValueFormatError.code) |
            MtdErrorWithCustomMessage(DateOfInvestmentFormatError.code) |
            MtdErrorWithCustomMessage(NameFormatError.code) |
-           MtdErrorWithCustomMessage(InvestmentRefFormatError.code) =>
+           MtdErrorWithCustomMessage(UniqueInvestmentRefFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case DownstreamError                                                => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }

@@ -24,7 +24,7 @@ import v1.models.request.amendForeignReliefs.AmendForeignReliefsRawData
 class AmendForeignReliefsValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
-  private val validTaxYear = "2018-19"
+  private val validTaxYear = "2021-22"
   private val requestBodyJson = Json.parse(
     """
       |{
@@ -72,6 +72,9 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec {
       }
       "the taxYear range is invalid" in {
         validator.validate(AmendForeignReliefsRawData(validNino, "2017-20", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
+      }
+      "the taxYear is too early" in {
+        validator.validate(AmendForeignReliefsRawData(validNino, "2020-21", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
       }
       "all path parameters are invalid" in {
         validator.validate(AmendForeignReliefsRawData("Walrus", "2000", requestBodyJson)) shouldBe List(NinoFormatError, TaxYearFormatError)

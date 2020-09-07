@@ -24,14 +24,16 @@ import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class RetrieveForeignReliefsBodySpec extends UnitSpec with MockAppConfig {
   val retrieveForeignReliefsBody = RetrieveForeignReliefsBody(
+    "2020-06-17T10:53:38Z",
     Some(ForeignTaxCreditRelief(763.00))
   )
 
   val json = Json.parse(
     """{
+      |  "submittedOn": "2020-06-17T10:53:38Z",
       |  "foreignTaxCreditRelief": {
-      |        "amount": 763.00
-      |      }
+      |    "amount": 763.00
+      |  }
       |}""".stripMargin
   )
 

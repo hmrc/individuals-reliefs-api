@@ -19,10 +19,10 @@ package v1.endpoints
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
 class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
@@ -30,11 +30,12 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino = "AA123456A"
-    val taxYear = "2019-20"
+    val taxYear = "2021-22"
 
-    val responseBody = Json.parse(
+    val responseBody: JsValue = Json.parse(
       s"""
         |{
+        |  "submittedOn": "2020-06-17T10:53:38Z",
         |  "vctSubscription":[
         |    {
         |      "uniqueInvestmentRef": "VCTREF",
@@ -81,29 +82,31 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         |      "reliefClaimed": 3432.00
         |    }
         |  ],
-        |  "links": [{
-        |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
-        |    "method": "GET",
-        |    "rel": "self"
+        |  "links": [
+        |    {
+        |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
+        |      "method": "GET",
+        |      "rel": "self"
         |    },
-        |  {
-        |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
-        |    "method": "PUT",
-        |    "rel": "amend-reliefs-investments"
-        |  },
-        |  {
-        |    "href": "/individuals/reliefs/investment/$nino/$taxYear",
-        |    "method": "DELETE",
-        |    "rel": "delete-reliefs-investments"
-        |  }
-        |]
+        |    {
+        |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
+        |      "method": "PUT",
+        |      "rel": "amend-reliefs-investments"
+        |    },
+        |    {
+        |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
+        |      "method": "DELETE",
+        |      "rel": "delete-reliefs-investments"
+        |    }
+        |  ]
         |}
         |""".stripMargin
     )
 
-    val desResponseBody = Json.parse(
+    val desResponseBody: JsValue = Json.parse(
       s"""
          |{
+         |  "submittedOn": "2020-06-17T10:53:38Z",
          |  "vctSubscription":[
          |    {
          |      "uniqueInvestmentRef": "VCTREF",
@@ -111,7 +114,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |      "dateOfInvestment": "2018-04-16",
          |      "amountInvested": 23312.00,
          |      "reliefClaimed": 1334.00
-         |      }
+         |    }
          |  ],
          |  "eisSubscription":[
          |    {
@@ -218,8 +221,9 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = Seq(
-          ("Walrus", "2019-20", Status.BAD_REQUEST, NinoFormatError),
+          ("Walrus", "2021-22", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", Status.BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2020-21", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
 

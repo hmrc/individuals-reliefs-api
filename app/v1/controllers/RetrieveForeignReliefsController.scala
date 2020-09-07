@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.Logging
 import v1.controllers.requestParsers.RetrieveForeignReliefsRequestParser
 import v1.hateoas.HateoasFactory
-import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRawData
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsHateoasData
 import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveForeignReliefsService}
@@ -69,7 +69,11 @@ class RetrieveForeignReliefsController @Inject()(val authService: EnrolmentsAuth
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     (errorWrapper.error: @unchecked) match {
-      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearRangeInvalidError => BadRequest(Json.toJson(errorWrapper))
+      case NinoFormatError |
+           BadRequestError |
+           TaxYearFormatError |
+           RuleTaxYearNotSupportedError |
+           RuleTaxYearRangeInvalidError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }

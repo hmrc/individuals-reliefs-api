@@ -22,7 +22,7 @@ case class SeedEnterpriseInvestmentItem(uniqueInvestmentRef: String,
                                         companyName: Option[String],
                                         dateOfInvestment: Option[String],
                                         amountInvested: Option[BigDecimal],
-                                        reliefClaimed: Option[BigDecimal])
+                                        reliefClaimed: BigDecimal)
 
 object SeedEnterpriseInvestmentItem {
   implicit val format: OFormat[SeedEnterpriseInvestmentItem] = Json.format[SeedEnterpriseInvestmentItem]

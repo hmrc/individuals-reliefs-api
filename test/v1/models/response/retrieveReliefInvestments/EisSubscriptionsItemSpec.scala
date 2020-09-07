@@ -24,10 +24,10 @@ class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   val eisSubscriptionsItem = EisSubscriptionsItem(
     "XTAL",
     Some("EIS Fund X"),
-    Some(true),
+    true,
     Some("EIS Fund X"),
     Some(BigDecimal(23312.00)),
-    Some(BigDecimal(43432.00))
+    BigDecimal(43432.00)
   )
   val json = Json.parse(
     """

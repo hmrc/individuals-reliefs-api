@@ -23,7 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveOtherReliefsRequestParser
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveOtherReliefsService}
-import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
@@ -68,6 +68,7 @@ class RetrieveOtherReliefsControllerSpec
   private val testHateoasLink = Link(href = s"individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveOtherReliefsBody(
+    "2020-06-17T10:53:38Z",
     Some(NonDeductableLoanInterest(
       Some("myref"),
       763.00)),
@@ -78,22 +79,22 @@ class RetrieveOtherReliefsControllerSpec
       Some("myref"),
       222.22)),
     Some(Seq(MaintenancePayments(
-      "myref",
+      Some("myref"),
       Some("Hilda"),
       Some("2000-01-01"),
-      Some(222.22)))),
+      222.22))),
     Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
-      "myref",
+      Some("myref"),
       Some("ACME Inc"),
       Some("2019-08-10"),
       Some("Widgets Manufacturer"),
       Some("AB12412/A12"),
-      Some(222.22)))),
+      222.22))),
     Some(AnnualPaymentsMade(
       Some("myref"),
       763.00)),
     Some(Seq(QualifyingLoanInterestPayments(
-      "myref",
+      Some("myref"),
       Some("Maurice"),
       763.00)))
   )
@@ -140,6 +141,7 @@ class RetrieveOtherReliefsControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST)
         )
 

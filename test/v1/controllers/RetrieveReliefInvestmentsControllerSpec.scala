@@ -65,44 +65,45 @@ class RetrieveReliefInvestmentsControllerSpec
   private val rawData = RetrieveReliefInvestmentsRawData(nino, taxYear)
   private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), taxYear)
 
-  private val testHateoasLink = Link(href = s"individuals/reliefs/innvestment/$nino/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveReliefInvestmentsBody(
+    "2020-06-17T10:53:38Z",
     Seq(VctSubscriptionsItem(
       "VCTREF",
       Some("VCT Fund X"),
       Some("2018-04-16"),
       Some(BigDecimal(23312.00)),
-      Some(BigDecimal(1334.00))
+      BigDecimal(1334.00)
     )),
     Seq(EisSubscriptionsItem(
       "XTAL",
       Some("EIS Fund X"),
-      Some(true),
+      true,
       Some("2020-12-12"),
       Some(BigDecimal(23312.00)),
-      Some(BigDecimal(43432.00))
+      BigDecimal(43432.00)
     )),
     Seq(CommunityInvestmentItem(
       "CIREF",
       Some("CI X"),
       Some("2020-12-12"),
       Some(BigDecimal(6442.00)),
-      Some(BigDecimal(2344.00))
+      BigDecimal(2344.00)
     )),
     Seq(SeedEnterpriseInvestmentItem(
       "123412/1A",
       Some("Company Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
-      Some(BigDecimal(3432.00))
+      BigDecimal(3432.00)
     )),
     Seq(SocialEnterpriseInvestmentItem(
       "123412/1A",
       Some("SE Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
-      Some(BigDecimal(3432.00))
+      BigDecimal(3432.00)
     ))
   )
 
@@ -148,6 +149,7 @@ class RetrieveReliefInvestmentsControllerSpec
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST)
         )
 
