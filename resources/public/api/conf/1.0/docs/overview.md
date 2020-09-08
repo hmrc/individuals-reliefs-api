@@ -1,1 +1,1 @@
-**Add overview documentation here**
+The Individuals Reliefs API allows a developer to retrieve, amend or delete relief investments from VCT subscriptions, EIS subscriptions, Community Investments, Seed Enterprise Investments and Social Enterprise Investments.

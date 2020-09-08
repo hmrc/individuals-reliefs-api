@@ -13,6 +13,7 @@
           "uniqueInvestmentRef": {
             "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "name": {
@@ -37,7 +38,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -51,6 +53,7 @@
           "uniqueInvestmentRef": {
             "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "name": {
@@ -80,7 +83,9 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "knowledgeIntensive",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -94,6 +99,7 @@
           "uniqueInvestmentRef": {
             "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "name": {
@@ -118,7 +124,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -132,6 +139,7 @@
           "uniqueInvestmentRef": {
             "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "companyName": {
@@ -156,7 +164,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -170,6 +179,7 @@
           "uniqueInvestmentRef": {
             "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "socialEnterpriseName": {
@@ -194,7 +204,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }

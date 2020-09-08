@@ -4,6 +4,11 @@
   "description": "Allows the retrieval of other reliefs",
   "type": "object",
   "properties": {
+    "submittedOn": {
+      "description": "The date the other reliefs was added. It must be provided in the format YYYY-MM-DDThh:mm:ssZ",
+      "type": "string",
+      "example": "2019-04-04T01:01:01Z"
+    },
     "nonDeductableLoanInterest": {
       "description": "Details of non-deductable loan interest claimed",
       "type": "object",
@@ -11,6 +16,7 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "reliefClaimed": {
@@ -31,6 +37,7 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "reliefClaimed": {
@@ -51,10 +58,11 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "amount": {
-          "description": "The amount of relief claimed on redemption of bonus shares.",
+          "description": "The amount of relief claimed on qualifying shares and securities.",
           "type": "number",
           "example": "2000.99"
         }
@@ -91,7 +99,7 @@
           }
         },
         "required": [
-          "customerReference"
+          "amount"
         ],
         "additionalProperties": false
       }
@@ -105,6 +113,7 @@
           "customerReference": {
             "description": "A reference or friendly name used by the customer.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "INPOLY123A"
           },
           "businessName": {
@@ -118,7 +127,8 @@
           },
           "natureOfTrade": {
             "description": "The trading nature of the business.",
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
           },
           "incomeSource": {
             "description": "Income source identifier or UTR (Unique Taxpayer Reference).",
@@ -131,7 +141,7 @@
           }
         },
         "required": [
-          "customerReference"
+          "amount"
         ],
         "additionalProperties": false
       }
@@ -143,6 +153,7 @@
         "customerReference": {
           "description": "A reference or friendly name used by the customer.",
           "type": "string",
+          "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
         },
         "reliefClaimed": {
@@ -165,6 +176,7 @@
           "customerReference": {
             "description": "A reference or friendly name used by the customer.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "INPOLY123A"
           },
           "lenderName": {
@@ -178,7 +190,6 @@
           }
         },
         "required": [
-          "customerReference",
           "reliefClaimed"
         ],
         "additionalProperties": false
@@ -223,5 +234,8 @@
       }
     }
   },
+  "required": [
+    "submittedOn"
+  ],
   "additionalProperties": false
 }

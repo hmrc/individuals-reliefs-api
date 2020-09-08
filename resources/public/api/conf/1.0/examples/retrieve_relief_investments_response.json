@@ -1,4 +1,5 @@
 {
+  "submittedOn": "2019-04-04T01:01:01Z",
   "vctSubscription":[
     {
       "uniqueInvestmentRef": "VCTREF",
@@ -29,7 +30,7 @@
   ],
   "seedEnterpriseInvestment": [
     {
-      "uniqueInvestmentRef": "123412/1A",
+      "uniqueInvestmentRef": "1234121A",
       "companyName": "Company Inc",
       "dateOfInvestment": "2020-12-12",
       "amountInvested": 123123.22,
@@ -38,7 +39,7 @@
   ],
   "socialEnterpriseInvestment": [
     {
-      "uniqueInvestmentRef": "123412/1A",
+      "uniqueInvestmentRef": "1234121A",
       "socialEnterpriseName": "SE Inc",
       "dateOfInvestment": "2020-12-12",
       "amountInvested": 123123.22,

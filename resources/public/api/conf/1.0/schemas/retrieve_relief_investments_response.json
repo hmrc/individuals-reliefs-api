@@ -4,6 +4,11 @@
   "description": "Allows the retrieval of relief investments",
   "type": "object",
   "properties": {
+    "submittedOn": {
+      "description": "The date the investment relief was added. It must be provided in the format YYYY-MM-DDThh:mm:ssZ",
+      "type": "string",
+      "example": "2019-04-04T01:01:01Z"
+    },
     "vctSubscription": {
       "description": "Financial details about VCT subscriptions income",
       "type": "array",
@@ -13,6 +18,7 @@
           "uniqueInvestmentRef": {
             "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "name": {
@@ -37,7 +43,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -51,6 +58,7 @@
           "uniqueInvestmentRef": {
             "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "name": {
@@ -80,7 +88,9 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "knowledgeIntensive",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -94,6 +104,7 @@
           "uniqueInvestmentRef": {
             "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "name": {
@@ -118,7 +129,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -132,6 +144,7 @@
           "uniqueInvestmentRef": {
             "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "companyName": {
@@ -156,7 +169,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -170,6 +184,7 @@
           "uniqueInvestmentRef": {
             "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "socialEnterpriseName": {
@@ -194,7 +209,8 @@
           }
         },
         "required": [
-          "uniqueInvestmentRef"
+          "uniqueInvestmentRef",
+          "reliefClaimed"
         ],
         "additionalProperties": false
       }
@@ -238,5 +254,8 @@
       }
     }
   },
+  "required": [
+    "submittedOn"
+  ],
   "additionalProperties": false
 }
