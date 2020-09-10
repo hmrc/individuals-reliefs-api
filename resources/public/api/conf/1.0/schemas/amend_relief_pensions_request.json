@@ -6,7 +6,7 @@
   "properties": {
     "pensionReliefs": {
       "type": "object",
-      "description": "Object that holds the key value for tax relief on pension contributions.",
+      "description": "Object that holds the key value for pensions reliefs on.",
       "properties": {
         "regularPensionContributions": {
           "type": "number",
