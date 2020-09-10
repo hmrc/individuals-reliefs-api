@@ -9,8 +9,8 @@
       "type": "string",
       "example": "2019-04-04T01:01:01Z"
     },
-    "nonDeductableLoanInterest": {
-      "description": "Details of non-deductable loan interest claimed",
+    "nonDeductibleLoanInterest": {
+      "description": "Details of non-deductible loan interest claimed",
       "type": "object",
       "properties": {
         "customerReference": {
