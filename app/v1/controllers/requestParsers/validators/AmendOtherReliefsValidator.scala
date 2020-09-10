@@ -60,7 +60,7 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
     val body = data.body.as[AmendOtherReliefsBody]
 
     val errorsO: Option[List[List[MtdError]]] = for {
-      nonDeductableLoanInterestErrors <- body.nonDeductableLoanInterest.map(validateNonDeductableLoanInterest)
+      nonDeductibleLoanInterestErrors <- body.nonDeductibleLoanInterest.map(validatenonDeductibleLoanInterest)
       payrollGivingErrors <- body.payrollGiving.map(validatePayrollGiving)
       qualifyingDistributionRedemptionOfSharesAndSecuritiesErrors <- {
         body.qualifyingDistributionRedemptionOfSharesAndSecurities.map(validateQualifyingDistributionRedemptionOfSharesAndSecurities)
@@ -83,7 +83,7 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
       }
     } yield {
       List(
-        nonDeductableLoanInterestErrors,
+        nonDeductibleLoanInterestErrors,
         payrollGivingErrors,
         qualifyingDistributionRedemptionOfSharesAndSecuritiesErrors,
         maintenancePaymentsErrors,
@@ -96,16 +96,16 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
     List(errorsO.map(flattenErrors)).flatten
   }
 
-  private def validateNonDeductableLoanInterest(nonDeductableLoanInterest: NonDeductableLoanInterest): List[MtdError] = {
+  private def validatenonDeductibleLoanInterest(nonDeductibleLoanInterest: NonDeductibleLoanInterest): List[MtdError] = {
     List(
       ReferenceRegexValidation.validateOptional(
-        field = nonDeductableLoanInterest.customerReference,
-        path = s"/nonDeductableLoanInterest/customerReference",
+        field = nonDeductibleLoanInterest.customerReference,
+        path = s"/nonDeductibleLoanInterest/customerReference",
         error = CustomerReferenceFormatError
       ),
       NumberValidation.validateOptional(
-        field = Some(nonDeductableLoanInterest.reliefClaimed),
-        path = s"/nonDeductableLoanInterest/reliefClaimed"
+        field = Some(nonDeductibleLoanInterest.reliefClaimed),
+        path = s"/nonDeductibleLoanInterest/reliefClaimed"
       )
     ).flatten
   }

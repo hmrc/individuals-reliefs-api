@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendOtherReliefs
+package v1.models.response.retrieveOtherReliefs
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class NonDeductableLoanInterestSpec extends UnitSpec with JsonErrorValidators {
-  val nonDeductableLoanInterest = NonDeductableLoanInterest(
+class NonDeductibleLoanInterestSpec extends UnitSpec with JsonErrorValidators {
+  val nonDeductibleLoanInterest = NonDeductibleLoanInterest(
     Some("myref"),
     763.00
   )
 
-  val noRefNoneDeductableLoanInterest = NonDeductableLoanInterest(
+  val noRefNoneDeductibleLoanInterest = NonDeductibleLoanInterest(
     None,
     763.00
   )
@@ -47,30 +47,29 @@ class NonDeductableLoanInterestSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        nonDeductableLoanInterest shouldBe json.as[NonDeductableLoanInterest]
+        nonDeductibleLoanInterest shouldBe json.as[NonDeductibleLoanInterest]
       }
     }
   }
   "reads from a JSON with no reference" when {
     "passed a JSON with no reference" should {
       "return a model with no reference" in {
-        noRefNoneDeductableLoanInterest shouldBe noRefJson.as[NonDeductableLoanInterest]
+        noRefNoneDeductibleLoanInterest shouldBe noRefJson.as[NonDeductibleLoanInterest]
       }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(nonDeductableLoanInterest) shouldBe json
+        Json.toJson(nonDeductibleLoanInterest) shouldBe json
       }
     }
   }
   "writes from a model with no reference" when {
     "passed a model with no customer reference" should {
       "return a JSON with no customer reference" in {
-        Json.toJson(noRefNoneDeductableLoanInterest) shouldBe noRefJson
+        Json.toJson(noRefNoneDeductibleLoanInterest) shouldBe noRefJson
       }
     }
   }
 }
-

@@ -23,7 +23,7 @@ import v1.models.hateoas.{HateoasData, Link}
 
 case class RetrieveOtherReliefsBody(
                                      submittedOn: String,
-                                     nonDeductableLoanInterest: Option[NonDeductableLoanInterest],
+                                     nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
                                      payrollGiving: Option[PayrollGiving],
                                      qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
                                      maintenancePayments: Option[Seq[MaintenancePayments]],

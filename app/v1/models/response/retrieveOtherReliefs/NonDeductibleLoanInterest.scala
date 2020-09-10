@@ -18,8 +18,8 @@ package v1.models.response.retrieveOtherReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class NonDeductableLoanInterest(customerReference: Option[String], reliefClaimed: BigDecimal)
+case class NonDeductibleLoanInterest(customerReference: Option[String], reliefClaimed: BigDecimal)
 
-object NonDeductableLoanInterest {
-  implicit val format: OFormat[NonDeductableLoanInterest] = Json.format[NonDeductableLoanInterest]
+object NonDeductibleLoanInterest {
+  implicit val format: OFormat[NonDeductibleLoanInterest] = Json.format[NonDeductibleLoanInterest]
 }

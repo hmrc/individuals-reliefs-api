@@ -18,7 +18,7 @@ package v1.models.request.amendOtherReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AmendOtherReliefsBody(nonDeductableLoanInterest: Option[NonDeductableLoanInterest],
+case class AmendOtherReliefsBody(nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
                                  payrollGiving: Option[PayrollGiving],
                                  qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
                                  maintenancePayments: Option[Seq[MaintenancePayments]],
@@ -27,7 +27,7 @@ case class AmendOtherReliefsBody(nonDeductableLoanInterest: Option[NonDeductable
                                  qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]) {
 
   private def isEmpty: Boolean =
-    nonDeductableLoanInterest.isEmpty &&
+    nonDeductibleLoanInterest.isEmpty &&
     payrollGiving.isEmpty &&
     qualifyingDistributionRedemptionOfSharesAndSecurities.isEmpty &&
     maintenancePayments.isEmpty &&

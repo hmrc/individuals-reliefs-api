@@ -29,7 +29,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
   val taxYear = "2017-18"
   val nino = Nino("AA123456A")
   val body = AmendOtherReliefsBody(
-    Some(NonDeductableLoanInterest(
+    Some(NonDeductibleLoanInterest(
       Some("myref"),
       763.00)),
     Some(PayrollGiving(
