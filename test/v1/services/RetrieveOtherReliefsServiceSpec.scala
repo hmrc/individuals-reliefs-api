@@ -37,7 +37,7 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
 
   private val fullResponseModel = RetrieveOtherReliefsBody(
     "2020-06-17T10:53:38Z",
-    Some(NonDeductableLoanInterest(
+    Some(NonDeductibleLoanInterest(
       Some("myref"),
       763.00)),
     Some(PayrollGiving(
