@@ -16,12 +16,13 @@
 
 package v1.controllers.requestParsers.validators
 
-import config.FixedConfig
+import config.AppConfig
+import javax.inject.Inject
 import v1.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation}
 import v1.models.errors.MtdError
 import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRawData
 
-class DeleteReliefInvestmentsValidator extends Validator[DeleteReliefInvestmentsRawData] with FixedConfig {
+class DeleteReliefInvestmentsValidator @Inject()(appConfig: AppConfig) extends Validator[DeleteReliefInvestmentsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 
@@ -34,7 +35,7 @@ class DeleteReliefInvestmentsValidator extends Validator[DeleteReliefInvestments
 
   private def parameterRuleValidation: DeleteReliefInvestmentsRawData => List[List[MtdError]] = (data: DeleteReliefInvestmentsRawData) => {
     List(
-      MtdTaxYearValidation.validate(data.taxYear, reliefsMinimumTaxYear)
+      MtdTaxYearValidation.validate(data.taxYear, appConfig.reliefsMinimumTaxYear)
     )
   }
 

@@ -16,12 +16,13 @@
 
 package v1.controllers.requestParsers.validators
 
+import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.errors._
 import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
 
-class AmendReliefInvestmentValidatorSpec extends UnitSpec {
+class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino = "AA123456A"
   private val validTaxYear = "2021-22"
@@ -77,41 +78,44 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
       |}
         """.stripMargin)
 
-  val validator = new AmendReliefInvestmentValidator()
-
+  class Test {
+    val validator = new AmendReliefInvestmentValidator(mockAppConfig)
+    MockedAppConfig.reliefsMinimumTaxYear returns 2022 anyNumberOfTimes()
+  }
+    
   "running a validation" should {
     "return no errors" when {
-      "a valid request is supplied" in {
+      "a valid request is supplied" in new Test {
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, requestBodyJson)) shouldBe Nil
       }
     }
 
     "return FORMAT_NINO error" when {
-      "a bad nino is provided" in {
+      "a bad nino is provided" in new Test {
         validator.validate(AmendReliefInvestmentsRawData("BALONEY", validTaxYear, requestBodyJson)) shouldBe List(NinoFormatError)
       }
     }
 
     "return FORMAT_TAX_YEAR error" when {
-      "a bad tax year is provided" in {
+      "a bad tax year is provided" in new Test {
         validator.validate(AmendReliefInvestmentsRawData(validNino, "BALONEY", requestBodyJson)) shouldBe List(TaxYearFormatError)
       }
     }
 
     "return RULE_TAX_YEAR_NOT_SUPPORTED error" when {
-      "a tax year before the earliest allowed date is supplied" in {
+      "a tax year before the earliest allowed date is supplied" in new Test {
         validator.validate(AmendReliefInvestmentsRawData(validNino, "2020-21", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
       }
     }
 
     "return RULE_TAX_YEAR_RANGE_INVALID error" when {
-      "an invalid tax year range is provided" in {
+      "an invalid tax year range is provided" in new Test {
         validator.validate(AmendReliefInvestmentsRawData(validNino, "2021-23", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
       }
     }
 
     "return a FORMAT_VALUE error" when {
-      "all fields are below 0" in {
+      "all fields are below 0" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -190,11 +194,11 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
     }
 
     "return RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED error" when {
-      "no JSON fields are provided" in {
+      "no JSON fields are provided" in new Test {
         val json = Json.parse("""{}""".stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
-      "at least one empty array is provided" in {
+      "at least one empty array is provided" in new Test {
         val json = Json.parse(
           """
             |{
@@ -240,7 +244,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
         """.stripMargin)
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
-      "at least one array contains an empty object" in {
+      "at least one array contains an empty object" in new Test {
         val json = Json.parse(
           """
             |{
@@ -291,7 +295,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_DATE_OF_INVESTMENT error" when {
-      "provided dates are invalid" in {
+      "provided dates are invalid" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -357,7 +361,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_UNIQUE_INVESTMENT_REFERENCE error" when {
-      "provided unique investment references are invalid" in {
+      "provided unique investment references are invalid" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -423,7 +427,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_NAME error" when {
-      "provided names are invalid" in {
+      "provided names are invalid" in new Test {
         val badJson = Json.parse(
           """
             |{

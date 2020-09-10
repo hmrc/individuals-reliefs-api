@@ -30,7 +30,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino: String = "AA123456A"
-    val taxYear: String = "2019-20"
+    val taxYear: String = "2020-21"
 
     def amount: BigDecimal = 5000.99
 
@@ -173,8 +173,8 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
         }
-        s"a taxYear before 2019-20 is provided" in new Test {
-          override val taxYear: String = "2018-19"
+        s"a taxYear before 2020-21 is provided" in new Test {
+          override val taxYear: String = "2019-20"
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()

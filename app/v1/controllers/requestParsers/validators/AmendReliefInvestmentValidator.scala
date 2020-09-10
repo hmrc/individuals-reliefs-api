@@ -16,13 +16,14 @@
 
 package v1.controllers.requestParsers.validators
 
-import config.FixedConfig
+import config.AppConfig
+import javax.inject.Inject
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
-import v1.models.request.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, CommunityInvestmentItem, EisSubscriptionsItem, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
+import v1.models.request.amendReliefInvestments._
 
 
-class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRawData] with FixedConfig {
+class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Validator[AmendReliefInvestmentsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, incorrectOfEmptyBodySubmittedValidation, bodyFieldValidation)
 
@@ -35,7 +36,7 @@ class AmendReliefInvestmentValidator extends Validator[AmendReliefInvestmentsRaw
 
   private def parameterRuleValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = (data: AmendReliefInvestmentsRawData) => {
     List(
-      MtdTaxYearValidation.validate(data.taxYear, reliefsMinimumTaxYear)
+      MtdTaxYearValidation.validate(data.taxYear, appConfig.reliefsMinimumTaxYear)
     )
   }
 

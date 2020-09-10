@@ -16,45 +16,49 @@
 
 package v1.controllers.requestParsers.validators
 
+import mocks.MockAppConfig
 import support.UnitSpec
 import v1.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRawData
 
-class DeleteOtherReliefsValidatorSpec extends UnitSpec {
+class DeleteOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino = "AA123456A"
   private val validTaxYear = "2021-22"
 
-  val validator = new DeleteOtherReliefsValidator()
+  class Test {
+    val validator = new DeleteOtherReliefsValidator(mockAppConfig)
+    MockedAppConfig.reliefsMinimumTaxYear returns 2022 anyNumberOfTimes()
+  }
 
   "running a validation" should {
     "return no errors" when {
-      "a valid request is supplied" in {
+      "a valid request is supplied" in new Test {
         validator.validate(DeleteOtherReliefsRawData(validNino, validTaxYear)) shouldBe Nil
       }
     }
     "return NinoFormatError" when {
-      "an invalid nino is supplied" in {
+      "an invalid nino is supplied" in new Test {
         validator.validate(DeleteOtherReliefsRawData("A12344A", validTaxYear)) shouldBe List(NinoFormatError)
       }
     }
     "return TaxYearFormatError" when {
-      "an invalid tax year is supplied" in {
+      "an invalid tax year is supplied" in new Test {
         validator.validate(DeleteOtherReliefsRawData(validNino, "201831")) shouldBe List(TaxYearFormatError)
       }
     }
     "return RuleTaxYearRangeInvalidError" when {
-      "the tax year range exceeds 1" in {
+      "the tax year range exceeds 1" in new Test {
         validator.validate(DeleteOtherReliefsRawData(validNino, "2019-21")) shouldBe List(RuleTaxYearRangeInvalidError)
       }
     }
     "return RULE_TAX_YEAR_NOT_SUPPORTED error" when {
-      "a tax year before the earliest allowed date is supplied" in {
+      "a tax year before the earliest allowed date is supplied" in new Test {
         validator.validate(DeleteOtherReliefsRawData(validNino, "2020-21")) shouldBe List(RuleTaxYearNotSupportedError)
       }
     }
     "return multiple errors" when {
-      "request supplied has multiple errors" in {
+      "request supplied has multiple errors" in new Test {
         validator.validate(DeleteOtherReliefsRawData("A12344A", "20178")) shouldBe List(NinoFormatError, TaxYearFormatError)
       }
     }

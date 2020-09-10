@@ -16,12 +16,13 @@
 
 package v1.controllers.requestParsers.validators
 
-import config.FixedConfig
+import config.AppConfig
+import javax.inject.Inject
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 import v1.models.request.amendForeignReliefs._
 
-class AmendForeignReliefsValidator extends Validator[AmendForeignReliefsRawData] with FixedConfig {
+class AmendForeignReliefsValidator @Inject()(appConfig: AppConfig) extends Validator[AmendForeignReliefsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, bodyFieldValidation)
 
@@ -34,7 +35,7 @@ class AmendForeignReliefsValidator extends Validator[AmendForeignReliefsRawData]
 
   private def parameterRuleValidation: AmendForeignReliefsRawData => List[List[MtdError]] = (data: AmendForeignReliefsRawData) => {
     List(
-      MtdTaxYearValidation.validate(data.taxYear, reliefsMinimumTaxYear)
+      MtdTaxYearValidation.validate(data.taxYear, appConfig.reliefsMinimumTaxYear)
     )
   }
 
