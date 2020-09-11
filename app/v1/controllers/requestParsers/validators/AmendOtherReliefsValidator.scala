@@ -16,12 +16,13 @@
 
 package v1.controllers.requestParsers.validators
 
-import config.FixedConfig
+import config.AppConfig
+import javax.inject.Inject
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
 import v1.models.request.amendOtherReliefs._
 
-class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] with FixedConfig {
+class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validator[AmendOtherReliefsRawData] {
 
   private val validationSet = List(
     parameterFormatValidation,
@@ -40,7 +41,7 @@ class AmendOtherReliefsValidator extends Validator[AmendOtherReliefsRawData] wit
 
   private def parameterRuleValidation: AmendOtherReliefsRawData => List[List[MtdError]] = (data: AmendOtherReliefsRawData) => {
     List(
-      MtdTaxYearValidation.validate(data.taxYear, reliefsMinimumTaxYear)
+      MtdTaxYearValidation.validate(data.taxYear, appConfig.reliefsMinimumTaxYear)
     )
   }
 

@@ -37,6 +37,10 @@ trait AppConfig {
   def featureSwitch: Option[Configuration]
 
   def endpointsEnabled(version: String): Boolean
+
+  def pensionsReliefsMinimumTaxYear: Int
+
+  def reliefsMinimumTaxYear: Int
 }
 
 @Singleton
@@ -53,9 +57,8 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
   def featureSwitch: Option[Configuration] = configuration.getOptional[Configuration](s"feature-switch")
 
   def endpointsEnabled(version: String): Boolean = config.getBoolean(s"api.$version.endpoints.enabled")
-}
 
-trait FixedConfig {
-  val mtdMinimumTaxYear = 2020 // 2019-20
-  val reliefsMinimumTaxYear = 2022 // 2021-22
+  override def pensionsReliefsMinimumTaxYear: Int = config.getInt("api.pensionsReliefsMinimumTaxYear")
+
+  override def reliefsMinimumTaxYear: Int = config.getInt("api.reliefsMinimumTaxYear")
 }

@@ -16,12 +16,13 @@
 
 package v1.controllers.requestParsers.validators
 
+import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.errors._
 import v1.models.request.amendOtherReliefs.AmendOtherReliefsRawData
 
-class AmendOtherReliefsValidatorSpec extends UnitSpec {
+class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino = "AA123456A"
   private val validTaxYear = "2021-22"
@@ -170,59 +171,62 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
   )
 
 
-  val validator = new AmendOtherReliefsValidator()
+  class Test {
+    val validator = new AmendOtherReliefsValidator(mockAppConfig)
+    MockedAppConfig.reliefsMinimumTaxYear returns 2022 anyNumberOfTimes()
+  }
 
   "running a validation" should {
     "return no errors" when {
-      "a valid request is supplied" in {
+      "a valid request is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, requestBodyJson)) shouldBe Nil
       }
-      "a valid request with the nonDeductableLoanInterest field is supplied" in {
+      "a valid request with the nonDeductableLoanInterest field is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, nonDeductableLoanInterestJson)) shouldBe Nil
       }
-      "a valid request with the payrollGiving field is supplied" in {
+      "a valid request with the payrollGiving field is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, payrollGivingJson)) shouldBe Nil
       }
-      "a valid request with the qualifyingDistributionRedemptionOfSharesAndSecurities field is supplied" in {
+      "a valid request with the qualifyingDistributionRedemptionOfSharesAndSecurities field is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, qualifyingDistributionRedemptionOfSharesAndSecuritiesJson)) shouldBe Nil
       }
-      "a valid request with the maintenancePayments field is supplied" in {
+      "a valid request with the maintenancePayments field is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, maintenancePaymentsJson)) shouldBe Nil
       }
-      "a valid request with the postCessationTradeReliefAndCertainOtherLosses field is supplied" in {
+      "a valid request with the postCessationTradeReliefAndCertainOtherLosses field is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, postCessationTradeReliefAndCertainOtherLossesJson)) shouldBe Nil
       }
-      "a valid request with the annualPaymentsMade field is supplied" in {
+      "a valid request with the annualPaymentsMade field is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, annualPaymentsMadeJson)) shouldBe Nil
       }
-      "a valid request with the qualifyingLoanInterestPayments field is supplied" in {
+      "a valid request with the qualifyingLoanInterestPayments field is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, qualifyingLoanInterestPaymentsJson)) shouldBe Nil
       }
     }
 
     "return a path parameter error" when {
-      "the nino is invalid" in {
+      "the nino is invalid" in new Test {
         validator.validate(AmendOtherReliefsRawData("Walrus", validTaxYear, requestBodyJson)) shouldBe List(NinoFormatError)
       }
-      "the taxYear format is invalid" in {
+      "the taxYear format is invalid" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, "2000", requestBodyJson)) shouldBe List(TaxYearFormatError)
       }
-      "the taxYear range is invalid" in {
+      "the taxYear range is invalid" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, "2017-20", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
       }
-      "a tax year before the earliest allowed date is supplied" in {
+      "a tax year before the earliest allowed date is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, "2020-21", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
       }
-      "all path parameters are invalid" in {
+      "all path parameters are invalid" in new Test {
         validator.validate(AmendOtherReliefsRawData("Walrus", "2000", requestBodyJson)) shouldBe List(NinoFormatError, TaxYearFormatError)
       }
     }
 
     "return a RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED error" when {
-      "an empty JSON body is submitted" in {
+      "an empty JSON body is submitted" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, emptyJson)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
-      "at least one empty array is provided" in {
+      "at least one empty array is provided" in new Test {
         val json = Json.parse(
           """
             |{
@@ -264,7 +268,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
             |""".stripMargin)
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
-      "at least one array contains an empty object" in {
+      "at least one array contains an empty object" in new Test {
         val json = Json.parse(
           """
             |{
@@ -311,7 +315,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_CUSTOMER_REF error" when {
-      "the customerReference provided is invalid" in {
+      "the customerReference provided is invalid" in new Test {
         val badJson = Json.parse(
           s"""
              |{
@@ -373,7 +377,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_NAME_EX_SPOUSE error" when {
-      "the exSpouseName provided is invalid" in {
+      "the exSpouseName provided is invalid" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -430,7 +434,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_NAME_BUSINESS error" when {
-      "the businessName provided is invalid" in {
+      "the businessName provided is invalid" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -487,7 +491,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_NATURE_OF_TRADE error" when {
-      "the natureOfTrade provided is invalid" in {
+      "the natureOfTrade provided is invalid" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -544,7 +548,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_INCOME_SOURCE error" when {
-      "the incomeSource provided is invalid" in {
+      "the incomeSource provided is invalid" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -601,7 +605,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_LENDER_NAME error" when {
-      "the lenderName provided is invalid" in {
+      "the lenderName provided is invalid" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -658,7 +662,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_VALUE error" when {
-      "all fields are below 0" in {
+      "all fields are below 0" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -724,7 +728,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
           )))
         )
       }
-      "only some fields are below 0" in {
+      "only some fields are below 0" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -789,7 +793,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
     }
 
     "return a FORMAT_DATE error" when {
-      "the dates are invalid" in {
+      "the dates are invalid" in new Test {
         val badJson = Json.parse(
           """
             |{
@@ -846,7 +850,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec {
     }
 
     "return all types of errors" when {
-      "the provided data violates all errors" in {
+      "the provided data violates all errors" in new Test {
         val badJson = Json.parse(
           s"""
              |{

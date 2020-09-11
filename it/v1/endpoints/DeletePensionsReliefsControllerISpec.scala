@@ -30,7 +30,7 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino = "AA123456A"
-    val taxYear = "2019-20"
+    val taxYear = "2020-21"
 
     def uri: String = s"/pensions/$nino/$taxYear"
     def desUri: String = s"/reliefs/pensions/$nino/$taxYear"
@@ -74,11 +74,11 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
     "return error according to spec" when {
 
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestId: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
             override val nino: String = requestNino
-            override val taxYear: String = requestId
+            override val taxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -94,10 +94,10 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = Seq(
-          ("Walrus", "2019-20", Status.BAD_REQUEST, NinoFormatError),
+          ("Walrus", "2020-21", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", Status.BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2018-19", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
+          ("AA123456A", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
 

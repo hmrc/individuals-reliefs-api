@@ -16,12 +16,13 @@
 
 package v1.controllers.requestParsers.validators
 
-import config.FixedConfig
+import config.AppConfig
+import javax.inject.Inject
 import v1.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation}
 import v1.models.errors.MtdError
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRawData
 
-class RetrieveOtherReliefsValidator extends Validator[RetrieveOtherReliefsRawData] with FixedConfig {
+class RetrieveOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validator[RetrieveOtherReliefsRawData] {
 
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
@@ -35,7 +36,7 @@ class RetrieveOtherReliefsValidator extends Validator[RetrieveOtherReliefsRawDat
 
   private def parameterRuleValidation: RetrieveOtherReliefsRawData => List[List[MtdError]] = (data: RetrieveOtherReliefsRawData) => {
     List(
-      MtdTaxYearValidation.validate(data.taxYear, reliefsMinimumTaxYear)
+      MtdTaxYearValidation.validate(data.taxYear, appConfig.reliefsMinimumTaxYear)
     )
   }
 
