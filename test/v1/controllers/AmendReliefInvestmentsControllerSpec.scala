@@ -50,6 +50,7 @@ class AmendReliefInvestmentsControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockAmendReliefInvestmentsRequestParser,
       service = mockService,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc
     )

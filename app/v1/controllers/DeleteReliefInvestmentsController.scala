@@ -21,11 +21,13 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.controllers.requestParsers.DeleteReliefInvestmentsRequestParser
+import v1.models.audit.{AuditEvent, AuditResponse, DeleteReliefInvestmentsAuditDetail}
 import v1.models.errors._
 import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRawData
-import v1.services.{DeleteReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{AuditService, DeleteReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,6 +36,7 @@ class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAut
                                                   val lookupService: MtdIdLookupService,
                                                   parser: DeleteReliefInvestmentsRequestParser,
                                                   service: DeleteReliefInvestmentsService,
+                                                  auditService: AuditService,
                                                   cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
@@ -51,7 +54,12 @@ class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAut
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
-          NoContent.withApiHeaders(serviceResponse.correlationId)
+
+          auditSubmission(DeleteReliefInvestmentsAuditDetail(request.userDetails, nino, taxYear,
+            serviceResponse.correlationId, AuditResponse(NO_CONTENT, Right(None))))
+
+          NoContent
+            .withApiHeaders(serviceResponse.correlationId)
 
         }
       result.leftMap { errorWrapper =>
@@ -70,5 +78,12 @@ class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAut
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
+  }
+
+  private def auditSubmission(details: DeleteReliefInvestmentsAuditDetail)
+                             (implicit hc: HeaderCarrier,
+                              ec: ExecutionContext) = {
+    val event = AuditEvent("deleteReliefInvestments", "delete-relief-investments", details)
+    auditService.auditEvent(event)
   }
 }

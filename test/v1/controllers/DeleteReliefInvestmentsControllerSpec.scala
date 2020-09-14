@@ -47,6 +47,7 @@ class DeleteReliefInvestmentsControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockRequestDataParser,
       service = mockService,
+      auditService = mockAuditService,
       cc = cc
     )
 
