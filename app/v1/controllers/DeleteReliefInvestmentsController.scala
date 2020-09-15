@@ -64,7 +64,12 @@ class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAut
         }
       result.leftMap { errorWrapper =>
         val correlationId = getCorrelationId(errorWrapper)
-        errorResult(errorWrapper).withApiHeaders(correlationId)
+        val result = errorResult(errorWrapper).withApiHeaders(correlationId)
+
+        auditSubmission(DeleteReliefInvestmentsAuditDetail(request.userDetails, nino, taxYear,
+          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+
+        result
       }.merge
     }
 
@@ -83,7 +88,7 @@ class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAut
   private def auditSubmission(details: DeleteReliefInvestmentsAuditDetail)
                              (implicit hc: HeaderCarrier,
                               ec: ExecutionContext) = {
-    val event = AuditEvent("deleteReliefInvestments", "delete-relief-investments", details)
+    val event = AuditEvent("DeleteReliefsInvestment", "delete-reliefs-investment", details)
     auditService.auditEvent(event)
   }
 }
