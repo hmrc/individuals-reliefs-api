@@ -1,6 +1,6 @@
 {
   "submittedOn": "2019-04-04T01:01:01Z",
-  "nonDeductableLoanInterest": {
+  "nonDeductibleLoanInterest": {
     "customerReference": "myref",
     "reliefClaimed": 763.00
   },

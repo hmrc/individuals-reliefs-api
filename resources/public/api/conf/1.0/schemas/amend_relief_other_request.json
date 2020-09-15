@@ -4,8 +4,8 @@
   "description": "Allows the amendments of other reliefs",
   "type": "object",
   "properties": {
-    "nonDeductableLoanInterest": {
-      "description": "Details of non-deductable loan interest claimed",
+    "nonDeductibleLoanInterest": {
+      "description": "Details of non-deductible loan interest claimed",
       "type": "object",
       "properties": {
         "customerReference": {
