@@ -21,14 +21,16 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.controllers.requestParsers.AmendReliefInvestmentsRequestParser
 import v1.hateoas.HateoasFactory
+import v1.models.audit.{AmendReliefInvestmentsAuditDetail, AuditEvent, AuditResponse}
 import v1.models.errors._
 import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
 import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
 import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsResponse.LinksFactory
-import v1.services.{AmendReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{AmendReliefInvestmentsService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,6 +39,7 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
                                                  val lookupService: MtdIdLookupService,
                                                  parser: AmendReliefInvestmentsRequestParser,
                                                  service: AmendReliefInvestmentsService,
+                                                 auditService: AuditService,
                                                  hateoasFactory: HateoasFactory,
                                                  cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
@@ -58,13 +61,23 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
+          val response = Json.toJson(vendorResponse)
+
+          auditSubmission(AmendReliefInvestmentsAuditDetail(request.userDetails, nino, taxYear, request.body,
+            serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
+
           Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
         }
 
       result.leftMap { errorWrapper =>
         val correlationId = getCorrelationId(errorWrapper)
-        errorResult(errorWrapper).withApiHeaders(correlationId)
+        val result = errorResult(errorWrapper).withApiHeaders(correlationId)
+
+        auditSubmission(AmendReliefInvestmentsAuditDetail(request.userDetails, nino, taxYear, request.body,
+          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+
+        result
       }.merge
     }
 
@@ -85,6 +98,13 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
       case DownstreamError                                                => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
+  }
+
+  private def auditSubmission(details: AmendReliefInvestmentsAuditDetail)
+                             (implicit hc: HeaderCarrier,
+                              ec: ExecutionContext) = {
+    val event = AuditEvent("CreateAmendReliefsInvestment", "create-amend-reliefs-investment", details)
+    auditService.auditEvent(event)
   }
 
 
