@@ -47,6 +47,7 @@ class DeleteOtherReliefsControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockRequestDataParser,
       service = mockDeleteOtherReliefsService,
+      auditService = mockAuditService,
       cc = cc
     )
 
