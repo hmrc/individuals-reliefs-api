@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
  val amendOtherReliefsBody = AmendOtherReliefsBody(
-   Some(NonDeductableLoanInterest(
+   Some(NonDeductibleLoanInterest(
      Some("myref"),
      763.00)),
    Some(PayrollGiving(
@@ -64,7 +64,7 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
 
   val json = Json.parse(
     """{
-      |  "nonDeductableLoanInterest": {
+      |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
       |        "reliefClaimed": 763.00
       |      },
@@ -140,7 +140,7 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
     "return false" when {
       "all arrays are provided, none are empty, no objects in the arrays are empty" in {
         val model = AmendOtherReliefsBody(
-          Some(NonDeductableLoanInterest(
+          Some(NonDeductibleLoanInterest(
             Some("myref"),
             763.00)),
           Some(PayrollGiving(
@@ -214,7 +214,7 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
       }
       "at least one empty array is provided" in {
         val model = AmendOtherReliefsBody(
-          Some(NonDeductableLoanInterest(
+          Some(NonDeductibleLoanInterest(
             Some("myref"),
             763.00)),
           Some(PayrollGiving(

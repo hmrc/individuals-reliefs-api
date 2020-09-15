@@ -36,7 +36,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
       s"""
          |{
          |    "submittedOn": "2020-06-17T10:53:38Z",
-         |    "nonDeductableLoanInterest": {
+         |    "nonDeductibleLoanInterest": {
          |        "customerReference": "INPOLY123A",
          |        "reliefClaimed": 2000.99
          |    },
@@ -102,7 +102,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
       s"""
          |{
          |    "submittedOn": "2020-06-17T10:53:38Z",
-         |    "nonDeductableLoanInterest": {
+         |    "nonDeductibleLoanInterest": {
          |        "customerReference": "INPOLY123A",
          |        "reliefClaimed": 2000.99
          |    },

@@ -35,7 +35,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
   private val correlationId = "X-123"
 
   val body = AmendOtherReliefsBody(
-    Some(NonDeductableLoanInterest(
+    Some(NonDeductibleLoanInterest(
       Some("myref"),
       763.00)),
     Some(PayrollGiving(

@@ -29,7 +29,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
   private val requestBodyJson = Json.parse(
     """
       |{
-      |  "nonDeductableLoanInterest": {
+      |  "nonDeductibleLoanInterest": {
       |    "customerReference": "myref",
       |    "reliefClaimed": 763.00
       |  },
@@ -80,10 +80,10 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
       |""".stripMargin
   )
 
-  private val nonDeductableLoanInterestJson = Json.parse(
+  private val nonDeductibleLoanInterestJson = Json.parse(
     """
       |{
-      |  "nonDeductableLoanInterest": {
+      |  "nonDeductibleLoanInterest": {
       |    "customerReference": "myref",
       |    "reliefClaimed": 763.00
       |  }
@@ -120,7 +120,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
   private val maintenancePaymentsJson = Json.parse(
     """
       |{
-      |  "nonDeductableLoanInterest": {
+      |  "nonDeductibleLoanInterest": {
       |    "customerReference": "myref",
       |    "reliefClaimed": 763.00
       |  }
@@ -181,8 +181,8 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
       "a valid request is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, requestBodyJson)) shouldBe Nil
       }
-      "a valid request with the nonDeductableLoanInterest field is supplied" in new Test {
-        validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, nonDeductableLoanInterestJson)) shouldBe Nil
+      "a valid request with the nonDeductibleLoanInterest field is supplied" in new Test {
+        validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, nonDeductibleLoanInterestJson)) shouldBe Nil
       }
       "a valid request with the payrollGiving field is supplied" in new Test {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, payrollGivingJson)) shouldBe Nil
@@ -230,7 +230,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val json = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
             |    "reliefClaimed": 763.00
             |  },
@@ -272,7 +272,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val json = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
             |    "reliefClaimed": 763.00
             |  },
@@ -319,7 +319,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val badJson = Json.parse(
           s"""
              |{
-             |  "nonDeductableLoanInterest": {
+             |  "nonDeductibleLoanInterest": {
              |    "customerReference": "${("1234567890" * 9) + "1"}",
              |    "reliefClaimed": 763.00
              |  },
@@ -364,7 +364,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
              |""".stripMargin)
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           CustomerReferenceFormatError.copy(paths = Some(Seq(
-            "/nonDeductableLoanInterest/customerReference",
+            "/nonDeductibleLoanInterest/customerReference",
             "/payrollGiving/customerReference",
             "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
             "/maintenancePayments/0/customerReference",
@@ -381,7 +381,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val badJson = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
             |    "reliefClaimed": 763.00
             |  },
@@ -438,7 +438,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val badJson = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
             |    "reliefClaimed": 763.00
             |  },
@@ -495,7 +495,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val badJson = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
             |    "reliefClaimed": 763.00
             |  },
@@ -552,7 +552,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val badJson = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
             |    "reliefClaimed": 763.00
             |  },
@@ -609,7 +609,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val badJson = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
             |    "reliefClaimed": 763.00
             |  },
@@ -666,7 +666,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val badJson = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
             |    "reliefClaimed": -1.00
             |  },
@@ -717,7 +717,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |""".stripMargin)
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq(
-            "/nonDeductableLoanInterest/reliefClaimed",
+            "/nonDeductibleLoanInterest/reliefClaimed",
             "/payrollGiving/reliefClaimed",
             "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
             "/maintenancePayments/0/amount",
@@ -732,7 +732,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val badJson = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
             |    "reliefClaimed": 763.00
             |  },
@@ -797,7 +797,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val badJson = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
             |    "reliefClaimed": 763.00
             |  },
@@ -854,7 +854,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         val badJson = Json.parse(
           s"""
              |{
-             |  "nonDeductableLoanInterest": {
+             |  "nonDeductibleLoanInterest": {
              |    "customerReference": "",
              |    "reliefClaimed": -1.00
              |  },
@@ -903,7 +903,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             "/qualifyingLoanInterestPayments/0/lenderName"
           ))),
           CustomerReferenceFormatError.copy(paths = Some(Seq(
-            "/nonDeductableLoanInterest/customerReference",
+            "/nonDeductibleLoanInterest/customerReference",
             "/payrollGiving/customerReference",
             "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
             "/maintenancePayments/0/customerReference",
@@ -928,7 +928,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
           ))),
           ValueFormatError.copy(paths = Some(Seq(
-            "/nonDeductableLoanInterest/reliefClaimed",
+            "/nonDeductibleLoanInterest/reliefClaimed",
             "/payrollGiving/reliefClaimed",
             "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
             "/maintenancePayments/0/amount",

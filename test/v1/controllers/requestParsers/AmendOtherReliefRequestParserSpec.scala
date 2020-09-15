@@ -29,7 +29,7 @@ class AmendOtherReliefRequestParserSpec extends UnitSpec {
   private val requestBodyJson = Json.parse(
     """
       |{
-      |  "nonDeductableLoanInterest": {
+      |  "nonDeductibleLoanInterest": {
       |    "customerReference": "myref",
       |    "reliefClaimed": 763.00
       |  },
@@ -93,7 +93,7 @@ class AmendOtherReliefRequestParserSpec extends UnitSpec {
 
         parser.parseRequest(inputData) shouldBe
           Right(AmendOtherReliefsRequest(Nino(nino), taxYear, AmendOtherReliefsBody(
-            Some(NonDeductableLoanInterest(Some("myref"), 763.00)),
+            Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
             Some(PayrollGiving(Some("myref"), 154.00)),
             Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
             Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),

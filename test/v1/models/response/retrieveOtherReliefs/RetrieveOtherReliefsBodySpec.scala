@@ -25,7 +25,7 @@ import v1.models.hateoas.Method.{DELETE, GET, PUT}
 class RetrieveOtherReliefsBodySpec extends UnitSpec with MockAppConfig {
   val retrieveOtherReliefsBody = RetrieveOtherReliefsBody(
     "2020-06-17T10:53:38Z",
-    Some(NonDeductableLoanInterest(
+    Some(NonDeductibleLoanInterest(
       Some("myref"),
       763.00)),
     Some(PayrollGiving(
@@ -58,7 +58,7 @@ class RetrieveOtherReliefsBodySpec extends UnitSpec with MockAppConfig {
   val json = Json.parse(
     """{
       |  "submittedOn": "2020-06-17T10:53:38Z",
-      |  "nonDeductableLoanInterest": {
+      |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
       |        "reliefClaimed": 763.00
       |      },

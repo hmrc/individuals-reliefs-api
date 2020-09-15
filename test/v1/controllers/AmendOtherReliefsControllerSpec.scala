@@ -68,7 +68,7 @@ class AmendOtherReliefsControllerSpec
   private val requestJson = Json.parse(
     """
       |{
-      |  "nonDeductableLoanInterest": {
+      |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
       |        "reliefClaimed": 763.00
       |      },
@@ -112,7 +112,7 @@ class AmendOtherReliefsControllerSpec
       |}""".stripMargin)
 
   private val requestBody = AmendOtherReliefsBody(
-    Some(NonDeductableLoanInterest(
+    Some(NonDeductibleLoanInterest(
     Some("myref"),
     763.00)),
     Some(PayrollGiving(

@@ -37,7 +37,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
     val requestBodyJson = Json.parse(
       """
         |{
-        |  "nonDeductableLoanInterest": {
+        |  "nonDeductibleLoanInterest": {
         |        "customerReference": "myref",
         |        "reliefClaimed": 763.00
         |      },
@@ -149,7 +149,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         val allInvalidValueRequestBodyJson: JsValue = Json.parse(
           """
             |{
-            |  "nonDeductableLoanInterest": {
+            |  "nonDeductibleLoanInterest": {
             |        "customerReference": "",
             |        "reliefClaimed": -763.00
             |      },
@@ -197,7 +197,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
             "/qualifyingLoanInterestPayments/0/lenderName"
           ))),
           CustomerReferenceFormatError.copy(paths = Some(List(
-            "/nonDeductableLoanInterest/customerReference",
+            "/nonDeductibleLoanInterest/customerReference",
             "/payrollGiving/customerReference",
             "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
             "/maintenancePayments/0/customerReference",
@@ -222,7 +222,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
             "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
           ))),
           ValueFormatError.copy(paths = Some(List(
-            "/nonDeductableLoanInterest/reliefClaimed",
+            "/nonDeductibleLoanInterest/reliefClaimed",
             "/payrollGiving/reliefClaimed",
             "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
             "/maintenancePayments/0/amount",
@@ -255,7 +255,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       val validRequestBodyJson = Json.parse(
         """
           |{
-          |  "nonDeductableLoanInterest": {
+          |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
           |        "reliefClaimed": 763.00
           |      },
@@ -301,7 +301,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       val allInvalidvalueFormatRequestBodyJson = Json.parse(
         """
           |{
-          |  "nonDeductableLoanInterest": {
+          |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
           |        "reliefClaimed": -763.00
           |      },
@@ -347,7 +347,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       val allDatesInvalidRequestBodyJson = Json.parse(
         """
           |{
-          |  "nonDeductableLoanInterest": {
+          |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
           |        "reliefClaimed": 763.00
           |      },
@@ -393,7 +393,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       val allCustomerReferencesInvalidRequestBodyJson = Json.parse(
         """
           |{
-          |  "nonDeductableLoanInterest": {
+          |  "nonDeductibleLoanInterest": {
           |        "customerReference": "",
           |        "reliefClaimed": 763.00
           |      },
@@ -439,7 +439,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       val allExSpouseNamesInvalidRequestBodyJson = Json.parse(
         """
           |{
-          |  "nonDeductableLoanInterest": {
+          |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
           |        "reliefClaimed": 763.00
           |      },
@@ -485,7 +485,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       val allBusinessNamesInvalidRequestBodyJson = Json.parse(
         """
           |{
-          |  "nonDeductableLoanInterest": {
+          |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
           |        "reliefClaimed": 763.00
           |      },
@@ -531,7 +531,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       val allNatureOfTradesInvalidRequestBodyJson = Json.parse(
         """
           |{
-          |  "nonDeductableLoanInterest": {
+          |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
           |        "reliefClaimed": 763.00
           |      },
@@ -577,7 +577,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       val allIncomeSourcesInvalidRequestBodyJson = Json.parse(
         """
           |{
-          |  "nonDeductableLoanInterest": {
+          |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
           |        "reliefClaimed": 763.00
           |      },
@@ -623,7 +623,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       val allLenderNamesInvalidRequestBodyJson = Json.parse(
         """
           |{
-          |  "nonDeductableLoanInterest": {
+          |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
           |        "reliefClaimed": 763.00
           |      },
@@ -668,7 +668,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
       val allValueFormatError: MtdError = ValueFormatError.copy(
         paths = Some(Seq(
-          "/nonDeductableLoanInterest/reliefClaimed",
+          "/nonDeductibleLoanInterest/reliefClaimed",
           "/payrollGiving/reliefClaimed",
           "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
           "/maintenancePayments/0/amount",
@@ -687,7 +687,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
       val allCustomerReferenceFormatErrors: MtdError = CustomerReferenceFormatError.copy(
         paths = Some(List(
-          "/nonDeductableLoanInterest/customerReference",
+          "/nonDeductibleLoanInterest/customerReference",
           "/payrollGiving/customerReference",
           "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
           "/maintenancePayments/0/customerReference",
