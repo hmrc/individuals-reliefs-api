@@ -21,11 +21,13 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.controllers.requestParsers.DeleteForeignReliefsRequestParser
+import v1.models.audit.{AuditEvent, AuditResponse, DeleteForeignReliefsAuditDetail}
 import v1.models.errors._
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRawData
-import v1.services.{DeleteForeignReliefsService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{AuditService, DeleteForeignReliefsService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,6 +36,7 @@ class DeleteForeignReliefsController @Inject()(val authService: EnrolmentsAuthSe
                                                val lookupService: MtdIdLookupService,
                                                parser: DeleteForeignReliefsRequestParser,
                                                service: DeleteForeignReliefsService,
+                                               auditService: AuditService,
                                                cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
@@ -51,12 +54,21 @@ class DeleteForeignReliefsController @Inject()(val authService: EnrolmentsAuthSe
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
+
+          auditSubmission(DeleteForeignReliefsAuditDetail(request.userDetails, nino, taxYear,
+            serviceResponse.correlationId, AuditResponse(NO_CONTENT, Right(None))))
+
           NoContent.withApiHeaders(serviceResponse.correlationId)
 
         }
       result.leftMap { errorWrapper =>
         val correlationId = getCorrelationId(errorWrapper)
-        errorResult(errorWrapper).withApiHeaders(correlationId)
+        val result = errorResult(errorWrapper).withApiHeaders(correlationId)
+
+        auditSubmission(DeleteForeignReliefsAuditDetail(request.userDetails, nino, taxYear,
+          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+
+        result
       }.merge
     }
 
@@ -70,5 +82,12 @@ class DeleteForeignReliefsController @Inject()(val authService: EnrolmentsAuthSe
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
+  }
+
+  private def auditSubmission(details: DeleteForeignReliefsAuditDetail)
+                             (implicit hc: HeaderCarrier,
+                              ec: ExecutionContext) = {
+    val event = AuditEvent("DeleteForeignReliefs", "delete-foreign-reliefs", details)
+    auditService.auditEvent(event)
   }
 }
