@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.controllers.requestParsers.DeleteOtherReliefsRequestParser
-import v1.models.audit.{AuditEvent, DeleteOtherReliefsAuditDetail}
+import v1.models.audit.{AuditEvent, AuditResponse, DeleteOtherReliefsAuditDetail}
 import v1.models.errors._
 import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRawData
 import v1.services.{AuditService, DeleteOtherReliefsService, EnrolmentsAuthService, MtdIdLookupService}
@@ -56,7 +56,7 @@ class DeleteOtherReliefsController @Inject()(val authService: EnrolmentsAuthServ
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
           auditSubmission(DeleteOtherReliefsAuditDetail(request.userDetails, nino, taxYear,
-            vendorResponse.correlationId, AuditResponse(NO_CONTENT, Right(None))))
+            serviceResponse.correlationId, AuditResponse(NO_CONTENT, Right(None))))
 
           NoContent
             .withApiHeaders(serviceResponse.correlationId)
@@ -83,7 +83,7 @@ class DeleteOtherReliefsController @Inject()(val authService: EnrolmentsAuthServ
   private def auditSubmission(details: DeleteOtherReliefsAuditDetail)
                              (implicit hc: HeaderCarrier,
                               ec: ExecutionContext) = {
-    val event = AuditEvent("deleteLossClaim", "delete-loss-claim", details)
+    val event = AuditEvent("DeleteOtherReliefs", "delete-other-reliefs", details)
     auditService.auditEvent(event)
   }
 }

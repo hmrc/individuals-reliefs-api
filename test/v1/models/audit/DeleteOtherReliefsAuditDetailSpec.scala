@@ -46,7 +46,7 @@ class DeleteOtherReliefsAuditDetailSpec extends UnitSpec {
     userType, agentReferenceNumber, nino, taxYear, xCorrId,
     AuditResponse(
       204,
-      erorrs = None,
+      errors = None,
       body = None
     )
   )
@@ -58,7 +58,8 @@ class DeleteOtherReliefsAuditDetailSpec extends UnitSpec {
        |    "nino": "notANino",
        |    "taxYear" : "2019-20",
        |    "response":{
-       |      "httpStatus": 204
+       |      "httpStatus": 400,
+       |      "errors":[{"errorCode":"FORMAT_NINO"}]
        |    },
        |    "X-CorrelationId": "a1e8057e-fbbc-47a8-a8b478d9f015c253"
        |}""".stripMargin)
@@ -67,7 +68,7 @@ class DeleteOtherReliefsAuditDetailSpec extends UnitSpec {
     userType, agentReferenceNumber, "notANino", taxYear, xCorrId,
     AuditResponse(
       400,
-      erorrs = Some(Seq(AuditError(NinoFormatError.code))),
+      errors = Some(Seq(AuditError(NinoFormatError.code))),
       body = None
     )
   )
