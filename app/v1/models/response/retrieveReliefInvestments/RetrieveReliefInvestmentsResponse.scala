@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class RetrieveReliefInvestmentsBody(
+case class RetrieveReliefInvestmentsResponse(
                                           submittedOn: String,
                                           vctSubscription: Seq[VctSubscriptionsItem],
                                           eisSubscription: Seq[EisSubscriptionsItem],
@@ -30,10 +30,10 @@ case class RetrieveReliefInvestmentsBody(
                                           socialEnterpriseInvestment: Seq[SocialEnterpriseInvestmentItem]
                                         )
 
-object RetrieveReliefInvestmentsBody extends HateoasLinks {
-  implicit val format: OFormat[RetrieveReliefInvestmentsBody] = Json.format[RetrieveReliefInvestmentsBody]
+object RetrieveReliefInvestmentsResponse extends HateoasLinks {
+  implicit val format: OFormat[RetrieveReliefInvestmentsResponse] = Json.format[RetrieveReliefInvestmentsResponse]
 
-  implicit object LinksFactory extends HateoasLinksFactory[RetrieveReliefInvestmentsBody, RetrieveReliefInvestmentsHateoasData] {
+  implicit object LinksFactory extends HateoasLinksFactory[RetrieveReliefInvestmentsResponse, RetrieveReliefInvestmentsHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveReliefInvestmentsHateoasData): Seq[Link] = {
       import data._
       Seq(

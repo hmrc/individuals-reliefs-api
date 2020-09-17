@@ -21,7 +21,7 @@ import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
-import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsBody
+import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 
 import scala.concurrent.Future
 
@@ -43,7 +43,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
     "return a result" when {
       "the downstream call is successful" in new Test{
         val request = RetrieveForeignReliefsRequest(nino, taxYear)
-        val outcome = Right(ResponseWrapper(correlationId, RetrieveForeignReliefsBody))
+        val outcome = Right(ResponseWrapper(correlationId, RetrieveForeignReliefsResponse))
 
         MockedHttpClient.get(
           url = s"$baseUrl/reliefs/foreign/$nino/$taxYear",

@@ -22,8 +22,8 @@ import support.UnitSpec
 import v1.models.hateoas.Link
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
-class RetrieveOtherReliefsBodySpec extends UnitSpec with MockAppConfig {
-  val retrieveOtherReliefsBody = RetrieveOtherReliefsBody(
+class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
+  val retrieveOtherReliefsBody = RetrieveOtherReliefsResponse(
     "2020-06-17T10:53:38Z",
     Some(NonDeductibleLoanInterest(
       Some("myref"),
@@ -107,7 +107,7 @@ class RetrieveOtherReliefsBodySpec extends UnitSpec with MockAppConfig {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        retrieveOtherReliefsBody shouldBe json.as[RetrieveOtherReliefsBody]
+        retrieveOtherReliefsBody shouldBe json.as[RetrieveOtherReliefsResponse]
       }
     }
   }
@@ -124,7 +124,7 @@ class RetrieveOtherReliefsBodySpec extends UnitSpec with MockAppConfig {
       val taxYear = "mytaxyear"
 
       MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
-      RetrieveOtherReliefsBody.LinksFactory.links(mockAppConfig, RetrieveOtherReliefsHateoasData(nino, taxYear)) shouldBe
+      RetrieveOtherReliefsResponse.LinksFactory.links(mockAppConfig, RetrieveOtherReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
           Link(s"/my/context/other/$nino/$taxYear", PUT, "amend-reliefs-other"),

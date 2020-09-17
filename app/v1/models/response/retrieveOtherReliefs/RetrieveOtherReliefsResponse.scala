@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class RetrieveOtherReliefsBody(
+case class RetrieveOtherReliefsResponse(
                                      submittedOn: String,
                                      nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
                                      payrollGiving: Option[PayrollGiving],
@@ -32,10 +32,10 @@ case class RetrieveOtherReliefsBody(
                                      qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]
                                    )
 
-object RetrieveOtherReliefsBody extends HateoasLinks {
-  implicit val format: OFormat[RetrieveOtherReliefsBody] = Json.format[RetrieveOtherReliefsBody]
+object RetrieveOtherReliefsResponse extends HateoasLinks {
+  implicit val format: OFormat[RetrieveOtherReliefsResponse] = Json.format[RetrieveOtherReliefsResponse]
 
-  implicit object LinksFactory extends HateoasLinksFactory[RetrieveOtherReliefsBody, RetrieveOtherReliefsHateoasData] {
+  implicit object LinksFactory extends HateoasLinksFactory[RetrieveOtherReliefsResponse, RetrieveOtherReliefsHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveOtherReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(

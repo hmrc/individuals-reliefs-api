@@ -21,16 +21,16 @@ import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class RetrieveForeignReliefsBody(
+case class RetrieveForeignReliefsResponse(
                                        submittedOn: String,
                                        foreignTaxCreditRelief: Option[ForeignTaxCreditRelief]
                                      )
 
 
-object RetrieveForeignReliefsBody extends HateoasLinks {
-  implicit val format: OFormat[RetrieveForeignReliefsBody] = Json.format[RetrieveForeignReliefsBody]
+object RetrieveForeignReliefsResponse extends HateoasLinks {
+  implicit val format: OFormat[RetrieveForeignReliefsResponse] = Json.format[RetrieveForeignReliefsResponse]
 
-  implicit object LinksFactory extends HateoasLinksFactory[RetrieveForeignReliefsBody, RetrieveForeignReliefsHateoasData] {
+  implicit object LinksFactory extends HateoasLinksFactory[RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData] {
     override def links(appConfig: AppConfig, data: RetrieveForeignReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(

@@ -23,7 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
-import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsBody
+import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsResponse
 import v1.services.RetrieveReliefInvestmentsService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +34,7 @@ trait MockRetrieveReliefInvestmentsService extends MockFactory {
 
   object MockRetrieveReliefService {
 
-    def retrieve(requestData: RetrieveReliefInvestmentsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveReliefInvestmentsBody]]]] = {
+    def retrieve(requestData: RetrieveReliefInvestmentsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveReliefInvestmentsResponse]]]] = {
       (mockService
         .retrieve(_: RetrieveReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
         .expects(requestData, *, *, *)

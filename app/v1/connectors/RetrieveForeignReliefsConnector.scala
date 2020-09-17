@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
-import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsBody
+import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,11 +32,11 @@ class RetrieveForeignReliefsConnector @Inject()(val http: HttpClient,
                                                 val appConfig: AppConfig) extends BaseDesConnector {
 
   def retrieve(request: RetrieveForeignReliefsRequest)(
-              implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[RetrieveForeignReliefsBody]] = {
+              implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[RetrieveForeignReliefsResponse]] = {
 
    val url = s"reliefs/foreign/${request.nino}/${request.taxYear}"
     get(
-      DesUri[RetrieveForeignReliefsBody](s"$url")
+      DesUri[RetrieveForeignReliefsResponse](s"$url")
     )
   }
 }

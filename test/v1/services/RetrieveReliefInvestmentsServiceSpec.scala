@@ -35,7 +35,7 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
   private val taxYear = "2017-18"
   private val correlationId = "X-123"
 
-  private val fullResponseModel = RetrieveReliefInvestmentsBody(
+  private val fullResponseModel = RetrieveReliefInvestmentsResponse(
     "2020-06-17T10:53:38Z",
     Seq(VctSubscriptionsItem(
       "VCTREF",

@@ -21,7 +21,7 @@ import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
-import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsBody
+import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsResponse
 
 import scala.concurrent.Future
 
@@ -44,7 +44,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
       val request: RetrieveReliefInvestmentsRequest = RetrieveReliefInvestmentsRequest(nino, taxYear)
 
       "return a valid response" in new Test {
-        val outcome = Right(ResponseWrapper(correlationId, RetrieveReliefInvestmentsBody))
+        val outcome = Right(ResponseWrapper(correlationId, RetrieveReliefInvestmentsResponse))
 
         MockedHttpClient
           .get(

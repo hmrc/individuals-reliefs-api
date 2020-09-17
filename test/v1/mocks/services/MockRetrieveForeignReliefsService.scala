@@ -23,7 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
-import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsBody
+import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 import v1.services.RetrieveForeignReliefsService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +34,7 @@ trait MockRetrieveForeignReliefsService extends MockFactory {
 
   object MockRetrieveReliefService {
 
-    def retrieve(requestData: RetrieveForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignReliefsBody]]]] = {
+    def retrieve(requestData: RetrieveForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignReliefsResponse]]]] = {
       (mockService
         .retrieve(_: RetrieveForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
         .expects(requestData, *, *, *)
