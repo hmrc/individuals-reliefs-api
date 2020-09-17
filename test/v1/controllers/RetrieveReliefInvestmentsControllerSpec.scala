@@ -67,7 +67,7 @@ class RetrieveReliefInvestmentsControllerSpec
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
 
-  private val responseBody = RetrieveReliefInvestmentsBody(
+  private val responseBody = RetrieveReliefInvestmentsResponse(
     "2020-06-17T10:53:38Z",
     Seq(VctSubscriptionsItem(
       "VCTREF",

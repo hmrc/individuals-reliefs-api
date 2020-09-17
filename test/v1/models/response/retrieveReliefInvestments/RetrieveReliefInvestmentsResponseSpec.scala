@@ -22,8 +22,8 @@ import support.UnitSpec
 import v1.models.hateoas.Link
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
-class RetrieveReliefInvestmentsBodySpec extends UnitSpec with MockAppConfig {
-  val retrieveReliefInvestmentsBody = RetrieveReliefInvestmentsBody(
+class RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig {
+  val retrieveReliefInvestmentsBody = RetrieveReliefInvestmentsResponse(
     "2020-06-17T10:53:38Z",
     Seq(VctSubscriptionsItem(
       "VCTREF",
@@ -120,7 +120,7 @@ class RetrieveReliefInvestmentsBodySpec extends UnitSpec with MockAppConfig {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        json.as[RetrieveReliefInvestmentsBody] shouldBe retrieveReliefInvestmentsBody
+        json.as[RetrieveReliefInvestmentsResponse] shouldBe retrieveReliefInvestmentsBody
       }
     }
   }
@@ -137,7 +137,7 @@ class RetrieveReliefInvestmentsBodySpec extends UnitSpec with MockAppConfig {
       val taxYear = "mytaxyear"
 
       MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
-      RetrieveReliefInvestmentsBody.LinksFactory.links(mockAppConfig, RetrieveReliefInvestmentsHateoasData(nino, taxYear)) shouldBe
+      RetrieveReliefInvestmentsResponse.LinksFactory.links(mockAppConfig, RetrieveReliefInvestmentsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/investment/$nino/$taxYear", GET, "self"),
           Link(s"/my/context/investment/$nino/$taxYear", PUT, "amend-reliefs-investments"),

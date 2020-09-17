@@ -28,7 +28,7 @@ import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveOtherReliefs.{RetrieveOtherReliefsRawData, RetrieveOtherReliefsRequest}
-import v1.models.response.retrieveOtherReliefs.{AnnualPaymentsMade, MaintenancePayments, NonDeductibleLoanInterest, PayrollGiving, PostCessationTradeReliefAndCertainOtherLosses, QualifyingDistributionRedemptionOfSharesAndSecurities, QualifyingLoanInterestPayments, RetrieveOtherReliefsBody, RetrieveOtherReliefsHateoasData}
+import v1.models.response.retrieveOtherReliefs.{AnnualPaymentsMade, MaintenancePayments, NonDeductibleLoanInterest, PayrollGiving, PostCessationTradeReliefAndCertainOtherLosses, QualifyingDistributionRedemptionOfSharesAndSecurities, QualifyingLoanInterestPayments, RetrieveOtherReliefsResponse, RetrieveOtherReliefsHateoasData}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -67,7 +67,7 @@ class RetrieveOtherReliefsControllerSpec
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self")
 
-  private val responseBody = RetrieveOtherReliefsBody(
+  private val responseBody = RetrieveOtherReliefsResponse(
     "2020-06-17T10:53:38Z",
     Some(NonDeductibleLoanInterest(
       Some("myref"),

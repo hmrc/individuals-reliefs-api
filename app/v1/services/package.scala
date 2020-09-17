@@ -18,8 +18,8 @@ package v1
 
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsBody
-import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsBody
+import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
+import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsResponse
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
 import v1.models.response.retrieveReliefInvestments._
 
@@ -33,19 +33,19 @@ package object services {
 
   type DeleteReliefInvestmentsServiceOutcome = ServiceOutcome[Unit]
 
-  type RetrieveReliefInvestmentsServiceOutcome = ServiceOutcome[RetrieveReliefInvestmentsBody]
+  type RetrieveReliefInvestmentsServiceOutcome = ServiceOutcome[RetrieveReliefInvestmentsResponse]
 
   type RetrievePensionsReliefsServiceOutcome = ServiceOutcome[RetrievePensionsReliefsResponse]
 
   type DeleteOtherReliefsServiceOutcome = ServiceOutcome[Unit]
 
-  type RetrieveOtherReliefsServiceOutcome = ServiceOutcome[RetrieveOtherReliefsBody]
+  type RetrieveOtherReliefsServiceOutcome = ServiceOutcome[RetrieveOtherReliefsResponse]
 
   type AmendForeignReliefsServiceOutcome = ServiceOutcome[Unit]
 
   type DeleteForeignReliefsServiceOutcome = ServiceOutcome[Unit]
 
-  type RetrieveForeignReliefsServiceOutcome = ServiceOutcome[RetrieveForeignReliefsBody]
+  type RetrieveForeignReliefsServiceOutcome = ServiceOutcome[RetrieveForeignReliefsResponse]
 
   type AmendPensionsReliefsServiceOutcome = ServiceOutcome[Unit]
 
