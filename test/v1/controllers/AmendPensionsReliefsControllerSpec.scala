@@ -23,8 +23,9 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendPensionsReliefsRequestParser
 import v1.mocks.services.{MockAmendPensionsReliefsService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.models.audit.{AmendPensionsReliefsAuditDetail, AuditError, AuditEvent, AuditResponse}
 import v1.models.errors._
-import v1.models.hateoas.Method.PUT
+import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendPensionsReliefs._
@@ -46,7 +47,11 @@ class AmendPensionsReliefsControllerSpec
   private val taxYear = "2019-20"
   private val correlationId = "X-123"
 
-  private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = PUT, rel = "self")
+  private val testHateoasLinks = Seq(
+    Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = PUT, rel = "amend-reliefs-pensions"),
+    Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self"),
+    Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-pensions")
+  )
 
   private val requestJson = Json.parse(
     """|{
@@ -81,6 +86,7 @@ class AmendPensionsReliefsControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockAmendPensionsReliefsRequestParser,
       service = mockService,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc
     )
@@ -88,6 +94,45 @@ class AmendPensionsReliefsControllerSpec
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
   }
+
+  val hateoasResponse = Json.parse(
+    """
+      |{
+      |        "links": [
+      |          {
+      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
+      |            "rel": "amend-reliefs-pensions",
+      |            "method": "PUT"
+      |          },
+      |          {
+      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
+      |            "rel": "self",
+      |            "method": "GET"
+      |          },
+      |          {
+      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
+      |            "rel": "delete-reliefs-pensions",
+      |            "method": "DELETE"
+      |          }
+      |        ]
+      |      }
+      |""".stripMargin)
+
+
+  def event(auditResponse: AuditResponse): AuditEvent[AmendPensionsReliefsAuditDetail] =
+    AuditEvent(
+      auditType = "CreateAmendReliefPension",
+      transactionName = "create-amend-reliefs-pensions",
+      detail = AmendPensionsReliefsAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        nino,
+        taxYear,
+        requestJson,
+        correlationId,
+        response = auditResponse
+      )
+    )
 
   "handleRequest" should {
     "return Ok" when {
@@ -103,11 +148,14 @@ class AmendPensionsReliefsControllerSpec
 
         MockHateoasFactory
           .wrap((), AmendPensionsReliefsHateoasData(nino, taxYear))
-          .returns(HateoasWrapper((), Seq(testHateoasLink)))
+          .returns(HateoasWrapper((), testHateoasLinks))
 
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
     "return the error as per spec" when {
@@ -124,6 +172,10 @@ class AmendPensionsReliefsControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -157,6 +209,9 @@ class AmendPensionsReliefsControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

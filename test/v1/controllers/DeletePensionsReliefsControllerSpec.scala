@@ -23,6 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockDeletePensionsReliefsRequestParser
 import v1.mocks.services.{MockAuditService, MockDeletePensionsReliefsService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeletePensionsReliefsAuditDetail}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deletePensionsReliefs.{DeletePensionsReliefsRawData, DeletePensionsReliefsRequest}
@@ -47,6 +48,7 @@ class DeletePensionsReliefsControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockRequestDataParser,
       service = mockDeletePensionsReliefsService,
+      auditService = mockAuditService,
       cc = cc
     )
 
@@ -60,6 +62,20 @@ class DeletePensionsReliefsControllerSpec
 
   private val rawData = DeletePensionsReliefsRawData(nino, taxYear)
   private val requestData = DeletePensionsReliefsRequest(Nino(nino), taxYear)
+
+  def event(auditResponse: AuditResponse): AuditEvent[DeletePensionsReliefsAuditDetail] =
+    AuditEvent(
+      auditType = "DeleteReliefPension",
+      transactionName = "delete-reliefs-pensions",
+      detail = DeletePensionsReliefsAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        nino,
+        taxYear,
+        correlationId,
+        response = auditResponse
+      )
+    )
 
   "handleRequest" should {
     "return NoContent" when {
@@ -77,6 +93,9 @@ class DeletePensionsReliefsControllerSpec
 
         status(result) shouldBe NO_CONTENT
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(NO_CONTENT, None, None)
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
     "return the error as per spec" when {
@@ -93,6 +112,9 @@ class DeletePensionsReliefsControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -124,6 +146,9 @@ class DeletePensionsReliefsControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
