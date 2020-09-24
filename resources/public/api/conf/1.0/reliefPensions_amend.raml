@@ -10,8 +10,8 @@ is:
   - errors.incorrectOrEmptyBody
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Amend Pensions Reliefs [test only]
-description: "This endpoint allows a developer to amend pensions reliefs for a tax year. A National Insurance number and tax year must be provided."
+displayName: Create And Amend Pensions Reliefs [test only]
+description: "This endpoint allows a developer to create and amend pensions reliefs for a tax year. A National Insurance number and tax year must be provided."
 (annotations.sandboxData): !include scenarios/amend_relief_pensions.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
