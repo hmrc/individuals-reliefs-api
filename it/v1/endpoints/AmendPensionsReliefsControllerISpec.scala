@@ -60,7 +60,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
          |    {
          |      "href": "/individuals/reliefs/pensions/$nino/$taxYear",
          |      "method": "PUT",
-         |      "rel": "amend-reliefs-pensions"
+         |      "rel": "create-and-amend-reliefs-pensions"
          |    },
          |    {
          |      "href": "/individuals/reliefs/pensions/$nino/$taxYear",

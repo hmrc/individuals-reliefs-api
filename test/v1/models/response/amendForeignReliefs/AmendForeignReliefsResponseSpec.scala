@@ -31,7 +31,7 @@ class AmendForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
       AmendForeignReliefsResponse.LinksFactory.links(mockAppConfig, AmendForeignReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/foreign/$nino/$taxYear", GET, "self"),
-          Link(s"/my/context/foreign/$nino/$taxYear", PUT, "amend-reliefs-foreign"),
+          Link(s"/my/context/foreign/$nino/$taxYear", PUT, "create-and-amend-reliefs-foreign"),
           Link(s"/my/context/foreign/$nino/$taxYear", DELETE, "delete-reliefs-foreign")
         )
     }

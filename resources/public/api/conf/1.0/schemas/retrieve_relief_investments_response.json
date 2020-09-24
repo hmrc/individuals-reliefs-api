@@ -240,7 +240,7 @@
             "type": "string",
             "enum": [
               "self",
-              "amend-reliefs-investments",
+              "create-and-amend-reliefs-investments",
               "delete-reliefs-investments"
             ]
           }

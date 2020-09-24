@@ -29,7 +29,7 @@
             "type": "string",
             "enum": [
               "self",
-              "amend-reliefs-pensions",
+              "create-and-amend-reliefs-pensions",
               "delete-reliefs-pensions"
             ]
           }

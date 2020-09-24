@@ -127,7 +127,7 @@ class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
       RetrieveOtherReliefsResponse.LinksFactory.links(mockAppConfig, RetrieveOtherReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
-          Link(s"/my/context/other/$nino/$taxYear", PUT, "amend-reliefs-other"),
+          Link(s"/my/context/other/$nino/$taxYear", PUT, "create-and-amend-reliefs-other"),
           Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
         )
     }

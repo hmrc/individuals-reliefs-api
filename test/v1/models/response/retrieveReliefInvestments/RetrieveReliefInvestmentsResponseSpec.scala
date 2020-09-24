@@ -140,7 +140,7 @@ class RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig 
       RetrieveReliefInvestmentsResponse.LinksFactory.links(mockAppConfig, RetrieveReliefInvestmentsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/investment/$nino/$taxYear", GET, "self"),
-          Link(s"/my/context/investment/$nino/$taxYear", PUT, "amend-reliefs-investments"),
+          Link(s"/my/context/investment/$nino/$taxYear", PUT, "create-and-amend-reliefs-investments"),
           Link(s"/my/context/investment/$nino/$taxYear", DELETE, "delete-reliefs-investments")
         )
     }
