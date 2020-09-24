@@ -98,7 +98,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |    {
          |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
          |      "method": "PUT",
-         |      "rel": "amend-reliefs-investments"
+         |      "rel": "create-and-amend-reliefs-investments"
          |    },
          |    {
          |      "href": "/individuals/reliefs/investment/$nino/$taxYear",

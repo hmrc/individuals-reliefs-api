@@ -86,7 +86,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |        {
          |            "href":"/individuals/reliefs/other/$nino/$taxYear",
          |            "method":"PUT",
-         |            "rel":"amend-reliefs-other"
+         |            "rel":"create-and-amend-reliefs-other"
          |        },
          |        {
          |            "href":"/individuals/reliefs/other/$nino/$taxYear",

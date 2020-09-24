@@ -47,7 +47,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec {
          |      {
          |         "href":"/individuals/reliefs/pensions/AA123456A/$taxYear",
          |         "method":"PUT",
-         |         "rel":"amend-reliefs-pensions"
+         |         "rel":"create-and-amend-reliefs-pensions"
          |      },
          |      {
          |         "href":"/individuals/reliefs/pensions/AA123456A/$taxYear",

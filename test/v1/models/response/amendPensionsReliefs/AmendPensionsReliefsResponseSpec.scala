@@ -31,7 +31,7 @@ class AmendPensionsReliefsResponseSpec extends UnitSpec with MockAppConfig {
       AmendPensionsReliefsResponse.LinksFactory.links(mockAppConfig, AmendPensionsReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/pensions/$nino/$taxYear", GET, "self"),
-          Link(s"/my/context/pensions/$nino/$taxYear", PUT, "amend-reliefs-pensions"),
+          Link(s"/my/context/pensions/$nino/$taxYear", PUT, "create-and-amend-reliefs-pensions"),
           Link(s"/my/context/pensions/$nino/$taxYear", DELETE, "delete-reliefs-pensions")
         )
     }

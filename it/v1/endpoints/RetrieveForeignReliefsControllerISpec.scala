@@ -48,7 +48,7 @@ class RetrieveForeignReliefsControllerISpec extends IntegrationBaseSpec {
          |      {
          |         "href":"/individuals/reliefs/foreign/$nino/$taxYear",
          |         "method":"PUT",
-         |         "rel":"amend-reliefs-foreign"
+         |         "rel":"create-and-amend-reliefs-foreign"
          |      },
          |      {
          |         "href":"/individuals/reliefs/foreign/$nino/$taxYear",
