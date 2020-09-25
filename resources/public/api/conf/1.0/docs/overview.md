@@ -1,1 +1,1 @@
-This API allows software packages to retrieve, create, amend or delete relief investments from VCT subscriptions, EIS subscriptions, Community Investments, Seed Enterprise Investments and Social Enterprise Investments.
+This API allows software packages to retrieve, create and amend, or delete relief investments from VCT subscriptions, EIS subscriptions, Community Investments, Seed Enterprise Investments and Social Enterprise Investments.

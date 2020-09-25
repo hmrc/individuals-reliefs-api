@@ -8,7 +8,7 @@
     {
       "href":"/individuals/reliefs/investment/TC663795B/2019-20",
       "method":"PUT",
-      "rel":"amend-reliefs-investments"
+      "rel":"create-and-amend-reliefs-investments"
     },
     {
       "href":"/individuals/reliefs/investment/TC663795B/2019-20",
