@@ -3,7 +3,7 @@
     {
       "href":"/individuals/reliefs/pensions/TC663795B/2019-20",
       "method":"PUT",
-      "rel":"amend-reliefs-pensions"
+      "rel":"create-and-amend-reliefs-pensions"
     },
     {
       "href":"/individuals/reliefs/pensions/TC663795B/2019-20",
