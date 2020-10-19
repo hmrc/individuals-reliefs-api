@@ -12,10 +12,4 @@
             <td><p>Simulate success response.</p></td>
         </tr>
     </tbody>
-        <tbody>
-            <tr>
-                <td><p>NOT_FOUND</p></td>
-                <td><p>Simulates the scenario where the given other reliefs could not be found</p></td>
-            </tr>            
-        </tbody>
 </table>
