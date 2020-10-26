@@ -45,7 +45,7 @@ class DeletePensionsReliefsService @Inject()(connector: DeletePensionsReliefsCon
   private def desErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_TAX_YEAR_EXPLICIT" -> TaxYearFormatError,
+      "INVALID_TAX_YEAR" -> TaxYearFormatError,
       "NOT_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
