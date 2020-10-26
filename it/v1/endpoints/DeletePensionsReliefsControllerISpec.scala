@@ -33,7 +33,7 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
     val taxYear = "2020-21"
 
     def uri: String = s"/pensions/$nino/$taxYear"
-    def desUri: String = s"/reliefs/pensions/$nino/$taxYear"
+    def desUri: String = s"/income-tax/pensions/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 
@@ -123,7 +123,7 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
         val input = Seq(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR_EXPLICIT", Status.BAD_REQUEST, TaxYearFormatError),
+          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
           (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError)

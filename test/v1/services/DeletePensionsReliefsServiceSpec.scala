@@ -65,7 +65,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
 
       val input = Seq(
         ("NOT_FOUND", NotFoundError),
-        ("INVALID_TAX_YEAR_EXPLICIT", TaxYearFormatError),
+        ("INVALID_TAX_YEAR", TaxYearFormatError),
         ("SERVER_ERROR", DownstreamError),
         ("SERVICE_UNAVAILABLE", DownstreamError),
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
