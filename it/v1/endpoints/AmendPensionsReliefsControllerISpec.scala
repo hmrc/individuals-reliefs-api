@@ -73,7 +73,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
     def uri: String = s"/pensions/$nino/$taxYear"
 
-    def desUri: String = s"/reliefs/pensions/$nino/$taxYear"
+    def desUri: String = s"/income-tax/reliefs/pensions/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 
@@ -236,8 +236,8 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
         val input = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
-          (BAD_REQUEST, "INVALID_TAX_YEAR_EXPLICIT", BAD_REQUEST, TaxYearFormatError),
-          (BAD_REQUEST, "NOT_FOUND", NOT_FOUND, NotFoundError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, DownstreamError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError))
 

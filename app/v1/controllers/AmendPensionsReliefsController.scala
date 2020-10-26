@@ -92,7 +92,6 @@ class AmendPensionsReliefsController @Inject()(val authService: EnrolmentsAuthSe
            RuleTaxYearNotSupportedError |
            MtdErrorWithCustomMessage(ValueFormatError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }
 
