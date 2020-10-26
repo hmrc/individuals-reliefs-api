@@ -49,7 +49,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
         MockedHttpClient
           .get(
-            url = s"$baseUrl/reliefs/pensions/$nino/$taxYear",
+            url = s"$baseUrl/income-tax/reliefs/pensions/$nino/$taxYear",
             requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
           )
           .returns(Future.successful(outcome))

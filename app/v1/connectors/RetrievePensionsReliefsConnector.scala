@@ -33,7 +33,7 @@ class RetrievePensionsReliefsConnector @Inject()(val http: HttpClient,
   def retrieve(request: RetrievePensionsReliefsRequest)(
     implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[RetrievePensionsReliefsResponse]] = {
 
-    val url = s"reliefs/pensions/${request.nino}/${request.taxYear}"
+    val url = s"income-tax/reliefs/pensions/${request.nino}/${request.taxYear}"
     get(
       DesUri[RetrievePensionsReliefsResponse](s"$url")
     )
