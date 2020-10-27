@@ -11,11 +11,4 @@
             <td><p>N/A - DEFAULT</p></td>
             <td><p>Simulate a success response.</p></td>
         </tr>
-    </tbody>
-        <tbody>
-            <tr>
-                <td><p>NOT_FOUND</p></td>
-                <td><p>Simulates the scenario where the given pensions reliefs could not be found.</p></td>
-            </tr>            
-        </tbody>
 </table>

@@ -23,7 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.AmendPensionsReliefsConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import v1.models.errors.{DownstreamError, NinoFormatError, TaxYearFormatError}
 import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequest
 import v1.support.DesResponseMappingSupport
 
@@ -47,8 +47,8 @@ class AmendPensionsReliefsService @Inject()(connector: AmendPensionsReliefsConne
   private def desErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "INVALID_TAX_YEAR_EXPLICIT" -> TaxYearFormatError,
-      "NOT_FOUND" -> NotFoundError,
+      "INVALID_TAX_YEAR" -> TaxYearFormatError,
+      "INVALID_PAYLOAD" -> DownstreamError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )
