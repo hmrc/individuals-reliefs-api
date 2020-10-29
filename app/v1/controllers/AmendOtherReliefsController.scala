@@ -100,7 +100,6 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
            MtdErrorWithCustomMessage(LenderNameFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper: ErrorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }
 
