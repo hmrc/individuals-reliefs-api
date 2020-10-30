@@ -288,7 +288,6 @@ class AmendReliefInvestmentsControllerSpec
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR),
           (TaxYearFormatError, BAD_REQUEST)
         )

@@ -96,7 +96,6 @@ class AmendReliefInvestmentsController @Inject()(val authService: EnrolmentsAuth
            MtdErrorWithCustomMessage(UniqueInvestmentRefFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case DownstreamError                                                => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }
 
