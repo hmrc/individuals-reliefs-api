@@ -749,7 +749,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
         val input = Seq(
           ("AA1123A", "2021-22", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "2020-21", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2020-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "20121", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2021-22", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),

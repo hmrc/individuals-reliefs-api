@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import config.AppConfig
 import javax.inject.Inject
-import v1.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation}
+import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
 import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRawData
 
@@ -35,7 +35,7 @@ class DeleteOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Valida
 
   private def parameterRuleValidation: DeleteOtherReliefsRawData => List[List[MtdError]] = (data: DeleteOtherReliefsRawData) => {
     List(
-      MtdTaxYearValidation.validate(data.taxYear, appConfig.reliefsMinimumTaxYear)
+      MtdTaxYearValidation.validate(data.taxYear, minimumTaxYear)
     )
   }
 

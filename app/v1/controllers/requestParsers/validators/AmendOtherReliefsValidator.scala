@@ -41,7 +41,7 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
 
   private def parameterRuleValidation: AmendOtherReliefsRawData => List[List[MtdError]] = (data: AmendOtherReliefsRawData) => {
     List(
-      MtdTaxYearValidation.validate(data.taxYear, appConfig.reliefsMinimumTaxYear)
+      MtdTaxYearValidation.validate(data.taxYear, minimumTaxYear)
     )
   }
 

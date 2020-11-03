@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import config.AppConfig
 import javax.inject.Inject
-import v1.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation}
+import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRawData
 
@@ -36,7 +36,7 @@ class RetrieveReliefInvestmentsValidator @Inject()(appConfig: AppConfig) extends
 
   private def parameterRuleValidation: RetrieveReliefInvestmentsRawData => List[List[MtdError]] = (data: RetrieveReliefInvestmentsRawData) => {
     List(
-      MtdTaxYearValidation.validate(data.taxYear, appConfig.reliefsMinimumTaxYear)
+      MtdTaxYearValidation.validate(data.taxYear, minimumTaxYear)
     )
   }
 

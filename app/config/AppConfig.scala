@@ -38,9 +38,6 @@ trait AppConfig {
 
   def endpointsEnabled(version: String): Boolean
 
-  def pensionsReliefsMinimumTaxYear: Int
-
-  def reliefsMinimumTaxYear: Int
 }
 
 @Singleton
@@ -58,7 +55,4 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
 
   def endpointsEnabled(version: String): Boolean = config.getBoolean(s"api.$version.endpoints.enabled")
 
-  override def pensionsReliefsMinimumTaxYear: Int = config.getInt("api.pensionsReliefsMinimumTaxYear")
-
-  override def reliefsMinimumTaxYear: Int = config.getInt("api.reliefsMinimumTaxYear")
 }

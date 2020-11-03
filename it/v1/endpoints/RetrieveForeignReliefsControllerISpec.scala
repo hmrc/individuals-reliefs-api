@@ -136,7 +136,7 @@ class RetrieveForeignReliefsControllerISpec extends IntegrationBaseSpec {
         val input = Seq(
           ("Walrus", "2021-22", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2020-21", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
 

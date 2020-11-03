@@ -173,7 +173,6 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
   class Test {
     val validator = new AmendOtherReliefsValidator(mockAppConfig)
-    MockedAppConfig.reliefsMinimumTaxYear returns 2022 anyNumberOfTimes()
   }
 
   "running a validation" should {
@@ -215,7 +214,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         validator.validate(AmendOtherReliefsRawData(validNino, "2017-20", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
       }
       "a tax year before the earliest allowed date is supplied" in new Test {
-        validator.validate(AmendOtherReliefsRawData(validNino, "2020-21", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(AmendOtherReliefsRawData(validNino, "2019-20", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
       }
       "all path parameters are invalid" in new Test {
         validator.validate(AmendOtherReliefsRawData("Walrus", "2000", requestBodyJson)) shouldBe List(NinoFormatError, TaxYearFormatError)
