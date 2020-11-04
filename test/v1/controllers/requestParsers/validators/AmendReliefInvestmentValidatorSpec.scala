@@ -80,7 +80,6 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
 
   class Test {
     val validator = new AmendReliefInvestmentValidator(mockAppConfig)
-    MockedAppConfig.reliefsMinimumTaxYear returns 2022 anyNumberOfTimes()
   }
     
   "running a validation" should {
@@ -104,7 +103,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return RULE_TAX_YEAR_NOT_SUPPORTED error" when {
       "a tax year before the earliest allowed date is supplied" in new Test {
-        validator.validate(AmendReliefInvestmentsRawData(validNino, "2020-21", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(AmendReliefInvestmentsRawData(validNino, "2019-20", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
       }
     }
 

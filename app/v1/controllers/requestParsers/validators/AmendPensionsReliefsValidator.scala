@@ -41,7 +41,7 @@ class AmendPensionsReliefsValidator @Inject()(appConfig: AppConfig) extends Vali
 
   private def parameterRuleValidation: AmendPensionsReliefsRawData => List[List[MtdError]] = (data: AmendPensionsReliefsRawData) => {
     List(
-      MtdTaxYearValidation.validate(data.taxYear, appConfig.pensionsReliefsMinimumTaxYear)
+      MtdTaxYearValidation.validate(data.taxYear, minimumTaxYear)
     )
   }
 

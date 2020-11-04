@@ -54,7 +54,6 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
   class Test {
     val validator = new AmendForeignReliefsValidator(mockAppConfig)
-    MockedAppConfig.reliefsMinimumTaxYear returns 2022 anyNumberOfTimes()
   }
 
   "running a validation" should {
@@ -79,7 +78,7 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         validator.validate(AmendForeignReliefsRawData(validNino, "2017-20", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
       }
       "the taxYear is too early" in new Test {
-        validator.validate(AmendForeignReliefsRawData(validNino, "2020-21", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(AmendForeignReliefsRawData(validNino, "2019-20", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
       }
       "all path parameters are invalid" in new Test {
         validator.validate(AmendForeignReliefsRawData("Walrus", "2000", requestBodyJson)) shouldBe List(NinoFormatError, TaxYearFormatError)

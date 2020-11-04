@@ -62,7 +62,6 @@ class AmendPensionsReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
   class Test {
     val validator = new AmendPensionsReliefsValidator(mockAppConfig)
-    MockedAppConfig.pensionsReliefsMinimumTaxYear returns 2021 anyNumberOfTimes()
   }
     
   "running a validation" should {
