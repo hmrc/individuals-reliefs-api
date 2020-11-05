@@ -35,7 +35,8 @@ class RetrieveReliefInvestmentsService @Inject()(connector: RetrieveReliefInvest
   def retrieve(request: RetrieveReliefInvestmentsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[RetrieveReliefInvestmentsServiceOutcome] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[RetrieveReliefInvestmentsServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))

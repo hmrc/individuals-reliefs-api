@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
+import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.AmendPensionsReliefsRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.audit.{AmendPensionsReliefsAuditDetail, AuditEvent, AuditResponse}
@@ -41,7 +41,8 @@ class AmendPensionsReliefsController @Inject()(val authService: EnrolmentsAuthSe
                                                service: AmendPensionsReliefsService,
                                                auditService: AuditService,
                                                hateoasFactory: HateoasFactory,
-                                               cc: ControllerComponents)(implicit ec: ExecutionContext)
+                                               cc: ControllerComponents,
+                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -49,6 +50,9 @@ class AmendPensionsReliefsController @Inject()(val authService: EnrolmentsAuthSe
 
   def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
+      implicit val correlationId: String = idGenerator.getCorrelationId
+      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+        s"with correlationId : $correlationId")
       val rawData = AmendPensionsReliefsRawData(nino, taxYear, request.body)
       val result =
         for {
@@ -71,8 +75,12 @@ class AmendPensionsReliefsController @Inject()(val authService: EnrolmentsAuthSe
         }
 
       result.leftMap { errorWrapper =>
-        val correlationId = getCorrelationId(errorWrapper)
-        val result = errorResult(errorWrapper).withApiHeaders(correlationId)
+        val resCorrelationId = errorWrapper.correlationId
+        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+
+        logger.info(
+          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
+            s"Error response received with CorrelationId: $resCorrelationId")
 
         auditSubmission(AmendPensionsReliefsAuditDetail(request.userDetails, nino, taxYear, request.body,
           correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))

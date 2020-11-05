@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveForeignReliefsRequestParser
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveForeignReliefsService}
@@ -28,7 +29,7 @@ import v1.models.hateoas.Method.GET
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignReliefs.{RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest}
-import v1.models.response.retrieveForeignReliefs.{ForeignTaxCreditRelief, RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData}
+import v1.models.response.retrieveForeignReliefs.{ForeignTaxCreditRelief, RetrieveForeignReliefsHateoasData, RetrieveForeignReliefsResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,7 +41,8 @@ class RetrieveForeignReliefsControllerSpec
     with MockRetrieveForeignReliefsService
     with MockRetrieveForeignReliefsRequestParser
     with MockHateoasFactory
-    with MockAuditService {
+    with MockAuditService
+    with MockIdGenerator {
 
   private val nino = "AA123456A"
   private val taxYear = "2019-20"
@@ -54,7 +56,7 @@ class RetrieveForeignReliefsControllerSpec
   )
 
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new RetrieveForeignReliefsController(
       authService = mockEnrolmentsAuthService,
@@ -63,10 +65,12 @@ class RetrieveForeignReliefsControllerSpec
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
   "handleRequest" should {
@@ -97,7 +101,7 @@ class RetrieveForeignReliefsControllerSpec
 
             MockRetrieveForeignReliefsRequestParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
@@ -128,7 +132,7 @@ class RetrieveForeignReliefsControllerSpec
 
             MockRetrieveReliefService
               .retrieve(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 

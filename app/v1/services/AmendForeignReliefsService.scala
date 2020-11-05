@@ -35,7 +35,8 @@ class AmendForeignReliefsService @Inject()(connector: AmendForeignReliefsConnect
   def amend(request: AmendForeignReliefsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[AmendForeignReliefsServiceOutcome] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[AmendForeignReliefsServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDesErrors(desErrorMap))

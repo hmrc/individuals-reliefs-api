@@ -33,7 +33,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
 
   private val nino = "AA123456A"
   private val taxYear = "2017-18"
-  private val correlationId = "X-123"
+  implicit val correlationId = "X-123"
 
   private val responseModel = RetrieveForeignReliefsResponse("2020-06-17T10:53:38Z", Some(ForeignTaxCreditRelief(234567.89)))
 
@@ -63,7 +63,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
             MockRetrieveForeignReliefsConnector.retrieve(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+            await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = Seq(

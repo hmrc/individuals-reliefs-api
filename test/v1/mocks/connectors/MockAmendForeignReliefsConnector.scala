@@ -32,8 +32,8 @@ trait MockAmendForeignReliefsConnector extends MockFactory {
 
     def amend(requestData: AmendForeignReliefsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
       (mockAmendForeignReliefsConnector
-        .amend(_: AmendForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
+        .amend(_: AmendForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _:String))
+        .expects(requestData, *, *, *)
     }
   }
 

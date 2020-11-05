@@ -25,6 +25,7 @@ import v1.models.request.retrieveForeignReliefs.{RetrieveForeignReliefsRawData, 
 class RetrieveForeignReliefsRequestParserSpec extends UnitSpec {
   val nino = "AA123456B"
   val taxYear = "2018-19"
+  implicit val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   val inputData = RetrieveForeignReliefsRawData(nino, taxYear)
 
@@ -50,7 +51,7 @@ class RetrieveForeignReliefsRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(None, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple validation errors occur" in new Test {
@@ -58,7 +59,7 @@ class RetrieveForeignReliefsRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

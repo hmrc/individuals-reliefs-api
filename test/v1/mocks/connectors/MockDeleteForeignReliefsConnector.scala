@@ -32,8 +32,8 @@ trait MockDeleteForeignReliefsConnector extends MockFactory {
 
     def delete(requestData: DeleteForeignReliefsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
       (mockConnector
-        .delete(_: DeleteForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
+        .delete(_: DeleteForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _:String))
+        .expects(requestData, *, *, *)
     }
   }
 

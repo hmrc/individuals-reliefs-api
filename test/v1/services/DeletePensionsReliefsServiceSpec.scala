@@ -32,6 +32,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
 
   val validNino = Nino("AA123456A")
   val validTaxYear = "2019-20"
+  implicit val correlationId = "X-123"
 
   val requestData = DeletePensionsReliefsRequest(validNino, validTaxYear)
 
@@ -60,7 +61,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
           MockDeletePensionsReliefsConnector.delete(requestData)
             .returns(Future.successful(Left(ResponseWrapper("resultId", DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.delete(requestData)) shouldBe Left(ErrorWrapper(Some("resultId"), error))
+          await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
 
       val input = Seq(

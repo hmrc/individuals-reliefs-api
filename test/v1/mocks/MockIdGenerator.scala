@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package v1.mocks.requestParsers
+package v1.mocks
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.controllers.requestParsers.DeleteOtherReliefsRequestParser
-import v1.models.errors.ErrorWrapper
-import v1.models.request.deleteOtherReliefs.{DeleteOtherReliefsRawData, DeleteOtherReliefsRequest}
+import utils.IdGenerator
 
-trait MockDeleteOtherReliefsRequestParser extends MockFactory {
 
-  val mockRequestDataParser: DeleteOtherReliefsRequestParser = mock[DeleteOtherReliefsRequestParser]
+trait MockIdGenerator extends MockFactory {
 
-  object MockDeleteOtherReliefsRequestParser {
-    def parse(data: DeleteOtherReliefsRawData): CallHandler[Either[ErrorWrapper, DeleteOtherReliefsRequest]] = {
-      (mockRequestDataParser.parseRequest(_: DeleteOtherReliefsRawData)(_: String)).expects(data, *)
-    }
+  val mockIdGenerator: IdGenerator = mock[IdGenerator]
+
+  object MockIdGenerator {
+    def getCorrelationId: CallHandler[String] = (mockIdGenerator.getCorrelationId _).expects()
   }
 }

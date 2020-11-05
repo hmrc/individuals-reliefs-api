@@ -16,7 +16,7 @@
 
 package v1.mocks.connectors
 
-import org.scalamock.handlers.CallHandler3
+import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.{DesOutcome, RetrieveReliefInvestmentsConnector}
@@ -32,10 +32,10 @@ trait MockRetrieveReliefInvestmentsConnector extends MockFactory {
   object MockRetrieveReliefInvestmentsConnector {
 
     def retrieve(requestData: RetrieveReliefInvestmentsRequest):
-    CallHandler3[RetrieveReliefInvestmentsRequest, HeaderCarrier, ExecutionContext, Future[DesOutcome[RetrieveReliefInvestmentsResponse]]] = {
+    CallHandler4[RetrieveReliefInvestmentsRequest, HeaderCarrier, ExecutionContext, String, Future[DesOutcome[RetrieveReliefInvestmentsResponse]]] = {
       (mockConnector
-        .retrieve(_: RetrieveReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
+        .retrieve(_: RetrieveReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _:String))
+        .expects(requestData, *, *, *)
     }
   }
 

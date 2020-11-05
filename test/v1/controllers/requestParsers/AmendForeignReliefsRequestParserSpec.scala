@@ -26,6 +26,7 @@ import v1.models.request.amendForeignReliefs._
 class AmendForeignReliefsRequestParserSpec extends UnitSpec {
   private val nino = "AA123456A"
   private val taxYear = "2018-19"
+  implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
   private val requestBodyJson = Json.parse(
     """
       |{
@@ -37,10 +38,10 @@ class AmendForeignReliefsRequestParserSpec extends UnitSpec {
 
 
 
-  val inputData =
+  val inputData: AmendForeignReliefsRawData =
     AmendForeignReliefsRawData(nino, taxYear, requestBodyJson)
 
-  val inputNone =
+  val inputNone: AmendForeignReliefsRawData =
     AmendForeignReliefsRawData(nino, taxYear, Json.obj())
 
   trait Test extends MockAmendForeignReliefsValidator {
@@ -66,7 +67,7 @@ class AmendForeignReliefsRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(None, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple validation errors occur" in new Test {
@@ -74,7 +75,7 @@ class AmendForeignReliefsRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

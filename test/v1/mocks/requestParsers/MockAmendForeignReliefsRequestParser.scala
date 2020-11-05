@@ -28,7 +28,7 @@ trait MockAmendForeignReliefsRequestParser extends MockFactory {
 
   object MockAmendForeignReliefsRequestParser {
     def parseRequest(data: AmendForeignReliefsRawData): CallHandler[Either[ErrorWrapper, AmendForeignReliefsRequest]] = {
-      (mockAmendForeignReliefsRequestParser.parseRequest(_: AmendForeignReliefsRawData)).expects(data)
+      (mockAmendForeignReliefsRequestParser.parseRequest(_: AmendForeignReliefsRawData)(_: String)).expects(data, *)
     }
   }
 

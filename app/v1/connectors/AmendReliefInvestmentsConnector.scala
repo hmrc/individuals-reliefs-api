@@ -31,7 +31,8 @@ class AmendReliefInvestmentsConnector @Inject()(val http: HttpClient,
 
   def amend(request: AmendReliefInvestmentsRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[Unit]] = {
 
     put(
       body = request.body,
