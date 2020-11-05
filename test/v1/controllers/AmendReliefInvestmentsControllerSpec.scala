@@ -16,10 +16,11 @@
 
 package v1.controllers
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendReliefInvestmentsRequestParser
 import v1.mocks.services.{MockAmendReliefInvestmentsService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
@@ -41,10 +42,15 @@ class AmendReliefInvestmentsControllerSpec
     with MockAmendReliefInvestmentsService
     with MockAmendReliefInvestmentsRequestParser
     with MockHateoasFactory
-    with MockAuditService {
+    with MockAuditService
+    with MockIdGenerator {
+
+  private val nino = "AA123456A"
+  private val taxYear = "2019-20"
+  private val correlationId = "X-123"
 
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new AmendReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
@@ -53,16 +59,14 @@ class AmendReliefInvestmentsControllerSpec
       service = mockService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
-      cc = cc
+      cc = cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.getCorrelationId.returns(correlationId)
   }
-
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
-  private val correlationId = "X-123"
 
   private val testHateoasLinks: Seq[Link] = Seq(
     Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = PUT, rel = "amend-reliefs-investment"),
@@ -134,7 +138,7 @@ class AmendReliefInvestmentsControllerSpec
     Some(Seq(EisSubscriptionsItem(
       "XTAL",
       Some("EIS Fund X"),
-      true,
+      knowledgeIntensive = true,
       Some("2020-12-12"),
       Some(BigDecimal(23312.00)),
       BigDecimal(43432.00)
@@ -165,7 +169,7 @@ class AmendReliefInvestmentsControllerSpec
   private val rawData = AmendReliefInvestmentsRawData(nino, taxYear, requestJson)
   private val requestData = AmendReliefInvestmentsRequest(Nino(nino), taxYear, requestBody)
 
-  val hateoasResponse = Json.parse(
+  val hateoasResponse: JsValue = Json.parse(
     """
       |{
       |        "links": [
@@ -234,7 +238,7 @@ class AmendReliefInvestmentsControllerSpec
 
             MockAmendReliefInvestmentsRequestParser
               .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 
@@ -273,7 +277,7 @@ class AmendReliefInvestmentsControllerSpec
 
             MockAmendReliefService
               .amend(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 

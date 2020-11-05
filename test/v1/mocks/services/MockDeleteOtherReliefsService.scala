@@ -35,8 +35,8 @@ trait MockDeleteOtherReliefsService extends MockFactory {
 
     def delete(requestData: DeleteOtherReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockDeleteOtherReliefsService
-        .delete(_: DeleteOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
-        .expects(requestData, *, *, *)
+        .delete(_: DeleteOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .expects(requestData, *, *, *, *)
     }
   }
 }

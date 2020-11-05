@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DeleteOtherReliefsConnector @Inject()(val http: HttpClient,
                                             val appConfig: AppConfig) extends BaseDesConnector {
  def delete(request: DeleteOtherReliefsRequest)
-           (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+           (implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
    delete(
      DesUri[Unit](s"reliefs/other/${request.nino}/${request.taxYear}")
    )

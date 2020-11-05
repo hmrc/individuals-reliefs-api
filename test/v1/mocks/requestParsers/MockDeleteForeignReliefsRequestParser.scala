@@ -28,7 +28,7 @@ trait MockDeleteForeignReliefsRequestParser extends MockFactory {
 
   object MockDeleteForeignReliefsRequestParser {
     def parse(data: DeleteForeignReliefsRawData): CallHandler[Either[ErrorWrapper, DeleteForeignReliefsRequest]] = {
-      (mockRequestDataParser.parseRequest(_: DeleteForeignReliefsRawData)).expects(data)
+      (mockRequestDataParser.parseRequest(_: DeleteForeignReliefsRawData)(_: String)).expects(data, *)
     }
   }
 }

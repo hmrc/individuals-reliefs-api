@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockDeleteForeignReliefsRequestParser
 import v1.mocks.services.{MockAuditService, MockDeleteForeignReliefsService, MockEnrolmentsAuthService, MockMtdIdLookupService}
@@ -38,10 +39,15 @@ class DeleteForeignReliefsControllerSpec
   with MockDeleteForeignReliefsService
   with MockDeleteForeignReliefsRequestParser
   with MockHateoasFactory
-  with MockAuditService {
+  with MockAuditService
+  with MockIdGenerator {
+
+  private val nino = "AA123456A"
+  private val taxYear = "2019-20"
+  private val correlationId = "X-123"
 
     trait Test {
-      val hc = HeaderCarrier()
+      val hc: HeaderCarrier = HeaderCarrier()
 
       val controller = new DeleteForeignReliefsController(
         authService = mockEnrolmentsAuthService,
@@ -49,16 +55,14 @@ class DeleteForeignReliefsControllerSpec
         parser = mockRequestDataParser,
         service = mockDeleteForeignReliefsService,
         auditService = mockAuditService,
-        cc = cc
+        cc = cc,
+        idGenerator = mockIdGenerator
       )
 
       MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
       MockedEnrolmentsAuthService.authoriseUser()
+      MockIdGenerator.getCorrelationId.returns(correlationId)
     }
-
-    private val nino = "AA123456A"
-    private val taxYear = "2019-20"
-    private val correlationId = "X-123"
 
     private val rawData = DeleteForeignReliefsRawData(nino, taxYear)
     private val requestData = DeleteForeignReliefsRequest(Nino(nino), taxYear)
@@ -105,7 +109,7 @@ class DeleteForeignReliefsControllerSpec
 
               MockDeleteForeignReliefsRequestParser
                 .parse(rawData)
-                .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+                .returns(Left(ErrorWrapper(correlationId, error, None)))
 
               val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
@@ -139,7 +143,7 @@ class DeleteForeignReliefsControllerSpec
 
               MockDeleteService
                 .delete(requestData)
-                .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+                .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
               val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 

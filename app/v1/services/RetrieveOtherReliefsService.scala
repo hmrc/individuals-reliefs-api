@@ -35,7 +35,8 @@ class RetrieveOtherReliefsService @Inject()(connector: RetrieveOtherReliefsConne
   def retrieve(request: RetrieveOtherReliefsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[RetrieveOtherReliefsServiceOutcome] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[RetrieveOtherReliefsServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))

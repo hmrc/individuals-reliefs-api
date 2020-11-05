@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.domain.Nino
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveInvestmentsRequestParser
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveReliefInvestmentsService}
@@ -40,10 +41,15 @@ class RetrieveReliefInvestmentsControllerSpec
     with MockRetrieveReliefInvestmentsService
     with MockRetrieveInvestmentsRequestParser
     with MockHateoasFactory
-    with MockAuditService {
+    with MockAuditService
+    with MockIdGenerator {
+
+  private val nino = "AA123456A"
+  private val taxYear = "2019-20"
+  private val correlationId = "X-123"
 
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new RetrieveReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
@@ -52,15 +58,13 @@ class RetrieveReliefInvestmentsControllerSpec
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.getCorrelationId.returns(correlationId)
   }
-
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
-  private val correlationId = "X-123"
 
   private val rawData = RetrieveReliefInvestmentsRawData(nino, taxYear)
   private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), taxYear)
@@ -79,7 +83,7 @@ class RetrieveReliefInvestmentsControllerSpec
     Seq(EisSubscriptionsItem(
       "XTAL",
       Some("EIS Fund X"),
-      true,
+      knowledgeIntensive = true,
       Some("2020-12-12"),
       Some(BigDecimal(23312.00)),
       BigDecimal(43432.00)
@@ -135,7 +139,7 @@ class RetrieveReliefInvestmentsControllerSpec
 
             MockRetrieveReliefInvestmentsRequestParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
@@ -166,7 +170,7 @@ class RetrieveReliefInvestmentsControllerSpec
 
             MockRetrieveReliefService
               .retrieve(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 

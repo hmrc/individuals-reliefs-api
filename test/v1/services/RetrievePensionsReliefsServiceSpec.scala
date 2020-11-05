@@ -33,7 +33,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
 
   private val nino = "AA123456A"
   private val taxYear = "2017-18"
-  private val correlationId = "X-123"
+  implicit val correlationId = "X-123"
 
   private val fullResponseModel = RetrievePensionsReliefsResponse(
     "2019-04-04T01:01:01Z",
@@ -75,7 +75,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
             MockRetrievePensionsReliefsConnector.retrieve(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+            await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = Seq(

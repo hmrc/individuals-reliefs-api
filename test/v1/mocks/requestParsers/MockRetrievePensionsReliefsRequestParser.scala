@@ -28,7 +28,7 @@ trait MockRetrievePensionsReliefsRequestParser extends MockFactory {
 
   object MockRetrievePensionsReliefsRequestParser {
     def parse(data: RetrievePensionsReliefsRawData): CallHandler[Either[ErrorWrapper, RetrievePensionsReliefsRequest]] = {
-      (mockRequestDataParser.parseRequest(_: RetrievePensionsReliefsRawData)).expects(data)
+      (mockRequestDataParser.parseRequest(_: RetrievePensionsReliefsRawData)(_: String)).expects(data, *)
     }
   }
 }

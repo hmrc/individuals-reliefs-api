@@ -35,7 +35,8 @@ class DeleteOtherReliefsService @Inject()(connector: DeleteOtherReliefsConnector
   def delete(request: DeleteOtherReliefsRequest)(
             implicit hc: HeaderCarrier,
             ec: ExecutionContext,
-            logContext: EndpointLogContext): Future[DeleteOtherReliefsServiceOutcome] = {
+            logContext: EndpointLogContext,
+            correlationId: String): Future[DeleteOtherReliefsServiceOutcome] = {
     val result = for {
       desResponseWrapper <- EitherT(connector.delete(request)).leftMap(mapDesErrors(desErrorMap))
     } yield desResponseWrapper

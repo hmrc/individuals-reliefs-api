@@ -16,10 +16,11 @@
 
 package v1.controllers
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendPensionsReliefsRequestParser
 import v1.mocks.services.{MockAmendPensionsReliefsService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
@@ -41,7 +42,8 @@ class AmendPensionsReliefsControllerSpec
     with MockAmendPensionsReliefsService
     with MockAmendPensionsReliefsRequestParser
     with MockHateoasFactory
-    with MockAuditService {
+    with MockAuditService
+    with MockIdGenerator {
 
   private val nino = "AA123456A"
   private val taxYear = "2019-20"
@@ -88,14 +90,16 @@ class AmendPensionsReliefsControllerSpec
       service = mockService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
-      cc = cc
+      cc = cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  val hateoasResponse = Json.parse(
+  val hateoasResponse: JsValue = Json.parse(
     """
       |{
       |        "links": [
@@ -165,7 +169,7 @@ class AmendPensionsReliefsControllerSpec
 
             MockAmendPensionsReliefsRequestParser
               .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 
@@ -202,7 +206,7 @@ class AmendPensionsReliefsControllerSpec
 
             MockAmendReliefService
               .amend(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 

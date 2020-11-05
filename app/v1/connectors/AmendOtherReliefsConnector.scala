@@ -30,7 +30,8 @@ class AmendOtherReliefsConnector @Inject()(val http: HttpClient,
                                            val appConfig: AppConfig) extends BaseDesConnector {
   def amend(request: AmendOtherReliefsRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[Unit]] = {
 
     put(
       body = request.body,

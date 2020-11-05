@@ -31,7 +31,7 @@ class RetrieveOtherReliefsConnector @Inject()(val http: HttpClient,
                                               val appConfig: AppConfig) extends BaseDesConnector {
 
   def retrieve(request: RetrieveOtherReliefsRequest)(
-    implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[RetrieveOtherReliefsResponse]] = {
+    implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[RetrieveOtherReliefsResponse]] = {
 
     val url = s"reliefs/other/${request.nino}/${request.taxYear}"
     get(

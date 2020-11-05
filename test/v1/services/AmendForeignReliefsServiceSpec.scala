@@ -32,7 +32,7 @@ class AmendForeignReliefsServiceSpec extends UnitSpec {
 
   val taxYear = "2017-18"
   val nino = Nino("AA123456A")
-  private val correlationId = "X-123"
+  implicit val correlationId = "X-123"
 
   val body = AmendForeignReliefsBody(
     Some(ForeignTaxCreditRelief(
@@ -71,7 +71,7 @@ class AmendForeignReliefsServiceSpec extends UnitSpec {
           MockAmendForeignReliefsConnector.amend(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.amend(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

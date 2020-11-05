@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveOtherReliefsRequestParser
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveOtherReliefsService}
@@ -28,7 +29,7 @@ import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveOtherReliefs.{RetrieveOtherReliefsRawData, RetrieveOtherReliefsRequest}
-import v1.models.response.retrieveOtherReliefs.{AnnualPaymentsMade, MaintenancePayments, NonDeductibleLoanInterest, PayrollGiving, PostCessationTradeReliefAndCertainOtherLosses, QualifyingDistributionRedemptionOfSharesAndSecurities, QualifyingLoanInterestPayments, RetrieveOtherReliefsResponse, RetrieveOtherReliefsHateoasData}
+import v1.models.response.retrieveOtherReliefs.{AnnualPaymentsMade, MaintenancePayments, NonDeductibleLoanInterest, PayrollGiving, PostCessationTradeReliefAndCertainOtherLosses, QualifyingDistributionRedemptionOfSharesAndSecurities, QualifyingLoanInterestPayments, RetrieveOtherReliefsHateoasData, RetrieveOtherReliefsResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,10 +41,15 @@ class RetrieveOtherReliefsControllerSpec
   with MockRetrieveOtherReliefsService
   with MockRetrieveOtherReliefsRequestParser
   with MockHateoasFactory
-  with MockAuditService {
+  with MockAuditService
+  with MockIdGenerator {
+
+  private val nino = "AA123456A"
+  private val taxYear = "2019-20"
+  private val correlationId = "X-123"
 
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new RetrieveOtherReliefsController(
       authService = mockEnrolmentsAuthService,
@@ -52,15 +58,13 @@ class RetrieveOtherReliefsControllerSpec
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.getCorrelationId.returns(correlationId)
   }
-
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
-  private val correlationId = "X-123"
 
   private val rawData = RetrieveOtherReliefsRawData(nino, taxYear)
   private val requestData = RetrieveOtherReliefsRequest(Nino(nino), taxYear)
@@ -127,7 +131,7 @@ class RetrieveOtherReliefsControllerSpec
 
             MockRetrieveOtherReliefsRequestParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
@@ -158,7 +162,7 @@ class RetrieveOtherReliefsControllerSpec
 
             MockRetrieveReliefService
               .retrieve(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
