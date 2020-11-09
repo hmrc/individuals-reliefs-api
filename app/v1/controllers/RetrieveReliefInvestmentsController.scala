@@ -69,7 +69,7 @@ class RetrieveReliefInvestmentsController @Inject()(val authService: EnrolmentsA
         val resCorrelationId = errorWrapper.correlationId
         val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
-        logger.info(
+        logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
 
