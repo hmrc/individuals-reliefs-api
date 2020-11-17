@@ -46,7 +46,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, RetrieveOtherReliefsResponse))
 
         MockedHttpClient.get(
-          url = s"$baseUrl/reliefs/other/$nino/$taxYear",
+          url = s"$baseUrl/income-tax/reliefs/other/$nino/$taxYear",
           requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         )
           .returns(Future.successful(outcome))

@@ -141,7 +141,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |""".stripMargin)
 
     def uri: String = s"/other/$nino/$taxYear"
-    def desUri: String = s"/reliefs/other/$nino/$taxYear"
+    def desUri: String = s"/income-tax/reliefs/other/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 

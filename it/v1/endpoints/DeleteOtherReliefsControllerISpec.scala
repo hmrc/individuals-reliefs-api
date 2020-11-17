@@ -33,7 +33,7 @@ class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
     val taxYear = "2021-22"
 
     def uri: String = s"/other/$nino/$taxYear"
-    def desUri: String = s"/reliefs/other/$nino/$taxYear"
+    def desUri: String = s"/income-tax/reliefs/other/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 
