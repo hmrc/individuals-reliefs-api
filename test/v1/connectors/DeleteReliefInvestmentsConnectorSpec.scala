@@ -47,7 +47,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
         MockedHttpClient.
           delete(
-            url = s"$baseUrl/reliefs/investment/${request.nino}/${request.taxYear}",
+            url = s"$baseUrl/income-tax/reliefs/investment/${request.nino}/${request.taxYear}",
             requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
           ).returns(Future.successful(outcome))
 
