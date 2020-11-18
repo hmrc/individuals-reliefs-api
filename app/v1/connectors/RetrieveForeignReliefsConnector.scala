@@ -34,7 +34,7 @@ class RetrieveForeignReliefsConnector @Inject()(val http: HttpClient,
   def retrieve(request: RetrieveForeignReliefsRequest)(
               implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[RetrieveForeignReliefsResponse]] = {
 
-   val url = s"reliefs/foreign/${request.nino}/${request.taxYear}"
+   val url = s"income-tax/reliefs/foreign/${request.nino}/${request.taxYear}"
     get(
       DesUri[RetrieveForeignReliefsResponse](s"$url")
     )
