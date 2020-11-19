@@ -69,7 +69,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
     def uri: String = s"/foreign/$nino/$taxYear"
 
-    def desUri: String = s"/reliefs/foreign/$nino/$taxYear"
+    def desUri: String = s"/income-tax/reliefs/foreign/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 

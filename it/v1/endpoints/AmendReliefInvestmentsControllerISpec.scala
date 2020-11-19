@@ -111,7 +111,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
     def uri: String = s"/investment/$nino/$taxYear"
 
-    def desUri: String = s"/reliefs/investment/$nino/$taxYear"
+    def desUri: String = s"/income-tax/reliefs/investment/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 
