@@ -84,7 +84,7 @@ class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
       MockedHttpClient
         .put(
-          url = s"$baseUrl/reliefs/investment/$nino/$taxYear",
+          url = s"$baseUrl/income-tax/reliefs/investment/$nino/$taxYear",
           body = body,
           requiredHeaders ="Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         )

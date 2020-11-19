@@ -47,7 +47,7 @@ class DeleteForeignReliefsService @Inject()(connector: DeleteForeignReliefsConne
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR" -> TaxYearFormatError,
-      "NOT_FOUND" -> NotFoundError,
+      "NO_DATA_FOUND" -> NotFoundError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )

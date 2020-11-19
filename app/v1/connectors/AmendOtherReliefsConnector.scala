@@ -35,7 +35,7 @@ class AmendOtherReliefsConnector @Inject()(val http: HttpClient,
 
     put(
       body = request.body,
-      DesUri[Unit](s"reliefs/other/${request.nino}/${request.taxYear}")
+      DesUri[Unit](s"income-tax/reliefs/other/${request.nino}/${request.taxYear}")
     )
   }
 }

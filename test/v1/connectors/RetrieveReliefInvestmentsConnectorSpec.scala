@@ -48,7 +48,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
         MockedHttpClient
           .get(
-            url = s"$baseUrl/reliefs/investment/$nino/$taxYear",
+            url = s"$baseUrl/income-tax/reliefs/investment/$nino/$taxYear",
             requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
           )
           .returns(Future.successful(outcome))
