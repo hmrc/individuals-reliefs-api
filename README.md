@@ -1,8 +1,9 @@
-API Example Microservice
+individuals-reliefs-api
 ========================
 
-TODO Describe microservice / API
- 
+The Individuals Reliefs Api allows operations such as:
+- 
+
 # Run tests
 ```
 sbt test
