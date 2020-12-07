@@ -25,10 +25,16 @@ Run integration tests: `sbt it:test`
 
 ## To view the RAML
 To view documentation locally ensure the Obligations API is running, and run api-documentation-frontend:
-```./run_local_with_dependencies.sh```
+
+```
+./run_local_with_dependencies.sh
+```
 
 Then go to http://localhost:9680/api-documentation/docs/api/preview and use this port and version:
-```http://localhost:7793/api/conf/1.0/application.raml```
+
+```
+http://localhost:7793/api/conf/1.0/application.raml
+```
 
 ## Reporting Issues
 
