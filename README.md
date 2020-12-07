@@ -16,7 +16,7 @@ The Individuals Reliefs API allows a developer to retrieve, create and amend, an
 ## Running the microservice
 Run from the console using: `sbt run` (starts on port 7796 by default)
 
-Start the service manager profile: `sm --start MTDFB_INDIVIDUALS_RELIEFS
+Start the service manager profile: `sm --start MTDFB_INDIVIDUALS_RELIEFS`
 
 ## Run tests
 Run unit tests: `sbt test`
@@ -33,7 +33,7 @@ To view documentation locally ensure the Obligations API is running, and run api
 Then go to http://localhost:9680/api-documentation/docs/api/preview and use this port and version:
 
 ```
-http://localhost:7793/api/conf/1.0/application.raml
+http://localhost:7796/api/conf/1.0/application.raml
 ```
 
 ## Reporting Issues
