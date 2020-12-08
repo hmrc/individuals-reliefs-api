@@ -42,7 +42,7 @@ You can create a GitHub issue [here](https://github.com/hmrc/individuals-reliefs
 
 ## API Reference / Documentation 
 
-Available on the [HMRC Developer Hub](https://developer.staging.tax.service.gov.uk/api-documentation/docs/api/service/individuals-reliefs-api/1.0)
+Available on the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individuals-reliefs-api/1.0)
 
 ## License
 
