@@ -1,4 +1,4 @@
-individuals-reliefs-api
+Individuals Reliefs API
 ========================
 
 The Individuals Reliefs API allows a developer to retrieve, create and amend, and delete:
@@ -8,30 +8,31 @@ The Individuals Reliefs API allows a developer to retrieve, create and amend, an
 - Pension Reliefs
 
 ## Requirements
+
 - Scala 2.12.x
 - Java 8
 - sbt > 1.3.7
 - [Service Manager](https://github.com/hmrc/service-manager)
 
 ## Running the microservice
+
 Run from the console using: `sbt run` (starts on port 7796 by default)
 
 Start the service manager profile: `sm --start MTDFB_INDIVIDUALS_RELIEFS`
 
-## Run tests
+## Running test
+
 Run unit tests: `sbt test`
 
 Run integration tests: `sbt it:test`
 
-## To view the RAML
-To view documentation locally ensure the Obligations API is running, and run api-documentation-frontend:
+## Viewing RAML
 
+To view documentation locally ensure the Obligations API is running, and run api-documentation-frontend:
 ```
 ./run_local_with_dependencies.sh
 ```
-
 Then go to http://localhost:9680/api-documentation/docs/api/preview and use this port and version:
-
 ```
 http://localhost:7796/api/conf/1.0/application.raml
 ```
