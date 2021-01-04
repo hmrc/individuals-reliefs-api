@@ -98,8 +98,10 @@ class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthSer
            RuleIncorrectOrEmptyBodyError |
            RuleTaxYearNotSupportedError |
            RuleTaxYearRangeInvalidError |
-           MtdErrorWithCustomMessage(ValueFormatError.code) => BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+           MtdErrorWithCustomMessage(ValueFormatError.code) |
+           MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
+           MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
+      case DownstreamError                                      => InternalServerError(Json.toJson(errorWrapper))
     }
   }
 

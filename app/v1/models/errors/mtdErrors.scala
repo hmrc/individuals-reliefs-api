@@ -54,6 +54,8 @@ object IncomeSourceFormatError extends MtdError("FORMAT_INCOME_SOURCE", "The pro
 
 object LenderNameFormatError extends MtdError("FORMAT_LENDER_NAME", "The provided lender name is not valid")
 
+object CountryCodeFormatError extends MtdError("FORMAT_COUNTRY_CODE", "The format of the country code is invalid")
+
 
 // Rule Errors
 object RuleTaxYearNotSupportedError extends MtdError(
@@ -64,7 +66,9 @@ object RuleTaxYearNotSupportedError extends MtdError(
 object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED", "An empty or non-matching body was submitted")
 
 object RuleTaxYearRangeInvalidError
-  extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required.")
+  extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required")
+
+object RuleCountryCodeError extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code")
 
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")

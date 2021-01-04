@@ -199,7 +199,9 @@ class AmendForeignReliefsControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (ValueFormatError.copy(paths = Some(Seq("/foreignTaxCreditRelief/amount"))), BAD_REQUEST)
+          (ValueFormatError, BAD_REQUEST),
+          (CountryCodeFormatError, BAD_REQUEST),
+          (RuleCountryCodeError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))

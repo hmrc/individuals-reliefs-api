@@ -48,11 +48,14 @@ class AmendForeignReliefsValidator @Inject()(appConfig: AppConfig) extends Valid
   private def bodyFieldValidation: AmendForeignReliefsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendForeignReliefsBody]
 
-    val errorsO: Option[List[List[MtdError]]] = for {
-      foreignTaxCreditReliefErrors <- body.foreignTaxCreditRelief.map(validateForeignTaxCreditRelief)
-    } yield List(foreignTaxCreditReliefErrors)
+    val foreignTaxCreditReliefErrors = body.foreignTaxCreditRelief.map(validateForeignTaxCreditRelief)
+    val foreignIncomeTaxCreditReliefErrors = body.foreignIncomeTaxCreditRelief.map(validateForeignIncomeTaxCreditRelief)
+    val foreignTaxForFtcrNotClaimedErrors = body.foreignTaxForFtcrNotClaimed.map(validateForeignTaxForFtcrNotClaimed)
 
-    List(errorsO.map(flattenErrors)).flatten
+    val errors: List[List[MtdError]] =
+      List(foreignTaxCreditReliefErrors, foreignIncomeTaxCreditReliefErrors, foreignTaxForFtcrNotClaimedErrors).map(_.getOrElse(NoValidationErrors))
+
+    List(flattenErrors(errors))
   }
 
   private def validateForeignTaxCreditRelief(foreignTaxCreditRelief: ForeignTaxCreditRelief): List[MtdError] = {
@@ -60,6 +63,32 @@ class AmendForeignReliefsValidator @Inject()(appConfig: AppConfig) extends Valid
       NumberValidation.validateOptional(
         field = Some(foreignTaxCreditRelief.amount),
         path = s"/foreignTaxCreditRelief/amount"
+      )
+    ).flatten
+  }
+
+  private def validateForeignIncomeTaxCreditRelief(foreignIncomeTaxCreditRelief: ForeignIncomeTaxCreditRelief): List[MtdError] = {
+    List(
+      CountryCodeValidation.validateOptional(
+        field = foreignIncomeTaxCreditRelief.countryCode,
+        path = s"/foreignIncomeTaxCreditRelief/countryCode"
+      ),
+      NumberValidation.validateOptional(
+        field = foreignIncomeTaxCreditRelief.foreignTaxPaid,
+        path = s"/foreignIncomeTaxCreditRelief/foreignTaxPaid"
+      ),
+      NumberValidation.validateOptional(
+        field = foreignIncomeTaxCreditRelief.taxableAmount,
+        path = s"/foreignIncomeTaxCreditRelief/taxableAmount"
+      )
+    ).flatten
+  }
+
+  private def validateForeignTaxForFtcrNotClaimed(foreignTaxForFtcrNotClaimed: ForeignTaxForFtcrNotClaimed): List[MtdError] = {
+    List(
+      NumberValidation.validateOptional(
+        field = Some(foreignTaxForFtcrNotClaimed.amount),
+        path = s"/foreignTaxForFtcrNotClaimed/amount"
       )
     ).flatten
   }
