@@ -27,16 +27,24 @@ class AmendForeignReliefsRequestParserSpec extends UnitSpec {
   private val nino = "AA123456A"
   private val taxYear = "2018-19"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  val amount: BigDecimal = 1234.56
   private val requestBodyJson = Json.parse(
-    """
-      |{
-      |  "foreignTaxCreditRelief": {
-      |    "amount": 763.00
-      |  }
-      |}
-        """.stripMargin)
-
-
+    s"""|
+        |{
+        |  "foreignTaxCreditRelief": {
+        |    "amount": $amount
+        |  },
+        |  "foreignIncomeTaxCreditRelief": {
+        |    "countryCode": "FRA",
+        |    "foreignTaxPaid": $amount,
+        |    "taxableAmount": $amount,
+        |    "employmentLumpSum": true
+        |  },
+        |  "foreignTaxForFtcrNotClaimed": {
+        |    "amount": $amount
+        |  }
+        |}
+        |""".stripMargin)
 
   val inputData: AmendForeignReliefsRawData =
     AmendForeignReliefsRawData(nino, taxYear, requestBodyJson)
@@ -56,7 +64,17 @@ class AmendForeignReliefsRequestParserSpec extends UnitSpec {
 
         parser.parseRequest(inputData) shouldBe
           Right(AmendForeignReliefsRequest(Nino(nino), taxYear, AmendForeignReliefsBody(
-            Some(ForeignTaxCreditRelief(763.00))
+            foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
+              amount = amount
+            )),
+            foreignIncomeTaxCreditRelief = Some(ForeignIncomeTaxCreditRelief(
+              countryCode = Some("FRA"),
+              foreignTaxPaid = Some(amount),
+              taxableAmount = Some(amount),
+              employmentLumpSum = true
+            )), foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
+              amount = amount
+            ))
           )))
       }
     }

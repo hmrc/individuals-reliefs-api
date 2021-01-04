@@ -39,6 +39,15 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
          |{
          |  "foreignTaxCreditRelief": {
          |    "amount": $amount
+         |  },
+         |  "foreignIncomeTaxCreditRelief": {
+         |    "countryCode": "FRA",
+         |    "foreignTaxPaid": $amount,
+         |    "taxableAmount": $amount,
+         |    "employmentLumpSum": true
+         |  },
+         |  "foreignTaxForFtcrNotClaimed": {
+         |    "amount": $amount
          |  }
          |}
          |""".stripMargin

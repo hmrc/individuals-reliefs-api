@@ -18,10 +18,8 @@ package v1.models.request.amendForeignReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AmendForeignReliefsBody(foreignTaxCreditRelief: Option[ForeignTaxCreditRelief],
-                                   foreignIncomeTaxCreditRelief: Option[ForeignIncomeTaxCreditRelief],
-                                   foreignTaxForFtcrNotClaimed: Option[ForeignTaxForFtcrNotClaimed])
+case class ForeignTaxForFtcrNotClaimed(amount: BigDecimal)
 
-object AmendForeignReliefsBody {
-  implicit val format: OFormat[AmendForeignReliefsBody] = Json.format[AmendForeignReliefsBody]
+object ForeignTaxForFtcrNotClaimed {
+  implicit val format: OFormat[ForeignTaxForFtcrNotClaimed] = Json.format[ForeignTaxForFtcrNotClaimed]
 }
