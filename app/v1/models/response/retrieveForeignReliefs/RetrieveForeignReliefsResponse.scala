@@ -24,7 +24,7 @@ import v1.models.hateoas.{HateoasData, Link}
 case class RetrieveForeignReliefsResponse(
                                            submittedOn: String,
                                            foreignTaxCreditRelief: Option[ForeignTaxCreditRelief],
-                                           foreignIncomeTaxCreditRelief: Seq[ForeignIncomeTaxCreditRelief],
+                                           foreignIncomeTaxCreditRelief: Option[Seq[ForeignIncomeTaxCreditRelief]],
                                            foreignTaxForFtcrNotClaimed: Option[ForeignTaxForFtcrNotClaimed]
                                          )
 

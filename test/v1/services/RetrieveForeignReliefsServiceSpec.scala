@@ -35,7 +35,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
   private val taxYear = "2017-18"
   implicit val correlationId = "X-123"
 
-  private val responseModel = RetrieveForeignReliefsResponse("2020-06-17T10:53:38Z", Some(ForeignTaxCreditRelief(234567.89)), Seq(ForeignIncomeTaxCreditRelief("FRA", Some(540.32), 204.78, false)), Some(ForeignTaxForFtcrNotClaimed(549.98)))
+  private val responseModel = RetrieveForeignReliefsResponse("2020-06-17T10:53:38Z", Some(ForeignTaxCreditRelief(234567.89)), Some(Seq(ForeignIncomeTaxCreditRelief("FRA", Some(540.32), 204.78, false))), Some(ForeignTaxForFtcrNotClaimed(549.98)))
 
   private val requestData = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
 
