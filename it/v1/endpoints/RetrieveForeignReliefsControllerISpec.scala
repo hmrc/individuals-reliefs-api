@@ -77,6 +77,17 @@ class RetrieveForeignReliefsControllerISpec extends IntegrationBaseSpec {
          |  "submittedOn": "2020-06-17T10:53:38Z",
          |  "foreignTaxCreditRelief":{
          |    "amount" : 2309.95
+         |  },
+         |  "foreignIncomeTaxCreditRelief": [
+         |      {
+         |          "countryCode": "FRA",
+         |          "foreignTaxPaid": 1640.32,
+         |          "taxableAmount": 1204.78,
+         |          "employmentLumpSum": false
+         |      }
+         |  ],
+         |  "foreignTaxForFtcrNotClaimed": {
+         |      "amount": 1749.98
          |  }
          |}
          |""".stripMargin)
