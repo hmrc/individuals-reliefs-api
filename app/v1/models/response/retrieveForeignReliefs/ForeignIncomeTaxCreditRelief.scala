@@ -20,7 +20,7 @@ import play.api.libs.json.{Json, OFormat}
 
 case class ForeignIncomeTaxCreditRelief(countryCode: Option[String],
                                         foreignTaxPaid: Option[BigDecimal],
-                                        taxableAmount: Option[BigDecimal],
+                                        taxableAmount: BigDecimal,
                                         employmentLumpSum: Boolean)
 
 object ForeignIncomeTaxCreditRelief {

@@ -26,12 +26,12 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
   val retrieveForeignReliefsBody = RetrieveForeignReliefsResponse(
     "2020-06-17T10:53:38Z",
     Some(ForeignTaxCreditRelief(763.00)),
-    Some(Seq(ForeignIncomeTaxCreditRelief(
+    Seq(ForeignIncomeTaxCreditRelief(
       Some("FRA"),
       Some(540.32),
-      Some(204.78),
+      204.78,
       false
-    ))),
+    )),
     Some(ForeignTaxForFtcrNotClaimed(549.98))
   )
 

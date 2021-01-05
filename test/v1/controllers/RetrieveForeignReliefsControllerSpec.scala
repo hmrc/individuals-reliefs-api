@@ -53,12 +53,12 @@ class RetrieveForeignReliefsControllerSpec
   private val responseBody = RetrieveForeignReliefsResponse(
     "2020-06-17T10:53:38Z",
     Some(ForeignTaxCreditRelief(2309.95)),
-    Some(Seq(ForeignIncomeTaxCreditRelief(
+    Seq(ForeignIncomeTaxCreditRelief(
       Some("FRA"),
       Some(1640.32),
-      Some(1204.78),
+      1204.78,
       false
-    ))),
+    )),
     Some(ForeignTaxForFtcrNotClaimed(1749.98))
   )
 
