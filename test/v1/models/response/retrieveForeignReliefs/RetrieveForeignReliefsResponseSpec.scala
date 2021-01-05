@@ -86,4 +86,3 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
     }
   }
 }
-
