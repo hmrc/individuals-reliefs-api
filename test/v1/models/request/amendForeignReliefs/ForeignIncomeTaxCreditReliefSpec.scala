@@ -24,14 +24,14 @@ class ForeignIncomeTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators
 
   private val amount = 1234.56
 
-  val model = ForeignIncomeTaxCreditRelief(
-    countryCode = Some("FRA"),
+  private val model = ForeignIncomeTaxCreditRelief(
+    countryCode = "FRA",
     foreignTaxPaid = Some(amount),
-    taxableAmount = Some(amount),
+    taxableAmount = amount,
     employmentLumpSum = true
   )
 
-  val json = Json.parse(
+  private val json = Json.parse(
     s"""{
       |  "countryCode": "FRA",
       |  "foreignTaxPaid": $amount,

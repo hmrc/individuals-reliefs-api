@@ -40,24 +40,20 @@ class CountryCodeValidationSpec extends UnitSpec {
         "ARE", "USA", "VIR", "URY", "UZB", "VUT", "VAT", "VEN", "VNM", "WLF", "YEM", "ZMB", "ZWE").foreach {
         code =>
           s"return an empty list for valid country code $code" in {
-            CountryCodeValidation.validateOptional(Some(code), "path") shouldBe NoValidationErrors
+            CountryCodeValidation.validate(code, "path") shouldBe NoValidationErrors
           }
       }
 
-      s"return an empty list for empty country code" in {
-        CountryCodeValidation.validateOptional(None, "path") shouldBe NoValidationErrors
-      }
-
       "return a CountryCodeFormatError for an invalid country code" in {
-        CountryCodeValidation.validateOptional(Some("notACountryCode"), "path") shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("path"))))
+        CountryCodeValidation.validate("notACountryCode", "path") shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("path"))))
       }
 
       "return a CountryCodeFormatError for an invalid format country code" in {
-        CountryCodeValidation.validateOptional(Some("FRANCE"), "path") shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("path"))))
+        CountryCodeValidation.validate("FRANCE", "path") shouldBe List(CountryCodeFormatError.copy(paths = Some(Seq("path"))))
       }
 
       "return a CountryCodeFormatError for an invalid rule country code" in {
-        CountryCodeValidation.validateOptional(Some("FRE"), "path") shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("path"))))
+        CountryCodeValidation.validate("FRE", "path") shouldBe List(RuleCountryCodeError.copy(paths = Some(Seq("path"))))
       }
     }
   }

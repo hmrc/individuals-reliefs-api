@@ -139,7 +139,9 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
           """
             |{
             |  "foreignIncomeTaxCreditRelief": {
+            |    "countryCode": "FRA",
             |    "foreignTaxPaid": -1.00,
+            |    "taxableAmount": 1.00,
             |    "employmentLumpSum": true
             |  }
             |}
@@ -155,6 +157,7 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
           """
             |{
             |  "foreignIncomeTaxCreditRelief": {
+            |    "countryCode": "FRA",
             |    "taxableAmount": -1.00,
             |    "employmentLumpSum": true
             |  }
@@ -190,6 +193,7 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |{
             |  "foreignIncomeTaxCreditRelief": {
             |    "countryCode": "ABCD",
+            |    "taxableAmount": 1.00,
             |    "employmentLumpSum": true
             |  }
             |}
@@ -207,6 +211,7 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |{
             |  "foreignIncomeTaxCreditRelief": {
             |    "countryCode": "AB",
+            |    "taxableAmount": 1.00,
             |    "employmentLumpSum": true
             |  }
             |}
@@ -227,6 +232,7 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |{
             |  "foreignIncomeTaxCreditRelief": {
             |    "countryCode": "GER",
+            |    "taxableAmount": 1.00,
             |    "employmentLumpSum": true
             |  }
             |}

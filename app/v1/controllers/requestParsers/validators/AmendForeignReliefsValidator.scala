@@ -69,7 +69,7 @@ class AmendForeignReliefsValidator @Inject()(appConfig: AppConfig) extends Valid
 
   private def validateForeignIncomeTaxCreditRelief(foreignIncomeTaxCreditRelief: ForeignIncomeTaxCreditRelief): List[MtdError] = {
     List(
-      CountryCodeValidation.validateOptional(
+      CountryCodeValidation.validate(
         field = foreignIncomeTaxCreditRelief.countryCode,
         path = s"/foreignIncomeTaxCreditRelief/countryCode"
       ),
@@ -78,7 +78,7 @@ class AmendForeignReliefsValidator @Inject()(appConfig: AppConfig) extends Valid
         path = s"/foreignIncomeTaxCreditRelief/foreignTaxPaid"
       ),
       NumberValidation.validateOptional(
-        field = foreignIncomeTaxCreditRelief.taxableAmount,
+        field = Some(foreignIncomeTaxCreditRelief.taxableAmount),
         path = s"/foreignIncomeTaxCreditRelief/taxableAmount"
       )
     ).flatten

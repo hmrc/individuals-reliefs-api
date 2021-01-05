@@ -24,25 +24,25 @@ class AmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
 
   private val amount = 1234.56
 
-  val amendForeignReliefsBody = AmendForeignReliefsBody(
+  private val amendForeignReliefsBody = AmendForeignReliefsBody(
     foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
       amount = amount
     )),
     foreignIncomeTaxCreditRelief = Some(ForeignIncomeTaxCreditRelief(
-      countryCode = Some("FRA"),
+      countryCode = "FRA",
       foreignTaxPaid = Some(amount),
-      taxableAmount = Some(amount),
+      taxableAmount = amount,
       employmentLumpSum = true
     )), foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
       amount = amount
     ))
   )
 
-  val emptyAmendForeignReliefsBody = AmendForeignReliefsBody(
+  private val emptyAmendForeignReliefsBody = AmendForeignReliefsBody(
     None, None, None
   )
 
-  val json = Json.parse(
+  private val json = Json.parse(
     s"""|
         |{
         |  "foreignTaxCreditRelief": {
@@ -61,7 +61,7 @@ class AmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
         |""".stripMargin
   )
 
-  val emptyJson = Json.parse("""{}""")
+  private val emptyJson = Json.parse("""{}""")
 
   "reads" when {
     "passed valid JSON" should {

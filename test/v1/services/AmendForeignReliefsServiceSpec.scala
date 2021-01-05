@@ -40,9 +40,9 @@ class AmendForeignReliefsServiceSpec extends UnitSpec {
       amount = amount
     )),
     foreignIncomeTaxCreditRelief = Some(ForeignIncomeTaxCreditRelief(
-      countryCode = Some("FRA"),
+      countryCode = "FRA",
       foreignTaxPaid = Some(amount),
-      taxableAmount = Some(amount),
+      taxableAmount = amount,
       employmentLumpSum = true
     )), foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
       amount = amount

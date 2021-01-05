@@ -173,6 +173,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
                |{
                |  "foreignIncomeTaxCreditRelief": {
                |    "countryCode": "BADCODE",
+               |    "taxableAmount": 1.00,
                |    "employmentLumpSum": true
                |  }
                |}
@@ -195,6 +196,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
                |{
                |  "foreignIncomeTaxCreditRelief": {
                |    "countryCode": "GER",
+               |    "taxableAmount": 1.00,
                |    "employmentLumpSum": true
                |  }
                |}
@@ -216,7 +218,9 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
             s"""
                |{
                |  "foreignIncomeTaxCreditRelief": {
+               |    "countryCode": "FRA",
                |    "foreignTaxPaid": -1,
+               |    "taxableAmount": 1.00,
                |    "employmentLumpSum": true
                |  }
                |}
@@ -238,6 +242,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
             s"""
                |{
                |  "foreignIncomeTaxCreditRelief": {
+               |    "countryCode": "FRA",
                |    "taxableAmount": -1,
                |    "employmentLumpSum": true
                |  }
