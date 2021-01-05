@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package utils
 
-import org.joda.time.DateTime
+import java.time.Instant
+
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.http.Status
@@ -58,7 +59,7 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
       eventId = "",
       tags = eventTags,
       detail = Map("test" -> "test"),
-      generatedAt = DateTime.now()
+      generatedAt = Instant.now()
     )
 
     (httpAuditEvent.dataEvent(_: String, _: String, _: RequestHeader, _: Map[String, String])(_: HeaderCarrier)).expects(*, *, *, *, *)
