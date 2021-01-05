@@ -18,7 +18,7 @@ package v1.models.response.retrieveForeignReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class ForeignIncomeTaxCreditRelief(countryCode: Option[String],
+case class ForeignIncomeTaxCreditRelief(countryCode: String,
                                         foreignTaxPaid: Option[BigDecimal],
                                         taxableAmount: BigDecimal,
                                         employmentLumpSum: Boolean)

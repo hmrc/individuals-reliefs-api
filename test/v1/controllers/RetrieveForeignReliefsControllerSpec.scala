@@ -54,7 +54,7 @@ class RetrieveForeignReliefsControllerSpec
     "2020-06-17T10:53:38Z",
     Some(ForeignTaxCreditRelief(2309.95)),
     Seq(ForeignIncomeTaxCreditRelief(
-      Some("FRA"),
+      "FRA",
       Some(1640.32),
       1204.78,
       false

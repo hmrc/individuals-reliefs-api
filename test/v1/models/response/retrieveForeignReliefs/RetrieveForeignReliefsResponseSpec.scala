@@ -27,7 +27,7 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
     "2020-06-17T10:53:38Z",
     Some(ForeignTaxCreditRelief(763.00)),
     Seq(ForeignIncomeTaxCreditRelief(
-      Some("FRA"),
+      "FRA",
       Some(540.32),
       204.78,
       false
