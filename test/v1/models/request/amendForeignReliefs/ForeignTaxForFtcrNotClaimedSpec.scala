@@ -16,12 +16,32 @@
 
 package v1.models.request.amendForeignReliefs
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
+import support.UnitSpec
+import v1.models.utils.JsonErrorValidators
 
-case class AmendForeignReliefsBody(foreignTaxCreditRelief: Option[ForeignTaxCreditRelief],
-                                   foreignIncomeTaxCreditRelief: Option[ForeignIncomeTaxCreditRelief],
-                                   foreignTaxForFtcrNotClaimed: Option[ForeignTaxForFtcrNotClaimed])
+class ForeignTaxForFtcrNotClaimedSpec extends UnitSpec with JsonErrorValidators {
 
-object AmendForeignReliefsBody {
-  implicit val format: OFormat[AmendForeignReliefsBody] = Json.format[AmendForeignReliefsBody]
+  val model = ForeignTaxForFtcrNotClaimed(2314.32)
+
+  val json = Json.parse(
+    """{
+      |  "amount": 2314.32
+      |}""".stripMargin
+  )
+
+  "reads" when {
+    "passed valid JSON" should {
+      "return a valid model" in {
+        json.as[ForeignTaxForFtcrNotClaimed] shouldBe model
+      }
+    }
+  }
+  "writes" when {
+    "passed valid model" should {
+      "return valid JSON" in {
+        Json.toJson(model) shouldBe json
+      }
+    }
+  }
 }

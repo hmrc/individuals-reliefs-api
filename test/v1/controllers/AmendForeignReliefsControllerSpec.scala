@@ -48,6 +48,7 @@ class AmendForeignReliefsControllerSpec
   private val nino = "AA123456A"
   private val taxYear = "2019-20"
   private val correlationId = "X-123"
+  private val amount = 1234.56
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -75,18 +76,35 @@ class AmendForeignReliefsControllerSpec
   )
 
   private val requestJson = Json.parse(
-    """|
-       |{
-       |  "foreignTaxCreditRelief": {
-       |    "amount": 1234.56
-       |  }
-       |}
-       |""".stripMargin
+    s"""|
+        |{
+        |  "foreignTaxCreditRelief": {
+        |    "amount": $amount
+        |  },
+        |  "foreignIncomeTaxCreditRelief": {
+        |    "countryCode": "FRA",
+        |    "foreignTaxPaid": $amount,
+        |    "taxableAmount": $amount,
+        |    "employmentLumpSum": true
+        |  },
+        |  "foreignTaxForFtcrNotClaimed": {
+        |    "amount": $amount
+        |  }
+        |}
+        |""".stripMargin
   )
 
   private val requestBody = AmendForeignReliefsBody(
     foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
-      amount = 1234.56
+      amount = amount
+    )),
+    foreignIncomeTaxCreditRelief = Some(ForeignIncomeTaxCreditRelief(
+      countryCode = "FRA",
+      foreignTaxPaid = Some(amount),
+      taxableAmount = amount,
+      employmentLumpSum = true
+    )), foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
+      amount = amount
     ))
   )
 
@@ -181,7 +199,9 @@ class AmendForeignReliefsControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (ValueFormatError.copy(paths = Some(Seq("/foreignTaxCreditRelief/amount"))), BAD_REQUEST)
+          (ValueFormatError, BAD_REQUEST),
+          (CountryCodeFormatError, BAD_REQUEST),
+          (RuleCountryCodeError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))

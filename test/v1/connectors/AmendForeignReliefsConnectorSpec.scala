@@ -28,9 +28,18 @@ class AmendForeignReliefsConnectorSpec extends ConnectorSpec {
 
   val taxYear = "2017-18"
   val nino = Nino("AA123456A")
+  val amount: BigDecimal = 1234.56
   val body = AmendForeignReliefsBody(
-    Some(ForeignTaxCreditRelief(
-      345.34
+    foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
+      amount = amount
+    )),
+    foreignIncomeTaxCreditRelief = Some(ForeignIncomeTaxCreditRelief(
+      countryCode = "FRA",
+      foreignTaxPaid = Some(amount),
+      taxableAmount = amount,
+      employmentLumpSum = true
+    )), foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
+      amount = amount
     ))
   )
 

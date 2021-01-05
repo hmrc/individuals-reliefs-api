@@ -22,21 +22,46 @@ import v1.models.utils.JsonErrorValidators
 
 class AmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
 
-  val amendForeignReliefsBody = AmendForeignReliefsBody(Some(ForeignTaxCreditRelief(2314.32)))
+  private val amount = 1234.56
 
-  val emptyAmendForeignReliefsBody = AmendForeignReliefsBody(
-    None
+  private val amendForeignReliefsBody = AmendForeignReliefsBody(
+    foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
+      amount = amount
+    )),
+    foreignIncomeTaxCreditRelief = Some(ForeignIncomeTaxCreditRelief(
+      countryCode = "FRA",
+      foreignTaxPaid = Some(amount),
+      taxableAmount = amount,
+      employmentLumpSum = true
+    )), foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
+      amount = amount
+    ))
   )
 
-  val json = Json.parse(
-    """{
-      |  "foreignTaxCreditRelief": {
-      |    "amount": 2314.32
-      |  }
-      |}""".stripMargin
+  private val emptyAmendForeignReliefsBody = AmendForeignReliefsBody(
+    None, None, None
   )
 
-  val emptyJson = Json.parse("""{}""")
+  private val json = Json.parse(
+    s"""|
+        |{
+        |  "foreignTaxCreditRelief": {
+        |    "amount": $amount
+        |  },
+        |  "foreignIncomeTaxCreditRelief": {
+        |    "countryCode": "FRA",
+        |    "foreignTaxPaid": $amount,
+        |    "taxableAmount": $amount,
+        |    "employmentLumpSum": true
+        |  },
+        |  "foreignTaxForFtcrNotClaimed": {
+        |    "amount": $amount
+        |  }
+        |}
+        |""".stripMargin
+  )
+
+  private val emptyJson = Json.parse("""{}""")
 
   "reads" when {
     "passed valid JSON" should {

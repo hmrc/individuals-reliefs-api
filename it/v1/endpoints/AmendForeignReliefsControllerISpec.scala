@@ -39,6 +39,15 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
          |{
          |  "foreignTaxCreditRelief": {
          |    "amount": $amount
+         |  },
+         |  "foreignIncomeTaxCreditRelief": {
+         |    "countryCode": "FRA",
+         |    "foreignTaxPaid": $amount,
+         |    "taxableAmount": $amount,
+         |    "employmentLumpSum": true
+         |  },
+         |  "foreignTaxForFtcrNotClaimed": {
+         |    "amount": $amount
          |  }
          |}
          |""".stripMargin
@@ -137,7 +146,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(TaxYearFormatError)
         }
-        s"an invalid amount is provided" in new Test {
+        s"an invalid /foreignTaxCreditRelief/amount is provided" in new Test {
           override val requestBodyJson: JsValue = Json.parse(
             s"""
                |{
@@ -157,6 +166,120 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
           val response: WSResponse = await(request().put(requestBodyJson))
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(ValueFormatError.copy(paths = Some(Seq("/foreignTaxCreditRelief/amount"))))
+        }
+        s"the country code is too short" in new Test {
+          override val requestBodyJson: JsValue = Json.parse(
+            s"""
+               |{
+               |  "foreignIncomeTaxCreditRelief": {
+               |    "countryCode": "BADCODE",
+               |    "taxableAmount": 1.00,
+               |    "employmentLumpSum": true
+               |  }
+               |}
+               |""".stripMargin
+          )
+
+          override def setupStubs(): StubMapping = {
+            AuditStub.audit()
+            AuthStub.authorised()
+            MtdIdLookupStub.ninoFound(nino)
+          }
+
+          val response: WSResponse = await(request().put(requestBodyJson))
+          response.status shouldBe BAD_REQUEST
+          response.json shouldBe Json.toJson(CountryCodeFormatError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/countryCode"))))
+        }
+        s"the country code is not a valid ISO 3166-1 alpha-3 code" in new Test {
+          override val requestBodyJson: JsValue = Json.parse(
+            s"""
+               |{
+               |  "foreignIncomeTaxCreditRelief": {
+               |    "countryCode": "GER",
+               |    "taxableAmount": 1.00,
+               |    "employmentLumpSum": true
+               |  }
+               |}
+               |""".stripMargin
+          )
+
+          override def setupStubs(): StubMapping = {
+            AuditStub.audit()
+            AuthStub.authorised()
+            MtdIdLookupStub.ninoFound(nino)
+          }
+
+          val response: WSResponse = await(request().put(requestBodyJson))
+          response.status shouldBe BAD_REQUEST
+          response.json shouldBe Json.toJson(RuleCountryCodeError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/countryCode"))))
+        }
+        s"an invalid /foreignIncomeTaxCreditRelief/foreignTaxPaid is provided" in new Test {
+          override val requestBodyJson: JsValue = Json.parse(
+            s"""
+               |{
+               |  "foreignIncomeTaxCreditRelief": {
+               |    "countryCode": "FRA",
+               |    "foreignTaxPaid": -1,
+               |    "taxableAmount": 1.00,
+               |    "employmentLumpSum": true
+               |  }
+               |}
+               |""".stripMargin
+          )
+
+          override def setupStubs(): StubMapping = {
+            AuditStub.audit()
+            AuthStub.authorised()
+            MtdIdLookupStub.ninoFound(nino)
+          }
+
+          val response: WSResponse = await(request().put(requestBodyJson))
+          response.status shouldBe BAD_REQUEST
+          response.json shouldBe Json.toJson(ValueFormatError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/foreignTaxPaid"))))
+        }
+        s"an invalid /foreignIncomeTaxCreditRelief/taxableAmount is provided" in new Test {
+          override val requestBodyJson: JsValue = Json.parse(
+            s"""
+               |{
+               |  "foreignIncomeTaxCreditRelief": {
+               |    "countryCode": "FRA",
+               |    "taxableAmount": -1,
+               |    "employmentLumpSum": true
+               |  }
+               |}
+               |""".stripMargin
+          )
+
+          override def setupStubs(): StubMapping = {
+            AuditStub.audit()
+            AuthStub.authorised()
+            MtdIdLookupStub.ninoFound(nino)
+          }
+
+          val response: WSResponse = await(request().put(requestBodyJson))
+          response.status shouldBe BAD_REQUEST
+          response.json shouldBe Json.toJson(ValueFormatError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/taxableAmount"))))
+        }
+        s"an invalid /foreignTaxForFtcrNotClaimed/amount is provided" in new Test {
+          override val requestBodyJson: JsValue = Json.parse(
+            s"""
+               |{
+               |  "foreignTaxForFtcrNotClaimed": {
+               |    "amount": -1
+               |  }
+               |}
+               |""".stripMargin
+          )
+
+          override def setupStubs(): StubMapping = {
+            AuditStub.audit()
+            AuthStub.authorised()
+            MtdIdLookupStub.ninoFound(nino)
+          }
+
+          val response: WSResponse = await(request().put(requestBodyJson))
+          response.status shouldBe BAD_REQUEST
+          response.json shouldBe Json.toJson(ValueFormatError.copy(paths = Some(Seq("/foreignTaxForFtcrNotClaimed/amount"))))
         }
         s"a taxYear with range of greater than a year is provided" in new Test {
           override val taxYear: String = "2019-21"
