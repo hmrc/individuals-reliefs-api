@@ -29,7 +29,7 @@ import v1.models.hateoas.Method.GET
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignReliefs.{RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest}
-import v1.models.response.retrieveForeignReliefs.{ForeignTaxCreditRelief, RetrieveForeignReliefsHateoasData, RetrieveForeignReliefsResponse}
+import v1.models.response.retrieveForeignReliefs.{ForeignIncomeTaxCreditRelief, ForeignTaxCreditRelief, ForeignTaxForFtcrNotClaimed, RetrieveForeignReliefsHateoasData, RetrieveForeignReliefsResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -52,7 +52,14 @@ class RetrieveForeignReliefsControllerSpec
   private val testHateoasLink = Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
   private val responseBody = RetrieveForeignReliefsResponse(
     "2020-06-17T10:53:38Z",
-    Some(ForeignTaxCreditRelief(2309.95))
+    Some(ForeignTaxCreditRelief(2309.95)),
+    Some(Seq(ForeignIncomeTaxCreditRelief(
+      "FRA",
+      Some(1640.32),
+      1204.78,
+      false
+    ))),
+    Some(ForeignTaxForFtcrNotClaimed(1749.98))
   )
 
   trait Test {
