@@ -50,14 +50,14 @@
             "type": "boolean",
             "example": "false"
           }
-        }
-      },
-      "required": [
-        "countryCode",
-        "employmentLumpSum",
-        "taxableAmount"
-      ],
-      "additionalProperties": false
+        },
+        "required": [
+          "countryCode",
+          "employmentLumpSum",
+          "taxableAmount"
+        ],
+        "additionalProperties": false
+      }
     },
     "foreignTaxForFtcrNotClaimed": {
       "description": "Object that holds the key value for foreign tax for FTCR not claimed",
