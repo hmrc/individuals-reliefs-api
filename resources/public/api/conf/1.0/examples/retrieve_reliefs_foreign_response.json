@@ -4,31 +4,31 @@
     "amount": 5000.99
   },
   "foreignIncomeTaxCreditRelief": [
-      {
-        "countryCode": "FRA",
-        "foreignTaxPaid": 4567.69,
-        "taxableAmount": 2853.13,
-        "employmentLumpSum": false
-      }
-    ],
-    "foreignTaxForFtcrNotClaimed": {
+    {
+      "countryCode": "FRA",
+      "foreignTaxPaid": 4567.69,
+      "taxableAmount": 2853.13,
+      "employmentLumpSum": false
+    }
+  ],
+  "foreignTaxForFtcrNotClaimed": {
     "amount": 3456.97
   },
   "links": [
     {
-      "href":"/individuals/reliefs/foreign/TC663795B/2017-18",
-      "method":"PUT",
-      "rel":"create-and-amend-reliefs-foreign"
+      "href": "/individuals/reliefs/foreign/TC663795B/2017-18",
+      "method": "PUT",
+      "rel": "create-and-amend-reliefs-foreign"
     },
     {
-      "href":"/individuals/reliefs/foreign/TC663795B/2017-18",
-      "method":"GET",
-      "rel":"self"
+      "href": "/individuals/reliefs/foreign/TC663795B/2017-18",
+      "method": "GET",
+      "rel": "self"
     },
     {
-      "href":"/individuals/reliefs/foreign/TC663795B/2017-18",
-      "method":"DELETE",
-      "rel":"delete-reliefs-foreign"
+      "href": "/individuals/reliefs/foreign/TC663795B/2017-18",
+      "method": "DELETE",
+      "rel": "delete-reliefs-foreign"
     }
   ]
 }
