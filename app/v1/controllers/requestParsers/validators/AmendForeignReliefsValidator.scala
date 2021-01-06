@@ -16,13 +16,11 @@
 
 package v1.controllers.requestParsers.validators
 
-import config.AppConfig
-import javax.inject.Inject
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 import v1.models.request.amendForeignReliefs._
 
-class AmendForeignReliefsValidator @Inject()(appConfig: AppConfig) extends Validator[AmendForeignReliefsRawData] {
+class AmendForeignReliefsValidator extends Validator[AmendForeignReliefsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, bodyFieldValidation)
 
@@ -49,7 +47,9 @@ class AmendForeignReliefsValidator @Inject()(appConfig: AppConfig) extends Valid
     val body = data.body.as[AmendForeignReliefsBody]
 
     val foreignTaxCreditReliefErrors = body.foreignTaxCreditRelief.map(validateForeignTaxCreditRelief)
-    val foreignIncomeTaxCreditReliefErrors = body.foreignIncomeTaxCreditRelief.map(validateForeignIncomeTaxCreditRelief)
+    val foreignIncomeTaxCreditReliefErrors = body.foreignIncomeTaxCreditRelief.map(_.zipWithIndex.flatMap {
+      case (relief, i) => validateForeignIncomeTaxCreditRelief(relief, i)
+    }).map(_.toList)
     val foreignTaxForFtcrNotClaimedErrors = body.foreignTaxForFtcrNotClaimed.map(validateForeignTaxForFtcrNotClaimed)
 
     val errors: List[List[MtdError]] =
@@ -67,19 +67,19 @@ class AmendForeignReliefsValidator @Inject()(appConfig: AppConfig) extends Valid
     ).flatten
   }
 
-  private def validateForeignIncomeTaxCreditRelief(foreignIncomeTaxCreditRelief: ForeignIncomeTaxCreditRelief): List[MtdError] = {
+  private def validateForeignIncomeTaxCreditRelief(foreignIncomeTaxCreditRelief: ForeignIncomeTaxCreditRelief, arrayIndex: Int): List[MtdError] = {
     List(
       CountryCodeValidation.validate(
         field = foreignIncomeTaxCreditRelief.countryCode,
-        path = s"/foreignIncomeTaxCreditRelief/countryCode"
+        path = s"/foreignIncomeTaxCreditRelief/$arrayIndex/countryCode"
       ),
       NumberValidation.validateOptional(
         field = foreignIncomeTaxCreditRelief.foreignTaxPaid,
-        path = s"/foreignIncomeTaxCreditRelief/foreignTaxPaid"
+        path = s"/foreignIncomeTaxCreditRelief/$arrayIndex/foreignTaxPaid"
       ),
       NumberValidation.validateOptional(
         field = Some(foreignIncomeTaxCreditRelief.taxableAmount),
-        path = s"/foreignIncomeTaxCreditRelief/taxableAmount"
+        path = s"/foreignIncomeTaxCreditRelief/$arrayIndex/taxableAmount"
       )
     ).flatten
   }

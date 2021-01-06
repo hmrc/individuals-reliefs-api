@@ -28,12 +28,13 @@ class AmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
     foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
       amount = amount
     )),
-    foreignIncomeTaxCreditRelief = Some(ForeignIncomeTaxCreditRelief(
+    foreignIncomeTaxCreditRelief = Some(Seq(ForeignIncomeTaxCreditRelief(
       countryCode = "FRA",
       foreignTaxPaid = Some(amount),
       taxableAmount = amount,
       employmentLumpSum = true
-    )), foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
+    ))),
+    foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
       amount = amount
     ))
   )
@@ -48,12 +49,14 @@ class AmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
         |  "foreignTaxCreditRelief": {
         |    "amount": $amount
         |  },
-        |  "foreignIncomeTaxCreditRelief": {
-        |    "countryCode": "FRA",
-        |    "foreignTaxPaid": $amount,
-        |    "taxableAmount": $amount,
-        |    "employmentLumpSum": true
-        |  },
+        |  "foreignIncomeTaxCreditRelief": [
+        |    {
+        |      "countryCode": "FRA",
+        |      "foreignTaxPaid": $amount,
+        |      "taxableAmount": $amount,
+        |      "employmentLumpSum": true
+        |    }
+        |  ],
         |  "foreignTaxForFtcrNotClaimed": {
         |    "amount": $amount
         |  }

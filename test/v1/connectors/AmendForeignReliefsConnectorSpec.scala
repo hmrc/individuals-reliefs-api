@@ -33,12 +33,13 @@ class AmendForeignReliefsConnectorSpec extends ConnectorSpec {
     foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
       amount = amount
     )),
-    foreignIncomeTaxCreditRelief = Some(ForeignIncomeTaxCreditRelief(
+    foreignIncomeTaxCreditRelief = Some(Seq(ForeignIncomeTaxCreditRelief(
       countryCode = "FRA",
       foreignTaxPaid = Some(amount),
       taxableAmount = amount,
       employmentLumpSum = true
-    )), foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
+    ))),
+    foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
       amount = amount
     ))
   )
