@@ -30,21 +30,22 @@ import scala.concurrent.Future
 
 class AmendForeignReliefsServiceSpec extends UnitSpec {
 
-  val taxYear = "2017-18"
-  val nino = Nino("AA123456A")
-  implicit val correlationId = "X-123"
-  val amount: BigDecimal = 1234.56
+  private val taxYear = "2017-18"
+  private val nino = Nino("AA123456A")
+  private implicit val correlationId: String = "X-123"
+  private val amount: BigDecimal = 1234.56
 
-  val body = AmendForeignReliefsBody(
+  private val body = AmendForeignReliefsBody(
     foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
       amount = amount
     )),
-    foreignIncomeTaxCreditRelief = Some(ForeignIncomeTaxCreditRelief(
+    foreignIncomeTaxCreditRelief = Some(Seq(ForeignIncomeTaxCreditRelief(
       countryCode = "FRA",
       foreignTaxPaid = Some(amount),
       taxableAmount = amount,
       employmentLumpSum = true
-    )), foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
+    ))),
+    foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
       amount = amount
     ))
   )

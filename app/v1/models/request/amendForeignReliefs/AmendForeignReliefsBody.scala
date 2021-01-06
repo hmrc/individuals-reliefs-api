@@ -19,7 +19,7 @@ package v1.models.request.amendForeignReliefs
 import play.api.libs.json.{Json, OFormat}
 
 case class AmendForeignReliefsBody(foreignTaxCreditRelief: Option[ForeignTaxCreditRelief],
-                                   foreignIncomeTaxCreditRelief: Option[ForeignIncomeTaxCreditRelief],
+                                   foreignIncomeTaxCreditRelief: Option[Seq[ForeignIncomeTaxCreditRelief]],
                                    foreignTaxForFtcrNotClaimed: Option[ForeignTaxForFtcrNotClaimed])
 
 object AmendForeignReliefsBody {

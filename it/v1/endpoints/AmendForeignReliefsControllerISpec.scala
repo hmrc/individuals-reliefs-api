@@ -40,12 +40,14 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
          |  "foreignTaxCreditRelief": {
          |    "amount": $amount
          |  },
-         |  "foreignIncomeTaxCreditRelief": {
-         |    "countryCode": "FRA",
-         |    "foreignTaxPaid": $amount,
-         |    "taxableAmount": $amount,
-         |    "employmentLumpSum": true
-         |  },
+         |  "foreignIncomeTaxCreditRelief": [
+         |    {
+         |      "countryCode": "FRA",
+         |      "foreignTaxPaid": $amount,
+         |      "taxableAmount": $amount,
+         |      "employmentLumpSum": true
+         |    }
+         |  ],
          |  "foreignTaxForFtcrNotClaimed": {
          |    "amount": $amount
          |  }
@@ -171,11 +173,13 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
           override val requestBodyJson: JsValue = Json.parse(
             s"""
                |{
-               |  "foreignIncomeTaxCreditRelief": {
-               |    "countryCode": "BADCODE",
-               |    "taxableAmount": 1.00,
-               |    "employmentLumpSum": true
-               |  }
+               |  "foreignIncomeTaxCreditRelief": [
+               |    {
+               |      "countryCode": "BADCODE",
+               |      "taxableAmount": 1.00,
+               |      "employmentLumpSum": true
+               |    }
+               |  ]
                |}
                |""".stripMargin
           )
@@ -188,17 +192,19 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
           val response: WSResponse = await(request().put(requestBodyJson))
           response.status shouldBe BAD_REQUEST
-          response.json shouldBe Json.toJson(CountryCodeFormatError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/countryCode"))))
+          response.json shouldBe Json.toJson(CountryCodeFormatError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/0/countryCode"))))
         }
         s"the country code is not a valid ISO 3166-1 alpha-3 code" in new Test {
           override val requestBodyJson: JsValue = Json.parse(
             s"""
                |{
-               |  "foreignIncomeTaxCreditRelief": {
-               |    "countryCode": "GER",
-               |    "taxableAmount": 1.00,
-               |    "employmentLumpSum": true
-               |  }
+               |  "foreignIncomeTaxCreditRelief": [
+               |    {
+               |      "countryCode": "GER",
+               |      "taxableAmount": 1.00,
+               |      "employmentLumpSum": true
+               |    }
+               |  ]
                |}
                |""".stripMargin
           )
@@ -211,18 +217,20 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
           val response: WSResponse = await(request().put(requestBodyJson))
           response.status shouldBe BAD_REQUEST
-          response.json shouldBe Json.toJson(RuleCountryCodeError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/countryCode"))))
+          response.json shouldBe Json.toJson(RuleCountryCodeError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/0/countryCode"))))
         }
         s"an invalid /foreignIncomeTaxCreditRelief/foreignTaxPaid is provided" in new Test {
           override val requestBodyJson: JsValue = Json.parse(
             s"""
                |{
-               |  "foreignIncomeTaxCreditRelief": {
-               |    "countryCode": "FRA",
-               |    "foreignTaxPaid": -1,
-               |    "taxableAmount": 1.00,
-               |    "employmentLumpSum": true
-               |  }
+               |  "foreignIncomeTaxCreditRelief": [
+               |    {
+               |      "countryCode": "FRA",
+               |      "foreignTaxPaid": -1,
+               |      "taxableAmount": 1.00,
+               |      "employmentLumpSum": true
+               |    }
+               |  ]
                |}
                |""".stripMargin
           )
@@ -235,17 +243,19 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
           val response: WSResponse = await(request().put(requestBodyJson))
           response.status shouldBe BAD_REQUEST
-          response.json shouldBe Json.toJson(ValueFormatError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/foreignTaxPaid"))))
+          response.json shouldBe Json.toJson(ValueFormatError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/0/foreignTaxPaid"))))
         }
         s"an invalid /foreignIncomeTaxCreditRelief/taxableAmount is provided" in new Test {
           override val requestBodyJson: JsValue = Json.parse(
             s"""
                |{
-               |  "foreignIncomeTaxCreditRelief": {
-               |    "countryCode": "FRA",
-               |    "taxableAmount": -1,
-               |    "employmentLumpSum": true
-               |  }
+               |  "foreignIncomeTaxCreditRelief": [
+               |    {
+               |      "countryCode": "FRA",
+               |      "taxableAmount": -1,
+               |      "employmentLumpSum": true
+               |    }
+               |  ]
                |}
                |""".stripMargin
           )
@@ -258,7 +268,7 @@ class AmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
           val response: WSResponse = await(request().put(requestBodyJson))
           response.status shouldBe BAD_REQUEST
-          response.json shouldBe Json.toJson(ValueFormatError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/taxableAmount"))))
+          response.json shouldBe Json.toJson(ValueFormatError.copy(paths = Some(Seq("/foreignIncomeTaxCreditRelief/0/taxableAmount"))))
         }
         s"an invalid /foreignTaxForFtcrNotClaimed/amount is provided" in new Test {
           override val requestBodyJson: JsValue = Json.parse(
