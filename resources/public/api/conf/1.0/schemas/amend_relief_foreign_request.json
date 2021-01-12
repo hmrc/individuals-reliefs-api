@@ -47,9 +47,9 @@
           }
         },
         "required": [
-        "countryCode",
-        "taxableAmount",
-        "employmentLumpSum"
+          "countryCode",
+          "taxableAmount",
+          "employmentLumpSum"
         ],
         "additionalProperties": false
       }
@@ -69,7 +69,6 @@
       ],
       "additionalProperties": false
     }
-
   },
   "additionalProperties": false
 }

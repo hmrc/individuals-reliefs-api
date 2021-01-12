@@ -2,13 +2,15 @@
   "foreignTaxCreditRelief": {
     "amount": 2000.99
   },
-  "foreignIncomeTaxCreditRelief": {
-    "countryCode": "FRA",
-    "taxableAmount": 1999.99,
-    "foreignTaxPaid": 1999.99,
-    "employmentLumpSum": false
-  },
-  "foreignTaxForFtcrNotClaimed": {
-      "amount": 1999.99
+  "foreignIncomeTaxCreditRelief": [
+    {
+      "countryCode": "FRA",
+      "taxableAmount": 1999.99,
+      "foreignTaxPaid": 1999.99,
+      "employmentLumpSum": false
     }
+  ],
+  "foreignTaxForFtcrNotClaimed": {
+    "amount": 1999.99
+  }
 }
