@@ -73,42 +73,42 @@ class RetrieveReliefInvestmentsControllerSpec
 
   private val responseBody = RetrieveReliefInvestmentsResponse(
     "2020-06-17T10:53:38Z",
-    Seq(VctSubscriptionsItem(
+    Some(Seq(VctSubscriptionsItem(
       "VCTREF",
       Some("VCT Fund X"),
       Some("2018-04-16"),
       Some(BigDecimal(23312.00)),
       BigDecimal(1334.00)
-    )),
-    Seq(EisSubscriptionsItem(
+    ))),
+    Some(Seq(EisSubscriptionsItem(
       "XTAL",
       Some("EIS Fund X"),
       knowledgeIntensive = true,
       Some("2020-12-12"),
       Some(BigDecimal(23312.00)),
       BigDecimal(43432.00)
-    )),
-    Seq(CommunityInvestmentItem(
+    ))),
+    Some(Seq(CommunityInvestmentItem(
       "CIREF",
       Some("CI X"),
       Some("2020-12-12"),
       Some(BigDecimal(6442.00)),
       BigDecimal(2344.00)
-    )),
-    Seq(SeedEnterpriseInvestmentItem(
+    ))),
+    Some(Seq(SeedEnterpriseInvestmentItem(
       "123412/1A",
       Some("Company Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
       BigDecimal(3432.00)
-    )),
-    Seq(SocialEnterpriseInvestmentItem(
+    ))),
+    Some(Seq(SocialEnterpriseInvestmentItem(
       "123412/1A",
       Some("SE Inc"),
       Some("2020-12-12"),
       Some(BigDecimal(123123.22)),
       BigDecimal(3432.00)
-    ))
+    )))
   )
 
   "handleRequest" should {
