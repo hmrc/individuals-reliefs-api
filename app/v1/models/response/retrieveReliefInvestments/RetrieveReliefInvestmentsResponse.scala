@@ -23,11 +23,11 @@ import v1.models.hateoas.{HateoasData, Link}
 
 case class RetrieveReliefInvestmentsResponse(
                                           submittedOn: String,
-                                          vctSubscription: Seq[VctSubscriptionsItem],
-                                          eisSubscription: Seq[EisSubscriptionsItem],
-                                          communityInvestment: Seq[CommunityInvestmentItem],
-                                          seedEnterpriseInvestment: Seq[SeedEnterpriseInvestmentItem],
-                                          socialEnterpriseInvestment: Seq[SocialEnterpriseInvestmentItem]
+                                          vctSubscription: Option[Seq[VctSubscriptionsItem]],
+                                          eisSubscription: Option[Seq[EisSubscriptionsItem]],
+                                          communityInvestment: Option[Seq[CommunityInvestmentItem]],
+                                          seedEnterpriseInvestment: Option[Seq[SeedEnterpriseInvestmentItem]],
+                                          socialEnterpriseInvestment: Option[Seq[SocialEnterpriseInvestmentItem]]
                                         )
 
 object RetrieveReliefInvestmentsResponse extends HateoasLinks {
