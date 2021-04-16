@@ -65,7 +65,8 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
     val desRequestHeaders: Seq[(String, String)] = Seq("Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
     MockedAppConfig.desBaseUrl returns baseUrl
     MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnvironment returns "des-environment"
+    MockedAppConfig.desEnv returns "des-environment"
+    MockedAppConfig.ifsEnabled returns false
   }
 
   "doConnector" must {
