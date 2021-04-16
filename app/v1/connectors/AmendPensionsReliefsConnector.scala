@@ -27,7 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendPensionsReliefsConnector@Inject()(val http: HttpClient,
-                                             val appConfig: AppConfig) extends BaseDesConnector {
+                                             val appConfig: AppConfig) extends BaseDownstreamConnector {
   def amend(request: AmendPensionsReliefsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
@@ -35,7 +35,7 @@ class AmendPensionsReliefsConnector@Inject()(val http: HttpClient,
 
     put(
       body = request.body,
-      DesUri[Unit](s"income-tax/reliefs/pensions/${request.nino}/${request.taxYear}")
+      DownstreamUri[Unit](s"income-tax/reliefs/pensions/${request.nino}/${request.taxYear}")
     )
   }
 }

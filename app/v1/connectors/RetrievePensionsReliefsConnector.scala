@@ -28,14 +28,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrievePensionsReliefsConnector @Inject()(val http: HttpClient,
-                                                 val appConfig: AppConfig) extends BaseDesConnector {
+                                                 val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieve(request: RetrievePensionsReliefsRequest)(
     implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[RetrievePensionsReliefsResponse]] = {
 
     val url = s"income-tax/reliefs/pensions/${request.nino}/${request.taxYear}"
     get(
-      DesUri[RetrievePensionsReliefsResponse](s"$url")
+      DownstreamUri[RetrievePensionsReliefsResponse](s"$url")
     )
   }
 }
