@@ -22,6 +22,7 @@ import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.http.HttpClient
 import utils.Logging
+import v1.connectors.DownstreamUri.{DesUri, IfsUri}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -29,15 +30,13 @@ trait BaseDownstreamConnector extends Logging {
   val http: HttpClient
   val appConfig: AppConfig
 
-  lazy val downstreamService: DownstreamService = if (appConfig.ifsEnabled) {
-    DownstreamService(appConfig.ifsBaseUrl, appConfig.ifsEnv, appConfig.ifsToken)
-  } else {
-    DownstreamService(appConfig.desBaseUrl, appConfig.desEnv, appConfig.desToken)
-  }
-
   private[connectors] def desHeaderCarrier(implicit hc: HeaderCarrier, correlationId: String): HeaderCarrier =
-    hc.copy(authorization = Some(Authorization(s"Bearer ${downstreamService.token}")))
-      .withExtraHeaders("Environment" -> downstreamService.environment, "CorrelationId" -> correlationId)
+    hc.copy(authorization = Some(Authorization(s"Bearer ${appConfig.desToken}")))
+      .withExtraHeaders("Environment" -> appConfig.desEnv, "CorrelationId" -> correlationId)
+
+  private[connectors] def ifsHeaderCarrier(implicit hc: HeaderCarrier, correlationId: String): HeaderCarrier =
+    hc.copy(authorization = Some(Authorization(s"Bearer ${appConfig.ifsToken}")))
+      .withExtraHeaders("Environment" -> appConfig.ifsEnv, "CorrelationId" -> correlationId)
 
   def post[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp])(implicit ec: ExecutionContext,
                                                                      hc: HeaderCarrier,
@@ -45,10 +44,10 @@ trait BaseDownstreamConnector extends Logging {
                                                                      correlationId: String): Future[DesOutcome[Resp]] = {
 
     def doPost(implicit hc: HeaderCarrier): Future[DesOutcome[Resp]] = {
-      http.POST(s"${downstreamService.baseUrl}/${uri.value}", body)
+      http.POST(getBackendUri(uri), body)
     }
 
-    doPost(desHeaderCarrier(hc, correlationId))
+    doPost(getBackendHeaders(uri, hc, correlationId))
   }
 
   def put[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp])(implicit ec: ExecutionContext,
@@ -57,10 +56,10 @@ trait BaseDownstreamConnector extends Logging {
                                                                     correlationId: String): Future[DesOutcome[Resp]] = {
 
     def doPut(implicit hc: HeaderCarrier): Future[DesOutcome[Resp]] = {
-      http.PUT(s"${downstreamService.baseUrl}/${uri.value}", body)
+      http.PUT(getBackendUri(uri), body)
     }
 
-    doPut(desHeaderCarrier(hc, correlationId))
+    doPut(getBackendHeaders(uri, hc, correlationId))
   }
 
   def get[Resp](uri: DownstreamUri[Resp])(implicit ec: ExecutionContext,
@@ -69,9 +68,9 @@ trait BaseDownstreamConnector extends Logging {
                                           correlationId: String): Future[DesOutcome[Resp]] = {
 
     def doGet(implicit hc: HeaderCarrier): Future[DesOutcome[Resp]] =
-      http.GET(s"${downstreamService.baseUrl}/${uri.value}")
+      http.GET(getBackendUri(uri))
 
-    doGet(desHeaderCarrier(hc, correlationId))
+    doGet(getBackendHeaders(uri, hc, correlationId))
   }
 
   def delete[Resp](uri: DownstreamUri[Resp])(implicit ec: ExecutionContext,
@@ -80,9 +79,19 @@ trait BaseDownstreamConnector extends Logging {
                                              correlationId: String): Future[DesOutcome[Resp]] = {
 
     def doDelete(implicit hc: HeaderCarrier): Future[DesOutcome[Resp]] =
-      http.DELETE(s"${downstreamService.baseUrl}/${uri.value}")
+      http.DELETE(getBackendUri(uri))
 
-    doDelete(desHeaderCarrier(hc, correlationId))
+    doDelete(getBackendHeaders(uri, hc, correlationId))
+  }
+
+  private def getBackendUri[Resp](uri: DownstreamUri[Resp]): String = uri match {
+    case DesUri(value) => s"${appConfig.desBaseUrl}/$value"
+    case IfsUri(value) => s"${appConfig.ifsBaseUrl}/$value"
+  }
+
+  private def getBackendHeaders[Resp](uri: DownstreamUri[Resp], hc: HeaderCarrier, correlationId: String): HeaderCarrier = uri match {
+    case DesUri(_) => desHeaderCarrier(hc, correlationId)
+    case IfsUri(_) => ifsHeaderCarrier(hc, correlationId)
   }
 
 }

@@ -39,8 +39,6 @@ trait MockAppConfig extends MockFactory {
 
     def ifsEnv: CallHandler[String] = (mockAppConfig.ifsEnv _).expects()
 
-    def ifsEnabled: CallHandler[Boolean] = (mockAppConfig.ifsEnabled _).expects()
-
     def mtdIdBaseUrl: CallHandler[String] = (mockAppConfig.mtdIdBaseUrl _: () => String).expects()
 
     def featureSwitch: CallHandler[Option[Configuration]] = (mockAppConfig.featureSwitch _: () => Option[Configuration]).expects()
