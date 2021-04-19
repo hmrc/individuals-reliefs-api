@@ -20,6 +20,7 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
+import v1.connectors.DownstreamUri.DesUri
 import v1.connectors.httpparsers.StandardDesHttpParser._
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
@@ -35,7 +36,7 @@ class RetrievePensionsReliefsConnector @Inject()(val http: HttpClient,
 
     val url = s"income-tax/reliefs/pensions/${request.nino}/${request.taxYear}"
     get(
-      DownstreamUri[RetrievePensionsReliefsResponse](s"$url")
+      DesUri[RetrievePensionsReliefsResponse](s"$url")
     )
   }
 }

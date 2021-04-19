@@ -20,6 +20,7 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
+import v1.connectors.DownstreamUri.IfsUri
 import v1.connectors.httpparsers.StandardDesHttpParser._
 import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
 
@@ -31,7 +32,7 @@ class DeleteReliefInvestmentsConnector @Inject()(val http: HttpClient,
  def delete(request: DeleteReliefInvestmentsRequest)
            (implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
    delete(
-     DownstreamUri[Unit](s"income-tax/reliefs/investment/${request.nino}/${request.taxYear}")
+     IfsUri[Unit](s"income-tax/reliefs/investment/${request.nino}/${request.taxYear}")
    )
  }
 }

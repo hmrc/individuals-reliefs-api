@@ -38,7 +38,6 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
     MockedAppConfig.desBaseUrl returns baseUrl
     MockedAppConfig.desToken returns "des-token"
     MockedAppConfig.desEnv returns "des-environment"
-    MockedAppConfig.ifsEnabled returns false
   }
 
   "RetrievePensionsReliefsConnector" when {

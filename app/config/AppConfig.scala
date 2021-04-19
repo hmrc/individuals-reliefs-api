@@ -37,8 +37,6 @@ trait AppConfig {
 
   def ifsToken: String
 
-  def ifsEnabled: Boolean
-
   def apiGatewayContext: String
 
   def apiStatus(version: String): String
@@ -61,7 +59,6 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
   val ifsBaseUrl: String        = config.baseUrl("ifs")
   val ifsEnv: String            = config.getString("microservice.services.ifs.env")
   val ifsToken: String          = config.getString("microservice.services.ifs.token")
-  val ifsEnabled: Boolean       = config.getBoolean("microservice.services.ifs.enabled")
   val apiGatewayContext: String = config.getString("api.gateway.context")
 
   def apiStatus(version: String): String = config.getString(s"api.$version.status")
