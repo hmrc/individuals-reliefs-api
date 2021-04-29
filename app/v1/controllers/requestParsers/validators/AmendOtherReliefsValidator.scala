@@ -59,44 +59,43 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
   private def bodyFieldValidation: AmendOtherReliefsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendOtherReliefsBody]
 
-    val errorsO: Option[List[List[MtdError]]] = for {
-      nonDeductibleLoanInterestErrors <- body.nonDeductibleLoanInterest.map(validatenonDeductibleLoanInterest)
-      payrollGivingErrors <- body.payrollGiving.map(validatePayrollGiving)
-      qualifyingDistributionRedemptionOfSharesAndSecuritiesErrors <- {
-        body.qualifyingDistributionRedemptionOfSharesAndSecurities.map(validateQualifyingDistributionRedemptionOfSharesAndSecurities)
-      }
-      maintenancePaymentsErrors <- {
-        body.maintenancePayments.map(_.zipWithIndex.flatMap {
-          case (item, i) => validateMaintenancePayments(item, i)
-        })
-      }
-      postCessationTradeReliefAndCertainOtherLossesErrors <- {
-        body.postCessationTradeReliefAndCertainOtherLosses.map(_.zipWithIndex.flatMap {
-          case (item, i) => validatePostCessationTradeReliefAndCertainOtherLosses(item, i)
-        })
-      }
-      annualPaymentsMadeErrors <- body.annualPaymentsMade.map(validateAnnualPayments)
-      qualifyingLoanInterestPayments <- {
-        body.qualifyingLoanInterestPayments.map(_.zipWithIndex.flatMap {
-          case (item, i) => validateQualifyingLoanInterestPayments(item, i)
-        })
-      }
-    } yield {
-      List(
-        nonDeductibleLoanInterestErrors,
-        payrollGivingErrors,
-        qualifyingDistributionRedemptionOfSharesAndSecuritiesErrors,
-        maintenancePaymentsErrors,
-        postCessationTradeReliefAndCertainOtherLossesErrors,
-        annualPaymentsMadeErrors,
-        qualifyingLoanInterestPayments
-      ).map(_.toList)
-    }
+    val nonDeductibleLoanInterestErrors = body.nonDeductibleLoanInterest.map(validateNonDeductibleLoanInterest)
 
-    List(errorsO.map(flattenErrors)).flatten
+    val payrollGivingErrors = body.payrollGiving.map(validatePayrollGiving)
+
+    val qualifyingDistributionRedemptionOfSharesAndSecuritiesErrors =
+      body.qualifyingDistributionRedemptionOfSharesAndSecurities.map(validateQualifyingDistributionRedemptionOfSharesAndSecurities)
+
+    val maintenancePaymentsErrors = body.maintenancePayments.map(_.zipWithIndex.flatMap {
+      case (item, i) => validateMaintenancePayments(item, i)
+    })
+
+    val postCessationTradeReliefAndCertainOtherLossesErrors = body.postCessationTradeReliefAndCertainOtherLosses.map(_.zipWithIndex.flatMap {
+      case (item, i) => validatePostCessationTradeReliefAndCertainOtherLosses(item, i)
+    })
+
+    val annualPaymentsMadeErrors = body.annualPaymentsMade.map(validateAnnualPayments)
+
+    val qualifyingLoanInterestPayments = body.qualifyingLoanInterestPayments.map(_.zipWithIndex.flatMap {
+      case (item, i) => validateQualifyingLoanInterestPayments(item, i)
+    })
+
+    val errorsO: List[Option[Seq[MtdError]]] = List(
+      nonDeductibleLoanInterestErrors,
+      payrollGivingErrors,
+      qualifyingDistributionRedemptionOfSharesAndSecuritiesErrors,
+      maintenancePaymentsErrors,
+      postCessationTradeReliefAndCertainOtherLossesErrors,
+      annualPaymentsMadeErrors,
+      qualifyingLoanInterestPayments
+    )
+
+    val errors: List[List[MtdError]] = errorsO.flatten.map(_.toList)
+
+    List(flattenErrors(errors))
   }
 
-  private def validatenonDeductibleLoanInterest(nonDeductibleLoanInterest: NonDeductibleLoanInterest): List[MtdError] = {
+  private def validateNonDeductibleLoanInterest(nonDeductibleLoanInterest: NonDeductibleLoanInterest): List[MtdError] = {
     List(
       ReferenceRegexValidation.validateOptional(
         field = nonDeductibleLoanInterest.customerReference,
@@ -124,8 +123,8 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
     ).flatten
   }
 
-  private def validateQualifyingDistributionRedemptionOfSharesAndSecurities
-  (qualifyingDistributionRedemptionOfSharesAndSecurities: QualifyingDistributionRedemptionOfSharesAndSecurities): List[MtdError] = {
+  private def validateQualifyingDistributionRedemptionOfSharesAndSecurities(
+      qualifyingDistributionRedemptionOfSharesAndSecurities: QualifyingDistributionRedemptionOfSharesAndSecurities): List[MtdError] = {
     List(
       ReferenceRegexValidation.validateOptional(
         field = qualifyingDistributionRedemptionOfSharesAndSecurities.customerReference,
@@ -138,7 +137,6 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
       )
     ).flatten
   }
-
 
   private def validateMaintenancePayments(maintenancePayments: MaintenancePayments, arrayIndex: Int): List[MtdError] = {
     List(
@@ -165,9 +163,9 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
   }
 
   private def validatePostCessationTradeReliefAndCertainOtherLosses(
-                                                                     postCessationTradeReliefAndCertainOtherLosses: PostCessationTradeReliefAndCertainOtherLosses,
-                                                                     arrayIndex: Int
-                                                                   ): List[MtdError] = {
+      postCessationTradeReliefAndCertainOtherLosses: PostCessationTradeReliefAndCertainOtherLosses,
+      arrayIndex: Int
+  ): List[MtdError] = {
     List(
       ReferenceRegexValidation.validateOptional(
         field = postCessationTradeReliefAndCertainOtherLosses.customerReference,
@@ -201,7 +199,6 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
     ).flatten
   }
 
-
   private def validateAnnualPayments(annualPaymentsMade: AnnualPaymentsMade): List[MtdError] = {
     List(
       ReferenceRegexValidation.validateOptional(
@@ -216,7 +213,8 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
     ).flatten
   }
 
-  private def validateQualifyingLoanInterestPayments(qualifyingLoanInterestPayments: QualifyingLoanInterestPayments, arrayIndex: Int): List[MtdError] = {
+  private def validateQualifyingLoanInterestPayments(qualifyingLoanInterestPayments: QualifyingLoanInterestPayments,
+                                                     arrayIndex: Int): List[MtdError] = {
     List(
       ReferenceRegexValidation.validateOptional(
         field = qualifyingLoanInterestPayments.customerReference,
@@ -234,7 +232,6 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
       )
     ).flatten
   }
-
 
   override def validate(data: AmendOtherReliefsRawData): List[MtdError] = {
     run(validationSet, data).distinct
