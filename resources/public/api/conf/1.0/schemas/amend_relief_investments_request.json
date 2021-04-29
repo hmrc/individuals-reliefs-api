@@ -146,7 +146,7 @@
             "example": "12345678"
           },
           "companyName": {
-            "description": "The name of the company holding the investment",
+            "description": "The name of the company holding the investment.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
             "example": "Company Inc"
