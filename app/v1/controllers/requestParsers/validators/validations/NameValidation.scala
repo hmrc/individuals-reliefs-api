@@ -16,24 +16,24 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{NameFormatError, MtdError}
+import v1.models.errors.MtdError
 
 
 object NameValidation {
 
   private val nameRegex =
-    "^[A-Za-z0-9 ]+$"
+    "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$"
 
-  def validateOptional(name: Option[String], path: String): List[MtdError] = {
-    name match {
+  def validateOptional(field: Option[String], path: String, error: MtdError): List[MtdError] = {
+    field match {
       case None => NoValidationErrors
-      case Some(value) => validate(value, path)
+      case Some(value) => validate(value, path, error)
     }
   }
 
-  private def validate(name: String, path: String): List[MtdError] = {
-    if (name.matches(nameRegex)) Nil else List(
-      NameFormatError.copy(paths = Some(Seq(path)))
+  private def validate(name: String, path: String, error: MtdError): List[MtdError] = {
+    if (name.matches(nameRegex)) NoValidationErrors else List(
+      error.copy(paths = Some(Seq(path)))
     )
   }
 }

@@ -19,6 +19,7 @@
           "name": {
             "description": "The name of the investment or fund.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
             "example": "VCT fund"
           },
           "dateOfInvestment": {
@@ -59,6 +60,7 @@
           "name": {
             "description": "The name of the investment or fund",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
             "example": "EIS fund"
           },
           "knowledgeIntensive": {
@@ -105,6 +107,7 @@
           "name": {
             "description": "The name of the investment or fund.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
             "example": "CI X"
           },
           "dateOfInvestment": {
@@ -143,9 +146,10 @@
             "example": "12345678"
           },
           "companyName": {
-            "description": "The name of the company holding the investment.",
+            "description": "The name of the company holding the investment",
             "type": "string",
-            "example": "Goldman Sachs"
+            "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
+            "example": "Real Company LTD"
           },
           "dateOfInvestment": {
             "description": "The date of the investment. Date in the format YYYY-MM-DD",
@@ -185,6 +189,7 @@
           "socialEnterpriseName": {
             "description": "The name of the investment or fund.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
             "example": "SE Inc"
           },
           "dateOfInvestment": {

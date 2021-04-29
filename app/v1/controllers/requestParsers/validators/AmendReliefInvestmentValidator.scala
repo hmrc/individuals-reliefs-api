@@ -22,10 +22,10 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
 import v1.models.request.amendReliefInvestments._
 
-
 class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Validator[AmendReliefInvestmentsRawData] {
 
-  private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, incorrectOfEmptyBodySubmittedValidation, bodyFieldValidation)
+  private val validationSet =
+    List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, incorrectOfEmptyBodySubmittedValidation, bodyFieldValidation)
 
   private def parameterFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = (data: AmendReliefInvestmentsRawData) => {
     List(
@@ -54,43 +54,33 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
   private def bodyFieldValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendReliefInvestmentsBody]
 
-    val errorsO: Option[List[List[MtdError]]] = for {
-      vctSubscriptionErrors <- {
-        body.vctSubscription.map(_.zipWithIndex.flatMap {
-          case (item, i) => validateVctSubscription(item, i)
-        })
-      }
-      eisSubscriptionErrors <- {
-        body.eisSubscription.map(_.zipWithIndex.flatMap {
-          case (item, i) => validateEisSubscription(item, i)
-        })
-      }
-      communityInvestmentErrors <- {
-        body.communityInvestment.map(_.zipWithIndex.flatMap {
-          case (item, i) => validateCommunityInvestment(item, i)
-        })
-      }
-      seedEnterpriseInvestmentErrors <- {
-        body.seedEnterpriseInvestment.map(_.zipWithIndex.flatMap {
-          case (item, i) => validateSeedEnterpriseInvestment(item, i)
-        })
-      }
-      socialEnterpriseInvestmentErrors <- {
-        body.socialEnterpriseInvestment.map(_.zipWithIndex.flatMap {
-          case (item, i) => validateSocialEnterpriseInvestment(item, i)
-        })
-      }
-    } yield {
-      List(
-        vctSubscriptionErrors,
-        eisSubscriptionErrors,
-        communityInvestmentErrors,
-        seedEnterpriseInvestmentErrors,
-        socialEnterpriseInvestmentErrors
-      ).map(_.toList)
-    }
+    val vctSubscriptionErrors = body.vctSubscription.map(_.zipWithIndex.flatMap {
+      case (item, i) => validateVctSubscription(item, i)
+    })
 
-    List(errorsO.map(flattenErrors)).flatten
+    val eisSubscriptionErrors = body.eisSubscription.map(_.zipWithIndex.flatMap {
+      case (item, i) => validateEisSubscription(item, i)
+    })
+
+    val communityInvestmentErrors = body.communityInvestment.map(_.zipWithIndex.flatMap {
+      case (item, i) => validateCommunityInvestment(item, i)
+    })
+
+    val seedEnterpriseInvestmentErrors =
+      body.seedEnterpriseInvestment.map(_.zipWithIndex.flatMap {
+        case (item, i) => validateSeedEnterpriseInvestment(item, i)
+      })
+
+    val socialEnterpriseInvestmentErrors = body.socialEnterpriseInvestment.map(_.zipWithIndex.flatMap {
+      case (item, i) => validateSocialEnterpriseInvestment(item, i)
+    })
+
+    val errorsO: List[Option[Seq[MtdError]]] =
+      List(vctSubscriptionErrors, eisSubscriptionErrors, communityInvestmentErrors, seedEnterpriseInvestmentErrors, socialEnterpriseInvestmentErrors)
+
+    val errors = errorsO.flatten.map(_.toList)
+
+    List(flattenErrors(errors))
   }
 
   private def validateVctSubscription(vctSubscriptionsItem: VctSubscriptionsItem, arrayIndex: Int): List[MtdError] = {
@@ -100,7 +90,7 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
         path = s"/vctSubscription/$arrayIndex/uniqueInvestmentRef",
         error = UniqueInvestmentRefFormatError
       ),
-      FieldLengthValidation.validateOptional(
+      NameValidation.validateOptional(
         field = vctSubscriptionsItem.name,
         path = s"/vctSubscription/$arrayIndex/name",
         error = NameFormatError
@@ -128,7 +118,7 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
         path = s"/eisSubscription/$arrayIndex/uniqueInvestmentRef",
         error = UniqueInvestmentRefFormatError
       ),
-      FieldLengthValidation.validateOptional(
+      NameValidation.validateOptional(
         field = eisSubscriptionsItem.name,
         path = s"/eisSubscription/$arrayIndex/name",
         error = NameFormatError
@@ -149,7 +139,6 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
     ).flatten
   }
 
-
   private def validateCommunityInvestment(communityInvestmentItem: CommunityInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
       ReferenceRegexValidation.validateOptional(
@@ -157,7 +146,7 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
         path = s"/communityInvestment/$arrayIndex/uniqueInvestmentRef",
         error = UniqueInvestmentRefFormatError
       ),
-      FieldLengthValidation.validateOptional(
+      NameValidation.validateOptional(
         field = communityInvestmentItem.name,
         path = s"/communityInvestment/$arrayIndex/name",
         error = NameFormatError
@@ -185,7 +174,7 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
         path = s"/seedEnterpriseInvestment/$arrayIndex/uniqueInvestmentRef",
         error = UniqueInvestmentRefFormatError
       ),
-      FieldLengthValidation.validateOptional(
+      NameValidation.validateOptional(
         field = seedEnterpriseInvestmentItem.companyName,
         path = s"/seedEnterpriseInvestment/$arrayIndex/companyName",
         error = NameFormatError
@@ -206,7 +195,6 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
     ).flatten
   }
 
-
   private def validateSocialEnterpriseInvestment(socialEnterpriseInvestmentItem: SocialEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
     List(
       ReferenceRegexValidation.validateOptional(
@@ -214,7 +202,7 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
         path = s"/socialEnterpriseInvestment/$arrayIndex/uniqueInvestmentRef",
         error = UniqueInvestmentRefFormatError
       ),
-      FieldLengthValidation.validateOptional(
+      NameValidation.validateOptional(
         field = socialEnterpriseInvestmentItem.socialEnterpriseName,
         path = s"/socialEnterpriseInvestment/$arrayIndex/socialEnterpriseName",
         error = NameFormatError
@@ -234,7 +222,6 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
       ),
     ).flatten
   }
-
 
   override def validate(data: AmendReliefInvestmentsRawData): List[MtdError] = {
     run(validationSet, data).distinct
