@@ -78,7 +78,7 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
     val errorsO: List[Option[Seq[MtdError]]] =
       List(vctSubscriptionErrors, eisSubscriptionErrors, communityInvestmentErrors, seedEnterpriseInvestmentErrors, socialEnterpriseInvestmentErrors)
 
-    val errors = errorsO.flatten.map(_.toList)
+    val errors: List[List[MtdError]] = errorsO.flatten.map(_.toList)
 
     List(flattenErrors(errors))
   }
