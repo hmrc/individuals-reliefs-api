@@ -16,7 +16,7 @@
 
 package v1.models.request.retrieveReliefInvestments
 
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 
 case class RetrieveReliefInvestmentsRequest(nino: Nino, taxYear: String) {
 

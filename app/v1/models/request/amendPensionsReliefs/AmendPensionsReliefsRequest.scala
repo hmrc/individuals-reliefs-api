@@ -16,6 +16,6 @@
 
 package v1.models.request.amendPensionsReliefs
 
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 
 case class AmendPensionsReliefsRequest(nino: Nino, taxYear: String, body: AmendPensionsReliefsBody)

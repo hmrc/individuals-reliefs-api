@@ -16,6 +16,6 @@
 
 package v1.models.request.deleteForeignReliefs
 
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 
 case class DeleteForeignReliefsRequest(nino: Nino, taxYear: String)
