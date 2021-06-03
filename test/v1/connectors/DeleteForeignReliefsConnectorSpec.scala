@@ -17,7 +17,7 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
@@ -26,19 +26,25 @@ import scala.concurrent.Future
 
 class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino = Nino("AA123456A")
-  val taxYear = "2019-20"
-
+  val nino: String = "AA123456A"
+  val taxYear: String = "2019-20"
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: DeleteForeignReliefsConnector = new DeleteForeignReliefsConnector(http = mockHttpClient, appConfig = mockAppConfig)
-    MockedAppConfig.ifsBaseUrl returns baseUrl
-    MockedAppConfig.ifsToken returns "ifs-token"
-    MockedAppConfig.ifsEnv returns "ifs-environment"
+
+    val connector: DeleteForeignReliefsConnector = new DeleteForeignReliefsConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "delete" should {
-    val request = DeleteForeignReliefsRequest(nino, taxYear)
+
+    val request: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(nino), taxYear)
 
     "return a result" when {
       "the downstream call is successful" in new Test {
@@ -46,8 +52,10 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
 
         MockedHttpClient.
           delete(
-            url = s"$baseUrl/income-tax/reliefs/foreign/${request.nino}/${request.taxYear}",
-            requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
+            url = s"$baseUrl/income-tax/reliefs/foreign/${request.nino.nino}/${request.taxYear}",
+            config = dummyIfsHeaderCarrierConfig,
+            requiredHeaders = requiredIfsHeaders,
+            excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
           ).returns(Future.successful(outcome))
 
         await(connector.delete(request)) shouldBe outcome

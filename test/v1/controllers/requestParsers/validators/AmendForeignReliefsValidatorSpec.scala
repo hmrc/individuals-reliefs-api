@@ -46,6 +46,7 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         |  }
         |}
         |""".stripMargin)
+
   private val requestBodyJsonNoDecimals = Json.parse(
     """
       |{
@@ -72,7 +73,6 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
       |{}
       |""".stripMargin
   )
-
 
   class Test {
     val validator = new AmendForeignReliefsValidator

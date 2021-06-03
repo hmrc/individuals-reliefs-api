@@ -16,8 +16,6 @@
 
 package utils
 
-import java.time.Instant
-
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.http.Status
@@ -35,6 +33,7 @@ import uk.gov.hmrc.play.audit.model.DataEvent
 import uk.gov.hmrc.play.bootstrap.config.HttpAuditEvent
 import v1.models.errors._
 
+import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NoStackTrace
@@ -53,7 +52,7 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     val eventTags: Map[String, String] = Map("transactionName" -> "event.transactionName")
 
-    val dataEvent = DataEvent(
+    val dataEvent: DataEvent = DataEvent(
       auditSource = "auditSource",
       auditType = "event.auditType",
       eventId = "",
@@ -68,7 +67,7 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
     (auditConnector.sendEvent(_ : DataEvent)(_: HeaderCarrier, _: ExecutionContext)).expects(*, *, *)
       .returns(Future.successful(Success))
 
-    val configuration = Configuration(
+    val configuration: Configuration = Configuration(
       "appName" -> "myApp",
       "bootstrap.errorHandler.warnOnly.statusCodes" -> List.empty
     )
@@ -89,7 +88,7 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     "return 400 with error body" when {
       "JsValidationException thrown and header is supplied" in new Test() {
-        private val result = handler.onClientError(requestHeader, BAD_REQUEST, "test")
+        private val result = handler.onClientError(requestHeader, BAD_REQUEST, "Invalid request")
         status(result) shouldBe BAD_REQUEST
 
         contentAsJson(result) shouldBe Json.toJson(BadRequestError)

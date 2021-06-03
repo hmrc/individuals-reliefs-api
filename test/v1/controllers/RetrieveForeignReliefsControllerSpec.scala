@@ -18,7 +18,7 @@ package v1.controllers
 
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
@@ -29,7 +29,7 @@ import v1.models.hateoas.Method.GET
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignReliefs.{RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest}
-import v1.models.response.retrieveForeignReliefs.{ForeignIncomeTaxCreditRelief, ForeignTaxCreditRelief, ForeignTaxForFtcrNotClaimed, RetrieveForeignReliefsHateoasData, RetrieveForeignReliefsResponse}
+import v1.models.response.retrieveForeignReliefs._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -21,12 +21,12 @@ import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
-  val payrollGiving = PayrollGiving(
+  val payrollGiving: PayrollGiving = PayrollGiving(
     Some("myRef"),
     154.00
   )
 
-  val noRefPayrollGiving = PayrollGiving(
+  val noRefPayrollGiving: PayrollGiving = PayrollGiving(
     None,
     154.00
   )

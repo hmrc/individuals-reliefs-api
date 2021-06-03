@@ -34,7 +34,7 @@ class RetrieveOtherReliefsConnector @Inject()(val http: HttpClient,
   def retrieve(request: RetrieveOtherReliefsRequest)(
     implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[RetrieveOtherReliefsResponse]] = {
 
-    val url = s"income-tax/reliefs/other/${request.nino}/${request.taxYear}"
+    val url = s"income-tax/reliefs/other/${request.nino.nino}/${request.taxYear}"
     get(
       IfsUri[RetrieveOtherReliefsResponse](s"$url")
     )

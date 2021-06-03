@@ -18,7 +18,7 @@ package v1.controllers.requestParsers
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import v1.mocks.validators.MockAmendOtherReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import v1.models.request.amendOtherReliefs._
@@ -79,7 +79,7 @@ class AmendOtherReliefRequestParserSpec extends UnitSpec {
   val inputData: AmendOtherReliefsRawData =
     AmendOtherReliefsRawData(nino, taxYear, requestBodyJson)
 
-  val inputNone =
+  val inputNone: AmendOtherReliefsRawData=
     AmendOtherReliefsRawData(nino, taxYear, Json.obj())
 
   trait Test extends MockAmendOtherReliefsValidator {

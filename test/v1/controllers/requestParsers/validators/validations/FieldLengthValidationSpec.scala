@@ -21,9 +21,9 @@ import v1.models.errors.CustomerReferenceFormatError
 
 class FieldLengthValidationSpec extends UnitSpec {
 
-  val validReference = Some("123")
-  val invalidReferenceTooShort = Some("")
-  val invalidReferenceTooLong = Some("1234")
+  val validReference: Option[String] = Some("123")
+  val invalidReferenceTooShort: Option[String] = Some("")
+  val invalidReferenceTooLong: Option[String] = Some("1234")
 
   "validate" should {
     "return no errors" when {

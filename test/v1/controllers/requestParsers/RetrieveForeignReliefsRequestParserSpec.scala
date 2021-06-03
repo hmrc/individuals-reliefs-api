@@ -17,17 +17,17 @@
 package v1.controllers.requestParsers
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import v1.mocks.validators.MockRetrieveForeignReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import v1.models.request.retrieveForeignReliefs.{RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest}
 
 class RetrieveForeignReliefsRequestParserSpec extends UnitSpec {
-  val nino = "AA123456B"
-  val taxYear = "2018-19"
-  implicit val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  val nino: String = "AA123456B"
+  val taxYear: String = "2018-19"
+  implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  val inputData = RetrieveForeignReliefsRawData(nino, taxYear)
+  val inputData: RetrieveForeignReliefsRawData= RetrieveForeignReliefsRawData(nino, taxYear)
 
   trait Test extends MockRetrieveForeignReliefsValidator {
     lazy val parser = new RetrieveForeignReliefsRequestParser(mockValidator)

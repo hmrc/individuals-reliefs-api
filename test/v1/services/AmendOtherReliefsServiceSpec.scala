@@ -17,7 +17,7 @@
 package v1.services
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendOtherReliefsConnector
@@ -30,11 +30,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class AmendOtherReliefsServiceSpec extends UnitSpec {
 
-  val taxYear = "2017-18"
-  val nino = Nino("AA123456A")
-  implicit val correlationId = "X-123"
+  val taxYear: String = "2017-18"
+  val nino: String = "AA123456A"
+  implicit val correlationId: String = "X-123"
 
-  val body = AmendOtherReliefsBody(
+  val body: AmendOtherReliefsBody = AmendOtherReliefsBody(
     Some(NonDeductibleLoanInterest(
       Some("myref"),
       763.00)),
@@ -65,7 +65,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
       763.00)))
   )
 
-  private val requestData = AmendOtherReliefsRequest(nino, taxYear, body)
+  private val requestData = AmendOtherReliefsRequest(Nino(nino), taxYear, body)
 
   trait Test extends MockAmendOtherReliefsConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

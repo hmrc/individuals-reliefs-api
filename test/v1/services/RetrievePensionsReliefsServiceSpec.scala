@@ -17,10 +17,10 @@
 package v1.services
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockRetrievePensionsReliefsConnector
+import v1.models.domain.Nino
 import v1.models.errors.{DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
@@ -31,9 +31,9 @@ import scala.concurrent.Future
 
 class RetrievePensionsReliefsServiceSpec extends UnitSpec {
 
-  private val nino = "AA123456A"
-  private val taxYear = "2017-18"
-  implicit val correlationId = "X-123"
+  private val nino: String = "AA123456A"
+  private val taxYear: String = "2017-18"
+  implicit val correlationId: String = "X-123"
 
   private val fullResponseModel = RetrievePensionsReliefsResponse(
     "2019-04-04T01:01:01Z",

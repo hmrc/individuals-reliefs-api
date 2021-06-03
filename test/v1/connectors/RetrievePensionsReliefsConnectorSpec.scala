@@ -16,33 +16,35 @@
 
 package v1.connectors
 
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
 import mocks.MockAppConfig
 import v1.mocks.MockHttpClient
+
 import scala.concurrent.Future
 
 class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
-
-
-  val taxYear = "2017-18"
-  val nino = Nino("AA123456A")
+  val taxYear: String = "2017-18"
+  val nino: String = "AA123456A"
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: RetrievePensionsReliefsConnector = new RetrievePensionsReliefsConnector(http = mockHttpClient, appConfig = mockAppConfig)
+    val connector: RetrievePensionsReliefsConnector = new RetrievePensionsReliefsConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
 
-    val desRequestHeaders: Seq[(String, String)] = Seq("Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-    MockedAppConfig.desBaseUrl returns baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnv returns "des-environment"
+    MockAppConfig.desBaseUrl returns baseUrl
+    MockAppConfig.desToken returns "des-token"
+    MockAppConfig.desEnvironment returns "des-environment"
+    MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
   "RetrievePensionsReliefsConnector" when {
     "retrieving pensions reliefs" must {
-      val request: RetrievePensionsReliefsRequest = RetrievePensionsReliefsRequest(nino, taxYear)
+      val request: RetrievePensionsReliefsRequest = RetrievePensionsReliefsRequest(Nino(nino), taxYear)
 
       "return a valid response" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, RetrievePensionsReliefsResponse))
@@ -50,9 +52,10 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
         MockedHttpClient
           .get(
             url = s"$baseUrl/income-tax/reliefs/pensions/$nino/$taxYear",
-            requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
-          )
-          .returns(Future.successful(outcome))
+            dummyDesHeaderCarrierConfig,
+            requiredDesHeaders,
+            Seq("AnotherHeader" -> "HeaderValue")
+          ).returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
       }

@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class RetrievePensionsReliefsResponseSpec extends UnitSpec with JsonErrorValidators {
 
-  val pensionsReliefsResponseItem = RetrievePensionsReliefsResponse(
+  val pensionsReliefsResponseItem: RetrievePensionsReliefsResponse = RetrievePensionsReliefsResponse(
     "2019-04-04T01:01:01Z",
     PensionsReliefs(
       Some(1999.99),

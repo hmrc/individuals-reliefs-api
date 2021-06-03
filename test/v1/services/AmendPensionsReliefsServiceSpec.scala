@@ -17,7 +17,7 @@
 package v1.services
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendPensionsReliefsConnector
@@ -30,11 +30,11 @@ import scala.concurrent.Future
 
 class AmendPensionsReliefsServiceSpec extends UnitSpec {
 
-  val taxYear = "2017-18"
-  val nino = Nino("AA123456A")
-  implicit val correlationId = "X-123"
+  val taxYear: String = "2017-18"
+  val nino: String = "AA123456A"
+  implicit val correlationId: String = "X-123"
 
-  val body = AmendPensionsReliefsBody(
+  val body: AmendPensionsReliefsBody = AmendPensionsReliefsBody(
     PensionReliefs(
       Some(1999.99),
       Some(1999.99),
@@ -44,7 +44,7 @@ class AmendPensionsReliefsServiceSpec extends UnitSpec {
     )
   )
 
-  private val requestData = AmendPensionsReliefsRequest(nino, taxYear, body)
+  private val requestData = AmendPensionsReliefsRequest(Nino(nino), taxYear, body)
 
   trait Test extends MockAmendPensionsReliefsConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

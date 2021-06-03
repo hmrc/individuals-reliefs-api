@@ -17,10 +17,10 @@
 package v1.services
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockDeleteForeignReliefsConnector
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
@@ -30,11 +30,11 @@ import scala.concurrent.Future
 
 class DeleteForeginReliefsServiceSpec extends UnitSpec {
 
-  val validNino = Nino("AA123456A")
-  val validTaxYear = "2019-20"
-  implicit val correlationId = "X-123"
+  val validNino: String = "AA123456A"
+  val validTaxYear: String = "2019-20"
+  implicit val correlationId: String = "X-123"
 
-  val requestData = DeleteForeignReliefsRequest(validNino, validTaxYear)
+  val requestData: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(validNino), validTaxYear)
 
   trait Test extends MockDeleteForeignReliefsConnector {
     implicit val hc: HeaderCarrier = HeaderCarrier()

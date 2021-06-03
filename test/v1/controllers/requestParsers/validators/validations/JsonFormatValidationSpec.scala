@@ -29,7 +29,7 @@ class JsonFormatValidationSpec extends UnitSpec with JsonErrorValidators {
   implicit val testDataObjectReads: Reads[TestDataObject] = Json.reads[TestDataObject]
   implicit val testDataObjectTwoReads: Reads[TestDataObjectTwo] = Json.reads[TestDataObjectTwo]
 
-  val someError = MtdError("SOME_CODE", "some message")
+  val someError: MtdError = MtdError("SOME_CODE", "some message")
 
   "validate" should {
     "return no errors" when {
