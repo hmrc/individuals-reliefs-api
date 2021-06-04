@@ -17,17 +17,17 @@
 package v1.controllers.requestParsers
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import v1.mocks.validators.MockDeletePensionsReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import v1.models.request.deletePensionsReliefs.{DeletePensionsReliefsRawData, DeletePensionsReliefsRequest}
 
 class DeletePensionsReliefsRequestParserSpec extends UnitSpec {
-  val nino = "AA123456B"
-  val taxYear = "2018-19"
-  implicit val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  val nino: String = "AA123456B"
+  val taxYear:  String = "2018-19"
+  implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  val inputData = DeletePensionsReliefsRawData(nino, taxYear)
+  val inputData: DeletePensionsReliefsRawData = DeletePensionsReliefsRawData(nino, taxYear)
 
   trait Test extends MockDeletePensionsReliefsValidator {
     lazy val parser = new DeletePensionsReliefsRequestParser(mockValidator)

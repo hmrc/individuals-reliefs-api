@@ -21,7 +21,7 @@ import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
-  val socialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
+  val socialEnterpriseInvestmentItem: SocialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
     "VCTREF",
     Some("VCT Fund X"),
     Some("2018-04-16"),

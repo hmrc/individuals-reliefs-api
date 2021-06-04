@@ -21,9 +21,9 @@ import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
-  val annualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)
+  val annualPaymentsMade: AnnualPaymentsMade= AnnualPaymentsMade(Some("myRef"), 763.00)
 
-  val noRefAnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
+  val noRefAnnualPaymentsMade: AnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
 
   val json = Json.parse(
     """{

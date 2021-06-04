@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class PensionsReliefsSpec extends UnitSpec with JsonErrorValidators {
 
-  val pensionsReliefsItem = PensionsReliefs(
+  val pensionsReliefsItem: PensionsReliefs = PensionsReliefs(
     Some(1999.99),
     Some(1999.99),
     Some(1999.99),

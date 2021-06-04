@@ -27,7 +27,7 @@ class AmendOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
       val nino = "mynino"
       val taxYear = "mytaxyear"
 
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
+      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
       AmendOtherReliefsResponse.LinksFactory.links(mockAppConfig, AmendOtherReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/other/$nino/$taxYear", PUT, "create-and-amend-reliefs-other"),

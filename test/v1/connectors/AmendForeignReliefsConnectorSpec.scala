@@ -17,7 +17,8 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.http.HeaderCarrier
+import v1.models.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.amendForeignReliefs._
@@ -26,10 +27,11 @@ import scala.concurrent.Future
 
 class AmendForeignReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYear = "2017-18"
-  val nino = Nino("AA123456A")
+  val taxYear: String = "2017-18"
+  val nino: String = "AA123456A"
   val amount: BigDecimal = 1234.56
-  val body = AmendForeignReliefsBody(
+
+  val body: AmendForeignReliefsBody = AmendForeignReliefsBody(
     foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
       amount = amount
     )),
@@ -45,25 +47,37 @@ class AmendForeignReliefsConnectorSpec extends ConnectorSpec {
   )
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: AmendForeignReliefsConnector = new AmendForeignReliefsConnector(http = mockHttpClient, appConfig = mockAppConfig)
 
-    MockedAppConfig.ifsBaseUrl returns baseUrl
-    MockedAppConfig.ifsToken returns "ifs-token"
-    MockedAppConfig.ifsEnv returns "ifs-environment"
+    val connector: AmendForeignReliefsConnector = new AmendForeignReliefsConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "doConnector" must {
-    val request = AmendForeignReliefsRequest(nino, taxYear, body)
+
+    val request: AmendForeignReliefsRequest = AmendForeignReliefsRequest(Nino(nino), taxYear, body)
 
     "put a body and return 204 no body" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
+
+      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      val requiredHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
+
+
       MockedHttpClient
         .put(
           url = s"$baseUrl/income-tax/reliefs/foreign/$nino/$taxYear",
+          config = dummyIfsHeaderCarrierConfig,
           body = body,
-          requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
-        )
-        .returns(Future.successful(outcome))
+          requiredHeaders = requiredHeadersPut,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+        ).returns(Future.successful(outcome))
 
       await(connector.amend(request)) shouldBe outcome
     }

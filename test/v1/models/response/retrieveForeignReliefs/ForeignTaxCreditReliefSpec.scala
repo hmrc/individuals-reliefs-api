@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class ForeignTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignTaxCreditRelief = ForeignTaxCreditRelief(2314.32)
+  val foreignTaxCreditRelief: ForeignTaxCreditRelief = ForeignTaxCreditRelief(2314.32)
 
   val json = Json.parse(
     """{

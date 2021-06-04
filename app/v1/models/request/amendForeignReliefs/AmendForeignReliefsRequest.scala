@@ -16,6 +16,6 @@
 
 package v1.models.request.amendForeignReliefs
 
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 
 case class AmendForeignReliefsRequest(nino: Nino, taxYear: String, body: AmendForeignReliefsBody)

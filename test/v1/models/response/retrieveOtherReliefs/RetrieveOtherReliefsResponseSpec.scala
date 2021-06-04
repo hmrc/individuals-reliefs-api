@@ -23,7 +23,7 @@ import v1.models.hateoas.Link
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
-  val retrieveOtherReliefsBody = RetrieveOtherReliefsResponse(
+  val retrieveOtherReliefsBody: RetrieveOtherReliefsResponse = RetrieveOtherReliefsResponse(
     "2020-06-17T10:53:38Z",
     Some(NonDeductibleLoanInterest(
       Some("myref"),
@@ -123,7 +123,7 @@ class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
       val nino = "mynino"
       val taxYear = "mytaxyear"
 
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
+      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
       RetrieveOtherReliefsResponse.LinksFactory.links(mockAppConfig, RetrieveOtherReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/other/$nino/$taxYear", GET, "self"),

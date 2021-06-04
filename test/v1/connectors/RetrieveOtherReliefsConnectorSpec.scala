@@ -17,7 +17,7 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
@@ -27,28 +27,35 @@ import scala.concurrent.Future
 
 class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYear = "2017-18"
-  val nino = Nino("AA123456A")
+  val taxYear: String = "2017-18"
+  val nino: String = "AA123456A"
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: RetrieveOtherReliefsConnector = new RetrieveOtherReliefsConnector(http = mockHttpClient, appConfig = mockAppConfig)
+    val connector: RetrieveOtherReliefsConnector = new RetrieveOtherReliefsConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
 
-    MockedAppConfig.ifsBaseUrl returns baseUrl
-    MockedAppConfig.ifsToken returns "ifs-token"
-    MockedAppConfig.ifsEnv returns "ifs-environment"
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "retrieve" should {
     "return a result" when {
+      val request: RetrieveOtherReliefsRequest = RetrieveOtherReliefsRequest(Nino(nino), taxYear)
+
       "the downstream call is successful" in new Test {
-        val request = RetrieveOtherReliefsRequest(nino, taxYear)
         val outcome = Right(ResponseWrapper(correlationId, RetrieveOtherReliefsResponse))
 
-        MockedHttpClient.get(
+        MockedHttpClient
+          .get(
           url = s"$baseUrl/income-tax/reliefs/other/$nino/$taxYear",
-          requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
-        )
-          .returns(Future.successful(outcome))
+          config = dummyIfsHeaderCarrierConfig,
+          requiredHeaders = requiredIfsHeaders,
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+        ).returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
       }

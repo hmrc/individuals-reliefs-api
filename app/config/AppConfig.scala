@@ -23,28 +23,26 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
 
+  //MTD ID LookupConfig
   def mtdIdBaseUrl: String
 
+  //DES config
   def desBaseUrl: String
-
   def desEnv: String
-
   def desToken: String
+  def desEnvironmentHeaders: Option[Seq[String]]
 
+  //ifs Config
   def ifsBaseUrl: String
-
   def ifsEnv: String
-
   def ifsToken: String
+  def ifsEnvironmentHeaders: Option[Seq[String]]
 
+  //API Config
   def apiGatewayContext: String
-
   def apiStatus(version: String): String
-
   def featureSwitch: Option[Configuration]
-
   def endpointsEnabled(version: String): Boolean
-
   def confidenceLevelConfig: ConfidenceLevelConfig
 
 }
@@ -52,21 +50,26 @@ trait AppConfig {
 @Singleton
 class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configuration) extends AppConfig {
 
+  //MTD ID Lookup Config
   val mtdIdBaseUrl: String      = config.baseUrl("mtd-id-lookup")
+
+  //DES Config
   val desBaseUrl: String        = config.baseUrl("des")
   val desEnv: String            = config.getString("microservice.services.des.env")
   val desToken: String          = config.getString("microservice.services.des.token")
+  val desEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.des.environmentHeaders")
+
+  //IFS Config
   val ifsBaseUrl: String        = config.baseUrl("ifs")
   val ifsEnv: String            = config.getString("microservice.services.ifs.env")
   val ifsToken: String          = config.getString("microservice.services.ifs.token")
+  val ifsEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.ifs.environmentHeaders")
+
+  //API Config
   val apiGatewayContext: String = config.getString("api.gateway.context")
-
   def apiStatus(version: String): String = config.getString(s"api.$version.status")
-
   def featureSwitch: Option[Configuration] = configuration.getOptional[Configuration](s"feature-switch")
-
   def endpointsEnabled(version: String): Boolean = config.getBoolean(s"api.$version.endpoints.enabled")
-
   val confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
 
 }

@@ -17,13 +17,13 @@
 package v1.controllers
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveInvestmentsRequestParser
-import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveReliefInvestmentsService}
+import v1.mocks.services._
 import v1.models.errors._
 import v1.models.hateoas.Method.GET
 import v1.models.hateoas.{HateoasWrapper, Link}

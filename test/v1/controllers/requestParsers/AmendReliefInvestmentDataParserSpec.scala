@@ -18,15 +18,15 @@ package v1.controllers.requestParsers
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import v1.mocks.validators.MockAmendReliefInvestmentValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
-import v1.models.request.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest, CommunityInvestmentItem, EisSubscriptionsItem, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
+import v1.models.request.amendReliefInvestments._
 
 class AmendReliefInvestmentDataParserSpec extends UnitSpec {
-  private val nino = "AA123456A"
-  private val taxYear = "2021-22"
-  implicit val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  private val nino: String = "AA123456A"
+  private val taxYear: String = "2021-22"
+  implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
   private val requestBodyJson = Json.parse(
     """
       |{
@@ -81,7 +81,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
 
 
 
-  val inputData =
+  val inputData: AmendReliefInvestmentsRawData =
     AmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
 
   trait Test extends MockAmendReliefInvestmentValidator {

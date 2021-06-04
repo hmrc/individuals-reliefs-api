@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class ForeignTaxForFtcrNotClaimedSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignTaxForFtcrNotClaimed = ForeignTaxForFtcrNotClaimed(1429.99)
+  val foreignTaxForFtcrNotClaimed: ForeignTaxForFtcrNotClaimed= ForeignTaxForFtcrNotClaimed(1429.99)
 
   val json = Json.parse(
     """{

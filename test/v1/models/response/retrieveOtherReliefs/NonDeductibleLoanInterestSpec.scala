@@ -21,12 +21,12 @@ import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class NonDeductibleLoanInterestSpec extends UnitSpec with JsonErrorValidators {
-  val nonDeductibleLoanInterest = NonDeductibleLoanInterest(
+  val nonDeductibleLoanInterest: NonDeductibleLoanInterest = NonDeductibleLoanInterest(
     Some("myref"),
     763.00
   )
 
-  val noRefNoneDeductibleLoanInterest = NonDeductibleLoanInterest(
+  val noRefNoneDeductibleLoanInterest: NonDeductibleLoanInterest = NonDeductibleLoanInterest(
     None,
     763.00
   )

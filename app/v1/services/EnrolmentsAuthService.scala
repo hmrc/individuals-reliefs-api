@@ -17,6 +17,7 @@
 package v1.services
 
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
@@ -49,7 +50,9 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfi
   def buildPredicate(predicate: Predicate): Predicate =
     if (appConfig.confidenceLevelConfig.authValidationEnabled) {
       predicate and ((Individual and ConfidenceLevel.L200) or Organisation or Agent)
-    } else predicate
+    } else {
+      predicate
+    }
 
   def authorised(predicate: Predicate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuthOutcome] = {
     authFunction.authorised(buildPredicate(predicate)).retrieve(affinityGroup and authorisedEnrolments) {

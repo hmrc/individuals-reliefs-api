@@ -17,7 +17,7 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequest
@@ -26,20 +26,25 @@ import scala.concurrent.Future
 
 class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino = Nino("AA123456A")
-  val taxYear = "2019-20"
+  val nino: String = "AA123456A"
+  val taxYear: String = "2019-20"
 
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: DeletePensionsReliefsConnector = new DeletePensionsReliefsConnector(http = mockHttpClient, appConfig = mockAppConfig)
-    val desRequestHeaders: Seq[(String, String)] = Seq("Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-    MockedAppConfig.desBaseUrl returns baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnv returns "des-environment"
+
+    val connector: DeletePensionsReliefsConnector = new DeletePensionsReliefsConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
+    MockAppConfig.desBaseUrl returns baseUrl
+    MockAppConfig.desToken returns "des-token"
+    MockAppConfig.desEnvironment returns "des-environment"
+    MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
   "delete" should {
-    val request = DeletePensionsReliefsRequest(nino, taxYear)
+    val request: DeletePensionsReliefsRequest = DeletePensionsReliefsRequest(Nino(nino), taxYear)
 
     "return a result" when {
       "the downstream call is successful" in new Test {
@@ -47,10 +52,11 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
 
         MockedHttpClient.
           delete(
-            url = s"$baseUrl/income-tax/reliefs/pensions/${request.nino}/${request.taxYear}",
-            requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
+            url = s"$baseUrl/income-tax/reliefs/pensions/${request.nino.nino}/${request.taxYear}",
+            config = dummyDesHeaderCarrierConfig,
+            requiredHeaders = requiredDesHeaders,
+            excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
           ).returns(Future.successful(outcome))
-
 
         await(connector.delete(request)) shouldBe outcome
       }

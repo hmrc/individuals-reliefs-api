@@ -21,8 +21,8 @@ import v1.models.errors.CustomerReferenceFormatError
 
 class ReferenceRegexValidationSpec extends UnitSpec {
 
-  val validReference = Some("HJ812JJMNS89SJ09KLJNBH89O")
-  val invalidReference = Some(("1234567890" * 9) + "1")
+  val validReference: Option[String] = Some("HJ812JJMNS89SJ09KLJNBH89O")
+  val invalidReference: Option[String] = Some(("1234567890" * 9) + "1")
 
   "validate" should {
     "return no errors" when {
