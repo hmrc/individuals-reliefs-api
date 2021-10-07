@@ -225,3 +225,15 @@ traits:
                 description: Not a valid ISO 3166-1 alpha-3 country code.
                 value:
                   code: RULE_COUNTRY_CODE
+
+  ruleSubmissionFailed:
+        responses:
+          403:
+            body:
+              application/json:
+                type: types.errorResponse
+                examples:
+                  businessValidationRule:
+                    description: The submission cannot be completed due to validation failures.
+                    value:
+                      code: RULE_SUBMISSION_FAILED

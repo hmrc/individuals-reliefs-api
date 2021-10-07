@@ -102,6 +102,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "FORMAT_TAX_YEAR" -> TaxYearFormatError,
+        "INVALID_CORRELATIONID"  -> DownstreamError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError
       )
