@@ -123,7 +123,7 @@ object RuleCountryCodeError extends MtdError(
   message  = "The country code is not a valid ISO 3166-1 alpha-3 country code"
 )
 
-object RuleSubmissionFailed extends MtdError(
+object RuleSubmissionFailedError extends MtdError(
   code = "RULE_SUBMISSION_FAILED",
   message = "The submission cannot be completed due to validation failures"
 )

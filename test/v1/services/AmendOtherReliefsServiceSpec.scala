@@ -103,7 +103,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "FORMAT_TAX_YEAR" -> TaxYearFormatError,
         "INVALID_CORRELATIONID"  -> DownstreamError,
-        "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailed,
+        "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailedError,
         "SERVER_ERROR" -> DownstreamError,
         "SERVICE_UNAVAILABLE" -> DownstreamError
       )

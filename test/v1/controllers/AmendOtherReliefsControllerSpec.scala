@@ -252,8 +252,7 @@ class AmendOtherReliefsControllerSpec
           (BusinessNameFormatError, BAD_REQUEST),
           (NatureOfTradeFormatError, BAD_REQUEST),
           (IncomeSourceFormatError, BAD_REQUEST),
-          (LenderNameFormatError, BAD_REQUEST),
-          (RuleSubmissionFailed, FORBIDDEN)
+          (LenderNameFormatError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
@@ -285,7 +284,8 @@ class AmendOtherReliefsControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (DownstreamError, INTERNAL_SERVER_ERROR),
-          (TaxYearFormatError, BAD_REQUEST)
+          (TaxYearFormatError, BAD_REQUEST),
+          (RuleSubmissionFailedError, FORBIDDEN)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))
