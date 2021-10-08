@@ -11,5 +11,9 @@
             <td><p>N/A - DEFAULT</p></td>
             <td><p>Simulate success response.</p></td>
         </tr>
+        <tr>
+             <td><p>SUBMISSION_FAILED</p></td>
+             <td><p>Simulates the scenario where a submission has failed.</p></td>
+        </tr>
     </tbody>
 </table>
