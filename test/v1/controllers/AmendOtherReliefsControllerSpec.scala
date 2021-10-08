@@ -252,7 +252,8 @@ class AmendOtherReliefsControllerSpec
           (BusinessNameFormatError, BAD_REQUEST),
           (NatureOfTradeFormatError, BAD_REQUEST),
           (IncomeSourceFormatError, BAD_REQUEST),
-          (LenderNameFormatError, BAD_REQUEST)
+          (LenderNameFormatError, BAD_REQUEST),
+          (RuleSubmissionFailed, FORBIDDEN)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))

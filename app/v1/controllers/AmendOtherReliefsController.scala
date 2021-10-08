@@ -108,6 +108,7 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
            MtdErrorWithCustomMessage(IncomeSourceFormatError.code) |
            MtdErrorWithCustomMessage(LenderNameFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper: ErrorWrapper))
+      case RuleSubmissionFailed => Forbidden(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
     }
   }
