@@ -49,6 +49,8 @@ class AmendOtherReliefsService @Inject()(connector: AmendOtherReliefsConnector) 
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR" -> TaxYearFormatError,
+      "INVALID_CORRELATIONID"  -> DownstreamError,
+      "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailedError,
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )
