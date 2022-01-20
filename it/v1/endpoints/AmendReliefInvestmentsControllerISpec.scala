@@ -213,16 +213,6 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         )
 
         val allInvalidValueRequestError: List[MtdError] = List(
-          DateOfInvestmentFormatError.copy(
-              paths = Some(List(
-              "/vctSubscription/0/dateOfInvestment",
-              "/vctSubscription/1/dateOfInvestment",
-              "/eisSubscription/0/dateOfInvestment",
-              "/communityInvestment/0/dateOfInvestment",
-              "/seedEnterpriseInvestment/0/dateOfInvestment",
-              "/socialEnterpriseInvestment/0/dateOfInvestment"
-            ))
-          ),
           UniqueInvestmentRefFormatError.copy(
             paths = Some(List(
               "/vctSubscription/0/uniqueInvestmentRef",
@@ -231,6 +221,26 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
               "/communityInvestment/0/uniqueInvestmentRef",
               "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
               "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
+            ))
+          ),
+          NameFormatError.copy(
+            paths = Some(Seq(
+              "/vctSubscription/0/name",
+              "/vctSubscription/1/name",
+              "/eisSubscription/0/name",
+              "/communityInvestment/0/name",
+              "/seedEnterpriseInvestment/0/companyName",
+              "/socialEnterpriseInvestment/0/socialEnterpriseName"
+            ))
+          ),
+          DateOfInvestmentFormatError.copy(
+              paths = Some(List(
+              "/vctSubscription/0/dateOfInvestment",
+              "/vctSubscription/1/dateOfInvestment",
+              "/eisSubscription/0/dateOfInvestment",
+              "/communityInvestment/0/dateOfInvestment",
+              "/seedEnterpriseInvestment/0/dateOfInvestment",
+              "/socialEnterpriseInvestment/0/dateOfInvestment"
             ))
           ),
           ValueFormatError.copy(
@@ -247,16 +257,6 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
               "/seedEnterpriseInvestment/0/reliefClaimed",
               "/socialEnterpriseInvestment/0/amountInvested",
               "/socialEnterpriseInvestment/0/reliefClaimed"
-            ))
-          ),
-          NameFormatError.copy(
-            paths = Some(Seq(
-              "/vctSubscription/0/name",
-              "/vctSubscription/1/name",
-              "/eisSubscription/0/name",
-              "/communityInvestment/0/name",
-              "/seedEnterpriseInvestment/0/companyName",
-              "/socialEnterpriseInvestment/0/socialEnterpriseName"
             ))
           )
         )
