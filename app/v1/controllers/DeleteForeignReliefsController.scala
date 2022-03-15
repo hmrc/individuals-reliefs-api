@@ -81,7 +81,7 @@ class DeleteForeignReliefsController @Inject()(val authService: EnrolmentsAuthSe
     }
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+    errorWrapper.error match {
       case NinoFormatError |
            BadRequestError |
            TaxYearFormatError |
@@ -89,6 +89,7 @@ class DeleteForeignReliefsController @Inject()(val authService: EnrolmentsAuthSe
            RuleTaxYearRangeInvalidError => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
   }
 
