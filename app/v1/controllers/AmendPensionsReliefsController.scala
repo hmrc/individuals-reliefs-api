@@ -91,7 +91,7 @@ class AmendPensionsReliefsController @Inject()(val authService: EnrolmentsAuthSe
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
 
-    (errorWrapper.error: @unchecked) match {
+    errorWrapper.error match {
       case NinoFormatError |
            BadRequestError |
            TaxYearFormatError |
@@ -100,6 +100,7 @@ class AmendPensionsReliefsController @Inject()(val authService: EnrolmentsAuthSe
            RuleTaxYearNotSupportedError |
            MtdErrorWithCustomMessage(ValueFormatError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
   }
 

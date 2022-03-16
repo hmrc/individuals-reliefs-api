@@ -91,7 +91,7 @@ class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthSer
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
 
-    (errorWrapper.error: @unchecked) match {
+    errorWrapper.error match {
       case NinoFormatError |
            BadRequestError |
            TaxYearFormatError |
@@ -102,6 +102,7 @@ class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthSer
            MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
            MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
       case DownstreamError                                      => InternalServerError(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
   }
 

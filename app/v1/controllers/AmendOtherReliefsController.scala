@@ -92,7 +92,7 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
     }
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
-    (errorWrapper.error: @unchecked) match {
+    errorWrapper.error match {
       case NinoFormatError |
            BadRequestError |
            TaxYearFormatError |
@@ -110,6 +110,7 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
         BadRequest(Json.toJson(errorWrapper: ErrorWrapper))
       case RuleSubmissionFailedError => Forbidden(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case _ => unhandledError(errorWrapper)
     }
   }
 
