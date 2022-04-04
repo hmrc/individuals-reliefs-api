@@ -45,7 +45,6 @@ class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec
       |      }""".stripMargin
   )
 
-
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
@@ -53,6 +52,7 @@ class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec
       }
     }
   }
+
   "reads from a JSON with no reference" when {
     "passed a JSON with no customer reference" should {
       "return a model with no customer reference " in {
@@ -60,6 +60,7 @@ class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -67,6 +68,7 @@ class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec
       }
     }
   }
+
   "writes from a model with no reference" when {
     "passed a model with no customer reference" should {
       "return a JSON with no customer reference" in {
@@ -74,4 +76,5 @@ class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec
       }
     }
   }
+
 }

@@ -22,7 +22,7 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
 import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRawData
 
-class DeleteOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validator[DeleteOtherReliefsRawData] {
+class DeleteOtherReliefsValidator @Inject() (appConfig: AppConfig) extends Validator[DeleteOtherReliefsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 

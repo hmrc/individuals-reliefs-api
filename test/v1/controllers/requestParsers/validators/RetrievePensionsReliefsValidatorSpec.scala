@@ -23,7 +23,7 @@ import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRawData
 
 class RetrievePensionsReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
+  private val validNino    = "AA123456A"
   private val validTaxYear = "2020-21"
 
   class Test {
@@ -62,4 +62,5 @@ class RetrievePensionsReliefsValidatorSpec extends UnitSpec with MockAppConfig {
       }
     }
   }
+
 }

@@ -30,56 +30,45 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class AmendOtherReliefsServiceSpec extends UnitSpec {
 
-  val taxYear: String = "2017-18"
-  val nino: String = "AA123456A"
+  val taxYear: String                = "2017-18"
+  val nino: String                   = "AA123456A"
   implicit val correlationId: String = "X-123"
 
   val body: AmendOtherReliefsBody = AmendOtherReliefsBody(
-    Some(NonDeductibleLoanInterest(
-      Some("myref"),
-      763.00)),
-    Some(PayrollGiving(
-      Some("myref"),
-      154.00)),
-    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(
-      Some("myref"),
-      222.22)),
-    Some(Seq(MaintenancePayments(
-      Some("myRef"),
-      Some("Hilda"),
-      Some("2000-01-01"),
-      222.22))),
-    Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
-      Some("myRef"),
-      Some("ACME Inc"),
-      Some("2019-08-10"),
-      Some("Widgets Manufacturer"),
-      Some("AB12412/A12"),
-      222.22))),
-    Some(AnnualPaymentsMade(
-      Some("myref"),
-      763.00)),
-    Some(Seq(QualifyingLoanInterestPayments(
-      Some("myRef"),
-      Some("Maurice"),
-      763.00)))
+    Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
+    Some(PayrollGiving(Some("myref"), 154.00)),
+    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+    Some(Seq(MaintenancePayments(Some("myRef"), Some("Hilda"), Some("2000-01-01"), 222.22))),
+    Some(
+      Seq(
+        PostCessationTradeReliefAndCertainOtherLosses(
+          Some("myRef"),
+          Some("ACME Inc"),
+          Some("2019-08-10"),
+          Some("Widgets Manufacturer"),
+          Some("AB12412/A12"),
+          222.22))),
+    Some(AnnualPaymentsMade(Some("myref"), 763.00)),
+    Some(Seq(QualifyingLoanInterestPayments(Some("myRef"), Some("Maurice"), 763.00)))
   )
 
   private val requestData = AmendOtherReliefsRequest(Nino(nino), taxYear, body)
 
   trait Test extends MockAmendOtherReliefsConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new AmendOtherReliefsService(
       connector = mockAmendOtherReliefsConnector
     )
+
   }
 
   "service" when {
     "service call successful" must {
       "return mapped result" in new Test {
-        MockAmendOtherReliefsConnector.amend(requestData)
+        MockAmendOtherReliefsConnector
+          .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         await(service.amend(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
@@ -93,22 +82,24 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
       def serviceError(desErrorCode: String, error: MtdError): Unit =
         s"a $desErrorCode error is returned from the service" in new Test {
 
-          MockAmendOtherReliefsConnector.amend(requestData)
+          MockAmendOtherReliefsConnector
+            .amend(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
           await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(
-        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "FORMAT_TAX_YEAR" -> TaxYearFormatError,
-        "INVALID_CORRELATIONID"  -> DownstreamError,
+        "INVALID_TAXABLE_ENTITY_ID"        -> NinoFormatError,
+        "FORMAT_TAX_YEAR"                  -> TaxYearFormatError,
+        "INVALID_CORRELATIONID"            -> DownstreamError,
         "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailedError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "SERVER_ERROR"                     -> DownstreamError,
+        "SERVICE_UNAVAILABLE"              -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

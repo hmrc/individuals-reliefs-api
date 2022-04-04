@@ -21,7 +21,7 @@ import v1.models.errors.{DateOfInvestmentFormatError, DateFormatError}
 
 class DateValidationSpec extends UnitSpec {
 
-  val validDate: Option[String] = Some("2018-04-06")
+  val validDate: Option[String]   = Some("2018-04-06")
   val invalidDate: Option[String] = Some("04-06-2018")
 
   "validate" should {
@@ -48,4 +48,5 @@ class DateValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

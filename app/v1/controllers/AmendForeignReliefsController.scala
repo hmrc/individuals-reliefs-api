@@ -35,15 +35,17 @@ import v1.services.{AmendForeignReliefsService, AuditService, EnrolmentsAuthServ
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthService,
-                                              val lookupService: MtdIdLookupService,
-                                              parser: AmendForeignReliefsRequestParser,
-                                              service: AmendForeignReliefsService,
-                                              auditService: AuditService,
-                                              hateoasFactory: HateoasFactory,
-                                              cc: ControllerComponents,
-                                              val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging {
+class AmendForeignReliefsController @Inject() (val authService: EnrolmentsAuthService,
+                                               val lookupService: MtdIdLookupService,
+                                               parser: AmendForeignReliefsRequestParser,
+                                               service: AmendForeignReliefsService,
+                                               auditService: AuditService,
+                                               hateoasFactory: HateoasFactory,
+                                               cc: ControllerComponents,
+                                               val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+    extends AuthorisedController(cc)
+    with BaseController
+    with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendForeignReliefsController", endpointName = "amendForeignReliefs")
@@ -56,7 +58,7 @@ class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthSer
       val rawData = AmendForeignReliefsRawData(nino, taxYear, request.body)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amend(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory.wrap(serviceResponse.responseData, AmendForeignReliefsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
@@ -67,8 +69,14 @@ class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthSer
 
           val response = Json.toJson(vendorResponse)
 
-          auditSubmission(AmendForeignReliefsAuditDetail(request.userDetails, nino, taxYear, request.body,
-            serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
+          auditSubmission(
+            AmendForeignReliefsAuditDetail(
+              request.userDetails,
+              nino,
+              taxYear,
+              request.body,
+              serviceResponse.correlationId,
+              AuditResponse(OK, Right(Some(response)))))
 
           Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
@@ -76,14 +84,20 @@ class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthSer
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
 
-        auditSubmission(AmendForeignReliefsAuditDetail(request.userDetails, nino, taxYear, request.body,
-          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+        auditSubmission(
+          AmendForeignReliefsAuditDetail(
+            request.userDetails,
+            nino,
+            taxYear,
+            request.body,
+            correlationId,
+            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result
       }.merge
@@ -92,24 +106,18 @@ class AmendForeignReliefsController @Inject()(val authService: EnrolmentsAuthSer
   private def errorResult(errorWrapper: ErrorWrapper) = {
 
     errorWrapper.error match {
-      case NinoFormatError |
-           BadRequestError |
-           TaxYearFormatError |
-           RuleIncorrectOrEmptyBodyError |
-           RuleTaxYearNotSupportedError |
-           RuleTaxYearRangeInvalidError |
-           MtdErrorWithCustomMessage(ValueFormatError.code) |
-           MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
-           MtdErrorWithCustomMessage(RuleCountryCodeError.code) => BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError                                      => InternalServerError(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleIncorrectOrEmptyBodyError | RuleTaxYearNotSupportedError |
+          RuleTaxYearRangeInvalidError | MtdErrorWithCustomMessage(ValueFormatError.code) | MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
+          MtdErrorWithCustomMessage(RuleCountryCodeError.code) =>
+        BadRequest(Json.toJson(errorWrapper))
+      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case _               => unhandledError(errorWrapper)
     }
   }
 
-  private def auditSubmission(details: AmendForeignReliefsAuditDetail)
-                             (implicit hc: HeaderCarrier,
-                              ec: ExecutionContext) = {
+  private def auditSubmission(details: AmendForeignReliefsAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
     val event = AuditEvent("CreateAmendForeignReliefs", "create-amend-foreign-reliefs", details)
     auditService.auditEvent(event)
   }
+
 }

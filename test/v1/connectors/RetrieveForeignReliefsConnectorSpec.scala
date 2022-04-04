@@ -28,7 +28,7 @@ import scala.concurrent.Future
 class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
 
   val taxYear: String = "2017-18"
-  val nino: String = "AA123456A"
+  val nino: String    = "AA123456A"
 
   class Test extends MockHttpClient with MockAppConfig {
 
@@ -47,7 +47,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
     "return a result" when {
       val request: RetrieveForeignReliefsRequest = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
 
-      "the downstream call is successful" in new Test{
+      "the downstream call is successful" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, RetrieveForeignReliefsResponse))
 
         MockedHttpClient
@@ -56,10 +56,12 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
             config = dummyIfsHeaderCarrierConfig,
             requiredHeaders = requiredIfsHeaders,
             excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        ).returns(Future.successful(outcome))
+          )
+          .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
       }
     }
   }
+
 }

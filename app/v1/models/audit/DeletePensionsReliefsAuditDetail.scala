@@ -20,11 +20,11 @@ import play.api.libs.json.{Json, Writes}
 import v1.models.auth.UserDetails
 
 case class DeletePensionsReliefsAuditDetail(userType: String,
-                                              agentReferenceNumber: Option[String],
-                                              nino: String,
-                                              taxYear: String,
-                                              `X-CorrelationId`: String,
-                                              response: AuditResponse)
+                                            agentReferenceNumber: Option[String],
+                                            nino: String,
+                                            taxYear: String,
+                                            `X-CorrelationId`: String,
+                                            response: AuditResponse)
 
 object DeletePensionsReliefsAuditDetail {
   implicit val writes: Writes[DeletePensionsReliefsAuditDetail] = Json.writes[DeletePensionsReliefsAuditDetail]
@@ -43,4 +43,5 @@ object DeletePensionsReliefsAuditDetail {
       `X-CorrelationId`,
       auditResponse)
   }
+
 }

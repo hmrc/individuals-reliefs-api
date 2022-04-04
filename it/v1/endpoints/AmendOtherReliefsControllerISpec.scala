@@ -30,12 +30,11 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino = "AA123456A"
-    val taxYear: String = "2021-22"
+    val nino                  = "AA123456A"
+    val taxYear: String       = "2021-22"
     val correlationId: String = "X-123"
 
-    val requestBodyJson = Json.parse(
-      """
+    val requestBodyJson = Json.parse("""
         |{
         |  "nonDeductibleLoanInterest": {
         |        "customerReference": "myref",
@@ -80,8 +79,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         |  ]
         |}""".stripMargin)
 
-    val responseBody = Json.parse(
-      s"""
+    val responseBody = Json.parse(s"""
          |{
          |   "links":[
          |      {
@@ -122,6 +120,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |        "reason": "des message"
          |      }
     """.stripMargin
+
   }
 
   "Calling the amend endpoint" should {
@@ -146,8 +145,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
     "return a 400 with multiple errors" when {
       "all field value validations fail on the request body" in new Test {
 
-        val allInvalidValueRequestBodyJson: JsValue = Json.parse(
-          """
+        val allInvalidValueRequestBodyJson: JsValue = Json.parse("""
             |{
             |  "nonDeductibleLoanInterest": {
             |        "customerReference": "",
@@ -193,9 +191,10 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
             |}""".stripMargin)
 
         val allInvalidValueRequestError: List[MtdError] = List(
-          LenderNameFormatError.copy(paths = Some(Seq(
-            "/qualifyingLoanInterestPayments/0/lenderName"
-          ))),
+          LenderNameFormatError.copy(paths = Some(
+            Seq(
+              "/qualifyingLoanInterestPayments/0/lenderName"
+            ))),
           CustomerReferenceFormatError.copy(paths = Some(List(
             "/nonDeductibleLoanInterest/customerReference",
             "/payrollGiving/customerReference",
@@ -205,22 +204,27 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
             "/annualPaymentsMade/customerReference",
             "/qualifyingLoanInterestPayments/0/customerReference"
           ))),
-          DateFormatError.copy(paths = Some(List(
-            "/maintenancePayments/0/exSpouseDateOfBirth",
-            "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
-          ))),
-          ExSpouseNameFormatError.copy(paths = Some(Seq(
-            "/maintenancePayments/0/exSpouseName"
-          ))),
-          IncomeSourceFormatError.copy(paths = Some(Seq(
-            "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
-          ))),
-          BusinessNameFormatError.copy(paths = Some(Seq(
-            "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
-          ))),
-          NatureOfTradeFormatError.copy(paths = Some(Seq(
-            "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
-          ))),
+          DateFormatError.copy(paths = Some(
+            List(
+              "/maintenancePayments/0/exSpouseDateOfBirth",
+              "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
+            ))),
+          ExSpouseNameFormatError.copy(paths = Some(
+            Seq(
+              "/maintenancePayments/0/exSpouseName"
+            ))),
+          IncomeSourceFormatError.copy(paths = Some(
+            Seq(
+              "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
+            ))),
+          BusinessNameFormatError.copy(paths = Some(
+            Seq(
+              "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
+            ))),
+          NatureOfTradeFormatError.copy(paths = Some(
+            Seq(
+              "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
+            ))),
           ValueFormatError.copy(paths = Some(List(
             "/nonDeductibleLoanInterest/reliefClaimed",
             "/payrollGiving/reliefClaimed",
@@ -252,8 +256,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
     "return an error according to spec" when {
 
-      val validRequestBodyJson = Json.parse(
-        """
+      val validRequestBodyJson = Json.parse("""
           |{
           |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
@@ -298,8 +301,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allInvalidvalueFormatRequestBodyJson = Json.parse(
-        """
+      val allInvalidvalueFormatRequestBodyJson = Json.parse("""
           |{
           |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
@@ -344,8 +346,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allDatesInvalidRequestBodyJson = Json.parse(
-        """
+      val allDatesInvalidRequestBodyJson = Json.parse("""
           |{
           |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
@@ -390,8 +391,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allCustomerReferencesInvalidRequestBodyJson = Json.parse(
-        """
+      val allCustomerReferencesInvalidRequestBodyJson = Json.parse("""
           |{
           |  "nonDeductibleLoanInterest": {
           |        "customerReference": "",
@@ -436,8 +436,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allExSpouseNamesInvalidRequestBodyJson = Json.parse(
-        """
+      val allExSpouseNamesInvalidRequestBodyJson = Json.parse("""
           |{
           |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
@@ -482,8 +481,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allBusinessNamesInvalidRequestBodyJson = Json.parse(
-        """
+      val allBusinessNamesInvalidRequestBodyJson = Json.parse("""
           |{
           |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
@@ -528,8 +526,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allNatureOfTradesInvalidRequestBodyJson = Json.parse(
-        """
+      val allNatureOfTradesInvalidRequestBodyJson = Json.parse("""
           |{
           |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
@@ -574,8 +571,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allIncomeSourcesInvalidRequestBodyJson = Json.parse(
-        """
+      val allIncomeSourcesInvalidRequestBodyJson = Json.parse("""
           |{
           |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
@@ -620,8 +616,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allLenderNamesInvalidRequestBodyJson = Json.parse(
-        """
+      val allLenderNamesInvalidRequestBodyJson = Json.parse("""
           |{
           |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
@@ -667,72 +662,84 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |}""".stripMargin)
 
       val allValueFormatError: MtdError = ValueFormatError.copy(
-        paths = Some(Seq(
-          "/nonDeductibleLoanInterest/reliefClaimed",
-          "/payrollGiving/reliefClaimed",
-          "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
-          "/maintenancePayments/0/amount",
-          "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
-          "/annualPaymentsMade/reliefClaimed",
-          "/qualifyingLoanInterestPayments/0/reliefClaimed"
-        ))
+        paths = Some(
+          Seq(
+            "/nonDeductibleLoanInterest/reliefClaimed",
+            "/payrollGiving/reliefClaimed",
+            "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
+            "/maintenancePayments/0/amount",
+            "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
+            "/annualPaymentsMade/reliefClaimed",
+            "/qualifyingLoanInterestPayments/0/reliefClaimed"
+          ))
       )
 
       val allDateFormatError: MtdError = DateFormatError.copy(
-        paths = Some(List(
-          "/maintenancePayments/0/exSpouseDateOfBirth",
-          "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
-        ))
+        paths = Some(
+          List(
+            "/maintenancePayments/0/exSpouseDateOfBirth",
+            "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
+          ))
       )
 
       val allCustomerReferenceFormatErrors: MtdError = CustomerReferenceFormatError.copy(
-        paths = Some(List(
-          "/nonDeductibleLoanInterest/customerReference",
-          "/payrollGiving/customerReference",
-          "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
-          "/maintenancePayments/0/customerReference",
-          "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
-          "/annualPaymentsMade/customerReference",
-          "/qualifyingLoanInterestPayments/0/customerReference"
-        ))
+        paths = Some(
+          List(
+            "/nonDeductibleLoanInterest/customerReference",
+            "/payrollGiving/customerReference",
+            "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
+            "/maintenancePayments/0/customerReference",
+            "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
+            "/annualPaymentsMade/customerReference",
+            "/qualifyingLoanInterestPayments/0/customerReference"
+          ))
       )
 
       val allExSpouseNameFormatErrors: MtdError = ExSpouseNameFormatError.copy(
-        paths = Some(List(
-          "/maintenancePayments/0/exSpouseName"
-        ))
+        paths = Some(
+          List(
+            "/maintenancePayments/0/exSpouseName"
+          ))
       )
 
       val allBusinessNameFormatErrors: MtdError = BusinessNameFormatError.copy(
-        paths = Some(List(
-          "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
-        ))
+        paths = Some(
+          List(
+            "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
+          ))
       )
 
       val allNatureOfTradeFormatErrors: MtdError = NatureOfTradeFormatError.copy(
-        paths = Some(List(
-          "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
-        ))
+        paths = Some(
+          List(
+            "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
+          ))
       )
 
       val allIncomeSourceFormatErrors: MtdError = IncomeSourceFormatError.copy(
-        paths = Some(List(
-          "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
-        ))
+        paths = Some(
+          List(
+            "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
+          ))
       )
 
       val allLenderNameFormatErrors: MtdError = LenderNameFormatError.copy(
-        paths = Some(List(
-          "/qualifyingLoanInterestPayments/0/lenderName"
-        ))
+        paths = Some(
+          List(
+            "/qualifyingLoanInterestPayments/0/lenderName"
+          ))
       )
 
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestTaxYear: String, requestBody: JsValue, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String,
+                                requestTaxYear: String,
+                                requestBody: JsValue,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
-            override val taxYear: String = requestTaxYear
+            override val nino: String             = requestNino
+            override val taxYear: String          = requestTaxYear
             override val requestBodyJson: JsValue = requestBody
 
             override def setupStubs(): StubMapping = {
@@ -788,11 +795,12 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, DownstreamError),
           (UNPROCESSABLE_ENTITY, "BUSINESS_VALIDATION_RULE_FAILURE", FORBIDDEN, RuleSubmissionFailedError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError),
-          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError))
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError)
+        )
 
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }
-}
 
+}

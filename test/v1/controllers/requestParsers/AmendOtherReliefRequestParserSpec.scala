@@ -24,11 +24,11 @@ import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYear
 import v1.models.request.amendOtherReliefs._
 
 class AmendOtherReliefRequestParserSpec extends UnitSpec {
-  private val nino = "AA123456A"
-  private val taxYear = "2018-19"
+  private val nino                   = "AA123456A"
+  private val taxYear                = "2018-19"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-  private val requestBodyJson = Json.parse(
-    """
+
+  private val requestBodyJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |    "customerReference": "myref",
@@ -74,12 +74,10 @@ class AmendOtherReliefRequestParserSpec extends UnitSpec {
       |}
         """.stripMargin)
 
-
-
   val inputData: AmendOtherReliefsRawData =
     AmendOtherReliefsRawData(nino, taxYear, requestBodyJson)
 
-  val inputNone: AmendOtherReliefsRawData=
+  val inputNone: AmendOtherReliefsRawData =
     AmendOtherReliefsRawData(nino, taxYear, Json.obj())
 
   trait Test extends MockAmendOtherReliefsValidator {
@@ -93,20 +91,35 @@ class AmendOtherReliefRequestParserSpec extends UnitSpec {
         MockAmendOtherReliefsValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(AmendOtherReliefsRequest(Nino(nino), taxYear, AmendOtherReliefsBody(
-            Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
-            Some(PayrollGiving(Some("myref"), 154.00)),
-            Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
-            Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
-            Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(Some("myref"), Some("ACME Inc"), Some("2019-08-10"), Some("Widgets Manufacturer"), Some("AB12412/A12"), 222.22))),
-            Some(AnnualPaymentsMade(Some("myref"), 763.00)),
-            Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00))))))
+          Right(
+            AmendOtherReliefsRequest(
+              Nino(nino),
+              taxYear,
+              AmendOtherReliefsBody(
+                Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
+                Some(PayrollGiving(Some("myref"), 154.00)),
+                Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+                Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
+                Some(
+                  Seq(
+                    PostCessationTradeReliefAndCertainOtherLosses(
+                      Some("myref"),
+                      Some("ACME Inc"),
+                      Some("2019-08-10"),
+                      Some("Widgets Manufacturer"),
+                      Some("AB12412/A12"),
+                      222.22))),
+                Some(AnnualPaymentsMade(Some("myref"), 763.00)),
+                Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
+              )
+            ))
       }
     }
     "return an ErrorWrapper" when {
 
       "a single validation error occurs" in new Test {
-        MockAmendOtherReliefsValidator.validate(inputData)
+        MockAmendOtherReliefsValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -114,7 +127,8 @@ class AmendOtherReliefRequestParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockAmendOtherReliefsValidator.validate(inputData)
+        MockAmendOtherReliefsValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -122,4 +136,5 @@ class AmendOtherReliefRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

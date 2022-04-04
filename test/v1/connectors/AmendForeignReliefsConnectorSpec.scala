@@ -27,23 +27,27 @@ import scala.concurrent.Future
 
 class AmendForeignReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYear: String = "2017-18"
-  val nino: String = "AA123456A"
+  val taxYear: String    = "2017-18"
+  val nino: String       = "AA123456A"
   val amount: BigDecimal = 1234.56
 
   val body: AmendForeignReliefsBody = AmendForeignReliefsBody(
-    foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
-      amount = amount
-    )),
-    foreignIncomeTaxCreditRelief = Some(Seq(ForeignIncomeTaxCreditRelief(
-      countryCode = "FRA",
-      foreignTaxPaid = Some(amount),
-      taxableAmount = amount,
-      employmentLumpSum = true
-    ))),
-    foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
-      amount = amount
-    ))
+    foreignTaxCreditRelief = Some(
+      ForeignTaxCreditRelief(
+        amount = amount
+      )),
+    foreignIncomeTaxCreditRelief = Some(
+      Seq(
+        ForeignIncomeTaxCreditRelief(
+          countryCode = "FRA",
+          foreignTaxPaid = Some(amount),
+          taxableAmount = amount,
+          employmentLumpSum = true
+        ))),
+    foreignTaxForFtcrNotClaimed = Some(
+      ForeignTaxForFtcrNotClaimed(
+        amount = amount
+      ))
   )
 
   class Test extends MockHttpClient with MockAppConfig {
@@ -66,9 +70,8 @@ class AmendForeignReliefsConnectorSpec extends ConnectorSpec {
     "put a body and return 204 no body" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      implicit val hc: HeaderCarrier                = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
 
       MockedHttpClient
         .put(
@@ -77,9 +80,11 @@ class AmendForeignReliefsConnectorSpec extends ConnectorSpec {
           body = body,
           requiredHeaders = requiredHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        ).returns(Future.successful(outcome))
+        )
+        .returns(Future.successful(outcome))
 
       await(connector.amend(request)) shouldBe outcome
     }
   }
+
 }

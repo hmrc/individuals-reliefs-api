@@ -22,7 +22,7 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
 import v1.models.request.amendOtherReliefs._
 
-class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validator[AmendOtherReliefsRawData] {
+class AmendOtherReliefsValidator @Inject() (appConfig: AppConfig) extends Validator[AmendOtherReliefsRawData] {
 
   private val validationSet = List(
     parameterFormatValidation,
@@ -66,8 +66,8 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
     val qualifyingDistributionRedemptionOfSharesAndSecuritiesErrors =
       body.qualifyingDistributionRedemptionOfSharesAndSecurities.map(validateQualifyingDistributionRedemptionOfSharesAndSecurities)
 
-    val maintenancePaymentsErrors = body.maintenancePayments.map(_.zipWithIndex.flatMap {
-      case (item, i) => validateMaintenancePayments(item, i)
+    val maintenancePaymentsErrors = body.maintenancePayments.map(_.zipWithIndex.flatMap { case (item, i) =>
+      validateMaintenancePayments(item, i)
     })
 
     val postCessationTradeReliefAndCertainOtherLossesErrors = body.postCessationTradeReliefAndCertainOtherLosses.map(_.zipWithIndex.flatMap {
@@ -76,8 +76,8 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
 
     val annualPaymentsMadeErrors = body.annualPaymentsMade.map(validateAnnualPayments)
 
-    val qualifyingLoanInterestPayments = body.qualifyingLoanInterestPayments.map(_.zipWithIndex.flatMap {
-      case (item, i) => validateQualifyingLoanInterestPayments(item, i)
+    val qualifyingLoanInterestPayments = body.qualifyingLoanInterestPayments.map(_.zipWithIndex.flatMap { case (item, i) =>
+      validateQualifyingLoanInterestPayments(item, i)
     })
 
     val errorsO: List[Option[Seq[MtdError]]] = List(
@@ -236,4 +236,5 @@ class AmendOtherReliefsValidator @Inject()(appConfig: AppConfig) extends Validat
   override def validate(data: AmendOtherReliefsRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

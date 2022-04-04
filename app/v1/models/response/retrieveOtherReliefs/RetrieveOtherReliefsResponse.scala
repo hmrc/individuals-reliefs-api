@@ -22,20 +22,21 @@ import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
 case class RetrieveOtherReliefsResponse(
-                                     submittedOn: String,
-                                     nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
-                                     payrollGiving: Option[PayrollGiving],
-                                     qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
-                                     maintenancePayments: Option[Seq[MaintenancePayments]],
-                                     postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
-                                     annualPaymentsMade: Option[AnnualPaymentsMade],
-                                     qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]
-                                   )
+    submittedOn: String,
+    nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
+    payrollGiving: Option[PayrollGiving],
+    qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
+    maintenancePayments: Option[Seq[MaintenancePayments]],
+    postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
+    annualPaymentsMade: Option[AnnualPaymentsMade],
+    qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]
+)
 
 object RetrieveOtherReliefsResponse extends HateoasLinks {
   implicit val format: OFormat[RetrieveOtherReliefsResponse] = Json.format[RetrieveOtherReliefsResponse]
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrieveOtherReliefsResponse, RetrieveOtherReliefsHateoasData] {
+
     override def links(appConfig: AppConfig, data: RetrieveOtherReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -44,6 +45,7 @@ object RetrieveOtherReliefsResponse extends HateoasLinks {
         deleteOtherReliefs(appConfig, nino, taxYear)
       )
     }
+
   }
 
 }

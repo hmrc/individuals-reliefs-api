@@ -30,13 +30,13 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteForeignReliefsService @Inject()(connector: DeleteForeignReliefsConnector) extends DesResponseMappingSupport with Logging {
+class DeleteForeignReliefsService @Inject() (connector: DeleteForeignReliefsConnector) extends DesResponseMappingSupport with Logging {
 
-  def delete(request: DeleteForeignReliefsRequest)(
-            implicit hc: HeaderCarrier,
-            ec: ExecutionContext,
-            logContext: EndpointLogContext,
-            correlationId: String): Future[DeleteForeignReliefsServiceOutcome] = {
+  def delete(request: DeleteForeignReliefsRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[DeleteForeignReliefsServiceOutcome] = {
     val result = for {
       desResponseWrapper <- EitherT(connector.delete(request)).leftMap(mapDesErrors(desErrorMap))
     } yield desResponseWrapper
@@ -46,9 +46,10 @@ class DeleteForeignReliefsService @Inject()(connector: DeleteForeignReliefsConne
   private def desErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_TAX_YEAR" -> TaxYearFormatError,
-      "NO_DATA_FOUND" -> NotFoundError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
+      "NO_DATA_FOUND"             -> NotFoundError,
+      "SERVER_ERROR"              -> DownstreamError,
+      "SERVICE_UNAVAILABLE"       -> DownstreamError
     )
+
 }

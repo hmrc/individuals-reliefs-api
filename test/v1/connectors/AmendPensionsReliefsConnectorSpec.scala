@@ -28,7 +28,7 @@ import scala.concurrent.Future
 class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
 
   val taxYear: String = "2019-20"
-  val nino: String = "AA123456A"
+  val nino: String    = "AA123456A"
 
   val body: AmendPensionsReliefsBody = AmendPensionsReliefsBody(
     PensionReliefs(
@@ -54,12 +54,12 @@ class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
   }
 
   "connector" must {
-    val request: AmendPensionsReliefsRequest = AmendPensionsReliefsRequest(Nino(nino), taxYear,body)
+    val request: AmendPensionsReliefsRequest = AmendPensionsReliefsRequest(Nino(nino), taxYear, body)
 
     "put a body and return 204 no body" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      implicit val hc: HeaderCarrier                = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredHeadersPut: Seq[(String, String)] = requiredDesHeaders ++ Seq("Content-Type" -> "application/json")
 
       MockedHttpClient
@@ -68,10 +68,12 @@ class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
           config = dummyDesHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredHeadersPut,
-          excludedHeaders =  Seq("AnotherHeader" -> "HeaderValue")
-        ).returns(Future.successful(outcome))
+          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+        )
+        .returns(Future.successful(outcome))
 
       await(connector.amend(request)) shouldBe outcome
     }
   }
+
 }

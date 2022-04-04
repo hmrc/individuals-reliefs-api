@@ -20,7 +20,6 @@ import play.api.libs.json.{Json, OFormat}
 
 case class PayrollGiving(customerReference: Option[String], reliefClaimed: BigDecimal)
 
-
 object PayrollGiving {
   implicit val format: OFormat[PayrollGiving] = Json.format[PayrollGiving]
 }

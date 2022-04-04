@@ -31,11 +31,13 @@ trait MockRetrieveForeignReliefsConnector extends MockFactory {
 
   object MockRetrieveForeignReliefsConnector {
 
-    def retrieve(requestData: RetrieveForeignReliefsRequest):
-    CallHandler4[RetrieveForeignReliefsRequest, HeaderCarrier, ExecutionContext, String, Future[DesOutcome[RetrieveForeignReliefsResponse]]] = {
+    def retrieve(requestData: RetrieveForeignReliefsRequest)
+        : CallHandler4[RetrieveForeignReliefsRequest, HeaderCarrier, ExecutionContext, String, Future[DesOutcome[RetrieveForeignReliefsResponse]]] = {
       (mockConnector
-        .retrieve(_: RetrieveForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _:String))
+        .retrieve(_: RetrieveForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
+
   }
+
 }

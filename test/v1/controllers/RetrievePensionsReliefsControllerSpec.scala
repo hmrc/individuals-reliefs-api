@@ -35,41 +35,41 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrievePensionsReliefsControllerSpec
-  extends ControllerBaseSpec
-  with MockEnrolmentsAuthService
-  with MockMtdIdLookupService
-  with MockRetrievePensionsReliefsService
-  with MockRetrievePensionsReliefsRequestParser
-  with MockHateoasFactory
-  with MockAuditService
-  with MockIdGenerator {
+    extends ControllerBaseSpec
+    with MockEnrolmentsAuthService
+    with MockMtdIdLookupService
+    with MockRetrievePensionsReliefsService
+    with MockRetrievePensionsReliefsRequestParser
+    with MockHateoasFactory
+    with MockAuditService
+    with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
+  private val nino          = "AA123456A"
+  private val taxYear       = "2019-20"
   private val correlationId = "X-123"
 
-    trait Test {
-      val hc = HeaderCarrier()
+  trait Test {
+    val hc = HeaderCarrier()
 
-      val controller = new RetrievePensionsReliefsController(
-        authService = mockEnrolmentsAuthService,
-        lookupService = mockMtdIdLookupService,
-        parser = mockRequestDataParser,
-        service = mockService,
-        hateoasFactory = mockHateoasFactory,
-        cc = cc,
-        idGenerator = mockIdGenerator
-      )
+    val controller = new RetrievePensionsReliefsController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockRequestDataParser,
+      service = mockService,
+      hateoasFactory = mockHateoasFactory,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
 
-      MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-      MockedEnrolmentsAuthService.authoriseUser()
-      MockIdGenerator.getCorrelationId.returns(correlationId)
-    }
+    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.getCorrelationId.returns(correlationId)
+  }
 
-    private val rawData = RetrievePensionsReliefsRawData(nino, taxYear)
-    private val requestData = RetrievePensionsReliefsRequest(Nino(nino), taxYear)
+  private val rawData     = RetrievePensionsReliefsRawData(nino, taxYear)
+  private val requestData = RetrievePensionsReliefsRequest(Nino(nino), taxYear)
 
-    private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrievePensionsReliefsResponse(
     "2019-04-04T01:01:01Z",
@@ -82,85 +82,85 @@ class RetrievePensionsReliefsControllerSpec
     )
   )
 
-    "handleRequest" should {
-      "return Ok" when {
-        "the request received is valid" in new Test {
+  "handleRequest" should {
+    "return Ok" when {
+      "the request received is valid" in new Test {
 
-          MockRetrievePensionsReliefsRequestParser
-            .parse(rawData)
-            .returns(Right(requestData))
+        MockRetrievePensionsReliefsRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
 
-          MockRetrievePensionsReliefsService
-            .retrieve(requestData)
-            .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
+        MockRetrievePensionsReliefsService
+          .retrieve(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
-          MockHateoasFactory
-            .wrap(responseBody, RetrievePensionsReliefsHateoasData(nino, taxYear))
-            .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
+        MockHateoasFactory
+          .wrap(responseBody, RetrievePensionsReliefsHateoasData(nino, taxYear))
+          .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
-          val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-          status(result) shouldBe OK
-          header("X-CorrelationId", result) shouldBe Some(correlationId)
-        }
+        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
+        status(result) shouldBe OK
+        header("X-CorrelationId", result) shouldBe Some(correlationId)
       }
-      "return the error as per spec" when {
-        "parser errors occur" should {
-          def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-            s"a ${error.code} error is returned from the parser" in new Test {
+    }
+    "return the error as per spec" when {
+      "parser errors occur" should {
+        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
+          s"a ${error.code} error is returned from the parser" in new Test {
 
-              MockRetrievePensionsReliefsRequestParser
-                .parse(rawData)
-                .returns(Left(ErrorWrapper(correlationId, error, None)))
+            MockRetrievePensionsReliefsRequestParser
+              .parse(rawData)
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-              val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
+            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
-              status(result) shouldBe expectedStatus
-              contentAsJson(result) shouldBe Json.toJson(error)
-              header("X-CorrelationId", result) shouldBe Some(correlationId)
-            }
+            status(result) shouldBe expectedStatus
+            contentAsJson(result) shouldBe Json.toJson(error)
+            header("X-CorrelationId", result) shouldBe Some(correlationId)
           }
-
-          val input = Seq(
-            (BadRequestError, BAD_REQUEST),
-            (NinoFormatError, BAD_REQUEST),
-            (TaxYearFormatError, BAD_REQUEST),
-            (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-            (RuleTaxYearNotSupportedError, BAD_REQUEST)
-          )
-
-          input.foreach(args => (errorsFromParserTester _).tupled(args))
         }
 
-        "service errors occur" should {
-          def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-            s"a $mtdError error is returned from the service" in new Test {
+        val input = Seq(
+          (BadRequestError, BAD_REQUEST),
+          (NinoFormatError, BAD_REQUEST),
+          (TaxYearFormatError, BAD_REQUEST),
+          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST)
+        )
 
-              MockRetrievePensionsReliefsRequestParser
-                .parse(rawData)
-                .returns(Right(requestData))
+        input.foreach(args => (errorsFromParserTester _).tupled(args))
+      }
 
-              MockRetrievePensionsReliefsService
-                .retrieve(requestData)
-                .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+      "service errors occur" should {
+        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
+          s"a $mtdError error is returned from the service" in new Test {
 
-              val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
+            MockRetrievePensionsReliefsRequestParser
+              .parse(rawData)
+              .returns(Right(requestData))
 
-              status(result) shouldBe expectedStatus
-              contentAsJson(result) shouldBe Json.toJson(mtdError)
-              header("X-CorrelationId", result) shouldBe Some(correlationId)
-            }
+            MockRetrievePensionsReliefsService
+              .retrieve(requestData)
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+
+            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
+
+            status(result) shouldBe expectedStatus
+            contentAsJson(result) shouldBe Json.toJson(mtdError)
+            header("X-CorrelationId", result) shouldBe Some(correlationId)
           }
-
-          val input = Seq(
-            (NinoFormatError, BAD_REQUEST),
-            (TaxYearFormatError, BAD_REQUEST),
-            (NotFoundError, NOT_FOUND),
-            (DownstreamError, INTERNAL_SERVER_ERROR)
-          )
-
-          input.foreach(args => (serviceErrors _).tupled(args))
         }
+
+        val input = Seq(
+          (NinoFormatError, BAD_REQUEST),
+          (TaxYearFormatError, BAD_REQUEST),
+          (NotFoundError, NOT_FOUND),
+          (DownstreamError, INTERNAL_SERVER_ERROR)
+        )
+
+        input.foreach(args => (serviceErrors _).tupled(args))
       }
     }
   }
 
+}

@@ -22,9 +22,7 @@ import v1.models.errors.NinoFormatError
 
 class DeleteForeignReliefsAuditDetailSpec extends UnitSpec {
 
-
-  val validJson = Json.parse(
-    """{
+  val validJson = Json.parse("""{
       |    "userType": "Agent",
       |    "agentReferenceNumber":"012345678",
       |    "nino": "ZG903729C",
@@ -48,8 +46,7 @@ class DeleteForeignReliefsAuditDetailSpec extends UnitSpec {
     )
   )
 
-  val invalidNinoJson = Json.parse(
-    """{
+  val invalidNinoJson = Json.parse("""{
       |    "userType": "Agent",
       |    "agentReferenceNumber":"012345678",
       |    "nino": "notANino",
@@ -90,4 +87,5 @@ class DeleteForeignReliefsAuditDetailSpec extends UnitSpec {
       }
     }
   }
+
 }

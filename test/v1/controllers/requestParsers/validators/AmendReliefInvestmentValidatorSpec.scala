@@ -24,10 +24,10 @@ import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
 
 class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
+  private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
-  private val requestBodyJson = Json.parse(
-    """
+
+  private val requestBodyJson = Json.parse("""
       |{
       |  "vctSubscription":[
       |    {
@@ -81,7 +81,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
   class Test {
     val validator = new AmendReliefInvestmentValidator(mockAppConfig)
   }
-    
+
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in new Test {
@@ -115,8 +115,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return a FORMAT_VALUE error" when {
       "all fields are below 0" in new Test {
-        val badJson = Json.parse(
-          """
+        val badJson = Json.parse("""
             |{
             |  "vctSubscription":[
             |    {
@@ -198,8 +197,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "at least one empty array is provided" in new Test {
-        val json = Json.parse(
-          """
+        val json = Json.parse("""
             |{
             |  "vctSubscription":[],
             |  "eisSubscription":[
@@ -244,8 +242,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
         validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "at least one array contains an empty object" in new Test {
-        val json = Json.parse(
-          """
+        val json = Json.parse("""
             |{
             |  "vctSubscription":[
             |    {}
@@ -295,8 +292,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return a FORMAT_DATE_OF_INVESTMENT error" when {
       "provided dates are invalid" in new Test {
-        val badJson = Json.parse(
-          """
+        val badJson = Json.parse("""
             |{
             |  "vctSubscription":[
             |    {
@@ -361,8 +357,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return a FORMAT_UNIQUE_INVESTMENT_REFERENCE error" when {
       "provided unique investment references are invalid" in new Test {
-        val badJson = Json.parse(
-          """
+        val badJson = Json.parse("""
             |{
             |  "vctSubscription":[
             |    {
@@ -427,8 +422,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return a FORMAT_NAME error" when {
       "provided names are invalid" in new Test {
-        val badJson = Json.parse(
-          """
+        val badJson = Json.parse("""
             |{
             |  "vctSubscription":[
             |    {
@@ -491,4 +485,5 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
       }
     }
   }
+
 }

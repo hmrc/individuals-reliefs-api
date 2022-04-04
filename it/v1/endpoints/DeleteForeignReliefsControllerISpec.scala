@@ -29,10 +29,10 @@ class DeleteForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino = "AA123456A"
+    val nino    = "AA123456A"
     val taxYear = "2021-22"
 
-    def uri: String = s"/foreign/$nino/$taxYear"
+    def uri: String    = s"/foreign/$nino/$taxYear"
     def desUri: String = s"/income-tax/reliefs/foreign/$nino/$taxYear"
 
     def setupStubs(): StubMapping
@@ -50,6 +50,7 @@ class DeleteForeignReliefsControllerISpec extends IntegrationBaseSpec {
          |        "reason": "des message"
          |      }
     """.stripMargin
+
   }
 
   "Calling the delete endpoint" should {
@@ -77,7 +78,7 @@ class DeleteForeignReliefsControllerISpec extends IntegrationBaseSpec {
         def validationErrorTest(requestNino: String, requestId: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
+            override val nino: String    = requestNino
             override val taxYear: String = requestId
 
             override def setupStubs(): StubMapping = {
@@ -99,7 +100,6 @@ class DeleteForeignReliefsControllerISpec extends IntegrationBaseSpec {
           ("AA123456A", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
-
 
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -133,4 +133,5 @@ class DeleteForeignReliefsControllerISpec extends IntegrationBaseSpec {
       }
     }
   }
+
 }

@@ -22,8 +22,7 @@ import v1.models.errors.NinoFormatError
 
 class AmendReliefInvestmentsAuditDetailSpec extends UnitSpec {
 
-  val validJson = Json.parse(
-    """{
+  val validJson = Json.parse("""{
       |    "userType": "Agent",
       |    "agentReferenceNumber":"012345678",
       |    "nino": "ZG903729C",
@@ -161,8 +160,7 @@ class AmendReliefInvestmentsAuditDetailSpec extends UnitSpec {
     `X-CorrelationId` = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253",
     response = AuditResponse(
       200,
-      Right(Some(Json.parse(
-        """{
+      Right(Some(Json.parse("""{
           |   "links":[
           |      {
           |         "href":"/individuals/reliefs/investment/{nino}/{taxYear}",
@@ -184,8 +182,7 @@ class AmendReliefInvestmentsAuditDetailSpec extends UnitSpec {
     )
   )
 
-  val invalidNinoJson = Json.parse(
-    """{
+  val invalidNinoJson = Json.parse("""{
       |    "userType": "Agent",
       |    "agentReferenceNumber":"012345678",
       |    "nino": "notANino",
@@ -308,7 +305,7 @@ class AmendReliefInvestmentsAuditDetailSpec extends UnitSpec {
     ),
     `X-CorrelationId` = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253",
     response = AuditResponse(400, Left(Seq(AuditError(NinoFormatError.code))))
-    )
+  )
 
   "writes" must {
     "work" when {
@@ -322,4 +319,5 @@ class AmendReliefInvestmentsAuditDetailSpec extends UnitSpec {
       }
     }
   }
+
 }

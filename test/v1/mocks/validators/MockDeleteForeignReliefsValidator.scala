@@ -33,5 +33,7 @@ class MockDeleteForeignReliefsValidator extends MockFactory {
         .validate(_: DeleteForeignReliefsRawData))
         .expects(data)
     }
+
   }
+
 }

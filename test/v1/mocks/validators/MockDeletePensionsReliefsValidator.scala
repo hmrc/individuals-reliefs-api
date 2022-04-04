@@ -33,5 +33,7 @@ class MockDeletePensionsReliefsValidator extends MockFactory {
         .validate(_: DeletePensionsReliefsRawData))
         .expects(data)
     }
+
   }
+
 }

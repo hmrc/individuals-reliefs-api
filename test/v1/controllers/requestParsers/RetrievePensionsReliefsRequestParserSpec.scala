@@ -23,8 +23,8 @@ import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYear
 import v1.models.request.retrievePensionsReliefs.{RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest}
 
 class RetrievePensionsReliefsRequestParserSpec extends UnitSpec {
-  val nino: String = "AA123456B"
-  val taxYear: String = "2018-19"
+  val nino: String                   = "AA123456B"
+  val taxYear: String                = "2018-19"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   val inputData: RetrievePensionsReliefsRawData = RetrievePensionsReliefsRawData(nino, taxYear)
@@ -40,22 +40,24 @@ class RetrievePensionsReliefsRequestParserSpec extends UnitSpec {
         MockRetrievePensionsReliefsValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-        Right(RetrievePensionsReliefsRequest(Nino(nino), taxYear))
+          Right(RetrievePensionsReliefsRequest(Nino(nino), taxYear))
       }
     }
 
     "return an errorWrapper" when {
 
       "a single validation error occurs" in new Test {
-        MockRetrievePensionsReliefsValidator.validate(inputData)
+        MockRetrievePensionsReliefsValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
-        Left(ErrorWrapper(correlationId, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple validation errors occur" in new Test {
-        MockRetrievePensionsReliefsValidator.validate(inputData)
+        MockRetrievePensionsReliefsValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -63,4 +65,5 @@ class RetrievePensionsReliefsRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

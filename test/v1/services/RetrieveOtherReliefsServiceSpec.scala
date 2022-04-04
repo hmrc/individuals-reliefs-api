@@ -31,80 +31,72 @@ import scala.concurrent.Future
 
 class RetrieveOtherReliefsServiceSpec extends UnitSpec {
 
-  private val nino: String = "AA123456A"
-  private val taxYear: String = "2017-18"
+  private val nino: String           = "AA123456A"
+  private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
   private val fullResponseModel = RetrieveOtherReliefsResponse(
     "2020-06-17T10:53:38Z",
-    Some(NonDeductibleLoanInterest(
-      Some("myref"),
-      763.00)),
-    Some(PayrollGiving(
-      Some("myref"),
-      154.00)),
-    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(
-      Some("myref"),
-      222.22)),
-    Some(Seq(MaintenancePayments(
-      Some("myref"),
-      Some("Hilda"),
-      Some("2000-01-01"),
-      222.22))),
-    Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
-      Some("myref"),
-      Some("ACME Inc"),
-      Some("2019-08-10"),
-      Some("Widgets Manufacturer"),
-      Some("AB12412/A12"),
-      222.22))),
-    Some(AnnualPaymentsMade(
-      Some("myref"),
-      763.00)),
-    Some(Seq(QualifyingLoanInterestPayments(
-      Some("myref"),
-      Some("Maurice"),
-      763.00)))
+    Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
+    Some(PayrollGiving(Some("myref"), 154.00)),
+    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+    Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
+    Some(
+      Seq(
+        PostCessationTradeReliefAndCertainOtherLosses(
+          Some("myref"),
+          Some("ACME Inc"),
+          Some("2019-08-10"),
+          Some("Widgets Manufacturer"),
+          Some("AB12412/A12"),
+          222.22))),
+    Some(AnnualPaymentsMade(Some("myref"), 763.00)),
+    Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
   private val requestData = RetrieveOtherReliefsRequest(Nino(nino), taxYear)
 
   trait Test extends MockRetrieveOtherReliefsConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
     val service = new RetrieveOtherReliefsService(
       connector = mockConnector
     )
+
   }
 
   "service" should {
     "return a successful response" when {
       "a successful response is passed through" in new Test {
-        MockRetrieveOtherReliefsConnector.retrieve(requestData)
+        MockRetrieveOtherReliefsConnector
+          .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, fullResponseModel))))
 
         await(service.retrieve(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
       }
     }
     "map errors according to spec" when {
-        def serviceError(desErrorCode: String, error: MtdError): Unit =
-          s"a $desErrorCode error is returned from the service" in new Test {
+      def serviceError(desErrorCode: String, error: MtdError): Unit =
+        s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockRetrieveOtherReliefsConnector.retrieve(requestData)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+          MockRetrieveOtherReliefsConnector
+            .retrieve(requestData)
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
-          }
+          await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
+        }
 
-        val input = Seq(
-          ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
-          ("FORMAT_TAX_YEAR", TaxYearFormatError),
-          ("NO_DATA_FOUND", NotFoundError),
-          ("SERVER_ERROR", DownstreamError),
-          ("SERVICE_UNAVAILABLE", DownstreamError)
-        )
+      val input = Seq(
+        ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
+        ("FORMAT_TAX_YEAR", TaxYearFormatError),
+        ("NO_DATA_FOUND", NotFoundError),
+        ("SERVER_ERROR", DownstreamError),
+        ("SERVICE_UNAVAILABLE", DownstreamError)
+      )
 
-        input.foreach(args => (serviceError _).tupled(args))
+      input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

@@ -55,6 +55,7 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
       }
     }
   }
+
   "reads from a JSON with no lender name" when {
     "passed a JSON with no customer lender name" should {
       "return a model with no customer lender name" in {
@@ -62,6 +63,7 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -69,6 +71,7 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
       }
     }
   }
+
   "writes from a model with no lender name" when {
     "passed a model with no customer lender name" should {
       "return a JSON with no customer lender name" in {
@@ -76,4 +79,5 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
       }
     }
   }
+
 }

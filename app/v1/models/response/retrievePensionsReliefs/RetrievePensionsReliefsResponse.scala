@@ -27,6 +27,7 @@ object RetrievePensionsReliefsResponse extends HateoasLinks {
   implicit val format: OFormat[RetrievePensionsReliefsResponse] = Json.format[RetrievePensionsReliefsResponse]
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrievePensionsReliefsResponse, RetrievePensionsReliefsHateoasData] {
+
     override def links(appConfig: AppConfig, data: RetrievePensionsReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -35,7 +36,9 @@ object RetrievePensionsReliefsResponse extends HateoasLinks {
         deletePensionsReliefs(appConfig, nino, taxYear)
       )
     }
+
   }
+
 }
 
 case class RetrievePensionsReliefsHateoasData(nino: String, taxYear: String) extends HateoasData

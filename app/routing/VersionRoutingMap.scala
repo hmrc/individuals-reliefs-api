@@ -36,24 +36,22 @@ trait VersionRoutingMap {
 }
 
 // Add routes corresponding to available versions...
-case class VersionRoutingMapImpl @Inject()(appConfig: AppConfig,
-                                           defaultRouter: Router,
-                                           v1Router: v1.Routes,
-                                           r4Router: release4.Routes) extends VersionRoutingMap {
+case class VersionRoutingMapImpl @Inject() (appConfig: AppConfig, defaultRouter: Router, v1Router: v1.Routes, r4Router: release4.Routes)
+    extends VersionRoutingMap {
 
   val featureSwitch: FeatureSwitch = FeatureSwitch(appConfig.featureSwitch)
-  protected val logger: Logger = Logger(this.getClass)
+  protected val logger: Logger     = Logger(this.getClass)
 
   val map: Map[String, Router] = Map(
     VERSION_1 -> {
-      if(featureSwitch.isFullRoutingEnabled) {
+      if (featureSwitch.isFullRoutingEnabled) {
         logger.info("[VersionRoutingMap][map] using v1Router to use full routes (sandbox routes)")
         v1Router
-      }
-      else {
+      } else {
         logger.info("[VersionRoutingMap][map] using r4Router to use release 4 routes only")
         r4Router
       }
     }
   )
+
 }

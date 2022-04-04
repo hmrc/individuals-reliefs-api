@@ -42,7 +42,6 @@ class PensionsReliefsSpec extends UnitSpec with JsonErrorValidators {
       """.stripMargin
   )
 
-
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
@@ -50,6 +49,7 @@ class PensionsReliefsSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
@@ -57,4 +57,5 @@ class PensionsReliefsSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
 }

@@ -28,45 +28,55 @@ import scala.concurrent.Future
 class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
   val taxYear: String = "2017-18"
-  val nino: String = "AA123456A"
+  val nino: String    = "AA123456A"
 
   val body: AmendReliefInvestmentsBody = AmendReliefInvestmentsBody(
-    Some(Seq(VctSubscriptionsItem(
-      "VCTREF",
-      Some("VCT Fund X"),
-      Some("2018-04-16"),
-      Some(BigDecimal(23312.00)),
-      BigDecimal(1334.00)
-    ))),
-    Some(Seq(EisSubscriptionsItem(
-      "XTAL",
-      Some("EIS Fund X"),
-      true,
-      Some("2020-12-12"),
-      Some(BigDecimal(23312.00)),
-      BigDecimal(43432.00)
-    ))),
-    Some(Seq(CommunityInvestmentItem(
-      "CIREF",
-      Some("CI X"),
-      Some("2020-12-12"),
-      Some(BigDecimal(6442.00)),
-      BigDecimal(2344.00)
-    ))),
-    Some(Seq(SeedEnterpriseInvestmentItem(
-      "123412/1A",
-      Some("Company Inc"),
-      Some("2020-12-12"),
-      Some(BigDecimal(123123.22)),
-      BigDecimal(3432.00)
-    ))),
-    Some(Seq(SocialEnterpriseInvestmentItem(
-      "123412/1A",
-      Some("SE Inc"),
-      Some("2020-12-12"),
-      Some(BigDecimal(123123.22)),
-      BigDecimal(3432.00)
-    )))
+    Some(
+      Seq(
+        VctSubscriptionsItem(
+          "VCTREF",
+          Some("VCT Fund X"),
+          Some("2018-04-16"),
+          Some(BigDecimal(23312.00)),
+          BigDecimal(1334.00)
+        ))),
+    Some(
+      Seq(
+        EisSubscriptionsItem(
+          "XTAL",
+          Some("EIS Fund X"),
+          true,
+          Some("2020-12-12"),
+          Some(BigDecimal(23312.00)),
+          BigDecimal(43432.00)
+        ))),
+    Some(
+      Seq(
+        CommunityInvestmentItem(
+          "CIREF",
+          Some("CI X"),
+          Some("2020-12-12"),
+          Some(BigDecimal(6442.00)),
+          BigDecimal(2344.00)
+        ))),
+    Some(
+      Seq(
+        SeedEnterpriseInvestmentItem(
+          "123412/1A",
+          Some("Company Inc"),
+          Some("2020-12-12"),
+          Some(BigDecimal(123123.22)),
+          BigDecimal(3432.00)
+        ))),
+    Some(
+      Seq(
+        SocialEnterpriseInvestmentItem(
+          "123412/1A",
+          Some("SE Inc"),
+          Some("2020-12-12"),
+          Some(BigDecimal(123123.22)),
+          BigDecimal(3432.00)
+        )))
   )
 
   class Test extends MockHttpClient with MockAppConfig {
@@ -88,7 +98,7 @@ class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
     "put a body and return 204 no body" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      implicit val hc: HeaderCarrier                = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
 
       MockedHttpClient
@@ -98,9 +108,11 @@ class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
           body = body,
           requiredHeaders = requiredHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        ).returns(Future.successful(outcome))
+        )
+        .returns(Future.successful(outcome))
 
       await(connector.amend(request)) shouldBe outcome
     }
   }
+
 }

@@ -18,17 +18,18 @@ package v1.controllers.requestParsers.validators.validations
 
 import v1.models.errors.{UniqueInvestmentRefFormatError, MtdError}
 
-
 object InvestmentRefValidation {
 
   private val investRegex =
     "^[A-Za-z0-9/]+$"
 
   def validate(investmentRef: String, path: String): List[MtdError] = {
-    if (investmentRef.matches(investRegex)) Nil else {
+    if (investmentRef.matches(investRegex)) Nil
+    else {
       List(
         UniqueInvestmentRefFormatError.copy(paths = Some(Seq(path)))
       )
     }
   }
+
 }

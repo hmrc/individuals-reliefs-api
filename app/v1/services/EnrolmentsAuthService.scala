@@ -34,7 +34,7 @@ import v1.models.outcomes.AuthOutcome
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfig: AppConfig) {
+class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConfig: AppConfig) {
 
   private val logger: Logger = Logger(this.getClass)
 
@@ -64,7 +64,7 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfi
         Future.successful(Right(user))
       case Some(Agent) ~ _ =>
         retrieveAgentDetails() map {
-          case arn@Some(_) =>
+          case arn @ Some(_) =>
             val user: AuthOutcome = Right(UserDetails("", "Agent", arn))
             user
           case None =>
@@ -75,7 +75,7 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfi
         logger.warn(s"[EnrolmentsAuthService][authorised] Invalid AffinityGroup.")
         Future.successful(Left(UnauthorisedError))
     } recoverWith {
-      case _: MissingBearerToken => Future.successful(Left(UnauthorisedError))
+      case _: MissingBearerToken     => Future.successful(Left(UnauthorisedError))
       case _: AuthorisationException => Future.successful(Left(UnauthorisedError))
       case error =>
         logger.warn(s"[EnrolmentsAuthService][authorised] An unexpected error occurred: $error")
@@ -84,10 +84,12 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfi
   }
 
   private def retrieveAgentDetails()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] =
-    authFunction.authorised(AffinityGroup.Agent and Enrolment("HMRC-AS-AGENT"))
+    authFunction
+      .authorised(AffinityGroup.Agent and Enrolment("HMRC-AS-AGENT"))
       .retrieve(Retrievals.agentCode and Retrievals.authorisedEnrolments) {
         case _ ~ enrolments =>
           Future.successful(getAgentReferenceFromEnrolments(enrolments))
         case _ => Future.successful(None)
       }
+
 }

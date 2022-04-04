@@ -21,10 +21,11 @@ import v1.models.domain.Nino
 import v1.controllers.requestParsers.validators.RetrieveReliefInvestmentsValidator
 import v1.models.request.retrieveReliefInvestments.{RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest}
 
-class RetrieveReliefInvestmentsRequestParser @Inject()(val validator: RetrieveReliefInvestmentsValidator)
-  extends RequestParser[RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest] {
+class RetrieveReliefInvestmentsRequestParser @Inject() (val validator: RetrieveReliefInvestmentsValidator)
+    extends RequestParser[RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest] {
 
   override protected def requestFor(data: RetrieveReliefInvestmentsRawData): RetrieveReliefInvestmentsRequest = {
     RetrieveReliefInvestmentsRequest(Nino(data.nino), data.taxYear)
   }
+
 }

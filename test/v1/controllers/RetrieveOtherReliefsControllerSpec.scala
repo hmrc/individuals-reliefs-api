@@ -35,17 +35,17 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveOtherReliefsControllerSpec
-  extends ControllerBaseSpec
-  with MockEnrolmentsAuthService
-  with MockMtdIdLookupService
-  with MockRetrieveOtherReliefsService
-  with MockRetrieveOtherReliefsRequestParser
-  with MockHateoasFactory
-  with MockAuditService
-  with MockIdGenerator {
+    extends ControllerBaseSpec
+    with MockEnrolmentsAuthService
+    with MockMtdIdLookupService
+    with MockRetrieveOtherReliefsService
+    with MockRetrieveOtherReliefsRequestParser
+    with MockHateoasFactory
+    with MockAuditService
+    with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
+  private val nino          = "AA123456A"
+  private val taxYear       = "2019-20"
   private val correlationId = "X-123"
 
   trait Test {
@@ -66,41 +66,28 @@ class RetrieveOtherReliefsControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val rawData = RetrieveOtherReliefsRawData(nino, taxYear)
+  private val rawData     = RetrieveOtherReliefsRawData(nino, taxYear)
   private val requestData = RetrieveOtherReliefsRequest(Nino(nino), taxYear)
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveOtherReliefsResponse(
     "2020-06-17T10:53:38Z",
-    Some(NonDeductibleLoanInterest(
-      Some("myref"),
-      763.00)),
-    Some(PayrollGiving(
-      Some("myref"),
-      154.00)),
-    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(
-      Some("myref"),
-      222.22)),
-    Some(Seq(MaintenancePayments(
-      Some("myref"),
-      Some("Hilda"),
-      Some("2000-01-01"),
-      222.22))),
-    Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
-      Some("myref"),
-      Some("ACME Inc"),
-      Some("2019-08-10"),
-      Some("Widgets Manufacturer"),
-      Some("AB12412/A12"),
-      222.22))),
-    Some(AnnualPaymentsMade(
-      Some("myref"),
-      763.00)),
-    Some(Seq(QualifyingLoanInterestPayments(
-      Some("myref"),
-      Some("Maurice"),
-      763.00)))
+    Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
+    Some(PayrollGiving(Some("myref"), 154.00)),
+    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+    Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
+    Some(
+      Seq(
+        PostCessationTradeReliefAndCertainOtherLosses(
+          Some("myref"),
+          Some("ACME Inc"),
+          Some("2019-08-10"),
+          Some("Widgets Manufacturer"),
+          Some("AB12412/A12"),
+          222.22))),
+    Some(AnnualPaymentsMade(Some("myref"), 763.00)),
+    Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
   "handleRequest" should {
@@ -183,4 +170,5 @@ class RetrieveOtherReliefsControllerSpec
       }
     }
   }
+
 }

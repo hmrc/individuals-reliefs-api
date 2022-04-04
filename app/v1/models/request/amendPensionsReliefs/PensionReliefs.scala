@@ -19,17 +19,19 @@ package v1.models.request.amendPensionsReliefs
 import play.api.libs.json.{Json, OFormat}
 
 case class PensionReliefs(
-                           regularPensionContributions: Option[BigDecimal],
-                           oneOffPensionContributionsPaid: Option[BigDecimal],
-                           retirementAnnuityPayments: Option[BigDecimal],
-                           paymentToEmployersSchemeNoTaxRelief: Option[BigDecimal],
-                           overseasPensionSchemeContributions: Option[BigDecimal]
-                         ) {
+    regularPensionContributions: Option[BigDecimal],
+    oneOffPensionContributionsPaid: Option[BigDecimal],
+    retirementAnnuityPayments: Option[BigDecimal],
+    paymentToEmployersSchemeNoTaxRelief: Option[BigDecimal],
+    overseasPensionSchemeContributions: Option[BigDecimal]
+) {
+
   def isEmpty: Boolean = regularPensionContributions.isEmpty &&
     oneOffPensionContributionsPaid.isEmpty &&
     retirementAnnuityPayments.isEmpty &&
     paymentToEmployersSchemeNoTaxRelief.isEmpty &&
     overseasPensionSchemeContributions.isEmpty
+
 }
 
 object PensionReliefs {

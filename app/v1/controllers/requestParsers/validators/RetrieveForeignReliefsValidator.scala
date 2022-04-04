@@ -22,8 +22,7 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRawData
 
-class RetrieveForeignReliefsValidator @Inject()(appConfig: AppConfig) extends Validator[RetrieveForeignReliefsRawData] {
-
+class RetrieveForeignReliefsValidator @Inject() (appConfig: AppConfig) extends Validator[RetrieveForeignReliefsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 
@@ -43,4 +42,5 @@ class RetrieveForeignReliefsValidator @Inject()(appConfig: AppConfig) extends Va
   override def validate(data: RetrieveForeignReliefsRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

@@ -25,22 +25,28 @@ class AmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
   private val amount = 1234.56
 
   private val amendForeignReliefsBody = AmendForeignReliefsBody(
-    foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
-      amount = amount
-    )),
-    foreignIncomeTaxCreditRelief = Some(Seq(ForeignIncomeTaxCreditRelief(
-      countryCode = "FRA",
-      foreignTaxPaid = Some(amount),
-      taxableAmount = amount,
-      employmentLumpSum = true
-    ))),
-    foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
-      amount = amount
-    ))
+    foreignTaxCreditRelief = Some(
+      ForeignTaxCreditRelief(
+        amount = amount
+      )),
+    foreignIncomeTaxCreditRelief = Some(
+      Seq(
+        ForeignIncomeTaxCreditRelief(
+          countryCode = "FRA",
+          foreignTaxPaid = Some(amount),
+          taxableAmount = amount,
+          employmentLumpSum = true
+        ))),
+    foreignTaxForFtcrNotClaimed = Some(
+      ForeignTaxForFtcrNotClaimed(
+        amount = amount
+      ))
   )
 
   private val emptyAmendForeignReliefsBody = AmendForeignReliefsBody(
-    None, None, None
+    None,
+    None,
+    None
   )
 
   private val json = Json.parse(
@@ -73,11 +79,13 @@ class AmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
   "read from empty JSON" should {
     "convert empty MTD JSON into an empty AmendSecuritiesItems object" in {
       emptyAmendForeignReliefsBody shouldBe emptyJson.as[AmendForeignReliefsBody]
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -85,6 +93,7 @@ class AmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
   "write from an empty body" when {
     "passed an empty model" should {
       "return an empty JSON" in {
@@ -92,8 +101,5 @@ class AmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
-
-
-
 
 }

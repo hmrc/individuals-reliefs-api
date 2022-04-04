@@ -22,7 +22,7 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 import v1.models.request.amendPensionsReliefs._
 
-class AmendPensionsReliefsValidator @Inject()(appConfig: AppConfig) extends Validator[AmendPensionsReliefsRawData] {
+class AmendPensionsReliefsValidator @Inject() (appConfig: AppConfig) extends Validator[AmendPensionsReliefsRawData] {
 
   private val validationSet = List(
     parameterFormatValidation,
@@ -59,11 +59,12 @@ class AmendPensionsReliefsValidator @Inject()(appConfig: AppConfig) extends Vali
   private def bodyFieldValidation: AmendPensionsReliefsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendPensionsReliefsBody]
 
-    List(flattenErrors(
-      List(
-        validatePensionsReliefs(body.pensionReliefs)
-      )
-    ))
+    List(
+      flattenErrors(
+        List(
+          validatePensionsReliefs(body.pensionReliefs)
+        )
+      ))
   }
 
   private def validatePensionsReliefs(pensionReliefs: PensionReliefs): List[MtdError] = {
@@ -91,8 +92,8 @@ class AmendPensionsReliefsValidator @Inject()(appConfig: AppConfig) extends Vali
     ).flatten
   }
 
-
   override def validate(data: AmendPensionsReliefsRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

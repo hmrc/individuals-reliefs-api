@@ -22,14 +22,16 @@ import v1.controllers.requestParsers.AmendOtherReliefsRequestParser
 import v1.models.errors.ErrorWrapper
 import v1.models.request.amendOtherReliefs.{AmendOtherReliefsRawData, AmendOtherReliefsRequest}
 
-trait MockAmendOtherReliefsRequestParser extends MockFactory{
+trait MockAmendOtherReliefsRequestParser extends MockFactory {
 
   val mockAmendOtherReliefsRequestParser: AmendOtherReliefsRequestParser = mock[AmendOtherReliefsRequestParser]
 
   object MockAmendOtherReliefsRequestParser {
+
     def parseRequest(data: AmendOtherReliefsRawData): CallHandler[Either[ErrorWrapper, AmendOtherReliefsRequest]] = {
       (mockAmendOtherReliefsRequestParser.parseRequest(_: AmendOtherReliefsRawData)(_: String)).expects(data, *)
     }
+
   }
 
 }

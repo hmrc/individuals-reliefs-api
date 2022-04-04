@@ -33,5 +33,7 @@ class MockAmendForeignReliefsValidator extends MockFactory {
         .validate(_: AmendForeignReliefsRawData))
         .expects(data)
     }
+
   }
+
 }

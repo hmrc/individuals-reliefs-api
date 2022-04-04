@@ -43,5 +43,5 @@ object DeleteOtherReliefsAuditDetail {
       `X-CorrelationId`,
       auditResponse)
   }
-}
 
+}

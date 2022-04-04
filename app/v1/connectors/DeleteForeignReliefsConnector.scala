@@ -27,12 +27,13 @@ import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteForeignReliefsConnector @Inject()(val http: HttpClient,
-                                              val appConfig: AppConfig) extends BaseDownstreamConnector {
- def delete(request: DeleteForeignReliefsRequest)
-           (implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
-   delete(
-     IfsUri[Unit](s"income-tax/reliefs/foreign/${request.nino.nino}/${request.taxYear}")
-   )
- }
+class DeleteForeignReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+
+  def delete(
+      request: DeleteForeignReliefsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
+    delete(
+      IfsUri[Unit](s"income-tax/reliefs/foreign/${request.nino.nino}/${request.taxYear}")
+    )
+  }
+
 }

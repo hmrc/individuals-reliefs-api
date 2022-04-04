@@ -21,8 +21,8 @@ import v1.models.domain.Nino
 import v1.controllers.requestParsers.validators.RetrievePensionsReliefsValidator
 import v1.models.request.retrievePensionsReliefs.{RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest}
 
-class RetrievePensionsReliefsRequestParser @Inject()(val validator: RetrievePensionsReliefsValidator)
-  extends RequestParser[RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest] {
+class RetrievePensionsReliefsRequestParser @Inject() (val validator: RetrievePensionsReliefsValidator)
+    extends RequestParser[RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest] {
 
   override protected def requestFor(data: RetrievePensionsReliefsRawData): RetrievePensionsReliefsRequest = {
     RetrievePensionsReliefsRequest(Nino(data.nino), data.taxYear)

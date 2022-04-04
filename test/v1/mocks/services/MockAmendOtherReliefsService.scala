@@ -38,6 +38,7 @@ trait MockAmendOtherReliefsService extends MockFactory {
         .amend(_: AmendOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)
     }
+
   }
 
 }

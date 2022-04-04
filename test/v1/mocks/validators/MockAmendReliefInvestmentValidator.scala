@@ -33,5 +33,7 @@ class MockAmendReliefInvestmentValidator extends MockFactory {
         .validate(_: AmendReliefInvestmentsRawData))
         .expects(data)
     }
+
   }
+
 }

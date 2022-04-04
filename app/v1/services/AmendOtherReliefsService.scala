@@ -30,13 +30,13 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendOtherReliefsService @Inject()(connector: AmendOtherReliefsConnector) extends DesResponseMappingSupport with Logging {
+class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector) extends DesResponseMappingSupport with Logging {
 
-  def amend(request: AmendOtherReliefsRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    logContext: EndpointLogContext,
-    correlationId: String): Future[AmendOtherReliefsServiceOutcome] = {
+  def amend(request: AmendOtherReliefsRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      logContext: EndpointLogContext,
+      correlationId: String): Future[AmendOtherReliefsServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDesErrors(desErrorMap))
@@ -47,11 +47,12 @@ class AmendOtherReliefsService @Inject()(connector: AmendOtherReliefsConnector) 
 
   private def desErrorMap =
     Map(
-      "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_TAX_YEAR" -> TaxYearFormatError,
-      "INVALID_CORRELATIONID"  -> DownstreamError,
+      "INVALID_TAXABLE_ENTITY_ID"        -> NinoFormatError,
+      "FORMAT_TAX_YEAR"                  -> TaxYearFormatError,
+      "INVALID_CORRELATIONID"            -> DownstreamError,
       "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailedError,
-      "SERVER_ERROR" -> DownstreamError,
-      "SERVICE_UNAVAILABLE" -> DownstreamError
+      "SERVER_ERROR"                     -> DownstreamError,
+      "SERVICE_UNAVAILABLE"              -> DownstreamError
     )
+
 }

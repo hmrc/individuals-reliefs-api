@@ -29,8 +29,8 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "AA123456A"
-    val taxYear: String = "2021-22"
+    val nino: String          = "AA123456A"
+    val taxYear: String       = "2021-22"
     val correlationId: String = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
@@ -86,8 +86,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |""".stripMargin
     )
 
-    val responseBody = Json.parse(
-      s"""
+    val responseBody = Json.parse(s"""
          |{
          |  "links": [
          |    {
@@ -128,6 +127,7 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |        "reason": "des message"
          |      }
     """.stripMargin
+
   }
 
   "Calling the amend endpoint" should {
@@ -214,50 +214,54 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
         val allInvalidValueRequestError: List[MtdError] = List(
           UniqueInvestmentRefFormatError.copy(
-            paths = Some(List(
-              "/vctSubscription/0/uniqueInvestmentRef",
-              "/vctSubscription/1/uniqueInvestmentRef",
-              "/eisSubscription/0/uniqueInvestmentRef",
-              "/communityInvestment/0/uniqueInvestmentRef",
-              "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
-              "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
-            ))
+            paths = Some(
+              List(
+                "/vctSubscription/0/uniqueInvestmentRef",
+                "/vctSubscription/1/uniqueInvestmentRef",
+                "/eisSubscription/0/uniqueInvestmentRef",
+                "/communityInvestment/0/uniqueInvestmentRef",
+                "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
+                "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
+              ))
           ),
           NameFormatError.copy(
-            paths = Some(Seq(
-              "/vctSubscription/0/name",
-              "/vctSubscription/1/name",
-              "/eisSubscription/0/name",
-              "/communityInvestment/0/name",
-              "/seedEnterpriseInvestment/0/companyName",
-              "/socialEnterpriseInvestment/0/socialEnterpriseName"
-            ))
+            paths = Some(
+              Seq(
+                "/vctSubscription/0/name",
+                "/vctSubscription/1/name",
+                "/eisSubscription/0/name",
+                "/communityInvestment/0/name",
+                "/seedEnterpriseInvestment/0/companyName",
+                "/socialEnterpriseInvestment/0/socialEnterpriseName"
+              ))
           ),
           DateOfInvestmentFormatError.copy(
-              paths = Some(List(
-              "/vctSubscription/0/dateOfInvestment",
-              "/vctSubscription/1/dateOfInvestment",
-              "/eisSubscription/0/dateOfInvestment",
-              "/communityInvestment/0/dateOfInvestment",
-              "/seedEnterpriseInvestment/0/dateOfInvestment",
-              "/socialEnterpriseInvestment/0/dateOfInvestment"
-            ))
+            paths = Some(
+              List(
+                "/vctSubscription/0/dateOfInvestment",
+                "/vctSubscription/1/dateOfInvestment",
+                "/eisSubscription/0/dateOfInvestment",
+                "/communityInvestment/0/dateOfInvestment",
+                "/seedEnterpriseInvestment/0/dateOfInvestment",
+                "/socialEnterpriseInvestment/0/dateOfInvestment"
+              ))
           ),
           ValueFormatError.copy(
-            paths = Some(List(
-              "/vctSubscription/0/amountInvested",
-              "/vctSubscription/0/reliefClaimed",
-              "/vctSubscription/1/amountInvested",
-              "/vctSubscription/1/reliefClaimed",
-              "/eisSubscription/0/amountInvested",
-              "/eisSubscription/0/reliefClaimed",
-              "/communityInvestment/0/amountInvested",
-              "/communityInvestment/0/reliefClaimed",
-              "/seedEnterpriseInvestment/0/amountInvested",
-              "/seedEnterpriseInvestment/0/reliefClaimed",
-              "/socialEnterpriseInvestment/0/amountInvested",
-              "/socialEnterpriseInvestment/0/reliefClaimed"
-            ))
+            paths = Some(
+              List(
+                "/vctSubscription/0/amountInvested",
+                "/vctSubscription/0/reliefClaimed",
+                "/vctSubscription/1/amountInvested",
+                "/vctSubscription/1/reliefClaimed",
+                "/eisSubscription/0/amountInvested",
+                "/eisSubscription/0/reliefClaimed",
+                "/communityInvestment/0/amountInvested",
+                "/communityInvestment/0/reliefClaimed",
+                "/seedEnterpriseInvestment/0/amountInvested",
+                "/seedEnterpriseInvestment/0/reliefClaimed",
+                "/socialEnterpriseInvestment/0/amountInvested",
+                "/socialEnterpriseInvestment/0/reliefClaimed"
+              ))
           )
         )
 
@@ -401,20 +405,21 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
       )
 
       val allValueFormatError: MtdError = ValueFormatError.copy(
-        paths = Some(Seq(
-          "/vctSubscription/0/amountInvested",
-          "/vctSubscription/0/reliefClaimed",
-          "/vctSubscription/1/amountInvested",
-          "/vctSubscription/1/reliefClaimed",
-          "/eisSubscription/0/amountInvested",
-          "/eisSubscription/0/reliefClaimed",
-          "/communityInvestment/0/amountInvested",
-          "/communityInvestment/0/reliefClaimed",
-          "/seedEnterpriseInvestment/0/amountInvested",
-          "/seedEnterpriseInvestment/0/reliefClaimed",
-          "/socialEnterpriseInvestment/0/amountInvested",
-          "/socialEnterpriseInvestment/0/reliefClaimed"
-        ))
+        paths = Some(
+          Seq(
+            "/vctSubscription/0/amountInvested",
+            "/vctSubscription/0/reliefClaimed",
+            "/vctSubscription/1/amountInvested",
+            "/vctSubscription/1/reliefClaimed",
+            "/eisSubscription/0/amountInvested",
+            "/eisSubscription/0/reliefClaimed",
+            "/communityInvestment/0/amountInvested",
+            "/communityInvestment/0/reliefClaimed",
+            "/seedEnterpriseInvestment/0/amountInvested",
+            "/seedEnterpriseInvestment/0/reliefClaimed",
+            "/socialEnterpriseInvestment/0/amountInvested",
+            "/socialEnterpriseInvestment/0/reliefClaimed"
+          ))
       )
 
       val allInvalidDateOfInvestmentRequestBodyJson: JsValue = Json.parse(
@@ -478,14 +483,15 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
       )
 
       val allDateOfInvestmentFormatError: MtdError = DateOfInvestmentFormatError.copy(
-        paths = Some(List(
-          "/vctSubscription/0/dateOfInvestment",
-          "/vctSubscription/1/dateOfInvestment",
-          "/eisSubscription/0/dateOfInvestment",
-          "/communityInvestment/0/dateOfInvestment",
-          "/seedEnterpriseInvestment/0/dateOfInvestment",
-          "/socialEnterpriseInvestment/0/dateOfInvestment"
-        ))
+        paths = Some(
+          List(
+            "/vctSubscription/0/dateOfInvestment",
+            "/vctSubscription/1/dateOfInvestment",
+            "/eisSubscription/0/dateOfInvestment",
+            "/communityInvestment/0/dateOfInvestment",
+            "/seedEnterpriseInvestment/0/dateOfInvestment",
+            "/socialEnterpriseInvestment/0/dateOfInvestment"
+          ))
       )
 
       val allInvalidUniqueInvestmentReferenceRequestBodyJson: JsValue = Json.parse(
@@ -548,14 +554,15 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
       )
 
       val allUniqueInvestmentReferenceFormatError: MtdError = UniqueInvestmentRefFormatError.copy(
-        paths = Some(List(
-          "/vctSubscription/0/uniqueInvestmentRef",
-          "/vctSubscription/1/uniqueInvestmentRef",
-          "/eisSubscription/0/uniqueInvestmentRef",
-          "/communityInvestment/0/uniqueInvestmentRef",
-          "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
-          "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
-        ))
+        paths = Some(
+          List(
+            "/vctSubscription/0/uniqueInvestmentRef",
+            "/vctSubscription/1/uniqueInvestmentRef",
+            "/eisSubscription/0/uniqueInvestmentRef",
+            "/communityInvestment/0/uniqueInvestmentRef",
+            "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
+            "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
+          ))
       )
 
       val allInvalidNameRequestBodyJson: JsValue = Json.parse(
@@ -617,25 +624,28 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
            |""".stripMargin
       )
 
-
-
       val allNameFormatError: MtdError = NameFormatError.copy(
-        paths = Some(List(
-          "/vctSubscription/0/name",
-          "/vctSubscription/1/name",
-          "/eisSubscription/0/name",
-          "/communityInvestment/0/name",
-          "/seedEnterpriseInvestment/0/companyName",
-          "/socialEnterpriseInvestment/0/socialEnterpriseName"
-        ))
+        paths = Some(
+          List(
+            "/vctSubscription/0/name",
+            "/vctSubscription/1/name",
+            "/eisSubscription/0/name",
+            "/communityInvestment/0/name",
+            "/seedEnterpriseInvestment/0/companyName",
+            "/socialEnterpriseInvestment/0/socialEnterpriseName"
+          ))
       )
 
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestTaxYear: String, requestBody: JsValue, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def validationErrorTest(requestNino: String,
+                                requestTaxYear: String,
+                                requestBody: JsValue,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
-            override val taxYear: String = requestTaxYear
+            override val nino: String             = requestNino
+            override val taxYear: String          = requestTaxYear
             override val requestBodyJson: JsValue = requestBody
 
             override def setupStubs(): StubMapping = {
@@ -652,9 +662,9 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
         val input = Seq(
           ("AA1123A", "2021-22", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "20177", validRequestBodyJson,  BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2017-19", validRequestBodyJson,  BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2019-20", validRequestBodyJson,  BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "20177", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2017-19", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2021-22", allInvalidValueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
           ("AA123456A", "2021-22", allInvalidDateOfInvestmentRequestBodyJson, BAD_REQUEST, allDateOfInvestmentFormatError),
           ("AA123456A", "2021-22", allInvalidUniqueInvestmentReferenceRequestBodyJson, BAD_REQUEST, allUniqueInvestmentReferenceFormatError),
@@ -685,10 +695,12 @@ class AmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "FORMAT_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError),
-          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError))
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError)
+        )
 
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }
+
 }

@@ -35,9 +35,8 @@ import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-
 class AmendOtherReliefsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAmendOtherReliefsService
@@ -46,8 +45,8 @@ class AmendOtherReliefsControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
+  private val nino          = "AA123456A"
+  private val taxYear       = "2019-20"
   private val correlationId = "X-123"
 
   trait Test {
@@ -75,8 +74,7 @@ class AmendOtherReliefsControllerSpec
     Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
   )
 
-  private val requestJson = Json.parse(
-    """
+  private val requestJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
@@ -122,41 +120,27 @@ class AmendOtherReliefsControllerSpec
       |}""".stripMargin)
 
   private val requestBody = AmendOtherReliefsBody(
-    Some(NonDeductibleLoanInterest(
-    Some("myref"),
-    763.00)),
-    Some(PayrollGiving(
-      Some("myref"),
-      154.00)),
-    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(
-      Some("myref"),
-      222.22)),
-    Some(Seq(MaintenancePayments(
-      Some("myref"),
-      Some("Hilda"),
-      Some("2000-01-01"),
-      222.22))),
-    Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
-      Some("myref"),
-      Some("ACME Inc"),
-      Some("2019-08-10"),
-      Some("Widgets Manufacturer"),
-      Some("AB12412/A12"),
-      222.22))),
-    Some(AnnualPaymentsMade(
-      Some("myref"),
-      763.00)),
-    Some(Seq(QualifyingLoanInterestPayments(
-      Some("myref"),
-      Some("Maurice"),
-      763.00)))
+    Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
+    Some(PayrollGiving(Some("myref"), 154.00)),
+    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+    Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
+    Some(
+      Seq(
+        PostCessationTradeReliefAndCertainOtherLosses(
+          Some("myref"),
+          Some("ACME Inc"),
+          Some("2019-08-10"),
+          Some("Widgets Manufacturer"),
+          Some("AB12412/A12"),
+          222.22))),
+    Some(AnnualPaymentsMade(Some("myref"), 763.00)),
+    Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val rawData = AmendOtherReliefsRawData(nino, taxYear, requestJson)
+  private val rawData     = AmendOtherReliefsRawData(nino, taxYear, requestJson)
   private val requestData = AmendOtherReliefsRequest(Nino(nino), taxYear, requestBody)
 
-  val hateoasResponse: JsValue = Json.parse(
-    """
+  val hateoasResponse: JsValue = Json.parse("""
       |{
       |   "links":[
       |      {
@@ -192,7 +176,6 @@ class AmendOtherReliefsControllerSpec
         response = auditResponse
       )
     )
-
 
   "handleRequest" should {
     "return OK" when {
@@ -292,4 +275,5 @@ class AmendOtherReliefsControllerSpec
       }
     }
   }
+
 }

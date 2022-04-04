@@ -35,15 +35,17 @@ import v1.services.{AmendOtherReliefsService, AuditService, EnrolmentsAuthServic
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthService,
-                                            val lookupService: MtdIdLookupService,
-                                            parser: AmendOtherReliefsRequestParser,
-                                            service: AmendOtherReliefsService,
-                                            auditService: AuditService,
-                                            hateoasFactory: HateoasFactory,
-                                            cc: ControllerComponents,
-                                            val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging {
+class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthService,
+                                             val lookupService: MtdIdLookupService,
+                                             parser: AmendOtherReliefsRequestParser,
+                                             service: AmendOtherReliefsService,
+                                             auditService: AuditService,
+                                             hateoasFactory: HateoasFactory,
+                                             cc: ControllerComponents,
+                                             val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+    extends AuthorisedController(cc)
+    with BaseController
+    with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendOtherReliefsController", endpointName = "amendOtherReliefs")
@@ -57,7 +59,7 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
       val rawData = AmendOtherReliefsRawData(nino, taxYear, request.body)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amend(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
             hateoasFactory.wrap(serviceResponse.responseData, AmendOtherReliefsHateoasData(nino, taxYear)).asRight[ErrorWrapper]
@@ -69,8 +71,14 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
 
           val response = Json.toJson(vendorResponse)
 
-          auditSubmission(AmendOtherReliefsAuditDetail(request.userDetails, nino, taxYear, request.body,
-            serviceResponse.correlationId, AuditResponse(OK, Right(Some(response)))))
+          auditSubmission(
+            AmendOtherReliefsAuditDetail(
+              request.userDetails,
+              nino,
+              taxYear,
+              request.body,
+              serviceResponse.correlationId,
+              AuditResponse(OK, Right(Some(response)))))
 
           Ok(Json.toJson(vendorResponse))
             .withApiHeaders(serviceResponse.correlationId)
@@ -78,14 +86,20 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
 
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
 
-        auditSubmission(AmendOtherReliefsAuditDetail(request.userDetails, nino, taxYear, request.body,
-          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+        auditSubmission(
+          AmendOtherReliefsAuditDetail(
+            request.userDetails,
+            nino,
+            taxYear,
+            request.body,
+            correlationId,
+            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result
       }.merge
@@ -93,31 +107,21 @@ class AmendOtherReliefsController @Inject()(val authService: EnrolmentsAuthServi
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
-      case NinoFormatError |
-           BadRequestError |
-           TaxYearFormatError |
-           RuleIncorrectOrEmptyBodyError |
-           RuleTaxYearRangeInvalidError |
-           RuleTaxYearNotSupportedError |
-           MtdErrorWithCustomMessage(ValueFormatError.code) |
-           MtdErrorWithCustomMessage(DateFormatError.code) |
-           MtdErrorWithCustomMessage(CustomerReferenceFormatError.code) |
-           MtdErrorWithCustomMessage(ExSpouseNameFormatError.code) |
-           MtdErrorWithCustomMessage(BusinessNameFormatError.code) |
-           MtdErrorWithCustomMessage(NatureOfTradeFormatError.code) |
-           MtdErrorWithCustomMessage(IncomeSourceFormatError.code) |
-           MtdErrorWithCustomMessage(LenderNameFormatError.code) =>
+      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleIncorrectOrEmptyBodyError | RuleTaxYearRangeInvalidError |
+          RuleTaxYearNotSupportedError | MtdErrorWithCustomMessage(ValueFormatError.code) | MtdErrorWithCustomMessage(DateFormatError.code) |
+          MtdErrorWithCustomMessage(CustomerReferenceFormatError.code) | MtdErrorWithCustomMessage(ExSpouseNameFormatError.code) |
+          MtdErrorWithCustomMessage(BusinessNameFormatError.code) | MtdErrorWithCustomMessage(NatureOfTradeFormatError.code) |
+          MtdErrorWithCustomMessage(IncomeSourceFormatError.code) | MtdErrorWithCustomMessage(LenderNameFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper: ErrorWrapper))
       case RuleSubmissionFailedError => Forbidden(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case DownstreamError           => InternalServerError(Json.toJson(errorWrapper))
+      case _                         => unhandledError(errorWrapper)
     }
   }
 
-  private def auditSubmission(details: AmendOtherReliefsAuditDetail)
-                             (implicit hc: HeaderCarrier,
-                              ec: ExecutionContext) = {
+  private def auditSubmission(details: AmendOtherReliefsAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
     val event = AuditEvent("CreateAmendOtherReliefs", "create-amend-other-reliefs", details)
     auditService.auditEvent(event)
   }
+
 }

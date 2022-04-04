@@ -22,7 +22,7 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
 import v1.models.request.amendReliefInvestments._
 
-class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Validator[AmendReliefInvestmentsRawData] {
+class AmendReliefInvestmentValidator @Inject() (appConfig: AppConfig) extends Validator[AmendReliefInvestmentsRawData] {
 
   private val validationSet =
     List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, incorrectOfEmptyBodySubmittedValidation, bodyFieldValidation)
@@ -54,25 +54,25 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
   private def bodyFieldValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendReliefInvestmentsBody]
 
-    val vctSubscriptionErrors = body.vctSubscription.map(_.zipWithIndex.flatMap {
-      case (item, i) => validateVctSubscription(item, i)
+    val vctSubscriptionErrors = body.vctSubscription.map(_.zipWithIndex.flatMap { case (item, i) =>
+      validateVctSubscription(item, i)
     })
 
-    val eisSubscriptionErrors = body.eisSubscription.map(_.zipWithIndex.flatMap {
-      case (item, i) => validateEisSubscription(item, i)
+    val eisSubscriptionErrors = body.eisSubscription.map(_.zipWithIndex.flatMap { case (item, i) =>
+      validateEisSubscription(item, i)
     })
 
-    val communityInvestmentErrors = body.communityInvestment.map(_.zipWithIndex.flatMap {
-      case (item, i) => validateCommunityInvestment(item, i)
+    val communityInvestmentErrors = body.communityInvestment.map(_.zipWithIndex.flatMap { case (item, i) =>
+      validateCommunityInvestment(item, i)
     })
 
     val seedEnterpriseInvestmentErrors =
-      body.seedEnterpriseInvestment.map(_.zipWithIndex.flatMap {
-        case (item, i) => validateSeedEnterpriseInvestment(item, i)
+      body.seedEnterpriseInvestment.map(_.zipWithIndex.flatMap { case (item, i) =>
+        validateSeedEnterpriseInvestment(item, i)
       })
 
-    val socialEnterpriseInvestmentErrors = body.socialEnterpriseInvestment.map(_.zipWithIndex.flatMap {
-      case (item, i) => validateSocialEnterpriseInvestment(item, i)
+    val socialEnterpriseInvestmentErrors = body.socialEnterpriseInvestment.map(_.zipWithIndex.flatMap { case (item, i) =>
+      validateSocialEnterpriseInvestment(item, i)
     })
 
     val errorsO: List[Option[Seq[MtdError]]] =
@@ -107,7 +107,7 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
       NumberValidation.validateOptional(
         field = Some(vctSubscriptionsItem.reliefClaimed),
         path = s"/vctSubscription/$arrayIndex/reliefClaimed"
-      ),
+      )
     ).flatten
   }
 
@@ -135,7 +135,7 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
       NumberValidation.validateOptional(
         field = Some(eisSubscriptionsItem.reliefClaimed),
         path = s"/eisSubscription/$arrayIndex/reliefClaimed"
-      ),
+      )
     ).flatten
   }
 
@@ -163,7 +163,7 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
       NumberValidation.validateOptional(
         field = Some(communityInvestmentItem.reliefClaimed),
         path = s"/communityInvestment/$arrayIndex/reliefClaimed"
-      ),
+      )
     ).flatten
   }
 
@@ -191,7 +191,7 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
       NumberValidation.validateOptional(
         field = Some(seedEnterpriseInvestmentItem.reliefClaimed),
         path = s"/seedEnterpriseInvestment/$arrayIndex/reliefClaimed"
-      ),
+      )
     ).flatten
   }
 
@@ -219,11 +219,12 @@ class AmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Val
       NumberValidation.validateOptional(
         field = Some(socialEnterpriseInvestmentItem.reliefClaimed),
         path = s"/socialEnterpriseInvestment/$arrayIndex/reliefClaimed"
-      ),
+      )
     ).flatten
   }
 
   override def validate(data: AmendReliefInvestmentsRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

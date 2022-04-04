@@ -23,7 +23,7 @@ import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRawD
 
 class RetrieveReliefInvestmentsValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
+  private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
 
   class Test {
@@ -62,4 +62,5 @@ class RetrieveReliefInvestmentsValidatorSpec extends UnitSpec with MockAppConfig
       }
     }
   }
+
 }

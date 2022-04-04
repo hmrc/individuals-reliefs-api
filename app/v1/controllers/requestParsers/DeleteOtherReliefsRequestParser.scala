@@ -21,8 +21,8 @@ import v1.models.domain.Nino
 import v1.controllers.requestParsers.validators.DeleteOtherReliefsValidator
 import v1.models.request.deleteOtherReliefs.{DeleteOtherReliefsRawData, DeleteOtherReliefsRequest}
 
-class DeleteOtherReliefsRequestParser @Inject()(val validator: DeleteOtherReliefsValidator)
-  extends RequestParser[DeleteOtherReliefsRawData, DeleteOtherReliefsRequest] {
+class DeleteOtherReliefsRequestParser @Inject() (val validator: DeleteOtherReliefsValidator)
+    extends RequestParser[DeleteOtherReliefsRawData, DeleteOtherReliefsRequest] {
 
   override protected def requestFor(data: DeleteOtherReliefsRawData): DeleteOtherReliefsRequest = {
     DeleteOtherReliefsRequest(Nino(data.nino), data.taxYear)

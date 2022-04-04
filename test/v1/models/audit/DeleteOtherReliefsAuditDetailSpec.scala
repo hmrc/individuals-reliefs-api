@@ -22,16 +22,15 @@ import v1.models.errors.NinoFormatError
 
 class DeleteOtherReliefsAuditDetailSpec extends UnitSpec {
 
-  val nino: String = "ZG903729C"
-  val taxYear: String = "2019-20"
-  val userType: String = "Agent"
+  val nino: String                         = "ZG903729C"
+  val taxYear: String                      = "2019-20"
+  val userType: String                     = "Agent"
   val agentReferenceNumber: Option[String] = Some("012345678")
-  val pathParams: Map[String, String] = Map("nino" -> nino, "taxYear" -> taxYear)
-  val requestBody: Option[JsValue] = None
-  val xCorrId = "a1e8057e-fbbc-47a8-a8b478d9f015c253"
+  val pathParams: Map[String, String]      = Map("nino" -> nino, "taxYear" -> taxYear)
+  val requestBody: Option[JsValue]         = None
+  val xCorrId                              = "a1e8057e-fbbc-47a8-a8b478d9f015c253"
 
-  val validJson = Json.parse(
-    s"""{
+  val validJson = Json.parse(s"""{
        |    "userType": "Agent",
        |    "agentReferenceNumber":"012345678",
        |    "nino": "ZG903729C",
@@ -43,7 +42,11 @@ class DeleteOtherReliefsAuditDetailSpec extends UnitSpec {
        |}""".stripMargin)
 
   val validBody = DeleteOtherReliefsAuditDetail(
-    userType, agentReferenceNumber, nino, taxYear, xCorrId,
+    userType,
+    agentReferenceNumber,
+    nino,
+    taxYear,
+    xCorrId,
     AuditResponse(
       204,
       errors = None,
@@ -51,8 +54,7 @@ class DeleteOtherReliefsAuditDetailSpec extends UnitSpec {
     )
   )
 
-  val invalidNinoJson = Json.parse(
-    s"""{
+  val invalidNinoJson = Json.parse(s"""{
        |    "userType": "Agent",
        |    "agentReferenceNumber":"012345678",
        |    "nino": "notANino",
@@ -65,7 +67,11 @@ class DeleteOtherReliefsAuditDetailSpec extends UnitSpec {
        |}""".stripMargin)
 
   val invalidNinoBody = DeleteOtherReliefsAuditDetail(
-    userType, agentReferenceNumber, "notANino", taxYear, xCorrId,
+    userType,
+    agentReferenceNumber,
+    "notANino",
+    taxYear,
+    xCorrId,
     AuditResponse(
       400,
       errors = Some(Seq(AuditError(NinoFormatError.code))),

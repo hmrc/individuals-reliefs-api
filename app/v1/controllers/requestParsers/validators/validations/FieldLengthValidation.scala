@@ -22,7 +22,7 @@ object FieldLengthValidation {
 
   def validateOptional(field: Option[String], maxLength: Int = 105, path: String, error: MtdError): List[MtdError] = {
     field match {
-      case None => NoValidationErrors
+      case None        => NoValidationErrors
       case Some(value) => validate(value, maxLength, path, error)
     }
   }
@@ -36,4 +36,5 @@ object FieldLengthValidation {
       )
     }
   }
+
 }

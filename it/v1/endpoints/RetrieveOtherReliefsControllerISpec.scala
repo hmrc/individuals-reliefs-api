@@ -22,14 +22,22 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors.{
+  DownstreamError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
 class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino = "AA123456A"
+    val nino    = "AA123456A"
     val taxYear = "2021-22"
 
     val responseBody: JsValue = Json.parse(
@@ -98,8 +106,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |""".stripMargin
     )
 
-    val desResponseBody: JsValue = Json.parse(
-      s"""
+    val desResponseBody: JsValue = Json.parse(s"""
          |{
          |    "submittedOn": "2020-06-17T10:53:38Z",
          |    "nonDeductibleLoanInterest": {
@@ -140,7 +147,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |}
          |""".stripMargin)
 
-    def uri: String = s"/other/$nino/$taxYear"
+    def uri: String    = s"/other/$nino/$taxYear"
     def desUri: String = s"/income-tax/reliefs/other/$nino/$taxYear"
 
     def setupStubs(): StubMapping
@@ -158,6 +165,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |        "reason": "des message"
          |      }
     """.stripMargin
+
   }
 
   "Calling the retrieve endpoint" should {
@@ -187,7 +195,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
         def validationErrorTest(requestNino: String, requestId: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
+            override val nino: String    = requestNino
             override val taxYear: String = requestId
 
             override def setupStubs(): StubMapping = {
@@ -209,7 +217,6 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
           ("AA123456A", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
-
 
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -243,4 +250,5 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
       }
     }
   }
+
 }

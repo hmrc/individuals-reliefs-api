@@ -21,6 +21,7 @@ import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with JsonErrorValidators {
+
   val postCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
     Some("myRef"),
     Some("ACME Inc"),
@@ -63,6 +64,7 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
       }
     }
   }
+
   "reads from a JSON with no optional fields supplied" when {
     "passed a JSON with no optional fields" should {
       "return a model with no optional fields" in {
@@ -70,6 +72,7 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -77,6 +80,7 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
       }
     }
   }
+
   "writes from a model with no optional fields" when {
     "passed a model with no optional fields" should {
       "return a JSON with no optional fields" in {
@@ -84,4 +88,5 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
       }
     }
   }
+
 }

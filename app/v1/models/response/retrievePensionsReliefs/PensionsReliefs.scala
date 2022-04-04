@@ -23,6 +23,7 @@ case class PensionsReliefs(regularPensionContributions: Option[BigDecimal],
                            retirementAnnuityPayments: Option[BigDecimal],
                            paymentToEmployersSchemeNoTaxRelief: Option[BigDecimal],
                            overseasPensionSchemeContributions: Option[BigDecimal])
+
 object PensionsReliefs {
   implicit val format: OFormat[PensionsReliefs] = Json.format[PensionsReliefs]
 }

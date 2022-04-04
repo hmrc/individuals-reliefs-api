@@ -30,8 +30,8 @@ import scala.concurrent.Future
 
 class AmendPensionsReliefsServiceSpec extends UnitSpec {
 
-  val taxYear: String = "2017-18"
-  val nino: String = "AA123456A"
+  val taxYear: String                = "2017-18"
+  val nino: String                   = "AA123456A"
   implicit val correlationId: String = "X-123"
 
   val body: AmendPensionsReliefsBody = AmendPensionsReliefsBody(
@@ -47,18 +47,20 @@ class AmendPensionsReliefsServiceSpec extends UnitSpec {
   private val requestData = AmendPensionsReliefsRequest(Nino(nino), taxYear, body)
 
   trait Test extends MockAmendPensionsReliefsConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new AmendPensionsReliefsService(
       connector = mockAmendPensionsReliefsConnector
     )
+
   }
 
   "service" when {
     "service call successful" must {
       "return mapped result" in new Test {
-        MockAmendPensionsReliefsConnector.amend(requestData)
+        MockAmendPensionsReliefsConnector
+          .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         await(service.amend(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
@@ -72,7 +74,8 @@ class AmendPensionsReliefsServiceSpec extends UnitSpec {
       def serviceError(desErrorCode: String, error: MtdError): Unit =
         s"a $desErrorCode error is returned from the service" in new Test {
 
-          MockAmendPensionsReliefsConnector.amend(requestData)
+          MockAmendPensionsReliefsConnector
+            .amend(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
           await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
@@ -80,14 +83,14 @@ class AmendPensionsReliefsServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_TAX_YEAR" -> TaxYearFormatError,
-        "INVALID_PAYLOAD" -> DownstreamError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "INVALID_PAYLOAD"           -> DownstreamError,
+        "SERVER_ERROR"              -> DownstreamError,
+        "SERVICE_UNAVAILABLE"       -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
-}
 
+}

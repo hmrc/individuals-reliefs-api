@@ -28,12 +28,12 @@ case class AmendOtherReliefsBody(nonDeductibleLoanInterest: Option[NonDeductible
 
   private def isEmpty: Boolean =
     nonDeductibleLoanInterest.isEmpty &&
-    payrollGiving.isEmpty &&
-    qualifyingDistributionRedemptionOfSharesAndSecurities.isEmpty &&
-    maintenancePayments.isEmpty &&
-    postCessationTradeReliefAndCertainOtherLosses.isEmpty &&
-    annualPaymentsMade.isEmpty &&
-    qualifyingLoanInterestPayments.isEmpty
+      payrollGiving.isEmpty &&
+      qualifyingDistributionRedemptionOfSharesAndSecurities.isEmpty &&
+      maintenancePayments.isEmpty &&
+      postCessationTradeReliefAndCertainOtherLosses.isEmpty &&
+      annualPaymentsMade.isEmpty &&
+      qualifyingLoanInterestPayments.isEmpty
 
   private def maintenancePaymentsIsEmpty: Boolean =
     maintenancePayments.isDefined && maintenancePayments.get.isEmpty
@@ -49,7 +49,9 @@ case class AmendOtherReliefsBody(nonDeductibleLoanInterest: Option[NonDeductible
     postCessationTradeReliefAndCertainOtherLossesIsEmpty ||
     qualifyingLoanInterestPaymentsIsEmpty
   }
+
 }
+
 object AmendOtherReliefsBody {
   implicit val format: OFormat[AmendOtherReliefsBody] = Json.format[AmendOtherReliefsBody]
 }

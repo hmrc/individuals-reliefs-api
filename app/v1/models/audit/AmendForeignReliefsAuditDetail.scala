@@ -47,4 +47,5 @@ object AmendForeignReliefsAuditDetail {
       auditResponse
     )
   }
+
 }

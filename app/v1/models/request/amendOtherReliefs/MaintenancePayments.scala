@@ -23,7 +23,6 @@ case class MaintenancePayments(customerReference: Option[String],
                                exSpouseDateOfBirth: Option[String],
                                amount: BigDecimal)
 
-
 object MaintenancePayments {
   implicit val format: OFormat[MaintenancePayments] = Json.format[MaintenancePayments]
 }

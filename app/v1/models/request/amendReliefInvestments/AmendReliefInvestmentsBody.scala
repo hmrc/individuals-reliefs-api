@@ -23,6 +23,7 @@ case class AmendReliefInvestmentsBody(vctSubscription: Option[Seq[VctSubscriptio
                                       communityInvestment: Option[Seq[CommunityInvestmentItem]],
                                       seedEnterpriseInvestment: Option[Seq[SeedEnterpriseInvestmentItem]],
                                       socialEnterpriseInvestment: Option[Seq[SocialEnterpriseInvestmentItem]]) {
+
   private def isEmpty: Boolean = vctSubscription.isEmpty &&
     eisSubscription.isEmpty &&
     communityInvestment.isEmpty &&
@@ -46,11 +47,12 @@ case class AmendReliefInvestmentsBody(vctSubscription: Option[Seq[VctSubscriptio
 
   def isIncorrectOrEmptyBody: Boolean = isEmpty || {
     vctSubscriptionIsEmpty ||
-      eisSubscriptionIsEmpty ||
-      communityInvestmentIsEmpty ||
-      seedEnterpriseInvestmentIsEmpty ||
-      socialEnterpriseInvestmentIsEmpty
+    eisSubscriptionIsEmpty ||
+    communityInvestmentIsEmpty ||
+    seedEnterpriseInvestmentIsEmpty ||
+    socialEnterpriseInvestmentIsEmpty
   }
+
 }
 
 object AmendReliefInvestmentsBody {

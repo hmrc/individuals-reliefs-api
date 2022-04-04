@@ -30,25 +30,27 @@ import scala.concurrent.Future
 
 class DeleteForeginReliefsServiceSpec extends UnitSpec {
 
-  val validNino: String = "AA123456A"
-  val validTaxYear: String = "2019-20"
+  val validNino: String              = "AA123456A"
+  val validTaxYear: String           = "2019-20"
   implicit val correlationId: String = "X-123"
 
   val requestData: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(validNino), validTaxYear)
 
   trait Test extends MockDeleteForeignReliefsConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new DeleteForeignReliefsService(
       connector = mockConnector
     )
+
   }
 
   "service" when {
     "a service call is successful" should {
       "return a mapped result" in new Test {
-        MockDeleteForeignReliefsConnector.delete(requestData)
+        MockDeleteForeignReliefsConnector
+          .delete(requestData)
           .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
 
         await(service.delete(requestData)) shouldBe Right(ResponseWrapper("resultId", ()))
@@ -58,7 +60,8 @@ class DeleteForeginReliefsServiceSpec extends UnitSpec {
       def serviceError(desErrorCode: String, error: MtdError): Unit =
         s"return ${error.code} error when $desErrorCode error is returned from the connector" in new Test {
 
-          MockDeleteForeignReliefsConnector.delete(requestData)
+          MockDeleteForeignReliefsConnector
+            .delete(requestData)
             .returns(Future.successful(Left(ResponseWrapper("resultId", DesErrors.single(DesErrorCode(desErrorCode))))))
 
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))

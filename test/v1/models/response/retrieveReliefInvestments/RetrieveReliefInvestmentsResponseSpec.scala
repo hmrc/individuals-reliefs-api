@@ -23,45 +23,57 @@ import v1.models.hateoas.Link
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig {
+
   val retrieveReliefInvestmentsBody: RetrieveReliefInvestmentsResponse = RetrieveReliefInvestmentsResponse(
     "2020-06-17T10:53:38Z",
-    Some(Seq(VctSubscriptionsItem(
-      "VCTREF",
-      Some("VCT Fund X"),
-      Some("2018-04-16"),
-      Some(BigDecimal(23312.00)),
-      BigDecimal(1334.00)
-    ))),
-    Some(Seq(EisSubscriptionsItem(
-      "XTAL",
-      Some("EIS Fund X"),
-      true,
-      Some("2020-12-12"),
-      Some(BigDecimal(23312.00)),
-      BigDecimal(43432.00)
-    ))),
-    Some(Seq(CommunityInvestmentItem(
-      "CIREF",
-      Some("CI X"),
-      Some("2020-12-12"),
-      Some(BigDecimal(6442.00)),
-      BigDecimal(2344.00)
-    ))),
-    Some(Seq(SeedEnterpriseInvestmentItem(
-      "123412/1A",
-      Some("Company Inc"),
-      Some("2020-12-12"),
-      Some(BigDecimal(123123.22)),
-      BigDecimal(3432.00)
-    ))),
-    Some(Seq(SocialEnterpriseInvestmentItem(
-      "123412/1A",
-      Some("SE Inc"),
-      Some("2020-12-12"),
-      Some(BigDecimal(123123.22)),
-      BigDecimal(3432.00)
-    )))
+    Some(
+      Seq(
+        VctSubscriptionsItem(
+          "VCTREF",
+          Some("VCT Fund X"),
+          Some("2018-04-16"),
+          Some(BigDecimal(23312.00)),
+          BigDecimal(1334.00)
+        ))),
+    Some(
+      Seq(
+        EisSubscriptionsItem(
+          "XTAL",
+          Some("EIS Fund X"),
+          true,
+          Some("2020-12-12"),
+          Some(BigDecimal(23312.00)),
+          BigDecimal(43432.00)
+        ))),
+    Some(
+      Seq(
+        CommunityInvestmentItem(
+          "CIREF",
+          Some("CI X"),
+          Some("2020-12-12"),
+          Some(BigDecimal(6442.00)),
+          BigDecimal(2344.00)
+        ))),
+    Some(
+      Seq(
+        SeedEnterpriseInvestmentItem(
+          "123412/1A",
+          Some("Company Inc"),
+          Some("2020-12-12"),
+          Some(BigDecimal(123123.22)),
+          BigDecimal(3432.00)
+        ))),
+    Some(
+      Seq(
+        SocialEnterpriseInvestmentItem(
+          "123412/1A",
+          Some("SE Inc"),
+          Some("2020-12-12"),
+          Some(BigDecimal(123123.22)),
+          BigDecimal(3432.00)
+        )))
   )
+
   val json = Json.parse(
     """
       |{
@@ -116,7 +128,6 @@ class RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig 
         """.stripMargin
   )
 
-
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
@@ -124,6 +135,7 @@ class RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig 
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
@@ -131,9 +143,10 @@ class RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig 
       }
     }
   }
+
   "LinksFactory" should {
     "return the correct links" in {
-      val nino = "mynino"
+      val nino    = "mynino"
       val taxYear = "mytaxyear"
 
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
@@ -145,4 +158,5 @@ class RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig 
         )
     }
   }
+
 }
