@@ -27,16 +27,15 @@ import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequest
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendPensionsReliefsConnector@Inject()(val http: HttpClient,
-                                             val appConfig: AppConfig) extends BaseDownstreamConnector {
-  def amend(request: AmendPensionsReliefsRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    correlationId: String): Future[DesOutcome[Unit]] = {
+class AmendPensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+
+  def amend(
+      request: AmendPensionsReliefsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
 
     put(
       body = request.body,
       DesUri[Unit](s"income-tax/reliefs/pensions/${request.nino.nino}/${request.taxYear}")
     )
   }
+
 }

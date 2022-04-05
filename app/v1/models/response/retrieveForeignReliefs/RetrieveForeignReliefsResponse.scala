@@ -22,17 +22,17 @@ import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
 case class RetrieveForeignReliefsResponse(
-                                           submittedOn: String,
-                                           foreignTaxCreditRelief: Option[ForeignTaxCreditRelief],
-                                           foreignIncomeTaxCreditRelief: Option[Seq[ForeignIncomeTaxCreditRelief]],
-                                           foreignTaxForFtcrNotClaimed: Option[ForeignTaxForFtcrNotClaimed]
-                                         )
-
+    submittedOn: String,
+    foreignTaxCreditRelief: Option[ForeignTaxCreditRelief],
+    foreignIncomeTaxCreditRelief: Option[Seq[ForeignIncomeTaxCreditRelief]],
+    foreignTaxForFtcrNotClaimed: Option[ForeignTaxForFtcrNotClaimed]
+)
 
 object RetrieveForeignReliefsResponse extends HateoasLinks {
   implicit val format: OFormat[RetrieveForeignReliefsResponse] = Json.format[RetrieveForeignReliefsResponse]
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData] {
+
     override def links(appConfig: AppConfig, data: RetrieveForeignReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -41,9 +41,9 @@ object RetrieveForeignReliefsResponse extends HateoasLinks {
         deleteForeignReliefs(appConfig, nino, taxYear)
       )
     }
+
   }
 
 }
-
 
 case class RetrieveForeignReliefsHateoasData(nino: String, taxYear: String) extends HateoasData

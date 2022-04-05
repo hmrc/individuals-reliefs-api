@@ -26,9 +26,8 @@ import scala.concurrent.Future
 
 class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String    = "AA123456A"
   val taxYear: String = "2019-20"
-
 
   class Test extends MockHttpClient with MockAppConfig {
 
@@ -50,16 +49,18 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
       "the downstream call is successful" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        MockedHttpClient.
-          delete(
+        MockedHttpClient
+          .delete(
             url = s"$baseUrl/income-tax/reliefs/pensions/${request.nino.nino}/${request.taxYear}",
             config = dummyDesHeaderCarrierConfig,
             requiredHeaders = requiredDesHeaders,
             excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-          ).returns(Future.successful(outcome))
+          )
+          .returns(Future.successful(outcome))
 
         await(connector.delete(request)) shouldBe outcome
       }
     }
   }
+
 }

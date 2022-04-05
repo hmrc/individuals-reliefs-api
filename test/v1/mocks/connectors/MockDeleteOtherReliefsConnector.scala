@@ -32,9 +32,10 @@ trait MockDeleteOtherReliefsConnector extends MockFactory {
 
     def delete(requestData: DeleteOtherReliefsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
       (mockConnector
-        .delete(_: DeleteOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _:String))
+        .delete(_: DeleteOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
+
   }
 
 }

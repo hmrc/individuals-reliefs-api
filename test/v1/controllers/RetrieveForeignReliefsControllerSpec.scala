@@ -35,7 +35,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignReliefsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveForeignReliefsService
@@ -44,21 +44,24 @@ class RetrieveForeignReliefsControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
-  private val correlationId = "X-123"
-  private val rawData = RetrieveForeignReliefsRawData(nino, taxYear)
-  private val requestData = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
+  private val nino            = "AA123456A"
+  private val taxYear         = "2019-20"
+  private val correlationId   = "X-123"
+  private val rawData         = RetrieveForeignReliefsRawData(nino, taxYear)
+  private val requestData     = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
   private val testHateoasLink = Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
+
   private val responseBody = RetrieveForeignReliefsResponse(
     "2020-06-17T10:53:38Z",
     Some(ForeignTaxCreditRelief(2309.95)),
-    Some(Seq(ForeignIncomeTaxCreditRelief(
-      "FRA",
-      Some(1640.32),
-      1204.78,
-      false
-    ))),
+    Some(
+      Seq(
+        ForeignIncomeTaxCreditRelief(
+          "FRA",
+          Some(1640.32),
+          1204.78,
+          false
+        ))),
     Some(ForeignTaxForFtcrNotClaimed(1749.98))
   )
 
@@ -160,4 +163,5 @@ class RetrieveForeignReliefsControllerSpec
       }
     }
   }
+
 }

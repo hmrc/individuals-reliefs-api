@@ -36,7 +36,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendPensionsReliefsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAmendPensionsReliefsService
@@ -45,8 +45,8 @@ class AmendPensionsReliefsControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
+  private val nino          = "AA123456A"
+  private val taxYear       = "2019-20"
   private val correlationId = "X-123"
 
   private val testHateoasLinks = Seq(
@@ -77,7 +77,7 @@ class AmendPensionsReliefsControllerSpec
     )
   )
 
-  private val rawData = AmendPensionsReliefsRawData(nino, taxYear, requestJson)
+  private val rawData     = AmendPensionsReliefsRawData(nino, taxYear, requestJson)
   private val requestData = AmendPensionsReliefsRequest(Nino(nino), taxYear, requestBody)
 
   trait Test {
@@ -99,8 +99,7 @@ class AmendPensionsReliefsControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  val hateoasResponse: JsValue = Json.parse(
-    """
+  val hateoasResponse: JsValue = Json.parse("""
       |{
       |        "links": [
       |          {
@@ -121,7 +120,6 @@ class AmendPensionsReliefsControllerSpec
       |        ]
       |      }
       |""".stripMargin)
-
 
   def event(auditResponse: AuditResponse): AuditEvent[AmendPensionsReliefsAuditDetail] =
     AuditEvent(
@@ -177,7 +175,6 @@ class AmendPensionsReliefsControllerSpec
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-
             val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
             MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
@@ -229,4 +226,5 @@ class AmendPensionsReliefsControllerSpec
       }
     }
   }
+
 }

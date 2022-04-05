@@ -32,9 +32,10 @@ trait MockAmendReliefInvestmentsConnector extends MockFactory {
 
     def amend(requestData: AmendReliefInvestmentsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
       (mockConnector
-        .amend(_: AmendReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _:String))
+        .amend(_: AmendReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
+
   }
 
 }

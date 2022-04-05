@@ -35,7 +35,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveReliefInvestmentsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveReliefInvestmentsService
@@ -44,8 +44,8 @@ class RetrieveReliefInvestmentsControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
+  private val nino          = "AA123456A"
+  private val taxYear       = "2019-20"
   private val correlationId = "X-123"
 
   trait Test {
@@ -66,49 +66,59 @@ class RetrieveReliefInvestmentsControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val rawData = RetrieveReliefInvestmentsRawData(nino, taxYear)
+  private val rawData     = RetrieveReliefInvestmentsRawData(nino, taxYear)
   private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), taxYear)
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveReliefInvestmentsResponse(
     "2020-06-17T10:53:38Z",
-    Some(Seq(VctSubscriptionsItem(
-      "VCTREF",
-      Some("VCT Fund X"),
-      Some("2018-04-16"),
-      Some(BigDecimal(23312.00)),
-      BigDecimal(1334.00)
-    ))),
-    Some(Seq(EisSubscriptionsItem(
-      "XTAL",
-      Some("EIS Fund X"),
-      knowledgeIntensive = true,
-      Some("2020-12-12"),
-      Some(BigDecimal(23312.00)),
-      BigDecimal(43432.00)
-    ))),
-    Some(Seq(CommunityInvestmentItem(
-      "CIREF",
-      Some("CI X"),
-      Some("2020-12-12"),
-      Some(BigDecimal(6442.00)),
-      BigDecimal(2344.00)
-    ))),
-    Some(Seq(SeedEnterpriseInvestmentItem(
-      "123412/1A",
-      Some("Company Inc"),
-      Some("2020-12-12"),
-      Some(BigDecimal(123123.22)),
-      BigDecimal(3432.00)
-    ))),
-    Some(Seq(SocialEnterpriseInvestmentItem(
-      "123412/1A",
-      Some("SE Inc"),
-      Some("2020-12-12"),
-      Some(BigDecimal(123123.22)),
-      BigDecimal(3432.00)
-    )))
+    Some(
+      Seq(
+        VctSubscriptionsItem(
+          "VCTREF",
+          Some("VCT Fund X"),
+          Some("2018-04-16"),
+          Some(BigDecimal(23312.00)),
+          BigDecimal(1334.00)
+        ))),
+    Some(
+      Seq(
+        EisSubscriptionsItem(
+          "XTAL",
+          Some("EIS Fund X"),
+          knowledgeIntensive = true,
+          Some("2020-12-12"),
+          Some(BigDecimal(23312.00)),
+          BigDecimal(43432.00)
+        ))),
+    Some(
+      Seq(
+        CommunityInvestmentItem(
+          "CIREF",
+          Some("CI X"),
+          Some("2020-12-12"),
+          Some(BigDecimal(6442.00)),
+          BigDecimal(2344.00)
+        ))),
+    Some(
+      Seq(
+        SeedEnterpriseInvestmentItem(
+          "123412/1A",
+          Some("Company Inc"),
+          Some("2020-12-12"),
+          Some(BigDecimal(123123.22)),
+          BigDecimal(3432.00)
+        ))),
+    Some(
+      Seq(
+        SocialEnterpriseInvestmentItem(
+          "123412/1A",
+          Some("SE Inc"),
+          Some("2020-12-12"),
+          Some(BigDecimal(123123.22)),
+          BigDecimal(3432.00)
+        )))
   )
 
   "handleRequest" should {
@@ -191,4 +201,5 @@ class RetrieveReliefInvestmentsControllerSpec
       }
     }
   }
+
 }

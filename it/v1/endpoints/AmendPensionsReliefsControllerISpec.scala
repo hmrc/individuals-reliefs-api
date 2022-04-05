@@ -29,7 +29,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino: String = "AA123456A"
+    val nino: String    = "AA123456A"
     val taxYear: String = "2020-21"
 
     def amount: BigDecimal = 5000.99
@@ -48,8 +48,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
          |""".stripMargin
     )
 
-    val responseBody = Json.parse(
-      s"""
+    val responseBody = Json.parse(s"""
          |{
          |  "links": [
          |    {
@@ -90,6 +89,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
          |        "reason": "des message"
          |      }
     """.stripMargin
+
   }
 
   "Calling the amend endpoint" should {
@@ -200,8 +200,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
           response.json shouldBe Json.toJson(RuleIncorrectOrEmptyBodyError)
         }
         s"an empty pensionReliefs object is provided" in new Test {
-          override val requestBodyJson: JsValue = Json.parse(
-            """{
+          override val requestBodyJson: JsValue = Json.parse("""{
               | "pensionReliefs": {}
               |}""".stripMargin)
 
@@ -239,10 +238,12 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, DownstreamError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError),
-          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError))
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError)
+        )
 
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }
+
 }

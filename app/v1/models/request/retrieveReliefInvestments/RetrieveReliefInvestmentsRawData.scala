@@ -18,6 +18,4 @@ package v1.models.request.retrieveReliefInvestments
 
 import v1.models.request.RawData
 
-case class RetrieveReliefInvestmentsRawData(nino: String, taxYear: String) extends RawData {
-
-}
+case class RetrieveReliefInvestmentsRawData(nino: String, taxYear: String) extends RawData {}

@@ -18,8 +18,11 @@ package v1.models.response.retrieveOtherReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class QualifyingDistributionRedemptionOfSharesAndSecurities(customerReference: Option[String], amount:BigDecimal)
+case class QualifyingDistributionRedemptionOfSharesAndSecurities(customerReference: Option[String], amount: BigDecimal)
 
 object QualifyingDistributionRedemptionOfSharesAndSecurities {
-  implicit val format: OFormat[QualifyingDistributionRedemptionOfSharesAndSecurities] = Json.format[QualifyingDistributionRedemptionOfSharesAndSecurities]
+
+  implicit val format: OFormat[QualifyingDistributionRedemptionOfSharesAndSecurities] =
+    Json.format[QualifyingDistributionRedemptionOfSharesAndSecurities]
+
 }

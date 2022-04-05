@@ -38,5 +38,7 @@ trait MockDeleteForeignReliefsService extends MockFactory {
         .delete(_: DeleteForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)
     }
+
   }
+
 }

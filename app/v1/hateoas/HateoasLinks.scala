@@ -23,7 +23,7 @@ import v1.models.hateoas.RelType._
 
 trait HateoasLinks {
 
-  //Domain URIs
+  // Domain URIs
   private def reliefInvestmentsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/investment/$nino/$taxYear"
 
@@ -36,7 +36,7 @@ trait HateoasLinks {
   private def pensionsReliefsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/pensions/$nino/$taxYear"
 
-  //API resource links
+  // API resource links
   def retrieveReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
@@ -50,7 +50,7 @@ trait HateoasLinks {
     Link(href = otherReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
   def amendOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-  Link(href = otherReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_OTHER)
+    Link(href = otherReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_OTHER)
 
   def deleteOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = otherReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_OTHER)
@@ -72,4 +72,5 @@ trait HateoasLinks {
 
   def deletePensionsReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_PENSIONS)
+
 }

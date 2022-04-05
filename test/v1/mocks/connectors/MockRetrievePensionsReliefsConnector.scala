@@ -31,12 +31,17 @@ trait MockRetrievePensionsReliefsConnector extends MockFactory {
 
   object MockRetrievePensionsReliefsConnector {
 
-    def retrieve(requestData: RetrievePensionsReliefsRequest):
-    CallHandler4[RetrievePensionsReliefsRequest, HeaderCarrier, ExecutionContext, String, Future[DesOutcome[RetrievePensionsReliefsResponse]]] = {
+    def retrieve(requestData: RetrievePensionsReliefsRequest): CallHandler4[
+      RetrievePensionsReliefsRequest,
+      HeaderCarrier,
+      ExecutionContext,
+      String,
+      Future[DesOutcome[RetrievePensionsReliefsResponse]]] = {
       (mockConnector
-        .retrieve(_: RetrievePensionsReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _:String))
+        .retrieve(_: RetrievePensionsReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
+
   }
 
 }

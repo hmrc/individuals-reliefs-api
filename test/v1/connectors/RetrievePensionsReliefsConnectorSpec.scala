@@ -28,9 +28,10 @@ import scala.concurrent.Future
 class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
   val taxYear: String = "2017-18"
-  val nino: String = "AA123456A"
+  val nino: String    = "AA123456A"
 
   class Test extends MockHttpClient with MockAppConfig {
+
     val connector: RetrievePensionsReliefsConnector = new RetrievePensionsReliefsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
@@ -55,10 +56,12 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
             dummyDesHeaderCarrierConfig,
             requiredDesHeaders,
             Seq("AnotherHeader" -> "HeaderValue")
-          ).returns(Future.successful(outcome))
+          )
+          .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
       }
     }
   }
+
 }

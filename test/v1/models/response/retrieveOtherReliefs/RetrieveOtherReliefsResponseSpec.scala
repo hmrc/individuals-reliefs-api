@@ -23,36 +23,24 @@ import v1.models.hateoas.Link
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
+
   val retrieveOtherReliefsBody: RetrieveOtherReliefsResponse = RetrieveOtherReliefsResponse(
     "2020-06-17T10:53:38Z",
-    Some(NonDeductibleLoanInterest(
-      Some("myref"),
-      763.00)),
-    Some(PayrollGiving(
-      Some("myref"),
-      154.00)),
-    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(
-      Some("myref"),
-      222.22)),
-    Some(Seq(MaintenancePayments(
-      Some("myref"),
-      Some("Hilda"),
-      Some("2000-01-01"),
-      222.22))),
-    Some(Seq(PostCessationTradeReliefAndCertainOtherLosses(
-      Some("myref"),
-      Some("ACME Inc"),
-      Some("2019-08-10"),
-      Some("Widgets Manufacturer"),
-      Some("AB12412/A12"),
-      222.22))),
-    Some(AnnualPaymentsMade(
-      Some("myref"),
-      763.00)),
-    Some(Seq(QualifyingLoanInterestPayments(
-      Some("myref"),
-      Some("Maurice"),
-      763.00)))
+    Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
+    Some(PayrollGiving(Some("myref"), 154.00)),
+    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+    Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
+    Some(
+      Seq(
+        PostCessationTradeReliefAndCertainOtherLosses(
+          Some("myref"),
+          Some("ACME Inc"),
+          Some("2019-08-10"),
+          Some("Widgets Manufacturer"),
+          Some("AB12412/A12"),
+          222.22))),
+    Some(AnnualPaymentsMade(Some("myref"), 763.00)),
+    Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
   val json = Json.parse(
@@ -111,6 +99,7 @@ class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -118,9 +107,10 @@ class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
       }
     }
   }
+
   "LinksFactory" should {
     "return the correct links" in {
-      val nino = "mynino"
+      val nino    = "mynino"
       val taxYear = "mytaxyear"
 
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
@@ -132,4 +122,5 @@ class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
         )
     }
   }
+
 }

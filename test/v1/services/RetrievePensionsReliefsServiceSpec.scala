@@ -31,8 +31,8 @@ import scala.concurrent.Future
 
 class RetrievePensionsReliefsServiceSpec extends UnitSpec {
 
-  private val nino: String = "AA123456A"
-  private val taxYear: String = "2017-18"
+  private val nino: String           = "AA123456A"
+  private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
   private val fullResponseModel = RetrievePensionsReliefsResponse(
@@ -49,17 +49,20 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
   private val requestData = RetrievePensionsReliefsRequest(Nino(nino), taxYear)
 
   trait Test extends MockRetrievePensionsReliefsConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
     val service = new RetrievePensionsReliefsService(
       connector = mockConnector
     )
+
   }
 
   "service" when {
     "service call successful" must {
       "return mapped result" in new Test {
-        MockRetrievePensionsReliefsConnector.retrieve(requestData)
+        MockRetrievePensionsReliefsConnector
+          .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, fullResponseModel))))
 
         await(service.retrieve(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
@@ -72,7 +75,8 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockRetrievePensionsReliefsConnector.retrieve(requestData)
+            MockRetrievePensionsReliefsConnector
+              .retrieve(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
             await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
@@ -90,4 +94,5 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
       }
     }
   }
+
 }

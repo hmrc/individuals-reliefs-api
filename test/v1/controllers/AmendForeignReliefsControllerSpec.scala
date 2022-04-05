@@ -36,7 +36,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendForeignReliefsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAmendForeignReliefsService
@@ -45,10 +45,10 @@ class AmendForeignReliefsControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
+  private val nino          = "AA123456A"
+  private val taxYear       = "2019-20"
   private val correlationId = "X-123"
-  private val amount = 1234.56
+  private val amount        = 1234.56
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -97,22 +97,25 @@ class AmendForeignReliefsControllerSpec
   )
 
   private val requestBody = AmendForeignReliefsBody(
-    foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
-      amount = amount
-    )),
-    foreignIncomeTaxCreditRelief = Some(Seq(ForeignIncomeTaxCreditRelief(
-      countryCode = "FRA",
-      foreignTaxPaid = Some(amount),
-      taxableAmount = amount,
-      employmentLumpSum = true
-    ))),
-    foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
-      amount = amount
-    ))
+    foreignTaxCreditRelief = Some(
+      ForeignTaxCreditRelief(
+        amount = amount
+      )),
+    foreignIncomeTaxCreditRelief = Some(
+      Seq(
+        ForeignIncomeTaxCreditRelief(
+          countryCode = "FRA",
+          foreignTaxPaid = Some(amount),
+          taxableAmount = amount,
+          employmentLumpSum = true
+        ))),
+    foreignTaxForFtcrNotClaimed = Some(
+      ForeignTaxForFtcrNotClaimed(
+        amount = amount
+      ))
   )
 
-  val responseBody: JsValue = Json.parse(
-    s"""
+  val responseBody: JsValue = Json.parse(s"""
        |{
        |  "links": [
        |    {
@@ -149,7 +152,7 @@ class AmendForeignReliefsControllerSpec
       )
     )
 
-  private val rawData = AmendForeignReliefsRawData(nino, taxYear, requestJson)
+  private val rawData     = AmendForeignReliefsRawData(nino, taxYear, requestJson)
   private val requestData = AmendForeignReliefsRequest(Nino(nino), taxYear, requestBody)
 
   "handleRequest" should {
@@ -243,4 +246,5 @@ class AmendForeignReliefsControllerSpec
       }
     }
   }
+
 }

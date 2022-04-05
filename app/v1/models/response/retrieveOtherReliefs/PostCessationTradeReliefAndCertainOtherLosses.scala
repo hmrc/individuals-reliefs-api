@@ -25,7 +25,6 @@ case class PostCessationTradeReliefAndCertainOtherLosses(customerReference: Opti
                                                          incomeSource: Option[String],
                                                          amount: BigDecimal)
 
-
 object PostCessationTradeReliefAndCertainOtherLosses {
   implicit val format: OFormat[PostCessationTradeReliefAndCertainOtherLosses] = Json.format[PostCessationTradeReliefAndCertainOtherLosses]
 }

@@ -27,8 +27,8 @@ import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 class AuthISpec extends IntegrationBaseSpec {
 
   private trait Test {
-    val nino          = "AA123456A"
-    val taxYear       = "2021-22"
+    val nino    = "AA123456A"
+    val taxYear = "2021-22"
 
     def setupStubs(): StubMapping
 
@@ -40,8 +40,7 @@ class AuthISpec extends IntegrationBaseSpec {
 
     def desUri: String = s"/income-tax/reliefs/investment/$nino/$taxYear"
 
-    val desResponse: JsValue = Json.parse(
-      """
+    val desResponse: JsValue = Json.parse("""
         |{
         |  "submittedOn": "2020-06-17T10:53:38Z",
         |  "vctSubscription":[
@@ -92,6 +91,7 @@ class AuthISpec extends IntegrationBaseSpec {
         |  ]
         |}
     """.stripMargin)
+
   }
 
   "Calling the investment endpoint" when {

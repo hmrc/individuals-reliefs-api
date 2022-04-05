@@ -18,7 +18,6 @@ package v1.controllers.requestParsers.validators.validations
 
 import v1.models.errors.MtdError
 
-
 object NameValidation {
 
   private val nameRegex =
@@ -26,14 +25,17 @@ object NameValidation {
 
   def validateOptional(field: Option[String], path: String, error: MtdError): List[MtdError] = {
     field match {
-      case None => NoValidationErrors
+      case None        => NoValidationErrors
       case Some(value) => validate(value, path, error)
     }
   }
 
   private def validate(name: String, path: String, error: MtdError): List[MtdError] = {
-    if (name.matches(nameRegex)) NoValidationErrors else List(
-      error.copy(paths = Some(Seq(path)))
-    )
+    if (name.matches(nameRegex)) NoValidationErrors
+    else
+      List(
+        error.copy(paths = Some(Seq(path)))
+      )
   }
+
 }

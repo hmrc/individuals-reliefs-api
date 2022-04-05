@@ -21,8 +21,8 @@ import v1.models.domain.Nino
 import v1.controllers.requestParsers.validators.AmendReliefInvestmentValidator
 import v1.models.request.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest}
 
-class AmendReliefInvestmentsRequestParser @Inject()(val validator: AmendReliefInvestmentValidator)
-  extends RequestParser[AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest] {
+class AmendReliefInvestmentsRequestParser @Inject() (val validator: AmendReliefInvestmentValidator)
+    extends RequestParser[AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest] {
 
   override protected def requestFor(data: AmendReliefInvestmentsRawData): AmendReliefInvestmentsRequest =
     AmendReliefInvestmentsRequest(Nino(data.nino), data.taxYear, data.body.as[AmendReliefInvestmentsBody])

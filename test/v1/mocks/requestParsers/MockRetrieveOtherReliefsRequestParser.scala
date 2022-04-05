@@ -27,8 +27,11 @@ trait MockRetrieveOtherReliefsRequestParser extends MockFactory {
   val mockRequestDataParser: RetrieveOtherReliefsRequestParser = mock[RetrieveOtherReliefsRequestParser]
 
   object MockRetrieveOtherReliefsRequestParser {
+
     def parse(data: RetrieveOtherReliefsRawData): CallHandler[Either[ErrorWrapper, RetrieveOtherReliefsRequest]] = {
       (mockRequestDataParser.parseRequest(_: RetrieveOtherReliefsRawData)(_: String)).expects(data, *)
     }
+
   }
+
 }

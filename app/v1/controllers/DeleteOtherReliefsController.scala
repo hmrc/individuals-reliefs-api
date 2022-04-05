@@ -32,14 +32,16 @@ import v1.services.{AuditService, DeleteOtherReliefsService, EnrolmentsAuthServi
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteOtherReliefsController @Inject()(val authService: EnrolmentsAuthService,
-                                             val lookupService: MtdIdLookupService,
-                                             parser: DeleteOtherReliefsRequestParser,
-                                             service: DeleteOtherReliefsService,
-                                             auditService: AuditService,
-                                             cc: ControllerComponents,
-                                             val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging {
+class DeleteOtherReliefsController @Inject() (val authService: EnrolmentsAuthService,
+                                              val lookupService: MtdIdLookupService,
+                                              parser: DeleteOtherReliefsRequestParser,
+                                              service: DeleteOtherReliefsService,
+                                              auditService: AuditService,
+                                              cc: ControllerComponents,
+                                              val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+    extends AuthorisedController(cc)
+    with BaseController
+    with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "DeleteOtherReliefsController", endpointName = "deleteOtherReliefs")
@@ -52,15 +54,15 @@ class DeleteOtherReliefsController @Inject()(val authService: EnrolmentsAuthServ
       val rawData = DeleteOtherReliefsRawData(nino, taxYear)
       val result =
         for {
-          parsedRequest <- EitherT.fromEither[Future](parser.parseRequest(rawData))
+          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.delete(parsedRequest))
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          auditSubmission(DeleteOtherReliefsAuditDetail(request.userDetails, nino, taxYear,
-            serviceResponse.correlationId, AuditResponse(NO_CONTENT, Right(None))))
+          auditSubmission(
+            DeleteOtherReliefsAuditDetail(request.userDetails, nino, taxYear, serviceResponse.correlationId, AuditResponse(NO_CONTENT, Right(None))))
 
           NoContent
             .withApiHeaders(serviceResponse.correlationId)
@@ -68,14 +70,19 @@ class DeleteOtherReliefsController @Inject()(val authService: EnrolmentsAuthServ
         }
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
-        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
 
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
 
-        auditSubmission(DeleteOtherReliefsAuditDetail(request.userDetails, nino, taxYear,
-          correlationId, AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+        auditSubmission(
+          DeleteOtherReliefsAuditDetail(
+            request.userDetails,
+            nino,
+            taxYear,
+            correlationId,
+            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result
       }.merge
@@ -83,21 +90,17 @@ class DeleteOtherReliefsController @Inject()(val authService: EnrolmentsAuthServ
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
-      case NinoFormatError |
-           BadRequestError |
-           TaxYearFormatError |
-           RuleTaxYearNotSupportedError |
-           RuleTaxYearRangeInvalidError => BadRequest(Json.toJson(errorWrapper))
+      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError =>
+        BadRequest(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case _ => unhandledError(errorWrapper)
+      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case _               => unhandledError(errorWrapper)
     }
   }
 
-  private def auditSubmission(details: DeleteOtherReliefsAuditDetail)
-                             (implicit hc: HeaderCarrier,
-                              ec: ExecutionContext) = {
+  private def auditSubmission(details: DeleteOtherReliefsAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
     val event = AuditEvent("DeleteOtherReliefs", "delete-other-reliefs", details)
     auditService.auditEvent(event)
   }
+
 }

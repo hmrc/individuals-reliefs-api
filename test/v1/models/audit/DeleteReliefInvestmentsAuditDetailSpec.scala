@@ -22,9 +22,7 @@ import v1.models.errors.NinoFormatError
 
 class DeleteReliefInvestmentsAuditDetailSpec extends UnitSpec {
 
-
-  val validJson = Json.parse(
-    """{
+  val validJson = Json.parse("""{
        |    "userType": "Agent",
        |    "agentReferenceNumber":"012345678",
        |    "nino": "ZG903729C",
@@ -48,8 +46,7 @@ class DeleteReliefInvestmentsAuditDetailSpec extends UnitSpec {
     )
   )
 
-  val invalidNinoJson = Json.parse(
-    """{
+  val invalidNinoJson = Json.parse("""{
       |    "userType": "Agent",
       |    "agentReferenceNumber":"012345678",
       |    "nino": "notANino",
@@ -78,8 +75,6 @@ class DeleteReliefInvestmentsAuditDetailSpec extends UnitSpec {
     )
   )
 
-
-
   "writes" must {
     "work" when {
       "success response" in {
@@ -92,4 +87,5 @@ class DeleteReliefInvestmentsAuditDetailSpec extends UnitSpec {
       }
     }
   }
+
 }

@@ -22,14 +22,22 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import v1.models.errors.{
+  DownstreamError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
 class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino = "AA123456A"
+    val nino    = "AA123456A"
     val taxYear = "2021-22"
 
     val responseBody: JsValue = Json.parse(
@@ -157,7 +165,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |""".stripMargin
     )
 
-    def uri: String = s"/investment/$nino/$taxYear"
+    def uri: String    = s"/investment/$nino/$taxYear"
     def desUri: String = s"/income-tax/reliefs/investment/$nino/$taxYear"
 
     def setupStubs(): StubMapping
@@ -175,6 +183,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
          |        "reason": "des message"
          |      }
     """.stripMargin
+
   }
 
   "Calling the retrieve endpoint" should {
@@ -204,7 +213,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         def validationErrorTest(requestNino: String, requestId: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
+            override val nino: String    = requestNino
             override val taxYear: String = requestId
 
             override def setupStubs(): StubMapping = {
@@ -226,7 +235,6 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
           ("AA123456A", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
-
 
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -260,5 +268,5 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
       }
     }
   }
-}
 
+}

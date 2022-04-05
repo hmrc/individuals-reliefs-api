@@ -47,9 +47,11 @@ class AmendForeignReliefsValidator extends Validator[AmendForeignReliefsRawData]
     val body = data.body.as[AmendForeignReliefsBody]
 
     val foreignTaxCreditReliefErrors = body.foreignTaxCreditRelief.map(validateForeignTaxCreditRelief)
-    val foreignIncomeTaxCreditReliefErrors = body.foreignIncomeTaxCreditRelief.map(_.zipWithIndex.flatMap {
-      case (relief, i) => validateForeignIncomeTaxCreditRelief(relief, i)
-    }).map(_.toList)
+    val foreignIncomeTaxCreditReliefErrors = body.foreignIncomeTaxCreditRelief
+      .map(_.zipWithIndex.flatMap { case (relief, i) =>
+        validateForeignIncomeTaxCreditRelief(relief, i)
+      })
+      .map(_.toList)
     val foreignTaxForFtcrNotClaimedErrors = body.foreignTaxForFtcrNotClaimed.map(validateForeignTaxForFtcrNotClaimed)
 
     val errors: List[List[MtdError]] =
@@ -93,8 +95,8 @@ class AmendForeignReliefsValidator extends Validator[AmendForeignReliefsRawData]
     ).flatten
   }
 
-
   override def validate(data: AmendForeignReliefsRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

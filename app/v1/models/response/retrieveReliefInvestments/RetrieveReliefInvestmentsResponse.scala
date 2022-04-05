@@ -22,18 +22,19 @@ import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
 case class RetrieveReliefInvestmentsResponse(
-                                          submittedOn: String,
-                                          vctSubscription: Option[Seq[VctSubscriptionsItem]],
-                                          eisSubscription: Option[Seq[EisSubscriptionsItem]],
-                                          communityInvestment: Option[Seq[CommunityInvestmentItem]],
-                                          seedEnterpriseInvestment: Option[Seq[SeedEnterpriseInvestmentItem]],
-                                          socialEnterpriseInvestment: Option[Seq[SocialEnterpriseInvestmentItem]]
-                                        )
+    submittedOn: String,
+    vctSubscription: Option[Seq[VctSubscriptionsItem]],
+    eisSubscription: Option[Seq[EisSubscriptionsItem]],
+    communityInvestment: Option[Seq[CommunityInvestmentItem]],
+    seedEnterpriseInvestment: Option[Seq[SeedEnterpriseInvestmentItem]],
+    socialEnterpriseInvestment: Option[Seq[SocialEnterpriseInvestmentItem]]
+)
 
 object RetrieveReliefInvestmentsResponse extends HateoasLinks {
   implicit val format: OFormat[RetrieveReliefInvestmentsResponse] = Json.format[RetrieveReliefInvestmentsResponse]
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrieveReliefInvestmentsResponse, RetrieveReliefInvestmentsHateoasData] {
+
     override def links(appConfig: AppConfig, data: RetrieveReliefInvestmentsHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -42,6 +43,7 @@ object RetrieveReliefInvestmentsResponse extends HateoasLinks {
         deleteReliefInvestments(appConfig, nino, taxYear)
       )
     }
+
   }
 
 }

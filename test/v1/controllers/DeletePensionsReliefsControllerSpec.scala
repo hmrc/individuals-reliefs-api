@@ -33,7 +33,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeletePensionsReliefsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockDeletePensionsReliefsService
@@ -42,8 +42,8 @@ class DeletePensionsReliefsControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val nino = "AA123456A"
-  private val taxYear = "2019-20"
+  private val nino          = "AA123456A"
+  private val taxYear       = "2019-20"
   private val correlationId = "X-123"
 
   trait Test {
@@ -64,7 +64,7 @@ class DeletePensionsReliefsControllerSpec
     MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
-  private val rawData = DeletePensionsReliefsRawData(nino, taxYear)
+  private val rawData     = DeletePensionsReliefsRawData(nino, taxYear)
   private val requestData = DeletePensionsReliefsRequest(Nino(nino), taxYear)
 
   def event(auditResponse: AuditResponse): AuditEvent[DeletePensionsReliefsAuditDetail] =
@@ -167,4 +167,5 @@ class DeletePensionsReliefsControllerSpec
       }
     }
   }
+
 }

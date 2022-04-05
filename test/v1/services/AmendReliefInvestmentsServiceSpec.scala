@@ -29,64 +29,76 @@ import scala.concurrent.Future
 
 class AmendReliefInvestmentsServiceSpec extends UnitSpec {
 
-  private val nino: String = "AA123456A"
-  private val taxYear: String = "2017-18"
+  private val nino: String           = "AA123456A"
+  private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
   private val requestBody = AmendReliefInvestmentsBody(
-    Some(Seq(VctSubscriptionsItem(
-      "VCTREF",
-      Some("VCT Fund X"),
-      Some("2018-04-16"),
-      Some(BigDecimal(23312.00)),
-      BigDecimal(1334.00)
-    ))),
-    Some(Seq(EisSubscriptionsItem(
-      "XTAL",
-      Some("EIS Fund X"),
-      true,
-      Some("2020-12-12"),
-      Some(BigDecimal(23312.00)),
-      BigDecimal(43432.00)
-    ))),
-    Some(Seq(CommunityInvestmentItem(
-      "CIREF",
-      Some("CI X"),
-      Some("2020-12-12"),
-      Some(BigDecimal(6442.00)),
-      BigDecimal(2344.00)
-    ))),
-    Some(Seq(SeedEnterpriseInvestmentItem(
-      "123412/1A",
-      Some("Company Inc"),
-      Some("2020-12-12"),
-      Some(BigDecimal(123123.22)),
-      BigDecimal(3432.00)
-    ))),
-    Some(Seq(SocialEnterpriseInvestmentItem(
-      "123412/1A",
-      Some("SE Inc"),
-      Some("2020-12-12"),
-      Some(BigDecimal(123123.22)),
-      BigDecimal(3432.00)
-    )))
+    Some(
+      Seq(
+        VctSubscriptionsItem(
+          "VCTREF",
+          Some("VCT Fund X"),
+          Some("2018-04-16"),
+          Some(BigDecimal(23312.00)),
+          BigDecimal(1334.00)
+        ))),
+    Some(
+      Seq(
+        EisSubscriptionsItem(
+          "XTAL",
+          Some("EIS Fund X"),
+          true,
+          Some("2020-12-12"),
+          Some(BigDecimal(23312.00)),
+          BigDecimal(43432.00)
+        ))),
+    Some(
+      Seq(
+        CommunityInvestmentItem(
+          "CIREF",
+          Some("CI X"),
+          Some("2020-12-12"),
+          Some(BigDecimal(6442.00)),
+          BigDecimal(2344.00)
+        ))),
+    Some(
+      Seq(
+        SeedEnterpriseInvestmentItem(
+          "123412/1A",
+          Some("Company Inc"),
+          Some("2020-12-12"),
+          Some(BigDecimal(123123.22)),
+          BigDecimal(3432.00)
+        ))),
+    Some(
+      Seq(
+        SocialEnterpriseInvestmentItem(
+          "123412/1A",
+          Some("SE Inc"),
+          Some("2020-12-12"),
+          Some(BigDecimal(123123.22)),
+          BigDecimal(3432.00)
+        )))
   )
 
   private val requestData = AmendReliefInvestmentsRequest(Nino(nino), taxYear, requestBody)
 
   trait Test extends MockAmendReliefInvestmentsConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new AmendReliefInvestmentsService(
       connector = mockConnector
     )
+
   }
 
   "service" when {
     "service call successsful" must {
       "return mapped result" in new Test {
-        MockAmendReliefInvestmentsConnector.amend(requestData)
+        MockAmendReliefInvestmentsConnector
+          .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         await(service.amend(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
@@ -99,7 +111,8 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockAmendReliefInvestmentsConnector.amend(requestData)
+            MockAmendReliefInvestmentsConnector
+              .amend(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
             await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
@@ -116,4 +129,5 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
       }
     }
   }
+
 }

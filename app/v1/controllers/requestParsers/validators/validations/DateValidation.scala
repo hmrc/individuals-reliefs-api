@@ -26,7 +26,7 @@ object DateValidation {
 
   def validateOptional(date: Option[String], path: String, error: MtdError): List[MtdError] = {
     date match {
-      case None => NoValidationErrors
+      case None        => NoValidationErrors
       case Some(value) => validate(value, path, error)
     }
   }
@@ -35,8 +35,10 @@ object DateValidation {
     LocalDate.parse(date, dateFormat)
   } match {
     case Success(_) => Nil
-    case Failure(_) => List(
-      error.copy(paths = Some(Seq(path)))
-    )
+    case Failure(_) =>
+      List(
+        error.copy(paths = Some(Seq(path)))
+      )
   }
+
 }

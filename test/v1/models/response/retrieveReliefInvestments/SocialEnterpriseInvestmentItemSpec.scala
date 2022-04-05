@@ -21,6 +21,7 @@ import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
+
   val socialEnterpriseInvestmentItem: SocialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
     "VCTREF",
     Some("VCT Fund X"),
@@ -28,6 +29,7 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
     Some(BigDecimal(23312.00)),
     BigDecimal(1334.00)
   )
+
   val json = Json.parse(
     """
       |{
@@ -40,7 +42,6 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
         """.stripMargin
   )
 
-
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
@@ -48,6 +49,7 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
@@ -55,4 +57,5 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
       }
     }
   }
+
 }

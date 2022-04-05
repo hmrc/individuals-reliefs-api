@@ -28,15 +28,17 @@ import v1.models.response.retrieveReliefInvestments._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveReliefInvestmentsConnector @Inject()(val http: HttpClient,
-                                                   val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveReliefInvestmentsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieve(request: RetrieveReliefInvestmentsRequest)(
-    implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[RetrieveReliefInvestmentsResponse]] = {
+  def retrieve(request: RetrieveReliefInvestmentsRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DesOutcome[RetrieveReliefInvestmentsResponse]] = {
 
     val url = s"income-tax/reliefs/investment/${request.nino.nino}/${request.taxYear}"
     get(
       IfsUri[RetrieveReliefInvestmentsResponse](s"$url")
     )
   }
+
 }

@@ -30,41 +30,47 @@ import scala.concurrent.Future
 
 class AmendForeignReliefsServiceSpec extends UnitSpec {
 
-  private val taxYear = "2017-18"
-  private val nino = Nino("AA123456A")
+  private val taxYear                        = "2017-18"
+  private val nino                           = Nino("AA123456A")
   private implicit val correlationId: String = "X-123"
-  private val amount: BigDecimal = 1234.56
+  private val amount: BigDecimal             = 1234.56
 
   private val body = AmendForeignReliefsBody(
-    foreignTaxCreditRelief = Some(ForeignTaxCreditRelief(
-      amount = amount
-    )),
-    foreignIncomeTaxCreditRelief = Some(Seq(ForeignIncomeTaxCreditRelief(
-      countryCode = "FRA",
-      foreignTaxPaid = Some(amount),
-      taxableAmount = amount,
-      employmentLumpSum = true
-    ))),
-    foreignTaxForFtcrNotClaimed = Some(ForeignTaxForFtcrNotClaimed(
-      amount = amount
-    ))
+    foreignTaxCreditRelief = Some(
+      ForeignTaxCreditRelief(
+        amount = amount
+      )),
+    foreignIncomeTaxCreditRelief = Some(
+      Seq(
+        ForeignIncomeTaxCreditRelief(
+          countryCode = "FRA",
+          foreignTaxPaid = Some(amount),
+          taxableAmount = amount,
+          employmentLumpSum = true
+        ))),
+    foreignTaxForFtcrNotClaimed = Some(
+      ForeignTaxForFtcrNotClaimed(
+        amount = amount
+      ))
   )
 
   private val requestData = AmendForeignReliefsRequest(nino, taxYear, body)
 
   trait Test extends MockAmendForeignReliefsConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new AmendForeignReliefsService(
       connector = mockAmendForeignReliefsConnector
     )
+
   }
 
   "service" when {
     "service call successful" must {
       "return mapped result" in new Test {
-        MockAmendForeignReliefsConnector.amend(requestData)
+        MockAmendForeignReliefsConnector
+          .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         await(service.amend(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
@@ -78,7 +84,8 @@ class AmendForeignReliefsServiceSpec extends UnitSpec {
       def serviceError(desErrorCode: String, error: MtdError): Unit =
         s"a $desErrorCode error is returned from the service" in new Test {
 
-          MockAmendForeignReliefsConnector.amend(requestData)
+          MockAmendForeignReliefsConnector
+            .amend(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
           await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
@@ -86,12 +93,13 @@ class AmendForeignReliefsServiceSpec extends UnitSpec {
 
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "FORMAT_TAX_YEAR" -> TaxYearFormatError,
-        "SERVER_ERROR" -> DownstreamError,
-        "SERVICE_UNAVAILABLE" -> DownstreamError
+        "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
+        "SERVER_ERROR"              -> DownstreamError,
+        "SERVICE_UNAVAILABLE"       -> DownstreamError
       )
 
       input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

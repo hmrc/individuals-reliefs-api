@@ -23,15 +23,18 @@ import v1.models.hateoas.Link
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
+
   val retrieveForeignReliefsBody: RetrieveForeignReliefsResponse = RetrieveForeignReliefsResponse(
     "2020-06-17T10:53:38Z",
     Some(ForeignTaxCreditRelief(763.00)),
-    Some(Seq(ForeignIncomeTaxCreditRelief(
-      "FRA",
-      Some(540.32),
-      204.78,
-      false
-    ))),
+    Some(
+      Seq(
+        ForeignIncomeTaxCreditRelief(
+          "FRA",
+          Some(540.32),
+          204.78,
+          false
+        ))),
     Some(ForeignTaxForFtcrNotClaimed(549.98))
   )
 
@@ -64,6 +67,7 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -71,9 +75,10 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
       }
     }
   }
+
   "LinksFactory" should {
     "return the correct links" in {
-      val nino = "mynino"
+      val nino    = "mynino"
       val taxYear = "mytaxyear"
 
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
@@ -85,4 +90,5 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
         )
     }
   }
+
 }

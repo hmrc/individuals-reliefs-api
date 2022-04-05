@@ -23,13 +23,13 @@ import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRawData
 
 class DeleteForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
+  private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
 
   class Test {
     val validator = new DeleteForeignReliefsValidator(mockAppConfig)
   }
-    
+
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in new Test {

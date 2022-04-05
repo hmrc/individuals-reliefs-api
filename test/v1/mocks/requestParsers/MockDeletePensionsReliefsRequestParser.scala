@@ -27,8 +27,11 @@ trait MockDeletePensionsReliefsRequestParser extends MockFactory {
   val mockRequestDataParser: DeletePensionsReliefsRequestParser = mock[DeletePensionsReliefsRequestParser]
 
   object MockDeletePensionsReliefsRequestParser {
+
     def parse(data: DeletePensionsReliefsRawData): CallHandler[Either[ErrorWrapper, DeletePensionsReliefsRequest]] = {
       (mockRequestDataParser.parseRequest(_: DeletePensionsReliefsRawData)(_: String)).expects(data, *)
     }
+
   }
+
 }

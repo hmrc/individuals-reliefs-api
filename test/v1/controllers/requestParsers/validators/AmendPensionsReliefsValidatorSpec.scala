@@ -24,8 +24,9 @@ import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRawData
 
 class AmendPensionsReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
+  private val validNino    = "AA123456A"
   private val validTaxYear = "2020-21"
+
   private val requestBodyJson = Json.parse(
     """
       |{
@@ -39,6 +40,7 @@ class AmendPensionsReliefsValidatorSpec extends UnitSpec with MockAppConfig {
       |}
       |""".stripMargin
   )
+
   private val requestBodyJsonNoDecimals = Json.parse(
     """
       |{
@@ -59,11 +61,10 @@ class AmendPensionsReliefsValidatorSpec extends UnitSpec with MockAppConfig {
       |""".stripMargin
   )
 
-
   class Test {
     val validator = new AmendPensionsReliefsValidator(mockAppConfig)
   }
-    
+
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied with decimal places in the JSON" in new Test {
@@ -100,8 +101,7 @@ class AmendPensionsReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         validator.validate(AmendPensionsReliefsRawData(validNino, validTaxYear, emptyJson)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "an empty pensionReliefs object is provided" in new Test {
-        val json = Json.parse(
-          """
+        val json = Json.parse("""
             |{
             |  "pensionReliefs": {}
             |}
@@ -117,57 +117,57 @@ class AmendPensionsReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         "retirementAnnuityPayments",
         "paymentToEmployersSchemeNoTaxRelief",
         "overseasPensionSchemeContributions"
-      ).foreach {
-        value =>
-          s"$value is provided" when {
-            "value is below 0" in new Test {
-              val badJson = Json.parse(
-                s"""
+      ).foreach { value =>
+        s"$value is provided" when {
+          "value is below 0" in new Test {
+            val badJson = Json.parse(s"""
                   |{
                   |  "pensionReliefs": {
                   |    "$value": -1.00
                   |  }
                   |}
                   |""".stripMargin)
-              validator.validate(AmendPensionsReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-                ValueFormatError.copy(paths = Some(Seq(
+            validator.validate(AmendPensionsReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+              ValueFormatError.copy(paths = Some(
+                Seq(
                   s"/pensionReliefs/$value"
                 )))
-              )
-            }
-            "value is greater than 99999999999.99" in new Test {
-              val tooLargeNumber: BigDecimal = 99999999999.99 + 0.01
-              val badJson = Json.parse(
-                s"""
+            )
+          }
+          "value is greater than 99999999999.99" in new Test {
+            val tooLargeNumber: BigDecimal = 99999999999.99 + 0.01
+            val badJson = Json.parse(s"""
                    |{
                    |  "pensionReliefs": {
                    |    "$value": $tooLargeNumber
                    |  }
                    |}
                    |""".stripMargin)
-              validator.validate(AmendPensionsReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-                ValueFormatError.copy(paths = Some(Seq(
+            validator.validate(AmendPensionsReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+              ValueFormatError.copy(paths = Some(
+                Seq(
                   s"/pensionReliefs/$value"
                 )))
-              )
-            }
-            "value is greater than 3dp" in new Test {
-              val badJson = Json.parse(
-                s"""
+            )
+          }
+          "value is greater than 3dp" in new Test {
+            val badJson = Json.parse(s"""
                    |{
                    |  "pensionReliefs": {
                    |    "$value": 1.123
                    |  }
                    |}
                    |""".stripMargin)
-              validator.validate(AmendPensionsReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-                ValueFormatError.copy(paths = Some(Seq(
+            validator.validate(AmendPensionsReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+              ValueFormatError.copy(paths = Some(
+                Seq(
                   s"/pensionReliefs/$value"
                 )))
-              )
-            }
+            )
           }
+        }
       }
     }
   }
+
 }

@@ -24,11 +24,11 @@ import v1.models.request.amendForeignReliefs.AmendForeignReliefsRawData
 
 class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
-  private val validTaxYear = "2021-22"
+  private val validNino          = "AA123456A"
+  private val validTaxYear       = "2021-22"
   private val amount: BigDecimal = 1234.56
-  private val requestBodyJson = Json.parse(
-    s"""|
+
+  private val requestBodyJson = Json.parse(s"""|
         |{
         |  "foreignTaxCreditRelief": {
         |    "amount": $amount
@@ -112,8 +112,7 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         validator.validate(AmendForeignReliefsRawData(validNino, validTaxYear, emptyJson)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "at least one mandatory field is missing" in new Test {
-        private val json = Json.parse(
-          """
+        private val json = Json.parse("""
             |{
             |  "foreignTaxCreditRelief": {}
             |}
@@ -124,8 +123,7 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return a FORMAT_VALUE error" when {
       "/foreignTaxCreditRelief/amount is below 0" in new Test {
-        private val badJson = Json.parse(
-          """
+        private val badJson = Json.parse("""
             |{
             |  "foreignTaxCreditRelief": {
             |    "amount": -1.00
@@ -133,14 +131,14 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |}
             |""".stripMargin)
         validator.validate(AmendForeignReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq(
-            "/foreignTaxCreditRelief/amount"
-          )))
+          ValueFormatError.copy(paths = Some(
+            Seq(
+              "/foreignTaxCreditRelief/amount"
+            )))
         )
       }
       "/foreignIncomeTaxCreditRelief/foreignTaxPaid is below 0" in new Test {
-        private val badJson = Json.parse(
-          """
+        private val badJson = Json.parse("""
             |{
             |  "foreignIncomeTaxCreditRelief": [
             |    {
@@ -153,14 +151,14 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |}
             |""".stripMargin)
         validator.validate(AmendForeignReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq(
-            "/foreignIncomeTaxCreditRelief/0/foreignTaxPaid"
-          )))
+          ValueFormatError.copy(paths = Some(
+            Seq(
+              "/foreignIncomeTaxCreditRelief/0/foreignTaxPaid"
+            )))
         )
       }
       "/foreignIncomeTaxCreditRelief/taxableAmount is below 0" in new Test {
-        private val badJson = Json.parse(
-          """
+        private val badJson = Json.parse("""
             |{
             |  "foreignIncomeTaxCreditRelief": [
             |    {
@@ -172,14 +170,14 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |}
             |""".stripMargin)
         validator.validate(AmendForeignReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq(
-            "/foreignIncomeTaxCreditRelief/0/taxableAmount"
-          )))
+          ValueFormatError.copy(paths = Some(
+            Seq(
+              "/foreignIncomeTaxCreditRelief/0/taxableAmount"
+            )))
         )
       }
       "/foreignTaxForFtcrNotClaimed/amount is below 0" in new Test {
-        private val badJson = Json.parse(
-          """
+        private val badJson = Json.parse("""
             |{
             |  "foreignTaxForFtcrNotClaimed": {
             |    "amount": -1.00
@@ -187,17 +185,17 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |}
             |""".stripMargin)
         validator.validate(AmendForeignReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          ValueFormatError.copy(paths = Some(Seq(
-            "/foreignTaxForFtcrNotClaimed/amount"
-          )))
+          ValueFormatError.copy(paths = Some(
+            Seq(
+              "/foreignTaxForFtcrNotClaimed/amount"
+            )))
         )
       }
     }
 
     "return a FORMAT_COUNTRY_CODE error" when {
       "the country code is too long" in new Test {
-        private val badJson = Json.parse(
-          """
+        private val badJson = Json.parse("""
             |{
             |  "foreignIncomeTaxCreditRelief": [
             |    {
@@ -210,14 +208,14 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |""".stripMargin)
 
         validator.validate(AmendForeignReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          CountryCodeFormatError.copy(paths = Some(Seq(
-            "/foreignIncomeTaxCreditRelief/0/countryCode"
-          )))
+          CountryCodeFormatError.copy(paths = Some(
+            Seq(
+              "/foreignIncomeTaxCreditRelief/0/countryCode"
+            )))
         )
       }
       "the country code is too short" in new Test {
-        private val badJson = Json.parse(
-          """
+        private val badJson = Json.parse("""
             |{
             |  "foreignIncomeTaxCreditRelief": [
             |    {
@@ -230,17 +228,17 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |""".stripMargin)
 
         validator.validate(AmendForeignReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          CountryCodeFormatError.copy(paths = Some(Seq(
-            "/foreignIncomeTaxCreditRelief/0/countryCode"
-          )))
+          CountryCodeFormatError.copy(paths = Some(
+            Seq(
+              "/foreignIncomeTaxCreditRelief/0/countryCode"
+            )))
         )
       }
     }
 
     "return a RULE_COUNTRY_CODE error" when {
       "the country code is not a valid ISO 3166-1 alpha-3 code" in new Test {
-        private val badJson = Json.parse(
-          """
+        private val badJson = Json.parse("""
             |{
             |  "foreignIncomeTaxCreditRelief": [
             |    {
@@ -253,17 +251,17 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |""".stripMargin)
 
         validator.validate(AmendForeignReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          RuleCountryCodeError.copy(paths = Some(Seq(
-            "/foreignIncomeTaxCreditRelief/0/countryCode"
-          )))
+          RuleCountryCodeError.copy(paths = Some(
+            Seq(
+              "/foreignIncomeTaxCreditRelief/0/countryCode"
+            )))
         )
       }
     }
 
     "return multiple errors" when {
       "multiple fields are wrong" in new Test {
-        private val badJson = Json.parse(
-          s"""|
+        private val badJson = Json.parse(s"""|
               |{
               |  "foreignTaxCreditRelief": {
               |    "amount": -1
@@ -289,11 +287,13 @@ class AmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             "/foreignIncomeTaxCreditRelief/0/taxableAmount",
             "/foreignTaxForFtcrNotClaimed/amount"
           ))),
-          RuleCountryCodeError.copy(paths = Some(Seq(
-            "/foreignIncomeTaxCreditRelief/0/countryCode"
-          )))
+          RuleCountryCodeError.copy(paths = Some(
+            Seq(
+              "/foreignIncomeTaxCreditRelief/0/countryCode"
+            )))
         )
       }
     }
   }
+
 }

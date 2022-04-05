@@ -43,5 +43,5 @@ object DeleteReliefInvestmentsAuditDetail {
       `X-CorrelationId`,
       auditResponse)
   }
-}
 
+}

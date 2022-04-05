@@ -20,8 +20,8 @@ import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class AmendPensionsReliefsBodySpec extends UnitSpec {
- val json: JsValue = Json.parse(
-   """
+
+  val json: JsValue = Json.parse("""
      |{
      |  "pensionReliefs": {
      |    "regularPensionContributions": 1999.99,
@@ -66,4 +66,5 @@ class AmendPensionsReliefsBodySpec extends UnitSpec {
       }
     }
   }
+
 }

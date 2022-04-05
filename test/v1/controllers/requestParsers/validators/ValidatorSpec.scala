@@ -44,7 +44,7 @@ class ValidatorSpec extends UnitSpec with MockFactory {
 
         val validationSet = List(levelOneValidations)
 
-        val inputData = TestRawData("ABCDEF", "12345")
+        val inputData              = TestRawData("ABCDEF", "12345")
         val result: List[MtdError] = validator.run(validationSet, inputData)
         result.isEmpty shouldBe true
         levelOneValidationOne.called shouldBe 1
@@ -69,7 +69,7 @@ class ValidatorSpec extends UnitSpec with MockFactory {
 
         val validationSet = List(levelOneValidations)
 
-        val inputData = TestRawData("ABCDEF", "12345")
+        val inputData              = TestRawData("ABCDEF", "12345")
         val result: List[MtdError] = validator.run(validationSet, inputData)
         result.isEmpty shouldBe false
         result.size shouldBe 1
@@ -104,7 +104,7 @@ class ValidatorSpec extends UnitSpec with MockFactory {
 
         val validationSet = List(levelOneValidations, levelTwoValidations)
 
-        val inputData = TestRawData("ABCDEF", "12345")
+        val inputData              = TestRawData("ABCDEF", "12345")
         val result: List[MtdError] = validator.run(validationSet, inputData)
         result.isEmpty shouldBe false
         result.size shouldBe 1
@@ -123,10 +123,12 @@ class ValidatorSpec extends UnitSpec with MockFactory {
         val errors = List(
           List(MtdError("CODE", "MSG1", Some(Seq("path 1")))),
           List(MtdError("CODE", "MSG1", Some(Seq("path 2")))),
-          List(MtdError("CODE", "MSG2", Some(Seq("path 1")))),
+          List(MtdError("CODE", "MSG2", Some(Seq("path 1"))))
         )
 
-        validator.flattenErrors(errors) shouldBe List(MtdError("CODE", "MSG1", Some(Seq("path 1", "path 2"))), MtdError("CODE", "MSG2", Some(Seq("path 1"))))
+        validator.flattenErrors(errors) shouldBe List(
+          MtdError("CODE", "MSG1", Some(Seq("path 1", "path 2"))),
+          MtdError("CODE", "MSG2", Some(Seq("path 1"))))
       }
     }
     "flatten nothing" when {
@@ -134,7 +136,7 @@ class ValidatorSpec extends UnitSpec with MockFactory {
         val errors = List(
           List(MtdError("CODE", "MSG1", Some(Seq("path 1")))),
           List(MtdError("CODE", "MSG2", Some(Seq("path 2")))),
-          List(MtdError("CODE", "MSG3", Some(Seq("path 3")))),
+          List(MtdError("CODE", "MSG3", Some(Seq("path 3"))))
         )
 
         validator.flattenErrors(errors).sortBy(_.message) shouldBe List(
@@ -162,6 +164,7 @@ private case class TestRawData(fieldOne: String, fieldTwo: String) extends RawDa
 
 // Create a Validator based off the trait to be able to test it
 private class TestValidator extends Validator[TestRawData] {
+
   override def validate(data: TestRawData): List[MtdError] = {
     run(List(), data) match {
       case Nil        => List()
@@ -169,4 +172,5 @@ private class TestValidator extends Validator[TestRawData] {
       case errs       => errs
     }
   }
+
 }

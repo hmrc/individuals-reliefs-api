@@ -33,5 +33,7 @@ class MockRetrieveForeignReliefsValidator extends MockFactory {
         .validate(_: RetrieveForeignReliefsRawData))
         .expects(data)
     }
+
   }
+
 }

@@ -33,5 +33,7 @@ class MockAmendOtherReliefsValidator extends MockFactory {
         .validate(_: AmendOtherReliefsRawData))
         .expects(data)
     }
+
   }
+
 }

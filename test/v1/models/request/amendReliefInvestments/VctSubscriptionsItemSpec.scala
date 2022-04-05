@@ -21,6 +21,7 @@ import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
+
   val vctSubscriptionsItem = VctSubscriptionsItem(
     "VCTREF",
     Some("VCT Fund X"),
@@ -28,6 +29,7 @@ class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
     Some(BigDecimal(23312.00)),
     BigDecimal(1334.00)
   )
+
   val json = Json.parse(
     """
       |{
@@ -40,7 +42,6 @@ class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
         """.stripMargin
   )
 
-
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
@@ -48,6 +49,7 @@ class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
@@ -55,4 +57,5 @@ class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+
 }

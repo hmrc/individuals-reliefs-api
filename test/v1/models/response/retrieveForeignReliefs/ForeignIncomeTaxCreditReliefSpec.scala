@@ -22,7 +22,7 @@ import v1.models.utils.JsonErrorValidators
 
 class ForeignIncomeTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignIncomeTaxCreditRelief: ForeignIncomeTaxCreditRelief= ForeignIncomeTaxCreditRelief("FRA", Some(640.32), 204.78, false)
+  val foreignIncomeTaxCreditRelief: ForeignIncomeTaxCreditRelief = ForeignIncomeTaxCreditRelief("FRA", Some(640.32), 204.78, false)
 
   val json = Json.parse(
     """{
@@ -40,6 +40,7 @@ class ForeignIncomeTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
@@ -47,4 +48,5 @@ class ForeignIncomeTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators
       }
     }
   }
+
 }

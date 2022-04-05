@@ -20,9 +20,11 @@ import com.neovisionaries.i18n.CountryCode
 import v1.models.errors.{CountryCodeFormatError, RuleCountryCodeError, MtdError}
 
 object CountryCodeValidation {
+
   def validate(field: String, path: String): List[MtdError] = (CountryCode.getByAlpha3Code(field), field) match {
-    case (_: CountryCode,_) => NoValidationErrors
+    case (_: CountryCode, _)           => NoValidationErrors
     case (_, code) if code.length == 3 => List(RuleCountryCodeError.copy(paths = Some(Seq(path))))
-    case _ => List(CountryCodeFormatError.copy(paths = Some(Seq(path))))
+    case _                             => List(CountryCodeFormatError.copy(paths = Some(Seq(path))))
   }
+
 }

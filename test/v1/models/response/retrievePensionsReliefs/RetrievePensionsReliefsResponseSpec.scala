@@ -48,7 +48,6 @@ class RetrievePensionsReliefsResponseSpec extends UnitSpec with JsonErrorValidat
     """.stripMargin
   )
 
-
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
@@ -56,6 +55,7 @@ class RetrievePensionsReliefsResponseSpec extends UnitSpec with JsonErrorValidat
       }
     }
   }
+
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
@@ -63,4 +63,5 @@ class RetrievePensionsReliefsResponseSpec extends UnitSpec with JsonErrorValidat
       }
     }
   }
+
 }

@@ -21,11 +21,10 @@ import v1.models.errors.NameFormatError
 
 class NameValidationSpec extends UnitSpec {
 
-  val validName: Option[String] = Some("Company Inc")
-  val invalidNameTooShort: Option[String] = Some("")
-  val invalidNameTooLong: Option[String] = Some("1234567890"*10 + "123456") // 106 characters
+  val validName: Option[String]                    = Some("Company Inc")
+  val invalidNameTooShort: Option[String]          = Some("")
+  val invalidNameTooLong: Option[String]           = Some("1234567890" * 10 + "123456") // 106 characters
   val invalidNameInvalidCharacters: Option[String] = Some("AA1234*&^%$£BBCBCBC")
-
 
   "validate" should {
     "return no errors" when {
@@ -60,4 +59,5 @@ class NameValidationSpec extends UnitSpec {
       }
     }
   }
+
 }

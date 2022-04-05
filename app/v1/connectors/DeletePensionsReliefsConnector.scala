@@ -27,12 +27,13 @@ import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequest
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeletePensionsReliefsConnector @Inject()(val http: HttpClient,
-                                               val appConfig: AppConfig) extends BaseDownstreamConnector {
-  def delete(request: DeletePensionsReliefsRequest)
-            (implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
+class DeletePensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+
+  def delete(
+      request: DeletePensionsReliefsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
     delete(
       DesUri[Unit](s"income-tax/reliefs/pensions/${request.nino.nino}/${request.taxYear}")
     )
   }
+
 }

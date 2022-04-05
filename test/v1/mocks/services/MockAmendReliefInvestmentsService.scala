@@ -38,5 +38,7 @@ trait MockAmendReliefInvestmentsService extends MockFactory {
         .amend(_: AmendReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)
     }
+
   }
+
 }

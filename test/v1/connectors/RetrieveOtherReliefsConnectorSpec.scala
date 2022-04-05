@@ -28,9 +28,10 @@ import scala.concurrent.Future
 class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
   val taxYear: String = "2017-18"
-  val nino: String = "AA123456A"
+  val nino: String    = "AA123456A"
 
   class Test extends MockHttpClient with MockAppConfig {
+
     val connector: RetrieveOtherReliefsConnector = new RetrieveOtherReliefsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
@@ -51,14 +52,16 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
         MockedHttpClient
           .get(
-          url = s"$baseUrl/income-tax/reliefs/other/$nino/$taxYear",
-          config = dummyIfsHeaderCarrierConfig,
-          requiredHeaders = requiredIfsHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        ).returns(Future.successful(outcome))
+            url = s"$baseUrl/income-tax/reliefs/other/$nino/$taxYear",
+            config = dummyIfsHeaderCarrierConfig,
+            requiredHeaders = requiredIfsHeaders,
+            excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          )
+          .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
       }
     }
   }
+
 }

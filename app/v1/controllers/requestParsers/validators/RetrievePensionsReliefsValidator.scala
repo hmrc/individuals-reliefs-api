@@ -22,8 +22,7 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRawData
 
-class RetrievePensionsReliefsValidator @Inject()(appConfig: AppConfig) extends Validator[RetrievePensionsReliefsRawData] {
-
+class RetrievePensionsReliefsValidator @Inject() (appConfig: AppConfig) extends Validator[RetrievePensionsReliefsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 
@@ -43,4 +42,5 @@ class RetrievePensionsReliefsValidator @Inject()(appConfig: AppConfig) extends V
   override def validate(data: RetrievePensionsReliefsRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

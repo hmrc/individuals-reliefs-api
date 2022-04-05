@@ -23,8 +23,8 @@ import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYear
 import v1.models.request.retrieveReliefInvestments.{RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest}
 
 class RetrieveReliefInvestmentsRequestParserSpec extends UnitSpec {
-  val nino: String = "AA123456B"
-  val taxYear: String = "2018-19"
+  val nino: String                   = "AA123456B"
+  val taxYear: String                = "2018-19"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   val inputData: RetrieveReliefInvestmentsRawData = RetrieveReliefInvestmentsRawData(nino, taxYear)
@@ -47,7 +47,8 @@ class RetrieveReliefInvestmentsRequestParserSpec extends UnitSpec {
     "return an ErrorWrapper" when {
 
       "a single validation error occurs" in new Test {
-        MockRetrieveReliefInvestmentsValidator.validate(inputData)
+        MockRetrieveReliefInvestmentsValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -55,7 +56,8 @@ class RetrieveReliefInvestmentsRequestParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockRetrieveReliefInvestmentsValidator.validate(inputData)
+        MockRetrieveReliefInvestmentsValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -63,4 +65,5 @@ class RetrieveReliefInvestmentsRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

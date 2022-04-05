@@ -22,8 +22,7 @@ import v1.models.errors.NinoFormatError
 
 class AmendForeignReliefsAuditDetailSpec extends UnitSpec {
 
-  val validJson = Json.parse(
-    """{
+  val validJson = Json.parse("""{
       |    "userType": "Agent",
       |    "agentReferenceNumber":"012345678",
       |    "nino": "ZG903729C",
@@ -76,8 +75,7 @@ class AmendForeignReliefsAuditDetailSpec extends UnitSpec {
     `X-CorrelationId` = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253",
     response = AuditResponse(
       200,
-      Right(Some(Json.parse(
-        """{
+      Right(Some(Json.parse("""{
           |    "links": [
           |       {
           |         "href": "/individuals/reliefs/foreign/$nino/$taxYear",
@@ -100,8 +98,7 @@ class AmendForeignReliefsAuditDetailSpec extends UnitSpec {
     )
   )
 
-  val invalidNinoJson = Json.parse(
-    """{
+  val invalidNinoJson = Json.parse("""{
       |    "userType": "Agent",
       |    "agentReferenceNumber":"012345678",
       |    "nino": "notANino",
@@ -152,5 +149,5 @@ class AmendForeignReliefsAuditDetailSpec extends UnitSpec {
       }
     }
   }
-}
 
+}

@@ -38,5 +38,7 @@ trait MockDeletePensionsReliefsService extends MockFactory {
         .delete(_: DeletePensionsReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)
     }
+
   }
+
 }

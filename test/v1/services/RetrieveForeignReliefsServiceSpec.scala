@@ -24,57 +24,72 @@ import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
-import v1.models.response.retrieveForeignReliefs.{ForeignIncomeTaxCreditRelief, ForeignTaxCreditRelief, ForeignTaxForFtcrNotClaimed, RetrieveForeignReliefsResponse}
+import v1.models.response.retrieveForeignReliefs.{
+  ForeignIncomeTaxCreditRelief,
+  ForeignTaxCreditRelief,
+  ForeignTaxForFtcrNotClaimed,
+  RetrieveForeignReliefsResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignReliefsServiceSpec extends UnitSpec {
 
-  private val nino: String = "AA123456A"
-  private val taxYear: String = "2017-18"
+  private val nino: String           = "AA123456A"
+  private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
-  private val responseModel = RetrieveForeignReliefsResponse("2020-06-17T10:53:38Z", Some(ForeignTaxCreditRelief(234567.89)), Some(Seq(ForeignIncomeTaxCreditRelief("FRA", Some(540.32), 204.78, false))), Some(ForeignTaxForFtcrNotClaimed(549.98)))
+  private val responseModel = RetrieveForeignReliefsResponse(
+    "2020-06-17T10:53:38Z",
+    Some(ForeignTaxCreditRelief(234567.89)),
+    Some(Seq(ForeignIncomeTaxCreditRelief("FRA", Some(540.32), 204.78, false))),
+    Some(ForeignTaxForFtcrNotClaimed(549.98))
+  )
 
   private val requestData = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
 
   trait Test extends MockRetrieveForeignReliefsConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
     val service = new RetrieveForeignReliefsService(
       connector = mockConnector
     )
+
   }
 
   "service" should {
     "return a successful response" when {
       "a successful response is passed through" in new Test {
-        MockRetrieveForeignReliefsConnector.retrieve(requestData)
+        MockRetrieveForeignReliefsConnector
+          .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseModel))))
 
         await(service.retrieve(requestData)) shouldBe Right(ResponseWrapper(correlationId, responseModel))
       }
     }
     "map errors according to spec" when {
-        def serviceError(desErrorCode: String, error: MtdError): Unit =
-          s"a $desErrorCode error is returned from the service" in new Test {
+      def serviceError(desErrorCode: String, error: MtdError): Unit =
+        s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockRetrieveForeignReliefsConnector.retrieve(requestData)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+          MockRetrieveForeignReliefsConnector
+            .retrieve(requestData)
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
-          }
+          await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
+        }
 
-        val input = Seq(
-          ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
-          ("FORMAT_TAX_YEAR", TaxYearFormatError),
-          ("NO_DATA_FOUND", NotFoundError),
-          ("SERVER_ERROR", DownstreamError),
-          ("SERVICE_UNAVAILABLE", DownstreamError)
-        )
+      val input = Seq(
+        ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
+        ("FORMAT_TAX_YEAR", TaxYearFormatError),
+        ("NO_DATA_FOUND", NotFoundError),
+        ("SERVER_ERROR", DownstreamError),
+        ("SERVICE_UNAVAILABLE", DownstreamError)
+      )
 
-        input.foreach(args => (serviceError _).tupled(args))
+      input.foreach(args => (serviceError _).tupled(args))
     }
   }
+
 }

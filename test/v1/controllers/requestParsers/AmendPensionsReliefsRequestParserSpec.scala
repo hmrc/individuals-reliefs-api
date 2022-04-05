@@ -24,11 +24,11 @@ import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYear
 import v1.models.request.amendPensionsReliefs._
 
 class AmendPensionsReliefsRequestParserSpec extends UnitSpec {
-  private val nino: String = "AA123456A"
-  private val taxYear: String = "2019-20"
+  private val nino: String           = "AA123456A"
+  private val taxYear: String        = "2019-20"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-  private val requestBodyJson = Json.parse(
-    """
+
+  private val requestBodyJson = Json.parse("""
       |{
       |  "pensionReliefs": {
       |    "regularPensionContributions": 1999.99,
@@ -38,8 +38,6 @@ class AmendPensionsReliefsRequestParserSpec extends UnitSpec {
       |    "overseasPensionSchemeContributions": 1999.99
       |  }
       |}""".stripMargin)
-
-
 
   val inputData: AmendPensionsReliefsRawData =
     AmendPensionsReliefsRawData(nino, taxYear, requestBodyJson)
@@ -58,21 +56,27 @@ class AmendPensionsReliefsRequestParserSpec extends UnitSpec {
         MockAmendPensionsReliefsValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(AmendPensionsReliefsRequest(Nino(nino), taxYear, AmendPensionsReliefsBody(
-            pensionReliefs = PensionReliefs(
-              regularPensionContributions = Some(1999.99),
-              oneOffPensionContributionsPaid = Some(1999.99),
-              retirementAnnuityPayments = Some(1999.99),
-              paymentToEmployersSchemeNoTaxRelief = Some(1999.99),
-              overseasPensionSchemeContributions = Some(1999.99)
-            )
-          )))
+          Right(
+            AmendPensionsReliefsRequest(
+              Nino(nino),
+              taxYear,
+              AmendPensionsReliefsBody(
+                pensionReliefs = PensionReliefs(
+                  regularPensionContributions = Some(1999.99),
+                  oneOffPensionContributionsPaid = Some(1999.99),
+                  retirementAnnuityPayments = Some(1999.99),
+                  paymentToEmployersSchemeNoTaxRelief = Some(1999.99),
+                  overseasPensionSchemeContributions = Some(1999.99)
+                )
+              )
+            ))
       }
     }
     "return an ErrorWrapper" when {
 
       "a single validation error occurs" in new Test {
-        MockAmendPensionsReliefsValidator.validate(inputData)
+        MockAmendPensionsReliefsValidator
+          .validate(inputData)
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -80,7 +84,8 @@ class AmendPensionsReliefsRequestParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockAmendPensionsReliefsValidator.validate(inputData)
+        MockAmendPensionsReliefsValidator
+          .validate(inputData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(inputData) shouldBe
@@ -88,4 +93,5 @@ class AmendPensionsReliefsRequestParserSpec extends UnitSpec {
       }
     }
   }
+
 }

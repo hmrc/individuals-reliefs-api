@@ -27,17 +27,15 @@ import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRequest
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendReliefInvestmentsConnector @Inject()(val http: HttpClient,
-                                                val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendReliefInvestmentsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def amend(request: AmendReliefInvestmentsRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext,
-    correlationId: String): Future[DesOutcome[Unit]] = {
+  def amend(
+      request: AmendReliefInvestmentsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
 
     put(
       body = request.body,
       IfsUri[Unit](s"income-tax/reliefs/investment/${request.nino.nino}/${request.taxYear}")
     )
   }
+
 }

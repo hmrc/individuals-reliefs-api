@@ -22,8 +22,7 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRawData
 
-class RetrieveReliefInvestmentsValidator @Inject()(appConfig: AppConfig) extends Validator[RetrieveReliefInvestmentsRawData] {
-
+class RetrieveReliefInvestmentsValidator @Inject() (appConfig: AppConfig) extends Validator[RetrieveReliefInvestmentsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 
@@ -43,4 +42,5 @@ class RetrieveReliefInvestmentsValidator @Inject()(appConfig: AppConfig) extends
   override def validate(data: RetrieveReliefInvestmentsRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
+
 }

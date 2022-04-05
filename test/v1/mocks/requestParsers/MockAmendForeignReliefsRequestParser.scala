@@ -27,9 +27,11 @@ trait MockAmendForeignReliefsRequestParser extends MockFactory {
   val mockAmendForeignReliefsRequestParser: AmendForeignReliefsRequestParser = mock[AmendForeignReliefsRequestParser]
 
   object MockAmendForeignReliefsRequestParser {
+
     def parseRequest(data: AmendForeignReliefsRawData): CallHandler[Either[ErrorWrapper, AmendForeignReliefsRequest]] = {
       (mockAmendForeignReliefsRequestParser.parseRequest(_: AmendForeignReliefsRawData)(_: String)).expects(data, *)
     }
+
   }
 
 }

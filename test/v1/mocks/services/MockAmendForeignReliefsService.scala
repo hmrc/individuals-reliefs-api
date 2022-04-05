@@ -38,5 +38,7 @@ trait MockAmendForeignReliefsService extends MockFactory {
         .amend(_: AmendForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)
     }
+
   }
+
 }

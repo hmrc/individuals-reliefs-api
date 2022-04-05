@@ -24,8 +24,9 @@ import v1.models.request.amendOtherReliefs.AmendOtherReliefsRawData
 
 class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
+  private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
+
   private val requestBodyJson = Json.parse(
     """
       |{
@@ -170,7 +171,6 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
       |""".stripMargin
   )
 
-
   class Test {
     val validator = new AmendOtherReliefsValidator(mockAppConfig)
   }
@@ -226,8 +226,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, emptyJson)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "at least one empty array is provided" in new Test {
-        val json = Json.parse(
-          """
+        val json = Json.parse("""
             |{
             |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
@@ -268,8 +267,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "at least one array contains an empty object" in new Test {
-        val json = Json.parse(
-          """
+        val json = Json.parse("""
             |{
             |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
@@ -315,8 +313,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return a FORMAT_CUSTOMER_REF error" when {
       "the customerReference provided is invalid" in new Test {
-        val badJson = Json.parse(
-          s"""
+        val badJson = Json.parse(s"""
              |{
              |  "nonDeductibleLoanInterest": {
              |    "customerReference": "${("1234567890" * 9) + "1"}",
@@ -425,9 +422,10 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |""".stripMargin
         )
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          ExSpouseNameFormatError.copy(paths = Some(Seq(
-            "/maintenancePayments/0/exSpouseName"
-          )))
+          ExSpouseNameFormatError.copy(paths = Some(
+            Seq(
+              "/maintenancePayments/0/exSpouseName"
+            )))
         )
       }
     }
@@ -482,9 +480,10 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |""".stripMargin
         )
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          BusinessNameFormatError.copy(paths = Some(Seq(
-            "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
-          )))
+          BusinessNameFormatError.copy(paths = Some(
+            Seq(
+              "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
+            )))
         )
       }
     }
@@ -539,9 +538,10 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |""".stripMargin
         )
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          NatureOfTradeFormatError.copy(paths = Some(Seq(
-            "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
-          )))
+          NatureOfTradeFormatError.copy(paths = Some(
+            Seq(
+              "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
+            )))
         )
       }
     }
@@ -596,9 +596,10 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |""".stripMargin
         )
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          IncomeSourceFormatError.copy(paths = Some(Seq(
-            "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
-          )))
+          IncomeSourceFormatError.copy(paths = Some(
+            Seq(
+              "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
+            )))
         )
       }
     }
@@ -653,17 +654,17 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |""".stripMargin
         )
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          LenderNameFormatError.copy(paths = Some(Seq(
-            "/qualifyingLoanInterestPayments/0/lenderName"
-          )))
+          LenderNameFormatError.copy(paths = Some(
+            Seq(
+              "/qualifyingLoanInterestPayments/0/lenderName"
+            )))
         )
       }
     }
 
     "return a FORMAT_VALUE error" when {
       "all fields are below 0" in new Test {
-        val badJson = Json.parse(
-          """
+        val badJson = Json.parse("""
             |{
             |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
@@ -728,8 +729,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
         )
       }
       "only some fields are below 0" in new Test {
-        val badJson = Json.parse(
-          """
+        val badJson = Json.parse("""
             |{
             |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
@@ -793,8 +793,7 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return a FORMAT_DATE error" when {
       "the dates are invalid" in new Test {
-        val badJson = Json.parse(
-          """
+        val badJson = Json.parse("""
             |{
             |  "nonDeductibleLoanInterest": {
             |    "customerReference": "myref",
@@ -840,18 +839,18 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             |}
             |""".stripMargin)
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          DateFormatError.copy(paths = Some(Seq(
-            "/maintenancePayments/0/exSpouseDateOfBirth",
-            "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
-          )))
+          DateFormatError.copy(paths = Some(
+            Seq(
+              "/maintenancePayments/0/exSpouseDateOfBirth",
+              "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
+            )))
         )
       }
     }
 
     "return all types of errors" when {
       "the provided data violates all errors" in new Test {
-        val badJson = Json.parse(
-          s"""
+        val badJson = Json.parse(s"""
              |{
              |  "nonDeductibleLoanInterest": {
              |    "customerReference": "",
@@ -898,9 +897,10 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
              |""".stripMargin)
 
         validator.validate(AmendOtherReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
-          LenderNameFormatError.copy(paths = Some(Seq(
-            "/qualifyingLoanInterestPayments/0/lenderName"
-          ))),
+          LenderNameFormatError.copy(paths = Some(
+            Seq(
+              "/qualifyingLoanInterestPayments/0/lenderName"
+            ))),
           CustomerReferenceFormatError.copy(paths = Some(Seq(
             "/nonDeductibleLoanInterest/customerReference",
             "/payrollGiving/customerReference",
@@ -910,22 +910,27 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
             "/annualPaymentsMade/customerReference",
             "/qualifyingLoanInterestPayments/0/customerReference"
           ))),
-          DateFormatError.copy(paths = Some(Seq(
-            "/maintenancePayments/0/exSpouseDateOfBirth",
-            "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
-          ))),
-          ExSpouseNameFormatError.copy(paths = Some(Seq(
-            "/maintenancePayments/0/exSpouseName"
-          ))),
-          IncomeSourceFormatError.copy(paths = Some(Seq(
-            "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
-          ))),
-          BusinessNameFormatError.copy(paths = Some(Seq(
-            "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
-          ))),
-          NatureOfTradeFormatError.copy(paths = Some(Seq(
-            "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
-          ))),
+          DateFormatError.copy(paths = Some(
+            Seq(
+              "/maintenancePayments/0/exSpouseDateOfBirth",
+              "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
+            ))),
+          ExSpouseNameFormatError.copy(paths = Some(
+            Seq(
+              "/maintenancePayments/0/exSpouseName"
+            ))),
+          IncomeSourceFormatError.copy(paths = Some(
+            Seq(
+              "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
+            ))),
+          BusinessNameFormatError.copy(paths = Some(
+            Seq(
+              "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
+            ))),
+          NatureOfTradeFormatError.copy(paths = Some(
+            Seq(
+              "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
+            ))),
           ValueFormatError.copy(paths = Some(Seq(
             "/nonDeductibleLoanInterest/reliefClaimed",
             "/payrollGiving/reliefClaimed",
@@ -939,4 +944,5 @@ class AmendOtherReliefsValidatorSpec extends UnitSpec with MockAppConfig {
       }
     }
   }
+
 }

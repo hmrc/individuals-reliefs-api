@@ -20,8 +20,8 @@ import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
 class PensionReliefsSpec extends UnitSpec {
-  val maxJson: JsValue = Json.parse(
-    """
+
+  val maxJson: JsValue = Json.parse("""
       |{
       |  "regularPensionContributions": 1999.99,
       |  "oneOffPensionContributionsPaid": 1999.99,
@@ -31,23 +31,22 @@ class PensionReliefsSpec extends UnitSpec {
       |}""".stripMargin)
 
   val maxModel: PensionReliefs = PensionReliefs(
-      regularPensionContributions = Some(1999.99),
-      oneOffPensionContributionsPaid = Some(1999.99),
-      retirementAnnuityPayments = Some(1999.99),
-      paymentToEmployersSchemeNoTaxRelief = Some(1999.99),
-      overseasPensionSchemeContributions = Some(1999.99)
+    regularPensionContributions = Some(1999.99),
+    oneOffPensionContributionsPaid = Some(1999.99),
+    retirementAnnuityPayments = Some(1999.99),
+    paymentToEmployersSchemeNoTaxRelief = Some(1999.99),
+    overseasPensionSchemeContributions = Some(1999.99)
   )
 
-  val minJson: JsValue = Json.parse(
-    """
+  val minJson: JsValue = Json.parse("""
       |{}""".stripMargin)
 
   val minModel: PensionReliefs = PensionReliefs(
-      regularPensionContributions = None,
-      oneOffPensionContributionsPaid = None,
-      retirementAnnuityPayments = None,
-      paymentToEmployersSchemeNoTaxRelief = None,
-      overseasPensionSchemeContributions = None
+    regularPensionContributions = None,
+    oneOffPensionContributionsPaid = None,
+    retirementAnnuityPayments = None,
+    paymentToEmployersSchemeNoTaxRelief = None,
+    overseasPensionSchemeContributions = None
   )
 
   "reads" should {
@@ -96,4 +95,5 @@ class PensionReliefsSpec extends UnitSpec {
       }
     }
   }
+
 }
