@@ -21,6 +21,7 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v1.models.errors._
 import v1.models.errors.{BadRequestError, ErrorWrapper, MtdError, ValueFormatError}
@@ -110,7 +111,10 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
-        .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"))
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+      )
     }
 
     def errorBody(code: String): String =
@@ -768,7 +772,6 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           ("AA123456A", "2021-22", allIncomeSourcesInvalidRequestBodyJson, BAD_REQUEST, allIncomeSourceFormatErrors),
           ("AA123456A", "2021-22", allLenderNamesInvalidRequestBodyJson, BAD_REQUEST, allLenderNameFormatErrors)
         )
-
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
@@ -797,10 +800,8 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError)
         )
-
         input.foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }
-
 }
