@@ -90,4 +90,15 @@ uses:
         delete: !include reliefPensions_delete.raml
         put: !include reliefPensions_amend.raml
         get: !include reliefPensions_retrieve.raml
+  /charitable-giving:
+    (annotations.group):
+      name: Charitable Giving
+      description: Resources relating to an individual's charitable giving
+    /{nino}:
+      /{taxYear}:
+        uriParameters:
+          taxYear:
+            description: 'The tax year the data applies to, for example, 2020-21. The start year and end year must not span two tax years. The minimum tax year is 2020-21. No gaps are allowed, for example, 2020-22 is not valid.'
+            example: "2020-21"
+        put: !include reliefCharitableGiving_amend.raml
 
