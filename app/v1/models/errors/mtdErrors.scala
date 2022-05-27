@@ -50,6 +50,8 @@ object ValueFormatError
       message = "The field should be between 0 and 99999999999.99"
     )
 
+object StringFormatError extends MtdError("FORMAT_STRING", "The supplied string format is not valid")
+
 object DateFormatError
     extends MtdError(
       code = "FORMAT_DATE",
@@ -146,6 +148,14 @@ object RuleSubmissionFailedError
       code = "RULE_SUBMISSION_FAILED",
       message = "The submission cannot be completed due to validation failures"
     )
+
+object RuleGiftAidNonUkAmountWithoutNamesError
+    extends MtdError(
+      code = "RULE_GIFT_AID_NON_UK_AMOUNT_WITHOUT_NAMES",
+      message = "Non-UK charity Gift Aid amount supplied without the non-UK Gift Aid charity names")
+
+object RuleGiftsNonUkInvestmentsAmountWithoutNamesError
+    extends MtdError(code = "RULE_GIFTS_NON_UK_AMOUNT_WITHOUT_NAMES", message = "Non-UK gifts amount supplied without non-UK gifts charity names")
 
 //Standard Errors
 object NotFoundError
