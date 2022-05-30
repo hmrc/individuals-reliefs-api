@@ -39,8 +39,8 @@ class AmendCharitableGivingReliefValidatorSpec extends UnitSpec with JsonErrorVa
     Json.parse(s"""
       |{
       |   "nonUkCharities": $nonUkCharities,
-      |   "benefitFromLandAndBuildings": 10.99,
-      |   "benefitFromSharesOrSecurities": 10.99
+      |   "landAndBuildings": 10.99,
+      |   "sharesOrSecurities": 10.99
       |}""".stripMargin)
 
   private def requestBodyJson(giftAidPayments: JsValue = giftAidPaymentsJson(), gifts: JsValue = giftsJson()): JsValue =
@@ -106,7 +106,7 @@ class AmendCharitableGivingReliefValidatorSpec extends UnitSpec with JsonErrorVa
 
   "return RuleTaxYearRangeInvalidError" when {
     "a tax year range is more than 1 year" in {
-      validator.validate(CreateAndAmendCharitableGivingTaxReliefRawData(validNino, validTaxYear, body)) shouldBe List(RuleTaxYearRangeInvalidError)
+      validator.validate(CreateAndAmendCharitableGivingTaxReliefRawData(validNino, "2020-22", body)) shouldBe List(RuleTaxYearRangeInvalidError)
     }
   }
 
@@ -114,14 +114,14 @@ class AmendCharitableGivingReliefValidatorSpec extends UnitSpec with JsonErrorVa
     val badValue = JsNumber(123.456)
 
     Seq(
-      "/giftAidPayments/nonUkCharities/amount",
+      "/giftAidPayments/nonUkCharities/totalAmount",
       "/giftAidPayments/totalAmount",
       "/giftAidPayments/oneOffAmount",
       "/giftAidPayments/amountTreatedAsPreviousTaxYear",
       "/giftAidPayments/amountTreatedAsSpecifiedTaxYear",
-      "/gifts/nonUkCharities/amount",
-      "/gifts/benefitFromLandAndBuildings",
-      "/gifts/benefitFromSharesOrSecurities"
+      "/gifts/nonUkCharities/totalAmount",
+      "/gifts/landAndBuildings",
+      "/gifts/sharesOrSecurities"
     ).foreach(path => testValueFormatError(body.update(path, badValue), path))
 
     def testValueFormatError(body: JsValue, expectedPath: String): Unit = s"for $expectedPath" in {
@@ -142,13 +142,13 @@ class AmendCharitableGivingReliefValidatorSpec extends UnitSpec with JsonErrorVa
         RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/giftAidPayments"))))
     }
 
-    "giftAidPayments nonUkCharities is empty" in {
+    "giftAidPayments nonUkCharities misses mandatory totalAmount" in {
       validator.validate(
         CreateAndAmendCharitableGivingTaxReliefRawData(
           validNino,
           validTaxYear,
-          body.replaceWithEmptyObject("/giftAidPayments/nonUkCharities"))) shouldBe List(
-        RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/giftAidPayments/nonUkCharities"))))
+          body.removeProperty("/giftAidPayments/nonUkCharities/totalAmount"))) shouldBe List(
+        RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/giftAidPayments/nonUkCharities/totalAmount"))))
     }
 
     "giftAidPayments charity names array is empty" in {
@@ -157,7 +157,7 @@ class AmendCharitableGivingReliefValidatorSpec extends UnitSpec with JsonErrorVa
           validNino,
           validTaxYear,
           requestBodyJson(giftAidPayments = giftAidPaymentsJson(nonUkCharitiesJson(Nil))))) shouldBe List(
-        RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/giftAidPayments/nonUkCharityNames"))))
+        RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/giftAidPayments/nonUkCharities/charityNames"))))
     }
 
     "gifts is empty" in {
@@ -166,15 +166,21 @@ class AmendCharitableGivingReliefValidatorSpec extends UnitSpec with JsonErrorVa
         RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/gifts"))))
     }
 
-    "gifts nonUkCharities is empty" in {
+    "gifts nonUkCharities misses mandatory totalAmount" in {
       validator.validate(
-        CreateAndAmendCharitableGivingTaxReliefRawData(validNino, validTaxYear, body.replaceWithEmptyObject("/gifts/nonUkCharities"))) shouldBe List(
-        RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/gifts/nonUkCharities"))))
+        CreateAndAmendCharitableGivingTaxReliefRawData(
+          validNino,
+          validTaxYear,
+          body.removeProperty("/gifts/nonUkCharities/totalAmount"))) shouldBe List(
+        RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/gifts/nonUkCharities/totalAmount"))))
     }
 
     "gifts charity names array is empty" in {
       validator.validate(
-        CreateAndAmendCharitableGivingTaxReliefRawData(validNino, validTaxYear, requestBodyJson(gifts = nonUkCharitiesJson(Nil)))) shouldBe List(
+        CreateAndAmendCharitableGivingTaxReliefRawData(
+          validNino,
+          validTaxYear,
+          requestBodyJson(gifts = giftsJson(nonUkCharitiesJson(Nil))))) shouldBe List(
         RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/gifts/nonUkCharities/charityNames"))))
     }
   }

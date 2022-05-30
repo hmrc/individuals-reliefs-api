@@ -20,8 +20,8 @@ import java.time.format.DateTimeFormatter
 
 package object validations {
 
-  val NoValidationErrors = List()
-  val dateFormat         = DateTimeFormatter ofPattern "yyyy-MM-dd"
-  val minimumTaxYear     = 2021
-
+  val NoValidationErrors: Nil.type   = Nil
+  val dateFormat: DateTimeFormatter  = DateTimeFormatter ofPattern "yyyy-MM-dd"
+  val minimumTaxYear                 = 2021
+  val charitableGivingMinimumTaxYear = 2018
 }

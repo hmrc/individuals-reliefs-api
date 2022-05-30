@@ -47,7 +47,7 @@ class AmendPensionsReliefsValidator @Inject() (appConfig: AppConfig) extends Val
 
   private def bodyFormatValidation: AmendPensionsReliefsRawData => List[List[MtdError]] = { data =>
     List(
-      JsonFormatValidation.validate[AmendPensionsReliefsBody](data.body, RuleIncorrectOrEmptyBodyError)
+      JsonFormatValidation.validate[AmendPensionsReliefsBody](data.body)
     )
   }
 

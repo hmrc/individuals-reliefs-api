@@ -47,7 +47,7 @@ class AmendOtherReliefsValidator @Inject() (appConfig: AppConfig) extends Valida
 
   private def bodyFormatValidation: AmendOtherReliefsRawData => List[List[MtdError]] = { data =>
     List(
-      JsonFormatValidation.validate[AmendOtherReliefsBody](data.body, RuleIncorrectOrEmptyBodyError)
+      JsonFormatValidation.validate[AmendOtherReliefsBody](data.body)
     )
   }
 
