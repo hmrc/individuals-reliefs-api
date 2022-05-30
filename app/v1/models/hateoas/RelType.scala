@@ -26,4 +26,6 @@ object RelType {
   val DELETE_RELIEFS_OTHER      = "delete-reliefs-other"
   val AMEND_RELIEFS_PENSIONS    = "create-and-amend-reliefs-pensions"
   val DELETE_RELIEFS_PENSIONS   = "delete-reliefs-pensions"
+  val CREATE_AMEND_CHARITABLE_GIVING_TAX_RELIEF = "create-and-amend-charitable-giving-tax-relief"
+  val DELETE_CHARITABLE_GIVING_TAX_RELIEF = "delete-charitable-giving-tax-relief"
 }

@@ -73,4 +73,13 @@ trait HateoasLinks {
   def deletePensionsReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_PENSIONS)
 
+  def retrieveCharitableGivingTaxRelief(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+
+  def createAndAmendCharitableGivingTaxRelief(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_CHARITABLE_GIVING_TAX_RELIEF)
+
+  def deleteCharitableGivingTaxRelief(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_CHARITABLE_GIVING_TAX_RELIEF)
+
 }
