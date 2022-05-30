@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package v1.models.request.CreateAndAmendCharitableGivingTaxRelief
+package v1.models.request.createAndAmendCharitableGivingTaxRelief
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.models.request.createAndAmendCharitableGivingTaxRelief.{CreateAndAmendCharitableGivingTaxReliefBody, GiftAidPayments, Gifts, NonUkCharities}
 
 class CreateAndAmendCharitableGivingTaxReliefBodySpec extends UnitSpec {
 
@@ -110,7 +109,7 @@ class CreateAndAmendCharitableGivingTaxReliefBodySpec extends UnitSpec {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        model shouldBe mtdJson.as[CreateAndAmendCharitableGivingTaxReliefBody]
+        mtdJson.as[CreateAndAmendCharitableGivingTaxReliefBody] shouldBe model
       }
     }
   }

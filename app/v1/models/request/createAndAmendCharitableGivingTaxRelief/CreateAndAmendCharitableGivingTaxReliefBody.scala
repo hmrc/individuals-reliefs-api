@@ -18,8 +18,7 @@ package v1.models.request.createAndAmendCharitableGivingTaxRelief
 
 import play.api.libs.json.{Json, OFormat}
 
-case class CreateAndAmendCharitableGivingTaxReliefBody(giftAidPayments: Option[GiftAidPayments],
-                                                       gifts: Option[Gifts])
+case class CreateAndAmendCharitableGivingTaxReliefBody(giftAidPayments: Option[GiftAidPayments], gifts: Option[Gifts])
 
 object CreateAndAmendCharitableGivingTaxReliefBody {
   implicit val format: OFormat[CreateAndAmendCharitableGivingTaxReliefBody] = Json.format[CreateAndAmendCharitableGivingTaxReliefBody]

@@ -36,6 +36,9 @@ trait HateoasLinks {
   private def pensionsReliefsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
     s"/${appConfig.apiGatewayContext}/pensions/$nino/$taxYear"
 
+  private def charitableGivingTaxReliefsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
+    s"/${appConfig.apiGatewayContext}/charitable-giving/$nino/$taxYear"
+
   // API resource links
   def retrieveReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
@@ -74,12 +77,12 @@ trait HateoasLinks {
     Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_PENSIONS)
 
   def retrieveCharitableGivingTaxRelief(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+    Link(href = charitableGivingTaxReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
   def createAndAmendCharitableGivingTaxRelief(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_CHARITABLE_GIVING_TAX_RELIEF)
+    Link(href = charitableGivingTaxReliefsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_CHARITABLE_GIVING_TAX_RELIEF)
 
   def deleteCharitableGivingTaxRelief(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_CHARITABLE_GIVING_TAX_RELIEF)
+    Link(href = charitableGivingTaxReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_CHARITABLE_GIVING_TAX_RELIEF)
 
 }

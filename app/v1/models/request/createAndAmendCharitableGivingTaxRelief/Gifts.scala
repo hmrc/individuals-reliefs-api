@@ -18,20 +18,21 @@ package v1.models.request.createAndAmendCharitableGivingTaxRelief
 
 import play.api.libs.json.{JsObject, Json, Reads, Writes}
 
-case class Gifts(nonUkCharities: Option[NonUkCharities],
-                 landAndBuildings: Option[BigDecimal],
-                 sharesOrSecurities: Option[BigDecimal])
+case class Gifts(nonUkCharities: Option[NonUkCharities], landAndBuildings: Option[BigDecimal], sharesOrSecurities: Option[BigDecimal])
 
 object Gifts {
 
   implicit val reads: Reads[Gifts] = Json.reads[Gifts]
 
   implicit val writes: Writes[Gifts] = new Writes[Gifts] {
+
     def writes(o: Gifts): JsObject = Json.obj(
       "investmentsNonUkCharitiesCharityNames" -> o.nonUkCharities.map(_.charityNames),
-      "investmentsNonUkCharities" -> o.nonUkCharities.map(_.totalAmount),
-      "landAndBuildings" -> o.landAndBuildings,
-      "sharesOrSecurities" -> o.sharesOrSecurities,
+      "investmentsNonUkCharities"             -> o.nonUkCharities.map(_.totalAmount),
+      "landAndBuildings"                      -> o.landAndBuildings,
+      "sharesOrSecurities"                    -> o.sharesOrSecurities
     )
+
   }
+
 }

@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-package v1.models.request.CreateAndAmendCharitableGivingTaxRelief
+package v1.models.request.createAndAmendCharitableGivingTaxRelief
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.models.request.createAndAmendCharitableGivingTaxRelief.{NonUkCharities, GiftAidPayments}
 
 class GiftAidPaymentsSpec extends UnitSpec {
 
   val nonUkCharitiesModel: NonUkCharities =
     NonUkCharities(
       charityNames = Some(Seq("abcdefghijklmnopqr")),
-      totalAmount = 10000.89
+      totalAmount = 123.89
     )
 
   val model: GiftAidPayments =
     GiftAidPayments(
       nonUkCharities = Some(nonUkCharitiesModel),
-      totalAmount = Some(10000.89),
-      oneOffAmount = Some(10000.89),
-      amountTreatedAsPreviousTaxYear = Some(10000.89),
+      totalAmount = Some(492.11),
+      oneOffAmount = Some(987.89),
+      amountTreatedAsPreviousTaxYear = Some(4522.20),
       amountTreatedAsSpecifiedTaxYear = Some(10000.89)
     )
 
@@ -44,11 +43,11 @@ class GiftAidPaymentsSpec extends UnitSpec {
       |      "charityNames":[
       |         "abcdefghijklmnopqr"
       |      ],
-      |      "totalAmount": 10000.89
+      |      "totalAmount": 123.89
       |   },
-      |   "totalAmount":10000.89,
-      |   "oneOffAmount":10000.89,
-      |   "amountTreatedAsPreviousTaxYear":10000.89,
+      |   "totalAmount":492.11,
+      |   "oneOffAmount":987.89,
+      |   "amountTreatedAsPreviousTaxYear":4522.20,
       |   "amountTreatedAsSpecifiedTaxYear": 10000.89
       |}
       |""".stripMargin)
@@ -59,10 +58,10 @@ class GiftAidPaymentsSpec extends UnitSpec {
       |   "nonUkCharitiesCharityNames":[
       |      "abcdefghijklmnopqr"
       |   ],
-      |   "nonUkCharities":10000.89,
-      |   "currentYear":10000.89,
-      |   "oneOffCurrentYear":10000.89,
-      |   "currentYearTreatedAsPreviousYear":10000.89,
+      |   "nonUkCharities":123.89,
+      |   "currentYear":492.11,
+      |   "oneOffCurrentYear":987.89,
+      |   "currentYearTreatedAsPreviousYear":4522.20,
       |   "nextYearTreatedAsCurrentYear":10000.89
       |}
       |""".stripMargin)
@@ -70,7 +69,7 @@ class GiftAidPaymentsSpec extends UnitSpec {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        model shouldBe mtdJson.as[GiftAidPayments]
+        mtdJson.as[GiftAidPayments] shouldBe model
       }
     }
   }

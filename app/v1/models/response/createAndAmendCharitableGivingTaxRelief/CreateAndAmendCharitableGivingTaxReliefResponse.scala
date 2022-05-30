@@ -32,7 +32,9 @@ object CreateAndAmendCharitableGivingTaxReliefResponse extends HateoasLinks {
         deleteCharitableGivingTaxRelief(appConfig, nino, taxYear)
       )
     }
+
   }
+
 }
 
 case class CreateAndAmendCharitableGivingTaxReliefHateoasData(nino: String, taxYear: String) extends HateoasData

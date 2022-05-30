@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package v1.models.request.CreateAndAmendCharitableGivingTaxRelief
+package v1.models.request.createAndAmendCharitableGivingTaxRelief
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.models.request.createAndAmendCharitableGivingTaxRelief.NonUkCharities
 
 class NonUkCharitiesSpec extends UnitSpec {
 
@@ -41,7 +40,7 @@ class NonUkCharitiesSpec extends UnitSpec {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        model shouldBe json.as[NonUkCharities]
+        json.as[NonUkCharities] shouldBe model
       }
     }
   }

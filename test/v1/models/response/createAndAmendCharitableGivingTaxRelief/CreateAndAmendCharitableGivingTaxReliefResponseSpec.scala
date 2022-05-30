@@ -28,12 +28,12 @@ class CreateAndAmendCharitableGivingTaxReliefResponseSpec extends UnitSpec with 
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
+      MockAppConfig.apiGatewayContext.returns("individuals/reliefs").anyNumberOfTimes
       CreateAndAmendCharitableGivingTaxReliefResponse.LinksFactory.links(mockAppConfig, CreateAndAmendCharitableGivingTaxReliefHateoasData(nino, taxYear)) shouldBe
         Seq(
-          Link(s"/my/context/pensions/$nino/$taxYear", GET, "self"),
-          Link(s"/my/context/pensions/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
-          Link(s"/my/context/pensions/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
+          Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", GET, "self"),
+          Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
+          Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
         )
     }
   }

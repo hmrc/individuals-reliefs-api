@@ -18,8 +18,7 @@ package v1.models.request.createAndAmendCharitableGivingTaxRelief
 
 import play.api.libs.json.{Json, OFormat}
 
-case class NonUkCharities(charityNames: Option[Seq[String]],
-                          totalAmount: BigDecimal)
+case class NonUkCharities(charityNames: Option[Seq[String]], totalAmount: BigDecimal)
 
 object NonUkCharities {
   implicit val format: OFormat[NonUkCharities] = Json.format[NonUkCharities]

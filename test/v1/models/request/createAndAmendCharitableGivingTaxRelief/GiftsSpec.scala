@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package v1.models.request.CreateAndAmendCharitableGivingTaxRelief
+package v1.models.request.createAndAmendCharitableGivingTaxRelief
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.models.request.createAndAmendCharitableGivingTaxRelief.{Gifts, NonUkCharities}
 
 class GiftsSpec extends UnitSpec {
 
   val nonUkCharitiesModel: NonUkCharities =
     NonUkCharities(
       charityNames = Some(Seq("abcdefghijklmnopqr")),
-      totalAmount = 10000.89
+      totalAmount = 492.10
     )
 
   val model: Gifts =
     Gifts(
       nonUkCharities = Some(nonUkCharitiesModel),
-      landAndBuildings = Some(10000.89),
+      landAndBuildings = Some(231.29),
       sharesOrSecurities = Some(10000.89),
     )
 
@@ -42,9 +41,9 @@ class GiftsSpec extends UnitSpec {
       |      "charityNames":[
       |         "abcdefghijklmnopqr"
       |      ],
-      |      "totalAmount": 10000.89
+      |      "totalAmount": 492.10
       |   },
-      |   "landAndBuildings":10000.89,
+      |   "landAndBuildings":231.29,
       |   "sharesOrSecurities":10000.89
       |}
       |""".stripMargin)
@@ -55,8 +54,8 @@ class GiftsSpec extends UnitSpec {
       |   "investmentsNonUkCharitiesCharityNames":[
       |      "abcdefghijklmnopqr"
       |   ],
-      |   "investmentsNonUkCharities":10000.89,
-      |   "landAndBuildings":10000.89,
+      |   "investmentsNonUkCharities":492.10,
+      |   "landAndBuildings":231.29,
       |   "sharesOrSecurities":10000.89
       |}
       |""".stripMargin)
@@ -64,7 +63,7 @@ class GiftsSpec extends UnitSpec {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        model shouldBe mtdJson.as[Gifts]
+        mtdJson.as[Gifts] shouldBe model
       }
     }
   }

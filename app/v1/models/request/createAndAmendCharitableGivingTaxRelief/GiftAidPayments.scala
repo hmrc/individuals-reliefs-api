@@ -29,13 +29,16 @@ object GiftAidPayments {
   implicit val reads: Reads[GiftAidPayments] = Json.reads[GiftAidPayments]
 
   implicit val writes: Writes[GiftAidPayments] = new Writes[GiftAidPayments] {
+
     def writes(o: GiftAidPayments): JsObject = Json.obj(
-      "nonUkCharitiesCharityNames" -> o.nonUkCharities.map(_.charityNames),
-      "nonUkCharities" -> o.nonUkCharities.map(_.totalAmount),
-      "currentYear" -> o.totalAmount,
-      "oneOffCurrentYear" -> o.oneOffAmount,
+      "nonUkCharitiesCharityNames"       -> o.nonUkCharities.map(_.charityNames),
+      "nonUkCharities"                   -> o.nonUkCharities.map(_.totalAmount),
+      "currentYear"                      -> o.totalAmount,
+      "oneOffCurrentYear"                -> o.oneOffAmount,
       "currentYearTreatedAsPreviousYear" -> o.amountTreatedAsPreviousTaxYear,
-      "nextYearTreatedAsCurrentYear" -> o.amountTreatedAsSpecifiedTaxYear
+      "nextYearTreatedAsCurrentYear"     -> o.amountTreatedAsSpecifiedTaxYear
     )
+
   }
+
 }
