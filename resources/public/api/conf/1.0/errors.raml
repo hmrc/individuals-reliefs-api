@@ -244,20 +244,20 @@ traits:
             type: types.errorResponse
             examples:
               ruleGiftAidNonUkAmountWithoutNames:
-                description: Non-UK charity gift aid amount supplied without the non-UK gift aid charity names.
+                description: Non-UK charity Gift Aid amount supplied without the non-UK Gift Aid charity names.
                 value:
                   code: RULE_GIFT_AID_NON_UK_AMOUNT_WITHOUT_NAMES
-  ruleGiftAidNonUkInvestmentsAmountWithoutNames:
+  ruleNonUkGiftsAmountWithoutNames:
     responses:
       400:
         body:
           application/json:
             type: types.errorResponse
             examples:
-              ruleGiftAidNonUkInvestmentsAmountWithoutNames:
-                description: Non-UK gift aid investment amount supplied without non-UK gift aid investment charity names.
+              ruleNonUkGiftsAmountWithoutNames:
+                description: Non-UK gifts amount supplied without non-UK gifts charity names.
                 value:
-                  code: RULE_GIFTS_NON_UK_INVESTMENTS_AMOUNT_WITHOUT_NAMES
+                  code: RULE_GIFTS_NON_UK_AMOUNT_WITHOUT_NAMES
   ruleSubmissionFailed:
         responses:
           403:
