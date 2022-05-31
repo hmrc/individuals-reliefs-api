@@ -20,17 +20,48 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockCreateAndAmendCharitableGivingTaxReliefConnector
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.createAndAmendCharitableGivingTaxRelief._
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingTaxReliefServiceSpec extends UnitSpec {
   private val nino: String           = "AA123456A"
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
-  //input request body
+  val nonUkCharitiesModel: NonUkCharities =
+    NonUkCharities(
+      charityNames = Some(Seq("non-UK charity 1", "non-UK charity 2")),
+      totalAmount = 1000.12
+    )
 
-  //private val requestData = AmendReliefInvestmentsRequest(Nino(nino), taxYear, requestBody)
+  val giftAidModel: GiftAidPayments =
+    GiftAidPayments(
+      nonUkCharities = Some(nonUkCharitiesModel),
+      totalAmount = Some(1000.12),
+      oneOffAmount = Some(1000.12),
+      amountTreatedAsPreviousTaxYear = Some(1000.12),
+      amountTreatedAsSpecifiedTaxYear = Some(1000.12)
+    )
+
+  val giftModel: Gifts =
+    Gifts(
+      nonUkCharities = Some(nonUkCharitiesModel),
+      landAndBuildings = Some(1000.12),
+      sharesOrSecurities = Some(1000.12)
+    )
+
+  val requestBody: CreateAndAmendCharitableGivingTaxReliefBody =
+    CreateAndAmendCharitableGivingTaxReliefBody(
+      giftAidPayments = Some(giftAidModel),
+      gifts = Some(giftModel)
+    )
+
+  val requestData: CreateAndAmendCharitableGivingTaxReliefRequest = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), taxYear, requestBody)
 
   trait Test extends MockCreateAndAmendCharitableGivingTaxReliefConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -58,9 +89,8 @@ class CreateAndAmendCharitableGivingTaxReliefServiceSpec extends UnitSpec {
 
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
-
             MockCreateAndAmendCharitableGivingTaxReliefConnector
-              .amend(requestData)
+              .createAmend(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
             await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))

@@ -21,6 +21,7 @@ import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.DesOutcome
 import v1.connectors.CreateAndAmendCharitableGivingTaxReliefConnector
+import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -28,14 +29,12 @@ trait MockCreateAndAmendCharitableGivingTaxReliefConnector extends MockFactory {
 
   val mockConnector: CreateAndAmendCharitableGivingTaxReliefConnector = mock[CreateAndAmendCharitableGivingTaxReliefConnector]
 
-  object MockAmendReliefInvestmentsConnector {
+  object MockCreateAndAmendCharitableGivingTaxReliefConnector {
 
-    def createAmend(requestData: AmendReliefInvestmentsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+    def createAmend(requestData: CreateAndAmendCharitableGivingTaxReliefRequest): CallHandler[Future[DesOutcome[Unit]]] = {
       (mockConnector
-        .createAmend(_: AmendReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .createAmend(_: CreateAndAmendCharitableGivingTaxReliefRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
-
   }
-
 }

@@ -18,27 +18,19 @@ package v1.services
 
 import cats.data.EitherT
 import javax.inject.{Inject, Singleton}
-import play.api.Logging
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.Logging
 import v1.connectors.CreateAndAmendCharitableGivingTaxReliefConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{
-  DownstreamError,
-  NinoFormatError,
-  NotFoundError,
-  RuleGiftAidNonUkAmountWithoutNamesError,
-  RuleGiftsNonUkAmountWithoutNamesError,
-  RuleTaxYearNotSupportedError,
-  TaxYearFormatError
-}
+import v1.models.errors._
+import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRequest
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: CreateAndAmendCharitableGivingTaxReliefConnector)
-    extends DesResponseMappingSupport
-    with Logging {
+  extends DesResponseMappingSupport with Logging {
 
   def amend(request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit
       hc: HeaderCarrier,

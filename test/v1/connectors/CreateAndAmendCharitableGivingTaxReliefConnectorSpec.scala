@@ -19,7 +19,9 @@ package v1.connectors
 import mocks.MockAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockHttpClient
+import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.createAndAmendCharitableGivingTaxRelief.{CreateAndAmendCharitableGivingTaxReliefBody, CreateAndAmendCharitableGivingTaxReliefRequest, GiftAidPayments, Gifts, NonUkCharities}
 
 import scala.concurrent.Future
 
@@ -28,7 +30,33 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
   val taxYear: String    = "2017-18"
   val nino: String       = "AA123456A"
 
-  // input models
+  val nonUkCharitiesModel: NonUkCharities =
+    NonUkCharities(
+      charityNames = Some(Seq("non-UK charity 1", "non-UK charity 2")),
+      totalAmount = 1000.12
+    )
+
+  val giftAidModel: GiftAidPayments =
+    GiftAidPayments(
+      nonUkCharities = Some(nonUkCharitiesModel),
+      totalAmount = Some(1000.12),
+      oneOffAmount = Some(1000.12),
+      amountTreatedAsPreviousTaxYear = Some(1000.12),
+      amountTreatedAsSpecifiedTaxYear = Some(1000.12)
+    )
+
+  val giftModel: Gifts =
+    Gifts(
+      nonUkCharities = Some(nonUkCharitiesModel),
+      landAndBuildings = Some(1000.12),
+      sharesOrSecurities = Some(1000.12)
+    )
+
+  val requestBody: CreateAndAmendCharitableGivingTaxReliefBody =
+    CreateAndAmendCharitableGivingTaxReliefBody(
+      giftAidPayments = Some(giftAidModel),
+      gifts = Some(giftModel)
+    )
 
   class Test extends MockHttpClient with MockAppConfig {
 
@@ -37,15 +65,15 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "des-token"
-    MockAppConfig.ifsEnvironment returns "des-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDesHeaders)
+    MockAppConfig.desBaseUrl returns baseUrl
+    MockAppConfig.desToken returns "des-token"
+    MockAppConfig.desEnvironment returns "des-environment"
+    MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
   "doConnector" must {
 
-    //val request: AmendForeignReliefsRequest = AmendForeignReliefsRequest(Nino(nino), taxYear, body)
+    val request: CreateAndAmendCharitableGivingTaxReliefRequest = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), taxYear, requestBody)
 
     "put a body and return 204 no body" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
@@ -57,7 +85,7 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
         .post(
           url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/$taxYear",
           config = dummyDesHeaderCarrierConfig,
-          body = body,
+          body = requestBody,
           requiredHeaders = requiredHeadersPost,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
