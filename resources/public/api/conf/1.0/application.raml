@@ -48,9 +48,9 @@ uses:
           taxYear:
             description: 'The tax year the data applies to, for example, 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2020-22 is not valid.'
             example: "2021-22"
-        delete: !include reliefInvestments_delete.raml
-        put: !include reliefInvestments_amend.raml
-        get: !include reliefInvestments_retrieve.raml
+        delete: !include endpoints/reliefInvestments_delete.raml
+        put: !include endpoints/reliefInvestments_amend.raml
+        get: !include endpoints/reliefInvestments_retrieve.raml
   /other:
     (annotations.group):
       name: Other Reliefs
@@ -61,9 +61,9 @@ uses:
           taxYear:
             description: 'The tax year the data applies to, for example, 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2020-22 is not valid.'
             example: "2021-22"
-        delete: !include reliefOther_delete.raml
-        put: !include reliefOther_amend.raml
-        get: !include reliefOther_retrieve.raml
+        delete: !include endpoints/reliefOther_delete.raml
+        put: !include endpoints/reliefOther_amend.raml
+        get: !include endpoints/reliefOther_retrieve.raml
   /foreign:
     (annotations.group):
       name: Foreign Reliefs
@@ -74,9 +74,9 @@ uses:
           taxYear:
             description: 'The tax year the data applies to, for example, 2021-22. The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2020-22 is not valid.'
             example: "2021-22"
-        delete: !include reliefForeign_delete.raml
-        put: !include reliefForeign_amend.raml
-        get: !include reliefForeign_retrieve.raml
+        delete: !include endpoints/reliefForeign_delete.raml
+        put: !include endpoints/reliefForeign_amend.raml
+        get: !include endpoints/reliefForeign_retrieve.raml
   /pensions:
     (annotations.group):
       name: Pensions Reliefs
@@ -87,18 +87,18 @@ uses:
           taxYear:
             description: 'The tax year the data applies to, for example, 2020-21. The start year and end year must not span two tax years. The minimum tax year is 2020-21. No gaps are allowed, for example, 2020-22 is not valid.'
             example: "2020-21"
-        delete: !include reliefPensions_delete.raml
-        put: !include reliefPensions_amend.raml
-        get: !include reliefPensions_retrieve.raml
+        delete: !include endpoints/reliefPensions_delete.raml
+        put: !include endpoints/reliefPensions_amend.raml
+        get: !include endpoints/reliefPensions_retrieve.raml
   /charitable-giving:
     (annotations.group):
-      name: Charitable Giving
-      description: Resources relating to an individual's charitable giving
+      name: Charitable Givings
+      description: Resources relating to an individual's charitable givings
     /{nino}:
       /{taxYear}:
         uriParameters:
           taxYear:
-            description: 'The tax year the data applies to, for example, 2020-21. The start year and end year must not span two tax years. The minimum tax year is 2020-21. No gaps are allowed, for example, 2020-22 is not valid.'
+            description: 'The tax year the data applies to. The start year and end year must not span two tax years. No gaps are allowed, for example, 2020-22 is not valid. The minimum tax year is 2017-18.'
             example: "2020-21"
-        put: !include reliefCharitableGiving_amend.raml
+        put: !include endpoints/charitableGiving_amend.raml
 

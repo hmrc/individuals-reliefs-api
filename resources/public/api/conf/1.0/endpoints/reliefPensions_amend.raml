@@ -4,34 +4,32 @@ is:
   - headers.testScenarioHeader
   - errors.formatNino
   - errors.formatTaxYear
-  - errors.ruleTaxYearNotSupported
   - errors.formatValue
   - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTaxYearNotSupported
   - errors.incorrectOrEmptyBody
   - errors.clientOrAgentNotAuthorised
-  - errors.formatCountryCode
-  - errors.ruleCountryCode
-displayName: Create and Amend Foreign Reliefs
-description: 'This endpoint allows a developer to create and amend foreign reliefs. A National Insurance number and tax year must be provided.'
-(annotations.sandboxData): !include scenarios/amend_relief_foreign.md
+displayName: Create and Amend Pensions Reliefs
+description: "This endpoint allows a developer to create and amend pensions reliefs for a tax year. A National Insurance number and tax year must be provided."
+(annotations.sandboxData): !include ../scenarios/amend_relief_pensions.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:
   application/json:
-    type: !include schemas/amend_relief_foreign_request.json
+    type: !include ../schemas/amend_relief_pensions_request.json
     examples:
       example-1:
         description: Default Example
-        value: !include examples/amend_relief_foreign_request.json
+        value: !include ../examples/amend_relief_pensions_request.json
 responses:
  200:
    body:
      application/json:
-       type: !include schemas/amend_relief_foreign_response.json
+       type: !include ../schemas/amend_relief_pensions_response.json
        examples:
          example-1:
            description: Example response
-           value: !include examples/amend_relief_foreign_response.json
+           value: !include ../examples/amend_relief_pensions_response.json
    headers:
      X-CorrelationId:
        example: c75f40a6-a3df-4429-a697-471eeec46435

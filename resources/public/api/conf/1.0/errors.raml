@@ -247,17 +247,6 @@ traits:
                 description: Non-UK charity gift aid amount supplied without the non-UK gift aid charity names.
                 value:
                   code: RULE_GIFT_AID_NON_UK_AMOUNT_WITHOUT_NAMES
-  ruleGiftAidNonUkNamesWithoutAmount:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              ruleGiftAidNonUkNamesWithoutAmount:
-                description: Non-UK charity gift aid charity names supplied without an amount or the amount was zero.
-                value:
-                  code: RULE_GIFT_AID_NON_UK_NAMES_WITHOUT_AMOUNT
   ruleGiftAidNonUkInvestmentsAmountWithoutNames:
     responses:
       400:
@@ -269,17 +258,6 @@ traits:
                 description: Non-UK gift aid investment amount supplied without non-UK gift aid investment charity names.
                 value:
                   code: RULE_GIFTS_NON_UK_INVESTMENTS_AMOUNT_WITHOUT_NAMES
-  ruleGiftAidNonUkInvestmentsNamesWithoutAmount:
-    responses:
-      400:
-        body:
-          application/json:
-            type: types.errorResponse
-            examples:
-              ruleGiftAidNonUkInvestmentsNamesWithoutAmount:
-                description: Non-UK gift of investment charity names supplied without an amount or the amount was zero.
-                value:
-                  code: RULE_GIFTS_NON_UK_INVESTMENTS_NAMES_WITHOUT_AMOUNT
   ruleSubmissionFailed:
         responses:
           403:

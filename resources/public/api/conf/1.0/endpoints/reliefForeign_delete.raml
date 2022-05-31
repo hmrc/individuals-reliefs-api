@@ -3,13 +3,13 @@ is:
   - headers.testScenarioHeader
   - errors.formatNino
   - errors.formatTaxYear
-  - errors.ruleTaxYearRangeInvalid
   - errors.ruleTaxYearNotSupported
+  - errors.ruleTaxYearRangeInvalid
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Delete Pensions Reliefs
-description: "This endpoint allows the developer to delete Tax relief on pension contributions for a tax year. A National Insurance number and tax year must be provided."
-(annotations.sandboxData): !include scenarios/delete_relief_pensions.md
+displayName: Delete Foreign Reliefs
+description: "This endpoint allows a developer to delete foreign reliefs that have been previously submitted. A National Insurance number and tax year must be provided."
+(annotations.sandboxData): !include ../scenarios/delete_relief_foreign.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 responses:
