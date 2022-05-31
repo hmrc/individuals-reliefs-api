@@ -1,6 +1,17 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package v1.controllers.requestParsers.validators
@@ -66,11 +77,8 @@ class AmendCharitableGivingReliefValidator extends Validator[CreateAndAmendChari
         field = giftAidPayments.amountTreatedAsSpecifiedTaxYear,
         path = s"/giftAidPayments/amountTreatedAsSpecifiedTaxYear"
       ),
-      giftAidPayments.nonUkCharities
-        .map(NonUkCharitiesValidation.hasMissingNames)
-        .map(missingNames => if (missingNames) List(RuleGiftAidNonUkAmountWithoutNamesError) else Nil)
-        .getOrElse(Nil),
-      giftAidPayments.nonUkCharities.map(x => validateCharityNames(x.charityNames, "/giftAidPayments/nonUkCharities/charityNames")).getOrElse(Nil)
+      validateMissingCharityNames(giftAidPayments.nonUkCharities, RuleGiftAidNonUkAmountWithoutNamesError),
+      validateFormatCharityNames(giftAidPayments.nonUkCharities, "/giftAidPayments/nonUkCharities/charityNames")
     ).flatten
   }
 
@@ -88,23 +96,26 @@ class AmendCharitableGivingReliefValidator extends Validator[CreateAndAmendChari
         field = gifts.sharesOrSecurities,
         path = s"/gifts/sharesOrSecurities"
       ),
-      gifts.nonUkCharities
-        .map(NonUkCharitiesValidation.hasMissingNames)
-        .map(missingNames => if (missingNames) List(RuleGiftsNonUkInvestmentsAmountWithoutNamesError) else Nil)
-        .getOrElse(Nil),
-      gifts.nonUkCharities.map(x => validateCharityNames(x.charityNames, "/gifts/nonUkCharities/charityNames")).getOrElse(Nil)
+      validateMissingCharityNames(gifts.nonUkCharities, RuleGiftsNonUkInvestmentsAmountWithoutNamesError),
+      validateFormatCharityNames(gifts.nonUkCharities, "/gifts/nonUkCharities/charityNames")
     ).flatten
   }
 
-  private def validateCharityNames(charityNames: Option[Seq[String]], path: String): Seq[MtdError] = {
-    charityNames match {
-      case None => Nil
-      case Some(names) =>
-        names.zipWithIndex.collect {
-          case (name, i) if !NonUkCharitiesValidation.isNameValid(name) => StringFormatError.copy(paths = Some(Seq(s"$path/$i")))
-        }
-    }
-  }
+  private def validateMissingCharityNames(nonUkCharities: Option[NonUkCharities], error: MtdError): Seq[MtdError] =
+    nonUkCharities
+      .map(nonUk => if (NonUkCharitiesValidation.hasMissingNames(nonUk)) List(error) else Nil)
+      .getOrElse(Nil)
+
+  private def validateFormatCharityNames(nonUkCharities: Option[NonUkCharities], path: String): Seq[MtdError] =
+    nonUkCharities
+      .map(_.charityNames match {
+        case None => Nil
+        case Some(names) =>
+          names.zipWithIndex.collect {
+            case (name, i) if !NonUkCharitiesValidation.isNameValid(name) => StringFormatError.copy(paths = Some(Seq(s"$path/$i")))
+          }
+      })
+      .getOrElse(Nil)
 
   override def validate(data: CreateAndAmendCharitableGivingTaxReliefRawData): List[MtdError] =
     run(validationSet, data).distinct

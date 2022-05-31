@@ -25,6 +25,17 @@ object JsonFormatValidation {
 
   private val logger: Logger = Logger(this.getClass)
 
+  def validate[A](data: JsValue, error: MtdError)(implicit reads: Reads[A]): List[MtdError] = {
+    if (data == JsObject.empty) {
+      List(error)
+    } else {
+      data.validate[A] match {
+        case JsSuccess(_, _) => NoValidationErrors
+        case _               => List(error)
+      }
+    }
+  }
+
   def validate[A: OFormat](data: JsValue): List[MtdError] =
     validateOrRead(data) match {
       case Left(errors) => errors

@@ -42,7 +42,7 @@ class AmendReliefInvestmentValidator @Inject() (appConfig: AppConfig) extends Va
 
   private def bodyFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     List(
-      JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body)
+      JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError)
     )
   }
 
