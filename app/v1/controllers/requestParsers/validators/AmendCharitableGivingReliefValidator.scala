@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors.{MtdError, RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkInvestmentsAmountWithoutNamesError, StringFormatError}
+import v1.models.errors.{MtdError, RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError, StringFormatError}
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 
 class AmendCharitableGivingReliefValidator extends Validator[CreateAndAmendCharitableGivingTaxReliefRawData] {
@@ -96,7 +96,7 @@ class AmendCharitableGivingReliefValidator extends Validator[CreateAndAmendChari
         field = gifts.sharesOrSecurities,
         path = s"/gifts/sharesOrSecurities"
       ),
-      validateMissingCharityNames(gifts.nonUkCharities, RuleGiftsNonUkInvestmentsAmountWithoutNamesError),
+      validateMissingCharityNames(gifts.nonUkCharities, RuleGiftsNonUkAmountWithoutNamesError),
       validateFormatCharityNames(gifts.nonUkCharities, "/gifts/nonUkCharities/charityNames")
     ).flatten
   }

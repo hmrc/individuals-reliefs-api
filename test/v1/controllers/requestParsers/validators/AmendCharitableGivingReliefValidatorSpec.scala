@@ -228,7 +228,7 @@ class AmendCharitableGivingReliefValidatorSpec extends UnitSpec with JsonErrorVa
           CreateAndAmendCharitableGivingTaxReliefRawData(
             validNino,
             validTaxYear,
-            body.removeProperty("/gifts/nonUkCharities/charityNames"))) shouldBe List(RuleGiftsNonUkInvestmentsAmountWithoutNamesError)
+            body.removeProperty("/gifts/nonUkCharities/charityNames"))) shouldBe List(RuleGiftsNonUkAmountWithoutNamesError)
       }
     }
 

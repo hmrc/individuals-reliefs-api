@@ -17,5 +17,6 @@
 package v1.models.request.createAndAmendCharitableGivingTaxRelief
 
 import v1.models.domain.Nino
+import v1.models.request.DesTaxYear
 
-case class CreateAndAmendCharitableGivingTaxReliefRequest(nino: Nino, taxYear: String, body: CreateAndAmendCharitableGivingTaxReliefBody)
+case class CreateAndAmendCharitableGivingTaxReliefRequest(nino: Nino, taxYear: DesTaxYear, body: CreateAndAmendCharitableGivingTaxReliefBody)

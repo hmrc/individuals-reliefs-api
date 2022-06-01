@@ -21,6 +21,7 @@ import support.UnitSpec
 import v1.mocks.validators.MockAmendCharitableGivingReliefValidator
 import v1.models.domain.Nino
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.DesTaxYear
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.{
   CreateAndAmendCharitableGivingTaxReliefBody,
   CreateAndAmendCharitableGivingTaxReliefRawData,
@@ -46,11 +47,12 @@ class AmendCharitableGivingRequestReliefParserSpec extends UnitSpec {
 
   val request: CreateAndAmendCharitableGivingTaxReliefRequest = CreateAndAmendCharitableGivingTaxReliefRequest(
     Nino(nino),
-    taxYear,
+    DesTaxYear.fromMtd(taxYear),
     CreateAndAmendCharitableGivingTaxReliefBody(
       Some(GiftAidPayments(nonUkCharities = None, totalAmount = Some(1.23), None, None, None)),
       None
-    ))
+    )
+  )
 
   trait Test extends MockAmendCharitableGivingReliefValidator {
     lazy val parser = new AmendCharitableGivingRequestReliefParser(mockValidator)

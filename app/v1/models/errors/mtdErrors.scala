@@ -152,10 +152,14 @@ object RuleSubmissionFailedError
 object RuleGiftAidNonUkAmountWithoutNamesError
     extends MtdError(
       code = "RULE_GIFT_AID_NON_UK_AMOUNT_WITHOUT_NAMES",
-      message = "Non-UK charity Gift Aid amount supplied without the non-UK Gift Aid charity names")
+      message = "Non-UK charity Gift Aid amount supplied without the non-UK Gift Aid charity names"
+    )
 
-object RuleGiftsNonUkInvestmentsAmountWithoutNamesError
-    extends MtdError(code = "RULE_GIFTS_NON_UK_AMOUNT_WITHOUT_NAMES", message = "Non-UK gifts amount supplied without non-UK gifts charity names")
+object RuleGiftsNonUkAmountWithoutNamesError
+    extends MtdError(
+      code = "RULE_GIFTS_NON_UK_AMOUNT_WITHOUT_NAMES",
+      message = "Non-UK gifts amount supplied without non-UK gifts charity names"
+    )
 
 //Standard Errors
 object NotFoundError

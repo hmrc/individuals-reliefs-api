@@ -51,4 +51,6 @@ package object services {
 
   type DeletePensionsReliefsServiceOutcome = ServiceOutcome[Unit]
 
+  type CreateAndAmendCharitableGivingTaxReliefServiceOutcome = ServiceOutcome[Unit]
+
 }
