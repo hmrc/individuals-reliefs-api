@@ -21,14 +21,16 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockHttpClient
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.DesTaxYear
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.{CreateAndAmendCharitableGivingTaxReliefBody, CreateAndAmendCharitableGivingTaxReliefRequest, GiftAidPayments, Gifts, NonUkCharities}
 
 import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
 
-  val taxYear: String    = "2018"
-  val nino: String       = "AA123456A"
+  val taxYearMtd: String        = "2017-18"
+  val taxYearDownstream: String = "2018"
+  val nino: String              = "AA123456A"
 
   val nonUkCharitiesModel: NonUkCharities =
     NonUkCharities(
@@ -73,7 +75,7 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
 
   "doConnector" must {
 
-    val request: CreateAndAmendCharitableGivingTaxReliefRequest = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), taxYear, requestBody)
+    val request: CreateAndAmendCharitableGivingTaxReliefRequest = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), DesTaxYear.fromMtd(taxYearMtd), requestBody)
 
     "put a body and return 204 no body" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
@@ -83,7 +85,7 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
 
       MockedHttpClient
         .post(
-          url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/$taxYear",
+          url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/$taxYearDownstream",
           config = dummyDesHeaderCarrierConfig,
           body = requestBody,
           requiredHeaders = requiredHeadersPost,

@@ -23,9 +23,10 @@ import v1.mocks.connectors.MockCreateAndAmendCharitableGivingTaxReliefConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.DesTaxYear
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
-import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingTaxReliefServiceSpec extends UnitSpec {
@@ -61,7 +62,7 @@ class CreateAndAmendCharitableGivingTaxReliefServiceSpec extends UnitSpec {
       gifts = Some(giftModel)
     )
 
-  val requestData: CreateAndAmendCharitableGivingTaxReliefRequest = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), taxYear, requestBody)
+  val requestData: CreateAndAmendCharitableGivingTaxReliefRequest = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), DesTaxYear.fromMtd(taxYear), requestBody)
 
   trait Test extends MockCreateAndAmendCharitableGivingTaxReliefConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
