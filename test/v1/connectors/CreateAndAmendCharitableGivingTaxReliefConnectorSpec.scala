@@ -27,7 +27,7 @@ import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
 
-  val taxYear: String    = "2017-18"
+  val taxYear: String    = "2018"
   val nino: String       = "AA123456A"
 
   val nonUkCharitiesModel: NonUkCharities =
