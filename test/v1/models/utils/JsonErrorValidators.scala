@@ -52,7 +52,13 @@ trait JsonErrorValidators {
 
   }
 
+  private def jsPathFrom(str: String) =
+    str.split("/").filter(_.nonEmpty).foldLeft[JsPath](__)(_ \ _)
+
   implicit class JsValueOps(json: JsValue) {
+
+    def removeProperty(path: String): JsValue =
+      removeProperty(jsPathFrom(path))
 
     def removeProperty(path: JsPath): JsValue = {
       path
@@ -63,12 +69,23 @@ trait JsonErrorValidators {
         )
     }
 
+    def update(path: String, replacement: JsValue): JsValue =
+      update(jsPathFrom(path), replacement)
+
+    def update(path: JsPath, replacement: JsValue): JsValue = {
+      val updateReads: Reads[JsObject] = __.json.update(path.json.put(replacement))
+      json.as[JsObject](updateReads)
+    }
+
+    def replaceWithEmptyObject(path: String): JsValue =
+      removeProperty(path).update(path, JsObject.empty)
+
   }
 
   def testMandatoryProperty[A: Reads](json: JsValue)(property: String): Unit = {
     s"the JSON is missing the required property $property" should {
 
-      val jsPath: JsPath = property.split("/").filterNot(_ == "").foldLeft(JsPath())(_ \ _)
+      val jsPath: JsPath = jsPathFrom(property)
       val jsResult       = json.removeProperty(jsPath).validate[A]
 
       "only throw one error" in {
@@ -89,14 +106,14 @@ trait JsonErrorValidators {
 
   def testPropertyType[T](json: JsValue)(path: String, replacement: JsValue, expectedError: String)(implicit rds: Reads[T]): Unit = {
 
-    val jsPath = path.split("/").filterNot(_ == "").foldLeft(JsPath())(_ \ _)
+    val jsPath = jsPathFrom(path)
 
     lazy val jsResult = {
       val amendedJson: JsValue = jsPath.json.pickBranch
         .reads(json)
         .fold(
           invalid = errs => fail(s"an error occurred when reading $path : $errs"),
-          valid = _ => overwriteJsonProperty(jsPath, json, replacement)
+          valid = _ => json.update(jsPath, replacement)
         )
       rds.reads(amendedJson)
     }
@@ -117,11 +134,6 @@ trait JsonErrorValidators {
         filterErrorByPath(jsPath, jsError).message shouldBe expectedError
       }
     }
-  }
-
-  private def overwriteJsonProperty(path: JsPath, json: JsValue, replacement: JsValue): JsValue = {
-    val updateReads: Reads[JsObject] = __.json.update(path.json.put(replacement))
-    json.as[JsObject](updateReads)
   }
 
   private def filterErrorByPath(jsPath: JsPath, jsError: JsError): JsonValidationError = {

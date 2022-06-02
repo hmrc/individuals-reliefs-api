@@ -50,6 +50,8 @@ object ValueFormatError
       message = "The field should be between 0 and 99999999999.99"
     )
 
+object StringFormatError extends MtdError("FORMAT_STRING", "The supplied string format is not valid")
+
 object DateFormatError
     extends MtdError(
       code = "FORMAT_DATE",
