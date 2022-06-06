@@ -100,6 +100,7 @@ uses:
           taxYear:
             description: 'The tax year the data applies to. The start year and end year must not span two tax years. No gaps are allowed, for example, 2020-22 is not valid. The minimum tax year is 2017-18.'
             example: "2020-21"
+        delete: !include endpoints/charitableGiving_delete.raml
         put: !include endpoints/charitableGiving_amend.raml
         get: !include endpoints/charitableGiving_retrieve.raml
 
