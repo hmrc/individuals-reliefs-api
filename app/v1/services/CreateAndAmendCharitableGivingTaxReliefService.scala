@@ -59,7 +59,8 @@ class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: Creat
       "INVALID_ACCOUNTING_PERIOD"         -> RuleTaxYearNotSupportedError,
       "SERVER_ERROR"                      -> DownstreamError,
       "SERVICE_UNAVAILABLE"               -> DownstreamError,
-      "GONE"                              -> DownstreamError
+      "GONE"                              -> DownstreamError,
+      "NOT_FOUND"                         -> NotFoundError
     )
 
 }
