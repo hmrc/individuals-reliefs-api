@@ -16,8 +16,6 @@
 
 package v1.services
 
-import support.UnitSpec
-import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockCreateAndAmendCharitableGivingTaxReliefConnector
 import v1.models.domain.Nino
@@ -26,13 +24,11 @@ import v1.models.outcomes.ResponseWrapper
 import v1.models.request.DesTaxYear
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateAndAmendCharitableGivingTaxReliefServiceSpec extends UnitSpec {
+class CreateAndAmendCharitableGivingTaxReliefServiceSpec extends ServiceSpec {
   private val nino: String           = "AA123456A"
   private val taxYear: String        = "2017-18"
-  implicit val correlationId: String = "X-123"
 
   val nonUkCharitiesModel: NonUkCharities =
     NonUkCharities(
@@ -65,7 +61,6 @@ class CreateAndAmendCharitableGivingTaxReliefServiceSpec extends UnitSpec {
   val requestData: CreateAndAmendCharitableGivingTaxReliefRequest = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), DesTaxYear.fromMtd(taxYear), requestBody)
 
   trait Test extends MockCreateAndAmendCharitableGivingTaxReliefConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new CreateAndAmendCharitableGivingTaxReliefService(

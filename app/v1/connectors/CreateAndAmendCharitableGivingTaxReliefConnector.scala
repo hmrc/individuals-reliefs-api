@@ -18,6 +18,7 @@ package v1.connectors
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
+import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.connectors.DownstreamUri.DesUri
 import v1.connectors.httpparsers.StandardDesHttpParser._
@@ -32,6 +33,8 @@ class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: Http
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DesOutcome[Unit]] = {
+
+    implicit val successCode: SuccessCode = SuccessCode(OK)
 
     post(
       body = request.body,
