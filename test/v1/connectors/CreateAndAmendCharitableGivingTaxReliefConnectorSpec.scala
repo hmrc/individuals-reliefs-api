@@ -77,7 +77,7 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
 
     val request: CreateAndAmendCharitableGivingTaxReliefRequest = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), DesTaxYear.fromMtd(taxYearMtd), requestBody)
 
-    "put a body and return 204 no body" in new Test {
+    "return 200 for a success scenario" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
       implicit val hc: HeaderCarrier                = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
