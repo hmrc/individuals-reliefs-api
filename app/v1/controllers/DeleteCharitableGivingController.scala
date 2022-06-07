@@ -18,16 +18,15 @@ package v1.controllers
 
 import cats.data.EitherT
 import cats.implicits._
+
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.DeleteForeignReliefsRequestParser
-import v1.models.audit.{AuditEvent, AuditResponse, DeleteForeignReliefsAuditDetail}
+
 import v1.models.errors._
-import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRawData
-import v1.services.{AuditService, DeleteForeignReliefsService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRawData
+import v1.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -51,7 +50,7 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
         s"with correlationId : $correlationId")
-      val rawData = DeleteCharitableGivingRawData(nino, taxYear)
+      val rawData = DeleteCharitableGivingTaxReliefRawData(nino, taxYear)
       val result =
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
@@ -60,14 +59,6 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
-
-          auditSubmission(
-            DeleteForeignReliefsAuditDetail(
-              request.userDetails,
-              nino,
-              taxYear,
-              serviceResponse.correlationId,
-              AuditResponse(NO_CONTENT, Right(None))))
 
           NoContent.withApiHeaders(serviceResponse.correlationId)
 
@@ -79,14 +70,6 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
-
-        auditSubmission(
-          DeleteForeignReliefsAuditDetail(
-            request.userDetails,
-            nino,
-            taxYear,
-            correlationId,
-            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result
       }.merge
@@ -100,11 +83,6 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case _               => unhandledError(errorWrapper)
     }
-  }
-
-  private def auditSubmission(details: DeleteForeignReliefsAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
-    val event = AuditEvent("DeleteForeignReliefs", "delete-foreign-reliefs", details)
-    auditService.auditEvent(event)
   }
 
 }
