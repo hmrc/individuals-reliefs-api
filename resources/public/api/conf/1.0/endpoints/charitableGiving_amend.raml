@@ -12,7 +12,7 @@ is:
   - errors.ruleNonUkGiftsAmountWithoutNames
   - errors.incorrectOrEmptyBody
   - errors.clientOrAgentNotAuthorised
-  - errors.notFound
+  - errors.notFoundCharitableGiving
 displayName: Create and Amend Charitable Giving Tax Relief [test only]
 description: This endpoint allows a developer to create and amend charitable giving tax relief for a tax year. A National Insurance number, and tax year must be provided.
 (annotations.sandboxData): !include ../scenarios/amend_charitable_givings.md
@@ -20,20 +20,20 @@ description: This endpoint allows a developer to create and amend charitable giv
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:
   application/json:
-    type: !include ../schemas/charitable_givings_payload.json
+    type: !include ../schemas/amend_charitable_giving_request.json
     examples:
       example-1:
         description: Charitable Giving Request
-        value: !include ../examples/charitable_givings_payload.json
+        value: !include ../examples/amend_charitable_giving_request.json
 responses:
  200:
    body:
      application/json:
-       type: !include ../schemas/charitable_givings_links.json
+       type: !include ../schemas/amend_charitable_giving_response.json
        examples:
          example-1:
            description: Charitable Giving Response
-           value: !include ../examples/charitable_givings_links.json
+           value: !include ../examples/amend_charitable_giving_response.json
    headers:
      X-CorrelationId:
        example: c75f40a6-a3df-4429-a697-471eeec46435
