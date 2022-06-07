@@ -17,6 +17,6 @@
 package v1.models.request.deleteCharitableGivingTaxRelief
 
 import v1.models.domain.Nino
-import v1.models.request.DesTaxYear
+import v1.models.request.TaxYear
 
-case class DeleteCharitableGivingTaxReliefRequest(nino: Nino, taxYear: DesTaxYear)
+case class DeleteCharitableGivingTaxReliefRequest(nino: Nino, taxYear: TaxYear)
