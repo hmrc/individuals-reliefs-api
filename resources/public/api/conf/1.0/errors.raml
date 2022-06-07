@@ -35,6 +35,17 @@ traits:
                 description: 'The client or agent is not authorised. This is because: the client is not subscribed to MTD, the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.'
                 value:
                   code: CLIENT_OR_AGENT_NOT_AUTHORISED
+  clientOrAgentNotAuthorisedCharitableGiving:
+    responses:
+      403:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              clientOrAgentNotAuthorisedCharitableGiving:
+                description: 'The client and/or agent are not authorized. This is normally because: the client is not subscribed to MTD, the agent is not subscribed to Agent Services, or the client has not authorized the agent to act on their behalf.'
+                value:
+                  code: CLIENT_OR_AGENT_NOT_AUTHORISED
   formatNino:
     responses:
       400:
