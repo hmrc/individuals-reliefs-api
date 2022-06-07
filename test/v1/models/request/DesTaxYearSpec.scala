@@ -23,7 +23,7 @@ class DesTaxYearSpec extends UnitSpec {
   val taxYearValue = DesTaxYear("2018")
 
   "DesTaxYear" should {
-    "return a value as a string" when {
+    "return the year in the range format required by DES" when {
       "toString is used" in {
         taxYearValue.toString shouldBe "2018"
       }
