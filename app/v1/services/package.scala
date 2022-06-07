@@ -18,39 +18,9 @@ package v1
 
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
-import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsResponse
-import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
-import v1.models.response.retrieveReliefInvestments._
 
 package object services {
 
-  private type ServiceOutcome[A] = Either[ErrorWrapper, ResponseWrapper[A]]
-
-  type AmendReliefInvestmentsServiceOutcome = ServiceOutcome[Unit]
-
-  type AmendOtherReliefsServiceOutcome = ServiceOutcome[Unit]
-
-  type DeleteReliefInvestmentsServiceOutcome = ServiceOutcome[Unit]
-
-  type RetrieveReliefInvestmentsServiceOutcome = ServiceOutcome[RetrieveReliefInvestmentsResponse]
-
-  type RetrievePensionsReliefsServiceOutcome = ServiceOutcome[RetrievePensionsReliefsResponse]
-
-  type DeleteOtherReliefsServiceOutcome = ServiceOutcome[Unit]
-
-  type RetrieveOtherReliefsServiceOutcome = ServiceOutcome[RetrieveOtherReliefsResponse]
-
-  type AmendForeignReliefsServiceOutcome = ServiceOutcome[Unit]
-
-  type DeleteForeignReliefsServiceOutcome = ServiceOutcome[Unit]
-
-  type RetrieveForeignReliefsServiceOutcome = ServiceOutcome[RetrieveForeignReliefsResponse]
-
-  type AmendPensionsReliefsServiceOutcome = ServiceOutcome[Unit]
-
-  type DeletePensionsReliefsServiceOutcome = ServiceOutcome[Unit]
-
-  type CreateAndAmendCharitableGivingTaxReliefServiceOutcome = ServiceOutcome[Unit]
+  type ServiceOutcome[A] = Either[ErrorWrapper, ResponseWrapper[A]]
 
 }

@@ -36,7 +36,7 @@ class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: Creat
       hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[CreateAndAmendCharitableGivingTaxReliefServiceOutcome] = {
+      correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.createAmend(request)).leftMap(mapDesErrors(desErrorMap))

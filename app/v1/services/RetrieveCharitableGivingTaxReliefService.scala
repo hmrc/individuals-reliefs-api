@@ -21,35 +21,41 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.connectors.DeleteForeignReliefsConnector
+import v1.connectors.RetrieveCharitableGivingTaxReliefConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
-import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
+import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
+import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteForeignReliefsService @Inject() (connector: DeleteForeignReliefsConnector) extends DesResponseMappingSupport with Logging {
+class RetrieveCharitableGivingTaxReliefService @Inject()(connector: RetrieveCharitableGivingTaxReliefConnector) extends DesResponseMappingSupport with Logging {
 
-  def delete(request: DeleteForeignReliefsRequest)(implicit
+  def retrieve(request: RetrieveCharitableGivingReliefRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+      correlationId: String): Future[ServiceOutcome[RetrieveCharitableGivingReliefResponse]] = {
+
     val result = for {
-      desResponseWrapper <- EitherT(connector.delete(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
     } yield desResponseWrapper
+
     result.value
   }
 
-  private def desErrorMap: Map[String, MtdError] =
+  private def desErrorMap =
     Map(
-      "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
-      "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> DownstreamError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamError
+      "INVALID_NINO"            -> NinoFormatError,
+      "INVALID_TYPE"            -> DownstreamError,
+      "INVALID_TAXYEAR"         -> TaxYearFormatError,
+      "INVALID_INCOME_SOURCE"   -> DownstreamError,
+      "NOT_FOUND_PERIOD"        -> NotFoundError,
+      "NOT_FOUND_INCOME_SOURCE" -> NotFoundError,
+      "SERVER_ERROR"            -> DownstreamError,
+      "SERVICE_UNAVAILABLE"     -> DownstreamError
     )
 
 }

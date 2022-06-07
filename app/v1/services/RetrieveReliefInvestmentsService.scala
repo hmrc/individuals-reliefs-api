@@ -25,6 +25,7 @@ import v1.connectors.RetrieveReliefInvestmentsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsResponse
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +37,7 @@ class RetrieveReliefInvestmentsService @Inject() (connector: RetrieveReliefInves
       hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[RetrieveReliefInvestmentsServiceOutcome] = {
+      correlationId: String): Future[ServiceOutcome[RetrieveReliefInvestmentsResponse]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
