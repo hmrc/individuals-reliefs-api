@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.DeleteCharitableGivingTaxRelief
+package v1.models.request.deleteCharitableGivingTaxRelief
 
 import v1.models.request.RawData
 
