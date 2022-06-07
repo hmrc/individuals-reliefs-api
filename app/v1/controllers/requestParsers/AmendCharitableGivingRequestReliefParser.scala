@@ -18,7 +18,7 @@ package v1.controllers.requestParsers
 
 import v1.controllers.requestParsers.validators.AmendCharitableGivingReliefValidator
 import v1.models.domain.Nino
-import v1.models.request.DesTaxYear
+import v1.models.request.TaxYear
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 
 import javax.inject.Inject
@@ -29,7 +29,7 @@ class AmendCharitableGivingRequestReliefParser @Inject() (val validator: AmendCh
   override protected def requestFor(data: CreateAndAmendCharitableGivingTaxReliefRawData): CreateAndAmendCharitableGivingTaxReliefRequest =
     CreateAndAmendCharitableGivingTaxReliefRequest(
       Nino(data.nino),
-      DesTaxYear.fromMtd(data.taxYear),
+      TaxYear.fromMtd(data.taxYear),
       data.body.as[CreateAndAmendCharitableGivingTaxReliefBody])
 
 }

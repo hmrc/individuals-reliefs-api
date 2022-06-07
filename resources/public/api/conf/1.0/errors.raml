@@ -14,6 +14,16 @@ traits:
               description: The matching resource is not found.
               value:
                 code: MATCHING_RESOURCE_NOT_FOUND
+  notFoundCharitableGiving:
+    responses:
+      404:
+        body:
+          application/json:
+            type: types.errorResponse
+            example:
+              description: The supplied income source could not be found.
+              value:
+                code: MATCHING_RESOURCE_NOT_FOUND
   clientOrAgentNotAuthorised:
     responses:
       403:
@@ -23,6 +33,17 @@ traits:
             examples:
               clientOrAgentNotAuthorised:
                 description: 'The client or agent is not authorised. This is because: the client is not subscribed to MTD, the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.'
+                value:
+                  code: CLIENT_OR_AGENT_NOT_AUTHORISED
+  clientOrAgentNotAuthorisedCharitableGiving:
+    responses:
+      403:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              clientOrAgentNotAuthorisedCharitableGiving:
+                description: 'The client and/or agent are not authorized. This is normally because: the client is not subscribed to MTD, the agent is not subscribed to Agent Services, or the client has not authorized the agent to act on their behalf.'
                 value:
                   code: CLIENT_OR_AGENT_NOT_AUTHORISED
   formatNino:
@@ -77,7 +98,7 @@ traits:
             type: types.errorResponse
             examples:
               ruleTaxYearNotSupported:
-                description: The specified tax year is not supported. That is, the tax year specified is before the minimum tax year value.
+                description: The specified tax year is not supported. The tax year specified is before the minimum tax year value.
                 value:
                   code: RULE_TAX_YEAR_NOT_SUPPORTED
   formatValue:

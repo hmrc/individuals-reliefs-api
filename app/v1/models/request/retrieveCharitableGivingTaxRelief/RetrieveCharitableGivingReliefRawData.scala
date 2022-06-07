@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteCharitableGivingTaxRelief
+package v1.models.request.retrieveCharitableGivingTaxRelief
 
-import v1.models.domain.Nino
-import v1.models.request.TaxYear
-
-case class DeleteCharitableGivingTaxReliefRequest(nino: Nino, taxYear: TaxYear)
+case class RetrieveCharitableGivingReliefRawData(nino: String, taxYear: String)
