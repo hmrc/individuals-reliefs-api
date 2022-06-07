@@ -21,8 +21,14 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockHttpClient
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.DesTaxYear
-import v1.models.request.createAndAmendCharitableGivingTaxRelief.{CreateAndAmendCharitableGivingTaxReliefBody, CreateAndAmendCharitableGivingTaxReliefRequest, GiftAidPayments, Gifts, NonUkCharities}
+import v1.models.request.TaxYear
+import v1.models.request.createAndAmendCharitableGivingTaxRelief.{
+  CreateAndAmendCharitableGivingTaxReliefBody,
+  CreateAndAmendCharitableGivingTaxReliefRequest,
+  GiftAidPayments,
+  Gifts,
+  NonUkCharities
+}
 
 import scala.concurrent.Future
 
@@ -75,12 +81,13 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
 
   "doConnector" must {
 
-    val request: CreateAndAmendCharitableGivingTaxReliefRequest = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), DesTaxYear.fromMtd(taxYearMtd), requestBody)
+    val request: CreateAndAmendCharitableGivingTaxReliefRequest =
+      CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYearMtd), requestBody)
 
     "return 200 for a success scenario" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier                = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+      implicit val hc: HeaderCarrier                 = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
       val requiredHeadersPost: Seq[(String, String)] = requiredDesHeaders ++ Seq("Content-Type" -> "application/json")
 
       MockedHttpClient
