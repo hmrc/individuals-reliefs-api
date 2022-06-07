@@ -20,7 +20,7 @@ import support.UnitSpec
 import v1.mocks.validators.MockDeleteCharitableGivingReliefValidator
 import v1.models.domain.Nino
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
-import v1.models.request.DesTaxYear
+import v1.models.request.TaxYear
 import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequest}
 
 class DeleteCharitableGivingReliefRequestParserSpec extends UnitSpec with MockDeleteCharitableGivingReliefValidator {
@@ -39,7 +39,7 @@ class DeleteCharitableGivingReliefRequestParserSpec extends UnitSpec with MockDe
         MockDeleteCharitableGivingReliefValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(DeleteCharitableGivingTaxReliefRequest(Nino(nino), DesTaxYear.fromMtd(taxYear)))
+          Right(DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
       }
     }
 
