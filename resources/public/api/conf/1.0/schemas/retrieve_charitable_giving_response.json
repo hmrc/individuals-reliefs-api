@@ -9,7 +9,7 @@
       "type":"object",
       "properties":{
         "nonUkCharities":{
-          "description":"An object containing Gift Aid payments made to charities for the specified tax year.",
+          "description":"An object containing Gift Aid payments made to non-UK charities for the specified tax year.",
           "type":"object",
           "properties":{
             "charityNames":{
