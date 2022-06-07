@@ -16,10 +16,13 @@
 
 package v1.models.response.retrieveCharitableGivingTaxRelief
 
+import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.models.hateoas.Link
+import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
-class RetrieveCharitableGivingReliefResponseSpec extends UnitSpec with RetrieveCharitableGivingReliefFixture {
+class RetrieveCharitableGivingReliefResponseSpec extends UnitSpec with MockAppConfig with RetrieveCharitableGivingReliefFixture {
 
   "RetrieveCharitableGivingReliefResponse reads" must {
     "read from downstream JSON" in {
@@ -30,6 +33,22 @@ class RetrieveCharitableGivingReliefResponseSpec extends UnitSpec with RetrieveC
   "RetrieveCharitableGivingReliefResponse writes" must {
     "write to MTD JSON" in {
       Json.toJson(charitableGivingReliefResponse) shouldBe charitableGivingReliefResponseMtdJson
+    }
+  }
+
+  "LinksFactory" should {
+    "return the correct links" in {
+      val nino    = "mynino"
+      val taxYear = "mytaxyear"
+      val context = "individuals/reliefs"
+
+      MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes
+      RetrieveCharitableGivingReliefResponse.LinksFactory.links(mockAppConfig, RetrieveCharitableGivingReliefHateoasData(nino, taxYear)) shouldBe
+        Seq(
+          Link(s"/$context/charitable-giving/$nino/$taxYear", GET, "self"),
+          Link(s"/$context/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
+          Link(s"/$context/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
+        )
     }
   }
 

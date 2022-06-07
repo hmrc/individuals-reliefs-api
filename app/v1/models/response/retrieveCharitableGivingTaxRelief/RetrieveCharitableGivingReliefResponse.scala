@@ -16,10 +16,30 @@
 
 package v1.models.response.retrieveCharitableGivingTaxRelief
 
+import config.AppConfig
+import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
+import v1.models.hateoas.{HateoasData, Link}
+
 import play.api.libs.json.{Json, OFormat}
 
 case class RetrieveCharitableGivingReliefResponse(giftAidPayments: Option[GiftAidPayments], gifts: Option[Gifts])
 
-object RetrieveCharitableGivingReliefResponse {
+object RetrieveCharitableGivingReliefResponse extends HateoasLinks {
   implicit val format: OFormat[RetrieveCharitableGivingReliefResponse] = Json.format
+
+  implicit object LinksFactory extends HateoasLinksFactory[RetrieveCharitableGivingReliefResponse, RetrieveCharitableGivingReliefHateoasData] {
+
+    override def links(appConfig: AppConfig, data: RetrieveCharitableGivingReliefHateoasData): Seq[Link] = {
+      import data._
+      Seq(
+        retrieveCharitableGivingTaxRelief(appConfig, nino, taxYear),
+        createAndAmendCharitableGivingTaxRelief(appConfig, nino, taxYear),
+        deleteCharitableGivingTaxRelief(appConfig, nino, taxYear)
+      )
+    }
+
+  }
+
 }
+
+case class RetrieveCharitableGivingReliefHateoasData(nino: String, taxYear: String) extends HateoasData
