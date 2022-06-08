@@ -31,7 +31,9 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveCharitableGivingTaxReliefService @Inject()(connector: RetrieveCharitableGivingTaxReliefConnector) extends DesResponseMappingSupport with Logging {
+class RetrieveCharitableGivingTaxReliefService @Inject() (connector: RetrieveCharitableGivingTaxReliefConnector)
+    extends DesResponseMappingSupport
+    with Logging {
 
   def retrieve(request: RetrieveCharitableGivingReliefRequest)(implicit
       hc: HeaderCarrier,

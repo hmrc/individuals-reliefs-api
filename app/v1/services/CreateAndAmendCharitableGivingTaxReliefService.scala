@@ -30,7 +30,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: CreateAndAmendCharitableGivingTaxReliefConnector)
-  extends DesResponseMappingSupport with Logging {
+    extends DesResponseMappingSupport
+    with Logging {
 
   def amend(request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit
       hc: HeaderCarrier,

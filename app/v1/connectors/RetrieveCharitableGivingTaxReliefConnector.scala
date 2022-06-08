@@ -27,7 +27,7 @@ import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGi
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveCharitableGivingTaxReliefConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieve(request: RetrieveCharitableGivingReliefRequest)(implicit
       hc: HeaderCarrier,
