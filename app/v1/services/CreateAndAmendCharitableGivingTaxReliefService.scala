@@ -30,13 +30,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: CreateAndAmendCharitableGivingTaxReliefConnector)
-  extends DesResponseMappingSupport with Logging {
+    extends DesResponseMappingSupport
+    with Logging {
 
   def amend(request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[CreateAndAmendCharitableGivingTaxReliefServiceOutcome] = {
+      correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.createAmend(request)).leftMap(mapDesErrors(desErrorMap))

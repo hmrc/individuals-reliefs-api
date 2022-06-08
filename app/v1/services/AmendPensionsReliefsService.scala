@@ -36,7 +36,7 @@ class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConn
       hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[AmendPensionsReliefsServiceOutcome] = {
+      correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDesErrors(desErrorMap))

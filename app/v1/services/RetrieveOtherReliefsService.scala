@@ -25,6 +25,7 @@ import v1.connectors.RetrieveOtherReliefsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors.{DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
+import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsResponse
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +37,7 @@ class RetrieveOtherReliefsService @Inject() (connector: RetrieveOtherReliefsConn
       hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[RetrieveOtherReliefsServiceOutcome] = {
+      correlationId: String): Future[ServiceOutcome[RetrieveOtherReliefsResponse]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))

@@ -25,6 +25,7 @@ import v1.connectors.RetrieveForeignReliefsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
+import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +37,7 @@ class RetrieveForeignReliefsService @Inject() (connector: RetrieveForeignReliefs
       hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[RetrieveForeignReliefsServiceOutcome] = {
+      correlationId: String): Future[ServiceOutcome[RetrieveForeignReliefsResponse]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
