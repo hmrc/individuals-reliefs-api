@@ -15,3 +15,5 @@ PUT        /pensions/:nino/:taxYear                         v1.controllers.Amend
 DELETE     /pensions/:nino/:taxYear                         v1.controllers.DeletePensionsReliefsController.handleRequest(nino: String, taxYear: String)
 
 #Charitable-giving-routes go here
+
+PUT        /charitable-giving/:nino/:taxYear                v1.controllers.CreateAndAmendCharitableGivingController.handleRequest(nino: String, taxYear: String)
