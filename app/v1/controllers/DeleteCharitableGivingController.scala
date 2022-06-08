@@ -23,7 +23,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
-
+import v1.controllers.requestParsers.DeleteCharitableGivingReliefRequestParser
 import v1.models.errors._
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRawData
 import v1.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAuthService,
                                                 val lookupService: MtdIdLookupService,
-                                                parser: DeleteCharitableGivingRequestParser,
+                                                parser: DeleteCharitableGivingReliefRequestParser,
                                                 service: DeleteCharitableGivingService,
                                                 auditService: AuditService,
                                                 cc: ControllerComponents,
