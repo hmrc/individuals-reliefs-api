@@ -23,4 +23,6 @@ package object services {
 
   type ServiceOutcome[A] = Either[ErrorWrapper, ResponseWrapper[A]]
 
+  type DeleteCharitableGivingTaxReliefServiceOutcome = ServiceOutcome[Unit]
+
 }
