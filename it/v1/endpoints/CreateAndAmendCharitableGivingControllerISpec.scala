@@ -174,9 +174,9 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
           response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
         }
 
-        s"a taxYear below 2020-21 is provided" in new Test {
-          override val mtdTaxYear: String = "2019-20"
-          override val desTaxYear: String = "2020"
+        s"a taxYear below 2017-18 is provided" in new Test {
+          override val mtdTaxYear: String = "2017-18"
+          override val desTaxYear: String = "2018"
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()

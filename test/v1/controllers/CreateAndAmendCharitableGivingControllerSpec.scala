@@ -23,7 +23,7 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateAndAmendCharitableGivingRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AuditError, AuditEvent, AuditResponse, CreateAndAmendCharitableGivingAuditDetail}
+import v1.models.audit.{AuditEvent, AuditResponse, CreateAndAmendCharitableGivingAuditDetail}
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
@@ -165,8 +165,9 @@ class CreateAndAmendCharitableGivingControllerSpec
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(responseBody))
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+        // uncomment once auditing is implemented in the controller:
+//        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(responseBody))
+//        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
     "return the error as per spec" when {
@@ -184,8 +185,8 @@ class CreateAndAmendCharitableGivingControllerSpec
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+//            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+//            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -222,8 +223,8 @@ class CreateAndAmendCharitableGivingControllerSpec
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+//            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+//            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

@@ -157,7 +157,7 @@ object RuleGiftAidNonUkAmountWithoutNamesError
 
 object RuleGiftsNonUkAmountWithoutNamesError
     extends MtdError(
-      code = "RULE_GIFTS_NON_UK_INVESTMENTS_AMOUNT_WITHOUT_NAMES",
+      code = "RULE_GIFTS_NON_UK_AMOUNT_WITHOUT_NAMES",
       message = "Non-UK gifts amount supplied without non-UK gifts charity names"
     )
 

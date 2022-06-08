@@ -20,11 +20,9 @@ import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.AmendCharitableGivingRequestReliefParser
 import v1.hateoas.HateoasFactory
-import v1.models.audit.{AuditEvent, AuditResponse, CreateAndAmendCharitableGivingAuditDetail}
 import v1.models.errors._
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRawData
 import v1.models.response.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefHateoasData
@@ -71,16 +69,16 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
 
           val response = Json.toJson(vendorResponse)
 
-          auditSubmission(
-            CreateAndAmendCharitableGivingAuditDetail(
-              request.userDetails,
-              nino,
-              taxYear,
-              request.body,
-              serviceResponse.correlationId,
-              AuditResponse(OK, Right(Some(response)))))
+//          auditSubmission(
+//            CreateAndAmendCharitableGivingAuditDetail(
+//              request.userDetails,
+//              nino,
+//              taxYear,
+//              request.body,
+//              serviceResponse.correlationId,
+//              AuditResponse(OK, Right(Some(response)))))
 
-          Ok(Json.toJson(vendorResponse))
+          Ok(response)
             .withApiHeaders(serviceResponse.correlationId)
         }
 
@@ -92,14 +90,14 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
 
-        auditSubmission(
-          CreateAndAmendCharitableGivingAuditDetail(
-            request.userDetails,
-            nino,
-            taxYear,
-            request.body,
-            correlationId,
-            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
+//        auditSubmission(
+//          CreateAndAmendCharitableGivingAuditDetail(
+//            request.userDetails,
+//            nino,
+//            taxYear,
+//            request.body,
+//            correlationId,
+//            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result
       }.merge
@@ -108,10 +106,9 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
   private def errorResult(errorWrapper: ErrorWrapper) = {
 
     errorWrapper.error match {
-      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleIncorrectOrEmptyBodyError | RuleTaxYearNotSupportedError |
-          RuleTaxYearRangeInvalidError | MtdErrorWithCustomMessage(ValueFormatError.code) | RuleGiftAidNonUkAmountWithoutNamesError |
-          RuleGiftsNonUkAmountWithoutNamesError | MtdErrorWithCustomMessage(CountryCodeFormatError.code) | MtdErrorWithCustomMessage(
-            RuleCountryCodeError.code) =>
+      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError |
+          RuleGiftAidNonUkAmountWithoutNamesError | RuleGiftsNonUkAmountWithoutNamesError | MtdErrorWithCustomMessage(StringFormatError.code) |
+          MtdErrorWithCustomMessage(ValueFormatError.code) | MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
@@ -119,9 +116,9 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
     }
   }
 
-  private def auditSubmission(details: CreateAndAmendCharitableGivingAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
-    val event = AuditEvent("CreateAmendCharitableGivingReliefs", "create-amend-charitable-giving-reliefs", details)
-    auditService.auditEvent(event)
-  }
+//  private def auditSubmission(details: CreateAndAmendCharitableGivingAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
+//    val event = AuditEvent("CreateAmendCharitableGivingReliefs", "create-amend-charitable-giving-reliefs", details)
+//    auditService.auditEvent(event)
+//  }
 
 }
