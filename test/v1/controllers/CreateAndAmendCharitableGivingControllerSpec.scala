@@ -190,14 +190,15 @@ class CreateAndAmendCharitableGivingControllerSpec
         }
 
         val input = Seq(
+          (NotFoundError, NOT_FOUND),
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
+          (RuleGiftAidNonUkAmountWithoutNamesError, BAD_REQUEST),
+          (RuleGiftsNonUkAmountWithoutNamesError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (ValueFormatError, BAD_REQUEST),
-          (CountryCodeFormatError, BAD_REQUEST),
-          (RuleCountryCodeError, BAD_REQUEST)
+          (ValueFormatError, BAD_REQUEST)
         )
 
         input.foreach(args => (errorsFromParserTester _).tupled(args))
