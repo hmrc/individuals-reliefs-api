@@ -25,6 +25,7 @@ import v1.connectors.RetrievePensionsReliefsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors.{DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
+import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +37,7 @@ class RetrievePensionsReliefsService @Inject() (connector: RetrievePensionsRelie
       hc: HeaderCarrier,
       ec: ExecutionContext,
       logContext: EndpointLogContext,
-      correlationId: String): Future[RetrievePensionsReliefsServiceOutcome] = {
+      correlationId: String): Future[ServiceOutcome[RetrievePensionsReliefsResponse]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
