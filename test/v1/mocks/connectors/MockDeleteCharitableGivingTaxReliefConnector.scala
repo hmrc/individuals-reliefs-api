@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.mocks.connectors
 
-import config.AppConfig
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.connectors.DownstreamUri.DesUri
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
+import uk.gov.hmrc.http.HeaderCarrier
+import v1.connectors.{DeleteCharitableGivingTaxReliefConnector, DesOutcome}
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class DeleteCharitableGivingTaxReliefConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+trait MockDeleteCharitableGivingTaxReliefConnector extends MockFactory {
 
-  def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
-             hc: HeaderCarrier,
-             ec: ExecutionContext,
-             correlationId: String): Future[DesOutcome[Unit]] = {
-    post(
-      DesUri[Unit](s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}")
-    )
+  val mockConnector: DeleteCharitableGivingTaxReliefConnector = mock[DeleteCharitableGivingTaxReliefConnector]
+
+  object MockDeleteCharitableGivingTaxReliefConnector {
+
+    def delete(requestData: DeleteCharitableGivingTaxReliefRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+      (mockConnector
+        .delete(_: DeleteCharitableGivingTaxReliefRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
+    }
+
   }
+
 }

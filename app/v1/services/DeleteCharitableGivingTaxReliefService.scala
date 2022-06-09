@@ -21,7 +21,7 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.connectors.DeleteForeignReliefsConnector
+import v1.connectors.DeleteCharitableGivingTaxReliefConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
@@ -30,7 +30,7 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingTaxReliefService @Inject()(connector: DeleteForeignReliefsConnector) extends DesResponseMappingSupport with Logging {
+class DeleteCharitableGivingTaxReliefService @Inject()(connector: DeleteCharitableGivingTaxReliefConnector) extends DesResponseMappingSupport with Logging {
 
   def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
       hc: HeaderCarrier,
@@ -45,12 +45,11 @@ class DeleteCharitableGivingTaxReliefService @Inject()(connector: DeleteForeignR
 
   private def desErrorMap: Map[String, MtdError] =
     Map(
-
       "INVALID_NINO"                      -> NinoFormatError,
       "INVALID_TYPE"                      -> DownstreamError,
       "INVALID_TAXYEAR"                   -> TaxYearFormatError,
       "INVALID_PAYLOAD"                   -> DownstreamError,
-      "NOT_FOUND_INCOME_SOURCE"           -> DownstreamError,
+      "NOT_FOUND_INCOME_SOURCE"           -> NotFoundError,
       "MISSING_CHARITIES_NAME_GIFT_AID"   -> DownstreamError,
       "MISSING_CHARITIES_NAME_INVESTMENT" -> DownstreamError,
       "MISSING_INVESTMENT_AMOUNT"         -> DownstreamError,
