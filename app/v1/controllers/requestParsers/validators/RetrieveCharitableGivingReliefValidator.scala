@@ -31,11 +31,12 @@ class RetrieveCharitableGivingReliefValidator extends Validator[RetrieveCharitab
     )
   }
 
-  private def parameterRuleValidation: RetrieveCharitableGivingReliefRawData => List[List[MtdError]] = (data: RetrieveCharitableGivingReliefRawData) => {
-    List(
-      MtdTaxYearValidation.validate(data.taxYear, charitableGivingMinimumTaxYear)
-    )
-  }
+  private def parameterRuleValidation: RetrieveCharitableGivingReliefRawData => List[List[MtdError]] =
+    (data: RetrieveCharitableGivingReliefRawData) => {
+      List(
+        MtdTaxYearValidation.validate(data.taxYear, charitableGivingMinimumTaxYear)
+      )
+    }
 
   override def validate(data: RetrieveCharitableGivingReliefRawData): List[MtdError] = {
     run(validationSet, data).distinct

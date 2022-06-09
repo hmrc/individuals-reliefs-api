@@ -23,7 +23,7 @@ import v1.models.request.retrieveCharitableGivingTaxRelief.{RetrieveCharitableGi
 
 import javax.inject.Inject
 
-class RetrieveCharitableGivingReliefRequestParser @Inject()(val validator: RetrieveCharitableGivingReliefValidator)
+class RetrieveCharitableGivingReliefRequestParser @Inject() (val validator: RetrieveCharitableGivingReliefValidator)
     extends RequestParser[RetrieveCharitableGivingReliefRawData, RetrieveCharitableGivingReliefRequest] {
 
   override protected def requestFor(data: RetrieveCharitableGivingReliefRawData): RetrieveCharitableGivingReliefRequest = {
