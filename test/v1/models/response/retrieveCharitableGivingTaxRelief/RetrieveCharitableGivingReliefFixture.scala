@@ -16,7 +16,7 @@
 
 package v1.models.response.retrieveCharitableGivingTaxRelief
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 
 trait RetrieveCharitableGivingReliefFixture {
 
@@ -42,6 +42,32 @@ trait RetrieveCharitableGivingReliefFixture {
       |   }
       |}
       |""".stripMargin)
+
+  def charitableGivingReliefResponseMtdJsonWithHateoas(nino: String, taxYear: String): JsValue =
+    charitableGivingReliefResponseMtdJson.as[JsObject] ++ Json
+      .parse(
+        s"""
+           |{
+           |  "links": [
+           |    {
+           |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+           |      "method": "PUT",
+           |      "rel": "create-and-amend-charitable-giving-tax-relief"
+           |    },
+           |    {
+           |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+           |      "method": "GET",
+           |      "rel": "self"
+           |    },
+           |    {
+           |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+           |      "method": "DELETE",
+           |      "rel": "delete-charitable-giving-tax-relief"
+           |    }
+           |  ]
+           |}
+        """.stripMargin
+      ).as[JsObject]
 
   val charitableGivingReliefResponse: RetrieveCharitableGivingReliefResponse =
     RetrieveCharitableGivingReliefResponse(

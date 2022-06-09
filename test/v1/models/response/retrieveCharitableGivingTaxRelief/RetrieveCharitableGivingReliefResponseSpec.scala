@@ -45,8 +45,8 @@ class RetrieveCharitableGivingReliefResponseSpec extends UnitSpec with MockAppCo
       MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes
       RetrieveCharitableGivingReliefResponse.LinksFactory.links(mockAppConfig, RetrieveCharitableGivingReliefHateoasData(nino, taxYear)) shouldBe
         Seq(
-          Link(s"/$context/charitable-giving/$nino/$taxYear", GET, "self"),
           Link(s"/$context/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
+          Link(s"/$context/charitable-giving/$nino/$taxYear", GET, "self"),
           Link(s"/$context/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
         )
     }

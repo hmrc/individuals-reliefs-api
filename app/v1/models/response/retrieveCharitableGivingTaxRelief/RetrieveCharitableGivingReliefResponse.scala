@@ -32,8 +32,8 @@ object RetrieveCharitableGivingReliefResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: RetrieveCharitableGivingReliefHateoasData): Seq[Link] = {
       import data._
       Seq(
-        retrieveCharitableGivingTaxRelief(appConfig, nino, taxYear),
         createAndAmendCharitableGivingTaxRelief(appConfig, nino, taxYear),
+        retrieveCharitableGivingTaxRelief(appConfig, nino, taxYear),
         deleteCharitableGivingTaxRelief(appConfig, nino, taxYear)
       )
     }

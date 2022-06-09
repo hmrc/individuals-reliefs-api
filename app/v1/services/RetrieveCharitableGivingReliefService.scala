@@ -31,7 +31,7 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveCharitableGivingTaxReliefService @Inject() (connector: RetrieveCharitableGivingReliefConnector)
+class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharitableGivingReliefConnector)
     extends DesResponseMappingSupport
     with Logging {
 

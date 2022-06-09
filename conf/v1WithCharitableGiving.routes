@@ -1,19 +1,23 @@
+# Relief Investments endpoints
 GET        /investment/:nino/:taxYear                       v1.controllers.RetrieveReliefInvestmentsController.handleRequest(nino: String, taxYear:String)
 PUT        /investment/:nino/:taxYear                       v1.controllers.AmendReliefInvestmentsController.handleRequest(nino: String, taxYear: String)
 DELETE     /investment/:nino/:taxYear                       v1.controllers.DeleteReliefInvestmentsController.handleRequest(nino: String, taxYear: String)
 
+# Other Reliefs endpoints
 GET        /other/:nino/:taxYear                            v1.controllers.RetrieveOtherReliefsController.handleRequest(nino: String, taxYear: String)
 PUT        /other/:nino/:taxYear                            v1.controllers.AmendOtherReliefsController.handleRequest(nino: String, taxYear: String)
 DELETE     /other/:nino/:taxYear                            v1.controllers.DeleteOtherReliefsController.handleRequest(nino: String, taxYear: String)
 
+# Foreign Reliefs endpoints
 GET        /foreign/:nino/:taxYear                          v1.controllers.RetrieveForeignReliefsController.handleRequest(nino: String, taxYear: String)
 PUT        /foreign/:nino/:taxYear                          v1.controllers.AmendForeignReliefsController.handleRequest(nino: String, taxYear: String)
 DELETE     /foreign/:nino/:taxYear                          v1.controllers.DeleteForeignReliefsController.handleRequest(nino: String, taxYear: String)
 
+# Pensions Reliefs endpoints
 GET        /pensions/:nino/:taxYear                         v1.controllers.RetrievePensionsReliefsController.handleRequest(nino: String, taxYear: String)
 PUT        /pensions/:nino/:taxYear                         v1.controllers.AmendPensionsReliefsController.handleRequest(nino: String, taxYear: String)
 DELETE     /pensions/:nino/:taxYear                         v1.controllers.DeletePensionsReliefsController.handleRequest(nino: String, taxYear: String)
 
-#Charitable-giving-routes go here
-
+# Charitable Giving Tax Relief endpoints
+GET        /charitable-giving/:nino/:taxYear                v1.controllers.RetrieveCharitableGivingReliefController.handleRequest(nino: String, taxYear: String)
 PUT        /charitable-giving/:nino/:taxYear                v1.controllers.CreateAndAmendCharitableGivingController.handleRequest(nino: String, taxYear: String)
