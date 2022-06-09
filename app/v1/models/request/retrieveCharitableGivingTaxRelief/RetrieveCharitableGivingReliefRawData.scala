@@ -16,4 +16,6 @@
 
 package v1.models.request.retrieveCharitableGivingTaxRelief
 
-case class RetrieveCharitableGivingReliefRawData(nino: String, taxYear: String)
+import v1.models.request.RawData
+
+case class RetrieveCharitableGivingReliefRawData(nino: String, taxYear: String) extends RawData

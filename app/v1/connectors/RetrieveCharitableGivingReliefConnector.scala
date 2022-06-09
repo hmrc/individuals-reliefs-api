@@ -14,29 +14,31 @@
  * limitations under the License.
  */
 
-package v1.mocks.connectors
+package v1.connectors
 
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{DesOutcome, RetrieveCharitableGivingTaxReliefConnector}
+import config.AppConfig
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v1.connectors.DownstreamUri.DesUri
+import v1.connectors.httpparsers.StandardDesHttpParser._
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveCharitableGivingTaxReliefConnector extends MockFactory {
+@Singleton
+class RetrieveCharitableGivingReliefConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  val mockConnector: RetrieveCharitableGivingTaxReliefConnector = mock[RetrieveCharitableGivingTaxReliefConnector]
+  def retrieve(request: RetrieveCharitableGivingReliefRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DesOutcome[RetrieveCharitableGivingReliefResponse]] = {
 
-  object MockRetrieveCharitableGivingTaxReliefConnector {
-
-    def retrieve(requestData: RetrieveCharitableGivingReliefRequest): CallHandler[Future[DesOutcome[RetrieveCharitableGivingReliefResponse]]] = {
-      (mockConnector
-        .retrieve(_: RetrieveCharitableGivingReliefRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
-        .expects(requestData, *, *, *)
-    }
-
+    get(
+      DesUri[RetrieveCharitableGivingReliefResponse](
+        s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}"
+      )
+    )
   }
 
 }
