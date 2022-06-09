@@ -21,7 +21,7 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.connectors.RetrieveCharitableGivingTaxReliefConnector
+import v1.connectors.RetrieveCharitableGivingReliefConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
@@ -31,7 +31,7 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveCharitableGivingTaxReliefService @Inject() (connector: RetrieveCharitableGivingTaxReliefConnector)
+class RetrieveCharitableGivingTaxReliefService @Inject() (connector: RetrieveCharitableGivingReliefConnector)
     extends DesResponseMappingSupport
     with Logging {
 

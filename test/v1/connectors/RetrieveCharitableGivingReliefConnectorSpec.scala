@@ -26,7 +26,7 @@ import v1.models.response.retrieveCharitableGivingTaxRelief._
 
 import scala.concurrent.Future
 
-class RetrieveCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
+class RetrieveCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
   private val taxYearMtd        = "2017-18"
   private val taxYearDownstream = "2018"
@@ -63,7 +63,7 @@ class RetrieveCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
 
   class Test extends MockHttpClient with MockAppConfig {
 
-    val connector: RetrieveCharitableGivingTaxReliefConnector = new RetrieveCharitableGivingTaxReliefConnector(
+    val connector: RetrieveCharitableGivingReliefConnector = new RetrieveCharitableGivingReliefConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -74,7 +74,7 @@ class RetrieveCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
     MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
-  "RetrieveCharitableGivingTaxReliefConnector" when {
+  "RetrieveCharitableGivingReliefConnector" when {
     "retrieve" must {
       "return a 200 status for a success scenario" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, response))

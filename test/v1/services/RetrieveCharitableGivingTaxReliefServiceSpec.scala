@@ -17,7 +17,7 @@
 package v1.services
 
 import v1.controllers.EndpointLogContext
-import v1.mocks.connectors.MockRetrieveCharitableGivingTaxReliefConnector
+import v1.mocks.connectors.MockRetrieveCharitableGivingReliefConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
@@ -61,7 +61,7 @@ class RetrieveCharitableGivingTaxReliefServiceSpec extends ServiceSpec {
     gifts = Some(giftsModel)
   )
 
-  trait Test extends MockRetrieveCharitableGivingTaxReliefConnector {
+  trait Test extends MockRetrieveCharitableGivingReliefConnector {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new RetrieveCharitableGivingTaxReliefService(
@@ -75,7 +75,7 @@ class RetrieveCharitableGivingTaxReliefServiceSpec extends ServiceSpec {
       "return correct result for a success" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, response))
 
-        MockRetrieveCharitableGivingTaxReliefConnector
+        MockRetrieveCharitableGivingReliefConnector
           .retrieve(request)
           .returns(Future.successful(outcome))
 
@@ -88,7 +88,7 @@ class RetrieveCharitableGivingTaxReliefServiceSpec extends ServiceSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockRetrieveCharitableGivingTaxReliefConnector
+            MockRetrieveCharitableGivingReliefConnector
               .retrieve(request)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
