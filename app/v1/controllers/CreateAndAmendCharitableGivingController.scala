@@ -27,7 +27,7 @@ import v1.models.errors._
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRawData
 import v1.models.response.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefHateoasData
 import v1.models.response.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefResponse.LinksFactory
-import v1.services.{AuditService, CreateAndAmendCharitableGivingTaxReliefService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{CreateAndAmendCharitableGivingTaxReliefService, EnrolmentsAuthService, MtdIdLookupService}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,7 +37,6 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
                                                           val lookupService: MtdIdLookupService,
                                                           parser: AmendCharitableGivingRequestReliefParser,
                                                           service: CreateAndAmendCharitableGivingTaxReliefService,
-                                                          auditService: AuditService,
                                                           hateoasFactory: HateoasFactory,
                                                           cc: ControllerComponents,
                                                           val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -46,7 +45,7 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "AmendCharitableGivingController", endpointName = "createAndAmendCharitableGivingReliefs")
+    EndpointLogContext(controllerName = "CreateAndAmendCharitableGivingController", endpointName = "createAndAmendCharitableGivingReliefs")
 
   def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -68,16 +67,6 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
           val response = Json.toJson(vendorResponse)
-
-//          auditSubmission(
-//            CreateAndAmendCharitableGivingAuditDetail(
-//              request.userDetails,
-//              nino,
-//              taxYear,
-//              request.body,
-//              serviceResponse.correlationId,
-//              AuditResponse(OK, Right(Some(response)))))
-
           Ok(response)
             .withApiHeaders(serviceResponse.correlationId)
         }
@@ -89,15 +78,6 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
-
-//        auditSubmission(
-//          CreateAndAmendCharitableGivingAuditDetail(
-//            request.userDetails,
-//            nino,
-//            taxYear,
-//            request.body,
-//            correlationId,
-//            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
 
         result
       }.merge
@@ -115,10 +95,5 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
       case _               => unhandledError(errorWrapper)
     }
   }
-
-//  private def auditSubmission(details: CreateAndAmendCharitableGivingAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
-//    val event = AuditEvent("CreateAmendCharitableGivingReliefs", "create-amend-charitable-giving-reliefs", details)
-//    auditService.auditEvent(event)
-//  }
 
 }

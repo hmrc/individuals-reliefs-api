@@ -23,7 +23,6 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateAndAmendCharitableGivingRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AuditEvent, AuditResponse, CreateAndAmendCharitableGivingAuditDetail}
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
@@ -75,7 +74,6 @@ class CreateAndAmendCharitableGivingControllerSpec
       parser = mockCreateAmendCharitableGivingRequestParser,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
-      auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -127,21 +125,6 @@ class CreateAndAmendCharitableGivingControllerSpec
        |}
        |""".stripMargin)
 
-  def event(auditResponse: AuditResponse): AuditEvent[CreateAndAmendCharitableGivingAuditDetail] =
-    AuditEvent(
-      auditType = "CreateAmendCharitableGivingReliefs",
-      transactionName = "create-amend-charitable-giving-reliefs",
-      detail = CreateAndAmendCharitableGivingAuditDetail(
-        userType = "Individual",
-        agentReferenceNumber = None,
-        nino,
-        taxYear,
-        requestJson,
-        correlationId,
-        response = auditResponse
-      )
-    )
-
   private val rawData     = CreateAndAmendCharitableGivingTaxReliefRawData(nino, taxYear, requestJson)
   private val requestData = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
@@ -164,10 +147,6 @@ class CreateAndAmendCharitableGivingControllerSpec
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        // uncomment once auditing is implemented in the controller:
-//        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(responseBody))
-//        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
     "return the error as per spec" when {
@@ -184,9 +163,6 @@ class CreateAndAmendCharitableGivingControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-//            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-//            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -222,9 +198,6 @@ class CreateAndAmendCharitableGivingControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-//            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-//            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

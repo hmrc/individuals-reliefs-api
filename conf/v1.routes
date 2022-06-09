@@ -13,6 +13,3 @@ DELETE     /foreign/:nino/:taxYear                          v1.controllers.Delet
 GET        /pensions/:nino/:taxYear                         v1.controllers.RetrievePensionsReliefsController.handleRequest(nino: String, taxYear: String)
 PUT        /pensions/:nino/:taxYear                         v1.controllers.AmendPensionsReliefsController.handleRequest(nino: String, taxYear: String)
 DELETE     /pensions/:nino/:taxYear                         v1.controllers.DeletePensionsReliefsController.handleRequest(nino: String, taxYear: String)
-
-# see v1WithCharitableGiving.routes:
-# PUT        /charitable-giving/:nino/:taxYear                v1.controllers.CreateAndAmendCharitableGivingController.handleRequest(nino: String, taxYear: String)
