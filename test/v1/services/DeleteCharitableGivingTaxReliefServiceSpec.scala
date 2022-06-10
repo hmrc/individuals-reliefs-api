@@ -19,11 +19,12 @@ package v1.services
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
-import v1.mocks.connectors.MockDeleteForeignReliefsConnector
+import v1.mocks.connectors.MockDeleteCharitableGivingTaxReliefConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
+import v1.models.request.TaxYear
+import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -34,13 +35,13 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
   val validTaxYear: String           = "2019-20"
   implicit val correlationId: String = "X-123"
 
-  val requestData: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(validNino), validTaxYear)
+  val requestData: DeleteCharitableGivingTaxReliefRequest = DeleteCharitableGivingTaxReliefRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
 
-  trait Test extends MockDeleteForeignReliefsConnector {
+  trait Test extends MockDeleteCharitableGivingTaxReliefConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new DeleteForeignReliefsService(
+    val service = new DeleteCharitableGivingTaxReliefService(
       connector = mockConnector
     )
 
@@ -49,7 +50,7 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
   "service" when {
     "a service call is successful" should {
       "return a mapped result" in new Test {
-        MockDeleteForeignReliefsConnector
+        MockDeleteCharitableGivingTaxReliefConnector
           .delete(requestData)
           .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
 

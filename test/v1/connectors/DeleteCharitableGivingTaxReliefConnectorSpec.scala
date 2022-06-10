@@ -16,10 +16,12 @@
 
 package v1.connectors
 
+import api.models.request.EmptyBody
 import mocks.MockAppConfig
 import v1.mocks.MockHttpClient
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
 
 import scala.concurrent.Future
@@ -36,25 +38,26 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
+    MockAppConfig.desBaseUrl returns baseUrl
+    MockAppConfig.desToken returns "des-token"
+    MockAppConfig.desEnvironment returns "des-environment"
+    MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
   "delete" should {
 
-    val request: DeleteCharitableGivingTaxReliefRequest = DeleteCharitableGivingTaxReliefRequest(Nino(nino), taxYear)
+    val request: DeleteCharitableGivingTaxReliefRequest = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
     "return a result" when {
       "the downstream call is successful" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         MockedHttpClient
-          .delete(
-            url = s"$baseUrl/income-tax/charitable-giving/${request.nino.nino}/${request.taxYear}",
-            config = dummyIfsHeaderCarrierConfig,
-            requiredHeaders = requiredIfsHeaders,
+          .post(
+            url = s"$baseUrl/income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}",
+            config = dummyDesHeaderCarrierConfig,
+            body = EmptyBody,
+            requiredHeaders = requiredDesHeaders,
             excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
           )
           .returns(Future.successful(outcome))
