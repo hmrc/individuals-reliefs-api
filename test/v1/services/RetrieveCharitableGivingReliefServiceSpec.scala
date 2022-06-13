@@ -27,7 +27,7 @@ import v1.models.response.retrieveCharitableGivingTaxRelief._
 
 import scala.concurrent.Future
 
-class RetrieveCharitableGivingTaxReliefServiceSpec extends ServiceSpec {
+class RetrieveCharitableGivingReliefServiceSpec extends ServiceSpec {
 
   private val nino    = "AA123456A"
   private val taxYear = "2017-18"
@@ -64,13 +64,13 @@ class RetrieveCharitableGivingTaxReliefServiceSpec extends ServiceSpec {
   trait Test extends MockRetrieveCharitableGivingReliefConnector {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new RetrieveCharitableGivingTaxReliefService(
+    val service = new RetrieveCharitableGivingReliefService(
       connector = mockConnector
     )
 
   }
 
-  "RetrieveCharitableGivingTaxReliefService" when {
+  "RetrieveCharitableGivingReliefService" when {
     "service call successful" should {
       "return correct result for a success" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, response))
