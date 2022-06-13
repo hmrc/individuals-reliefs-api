@@ -28,7 +28,7 @@ import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteForeginReliefsServiceSpec extends UnitSpec {
+class DeleteForeignReliefsServiceSpec extends UnitSpec {
 
   val validNino: String              = "AA123456A"
   val validTaxYear: String           = "2019-20"
