@@ -16,9 +16,9 @@
 
 package v1.connectors
 
-import api.models.request.EmptyBody
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
+import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.connectors.DownstreamUri.DesUri
 import v1.connectors.httpparsers.StandardDesHttpParser._
@@ -34,7 +34,7 @@ class DeleteCharitableGivingTaxReliefConnector @Inject()(val http: HttpClient, v
              ec: ExecutionContext,
              correlationId: String): Future[DesOutcome[Unit]] = {
     post(
-      body = EmptyBody,
+      body = JsObject.empty,
       DesUri[Unit](s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}")
     )
   }

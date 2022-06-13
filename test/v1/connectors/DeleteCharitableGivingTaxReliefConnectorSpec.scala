@@ -16,8 +16,8 @@
 
 package v1.connectors
 
-import api.models.request.EmptyBody
 import mocks.MockAppConfig
+import play.api.libs.json.JsObject
 import v1.mocks.MockHttpClient
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
@@ -56,7 +56,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
           .post(
             url = s"$baseUrl/income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}",
             config = dummyDesHeaderCarrierConfig,
-            body = EmptyBody,
+            body = JsObject.empty,
             requiredHeaders = requiredDesHeaders,
             excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
           )
