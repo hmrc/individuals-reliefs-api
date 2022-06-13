@@ -51,7 +51,7 @@ case class VersionRoutingMapImpl @Inject() (appConfig: AppConfig,
         logger.info("[VersionRoutingMap][map] using charitableGivingRouter to include charitable giving routes")
         charitableGivingRouter
       } else {
-        logger.info("[VersionRoutingMap][map] using v1Router to use full routes (sandbox routes)")
+        logger.info("[VersionRoutingMap][map] using v1Router without charitable giving routes")
         v1Router
       }
     }

@@ -38,11 +38,6 @@ case class FeatureSwitch(value: Option[Configuration]) {
     enabled.getOrElse(false)
   }
 
-  def isFullRoutingEnabled: Boolean = value match {
-    case Some(config) => config.getOptional[Boolean]("all-endpoints.enabled").getOrElse(true)
-    case None         => true
-  }
-
   def isCharitableGivingRoutingEnabled: Boolean = value match {
     case Some(config) => config.getOptional[Boolean]("charitable-giving-endpoints.enabled").getOrElse(true)
     case None         => true
