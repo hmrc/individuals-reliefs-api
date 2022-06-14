@@ -22,7 +22,7 @@ import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
-import v1.mocks.requestParsers.MockDeleteForeignReliefsRequestParser
+import v1.mocks.requestParsers.{MockDeleteCharitableGivingReliefRequestParser, MockDeleteForeignReliefsRequestParser}
 import v1.mocks.services._
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
@@ -36,9 +36,10 @@ class DeleteCharitableGivingControllerSpecControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockDeleteForeignReliefsService
-    with MockDeleteForeignReliefsRequestParser
+    with MockDeleteCharitableGivingReliefService
+    with MockDeleteCharitableGivingReliefRequestParser
     with MockHateoasFactory
+    with MockAuditService
     with MockIdGenerator {
 
   private val nino          = "AA123456A"
@@ -48,11 +49,12 @@ class DeleteCharitableGivingControllerSpecControllerSpec
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
 
-    val controller = new DeleteCharitableGivingController()(
+    val controller = new DeleteCharitableGivingController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       parser = mockRequestDataParser,
       service = mockDeleteCharitableGivingReliefService,
+      auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )

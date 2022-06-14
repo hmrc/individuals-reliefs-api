@@ -22,6 +22,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
 import v1.services.DeleteForeignReliefsService
 
@@ -35,7 +36,7 @@ trait MockDeleteCharitableGivingReliefService extends MockFactory {
 
     def delete(requestData: DeleteForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockDeleteCharitableGivingReliefService
-        .delete(_: DeleteCharitableGivingRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .delete(_: DeleteCharitableGivingTaxReliefRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)
     }
 
