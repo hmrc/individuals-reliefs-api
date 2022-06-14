@@ -23,18 +23,17 @@ import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
-import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
-import v1.services.DeleteForeignReliefsService
+import v1.services.{DeleteCharitableGivingTaxReliefService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 trait MockDeleteCharitableGivingReliefService extends MockFactory {
 
-  val mockDeleteCharitableGivingReliefService: MockDeleteCharitableGivingReliefService = mock[MockDeleteCharitableGivingReliefService]
+  val mockDeleteCharitableGivingReliefService: DeleteCharitableGivingTaxReliefService = mock[DeleteCharitableGivingTaxReliefService]
 
   object MockDeleteService {
 
-    def delete(requestData: DeleteForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def delete(requestData: DeleteCharitableGivingTaxReliefRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockDeleteCharitableGivingReliefService
         .delete(_: DeleteCharitableGivingTaxReliefRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)

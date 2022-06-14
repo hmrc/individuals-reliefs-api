@@ -22,12 +22,12 @@ import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
-import v1.mocks.requestParsers.{MockDeleteCharitableGivingReliefRequestParser, MockDeleteForeignReliefsRequestParser}
+import v1.mocks.requestParsers.MockDeleteCharitableGivingReliefRequestParser
 import v1.mocks.services._
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequest}
-import v1.models.request.deleteForeignReliefs.{DeleteForeignReliefsRawData, DeleteForeignReliefsRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -65,7 +65,7 @@ class DeleteCharitableGivingControllerSpecControllerSpec
   }
 
   private val rawData     = DeleteCharitableGivingTaxReliefRawData(nino, taxYear)
-  private val requestData = DeleteCharitableGivingTaxReliefRequest(Nino(nino), taxYear)
+  private val requestData = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
     "return NoContent" when {
