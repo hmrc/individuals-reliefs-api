@@ -35,7 +35,6 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
     val downstreamTaxYear = "2022"
 
     def uri: String    = s"/charitable-giving/$nino/$taxYear"
-    //def desUri: String = s"/income-tax/reliefs/charitable-giving/$nino/$taxYear"
     def desUri: String = s"/income-tax/nino/$nino/income-source/charity/annual/$downstreamTaxYear"
 
     def setupStubs(): StubMapping
