@@ -32,9 +32,11 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
 
     val nino    = "AA123456A"
     val taxYear = "2021-22"
+    val downstreamTaxYear = "2022"
 
     def uri: String    = s"/charitable-giving/$nino/$taxYear"
-    def desUri: String = s"/income-tax/reliefs/charitable-giving/$nino/$taxYear"
+    //def desUri: String = s"/income-tax/reliefs/charitable-giving/$nino/$taxYear"
+    def desUri: String = s"/income-tax/nino/$nino/income-source/charity/annual/$downstreamTaxYear"
 
     def setupStubs(): StubMapping
 
@@ -66,7 +68,7 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.DELETE, desUri, Status.NO_CONTENT, JsObject.empty)
+          DesStub.onSuccess(DesStub.POST, desUri, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().delete())
@@ -99,7 +101,7 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
         val input = Seq(
           ("Walrus", "2021-22", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2016-17", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
@@ -112,7 +114,7 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
             override def setupStubs(): StubMapping = {
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DesStub.onError(DesStub.DELETE, desUri, desStatus, errorBody(desCode))
+              DesStub.onError(DesStub.POST, desUri, desStatus, errorBody(desCode))
             }
 
             val response: WSResponse = await(request().delete())
