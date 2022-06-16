@@ -55,8 +55,8 @@ object CharitableGivingReliefAuditDetail {
 
     val resOutcome: String = if (auditResponse.errors.exists(_.nonEmpty)) "error" else "success"
     val errorCodes: Option[Seq[String]] = auditResponse.errors.flatMap {
-      case Nil        => None
-      case errs       => Some(errs.map(_.errorCode))
+      case Nil  => None
+      case errs => Some(errs.map(_.errorCode))
     }
 
     CharitableGivingReliefAuditDetail(
