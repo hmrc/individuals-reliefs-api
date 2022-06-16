@@ -23,6 +23,7 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateAndAmendCharitableGivingRequestParser
 import v1.mocks.services._
+import v1.models.audit.{AuditEvent, CharitableGivingReliefAuditDetail}
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
@@ -36,13 +37,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateAndAmendCharitableGivingService
+    with MockAuditService
     with MockCreateAndAmendCharitableGivingRequestParser
     with MockHateoasFactory
-    with MockAuditService
     with MockIdGenerator {
 
   private val nino          = "AA123456A"
@@ -73,6 +74,7 @@ class CreateAndAmendCharitableGivingControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockCreateAmendCharitableGivingRequestParser,
       service = mockService,
+      auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -128,6 +130,24 @@ class CreateAndAmendCharitableGivingControllerSpec
   private val rawData     = CreateAndAmendCharitableGivingTaxReliefRawData(nino, taxYear, requestJson)
   private val requestData = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
+  private def event(response: String, httpStatusCode: Int, errorCodes: Option[Seq[String]]): AuditEvent[CharitableGivingReliefAuditDetail] =
+    AuditEvent(
+      auditType = "CreateAndAmendCharitableGivingTaxRelief",
+      transactionName = "create-and-amend-charitable-giving-tax-relief",
+      detail = CharitableGivingReliefAuditDetail(
+        versionNumber = "1.0",
+        userType = "Individual",
+        agentReferenceNumber = None,
+        nino = nino,
+        taxYear = taxYear,
+        requestBody = Some(requestJson),
+        `X-CorrelationId` = correlationId,
+        response = response,
+        httpStatusCode = httpStatusCode,
+        errorCodes = errorCodes
+      )
+    )
+
   "handleRequest" should {
     "return Ok" when {
       "the request received is valid" in new Test {
@@ -147,6 +167,8 @@ class CreateAndAmendCharitableGivingControllerSpec
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        MockedAuditService.verifyAuditEvent(event("success", OK, None)).once
       }
     }
     "return the error as per spec" when {
@@ -163,6 +185,8 @@ class CreateAndAmendCharitableGivingControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            MockedAuditService.verifyAuditEvent(event("error", expectedStatus, Some(Seq(error.code)))).once
           }
         }
 
@@ -198,6 +222,8 @@ class CreateAndAmendCharitableGivingControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            MockedAuditService.verifyAuditEvent(event("error", expectedStatus, Some(Seq(mtdError.code)))).once
           }
         }
 

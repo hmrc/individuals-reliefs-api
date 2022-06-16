@@ -27,15 +27,16 @@ import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingT
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingTaxReliefConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
-             hc: HeaderCarrier,
-             ec: ExecutionContext,
-             correlationId: String): Future[DesOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DesOutcome[Unit]] = {
     post(
       body = JsObject.empty,
       DesUri[Unit](s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}")
     )
   }
+
 }
