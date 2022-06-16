@@ -24,6 +24,7 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockDeleteCharitableGivingReliefRequestParser
 import v1.mocks.services._
+import v1.models.audit.{AuditEvent, CharitableGivingReliefAuditDetail}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
@@ -32,14 +33,14 @@ import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGiving
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteCharitableGivingControllerSpecControllerSpec
+class DeleteCharitableGivingControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockDeleteCharitableGivingReliefService
+    with MockAuditService
     with MockDeleteCharitableGivingReliefRequestParser
     with MockHateoasFactory
-    with MockAuditService
     with MockIdGenerator {
 
   private val nino          = "AA123456A"
@@ -67,6 +68,24 @@ class DeleteCharitableGivingControllerSpecControllerSpec
   private val rawData     = DeleteCharitableGivingTaxReliefRawData(nino, taxYear)
   private val requestData = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
+  private def event(response: String, httpStatusCode: Int, errorCodes: Option[Seq[String]]): AuditEvent[CharitableGivingReliefAuditDetail] =
+    AuditEvent(
+      auditType = "DeleteCharitableGivingTaxRelief",
+      transactionName = "delete-charitable-giving-tax-relief",
+      detail = CharitableGivingReliefAuditDetail(
+        versionNumber = "1.0",
+        userType = "Individual",
+        agentReferenceNumber = None,
+        nino = nino,
+        taxYear = taxYear,
+        requestBody = None,
+        `X-CorrelationId` = correlationId,
+        response = response,
+        httpStatusCode = httpStatusCode,
+        errorCodes = errorCodes
+      )
+    )
+
   "handleRequest" should {
     "return NoContent" when {
       "the request received is valid" in new Test {
@@ -84,6 +103,8 @@ class DeleteCharitableGivingControllerSpecControllerSpec
         status(result) shouldBe NO_CONTENT
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
+        MockedAuditService.verifyAuditEvent(event("success", NO_CONTENT, None)).once
+
       }
     }
     "return the error as per spec" when {
@@ -100,6 +121,8 @@ class DeleteCharitableGivingControllerSpecControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            MockedAuditService.verifyAuditEvent(event("error", expectedStatus, Some(Seq(error.code)))).once
 
           }
         }
@@ -132,6 +155,8 @@ class DeleteCharitableGivingControllerSpecControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            MockedAuditService.verifyAuditEvent(event("error", expectedStatus, Some(Seq(mtdError.code)))).once
 
           }
         }
