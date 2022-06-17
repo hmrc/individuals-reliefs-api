@@ -25,8 +25,11 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.DeleteCharitableGivingReliefRequestParser
 import v1.models.errors._
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRawData
+import uk.gov.hmrc.http.HeaderCarrier
 import v1.services.{AuditService, DeleteCharitableGivingTaxReliefService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.models.audit.{AuditEvent, AuditResponse, CharitableGivingReliefAuditDetail}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -60,6 +63,17 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
+          auditSubmission(
+            CharitableGivingReliefAuditDetail(
+              userDetails = request.userDetails,
+              nino = nino,
+              taxYear = taxYear,
+              requestBody = None,
+              `X-CorrelationId` = serviceResponse.correlationId,
+              auditResponse = AuditResponse(httpStatus = NO_CONTENT, response = Right(None))
+            )
+          )
+
           NoContent.withApiHeaders(serviceResponse.correlationId)
 
         }
@@ -70,6 +84,16 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
         logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
+
+        auditSubmission(
+          CharitableGivingReliefAuditDetail(
+            userDetails = request.userDetails,
+            nino = nino,
+            taxYear = taxYear,
+            requestBody = None,
+            `X-CorrelationId` = resCorrelationId,
+            auditResponse = AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
+          ))
 
         result
       }.merge
@@ -84,5 +108,17 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
       case _               => unhandledError(errorWrapper)
     }
   }
+
+  private def auditSubmission(details: CharitableGivingReliefAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+
+    val event = AuditEvent(
+      auditType = "DeleteCharitableGivingTaxRelief",
+      transactionName = "delete-charitable-giving-tax-relief",
+      detail = details
+    )
+
+    auditService.auditEvent(event)
+  }
+
 
 }
