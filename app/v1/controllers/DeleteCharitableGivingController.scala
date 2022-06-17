@@ -70,7 +70,7 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
               taxYear = taxYear,
               requestBody = None,
               `X-CorrelationId` = serviceResponse.correlationId,
-              auditResponse = AuditResponse(httpStatus = NO_CONTENT, Right(None))
+              auditResponse = AuditResponse(httpStatus = NO_CONTENT, response = Right(None))
             )
           )
 
