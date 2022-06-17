@@ -30,7 +30,9 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingTaxReliefService @Inject()(connector: DeleteCharitableGivingTaxReliefConnector) extends DesResponseMappingSupport with Logging {
+class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharitableGivingTaxReliefConnector)
+    extends DesResponseMappingSupport
+    with Logging {
 
   def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
       hc: HeaderCarrier,

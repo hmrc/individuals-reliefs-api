@@ -32,13 +32,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAuthService,
-                                                val lookupService: MtdIdLookupService,
-                                                parser: DeleteCharitableGivingReliefRequestParser,
-                                                service: DeleteCharitableGivingTaxReliefService,
-                                                auditService: AuditService,
-                                                cc: ControllerComponents,
-                                                val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc)
+                                                  val lookupService: MtdIdLookupService,
+                                                  parser: DeleteCharitableGivingReliefRequestParser,
+                                                  service: DeleteCharitableGivingTaxReliefService,
+                                                  auditService: AuditService,
+                                                  cc: ControllerComponents,
+                                                  val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+    extends AuthorisedController(cc)
     with BaseController
     with Logging {
 
