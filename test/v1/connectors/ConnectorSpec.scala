@@ -100,8 +100,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
   protected trait ConnectorTest extends MockHttpClient with MockAppConfig {
     protected val baseUrl: String = "http://test-BaseUrl"
 
-    implicit protected val hc: HeaderCarrier =
-      HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+    implicit protected val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders)
 
     protected val requiredHeaders: Seq[(String, String)]
 
@@ -110,7 +109,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
         .get(
           url = url,
           config = dummyHeaderCarrierConfig,
-          requiredHeaders = requiredHeaders ++ Seq("Content-Type" -> "application/json"),
+          requiredHeaders = requiredHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
     }
@@ -142,7 +141,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
         .delete(
           url = url,
           config = dummyHeaderCarrierConfig,
-          requiredHeaders = requiredHeaders ++ Seq("Content-Type" -> "application/json"),
+          requiredHeaders = requiredHeaders,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         )
     }
