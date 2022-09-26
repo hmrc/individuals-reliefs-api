@@ -16,8 +16,6 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
-import v1.mocks.MockHttpClient
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
@@ -61,31 +59,23 @@ class RetrieveCharitableGivingReliefConnectorSpec extends ConnectorSpec {
     gifts = Some(giftsModel)
   )
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test { _: ConnectorTest =>
 
     val connector: RetrieveCharitableGivingReliefConnector = new RetrieveCharitableGivingReliefConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.desBaseUrl returns baseUrl
-    MockAppConfig.desToken returns "des-token"
-    MockAppConfig.desEnvironment returns "des-environment"
-    MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
   "RetrieveCharitableGivingReliefConnector" when {
     "retrieve" must {
-      "return a 200 status for a success scenario" in new Test {
+      "return a 200 status for a success scenario" in new DesTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, response))
 
-        MockedHttpClient
-          .get(
-            url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/$taxYearDownstream",
-            config = dummyDesHeaderCarrierConfig,
-            requiredHeaders = requiredDesHeaders,
-            excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-          )
+        willGet(
+          url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/$taxYearDownstream"
+        )
           .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome

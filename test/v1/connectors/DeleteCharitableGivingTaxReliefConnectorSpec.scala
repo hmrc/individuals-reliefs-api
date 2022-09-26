@@ -16,9 +16,7 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
 import play.api.libs.json.JsObject
-import v1.mocks.MockHttpClient
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
@@ -31,17 +29,13 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
   val nino: String    = "AA123456A"
   val taxYear: String = "2019-20"
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test  { _: ConnectorTest =>
 
     val connector: DeleteCharitableGivingTaxReliefConnector = new DeleteCharitableGivingTaxReliefConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.desBaseUrl returns baseUrl
-    MockAppConfig.desToken returns "des-token"
-    MockAppConfig.desEnvironment returns "des-environment"
-    MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
   "delete" should {
@@ -49,17 +43,13 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
     val request: DeleteCharitableGivingTaxReliefRequest = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
     "return a result" when {
-      "the downstream call is successful" in new Test {
+      "the downstream call is successful" in new DesTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        MockedHttpClient
-          .post(
-            url = s"$baseUrl/income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}",
-            config = dummyDesHeaderCarrierConfig,
-            body = JsObject.empty,
-            requiredHeaders = requiredDesHeaders,
-            excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-          )
+        willPost(
+          url = s"$baseUrl/income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}",
+          body = JsObject.empty
+        )
           .returns(Future.successful(outcome))
 
         await(connector.delete(request)) shouldBe outcome
