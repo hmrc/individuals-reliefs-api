@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AmendOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def amend(request: AmendOtherReliefsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
+  def amend(request: AmendOtherReliefsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     put(
       body = request.body,

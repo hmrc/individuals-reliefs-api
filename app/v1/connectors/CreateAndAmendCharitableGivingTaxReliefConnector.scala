@@ -32,7 +32,7 @@ class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: Http
   def createAmend(request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DesOutcome[Unit]] = {
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
 

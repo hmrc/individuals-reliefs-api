@@ -32,7 +32,7 @@ class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, 
   def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DesOutcome[Unit]] = {
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
     post(
       body = JsObject.empty,
       DesUri[Unit](s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}")

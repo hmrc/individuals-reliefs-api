@@ -19,7 +19,7 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{DesOutcome, RetrieveCharitableGivingReliefConnector}
+import v1.connectors.{DownstreamOutcome, RetrieveCharitableGivingReliefConnector}
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
 
@@ -31,7 +31,7 @@ trait MockRetrieveCharitableGivingReliefConnector extends MockFactory {
 
   object MockRetrieveCharitableGivingReliefConnector {
 
-    def retrieve(requestData: RetrieveCharitableGivingReliefRequest): CallHandler[Future[DesOutcome[RetrieveCharitableGivingReliefResponse]]] = {
+    def retrieve(requestData: RetrieveCharitableGivingReliefRequest): CallHandler[Future[DownstreamOutcome[RetrieveCharitableGivingReliefResponse]]] = {
       (mockConnector
         .retrieve(_: RetrieveCharitableGivingReliefRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

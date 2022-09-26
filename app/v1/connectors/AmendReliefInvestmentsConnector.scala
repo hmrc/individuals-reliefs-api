@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendReliefInvestmentsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def amend(
-      request: AmendReliefInvestmentsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
+      request: AmendReliefInvestmentsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     put(
       body = request.body,

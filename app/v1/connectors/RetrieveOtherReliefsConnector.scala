@@ -33,7 +33,7 @@ class RetrieveOtherReliefsConnector @Inject() (val http: HttpClient, val appConf
   def retrieve(request: RetrieveOtherReliefsRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DesOutcome[RetrieveOtherReliefsResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[RetrieveOtherReliefsResponse]] = {
 
     val url = s"income-tax/reliefs/other/${request.nino.nino}/${request.taxYear}"
     get(

@@ -19,7 +19,7 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{AmendPensionsReliefsConnector, DesOutcome}
+import v1.connectors.{AmendPensionsReliefsConnector, DownstreamOutcome}
 import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ trait MockAmendPensionsReliefsConnector extends MockFactory {
 
   object MockAmendPensionsReliefsConnector {
 
-    def amend(requestData: AmendPensionsReliefsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+    def amend(requestData: AmendPensionsReliefsRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockAmendPensionsReliefsConnector
         .amend(_: AmendPensionsReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

@@ -32,7 +32,7 @@ class RetrieveCharitableGivingReliefConnector @Inject() (val http: HttpClient, v
   def retrieve(request: RetrieveCharitableGivingReliefRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DesOutcome[RetrieveCharitableGivingReliefResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[RetrieveCharitableGivingReliefResponse]] = {
 
     get(
       DesUri[RetrieveCharitableGivingReliefResponse](

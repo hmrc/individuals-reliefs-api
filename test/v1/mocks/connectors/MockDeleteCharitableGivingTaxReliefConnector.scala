@@ -19,7 +19,7 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{DeleteCharitableGivingTaxReliefConnector, DesOutcome}
+import v1.connectors.{DeleteCharitableGivingTaxReliefConnector, DownstreamOutcome}
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ trait MockDeleteCharitableGivingTaxReliefConnector extends MockFactory {
 
   object MockDeleteCharitableGivingTaxReliefConnector {
 
-    def delete(requestData: DeleteCharitableGivingTaxReliefRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+    def delete(requestData: DeleteCharitableGivingTaxReliefRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockConnector
         .delete(_: DeleteCharitableGivingTaxReliefRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

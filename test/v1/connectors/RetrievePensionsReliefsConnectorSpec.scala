@@ -53,9 +53,9 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
         MockedHttpClient
           .get(
             url = s"$baseUrl/income-tax/reliefs/pensions/$nino/$taxYear",
-            dummyDesHeaderCarrierConfig,
-            requiredDesHeaders,
-            Seq("AnotherHeader" -> "HeaderValue")
+            config = dummyDesHeaderCarrierConfig,
+            requiredHeaders = requiredDesHeaders,
+            excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
           )
           .returns(Future.successful(outcome))
 
