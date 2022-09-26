@@ -17,7 +17,7 @@
 package routing
 
 import com.google.inject.ImplementedBy
-import config.{AppConfig, FeatureSwitch}
+import config.{AppConfig, FeatureSwitches}
 import definition.Versions.VERSION_1
 import javax.inject.Inject
 import play.api.Logger
@@ -42,12 +42,12 @@ case class VersionRoutingMapImpl @Inject() (appConfig: AppConfig,
                                             charitableGivingRouter: v1WithCharitableGiving.Routes)
     extends VersionRoutingMap {
 
-  val featureSwitch: FeatureSwitch = FeatureSwitch(appConfig.featureSwitch)
-  protected val logger: Logger     = Logger(this.getClass)
+  val featureSwitches: FeatureSwitches = FeatureSwitches(appConfig.featureSwitches)
+  protected val logger: Logger         = Logger(this.getClass)
 
   val map: Map[String, Router] = Map(
     VERSION_1 -> {
-      if (featureSwitch.isCharitableGivingRoutingEnabled) {
+      if (featureSwitches.isCharitableGivingRoutingEnabled) {
         logger.info("[VersionRoutingMap][map] using charitableGivingRouter to include charitable giving routes")
         charitableGivingRouter
       } else {
