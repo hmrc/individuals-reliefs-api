@@ -23,6 +23,7 @@ import v1.mocks.connectors.MockDeleteForeignReliefsConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,7 +35,7 @@ class DeleteForeignReliefsServiceSpec extends UnitSpec {
   val validTaxYear: String           = "2019-20"
   implicit val correlationId: String = "X-123"
 
-  val requestData: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(validNino), validTaxYear)
+  val requestData: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
 
   trait Test extends MockDeleteForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

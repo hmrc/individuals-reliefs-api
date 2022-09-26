@@ -21,6 +21,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import v1.mocks.validators.MockAmendPensionsReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.TaxYear
 import v1.models.request.amendPensionsReliefs._
 
 class AmendPensionsReliefsRequestParserSpec extends UnitSpec {
@@ -59,7 +60,7 @@ class AmendPensionsReliefsRequestParserSpec extends UnitSpec {
           Right(
             AmendPensionsReliefsRequest(
               Nino(nino),
-              taxYear,
+              TaxYear.fromMtd(taxYear),
               AmendPensionsReliefsBody(
                 pensionReliefs = PensionReliefs(
                   regularPensionContributions = Some(1999.99),

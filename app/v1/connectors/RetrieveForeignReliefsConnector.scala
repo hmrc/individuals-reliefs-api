@@ -35,7 +35,7 @@ class RetrieveForeignReliefsConnector @Inject() (val http: HttpClient, val appCo
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveForeignReliefsResponse]] = {
 
-    val url = s"income-tax/reliefs/foreign/${request.nino.nino}/${request.taxYear}"
+    val url = s"income-tax/reliefs/foreign/${request.nino.nino}/${request.taxYear.asMtd}"
     get(
       IfsUri[RetrieveForeignReliefsResponse](s"$url")
     )

@@ -23,6 +23,7 @@ import v1.mocks.connectors.MockDeletePensionsReliefsConnector
 import v1.models.domain.Nino
 import v1.models.errors.{DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequest
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,7 +35,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
   val validTaxYear: String           = "2019-20"
   implicit val correlationId: String = "X-123"
 
-  val requestData: DeletePensionsReliefsRequest = DeletePensionsReliefsRequest(Nino(validNino), validTaxYear)
+  val requestData: DeletePensionsReliefsRequest = DeletePensionsReliefsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
 
   trait Test extends MockDeletePensionsReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

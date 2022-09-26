@@ -29,6 +29,7 @@ import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendOtherReliefs._
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
 
@@ -138,7 +139,7 @@ class AmendOtherReliefsControllerSpec
   )
 
   private val rawData     = AmendOtherReliefsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendOtherReliefsRequest(Nino(nino), taxYear, requestBody)
+  private val requestData = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   val hateoasResponse: JsValue = Json.parse("""
       |{

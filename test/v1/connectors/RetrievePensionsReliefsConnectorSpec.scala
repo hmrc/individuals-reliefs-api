@@ -18,6 +18,7 @@ package v1.connectors
 
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
 
@@ -39,7 +40,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
   "RetrievePensionsReliefsConnector" when {
     "retrieving pensions reliefs" must {
-      val request: RetrievePensionsReliefsRequest = RetrievePensionsReliefsRequest(Nino(nino), taxYear)
+      val request: RetrievePensionsReliefsRequest = RetrievePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
       "return a valid response" in new DesTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, RetrievePensionsReliefsResponse))

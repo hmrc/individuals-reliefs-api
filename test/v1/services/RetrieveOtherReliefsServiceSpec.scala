@@ -23,6 +23,7 @@ import v1.mocks.connectors.MockRetrieveOtherReliefsConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
 import v1.models.response.retrieveOtherReliefs._
 
@@ -54,7 +55,7 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val requestData = RetrieveOtherReliefsRequest(Nino(nino), taxYear)
+  private val requestData = RetrieveOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveOtherReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

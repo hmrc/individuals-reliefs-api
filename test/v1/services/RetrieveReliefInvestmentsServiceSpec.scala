@@ -23,6 +23,7 @@ import v1.mocks.connectors.MockRetrieveReliefInvestmentsConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments._
 
@@ -85,7 +86,7 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
         )))
   )
 
-  private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), taxYear)
+  private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveReliefInvestmentsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

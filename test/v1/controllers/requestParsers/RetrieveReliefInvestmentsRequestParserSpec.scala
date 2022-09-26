@@ -20,6 +20,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import v1.mocks.validators.MockRetrieveReliefInvestmentsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.TaxYear
 import v1.models.request.retrieveReliefInvestments.{RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest}
 
 class RetrieveReliefInvestmentsRequestParserSpec extends UnitSpec {
@@ -40,7 +41,7 @@ class RetrieveReliefInvestmentsRequestParserSpec extends UnitSpec {
         MockRetrieveReliefInvestmentsValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(RetrieveReliefInvestmentsRequest(Nino(nino), taxYear))
+          Right(RetrieveReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
       }
     }
 

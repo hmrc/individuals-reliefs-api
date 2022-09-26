@@ -20,6 +20,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import v1.mocks.validators.MockDeleteForeignReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.TaxYear
 import v1.models.request.deleteForeignReliefs.{DeleteForeignReliefsRawData, DeleteForeignReliefsRequest}
 
 class DeleteForeignReliefsRequestParserSpec extends UnitSpec {
@@ -40,7 +41,7 @@ class DeleteForeignReliefsRequestParserSpec extends UnitSpec {
         MockDeleteForeignReliefsValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(DeleteForeignReliefsRequest(Nino(nino), taxYear))
+          Right(DeleteForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
       }
     }
 

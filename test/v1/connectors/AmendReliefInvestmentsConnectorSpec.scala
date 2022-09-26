@@ -18,6 +18,7 @@ package v1.connectors
 
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendReliefInvestments._
 
 import scala.concurrent.Future
@@ -86,7 +87,7 @@ class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
   }
 
   "doConnector" must {
-    val request: AmendReliefInvestmentsRequest = AmendReliefInvestmentsRequest(Nino(nino), taxYear, body)
+    val request: AmendReliefInvestmentsRequest = AmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
     "put a body and return 204 no body" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))

@@ -17,5 +17,6 @@
 package v1.models.request.deleteForeignReliefs
 
 import v1.models.domain.Nino
+import v1.models.request.TaxYear
 
-case class DeleteForeignReliefsRequest(nino: Nino, taxYear: String)
+case class DeleteForeignReliefsRequest(nino: Nino, taxYear: TaxYear)

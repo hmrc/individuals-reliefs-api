@@ -23,6 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendPensionsReliefsConnector
 import v1.models.errors.{DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, TaxYearFormatError}
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRequest, PensionReliefs}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +45,7 @@ class AmendPensionsReliefsServiceSpec extends UnitSpec {
     )
   )
 
-  private val requestData = AmendPensionsReliefsRequest(Nino(nino), taxYear, body)
+  private val requestData = AmendPensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
   trait Test extends MockAmendPensionsReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

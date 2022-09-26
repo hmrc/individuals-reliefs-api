@@ -18,6 +18,7 @@ package v1.connectors
 
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 
@@ -39,7 +40,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
 
   "retrieve" should {
     "return a result" when {
-      val request: RetrieveForeignReliefsRequest = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
+      val request: RetrieveForeignReliefsRequest = RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
       "the downstream call is successful" in new IfsTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, RetrieveForeignReliefsResponse))

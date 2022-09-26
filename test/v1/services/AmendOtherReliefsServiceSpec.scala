@@ -23,6 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendOtherReliefsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendOtherReliefs._
 
 import scala.concurrent.Future
@@ -52,7 +53,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
     Some(Seq(QualifyingLoanInterestPayments(Some("myRef"), Some("Maurice"), 763.00)))
   )
 
-  private val requestData = AmendOtherReliefsRequest(Nino(nino), taxYear, body)
+  private val requestData = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
   trait Test extends MockAmendOtherReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

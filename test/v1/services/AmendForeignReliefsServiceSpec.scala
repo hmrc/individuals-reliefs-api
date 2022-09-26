@@ -23,6 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendForeignReliefsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendForeignReliefs._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -54,7 +55,7 @@ class AmendForeignReliefsServiceSpec extends UnitSpec {
       ))
   )
 
-  private val requestData = AmendForeignReliefsRequest(nino, taxYear, body)
+  private val requestData = AmendForeignReliefsRequest(nino, TaxYear.fromMtd(taxYear), body)
 
   trait Test extends MockAmendForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

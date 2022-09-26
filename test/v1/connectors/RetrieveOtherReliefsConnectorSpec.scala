@@ -18,6 +18,7 @@ package v1.connectors
 
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsResponse
 
@@ -39,7 +40,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
   "retrieve" should {
     "return a result" when {
-      val request: RetrieveOtherReliefsRequest = RetrieveOtherReliefsRequest(Nino(nino), taxYear)
+      val request: RetrieveOtherReliefsRequest = RetrieveOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
       "the downstream call is successful" in new IfsTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, RetrieveOtherReliefsResponse))

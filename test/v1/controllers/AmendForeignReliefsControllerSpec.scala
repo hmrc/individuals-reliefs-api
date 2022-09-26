@@ -29,6 +29,7 @@ import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendForeignReliefs._
 import v1.models.response.amendForeignReliefs.AmendForeignReliefsHateoasData
 
@@ -153,7 +154,7 @@ class AmendForeignReliefsControllerSpec
     )
 
   private val rawData     = AmendForeignReliefsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendForeignReliefsRequest(Nino(nino), taxYear, requestBody)
+  private val requestData = AmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   "handleRequest" should {
     "return Ok" when {

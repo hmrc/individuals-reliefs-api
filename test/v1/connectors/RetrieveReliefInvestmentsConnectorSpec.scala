@@ -18,6 +18,7 @@ package v1.connectors
 
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsResponse
 
@@ -39,7 +40,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
   "RetrieveReliefInvestmentsConnector" when {
     "retrieving relief investments" must {
-      val request: RetrieveReliefInvestmentsRequest = RetrieveReliefInvestmentsRequest(Nino(nino), taxYear)
+      val request: RetrieveReliefInvestmentsRequest = RetrieveReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
       "return a valid response" in new IfsTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, RetrieveReliefInvestmentsResponse))

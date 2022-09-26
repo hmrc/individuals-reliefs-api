@@ -23,6 +23,7 @@ import v1.mocks.connectors.MockRetrievePensionsReliefsConnector
 import v1.models.domain.Nino
 import v1.models.errors.{DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.{PensionsReliefs, RetrievePensionsReliefsResponse}
 
@@ -46,7 +47,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
     )
   )
 
-  private val requestData = RetrievePensionsReliefsRequest(Nino(nino), taxYear)
+  private val requestData = RetrievePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrievePensionsReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

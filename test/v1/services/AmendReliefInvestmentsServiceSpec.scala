@@ -23,7 +23,9 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendReliefInvestmentsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendReliefInvestments._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -82,7 +84,7 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
         )))
   )
 
-  private val requestData = AmendReliefInvestmentsRequest(Nino(nino), taxYear, requestBody)
+  private val requestData = AmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   trait Test extends MockAmendReliefInvestmentsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

@@ -17,5 +17,6 @@
 package v1.models.request.deletePensionsReliefs
 
 import v1.models.domain.Nino
+import v1.models.request.TaxYear
 
-case class DeletePensionsReliefsRequest(nino: Nino, taxYear: String)
+case class DeletePensionsReliefsRequest(nino: Nino, taxYear: TaxYear)

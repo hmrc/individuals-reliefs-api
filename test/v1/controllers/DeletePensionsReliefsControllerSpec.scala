@@ -27,6 +27,7 @@ import v1.mocks.services._
 import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeletePensionsReliefsAuditDetail}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.deletePensionsReliefs.{DeletePensionsReliefsRawData, DeletePensionsReliefsRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -65,7 +66,7 @@ class DeletePensionsReliefsControllerSpec
   }
 
   private val rawData     = DeletePensionsReliefsRawData(nino, taxYear)
-  private val requestData = DeletePensionsReliefsRequest(Nino(nino), taxYear)
+  private val requestData = DeletePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   def event(auditResponse: AuditResponse): AuditEvent[DeletePensionsReliefsAuditDetail] =
     AuditEvent(

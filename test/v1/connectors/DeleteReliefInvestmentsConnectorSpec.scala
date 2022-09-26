@@ -18,6 +18,7 @@ package v1.connectors
 
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
 
 import scala.concurrent.Future
@@ -37,14 +38,14 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
   }
 
   "delete" should {
-    val request: DeleteReliefInvestmentsRequest = DeleteReliefInvestmentsRequest(Nino(nino), taxYear)
+    val request: DeleteReliefInvestmentsRequest = DeleteReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
     "return a result" when {
       "the downstream call is successful" in new IfsTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
-          url = s"$baseUrl/income-tax/reliefs/investment/${request.nino.nino}/${request.taxYear}"
+          url = s"$baseUrl/income-tax/reliefs/investment/${request.nino.nino}/$taxYear"
         )
           .returns(Future.successful(outcome))
 

@@ -18,6 +18,7 @@ package v1.connectors
 
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendPensionsReliefs._
 
 import scala.concurrent.Future
@@ -47,7 +48,7 @@ class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
   }
 
   "connector" must {
-    val request: AmendPensionsReliefsRequest = AmendPensionsReliefsRequest(Nino(nino), taxYear, body)
+    val request: AmendPensionsReliefsRequest = AmendPensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
     "put a body and return 204 no body" in new DesTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))

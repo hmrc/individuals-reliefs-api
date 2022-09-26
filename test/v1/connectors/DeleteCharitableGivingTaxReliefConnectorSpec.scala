@@ -29,7 +29,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
   val nino: String    = "AA123456A"
   val taxYear: String = "2019-20"
 
-  trait Test  { _: ConnectorTest =>
+  trait Test { _: ConnectorTest =>
 
     val connector: DeleteCharitableGivingTaxReliefConnector = new DeleteCharitableGivingTaxReliefConnector(
       http = mockHttpClient,
