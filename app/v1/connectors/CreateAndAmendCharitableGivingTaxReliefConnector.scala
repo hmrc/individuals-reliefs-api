@@ -38,7 +38,7 @@ class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: Http
 
     post(
       body = request.body,
-      DesUri[Unit](s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}")
+      DesUri[Unit](s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}")
     )
   }
 

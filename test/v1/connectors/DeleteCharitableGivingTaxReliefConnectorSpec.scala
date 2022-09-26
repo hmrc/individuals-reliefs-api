@@ -54,7 +54,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
 
         MockedHttpClient
           .post(
-            url = s"$baseUrl/income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}",
+            url = s"$baseUrl/income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}",
             config = dummyDesHeaderCarrierConfig,
             body = JsObject.empty,
             requiredHeaders = requiredDesHeaders,

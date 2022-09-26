@@ -16,19 +16,40 @@
 
 package v1.models.request
 
+import config.FeatureSwitches
+
 /** Opaque representation of a tax year
   */
-final class TaxYear private (private val value: String) extends AnyVal {
-  def toDownstream: String = value
+final case class TaxYear private (private val value: String) {
 
-  def toMtd: String = {
+  /** The tax year as a number, e.g. for "2023-24" this will be 2024.
+    */
+  val year: Int = value.toInt
+
+  /** The tax year in MTD (vendor-facing) format, e.g. "2024".
+    */
+  val asMtd: String = {
     val prefix  = value.take(2)
     val yearTwo = value.drop(2)
     val yearOne = (yearTwo.toInt - 1).toString
     prefix + yearOne + "-" + yearTwo
   }
 
-  override def toString: String = s"TaxYear($value)"
+  /** The tax year in the pre-TYS downstream format, e.g. "2023-24".
+    */
+  val asDownstream: String = value
+
+  /** The tax year in the Tax Year Specific downstream format, e.g. "23-24".
+    */
+  val asTysDownstream: String = {
+    val year2 = value.toInt - 2000
+    val year1 = year2 - 1
+    s"$year1-$year2"
+  }
+
+  /** Use this for downstream API endpoints that are known to be TYS.
+    */
+  def useTaxYearSpecificApi(implicit featureSwitches: FeatureSwitches): Boolean = featureSwitches.isTaxYearSpecificApiEnabled && year >= 2024
 }
 
 object TaxYear {

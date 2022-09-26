@@ -36,7 +36,7 @@ class RetrieveCharitableGivingReliefConnector @Inject() (val http: HttpClient, v
 
     get(
       DesUri[RetrieveCharitableGivingReliefResponse](
-        s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}"
+        s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}"
       )
     )
   }
