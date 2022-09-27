@@ -28,6 +28,7 @@ import v1.models.errors._
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.GET
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrievePensionsReliefs.{RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest}
 import v1.models.response.retrievePensionsReliefs._
 
@@ -67,7 +68,7 @@ class RetrievePensionsReliefsControllerSpec
   }
 
   private val rawData     = RetrievePensionsReliefsRawData(nino, taxYear)
-  private val requestData = RetrievePensionsReliefsRequest(Nino(nino), taxYear)
+  private val requestData = RetrievePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")
 
@@ -155,7 +156,7 @@ class RetrievePensionsReliefsControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

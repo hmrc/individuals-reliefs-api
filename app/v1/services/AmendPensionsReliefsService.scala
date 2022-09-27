@@ -23,14 +23,14 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.AmendPensionsReliefsConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{DownstreamError, NinoFormatError, TaxYearFormatError}
+import v1.models.errors.{InternalError, NinoFormatError, TaxYearFormatError}
 import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequest
-import v1.support.DesResponseMappingSupport
+import v1.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConnector) extends DesResponseMappingSupport with Logging {
+class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConnector) extends DownstreamResponseMappingSupport with Logging {
 
   def amend(request: AmendPensionsReliefsRequest)(implicit
       hc: HeaderCarrier,
@@ -39,8 +39,8 @@ class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConn
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDesErrors(desErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))
+    } yield responseWrapper
 
     result.value
   }
@@ -49,9 +49,9 @@ class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConn
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-      "INVALID_PAYLOAD"           -> DownstreamError,
-      "SERVER_ERROR"              -> DownstreamError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamError
+      "INVALID_PAYLOAD"           -> InternalError,
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
 }

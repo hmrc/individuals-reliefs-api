@@ -19,13 +19,14 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import v1.models.domain.Nino
 import v1.controllers.requestParsers.validators.RetrieveForeignReliefsValidator
+import v1.models.request.TaxYear
 import v1.models.request.retrieveForeignReliefs.{RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest}
 
 class RetrieveForeignReliefsRequestParser @Inject() (val validator: RetrieveForeignReliefsValidator)
     extends RequestParser[RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest] {
 
   override protected def requestFor(data: RetrieveForeignReliefsRawData): RetrieveForeignReliefsRequest = {
-    RetrieveForeignReliefsRequest(Nino(data.nino), data.taxYear)
+    RetrieveForeignReliefsRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear))
   }
 
 }

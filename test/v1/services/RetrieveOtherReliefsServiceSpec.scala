@@ -23,6 +23,7 @@ import v1.mocks.connectors.MockRetrieveOtherReliefsConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
 import v1.models.response.retrieveOtherReliefs._
 
@@ -54,7 +55,7 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val requestData = RetrieveOtherReliefsRequest(Nino(nino), taxYear)
+  private val requestData = RetrieveOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveOtherReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -82,7 +83,7 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
 
           MockRetrieveOtherReliefsConnector
             .retrieve(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
           await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -91,8 +92,8 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
         ("FORMAT_TAX_YEAR", TaxYearFormatError),
         ("NO_DATA_FOUND", NotFoundError),
-        ("SERVER_ERROR", DownstreamError),
-        ("SERVICE_UNAVAILABLE", DownstreamError)
+        ("SERVER_ERROR", InternalError),
+        ("SERVICE_UNAVAILABLE", InternalError)
       )
 
       input.foreach(args => (serviceError _).tupled(args))

@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
 import v1.connectors.DownstreamUri.IfsUri
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 
@@ -33,9 +33,9 @@ class RetrieveForeignReliefsConnector @Inject() (val http: HttpClient, val appCo
   def retrieve(request: RetrieveForeignReliefsRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DesOutcome[RetrieveForeignReliefsResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[RetrieveForeignReliefsResponse]] = {
 
-    val url = s"income-tax/reliefs/foreign/${request.nino.nino}/${request.taxYear}"
+    val url = s"income-tax/reliefs/foreign/${request.nino.nino}/${request.taxYear.asMtd}"
     get(
       IfsUri[RetrieveForeignReliefsResponse](s"$url")
     )

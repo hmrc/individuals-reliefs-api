@@ -23,13 +23,9 @@ import v1.mocks.connectors.MockRetrieveForeignReliefsConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
-import v1.models.response.retrieveForeignReliefs.{
-  ForeignIncomeTaxCreditRelief,
-  ForeignTaxCreditRelief,
-  ForeignTaxForFtcrNotClaimed,
-  RetrieveForeignReliefsResponse
-}
+import v1.models.response.retrieveForeignReliefs.{ForeignIncomeTaxCreditRelief, ForeignTaxCreditRelief, ForeignTaxForFtcrNotClaimed, RetrieveForeignReliefsResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -47,7 +43,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
     Some(ForeignTaxForFtcrNotClaimed(549.98))
   )
 
-  private val requestData = RetrieveForeignReliefsRequest(Nino(nino), taxYear)
+  private val requestData = RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -75,7 +71,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
 
           MockRetrieveForeignReliefsConnector
             .retrieve(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
           await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -84,8 +80,8 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
         ("FORMAT_TAX_YEAR", TaxYearFormatError),
         ("NO_DATA_FOUND", NotFoundError),
-        ("SERVER_ERROR", DownstreamError),
-        ("SERVICE_UNAVAILABLE", DownstreamError)
+        ("SERVER_ERROR", InternalError),
+        ("SERVICE_UNAVAILABLE", InternalError)
       )
 
       input.foreach(args => (serviceError _).tupled(args))

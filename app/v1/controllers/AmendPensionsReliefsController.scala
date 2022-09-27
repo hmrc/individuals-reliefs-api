@@ -109,7 +109,7 @@ class AmendPensionsReliefsController @Inject() (val authService: EnrolmentsAuthS
       case NinoFormatError | BadRequestError | TaxYearFormatError | RuleIncorrectOrEmptyBodyError | RuleTaxYearRangeInvalidError |
           RuleTaxYearNotSupportedError | MtdErrorWithCustomMessage(ValueFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _               => unhandledError(errorWrapper)
     }
   }

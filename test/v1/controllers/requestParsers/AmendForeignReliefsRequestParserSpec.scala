@@ -21,6 +21,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import v1.mocks.validators.MockAmendForeignReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.TaxYear
 import v1.models.request.amendForeignReliefs._
 
 class AmendForeignReliefsRequestParserSpec extends UnitSpec {
@@ -68,7 +69,7 @@ class AmendForeignReliefsRequestParserSpec extends UnitSpec {
           Right(
             AmendForeignReliefsRequest(
               Nino(nino),
-              taxYear,
+              TaxYear.fromMtd(taxYear),
               AmendForeignReliefsBody(
                 foreignTaxCreditRelief = Some(
                   ForeignTaxCreditRelief(

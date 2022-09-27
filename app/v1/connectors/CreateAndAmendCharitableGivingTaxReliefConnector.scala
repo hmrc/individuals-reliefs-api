@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.connectors.DownstreamUri.DesUri
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRequest
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,13 +32,13 @@ class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: Http
   def createAmend(request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DesOutcome[Unit]] = {
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
 
     post(
       body = request.body,
-      DesUri[Unit](s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}")
+      DesUri[Unit](s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}")
     )
   }
 

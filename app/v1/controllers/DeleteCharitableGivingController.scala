@@ -103,7 +103,7 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
     errorWrapper.error match {
       case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError =>
         BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case _               => unhandledError(errorWrapper)
     }

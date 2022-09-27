@@ -17,5 +17,6 @@
 package v1.models.request.retrieveOtherReliefs
 
 import v1.models.domain.Nino
+import v1.models.request.TaxYear
 
-case class RetrieveOtherReliefsRequest(nino: Nino, taxYear: String)
+case class RetrieveOtherReliefsRequest(nino: Nino, taxYear: TaxYear)

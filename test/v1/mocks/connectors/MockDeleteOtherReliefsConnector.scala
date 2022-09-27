@@ -19,7 +19,7 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{DeleteOtherReliefsConnector, DesOutcome}
+import v1.connectors.{DeleteOtherReliefsConnector, DownstreamOutcome}
 import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ trait MockDeleteOtherReliefsConnector extends MockFactory {
 
   object MockDeleteOtherReliefsConnector {
 
-    def delete(requestData: DeleteOtherReliefsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+    def delete(requestData: DeleteOtherReliefsRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockConnector
         .delete(_: DeleteOtherReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

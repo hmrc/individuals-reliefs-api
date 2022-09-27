@@ -20,6 +20,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import v1.mocks.validators.MockRetrieveForeignReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.TaxYear
 import v1.models.request.retrieveForeignReliefs.{RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest}
 
 class RetrieveForeignReliefsRequestParserSpec extends UnitSpec {
@@ -40,7 +41,7 @@ class RetrieveForeignReliefsRequestParserSpec extends UnitSpec {
         MockRetrieveForeignReliefsValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(RetrieveForeignReliefsRequest(Nino(nino), taxYear))
+          Right(RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
       }
     }
 

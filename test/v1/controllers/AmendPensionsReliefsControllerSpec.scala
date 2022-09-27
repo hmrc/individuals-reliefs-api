@@ -29,6 +29,7 @@ import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendPensionsReliefs._
 import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsHateoasData
 
@@ -78,7 +79,7 @@ class AmendPensionsReliefsControllerSpec
   )
 
   private val rawData     = AmendPensionsReliefsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendPensionsReliefsRequest(Nino(nino), taxYear, requestBody)
+  private val requestData = AmendPensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -218,7 +219,7 @@ class AmendPensionsReliefsControllerSpec
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
-          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (InternalError, INTERNAL_SERVER_ERROR),
           (TaxYearFormatError, BAD_REQUEST)
         )
 

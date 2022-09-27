@@ -17,5 +17,6 @@
 package v1.models.request.retrievePensionsReliefs
 
 import v1.models.domain.Nino
+import v1.models.request.TaxYear
 
-case class RetrievePensionsReliefsRequest(nino: Nino, taxYear: String)
+case class RetrievePensionsReliefsRequest(nino: Nino, taxYear: TaxYear)

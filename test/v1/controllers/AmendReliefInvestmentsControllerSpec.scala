@@ -29,6 +29,7 @@ import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendReliefInvestments._
 import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
 
@@ -177,7 +178,7 @@ class AmendReliefInvestmentsControllerSpec
   )
 
   private val rawData     = AmendReliefInvestmentsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendReliefInvestmentsRequest(Nino(nino), taxYear, requestBody)
+  private val requestData = AmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   val hateoasResponse: JsValue = Json.parse("""
       |{
@@ -301,7 +302,7 @@ class AmendReliefInvestmentsControllerSpec
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
-          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (InternalError, INTERNAL_SERVER_ERROR),
           (TaxYearFormatError, BAD_REQUEST)
         )
 

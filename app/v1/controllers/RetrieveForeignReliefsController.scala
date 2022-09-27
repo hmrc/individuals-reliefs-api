@@ -26,7 +26,7 @@ import v1.controllers.requestParsers.RetrieveForeignReliefsRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors.{
   BadRequestError,
-  DownstreamError,
+  InternalError,
   ErrorWrapper,
   NinoFormatError,
   NotFoundError,
@@ -92,7 +92,7 @@ class RetrieveForeignReliefsController @Inject() (val authService: EnrolmentsAut
     errorWrapper.error match {
       case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError =>
         BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case _               => unhandledError(errorWrapper)
     }

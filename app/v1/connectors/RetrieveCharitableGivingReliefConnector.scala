@@ -20,7 +20,7 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.connectors.DownstreamUri.DesUri
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
 
@@ -32,11 +32,11 @@ class RetrieveCharitableGivingReliefConnector @Inject() (val http: HttpClient, v
   def retrieve(request: RetrieveCharitableGivingReliefRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DesOutcome[RetrieveCharitableGivingReliefResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[RetrieveCharitableGivingReliefResponse]] = {
 
     get(
       DesUri[RetrieveCharitableGivingReliefResponse](
-        s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.toDownstream}"
+        s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}"
       )
     )
   }

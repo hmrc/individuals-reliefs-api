@@ -18,29 +18,27 @@ package config
 
 import play.api.Configuration
 
-case class FeatureSwitch(value: Option[Configuration]) {
+case class FeatureSwitches(featureSwitchConfig: Configuration) {
 
   private val versionRegex = """(\d)\.\d""".r
 
   def isVersionEnabled(version: String): Boolean = {
-    val versionNoIfPresent: Option[String] =
+    val maybeVersion: Option[String] =
       version match {
         case versionRegex(v) => Some(v)
         case _               => None
       }
 
     val enabled = for {
-      versionNo <- versionNoIfPresent
-      config    <- value
-      enabled   <- config.getOptional[Boolean](s"version-$versionNo.enabled")
+      validVersion <- maybeVersion
+      enabled      <- featureSwitchConfig.getOptional[Boolean](s"version-$validVersion.enabled")
     } yield enabled
 
     enabled.getOrElse(false)
   }
 
-  def isCharitableGivingRoutingEnabled: Boolean = value match {
-    case Some(config) => config.getOptional[Boolean]("charitable-giving-endpoints.enabled").getOrElse(true)
-    case None         => true
-  }
+  val isCharitableGivingRoutingEnabled: Boolean = isEnabled("charitable-giving-endpoints.enabled")
+  val isTaxYearSpecificApiEnabled: Boolean      = isEnabled("tys-api.enabled")
 
+  private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
 }

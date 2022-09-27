@@ -111,7 +111,7 @@ class AmendReliefInvestmentsController @Inject() (val authService: EnrolmentsAut
             DateOfInvestmentFormatError.code) | MtdErrorWithCustomMessage(NameFormatError.code) | MtdErrorWithCustomMessage(
             UniqueInvestmentRefFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _               => unhandledError(errorWrapper)
     }
   }

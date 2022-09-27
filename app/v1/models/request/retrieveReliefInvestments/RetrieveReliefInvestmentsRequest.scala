@@ -17,5 +17,6 @@
 package v1.models.request.retrieveReliefInvestments
 
 import v1.models.domain.Nino
+import v1.models.request.TaxYear
 
-case class RetrieveReliefInvestmentsRequest(nino: Nino, taxYear: String) {}
+case class RetrieveReliefInvestmentsRequest(nino: Nino, taxYear: TaxYear)

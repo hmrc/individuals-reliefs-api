@@ -16,19 +16,10 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.MockHttpClient
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
-import v1.models.request.createAndAmendCharitableGivingTaxRelief.{
-  CreateAndAmendCharitableGivingTaxReliefBody,
-  CreateAndAmendCharitableGivingTaxReliefRequest,
-  GiftAidPayments,
-  Gifts,
-  NonUkCharities
-}
+import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 
 import scala.concurrent.Future
 
@@ -66,17 +57,13 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
       gifts = Some(giftModel)
     )
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test { _: ConnectorTest =>
 
     val connector: CreateAndAmendCharitableGivingTaxReliefConnector = new CreateAndAmendCharitableGivingTaxReliefConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.desBaseUrl returns baseUrl
-    MockAppConfig.desToken returns "des-token"
-    MockAppConfig.desEnvironment returns "des-environment"
-    MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
   "doConnector" must {
@@ -84,20 +71,10 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
     val request: CreateAndAmendCharitableGivingTaxReliefRequest =
       CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYearMtd), requestBody)
 
-    "return 200 for a success scenario" in new Test {
+    "return 200 for a success scenario" in new DesTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier                 = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredHeadersPost: Seq[(String, String)] = requiredDesHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockedHttpClient
-        .post(
-          url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/$taxYearDownstream",
-          config = dummyDesHeaderCarrierConfig,
-          body = requestBody,
-          requiredHeaders = requiredHeadersPost,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
+      willPost(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/$taxYearDownstream", body = requestBody)
         .returns(Future.successful(outcome))
 
       await(connector.createAmend(request)) shouldBe outcome

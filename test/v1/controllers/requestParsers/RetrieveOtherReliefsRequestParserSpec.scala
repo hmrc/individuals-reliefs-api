@@ -20,6 +20,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import v1.mocks.validators.MockRetrieveOtherReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.TaxYear
 import v1.models.request.retrieveOtherReliefs.{RetrieveOtherReliefsRawData, RetrieveOtherReliefsRequest}
 
 class RetrieveOtherReliefsRequestParserSpec extends UnitSpec {
@@ -40,7 +41,7 @@ class RetrieveOtherReliefsRequestParserSpec extends UnitSpec {
         MockRetrieveOtherReliefsValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(RetrieveOtherReliefsRequest(Nino(nino), taxYear))
+          Right(RetrieveOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
       }
     }
 

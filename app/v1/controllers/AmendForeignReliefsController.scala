@@ -110,7 +110,7 @@ class AmendForeignReliefsController @Inject() (val authService: EnrolmentsAuthSe
           RuleTaxYearRangeInvalidError | MtdErrorWithCustomMessage(ValueFormatError.code) | MtdErrorWithCustomMessage(CountryCodeFormatError.code) |
           MtdErrorWithCustomMessage(RuleCountryCodeError.code) =>
         BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _               => unhandledError(errorWrapper)
     }
   }

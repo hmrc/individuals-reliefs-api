@@ -23,6 +23,7 @@ import v1.mocks.connectors.MockRetrieveReliefInvestmentsConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments._
 
@@ -85,7 +86,7 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
         )))
   )
 
-  private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), taxYear)
+  private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveReliefInvestmentsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -116,7 +117,7 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
 
             MockRetrieveReliefInvestmentsConnector
               .retrieve(requestData)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
             await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
@@ -125,8 +126,8 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
           ("FORMAT_TAX_YEAR", TaxYearFormatError),
           ("NO_DATA_FOUND", NotFoundError),
-          ("SERVER_ERROR", DownstreamError),
-          ("SERVICE_UNAVAILABLE", DownstreamError)
+          ("SERVER_ERROR", InternalError),
+          ("SERVICE_UNAVAILABLE", InternalError)
         )
 
         input.foreach(args => (serviceError _).tupled(args))

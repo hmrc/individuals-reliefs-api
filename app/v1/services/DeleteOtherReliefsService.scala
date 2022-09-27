@@ -25,12 +25,12 @@ import v1.connectors.DeleteOtherReliefsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRequest
-import v1.support.DesResponseMappingSupport
+import v1.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteOtherReliefsService @Inject() (connector: DeleteOtherReliefsConnector) extends DesResponseMappingSupport with Logging {
+class DeleteOtherReliefsService @Inject() (connector: DeleteOtherReliefsConnector) extends DownstreamResponseMappingSupport with Logging {
 
   def delete(request: DeleteOtherReliefsRequest)(implicit
       hc: HeaderCarrier,
@@ -38,8 +38,8 @@ class DeleteOtherReliefsService @Inject() (connector: DeleteOtherReliefsConnecto
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[Unit]] = {
     val result = for {
-      desResponseWrapper <- EitherT(connector.delete(request)).leftMap(mapDesErrors(desErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(desErrorMap))
+    } yield responseWrapper
     result.value
   }
 
@@ -48,8 +48,8 @@ class DeleteOtherReliefsService @Inject() (connector: DeleteOtherReliefsConnecto
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> DownstreamError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamError
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
 }

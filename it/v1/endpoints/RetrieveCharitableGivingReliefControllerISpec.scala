@@ -25,7 +25,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v1.models.errors._
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefFixture
-import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec with RetrieveCharitableGivingReliefFixture {
 
@@ -70,7 +70,7 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, downstreamUri, OK, downstreamResponse)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponse)
         }
 
         val response: WSResponse = await(request().get())
@@ -119,7 +119,7 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DesStub.onError(DesStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamCode))
+              DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
             val response: WSResponse = await(request().get())
@@ -130,13 +130,13 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
 
         val input = Seq(
           (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
-          (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, DownstreamError),
+          (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_TAXYEAR", BAD_REQUEST, TaxYearFormatError),
-          (BAD_REQUEST, "INVALID_INCOME_SOURCE", INTERNAL_SERVER_ERROR, DownstreamError),
+          (BAD_REQUEST, "INVALID_INCOME_SOURCE", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "NOT_FOUND_PERIOD", NOT_FOUND, NotFoundError),
           (NOT_FOUND, "NOT_FOUND_INCOME_SOURCE", NOT_FOUND, NotFoundError),
-          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
-          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError)
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
         input.foreach(args => (serviceErrorTest _).tupled(args))

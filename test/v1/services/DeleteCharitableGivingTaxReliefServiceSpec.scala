@@ -63,23 +63,23 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
 
           MockDeleteCharitableGivingTaxReliefConnector
             .delete(requestData)
-            .returns(Future.successful(Left(ResponseWrapper("resultId", DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
 
       val input = Seq(
         ("INVALID_NINO", NinoFormatError),
-        ("INVALID_TYPE", DownstreamError),
+        ("INVALID_TYPE", InternalError),
         ("INVALID_TAXYEAR", TaxYearFormatError),
-        ("INVALID_PAYLOAD", DownstreamError),
+        ("INVALID_PAYLOAD", InternalError),
         ("NOT_FOUND_INCOME_SOURCE", NotFoundError),
-        ("MISSING_CHARITIES_NAME_GIFT_AID", DownstreamError),
-        ("MISSING_CHARITIES_NAME_INVESTMENT", DownstreamError),
-        ("MISSING_INVESTMENT_AMOUNT", DownstreamError),
+        ("MISSING_CHARITIES_NAME_GIFT_AID", InternalError),
+        ("MISSING_CHARITIES_NAME_INVESTMENT", InternalError),
+        ("MISSING_INVESTMENT_AMOUNT", InternalError),
         ("INVALID_ACCOUNTING_PERIOD", RuleTaxYearNotSupportedError),
-        ("SERVER_ERROR", DownstreamError),
-        ("SERVICE_UNAVAILABLE", DownstreamError),
+        ("SERVER_ERROR", InternalError),
+        ("SERVICE_UNAVAILABLE", InternalError),
         ("GONE", NotFoundError),
         ("NOT_FOUND", NotFoundError)
       )

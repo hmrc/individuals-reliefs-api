@@ -27,6 +27,7 @@ import v1.mocks.services._
 import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeleteForeignReliefsAuditDetail}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.deleteForeignReliefs.{DeleteForeignReliefsRawData, DeleteForeignReliefsRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -65,7 +66,7 @@ class DeleteForeignReliefsControllerSpec
   }
 
   private val rawData     = DeleteForeignReliefsRawData(nino, taxYear)
-  private val requestData = DeleteForeignReliefsRequest(Nino(nino), taxYear)
+  private val requestData = DeleteForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   def event(auditResponse: AuditResponse): AuditEvent[DeleteForeignReliefsAuditDetail] =
     AuditEvent(
@@ -160,7 +161,7 @@ class DeleteForeignReliefsControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

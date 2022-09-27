@@ -16,11 +16,9 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
-import uk.gov.hmrc.http.HeaderCarrier
 import v1.models.domain.Nino
-import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendReliefInvestments._
 
 import scala.concurrent.Future
@@ -79,36 +77,25 @@ class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
         )))
   )
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test { _: ConnectorTest =>
 
     val connector: AmendReliefInvestmentsConnector = new AmendReliefInvestmentsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "doConnector" must {
-    val request: AmendReliefInvestmentsRequest = AmendReliefInvestmentsRequest(Nino(nino), taxYear, body)
+    val request: AmendReliefInvestmentsRequest = AmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
-    "put a body and return 204 no body" in new Test {
+    "put a body and return 204 no body" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      implicit val hc: HeaderCarrier                = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
-      MockedHttpClient
-        .put(
-          url = s"$baseUrl/income-tax/reliefs/investment/$nino/$taxYear",
-          config = dummyIfsHeaderCarrierConfig,
-          body = body,
-          requiredHeaders = requiredHeadersPut,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-        )
+      willPut(
+        url = s"$baseUrl/income-tax/reliefs/investment/$nino/$taxYear",
+        body = body
+      )
         .returns(Future.successful(outcome))
 
       await(connector.amend(request)) shouldBe outcome

@@ -26,12 +26,12 @@ import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsResponse
-import v1.support.DesResponseMappingSupport
+import v1.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveReliefInvestmentsService @Inject() (connector: RetrieveReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
+class RetrieveReliefInvestmentsService @Inject() (connector: RetrieveReliefInvestmentsConnector) extends DownstreamResponseMappingSupport with Logging {
 
   def retrieve(request: RetrieveReliefInvestmentsRequest)(implicit
       hc: HeaderCarrier,
@@ -40,8 +40,8 @@ class RetrieveReliefInvestmentsService @Inject() (connector: RetrieveReliefInves
       correlationId: String): Future[ServiceOutcome[RetrieveReliefInvestmentsResponse]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
+    } yield responseWrapper
 
     result.value
   }
@@ -51,8 +51,8 @@ class RetrieveReliefInvestmentsService @Inject() (connector: RetrieveReliefInves
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> DownstreamError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamError
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
 }

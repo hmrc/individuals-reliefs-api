@@ -21,6 +21,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import v1.mocks.validators.MockAmendOtherReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.TaxYear
 import v1.models.request.amendOtherReliefs._
 
 class AmendOtherReliefRequestParserSpec extends UnitSpec {
@@ -94,7 +95,7 @@ class AmendOtherReliefRequestParserSpec extends UnitSpec {
           Right(
             AmendOtherReliefsRequest(
               Nino(nino),
-              taxYear,
+              TaxYear.fromMtd(taxYear),
               AmendOtherReliefsBody(
                 Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
                 Some(PayrollGiving(Some("myref"), 154.00)),

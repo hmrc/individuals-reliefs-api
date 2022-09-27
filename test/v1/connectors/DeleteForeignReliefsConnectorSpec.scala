@@ -16,10 +16,9 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
 import v1.models.domain.Nino
-import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
 
 import scala.concurrent.Future
@@ -29,34 +28,26 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
   val nino: String    = "AA123456A"
   val taxYear: String = "2019-20"
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test { _: ConnectorTest =>
 
     val connector: DeleteForeignReliefsConnector = new DeleteForeignReliefsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "delete" should {
 
-    val request: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(nino), taxYear)
+    val request: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
     "return a result" when {
-      "the downstream call is successful" in new Test {
+      "the downstream call is successful" in new IfsTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        MockedHttpClient
-          .delete(
-            url = s"$baseUrl/income-tax/reliefs/foreign/${request.nino.nino}/${request.taxYear}",
-            config = dummyIfsHeaderCarrierConfig,
-            requiredHeaders = requiredIfsHeaders,
-            excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-          )
+        willDelete(
+          url = s"$baseUrl/income-tax/reliefs/foreign/${request.nino.nino}/$taxYear"
+        )
           .returns(Future.successful(outcome))
 
         await(connector.delete(request)) shouldBe outcome

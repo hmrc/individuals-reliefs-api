@@ -23,6 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendForeignReliefsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.amendForeignReliefs._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -54,7 +55,7 @@ class AmendForeignReliefsServiceSpec extends UnitSpec {
       ))
   )
 
-  private val requestData = AmendForeignReliefsRequest(nino, taxYear, body)
+  private val requestData = AmendForeignReliefsRequest(nino, TaxYear.fromMtd(taxYear), body)
 
   trait Test extends MockAmendForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -86,7 +87,7 @@ class AmendForeignReliefsServiceSpec extends UnitSpec {
 
           MockAmendForeignReliefsConnector
             .amend(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
           await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -94,8 +95,8 @@ class AmendForeignReliefsServiceSpec extends UnitSpec {
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
-        "SERVER_ERROR"              -> DownstreamError,
-        "SERVICE_UNAVAILABLE"       -> DownstreamError
+        "SERVER_ERROR"              -> InternalError,
+        "SERVICE_UNAVAILABLE"       -> InternalError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

@@ -18,10 +18,9 @@ package v1.connectors
 
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
-import mocks.MockAppConfig
-import v1.mocks.MockHttpClient
 
 import scala.concurrent.Future
 
@@ -30,33 +29,25 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
   val taxYear: String = "2017-18"
   val nino: String    = "AA123456A"
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test { _: ConnectorTest =>
 
     val connector: RetrievePensionsReliefsConnector = new RetrievePensionsReliefsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.desBaseUrl returns baseUrl
-    MockAppConfig.desToken returns "des-token"
-    MockAppConfig.desEnvironment returns "des-environment"
-    MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
   "RetrievePensionsReliefsConnector" when {
     "retrieving pensions reliefs" must {
-      val request: RetrievePensionsReliefsRequest = RetrievePensionsReliefsRequest(Nino(nino), taxYear)
+      val request: RetrievePensionsReliefsRequest = RetrievePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
-      "return a valid response" in new Test {
+      "return a valid response" in new DesTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, RetrievePensionsReliefsResponse))
 
-        MockedHttpClient
-          .get(
-            url = s"$baseUrl/income-tax/reliefs/pensions/$nino/$taxYear",
-            dummyDesHeaderCarrierConfig,
-            requiredDesHeaders,
-            Seq("AnotherHeader" -> "HeaderValue")
-          )
+        willGet(
+          url = s"$baseUrl/income-tax/reliefs/pensions/$nino/$taxYear"
+        )
           .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome

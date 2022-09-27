@@ -24,7 +24,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec {
 
@@ -84,7 +84,7 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
       s"""
          |      {
          |        "code": "$code",
-         |        "reason": "des message"
+         |        "reason": "message"
          |      }
     """.stripMargin
 
@@ -100,7 +100,7 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.POST, desUri(desTaxYear), OK, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.POST, desUri(desTaxYear), OK, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestJson))
@@ -205,14 +205,14 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
       }
 
       "downstream service error" when {
-        def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"DES returns $desCode and status $desStatus" in new Test {
+        def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"downstream returns $downstreamCode and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DesStub.onError(DesStub.POST, desUri(desTaxYear), desStatus, errorBody(desCode))
+              DownstreamStub.onError(DownstreamStub.POST, desUri(desTaxYear), downstreamStatus, errorBody(downstreamCode))
             }
 
             val response: WSResponse = await(request().put(requestJson))
@@ -223,18 +223,18 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
 
         val input = Seq(
           (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
-          (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, DownstreamError),
+          (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_TAXYEAR", BAD_REQUEST, TaxYearFormatError),
-          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, DownstreamError),
+          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
           (FORBIDDEN, "NOT_FOUND_INCOME_SOURCE", NOT_FOUND, NotFoundError),
           (FORBIDDEN, "MISSING_CHARITIES_NAME_GIFT_AID", BAD_REQUEST, RuleGiftAidNonUkAmountWithoutNamesError),
-          (FORBIDDEN, "MISSING_GIFT_AID_AMOUNT", INTERNAL_SERVER_ERROR, DownstreamError),
+          (FORBIDDEN, "MISSING_GIFT_AID_AMOUNT", INTERNAL_SERVER_ERROR, InternalError),
           (FORBIDDEN, "MISSING_CHARITIES_NAME_INVESTMENT", BAD_REQUEST, RuleGiftsNonUkAmountWithoutNamesError),
-          (FORBIDDEN, "MISSING_INVESTMENT_AMOUNT", INTERNAL_SERVER_ERROR, DownstreamError),
+          (FORBIDDEN, "MISSING_INVESTMENT_AMOUNT", INTERNAL_SERVER_ERROR, InternalError),
           (FORBIDDEN, "INVALID_ACCOUNTING_PERIOD", BAD_REQUEST, RuleTaxYearNotSupportedError),
-          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError),
-          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
-          (GONE, "GONE", INTERNAL_SERVER_ERROR, DownstreamError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (GONE, "GONE", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError)
         )
         input.foreach(args => (serviceErrorTest _).tupled(args))

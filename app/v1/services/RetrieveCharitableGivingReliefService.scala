@@ -26,13 +26,13 @@ import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
-import v1.support.DesResponseMappingSupport
+import v1.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharitableGivingReliefConnector)
-    extends DesResponseMappingSupport
+    extends DownstreamResponseMappingSupport
     with Logging {
 
   def retrieve(request: RetrieveCharitableGivingReliefRequest)(implicit
@@ -42,8 +42,8 @@ class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharit
       correlationId: String): Future[ServiceOutcome[RetrieveCharitableGivingReliefResponse]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
+    } yield responseWrapper
 
     result.value
   }
@@ -51,13 +51,13 @@ class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharit
   private def desErrorMap =
     Map(
       "INVALID_NINO"            -> NinoFormatError,
-      "INVALID_TYPE"            -> DownstreamError,
+      "INVALID_TYPE"            -> InternalError,
       "INVALID_TAXYEAR"         -> TaxYearFormatError,
-      "INVALID_INCOME_SOURCE"   -> DownstreamError,
+      "INVALID_INCOME_SOURCE"   -> InternalError,
       "NOT_FOUND_PERIOD"        -> NotFoundError,
       "NOT_FOUND_INCOME_SOURCE" -> NotFoundError,
-      "SERVER_ERROR"            -> DownstreamError,
-      "SERVICE_UNAVAILABLE"     -> DownstreamError
+      "SERVER_ERROR"            -> InternalError,
+      "SERVICE_UNAVAILABLE"     -> InternalError
     )
 
 }

@@ -21,6 +21,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import v1.mocks.validators.MockAmendReliefInvestmentValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.TaxYear
 import v1.models.request.amendReliefInvestments._
 
 class AmendReliefInvestmentDataParserSpec extends UnitSpec {
@@ -96,7 +97,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
           Right(
             AmendReliefInvestmentsRequest(
               Nino(nino),
-              taxYear,
+              TaxYear.fromMtd(taxYear),
               AmendReliefInvestmentsBody(
                 Some(Seq(VctSubscriptionsItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(23312.00), 1334.00))),
                 Some(Seq(EisSubscriptionsItem("XTAL", Some("EIS Fund X"), true, Some("2020-12-12"), Some(23312.00), 43432.00))),

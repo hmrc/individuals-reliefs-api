@@ -19,12 +19,13 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import v1.models.domain.Nino
 import v1.controllers.requestParsers.validators.AmendPensionsReliefsValidator
+import v1.models.request.TaxYear
 import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRawData, AmendPensionsReliefsRequest}
 
 class AmendPensionsReliefsRequestParser @Inject() (val validator: AmendPensionsReliefsValidator)
     extends RequestParser[AmendPensionsReliefsRawData, AmendPensionsReliefsRequest] {
 
   override protected def requestFor(data: AmendPensionsReliefsRawData): AmendPensionsReliefsRequest =
-    AmendPensionsReliefsRequest(Nino(data.nino), data.taxYear, data.body.as[AmendPensionsReliefsBody])
+    AmendPensionsReliefsRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear), data.body.as[AmendPensionsReliefsBody])
 
 }

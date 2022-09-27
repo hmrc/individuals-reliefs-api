@@ -16,10 +16,9 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
 import v1.models.domain.Nino
-import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsResponse
 
@@ -30,33 +29,25 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
   val taxYear: String = "2017-18"
   val nino: String    = "AA123456A"
 
-  class Test extends MockHttpClient with MockAppConfig {
+  trait Test { _: ConnectorTest =>
 
     val connector: RetrieveReliefInvestmentsConnector = new RetrieveReliefInvestmentsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "RetrieveReliefInvestmentsConnector" when {
     "retrieving relief investments" must {
-      val request: RetrieveReliefInvestmentsRequest = RetrieveReliefInvestmentsRequest(Nino(nino), taxYear)
+      val request: RetrieveReliefInvestmentsRequest = RetrieveReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
-      "return a valid response" in new Test {
+      "return a valid response" in new IfsTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, RetrieveReliefInvestmentsResponse))
 
-        MockedHttpClient
-          .get(
-            url = s"$baseUrl/income-tax/reliefs/investment/$nino/$taxYear",
-            config = dummyIfsHeaderCarrierConfig,
-            requiredHeaders = requiredIfsHeaders,
-            excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-          )
+        willGet(
+          url = s"$baseUrl/income-tax/reliefs/investment/$nino/$taxYear"
+        )
           .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome

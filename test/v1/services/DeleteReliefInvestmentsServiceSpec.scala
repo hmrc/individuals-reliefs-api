@@ -23,6 +23,7 @@ import v1.mocks.connectors.MockDeleteReliefInvestmentsConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,7 +35,7 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
   val validTaxYear: String           = "2019-20"
   implicit val correlationId: String = "X-123"
 
-  val requestData: DeleteReliefInvestmentsRequest = DeleteReliefInvestmentsRequest(Nino(validNino), validTaxYear)
+  val requestData: DeleteReliefInvestmentsRequest = DeleteReliefInvestmentsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
 
   trait Test extends MockDeleteReliefInvestmentsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -62,7 +63,7 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
 
           MockDeleteReliefInvestmentsConnector
             .delete(requestData)
-            .returns(Future.successful(Left(ResponseWrapper("resultId", DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
@@ -70,8 +71,8 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
       val input = Seq(
         ("NO_DATA_FOUND", NotFoundError),
         ("FORMAT_TAX_YEAR", TaxYearFormatError),
-        ("SERVER_ERROR", DownstreamError),
-        ("SERVICE_UNAVAILABLE", DownstreamError),
+        ("SERVER_ERROR", InternalError),
+        ("SERVICE_UNAVAILABLE", InternalError),
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
       )
 

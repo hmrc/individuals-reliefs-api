@@ -17,5 +17,6 @@
 package v1.models.request.deleteOtherReliefs
 
 import v1.models.domain.Nino
+import v1.models.request.TaxYear
 
-case class DeleteOtherReliefsRequest(nino: Nino, taxYear: String)
+case class DeleteOtherReliefsRequest(nino: Nino, taxYear: TaxYear)

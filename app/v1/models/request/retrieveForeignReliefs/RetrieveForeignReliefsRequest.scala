@@ -17,5 +17,6 @@
 package v1.models.request.retrieveForeignReliefs
 
 import v1.models.domain.Nino
+import v1.models.request.TaxYear
 
-case class RetrieveForeignReliefsRequest(nino: Nino, taxYear: String)
+case class RetrieveForeignReliefsRequest(nino: Nino, taxYear: TaxYear)

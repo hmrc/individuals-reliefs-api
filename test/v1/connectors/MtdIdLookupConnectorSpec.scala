@@ -18,7 +18,7 @@ package v1.connectors
 
 import mocks.MockAppConfig
 import v1.mocks.MockHttpClient
-import v1.models.errors.DownstreamError
+import v1.models.errors.InternalError
 
 import scala.concurrent.Future
 
@@ -43,7 +43,7 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
         MockedHttpClient
           .get[MtdIdLookupOutcome](
             url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
-            config = dummyDesHeaderCarrierConfig
+            config = dummyHeaderCarrierConfig
           )
           .returns(Future.successful(Right(mtdId)))
 
@@ -52,17 +52,17 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
       }
     }
 
-    "return a DownstreamError" when {
-      "the http client returns a DownstreamError" in new Test {
+    "return a InternalError" when {
+      "the http client returns a InternalError" in new Test {
         MockedHttpClient
           .get[MtdIdLookupOutcome](
             url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
-            config = dummyDesHeaderCarrierConfig
+            config = dummyHeaderCarrierConfig
           )
-          .returns(Future.successful(Left(DownstreamError)))
+          .returns(Future.successful(Left(InternalError)))
 
         val result: MtdIdLookupOutcome = await(connector.getMtdId(nino))
-        result shouldBe Left(DownstreamError)
+        result shouldBe Left(InternalError)
       }
 
       "getMtdId" should {
@@ -71,7 +71,7 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
             MockedHttpClient
               .get[MtdIdLookupOutcome](
                 url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
-                config = dummyIfsHeaderCarrierConfig
+                config = dummyHeaderCarrierConfig
               )
               .returns(Future.successful(Right(mtdId)))
 
@@ -80,17 +80,17 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
           }
         }
 
-        "return a DownstreamError" when {
-          "the http client returns a DownstreamError" in new Test {
+        "return a InternalError" when {
+          "the http client returns a InternalError" in new Test {
             MockedHttpClient
               .get[MtdIdLookupOutcome](
                 url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
-                config = dummyIfsHeaderCarrierConfig
+                config = dummyHeaderCarrierConfig
               )
-              .returns(Future.successful(Left(DownstreamError)))
+              .returns(Future.successful(Left(InternalError)))
 
             val result: MtdIdLookupOutcome = await(connector.getMtdId(nino))
-            result shouldBe Left(DownstreamError)
+            result shouldBe Left(InternalError)
           }
         }
       }

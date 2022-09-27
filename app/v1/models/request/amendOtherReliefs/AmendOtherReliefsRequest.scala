@@ -17,5 +17,6 @@
 package v1.models.request.amendOtherReliefs
 
 import v1.models.domain.Nino
+import v1.models.request.TaxYear
 
-case class AmendOtherReliefsRequest(nino: Nino, taxYear: String, body: AmendOtherReliefsBody)
+case class AmendOtherReliefsRequest(nino: Nino, taxYear: TaxYear, body: AmendOtherReliefsBody)

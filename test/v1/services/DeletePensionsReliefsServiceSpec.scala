@@ -21,8 +21,9 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockDeletePensionsReliefsConnector
 import v1.models.domain.Nino
-import v1.models.errors.{DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import v1.models.errors.{DownstreamErrorCode, DownstreamErrors, InternalError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.outcomes.ResponseWrapper
+import v1.models.request.TaxYear
 import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequest
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,7 +35,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
   val validTaxYear: String           = "2019-20"
   implicit val correlationId: String = "X-123"
 
-  val requestData: DeletePensionsReliefsRequest = DeletePensionsReliefsRequest(Nino(validNino), validTaxYear)
+  val requestData: DeletePensionsReliefsRequest = DeletePensionsReliefsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
 
   trait Test extends MockDeletePensionsReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -62,7 +63,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
 
           MockDeletePensionsReliefsConnector
             .delete(requestData)
-            .returns(Future.successful(Left(ResponseWrapper("resultId", DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
@@ -70,8 +71,8 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
       val input = Seq(
         ("NOT_FOUND", NotFoundError),
         ("INVALID_TAX_YEAR", TaxYearFormatError),
-        ("SERVER_ERROR", DownstreamError),
-        ("SERVICE_UNAVAILABLE", DownstreamError),
+        ("SERVER_ERROR", InternalError),
+        ("SERVICE_UNAVAILABLE", InternalError),
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
       )
 

@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
 import v1.connectors.DownstreamUri.IfsUri
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,11 +30,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendReliefInvestmentsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def amend(
-      request: AmendReliefInvestmentsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DesOutcome[Unit]] = {
+      request: AmendReliefInvestmentsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     put(
       body = request.body,
-      IfsUri[Unit](s"income-tax/reliefs/investment/${request.nino.nino}/${request.taxYear}")
+      IfsUri[Unit](s"income-tax/reliefs/investment/${request.nino.nino}/${request.taxYear.asMtd}")
     )
   }
 

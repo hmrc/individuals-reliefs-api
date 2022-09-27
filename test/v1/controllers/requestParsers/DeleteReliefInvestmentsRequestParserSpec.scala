@@ -20,6 +20,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import v1.mocks.validators.MockDeleteReliefInvestmentsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
+import v1.models.request.TaxYear
 import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest}
 
 class DeleteReliefInvestmentsRequestParserSpec extends UnitSpec {
@@ -40,7 +41,7 @@ class DeleteReliefInvestmentsRequestParserSpec extends UnitSpec {
         MockDeleteReliefInvestmentsValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(DeleteReliefInvestmentsRequest(Nino(nino), taxYear))
+          Right(DeleteReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
       }
     }
 
