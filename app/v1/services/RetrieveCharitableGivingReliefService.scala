@@ -42,8 +42,8 @@ class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharit
       correlationId: String): Future[ServiceOutcome[RetrieveCharitableGivingReliefResponse]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
+    } yield responseWrapper
 
     result.value
   }

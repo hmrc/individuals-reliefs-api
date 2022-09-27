@@ -40,8 +40,8 @@ class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharita
       logContext: EndpointLogContext,
       correlationId: String): Future[DeleteCharitableGivingTaxReliefServiceOutcome] = {
     val result = for {
-      desResponseWrapper <- EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(desErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(desErrorMap))
+    } yield responseWrapper
     result.value
   }
 

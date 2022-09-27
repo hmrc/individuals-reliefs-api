@@ -39,8 +39,8 @@ class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector)
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))
+    } yield responseWrapper
 
     result.value
   }

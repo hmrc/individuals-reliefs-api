@@ -40,8 +40,8 @@ class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: Creat
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.createAmend(request)).leftMap(mapDownstreamErrors(desErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.createAmend(request)).leftMap(mapDownstreamErrors(desErrorMap))
+    } yield responseWrapper
 
     result.value
   }

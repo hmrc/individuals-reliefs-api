@@ -40,8 +40,8 @@ class RetrievePensionsReliefsService @Inject() (connector: RetrievePensionsRelie
       correlationId: String): Future[ServiceOutcome[RetrievePensionsReliefsResponse]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
-    } yield desResponseWrapper
+      responseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
+    } yield responseWrapper
 
     result.value
   }
