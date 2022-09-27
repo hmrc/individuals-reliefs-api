@@ -47,11 +47,8 @@ trait AppConfig {
 
   // Tax Year Specific (TYS) IFS Config
   def tysIfsBaseUrl: String
-
   def tysIfsEnv: String
-
   def tysIfsToken: String
-
   def tysIfsEnvironmentHeaders: Option[Seq[String]]
 
   lazy val taxYearSpecificIfsDownstreamConfig: DownstreamConfig =

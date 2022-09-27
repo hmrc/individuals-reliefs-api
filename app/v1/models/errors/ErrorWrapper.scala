@@ -19,6 +19,8 @@ package v1.models.errors
 import play.api.libs.json.{JsObject, Json, Writes}
 import v1.models.audit.AuditError
 
+/** If the errors arg is defined, error should be a BadRequest.
+  */
 case class ErrorWrapper(correlationId: String, error: MtdError, errors: Option[Seq[MtdError]] = None) {
 
   private def allErrors: Seq[MtdError] = errors match {
