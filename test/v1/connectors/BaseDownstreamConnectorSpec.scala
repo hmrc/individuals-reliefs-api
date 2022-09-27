@@ -84,7 +84,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
 
   "for DES" when {
     "post" must {
-      "posts with the required des headers and returns the result" in new DesTest {
+      "posts with the required headers and returns the result" in new DesTest {
         implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
         val requiredDesHeadersPost: Seq[(String, String)] = requiredDesHeaders ++ Seq("Content-Type" -> "application/json")
 
@@ -102,7 +102,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "get" must {
-      "get with the required des headers and return the result" in new DesTest {
+      "get with the required headers and return the result" in new DesTest {
         implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
 
         MockedHttpClient
@@ -119,7 +119,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "delete" must {
-      "delete with the required des headers and return the result" in new DesTest {
+      "delete with the required headers and return the result" in new DesTest {
         implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
 
         MockedHttpClient
@@ -135,7 +135,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "put" must {
-      "put with the required des headers and return result" in new DesTest {
+      "put with the required headers and return result" in new DesTest {
         implicit val hc: HeaderCarrier                   = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
         val requiredDesHeadersPut: Seq[(String, String)] = requiredDesHeaders ++ Seq("Content-Type" -> "application/json")
 
@@ -197,7 +197,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "get" must {
-      "get with the required des headers and return the result" in new IfsTest {
+      "get with the required headers and return the result" in new IfsTest {
         implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
 
         MockedHttpClient
@@ -214,7 +214,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "delete" must {
-      "delete with the required des headers and return the result" in new IfsTest {
+      "delete with the required headers and return the result" in new IfsTest {
         implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
 
         MockedHttpClient
@@ -230,7 +230,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "put" must {
-      "put with the required des headers and return result" in new IfsTest {
+      "put with the required headers and return result" in new IfsTest {
         implicit val hc: HeaderCarrier                   = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
         val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
 
@@ -292,7 +292,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "get" must {
-      "get with the required des headers and return the result" in new TysIfsTest {
+      "get with the required headers and return the result" in new TysIfsTest {
         implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
 
         MockedHttpClient
@@ -309,7 +309,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "delete" must {
-      "delete with the required des headers and return the result" in new TysIfsTest {
+      "delete with the required headers and return the result" in new TysIfsTest {
         implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
 
         MockedHttpClient
@@ -325,7 +325,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "put" must {
-      "put with the required des headers and return result" in new TysIfsTest {
+      "put with the required headers and return result" in new TysIfsTest {
         implicit val hc: HeaderCarrier                      = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
         val requiredTysIfsHeadersPut: Seq[(String, String)] = requiredTysIfsHeaders ++ Seq("Content-Type" -> "application/json")
 

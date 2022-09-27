@@ -117,7 +117,7 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
           MtdErrorWithCustomMessage(ValueFormatError.code) | MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _               => unhandledError(errorWrapper)
     }
   }

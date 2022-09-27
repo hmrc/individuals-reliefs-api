@@ -23,15 +23,15 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrievePensionsReliefsConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import v1.models.errors.{InternalError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
-import v1.support.DesResponseMappingSupport
+import v1.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrievePensionsReliefsService @Inject() (connector: RetrievePensionsReliefsConnector) extends DesResponseMappingSupport with Logging {
+class RetrievePensionsReliefsService @Inject() (connector: RetrievePensionsReliefsConnector) extends DownstreamResponseMappingSupport with Logging {
 
   def retrieve(request: RetrievePensionsReliefsRequest)(implicit
       hc: HeaderCarrier,
@@ -40,7 +40,7 @@ class RetrievePensionsReliefsService @Inject() (connector: RetrievePensionsRelie
       correlationId: String): Future[ServiceOutcome[RetrievePensionsReliefsResponse]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
     } yield desResponseWrapper
 
     result.value
@@ -51,8 +51,8 @@ class RetrievePensionsReliefsService @Inject() (connector: RetrievePensionsRelie
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "NOT_FOUND"                 -> NotFoundError,
-      "SERVER_ERROR"              -> DownstreamError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamError
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
 }

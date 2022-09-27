@@ -25,12 +25,12 @@ import v1.connectors.AmendForeignReliefsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.amendForeignReliefs.AmendForeignReliefsRequest
-import v1.support.DesResponseMappingSupport
+import v1.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendForeignReliefsService @Inject() (connector: AmendForeignReliefsConnector) extends DesResponseMappingSupport with Logging {
+class AmendForeignReliefsService @Inject() (connector: AmendForeignReliefsConnector) extends DownstreamResponseMappingSupport with Logging {
 
   def amend(request: AmendForeignReliefsRequest)(implicit
       hc: HeaderCarrier,
@@ -39,7 +39,7 @@ class AmendForeignReliefsService @Inject() (connector: AmendForeignReliefsConnec
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))
     } yield desResponseWrapper
 
     result.value
@@ -49,8 +49,8 @@ class AmendForeignReliefsService @Inject() (connector: AmendForeignReliefsConnec
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
-      "SERVER_ERROR"              -> DownstreamError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamError
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
 }

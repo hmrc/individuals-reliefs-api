@@ -21,7 +21,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockRetrievePensionsReliefsConnector
 import v1.models.domain.Nino
-import v1.models.errors.{DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import v1.models.errors.{DownstreamErrorCode, DownstreamErrors, InternalError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
@@ -78,7 +78,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
 
             MockRetrievePensionsReliefsConnector
               .retrieve(requestData)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
             await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
@@ -87,8 +87,8 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
           ("INVALID_TAX_YEAR", TaxYearFormatError),
           ("NOT_FOUND", NotFoundError),
-          ("SERVER_ERROR", DownstreamError),
-          ("SERVICE_UNAVAILABLE", DownstreamError)
+          ("SERVER_ERROR", InternalError),
+          ("SERVICE_UNAVAILABLE", InternalError)
         )
 
         input.foreach(args => (serviceError _).tupled(args))

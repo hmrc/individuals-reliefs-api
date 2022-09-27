@@ -25,13 +25,13 @@ import v1.connectors.DeleteCharitableGivingTaxReliefConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
-import v1.support.DesResponseMappingSupport
+import v1.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharitableGivingTaxReliefConnector)
-    extends DesResponseMappingSupport
+    extends DownstreamResponseMappingSupport
     with Logging {
 
   def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
@@ -40,7 +40,7 @@ class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharita
       logContext: EndpointLogContext,
       correlationId: String): Future[DeleteCharitableGivingTaxReliefServiceOutcome] = {
     val result = for {
-      desResponseWrapper <- EitherT(connector.delete(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(desErrorMap))
     } yield desResponseWrapper
     result.value
   }
@@ -48,16 +48,16 @@ class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharita
   private def desErrorMap: Map[String, MtdError] =
     Map(
       "INVALID_NINO"                      -> NinoFormatError,
-      "INVALID_TYPE"                      -> DownstreamError,
+      "INVALID_TYPE"                      -> InternalError,
       "INVALID_TAXYEAR"                   -> TaxYearFormatError,
-      "INVALID_PAYLOAD"                   -> DownstreamError,
+      "INVALID_PAYLOAD"                   -> InternalError,
       "NOT_FOUND_INCOME_SOURCE"           -> NotFoundError,
-      "MISSING_CHARITIES_NAME_GIFT_AID"   -> DownstreamError,
-      "MISSING_CHARITIES_NAME_INVESTMENT" -> DownstreamError,
-      "MISSING_INVESTMENT_AMOUNT"         -> DownstreamError,
+      "MISSING_CHARITIES_NAME_GIFT_AID"   -> InternalError,
+      "MISSING_CHARITIES_NAME_INVESTMENT" -> InternalError,
+      "MISSING_INVESTMENT_AMOUNT"         -> InternalError,
       "INVALID_ACCOUNTING_PERIOD"         -> RuleTaxYearNotSupportedError,
-      "SERVER_ERROR"                      -> DownstreamError,
-      "SERVICE_UNAVAILABLE"               -> DownstreamError,
+      "SERVER_ERROR"                      -> InternalError,
+      "SERVICE_UNAVAILABLE"               -> InternalError,
       "GONE"                              -> NotFoundError,
       "NOT_FOUND"                         -> NotFoundError
     )

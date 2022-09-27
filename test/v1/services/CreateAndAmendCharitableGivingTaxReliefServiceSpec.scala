@@ -88,25 +88,25 @@ class CreateAndAmendCharitableGivingTaxReliefServiceSpec extends ServiceSpec {
           s"a $desErrorCode error is returned from the service" in new Test {
             MockCreateAndAmendCharitableGivingTaxReliefConnector
               .createAmend(requestData)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
             await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = Seq(
           ("INVALID_NINO", NinoFormatError),
-          ("INVALID_TYPE", DownstreamError),
+          ("INVALID_TYPE", InternalError),
           ("INVALID_TAXYEAR", TaxYearFormatError),
-          ("INVALID_PAYLOAD", DownstreamError),
+          ("INVALID_PAYLOAD", InternalError),
           ("NOT_FOUND_INCOME_SOURCE", NotFoundError),
           ("MISSING_CHARITIES_NAME_GIFT_AID", RuleGiftAidNonUkAmountWithoutNamesError),
-          ("MISSING_GIFT_AID_AMOUNT", DownstreamError),
+          ("MISSING_GIFT_AID_AMOUNT", InternalError),
           ("MISSING_CHARITIES_NAME_INVESTMENT", RuleGiftsNonUkAmountWithoutNamesError),
-          ("MISSING_INVESTMENT_AMOUNT", DownstreamError),
+          ("MISSING_INVESTMENT_AMOUNT", InternalError),
           ("INVALID_ACCOUNTING_PERIOD", RuleTaxYearNotSupportedError),
-          ("SERVER_ERROR", DownstreamError),
-          ("SERVICE_UNAVAILABLE", DownstreamError),
-          ("GONE", DownstreamError),
+          ("SERVER_ERROR", InternalError),
+          ("SERVICE_UNAVAILABLE", InternalError),
+          ("GONE", InternalError),
           ("NOT_FOUND", NotFoundError)
         )
 

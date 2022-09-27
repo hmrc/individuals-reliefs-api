@@ -23,15 +23,15 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveOtherReliefsConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import v1.models.errors.{InternalError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsResponse
-import v1.support.DesResponseMappingSupport
+import v1.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveOtherReliefsService @Inject() (connector: RetrieveOtherReliefsConnector) extends DesResponseMappingSupport with Logging {
+class RetrieveOtherReliefsService @Inject() (connector: RetrieveOtherReliefsConnector) extends DownstreamResponseMappingSupport with Logging {
 
   def retrieve(request: RetrieveOtherReliefsRequest)(implicit
       hc: HeaderCarrier,
@@ -40,7 +40,7 @@ class RetrieveOtherReliefsService @Inject() (connector: RetrieveOtherReliefsConn
       correlationId: String): Future[ServiceOutcome[RetrieveOtherReliefsResponse]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
     } yield desResponseWrapper
 
     result.value
@@ -51,8 +51,8 @@ class RetrieveOtherReliefsService @Inject() (connector: RetrieveOtherReliefsConn
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> DownstreamError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamError
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
 }

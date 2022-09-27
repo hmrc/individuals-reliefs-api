@@ -24,7 +24,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v1.models.errors._
-import v1.stubs.{ AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{ AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
 
@@ -52,7 +52,7 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
       s"""
          |      {
          |        "code": "$code",
-         |        "reason": "des message"
+         |        "reason": "message"
          |      }
     """.stripMargin
 
@@ -67,7 +67,7 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.POST, desUri, Status.NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.POST, desUri, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().delete())
@@ -106,14 +106,14 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
 
-      "des service error" when {
-        def serviceErrorTest(desStatus: Int, desCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"des returns an $desCode error and status $desStatus" in new Test {
+      "downstream service error" when {
+        def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DesStub.onError(DesStub.POST, desUri, desStatus, errorBody(desCode))
+              DownstreamStub.onError(DownstreamStub.POST, desUri, downstreamStatus, errorBody(downstreamCode))
             }
 
             val response: WSResponse = await(request().delete())
@@ -124,17 +124,17 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
 
         val input = Seq(
           (Status.BAD_REQUEST, "INVALID_NINO", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, DownstreamError),
+          (Status.BAD_REQUEST, "INVALID_TYPE", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "INVALID_TAXYEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, DownstreamError),
+          (Status.BAD_REQUEST, "INVALID_PAYLOAD", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.FORBIDDEN, "NOT_FOUND_INCOME_SOURCE", Status.NOT_FOUND, NotFoundError),
-          (Status.FORBIDDEN, "MISSING_CHARITIES_NAME_GIFT_AID", Status.INTERNAL_SERVER_ERROR, DownstreamError),
-          (Status.FORBIDDEN, "MISSING_GIFT_AID_AMOUNT", Status.INTERNAL_SERVER_ERROR, DownstreamError),
-          (Status.FORBIDDEN, "MISSING_CHARITIES_NAME_INVESTMENT", Status.INTERNAL_SERVER_ERROR, DownstreamError),
-          (Status.FORBIDDEN, "MISSING_INVESTMENT_AMOUNT", Status.INTERNAL_SERVER_ERROR, DownstreamError),
+          (Status.FORBIDDEN, "MISSING_CHARITIES_NAME_GIFT_AID", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.FORBIDDEN, "MISSING_GIFT_AID_AMOUNT", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.FORBIDDEN, "MISSING_CHARITIES_NAME_INVESTMENT", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.FORBIDDEN, "MISSING_INVESTMENT_AMOUNT", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.FORBIDDEN, "INVALID_ACCOUNTING_PERIOD", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, DownstreamError),
-          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, DownstreamError),
+          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.GONE, "GONE", Status.NOT_FOUND, NotFoundError),
           (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError)
         )

@@ -219,7 +219,7 @@ class AmendPensionsReliefsControllerSpec
 
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
-          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (InternalError, INTERNAL_SERVER_ERROR),
           (TaxYearFormatError, BAD_REQUEST)
         )
 

@@ -23,14 +23,14 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.DeleteReliefInvestmentsConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import v1.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
-import v1.support.DesResponseMappingSupport
+import v1.support.DownstreamResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteReliefInvestmentsService @Inject() (connector: DeleteReliefInvestmentsConnector) extends DesResponseMappingSupport with Logging {
+class DeleteReliefInvestmentsService @Inject() (connector: DeleteReliefInvestmentsConnector) extends DownstreamResponseMappingSupport with Logging {
 
   def delete(request: DeleteReliefInvestmentsRequest)(implicit
       hc: HeaderCarrier,
@@ -38,7 +38,7 @@ class DeleteReliefInvestmentsService @Inject() (connector: DeleteReliefInvestmen
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[Unit]] = {
     val result = for {
-      desResponseWrapper <- EitherT(connector.delete(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(desErrorMap))
     } yield desResponseWrapper
     result.value
   }
@@ -48,8 +48,8 @@ class DeleteReliefInvestmentsService @Inject() (connector: DeleteReliefInvestmen
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> DownstreamError,
-      "SERVICE_UNAVAILABLE"       -> DownstreamError
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
 }

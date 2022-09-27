@@ -63,7 +63,7 @@ class DeleteOtherReliefsServiceSpec extends UnitSpec {
 
           MockDeleteOtherReliefsConnector
             .delete(requestData)
-            .returns(Future.successful(Left(ResponseWrapper("resultId", DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
@@ -71,8 +71,8 @@ class DeleteOtherReliefsServiceSpec extends UnitSpec {
       val input = Seq(
         ("NO_DATA_FOUND", NotFoundError),
         ("FORMAT_TAX_YEAR", TaxYearFormatError),
-        ("SERVER_ERROR", DownstreamError),
-        ("SERVICE_UNAVAILABLE", DownstreamError),
+        ("SERVER_ERROR", InternalError),
+        ("SERVICE_UNAVAILABLE", InternalError),
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
       )
 

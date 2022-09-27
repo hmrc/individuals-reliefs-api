@@ -90,20 +90,20 @@ class RetrieveCharitableGivingReliefServiceSpec extends ServiceSpec {
 
             MockRetrieveCharitableGivingReliefConnector
               .retrieve(request)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
             await(service.retrieve(request)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = Seq(
           ("INVALID_NINO", NinoFormatError),
-          ("INVALID_TYPE", DownstreamError),
+          ("INVALID_TYPE", InternalError),
           ("INVALID_TAXYEAR", TaxYearFormatError),
-          ("INVALID_INCOME_SOURCE", DownstreamError),
+          ("INVALID_INCOME_SOURCE", InternalError),
           ("NOT_FOUND_PERIOD", NotFoundError),
           ("NOT_FOUND_INCOME_SOURCE", NotFoundError),
-          ("SERVER_ERROR", DownstreamError),
-          ("SERVICE_UNAVAILABLE", DownstreamError)
+          ("SERVER_ERROR", InternalError),
+          ("SERVICE_UNAVAILABLE", InternalError)
         )
 
         input.foreach(args => (serviceError _).tupled(args))

@@ -21,7 +21,7 @@ import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendPensionsReliefsConnector
-import v1.models.errors.{DesErrorCode, DesErrors, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, TaxYearFormatError}
+import v1.models.errors.{DownstreamErrorCode, DownstreamErrors, InternalError, ErrorWrapper, MtdError, NinoFormatError, TaxYearFormatError}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
 import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRequest, PensionReliefs}
@@ -77,7 +77,7 @@ class AmendPensionsReliefsServiceSpec extends UnitSpec {
 
           MockAmendPensionsReliefsConnector
             .amend(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
           await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -85,9 +85,9 @@ class AmendPensionsReliefsServiceSpec extends UnitSpec {
       val input = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-        "INVALID_PAYLOAD"           -> DownstreamError,
-        "SERVER_ERROR"              -> DownstreamError,
-        "SERVICE_UNAVAILABLE"       -> DownstreamError
+        "INVALID_PAYLOAD"           -> InternalError,
+        "SERVER_ERROR"              -> InternalError,
+        "SERVICE_UNAVAILABLE"       -> InternalError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

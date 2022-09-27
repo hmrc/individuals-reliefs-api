@@ -115,7 +115,7 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
 
             MockAmendReliefInvestmentsConnector
               .amend(requestData)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
             await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
@@ -123,8 +123,8 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
         val input = Seq(
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
           ("FORMAT_TAX_YEAR", TaxYearFormatError),
-          ("SERVER_ERROR", DownstreamError),
-          ("SERVICE_UNAVAILABLE", DownstreamError)
+          ("SERVER_ERROR", InternalError),
+          ("SERVICE_UNAVAILABLE", InternalError)
         )
 
         input.foreach(args => (serviceError _).tupled(args))
