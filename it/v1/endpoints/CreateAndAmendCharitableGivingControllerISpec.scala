@@ -46,6 +46,21 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
         response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
+
+      "any valid request is made with a TYS tax year" in new TysIfsTest {
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, OK, JsObject.empty)
+        }
+
+        val response: WSResponse = await(request().put(requestJson))
+        response.status shouldBe OK
+        response.json shouldBe responseBody
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+      }
+
     }
 
     "return error according to spec" when {
@@ -159,7 +174,7 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
           }
         }
 
-        val input = Seq(
+        val errors = Seq(
           (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_TAXYEAR", BAD_REQUEST, TaxYearFormatError),
@@ -175,7 +190,16 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
           (GONE, "GONE", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError)
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+
+        val extraTysErrors = Seq(
+          (BAD_REQUEST, "INVALID_INCOMESOURCE_TYPE", BAD_REQUEST, InternalError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
+          (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_INCOME_SOURCE", INTERNAL_SERVER_ERROR, InternalError)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }
@@ -249,10 +273,10 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
 
   }
 
-//  private trait TysIfsTest extends Test {
-//    def mtdTaxYear:String = "2023-24"
-//    def downstreamTaxYear:String = "23-24"
-//    def downstreamUri:String = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
-//  }
+  private trait TysIfsTest extends Test {
+    def mtdTaxYear:String = "2023-24"
+    def downstreamTaxYear:String = "23-24"
+    def downstreamUri:String = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
+  }
 
 }
