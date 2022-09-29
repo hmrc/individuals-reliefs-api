@@ -46,8 +46,8 @@ class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: Creat
     result.value
   }
 
-  private def desErrorMap =
-    Map(
+  private def downstreamErrorMap: Map[String, MtdError] =
+    vel errors = Map(
       "INVALID_NINO"                      -> NinoFormatError,
       "INVALID_TYPE"                      -> InternalError,
       "INVALID_TAXYEAR"                   -> TaxYearFormatError,
@@ -63,5 +63,17 @@ class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: Creat
       "GONE"                              -> InternalError,
       "NOT_FOUND"                         -> NotFoundError
     )
+
+  val extraTysErrors = Map(
+    "INVALID_INCOMESOURCE_TYPE" -> StandardDownsteamError,
+    "INVALID_TAX_YEAR" -> TaxYearFormatError,
+    //invalid payload if "Internal Error" mapping above is not correct.
+    "INVALID_CORRELATIONID" -> StandardDownstreamError,
+    "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+    "INCOMPATIBLE_INCOME_SOURCE" -> StandardDownstreamError,
+    "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+  )
+
+  errors ++ extraTysErrors
 
 }
