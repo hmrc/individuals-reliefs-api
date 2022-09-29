@@ -57,28 +57,46 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
       gifts = Some(giftModel)
     )
 
-  trait Test { _: ConnectorTest =>
+  "CreateAndAmendCharitableGivingTaxReliefConnector" when {
+    "createOrAmendCharitableGivingTaxRelief is called" must {
+      "return 200 for a success scenario" in new DesTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
-    val connector: CreateAndAmendCharitableGivingTaxReliefConnector = new CreateAndAmendCharitableGivingTaxReliefConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
+        willPost(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}", body = requestBody)
+          .returns(Future.successful(outcome))
+
+        val result = await(connector.createAmend(request))
+
+        result shouldBe outcome
+      }
+
+    }
+    "createOrAmendCharitableGivingTaxRelief is called for a TYS tax year" must {
+      "return 200 for a success scenario" in new TysIfsTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        willPost(url = s"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual", body = requestBody)
+          .returns(Future.successful(outcome))
+
+        val result = await(connector.createAmend(request))
+
+        result shouldBe outcome
+      }
+    }
 
   }
 
-  "doConnector" must {
+  trait Test { _: ConnectorTest =>
+    def taxYear: TaxYear
 
-    val request: CreateAndAmendCharitableGivingTaxReliefRequest =
-      CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYearMtd), requestBody)
+    protected val connector: CreateAndAmendCharitableGivingTaxReliefConnector =
+      new CreateAndAmendCharitableGivingTaxReliefConnector(http = mockHttpClient, appConfig = mockAppConfig)
 
-    "return 200 for a success scenario" in new DesTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
+    protected val request: CreateAndAmendCharitableGivingTaxReliefRequest =
+      CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), taxYear, requestBody)
 
-      willPost(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/$taxYearDownstream", body = requestBody)
-        .returns(Future.successful(outcome))
+    protected val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      await(connector.createAmend(request)) shouldBe outcome
-    }
   }
 
 }
