@@ -81,6 +81,21 @@ class RetrieveCharitableGivingReliefConnectorSpec extends ConnectorSpec {
         await(connector.retrieve(request)) shouldBe outcome
       }
     }
+
+    "retrieveCharitableGivingRelief is called for a TaxYearSpecific tax year" must {
+      "return a 200 for success scenario" in {
+        new TysIfsTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          val outcome = Right(ResponseWrapper(correlationId, response))
+
+          willGet(s"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
+            .returns(Future.successful(outcome))
+
+          await(connector.retrieve(request)) shouldBe outcome
+        }
+      }
+    }
   }
 
 }
