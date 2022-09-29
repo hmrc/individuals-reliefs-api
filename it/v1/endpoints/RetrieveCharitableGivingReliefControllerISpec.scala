@@ -31,15 +31,15 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
 
   private trait Test {
 
-    val nino: String              = "AA123456A"
-    val taxYearMtd: String        = "2017-18"
-    val taxYearDownstream: String = "2018"
+    def nino: String              = "AA123456A"
+    def taxYear: String
+    def downstreamTaxYear: String
 
     val downstreamResponse: JsValue = charitableGivingReliefResponseDownstreamJson
-    val mtdResponse: JsValue        = charitableGivingReliefResponseMtdJsonWithHateoas(nino, taxYearMtd)
+    val mtdResponse: JsValue        = charitableGivingReliefResponseMtdJsonWithHateoas(nino, taxYear)
 
-    def uri: String           = s"/charitable-giving/$nino/$taxYearMtd"
-    def downstreamUri: String = s"/income-tax/nino/$nino/income-source/charity/annual/$taxYearDownstream"
+    def uri: String           = s"/charitable-giving/$nino/$taxYear"
+    def downstreamUri: String
 
     def setupStubs(): StubMapping
 
@@ -62,9 +62,22 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
 
   }
 
+  private trait NonTysTest extends Test {
+    def taxYear: String           = "2020-21"
+    def downstreamTaxYear: String = "2021"
+    def downstreamUri: String     = s"/income-tax/nino/$nino/income-source/charity/annual/$downstreamTaxYear"
+
+  }
+
+//  private trait TysIfsTest extends Test {
+//    def taxYear: String           = "2023-24"
+//    def downstreamTaxYear: String = "23-24"
+//    def downstreamUri: String      = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
+//  }
+
   "Calling the 'Retrieve Charitable Giving Tax Relief' endpoint" should {
     "return a 200 status code" when {
-      "any valid request is made" in new Test {
+      "any valid request is made" in new NonTysTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -84,10 +97,10 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
     "return error according to spec" when {
       "validation error" when {
         def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
-            override val nino: String       = requestNino
-            override val taxYearMtd: String = requestTaxYear
+            override def nino: String       = requestNino
+            override def taxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -113,7 +126,7 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
