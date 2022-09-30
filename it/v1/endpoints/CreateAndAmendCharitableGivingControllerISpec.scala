@@ -196,7 +196,9 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
-          (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_INCOME_SOURCE", INTERNAL_SERVER_ERROR, InternalError)
+          (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_INCOME_SOURCE", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
+
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
