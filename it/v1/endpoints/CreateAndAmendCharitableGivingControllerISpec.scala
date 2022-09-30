@@ -192,7 +192,7 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
         )
 
         val extraTysErrors = Seq(
-          (BAD_REQUEST, "INVALID_INCOMESOURCE_TYPE", BAD_REQUEST, InternalError),
+          (BAD_REQUEST, "INVALID_INCOMESOURCE_TYPE", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
