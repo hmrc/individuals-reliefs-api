@@ -178,7 +178,6 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
         )
 
-        //errors.foreach(args => (serviceErrorTest _).tupled(args))
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }

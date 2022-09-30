@@ -26,14 +26,8 @@ import scala.concurrent.Future
 
 class RetrieveCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
-  private val taxYearMtd        = "2017-18"
-  private val taxYearDownstream = "2018"
   private val nino              = "AA123456A"
 
-  private val request = RetrieveCharitableGivingReliefRequest(
-    nino = Nino(nino),
-    taxYear = TaxYear.fromMtd(taxYearMtd)
-  )
 
   private val nonUkCharitiesModel = NonUkCharities(
     charityNames = Some(Seq("non-UK charity 1", "non-UK charity 2")),
@@ -61,9 +55,16 @@ class RetrieveCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
   trait Test { _: ConnectorTest =>
 
+    def taxYear: TaxYear
+
     val connector: RetrieveCharitableGivingReliefConnector = new RetrieveCharitableGivingReliefConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
+    )
+
+    protected val request = RetrieveCharitableGivingReliefRequest(
+      nino = Nino(nino),
+      taxYear = taxYear
     )
 
   }
@@ -72,9 +73,10 @@ class RetrieveCharitableGivingReliefConnectorSpec extends ConnectorSpec {
     "retrieve" must {
       "return a 200 status for a success scenario" in new DesTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, response))
+        def taxYear = TaxYear.fromMtd("2018-19")
 
         willGet(
-          url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/$taxYearDownstream"
+          url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
         )
           .returns(Future.successful(outcome))
 
