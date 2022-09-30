@@ -52,14 +52,6 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
       )
     }
 
-    def errorBody(code: String): String =
-      s"""
-         |{
-         |  "code": "$code",
-         |  "reason": "downstream message"
-         |}
-      """.stripMargin
-
   }
 
   private trait NonTysTest extends Test {
@@ -69,15 +61,31 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
 
   }
 
-//  private trait TysIfsTest extends Test {
-//    def taxYear: String           = "2023-24"
-//    def downstreamTaxYear: String = "23-24"
-//    def downstreamUri: String      = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
-//  }
+  private trait TysIfsTest extends Test {
+    def taxYear: String           = "2023-24"
+    def downstreamTaxYear: String = "23-24"
+    def downstreamUri: String      = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
+  }
 
   "Calling the 'Retrieve Charitable Giving Tax Relief' endpoint" should {
     "return a 200 status code" when {
       "any valid request is made" in new NonTysTest {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponse)
+        }
+
+        val response: WSResponse = await(request().get())
+        response.status shouldBe OK
+        response.json shouldBe mtdResponse
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
+
+      "any valid request is made with a Tax Year Specific year" in new TysIfsTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -141,7 +149,15 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
           }
         }
 
-        val input = Seq(
+        def errorBody(code: String): String =
+          s"""
+             |{
+             |  "code": "$code",
+             |  "reason": "downstream message"
+             |}
+          """.stripMargin
+
+        val errors = Seq(
           (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_TAXYEAR", BAD_REQUEST, TaxYearFormatError),
@@ -152,7 +168,18 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+        val extraTysErrors = Seq(
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_INCOMESOURCE_TYPE", INTERNAL_SERVER_ERROR, InternalError),
+          (NOT_FOUND, "SUBMISSION_PERIOD_NOT_FOUND", NOT_FOUND, NotFoundError),
+          (NOT_FOUND, "INCOME_DATA_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+        )
+
+        //errors.foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }
