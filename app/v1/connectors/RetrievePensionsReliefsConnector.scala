@@ -20,7 +20,7 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
-import v1.connectors.DownstreamUri.DesUri
+import v1.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
 import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
@@ -28,17 +28,20 @@ import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsRespons
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrievePensionsReliefsConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieve(request: RetrievePensionsReliefsRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[RetrievePensionsReliefsResponse]] = {
+                                                        hc: HeaderCarrier,
+                                                        ec: ExecutionContext,
+                                                        correlationId: String): Future[DownstreamOutcome[RetrievePensionsReliefsResponse]] = {
 
-    val url = s"income-tax/reliefs/pensions/${request.nino.nino}/${request.taxYear.asMtd}"
-    get(
-      DesUri[RetrievePensionsReliefsResponse](s"$url")
-    )
+    val downstreamUri =
+      if (request.taxYear.useTaxYearSpecificApi) {
+        TaxYearSpecificIfsUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/${request.taxYear.asTysDownstream}/${request.nino.nino}")
+      } else {
+        DesUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/${request.nino.nino}/${request.taxYear.asDownstream}")
+      }
+    get(downstreamUri)
   }
 
 }
