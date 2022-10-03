@@ -21,7 +21,16 @@ import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendPensionsReliefsConnector
-import v1.models.errors.{DownstreamErrorCode, DownstreamErrors, InternalError, ErrorWrapper, MtdError, NinoFormatError, TaxYearFormatError}
+import v1.models.errors.{
+  DownstreamErrorCode,
+  DownstreamErrors,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  RuleTaxYearNotSupportedError,
+  TaxYearFormatError
+}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
 import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRequest, PensionReliefs}
@@ -83,11 +92,13 @@ class AmendPensionsReliefsServiceSpec extends UnitSpec {
         }
 
       val input = Seq(
+        "INVALID_CORRELATIONID"     -> InternalError,
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR"          -> TaxYearFormatError,
         "INVALID_PAYLOAD"           -> InternalError,
         "SERVER_ERROR"              -> InternalError,
-        "SERVICE_UNAVAILABLE"       -> InternalError
+        "SERVICE_UNAVAILABLE"       -> InternalError,
+        "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError
       )
 
       input.foreach(args => (serviceError _).tupled(args))

@@ -32,7 +32,7 @@ trait MockAmendPensionsReliefsConnector extends MockFactory {
 
     def amend(requestData: AmendPensionsReliefsRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockAmendPensionsReliefsConnector
-        .amend(_: AmendPensionsReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .createOrAmendPensionsRelief(_: AmendPensionsReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
 
