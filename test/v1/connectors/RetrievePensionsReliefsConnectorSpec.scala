@@ -26,33 +26,57 @@ import scala.concurrent.Future
 
 class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYear: String = "2017-18"
-  val nino: String    = "AA123456A"
+  val nino: String = "AA123456A"
+  val taxableEntityId: String = "AA123456A"
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    _: ConnectorTest =>
+
+    def taxYear: TaxYear
 
     val connector: RetrievePensionsReliefsConnector = new RetrievePensionsReliefsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
-
+    protected val request: RetrievePensionsReliefsRequest =
+      RetrievePensionsReliefsRequest(
+        nino = Nino(nino),
+        taxYear = taxYear,
+      )
   }
 
   "RetrievePensionsReliefsConnector" when {
     "retrieving pensions reliefs" must {
-      val request: RetrievePensionsReliefsRequest = RetrievePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
-
       "return a valid response" in new DesTest with Test {
+
         val outcome = Right(ResponseWrapper(correlationId, RetrievePensionsReliefsResponse))
 
+        def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
+
         willGet(
-          url = s"$baseUrl/income-tax/reliefs/pensions/$nino/$taxYear"
+          url = s"$baseUrl/income-tax/reliefs/pensions/$nino/${taxYear.asDownstream}"
         )
           .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
       }
     }
-  }
 
+    "retrievePensionsRelief called for a Tax Year Specific tax year" must {
+      "return a 200 status for a success scenario" in
+        new TysIfsTest with Test {
+
+          val outcome = Right(ResponseWrapper(correlationId, RetrievePensionsReliefsResponse))
+
+          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          willGet(
+            url = s"$baseUrl/income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$taxableEntityId"
+          )
+            .returns(Future.successful(outcome))
+
+          await(connector.retrieve(request)) shouldBe outcome
+        }
+    }
+  }
 }
