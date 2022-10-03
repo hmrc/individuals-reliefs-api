@@ -31,14 +31,14 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
 
   private trait Test {
 
-    def nino: String              = "AA123456A"
+    def nino: String = "AA123456A"
     def taxYear: String
     def downstreamTaxYear: String
 
     val downstreamResponse: JsValue = charitableGivingReliefResponseDownstreamJson
     val mtdResponse: JsValue        = charitableGivingReliefResponseMtdJsonWithHateoas(nino, taxYear)
 
-    def uri: String           = s"/charitable-giving/$nino/$taxYear"
+    def uri: String = s"/charitable-giving/$nino/$taxYear"
     def downstreamUri: String
 
     def setupStubs(): StubMapping
@@ -49,7 +49,7 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
   }
@@ -64,7 +64,7 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
   private trait TysIfsTest extends Test {
     def taxYear: String           = "2023-24"
     def downstreamTaxYear: String = "23-24"
-    def downstreamUri: String      = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
+    def downstreamUri: String     = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
   }
 
   "Calling the 'Retrieve Charitable Giving Tax Relief' endpoint" should {
@@ -107,7 +107,7 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
         def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
-            override def nino: String       = requestNino
+            override def nino: String    = requestNino
             override def taxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
@@ -175,11 +175,12 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
           (BAD_REQUEST, "INVALID_INCOMESOURCE_TYPE", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "SUBMISSION_PERIOD_NOT_FOUND", NOT_FOUND, NotFoundError),
           (NOT_FOUND, "INCOME_DATA_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
-          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }
+
 }

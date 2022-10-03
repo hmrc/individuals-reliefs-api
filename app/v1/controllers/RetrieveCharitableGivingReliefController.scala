@@ -86,18 +86,18 @@ class RetrieveCharitableGivingReliefController @Inject() (val authService: Enrol
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
       case _
-        if errorWrapper.containsAnyOf(
-          BadRequestError,
-          NinoFormatError,
-          TaxYearFormatError,
-          RuleTaxYearNotSupportedError,
-          RuleTaxYearRangeInvalidError
-        ) =>
+          if errorWrapper.containsAnyOf(
+            BadRequestError,
+            NinoFormatError,
+            TaxYearFormatError,
+            RuleTaxYearNotSupportedError,
+            RuleTaxYearRangeInvalidError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
 
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
   }
 

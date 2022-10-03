@@ -26,8 +26,7 @@ import scala.concurrent.Future
 
 class RetrieveCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
-  private val nino              = "AA123456A"
-
+  private val nino = "AA123456A"
 
   private val nonUkCharitiesModel = NonUkCharities(
     charityNames = Some(Seq("non-UK charity 1", "non-UK charity 2")),

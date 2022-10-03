@@ -50,14 +50,14 @@ class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharit
 
   private def downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
-      "INVALID_NINO"                 -> NinoFormatError,
-      "INVALID_TYPE"                 -> InternalError,
-      "INVALID_TAXYEAR"              -> TaxYearFormatError,
-      "INVALID_INCOME_SOURCE"        -> InternalError,
-      "NOT_FOUND_PERIOD"             -> NotFoundError,
-      "NOT_FOUND_INCOME_SOURCE"      -> NotFoundError,
-      "SERVER_ERROR"                 -> InternalError,
-      "SERVICE_UNAVAILABLE"          -> InternalError
+      "INVALID_NINO"            -> NinoFormatError,
+      "INVALID_TYPE"            -> InternalError,
+      "INVALID_TAXYEAR"         -> TaxYearFormatError,
+      "INVALID_INCOME_SOURCE"   -> InternalError,
+      "NOT_FOUND_PERIOD"        -> NotFoundError,
+      "NOT_FOUND_INCOME_SOURCE" -> NotFoundError,
+      "SERVER_ERROR"            -> InternalError,
+      "SERVICE_UNAVAILABLE"     -> InternalError
     )
 
     val extraTysErrors = Map(
@@ -67,8 +67,9 @@ class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharit
       "INVALID_INCOMESOURCE_TYPE"    -> InternalError,
       "SUBMISSION_PERIOD_NOT_FOUND"  -> NotFoundError,
       "INCOME_DATA_SOURCE_NOT_FOUND" -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED"       -> RuleTaxYearNotSupportedError,
+      "TAX_YEAR_NOT_SUPPORTED"       -> RuleTaxYearNotSupportedError
     )
     errors ++ extraTysErrors
   }
+
 }
