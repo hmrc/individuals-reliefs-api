@@ -92,12 +92,22 @@ class DeletePensionsReliefsController @Inject() (val authService: EnrolmentsAuth
     }
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
+
     errorWrapper.error match {
-      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearRangeInvalidError | RuleTaxYearNotSupportedError =>
+      case _
+          if errorWrapper.containsAnyOf(
+            BadRequestError,
+            NinoFormatError,
+            TaxYearFormatError,
+            RuleTaxYearRangeInvalidError,
+            RuleTaxYearNotSupportedError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+
+      case InternalError     => InternalServerError(Json.toJson(errorWrapper))
+      case NotFoundError     => NotFound(Json.toJson(errorWrapper))
+      case UnauthorisedError => Forbidden(Json.toJson(errorWrapper))
+      case _                 => unhandledError(errorWrapper)
     }
   }
 
