@@ -28,7 +28,7 @@ import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with WireMockMethods {
 
-  "Calling the retrieve endpoint" should {
+  "Calling the 'Retrieve Pensions Relief' endpoint" should {
     "return a 200 status code" when {
       "any valid request is made" in new NonTysTest {
 
@@ -41,7 +41,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
 
         val response: WSResponse = await(mtdRequest.get())
         response.status shouldBe OK
-        response.json shouldBe downstreamResponse
+        response.json shouldBe mtdResponse
         response.header("X-CorrelationId").nonEmpty shouldBe true
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -106,18 +106,16 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
             val response: WSResponse = await(mtdRequest.get())
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
-            response.header("Content-Type") shouldBe Some("application/json")
           }
         }
 
-        def errorBody(code: String): String = {
+        def errorBody(code: String): String =
           s"""
-             |      {
-             |        "code": "$code",
-             |        "reason": "message"
-             |      }
-        """.stripMargin
-        }
+             |{
+             |   "code": "$code",
+             |   "reason": "message"
+             |}
+            """.stripMargin
 
         val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
@@ -146,7 +144,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
 
     def taxableEntityId: String = "AA123456A"
 
-    def nino: String = "AA123456A" //nino (mtd request path parameter) gets mapped to taxableEntityId (downstream request path parameter)
+    def nino: String = "AA123456A"
 
     val downstreamResponse: JsValue = Json.parse(
       s"""
@@ -197,7 +195,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
 
     def mtdRequest: WSRequest = {
       setupStubs()
-      buildRequest(s"/individuals/reliefs/pensions/$nino/$taxYear")
+      buildRequest(s"/pensions/$nino/$taxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123")
@@ -211,7 +209,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
 
     def downstreamTaxYear: String = "2020-21"
 
-    def downstreamUri: String = s"/income-tax/reliefs/pensions/$taxableEntityId/$taxYear"
+    def downstreamUri: String = s"/income-tax/reliefs/pensions/$taxableEntityId/$downstreamTaxYear"
 
   }
 
@@ -221,7 +219,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
 
     def downstreamTaxYear: String = "23-24"
 
-    def downstreamUri: String = s"/income-tax/reliefs/pensions/$taxYear/$taxableEntityId"
+    def downstreamUri: String = s"/income-tax/reliefs/pensions/$downstreamTaxYear/$taxableEntityId"
 
   }
 }
