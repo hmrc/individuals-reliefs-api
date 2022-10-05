@@ -35,7 +35,7 @@ final case class TaxYear private (private val value: String) {
     prefix + yearOne + "-" + yearTwo
   }
 
-  /** The tax year in the pre-TYS downstream format, e.g. "2023-24".
+  /** The tax year in the pre-TYS downstream format, e.g. "2024".
     */
   val asDownstream: String = value
 
