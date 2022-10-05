@@ -89,8 +89,6 @@ class RetrievePensionsReliefsController @Inject() (val authService: EnrolmentsAu
           TaxYearFormatError,
           RuleTaxYearRangeInvalidError,
           RuleTaxYearNotSupportedError,
-          ValueFormatError,
-          UnauthorisedError
         ) => BadRequest(Json.toJson(errorWrapper))
 
       case InternalError   => InternalServerError(Json.toJson(errorWrapper))
