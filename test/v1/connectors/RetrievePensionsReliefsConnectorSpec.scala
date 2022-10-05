@@ -54,7 +54,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
         def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
 
         willGet(
-          url = s"$baseUrl/income-tax/reliefs/pensions/$nino/${taxYear.asMtd}"
+          url = s"$baseUrl/income-tax/reliefs/pensions/$nino/2018-19"
         )
           .returns(Future.successful(outcome))
 
@@ -71,7 +71,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
           willGet(
-            url = s"$baseUrl/income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$taxableEntityId"
+            url = s"$baseUrl/income-tax/reliefs/pensions/23-24/$taxableEntityId"
           )
             .returns(Future.successful(outcome))
 
