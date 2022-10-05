@@ -20,6 +20,7 @@ import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
 import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequest
+//import v1.connectors.{ConnectorSpec, DownstreamOutcome}
 
 import scala.concurrent.Future
 
@@ -54,6 +55,23 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
 
           willDelete(
             url = s"$baseUrl/income-tax/reliefs/pensions/$nino/${taxYear.asDownstream}"
+          )
+            .returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Unit] = await(connector.delete(request))
+          result shouldBe outcome
+        }
+    }
+
+    "deletePensionsRelief called for a Tax Year Specific tax year" must {
+      "return a 204 status for a success scenario" in
+        new TysIfsTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          val outcome = Right(ResponseWrapper(correlationId, ()))
+
+          willDelete(
+            url = s"$baseUrl/income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino"
           )
             .returns(Future.successful(outcome))
 
