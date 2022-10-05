@@ -80,10 +80,18 @@ class RetrievePensionsReliefsController @Inject() (val authService: EnrolmentsAu
     }
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
+
     errorWrapper.error match {
-      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearRangeInvalidError | RuleTaxYearNotSupportedError =>
-        BadRequest(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
+      case _
+        if errorWrapper.containsAnyOf(
+          BadRequestError,
+          NinoFormatError,
+          TaxYearFormatError,
+          RuleTaxYearRangeInvalidError,
+          RuleTaxYearNotSupportedError,
+        ) => BadRequest(Json.toJson(errorWrapper))
+
+      case InternalError   => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case _               => unhandledError(errorWrapper)
     }
