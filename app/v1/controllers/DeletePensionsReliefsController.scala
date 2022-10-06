@@ -104,10 +104,9 @@ class DeletePensionsReliefsController @Inject() (val authService: EnrolmentsAuth
           ) =>
         BadRequest(Json.toJson(errorWrapper))
 
-      case InternalError     => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError     => NotFound(Json.toJson(errorWrapper))
-      case UnauthorisedError => Forbidden(Json.toJson(errorWrapper))
-      case _                 => unhandledError(errorWrapper)
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _             => unhandledError(errorWrapper)
     }
   }
 

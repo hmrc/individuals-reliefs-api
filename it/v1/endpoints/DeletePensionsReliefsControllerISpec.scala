@@ -30,47 +30,44 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino    = "AA123456A"
-    val taxYear = "2020-21"
-
-    def uri: String    = s"/pensions/$nino/$taxYear"
-    def desUri: String = s"/income-tax/reliefs/pensions/$nino/$taxYear"
+    def taxYear: String
+    def downstreamTaxYear: String
+    def downstreamUri: String
+    def nino: String = "AA123456A"
 
     def setupStubs(): StubMapping
 
-    def request(): WSRequest = {
+    def mtdRequest(): WSRequest = {
       setupStubs()
-      buildRequest(uri)
+      buildRequest(s"/pensions/$nino/$taxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
 
-    def errorBody(code: String): String =
-      s"""
-         |      {
-         |        "code": "$code",
-         |        "reason": "message"
-         |      }
-    """.stripMargin
+  }
 
+  private trait NonTysTest extends Test {
+    def taxYear: String           = "2020-21"
+    def downstreamTaxYear: String = "2021"
+    def downstreamUri: String     = s"/income-tax/reliefs/pensions/$nino/$downstreamTaxYear"
   }
 
   "Calling the delete endpoint" should {
 
     "return a 204 status code" when {
 
-      "any valid request is made" in new Test {
+      "any valid request is made" in new NonTysTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.DELETE, desUri, Status.NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, Status.NO_CONTENT, JsObject.empty)
         }
 
-        val response: WSResponse = await(request().delete())
+        val response: WSResponse = await(mtdRequest().delete())
         response.status shouldBe Status.NO_CONTENT
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
@@ -80,10 +77,10 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
       "validation error" when {
         def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
-            override val nino: String    = requestNino
-            override val taxYear: String = requestTaxYear
+            override def nino: String    = requestNino
+            override def taxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -91,7 +88,7 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
               MtdIdLookupStub.ninoFound(nino)
             }
 
-            val response: WSResponse = await(request().delete())
+            val response: WSResponse = await(mtdRequest().delete())
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
             response.header("Content-Type") shouldBe Some("application/json")
@@ -109,20 +106,28 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.DELETE, desUri, downstreamStatus, errorBody(downstreamCode))
+              DownstreamStub.onError(DownstreamStub.DELETE, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
-            val response: WSResponse = await(request().delete())
+            val response: WSResponse = await(mtdRequest().delete())
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
         }
+
+        def errorBody(code: String): String =
+          s"""
+             |      {
+             |        "code": "$code",
+             |        "reason": "message"
+             |      }
+        """.stripMargin
 
         val input = Seq(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),

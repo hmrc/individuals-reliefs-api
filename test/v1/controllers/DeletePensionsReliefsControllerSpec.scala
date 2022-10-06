@@ -131,11 +131,7 @@ class DeletePensionsReliefsControllerSpec
           (RuleTaxYearNotSupportedError, BAD_REQUEST)
         )
 
-        val extraTysErrors = Seq(
-          (UnauthorisedError, FORBIDDEN)
-        )
-
-        (errors ++ extraTysErrors).foreach(args => (errorsFromParserTester _).tupled(args))
+        errors.foreach(args => (errorsFromParserTester _).tupled(args))
       }
 
       "service errors occur" should {
