@@ -91,17 +91,20 @@ class AmendPensionsReliefsServiceSpec extends UnitSpec {
           await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
-        "INVALID_CORRELATIONID"     -> InternalError,
+      val errors = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR"          -> TaxYearFormatError,
         "INVALID_PAYLOAD"           -> InternalError,
         "SERVER_ERROR"              -> InternalError,
-        "SERVICE_UNAVAILABLE"       -> InternalError,
-        "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError
+        "SERVICE_UNAVAILABLE"       -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = Seq(
+        "INVALID_CORRELATIONID"  -> InternalError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
 

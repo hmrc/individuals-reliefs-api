@@ -41,10 +41,11 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
   }
 
   private trait Test {
-
-    val nino: String = "AA123456A"
     def mtdTaxYear: String
+    def downstreamUri: String
+    def setupStubs(): StubMapping
 
+    val nino: String       = "AA123456A"
     def amount: BigDecimal = 5000.99
 
     def requestBodyJson: JsValue = Json.parse(
@@ -84,10 +85,6 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
          |""".stripMargin)
 
     def uri: String = s"/pensions/$nino/$mtdTaxYear"
-
-    def downstreamUri: String
-
-    def setupStubs(): StubMapping
 
     def request(): WSRequest = {
       setupStubs()
@@ -264,16 +261,20 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val input = Seq(
+        val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
-          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
-          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError)
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+
+        val extraTysErrors = Seq(
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }

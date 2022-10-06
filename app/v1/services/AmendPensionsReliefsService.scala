@@ -40,13 +40,13 @@ class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConn
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      responseWrapper <- EitherT(connector.createOrAmendPensionsRelief(request)).leftMap(mapDownstreamErrors(desErrorMap))
+      responseWrapper <- EitherT(connector.createOrAmendPensionsRelief(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
     } yield responseWrapper
 
     result.value
   }
 
-  private def desErrorMap: Map[String, MtdError] = {
+  private def downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
