@@ -44,7 +44,7 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def errorBody(code: String): String =
@@ -135,4 +135,5 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
       }
     }
   }
+
 }

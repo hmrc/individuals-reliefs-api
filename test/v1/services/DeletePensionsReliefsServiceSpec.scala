@@ -87,7 +87,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
       )
 
       val extraTysErrors = Seq(
-        ("INVALID_CORRELATIONID", InternalError),
+        ("INVALID_CORRELATION_ID", InternalError),
         ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
       )
 
