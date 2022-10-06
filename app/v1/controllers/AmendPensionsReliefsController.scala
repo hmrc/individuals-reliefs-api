@@ -18,7 +18,6 @@ package v1.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -26,12 +25,22 @@ import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.AmendPensionsReliefsRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.audit.{AmendPensionsReliefsAuditDetail, AuditEvent, AuditResponse}
-import v1.models.errors._
+import v1.models.errors.{
+  BadRequestError,
+  MtdErrorWithCustomMessage,
+  NinoFormatError,
+  RuleIncorrectOrEmptyBodyError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError,
+  _
+}
 import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRawData
 import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsHateoasData
 import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsResponse.LinksFactory
 import v1.services.{AmendPensionsReliefsService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -106,11 +115,19 @@ class AmendPensionsReliefsController @Inject() (val authService: EnrolmentsAuthS
   private def errorResult(errorWrapper: ErrorWrapper) = {
 
     errorWrapper.error match {
-      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleIncorrectOrEmptyBodyError | RuleTaxYearRangeInvalidError |
-          RuleTaxYearNotSupportedError | MtdErrorWithCustomMessage(ValueFormatError.code) =>
+      case _
+          if errorWrapper.containsAnyOf(
+            NinoFormatError,
+            BadRequestError,
+            TaxYearFormatError,
+            RuleIncorrectOrEmptyBodyError,
+            RuleTaxYearRangeInvalidError,
+            RuleTaxYearNotSupportedError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
+      case MtdErrorWithCustomMessage(ValueFormatError.code) => BadRequest(Json.toJson(errorWrapper))
+      case InternalError                                    => InternalServerError(Json.toJson(errorWrapper))
+      case _                                                => unhandledError(errorWrapper)
     }
   }
 
