@@ -18,12 +18,13 @@ package v1.services
 
 import cats.data.EitherT
 import cats.implicits._
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.AmendPensionsReliefsConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{InternalError, NinoFormatError, TaxYearFormatError}
+import v1.models.errors.{InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequest
 import v1.support.DownstreamResponseMappingSupport
 
@@ -39,19 +40,27 @@ class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConn
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
     val result = for {
-      responseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))
+      responseWrapper <- EitherT(connector.createOrAmendPensionsRelief(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
     } yield responseWrapper
 
     result.value
   }
 
-  private def desErrorMap =
-    Map(
+  private def downstreamErrorMap: Map[String, MtdError] = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "INVALID_PAYLOAD"           -> InternalError,
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_CORRELATIONID"  -> InternalError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+    )
+
+    errors ++ extraTysErrors
+  }
 
 }

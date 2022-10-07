@@ -25,8 +25,7 @@ import scala.concurrent.Future
 
 class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYear: String = "2019-20"
-  val nino: String    = "AA123456A"
+  val nino: String = "AA123456A"
 
   val body: AmendPensionsReliefsBody = AmendPensionsReliefsBody(
     PensionReliefs(
@@ -38,29 +37,45 @@ class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
     )
   )
 
-  trait Test { _: ConnectorTest =>
+  "AmendPensionsReliefsConnector" when {
+    "createOrAmendPensionsRelief called" must {
+      "return a 204 status for a success scenario" in new DesTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
+        val outcome          = Right(ResponseWrapper(correlationId, ()))
+        willPut(url = s"$baseUrl/income-tax/reliefs/pensions/$nino/${taxYear.asMtd}", body = body)
+          .returns(Future.successful(outcome))
 
-    val connector: AmendPensionsReliefsConnector = new AmendPensionsReliefsConnector(
+        val result: DownstreamOutcome[Unit] = await(connector.createOrAmendPensionsRelief(request))
+        result shouldBe outcome
+      }
+    }
+    "createOrAmendPensionsRelief called for a Tax Year Specific tax year" must {
+      "return a 204 status for a success scenario" in new TysIfsTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+        val outcome          = Right(ResponseWrapper(correlationId, ()))
+        willPut(url = s"$baseUrl/income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino", body = body)
+          .returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.createOrAmendPensionsRelief(request))
+        result shouldBe outcome
+      }
+    }
+  }
+
+  trait Test { _: ConnectorTest =>
+    def taxYear: TaxYear
+
+    protected val connector: AmendPensionsReliefsConnector = new AmendPensionsReliefsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-  }
+    protected val request: AmendPensionsReliefsRequest = AmendPensionsReliefsRequest(
+      nino = Nino(nino),
+      taxYear = taxYear,
+      body = body
+    )
 
-  "connector" must {
-    val request: AmendPensionsReliefsRequest = AmendPensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
-
-    "put a body and return 204 no body" in new DesTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
-
-      willPut(
-        url = s"$baseUrl/income-tax/reliefs/pensions/$nino/$taxYear",
-        body = body
-      )
-        .returns(Future.successful(outcome))
-
-      await(connector.amend(request)) shouldBe outcome
-    }
   }
 
 }
