@@ -21,7 +21,17 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockDeletePensionsReliefsConnector
 import v1.models.domain.Nino
-import v1.models.errors.{DownstreamErrorCode, DownstreamErrors, InternalError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import v1.models.errors.{
+  DownstreamErrorCode,
+  DownstreamErrors,
+  InternalError,
+  ErrorWrapper,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  TaxYearFormatError,
+  RuleTaxYearNotSupportedError
+}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
 import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequest
@@ -68,7 +78,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
 
-      val input = Seq(
+      val errors = Seq(
         ("NOT_FOUND", NotFoundError),
         ("INVALID_TAX_YEAR", TaxYearFormatError),
         ("SERVER_ERROR", InternalError),
@@ -76,7 +86,12 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = Seq(
+        ("INVALID_CORRELATION_ID", InternalError),
+        ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
 

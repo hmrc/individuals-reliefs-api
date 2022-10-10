@@ -123,7 +123,7 @@ class DeletePensionsReliefsControllerSpec
           }
         }
 
-        val input = Seq(
+        val errors = Seq(
           (BadRequestError, BAD_REQUEST),
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
@@ -131,7 +131,7 @@ class DeletePensionsReliefsControllerSpec
           (RuleTaxYearNotSupportedError, BAD_REQUEST)
         )
 
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
+        errors.foreach(args => (errorsFromParserTester _).tupled(args))
       }
 
       "service errors occur" should {
@@ -157,14 +157,18 @@ class DeletePensionsReliefsControllerSpec
           }
         }
 
-        val input = Seq(
+        val errors = Seq(
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (InternalError, INTERNAL_SERVER_ERROR)
         )
 
-        input.foreach(args => (serviceErrors _).tupled(args))
+        val extraTysErrors = Seq(
+          (RuleTaxYearNotSupportedError, BAD_REQUEST)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrors _).tupled(args))
       }
     }
   }
