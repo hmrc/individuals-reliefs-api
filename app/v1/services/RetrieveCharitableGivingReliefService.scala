@@ -42,14 +42,14 @@ class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharit
       correlationId: String): Future[ServiceOutcome[RetrieveCharitableGivingReliefResponse]] = {
 
     val result = for {
-      responseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
+      responseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
     } yield responseWrapper
 
     result.value
   }
 
-  private def desErrorMap =
-    Map(
+  private def downstreamErrorMap: Map[String, MtdError] = {
+    val errors = Map(
       "INVALID_NINO"            -> NinoFormatError,
       "INVALID_TYPE"            -> InternalError,
       "INVALID_TAXYEAR"         -> TaxYearFormatError,
@@ -59,5 +59,17 @@ class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharit
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_TAX_YEAR"             -> TaxYearFormatError,
+      "INVALID_CORRELATION_ID"       -> InternalError,
+      "INVALID_INCOMESOURCE_ID"      -> InternalError,
+      "INVALID_INCOMESOURCE_TYPE"    -> InternalError,
+      "SUBMISSION_PERIOD_NOT_FOUND"  -> NotFoundError,
+      "INCOME_DATA_SOURCE_NOT_FOUND" -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"       -> RuleTaxYearNotSupportedError
+    )
+    errors ++ extraTysErrors
+  }
 
 }

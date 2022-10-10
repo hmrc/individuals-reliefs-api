@@ -95,7 +95,7 @@ class RetrieveCharitableGivingReliefServiceSpec extends ServiceSpec {
             await(service.retrieve(request)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val input = Seq(
+        val errors = Seq(
           ("INVALID_NINO", NinoFormatError),
           ("INVALID_TYPE", InternalError),
           ("INVALID_TAXYEAR", TaxYearFormatError),
@@ -106,7 +106,16 @@ class RetrieveCharitableGivingReliefServiceSpec extends ServiceSpec {
           ("SERVICE_UNAVAILABLE", InternalError)
         )
 
-        input.foreach(args => (serviceError _).tupled(args))
+        val extraTysErrors = Seq(
+          ("INVALID_TAX_YEAR", TaxYearFormatError),
+          ("INVALID_CORRELATION_ID", InternalError),
+          ("INVALID_INCOMESOURCE_ID", InternalError),
+          ("INVALID_INCOMESOURCE_TYPE", InternalError),
+          ("SUBMISSION_PERIOD_NOT_FOUND", NotFoundError),
+          ("INCOME_DATA_SOURCE_NOT_FOUND", NotFoundError),
+          ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
+        )
+        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
       }
     }
   }

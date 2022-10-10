@@ -17,9 +17,10 @@
 package v1.connectors
 
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.connectors.DownstreamUri.DesUri
+import v1.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
 import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
@@ -34,11 +35,15 @@ class RetrieveCharitableGivingReliefConnector @Inject() (val http: HttpClient, v
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveCharitableGivingReliefResponse]] = {
 
-    get(
-      DesUri[RetrieveCharitableGivingReliefResponse](
-        s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}"
-      )
-    )
+    val downstreamUri =
+      if (request.taxYear.useTaxYearSpecificApi) {
+        TaxYearSpecificIfsUri[RetrieveCharitableGivingReliefResponse](
+          s"income-tax/${request.taxYear.asTysDownstream}/${request.nino.nino}/income-source/charity/annual")
+      } else {
+        DesUri[RetrieveCharitableGivingReliefResponse](s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}")
+      }
+
+    get(downstreamUri)
   }
 
 }
