@@ -41,7 +41,7 @@ class DeletePensionsReliefsConnector @Inject() (val http: HttpClient, val appCon
       if (taxYear.useTaxYearSpecificApi) {
         TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
       } else {
-        DesUri[Unit](s"income-tax/reliefs/pensions/$nino/${taxYear.asDownstream}")
+        DesUri[Unit](s"income-tax/reliefs/pensions/$nino/${taxYear.asMtd}")
       }
 
     delete(
