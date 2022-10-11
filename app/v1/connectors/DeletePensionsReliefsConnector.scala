@@ -41,6 +41,7 @@ class DeletePensionsReliefsConnector @Inject() (val http: HttpClient, val appCon
       if (taxYear.useTaxYearSpecificApi) {
         TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
       } else {
+        // Note the downstream endpoint uses the MTD tax year format
         DesUri[Unit](s"income-tax/reliefs/pensions/$nino/${taxYear.asMtd}")
       }
 
