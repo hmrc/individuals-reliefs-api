@@ -54,7 +54,7 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
           val outcome = Right(ResponseWrapper(correlationId, ()))
 
           willDelete(
-            url = s"$baseUrl/income-tax/reliefs/pensions/$nino/${taxYear.asDownstream}"
+            url = s"$baseUrl/income-tax/reliefs/pensions/$nino/2019-20"
           )
             .returns(Future.successful(outcome))
 
@@ -71,7 +71,7 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
           val outcome = Right(ResponseWrapper(correlationId, ()))
 
           willDelete(
-            url = s"$baseUrl/income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino"
+            url = s"$baseUrl/income-tax/reliefs/pensions/23-24/$nino"
           )
             .returns(Future.successful(outcome))
 

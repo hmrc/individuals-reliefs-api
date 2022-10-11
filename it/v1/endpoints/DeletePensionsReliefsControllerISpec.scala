@@ -31,7 +31,6 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     def taxYear: String
-    def downstreamTaxYear: String
     def downstreamUri: String
     def nino: String = "AA123456A"
 
@@ -49,15 +48,13 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
   }
 
   private trait NonTysTest extends Test {
-    def taxYear: String           = "2020-21"
-    def downstreamTaxYear: String = "2021"
-    def downstreamUri: String     = s"/income-tax/reliefs/pensions/$nino/$downstreamTaxYear"
+    def taxYear: String       = "2020-21"
+    def downstreamUri: String = s"/income-tax/reliefs/pensions/$nino/2020-21"
   }
 
   private trait TysIfsTest extends Test {
-    def taxYear: String           = "2023-24"
-    def downstreamTaxYear: String = "23-24"
-    def downstreamUri: String     = s"/income-tax/reliefs/pensions/$downstreamTaxYear/$nino"
+    def taxYear: String       = "2023-24"
+    def downstreamUri: String = s"/income-tax/reliefs/pensions/23-24/$nino"
   }
 
   "Calling the delete endpoint" should {
