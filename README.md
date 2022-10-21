@@ -6,6 +6,7 @@ The Individuals Reliefs API allows a developer to retrieve, create and amend, an
 - Other Reliefs
 - Foreign Reliefs
 - Pension Reliefs
+- Charitable Giving
 
 ## Requirements
 
