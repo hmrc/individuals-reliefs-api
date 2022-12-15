@@ -32,7 +32,7 @@ class DeleteOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig
   def delete(
       request: DeleteOtherReliefsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DownstreamOutcome[Unit]] = {
     delete(
-      IfsUri[Unit](s"income-tax/reliefs/other/${request.nino.nino}/${request.taxYear.asMtd}")
+      IfsUri[Unit](s"income-tax/reliefs/other/${request.nino}/${request.taxYear.asMtd}")
     )
   }
 

@@ -29,12 +29,14 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AmendForeignReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def amend(
-      request: AmendForeignReliefsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def amend(request: AmendForeignReliefsRequest)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     put(
       body = request.body,
-      IfsUri[Unit](s"income-tax/reliefs/foreign/${request.nino.nino}/${request.taxYear.asMtd}")
+      IfsUri[Unit](s"income-tax/reliefs/foreign/${request.nino}/${request.taxYear.asMtd}")
     )
   }
 
