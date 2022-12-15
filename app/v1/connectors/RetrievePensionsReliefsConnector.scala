@@ -37,10 +37,10 @@ class RetrievePensionsReliefsConnector @Inject()(val http: HttpClient, val appCo
 
     val downstreamUri =
       if (request.taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/${request.taxYear.asTysDownstream}/${request.nino.nino}")
+        TaxYearSpecificIfsUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/${request.taxYear.asTysDownstream}/${request.nino}")
       } else {
         val downstreamTaxYearParam = request.taxYear.asMtd // Supposed to be MTD format for this downstream endpoint
-        DesUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/${request.nino.nino}/$downstreamTaxYearParam")
+        DesUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/${request.nino}/$downstreamTaxYearParam")
       }
     get(downstreamUri)
   }

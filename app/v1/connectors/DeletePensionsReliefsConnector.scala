@@ -34,7 +34,7 @@ class DeletePensionsReliefsConnector @Inject() (val http: HttpClient, val appCon
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request.nino.nino
+    import request.nino
     import request.taxYear
 
     val downstreamUri =

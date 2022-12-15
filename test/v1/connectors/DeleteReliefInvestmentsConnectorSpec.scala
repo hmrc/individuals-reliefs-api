@@ -45,7 +45,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
-          url = s"$baseUrl/income-tax/reliefs/investment/${request.nino.nino}/$taxYear"
+          url = s"$baseUrl/income-tax/reliefs/investment/${request.nino}/$taxYear"
         )
           .returns(Future.successful(outcome))
 

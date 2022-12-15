@@ -34,7 +34,7 @@ class AmendReliefInvestmentsConnector @Inject() (val http: HttpClient, val appCo
 
     put(
       body = request.body,
-      IfsUri[Unit](s"income-tax/reliefs/investment/${request.nino.nino}/${request.taxYear.asMtd}")
+      IfsUri[Unit](s"income-tax/reliefs/investment/${request.nino}/${request.taxYear.asMtd}")
     )
   }
 
