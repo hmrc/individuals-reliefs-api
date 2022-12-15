@@ -47,7 +47,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPost(
-          url = s"$baseUrl/income-tax/nino/${request.nino}/income-source/charity/annual/${request.taxYear.asDownstream}",
+          url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${request.taxYear.asDownstream}",
           body = JsObject.empty
         )
           .returns(Future.successful(outcome))

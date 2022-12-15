@@ -46,7 +46,7 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
-          url = s"$baseUrl/income-tax/reliefs/foreign/${request.nino}/$taxYear"
+          url = s"$baseUrl/income-tax/reliefs/foreign/$nino/$taxYear"
         )
           .returns(Future.successful(outcome))
 
