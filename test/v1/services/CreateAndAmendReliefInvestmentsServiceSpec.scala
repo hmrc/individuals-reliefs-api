@@ -24,7 +24,7 @@ import v1.mocks.connectors.MockCreateAndAmendReliefInvestmentsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
-import v1.models.request.amendReliefInvestments._
+import v1.models.request.createAndAmendReliefInvestments._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -35,7 +35,7 @@ class CreateAndAmendReliefInvestmentsServiceSpec extends UnitSpec {
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
-  private val requestBody = AmendReliefInvestmentsBody(
+  private val requestBody = CreateAndAmendReliefInvestmentsBody(
     Some(
       Seq(
         VctSubscriptionsItem(

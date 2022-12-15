@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.CreateAndAmendReliefInvestmentsRequestParser
 import v1.models.errors.ErrorWrapper
-import v1.models.request.amendReliefInvestments.{CreateAndAmendReliefInvestmentsRawData, CreateAndAmendReliefInvestmentsRequest}
+import v1.models.request.createAndAmendReliefInvestments.{CreateAndAmendReliefInvestmentsRawData, CreateAndAmendReliefInvestmentsRequest}
 
 trait MockCreateAndAmendReliefInvestmentsRequestParser extends MockFactory {
 

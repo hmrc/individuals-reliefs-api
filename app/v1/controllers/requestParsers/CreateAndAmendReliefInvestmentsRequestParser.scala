@@ -20,8 +20,8 @@ import javax.inject.Inject
 import v1.models.domain.Nino
 import v1.controllers.requestParsers.validators.CreateAndAmendReliefInvestmentValidator
 import v1.models.request.TaxYear
-import v1.models.request.amendReliefInvestments.{
-  AmendReliefInvestmentsBody,
+import v1.models.request.createAndAmendReliefInvestments.{
+  CreateAndAmendReliefInvestmentsBody,
   CreateAndAmendReliefInvestmentsRawData,
   CreateAndAmendReliefInvestmentsRequest
 }
@@ -30,6 +30,6 @@ class CreateAndAmendReliefInvestmentsRequestParser @Inject() (val validator: Cre
     extends RequestParser[CreateAndAmendReliefInvestmentsRawData, CreateAndAmendReliefInvestmentsRequest] {
 
   override protected def requestFor(data: CreateAndAmendReliefInvestmentsRawData): CreateAndAmendReliefInvestmentsRequest =
-    CreateAndAmendReliefInvestmentsRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear), data.body.as[AmendReliefInvestmentsBody])
+    CreateAndAmendReliefInvestmentsRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear), data.body.as[CreateAndAmendReliefInvestmentsBody])
 
 }

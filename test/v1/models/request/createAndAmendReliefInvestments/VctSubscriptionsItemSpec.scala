@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendReliefInvestments
+package v1.models.request.createAndAmendReliefInvestments
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
+class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
 
-  val communityInvestmentItem = CommunityInvestmentItem(
+  val vctSubscriptionsItem = VctSubscriptionsItem(
     "VCTREF",
     Some("VCT Fund X"),
     Some("2018-04-16"),
@@ -45,7 +45,7 @@ class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        json.as[CommunityInvestmentItem] shouldBe communityInvestmentItem
+        json.as[VctSubscriptionsItem] shouldBe vctSubscriptionsItem
       }
     }
   }
@@ -53,7 +53,7 @@ class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(communityInvestmentItem) shouldBe json
+        Json.toJson(vctSubscriptionsItem) shouldBe json
       }
     }
   }

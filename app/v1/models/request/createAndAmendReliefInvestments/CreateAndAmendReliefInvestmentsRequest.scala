@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendReliefInvestments
+package v1.models.request.createAndAmendReliefInvestments
 
-import play.api.libs.json.JsValue
-import v1.models.request.RawData
+import v1.models.domain.Nino
+import v1.models.request.TaxYear
 
-case class CreateAndAmendReliefInvestmentsRawData(nino: String, taxYear: String, body: JsValue) extends RawData
+case class CreateAndAmendReliefInvestmentsRequest(nino: Nino, taxYear: TaxYear, body: CreateAndAmendReliefInvestmentsBody)

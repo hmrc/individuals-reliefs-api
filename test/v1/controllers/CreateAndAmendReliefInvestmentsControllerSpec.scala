@@ -24,14 +24,14 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateAndAmendReliefInvestmentsRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AmendReliefInvestmentsAuditDetail, AuditError, AuditEvent, AuditResponse}
+import v1.models.audit.{CreateAndAmendReliefInvestmentsAuditDetail, AuditError, AuditEvent, AuditResponse}
 import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
-import v1.models.request.amendReliefInvestments._
-import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
+import v1.models.request.createAndAmendReliefInvestments._
+import v1.models.response.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -128,7 +128,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
        |""".stripMargin
   )
 
-  private val requestBody = AmendReliefInvestmentsBody(
+  private val requestBody = CreateAndAmendReliefInvestmentsBody(
     Some(
       Seq(
         VctSubscriptionsItem(
@@ -202,11 +202,11 @@ class CreateAndAmendReliefInvestmentsControllerSpec
       |}
       |""".stripMargin)
 
-  def event(auditResponse: AuditResponse): AuditEvent[AmendReliefInvestmentsAuditDetail] =
+  def event(auditResponse: AuditResponse): AuditEvent[CreateAndAmendReliefInvestmentsAuditDetail] =
     AuditEvent(
       auditType = "CreateAmendReliefsInvestment",
       transactionName = "create-amend-reliefs-investment",
-      detail = AmendReliefInvestmentsAuditDetail(
+      detail = CreateAndAmendReliefInvestmentsAuditDetail(
         userType = "Individual",
         agentReferenceNumber = None,
         nino,
@@ -230,7 +230,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), AmendReliefInvestmentsHateoasData(nino, taxYear))
+          .wrap((), CreateAndAmendReliefInvestmentsHateoasData(nino, taxYear))
           .returns(HateoasWrapper((), testHateoasLinks))
 
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))

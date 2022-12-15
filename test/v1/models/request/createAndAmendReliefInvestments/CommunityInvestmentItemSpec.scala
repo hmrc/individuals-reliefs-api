@@ -14,32 +14,30 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendReliefInvestments
+package v1.models.request.createAndAmendReliefInvestments
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
+class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 
-  val eisSubscriptionsItem = EisSubscriptionsItem(
-    "XTAL",
-    Some("EIS Fund X"),
-    true,
-    Some("EIS Fund X"),
+  val communityInvestmentItem = CommunityInvestmentItem(
+    "VCTREF",
+    Some("VCT Fund X"),
+    Some("2018-04-16"),
     Some(BigDecimal(23312.00)),
-    BigDecimal(43432.00)
+    BigDecimal(1334.00)
   )
 
   val json = Json.parse(
     """
       |{
-      |  "uniqueInvestmentRef": "XTAL",
-      |  "name": "EIS Fund X",
-      |  "knowledgeIntensive": true,
-      |  "dateOfInvestment": "EIS Fund X",
+      |  "uniqueInvestmentRef": "VCTREF",
+      |  "name": "VCT Fund X",
+      |  "dateOfInvestment": "2018-04-16",
       |  "amountInvested": 23312.00,
-      |  "reliefClaimed": 43432.00
+      |  "reliefClaimed": 1334.00
       |}
         """.stripMargin
   )
@@ -47,7 +45,7 @@ class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        json.as[EisSubscriptionsItem] shouldBe eisSubscriptionsItem
+        json.as[CommunityInvestmentItem] shouldBe communityInvestmentItem
       }
     }
   }
@@ -55,7 +53,7 @@ class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(eisSubscriptionsItem) shouldBe json
+        Json.toJson(communityInvestmentItem) shouldBe json
       }
     }
   }

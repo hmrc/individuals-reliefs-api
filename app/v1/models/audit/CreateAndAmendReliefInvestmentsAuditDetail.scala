@@ -19,25 +19,25 @@ package v1.models.audit
 import play.api.libs.json.{JsValue, Json, Writes}
 import v1.models.auth.UserDetails
 
-case class AmendReliefInvestmentsAuditDetail(userType: String,
-                                             agentReferenceNumber: Option[String],
-                                             nino: String,
-                                             taxYear: String,
-                                             request: JsValue,
-                                             `X-CorrelationId`: String,
-                                             response: AuditResponse)
+case class CreateAndAmendReliefInvestmentsAuditDetail(userType: String,
+                                                      agentReferenceNumber: Option[String],
+                                                      nino: String,
+                                                      taxYear: String,
+                                                      request: JsValue,
+                                                      `X-CorrelationId`: String,
+                                                      response: AuditResponse)
 
-object AmendReliefInvestmentsAuditDetail {
-  implicit val writes: Writes[AmendReliefInvestmentsAuditDetail] = Json.writes[AmendReliefInvestmentsAuditDetail]
+object CreateAndAmendReliefInvestmentsAuditDetail {
+  implicit val writes: Writes[CreateAndAmendReliefInvestmentsAuditDetail] = Json.writes[CreateAndAmendReliefInvestmentsAuditDetail]
 
   def apply(userDetails: UserDetails,
             nino: String,
             taxYear: String,
             request: JsValue,
             `X-CorrelationId`: String,
-            auditResponse: AuditResponse): AmendReliefInvestmentsAuditDetail = {
+            auditResponse: AuditResponse): CreateAndAmendReliefInvestmentsAuditDetail = {
 
-    AmendReliefInvestmentsAuditDetail(
+    CreateAndAmendReliefInvestmentsAuditDetail(
       userType = userDetails.userType,
       agentReferenceNumber = userDetails.agentReferenceNumber,
       nino = nino,

@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendReliefInvestments
+package v1.models.request.createAndAmendReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-case class EisSubscriptionsItem(uniqueInvestmentRef: String,
-                                name: Option[String],
-                                knowledgeIntensive: Boolean,
-                                dateOfInvestment: Option[String],
-                                amountInvested: Option[BigDecimal],
-                                reliefClaimed: BigDecimal)
+case class SocialEnterpriseInvestmentItem(uniqueInvestmentRef: String,
+                                          socialEnterpriseName: Option[String],
+                                          dateOfInvestment: Option[String],
+                                          amountInvested: Option[BigDecimal],
+                                          reliefClaimed: BigDecimal)
 
-object EisSubscriptionsItem {
-  implicit val format: OFormat[EisSubscriptionsItem] = Json.format[EisSubscriptionsItem]
+object SocialEnterpriseInvestmentItem {
+  implicit val format: OFormat[SocialEnterpriseInvestmentItem] = Json.format[SocialEnterpriseInvestmentItem]
 }

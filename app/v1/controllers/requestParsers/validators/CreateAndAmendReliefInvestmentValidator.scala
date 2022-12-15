@@ -20,7 +20,7 @@ import config.AppConfig
 import javax.inject.Inject
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
-import v1.models.request.amendReliefInvestments._
+import v1.models.request.createAndAmendReliefInvestments._
 
 class CreateAndAmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Validator[CreateAndAmendReliefInvestmentsRawData] {
 
@@ -42,17 +42,17 @@ class CreateAndAmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) ex
 
   private def bodyFormatValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     List(
-      JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError)
+      JsonFormatValidation.validate[CreateAndAmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError)
     )
   }
 
   private def incorrectOfEmptyBodySubmittedValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[AmendReliefInvestmentsBody]
+    val body = data.body.as[CreateAndAmendReliefInvestmentsBody]
     if (body.isIncorrectOrEmptyBody) List(List(RuleIncorrectOrEmptyBodyError)) else NoValidationErrors
   }
 
   private def bodyFieldValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
-    val body = data.body.as[AmendReliefInvestmentsBody]
+    val body = data.body.as[CreateAndAmendReliefInvestmentsBody]
 
     val vctSubscriptionErrors = body.vctSubscription.map(_.zipWithIndex.flatMap { case (item, i) =>
       validateVctSubscription(item, i)

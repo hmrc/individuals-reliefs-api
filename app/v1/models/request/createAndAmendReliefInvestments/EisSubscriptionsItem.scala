@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendReliefInvestments
+package v1.models.request.createAndAmendReliefInvestments
 
-import v1.models.domain.Nino
-import v1.models.request.TaxYear
+import play.api.libs.json.{Json, OFormat}
 
-case class CreateAndAmendReliefInvestmentsRequest(nino: Nino, taxYear: TaxYear, body: AmendReliefInvestmentsBody)
+case class EisSubscriptionsItem(uniqueInvestmentRef: String,
+                                name: Option[String],
+                                knowledgeIntensive: Boolean,
+                                dateOfInvestment: Option[String],
+                                amountInvested: Option[BigDecimal],
+                                reliefClaimed: BigDecimal)
+
+object EisSubscriptionsItem {
+  implicit val format: OFormat[EisSubscriptionsItem] = Json.format[EisSubscriptionsItem]
+}

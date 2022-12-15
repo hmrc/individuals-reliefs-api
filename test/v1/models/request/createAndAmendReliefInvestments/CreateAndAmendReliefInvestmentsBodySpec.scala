@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendReliefInvestments
+package v1.models.request.createAndAmendReliefInvestments
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
+class CreateAndAmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
 
-  val amendReliefInvestmentsBody = AmendReliefInvestmentsBody(
+  val createAndAmendReliefInvestmentsBody = CreateAndAmendReliefInvestmentsBody(
     Some(
       Seq(
         VctSubscriptionsItem(
@@ -127,7 +127,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        json.as[AmendReliefInvestmentsBody] shouldBe amendReliefInvestmentsBody
+        json.as[CreateAndAmendReliefInvestmentsBody] shouldBe createAndAmendReliefInvestmentsBody
       }
     }
   }
@@ -135,7 +135,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(amendReliefInvestmentsBody) shouldBe json
+        Json.toJson(createAndAmendReliefInvestmentsBody) shouldBe json
       }
     }
   }
@@ -143,7 +143,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
   "isIncorrectOrEmptyBodyError" should {
     "return false" when {
       "all arrays are provided, none are empty, no objects in the arrays are empty" in {
-        val model = AmendReliefInvestmentsBody(
+        val model = CreateAndAmendReliefInvestmentsBody(
           Some(
             Seq(
               VctSubscriptionsItem(
@@ -194,7 +194,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
         model.isIncorrectOrEmptyBody shouldBe false
       }
       "only some arrays are provided, none are empty, no objects in the arrays are empty" in {
-        val model = AmendReliefInvestmentsBody(
+        val model = CreateAndAmendReliefInvestmentsBody(
           None,
           Some(
             Seq(
@@ -231,7 +231,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
     }
     "return true" when {
       "no arrays are provided" in {
-        val model = AmendReliefInvestmentsBody(
+        val model = CreateAndAmendReliefInvestmentsBody(
           None,
           None,
           None,
@@ -241,7 +241,7 @@ class AmendReliefInvestmentsBodySpec extends UnitSpec with JsonErrorValidators {
         model.isIncorrectOrEmptyBody shouldBe true
       }
       "at least one empty array is provided" in {
-        val model = AmendReliefInvestmentsBody(
+        val model = CreateAndAmendReliefInvestmentsBody(
           Some(Seq()),
           Some(
             Seq(

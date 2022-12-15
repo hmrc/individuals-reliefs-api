@@ -19,7 +19,7 @@ package v1.connectors
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
-import v1.models.request.amendReliefInvestments._
+import v1.models.request.createAndAmendReliefInvestments._
 
 import scala.concurrent.Future
 
@@ -28,7 +28,7 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
   val taxYear: String = "2017-18"
   val nino: String    = "AA123456A"
 
-  val body: AmendReliefInvestmentsBody = AmendReliefInvestmentsBody(
+  val body: CreateAndAmendReliefInvestmentsBody = CreateAndAmendReliefInvestmentsBody(
     Some(
       Seq(
         VctSubscriptionsItem(

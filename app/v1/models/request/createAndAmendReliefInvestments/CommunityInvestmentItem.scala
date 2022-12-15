@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendReliefInvestments
+package v1.models.request.createAndAmendReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 

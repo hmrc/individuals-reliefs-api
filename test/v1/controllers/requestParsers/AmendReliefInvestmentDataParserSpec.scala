@@ -22,7 +22,7 @@ import v1.models.domain.Nino
 import v1.mocks.validators.MockCreateAndAmendReliefInvestmentValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import v1.models.request.TaxYear
-import v1.models.request.amendReliefInvestments._
+import v1.models.request.createAndAmendReliefInvestments._
 
 class AmendReliefInvestmentDataParserSpec extends UnitSpec {
   private val nino: String           = "AA123456A"
@@ -98,7 +98,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
             CreateAndAmendReliefInvestmentsRequest(
               Nino(nino),
               TaxYear.fromMtd(taxYear),
-              AmendReliefInvestmentsBody(
+              CreateAndAmendReliefInvestmentsBody(
                 Some(Seq(VctSubscriptionsItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(23312.00), 1334.00))),
                 Some(Seq(EisSubscriptionsItem("XTAL", Some("EIS Fund X"), true, Some("2020-12-12"), Some(23312.00), 43432.00))),
                 Some(Seq(CommunityInvestmentItem("CIREF", Some("CI X"), Some("2020-12-12"), Some(6442.00), 2344.00))),

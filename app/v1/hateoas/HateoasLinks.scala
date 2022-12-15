@@ -43,8 +43,8 @@ trait HateoasLinks {
   def retrieveReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
-  def amendReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEF_INVESTMENTS)
+  def createAndAmendReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_RELIEF_INVESTMENTS)
 
   def deleteReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEF_INVESTMENTS)

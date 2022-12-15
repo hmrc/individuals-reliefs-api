@@ -14,30 +14,32 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendReliefInvestments
+package v1.models.request.createAndAmendReliefInvestments
 
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
+class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
 
-  val vctSubscriptionsItem = VctSubscriptionsItem(
-    "VCTREF",
-    Some("VCT Fund X"),
-    Some("2018-04-16"),
+  val eisSubscriptionsItem = EisSubscriptionsItem(
+    "XTAL",
+    Some("EIS Fund X"),
+    true,
+    Some("EIS Fund X"),
     Some(BigDecimal(23312.00)),
-    BigDecimal(1334.00)
+    BigDecimal(43432.00)
   )
 
   val json = Json.parse(
     """
       |{
-      |  "uniqueInvestmentRef": "VCTREF",
-      |  "name": "VCT Fund X",
-      |  "dateOfInvestment": "2018-04-16",
+      |  "uniqueInvestmentRef": "XTAL",
+      |  "name": "EIS Fund X",
+      |  "knowledgeIntensive": true,
+      |  "dateOfInvestment": "EIS Fund X",
       |  "amountInvested": 23312.00,
-      |  "reliefClaimed": 1334.00
+      |  "reliefClaimed": 43432.00
       |}
         """.stripMargin
   )
@@ -45,7 +47,7 @@ class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        json.as[VctSubscriptionsItem] shouldBe vctSubscriptionsItem
+        json.as[EisSubscriptionsItem] shouldBe eisSubscriptionsItem
       }
     }
   }
@@ -53,7 +55,7 @@ class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(vctSubscriptionsItem) shouldBe json
+        Json.toJson(eisSubscriptionsItem) shouldBe json
       }
     }
   }

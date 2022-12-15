@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.errors.NinoFormatError
 
-class AmendReliefInvestmentsAuditDetailSpec extends UnitSpec {
+class CreateAndAmendReliefInvestmentsAuditDetailSpec extends UnitSpec {
 
   val validJson = Json.parse("""{
       |    "userType": "Agent",
@@ -100,7 +100,7 @@ class AmendReliefInvestmentsAuditDetailSpec extends UnitSpec {
       |    }
       |}""".stripMargin)
 
-  val validBody = AmendReliefInvestmentsAuditDetail(
+  val validBody = CreateAndAmendReliefInvestmentsAuditDetail(
     userType = "Agent",
     agentReferenceNumber = Some("012345678"),
     nino = "ZG903729C",
@@ -246,7 +246,7 @@ class AmendReliefInvestmentsAuditDetailSpec extends UnitSpec {
       |    }
       |}""".stripMargin)
 
-  val invalidNinoBody = AmendReliefInvestmentsAuditDetail(
+  val invalidNinoBody = CreateAndAmendReliefInvestmentsAuditDetail(
     userType = "Agent",
     agentReferenceNumber = Some("012345678"),
     nino = "notANino",

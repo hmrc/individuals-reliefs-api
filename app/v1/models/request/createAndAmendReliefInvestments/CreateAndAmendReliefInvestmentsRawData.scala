@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendReliefInvestments
+package v1.models.request.createAndAmendReliefInvestments
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.JsValue
+import v1.models.request.RawData
 
-case class VctSubscriptionsItem(uniqueInvestmentRef: String,
-                                name: Option[String],
-                                dateOfInvestment: Option[String],
-                                amountInvested: Option[BigDecimal],
-                                reliefClaimed: BigDecimal)
-
-object VctSubscriptionsItem {
-  implicit val format: OFormat[VctSubscriptionsItem] = Json.format[VctSubscriptionsItem]
-}
+case class CreateAndAmendReliefInvestmentsRawData(nino: String, taxYear: String, body: JsValue) extends RawData

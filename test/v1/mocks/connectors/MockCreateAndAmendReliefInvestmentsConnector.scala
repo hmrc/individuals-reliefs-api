@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.{CreateAndAmendReliefInvestmentsConnector, DownstreamOutcome}
-import v1.models.request.amendReliefInvestments.CreateAndAmendReliefInvestmentsRequest
+import v1.models.request.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 

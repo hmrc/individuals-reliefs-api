@@ -25,11 +25,11 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.CreateAndAmendReliefInvestmentsRequestParser
 import v1.hateoas.HateoasFactory
-import v1.models.audit.{AmendReliefInvestmentsAuditDetail, AuditEvent, AuditResponse}
+import v1.models.audit.{CreateAndAmendReliefInvestmentsAuditDetail, AuditEvent, AuditResponse}
 import v1.models.errors._
-import v1.models.request.amendReliefInvestments.CreateAndAmendReliefInvestmentsRawData
-import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
-import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsResponse.LinksFactory
+import v1.models.request.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsRawData
+import v1.models.response.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsHateoasData
+import v1.models.response.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsResponse.LinksFactory
 import v1.services.{CreateAndAmendReliefInvestmentsService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,7 +48,7 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(controllerName = "AmendReliefInvestmentsController", endpointName = "amendReliefInvestments")
+    EndpointLogContext(controllerName = "CreateAndAmendReliefInvestmentsController", endpointName = "createAndAmendReliefInvestments")
 
   def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
@@ -61,7 +61,7 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amend(parsedRequest))
           vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, AmendReliefInvestmentsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
+            hateoasFactory.wrap(serviceResponse.responseData, CreateAndAmendReliefInvestmentsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
@@ -70,7 +70,7 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
           val response = Json.toJson(vendorResponse)
 
           auditSubmission(
-            AmendReliefInvestmentsAuditDetail(
+            CreateAndAmendReliefInvestmentsAuditDetail(
               request.userDetails,
               nino,
               taxYear,
@@ -91,7 +91,7 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
             s"Error response received with CorrelationId: $resCorrelationId")
 
         auditSubmission(
-          AmendReliefInvestmentsAuditDetail(
+          CreateAndAmendReliefInvestmentsAuditDetail(
             request.userDetails,
             nino,
             taxYear,
@@ -116,7 +116,7 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
     }
   }
 
-  private def auditSubmission(details: AmendReliefInvestmentsAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
+  private def auditSubmission(details: CreateAndAmendReliefInvestmentsAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
     val event = AuditEvent("CreateAmendReliefsInvestment", "create-amend-reliefs-investment", details)
     auditService.auditEvent(event)
   }

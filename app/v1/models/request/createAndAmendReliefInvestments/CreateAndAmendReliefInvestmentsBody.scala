@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendReliefInvestments
+package v1.models.request.createAndAmendReliefInvestments
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AmendReliefInvestmentsBody(vctSubscription: Option[Seq[VctSubscriptionsItem]],
-                                      eisSubscription: Option[Seq[EisSubscriptionsItem]],
-                                      communityInvestment: Option[Seq[CommunityInvestmentItem]],
-                                      seedEnterpriseInvestment: Option[Seq[SeedEnterpriseInvestmentItem]],
-                                      socialEnterpriseInvestment: Option[Seq[SocialEnterpriseInvestmentItem]]) {
+case class CreateAndAmendReliefInvestmentsBody(vctSubscription: Option[Seq[VctSubscriptionsItem]],
+                                               eisSubscription: Option[Seq[EisSubscriptionsItem]],
+                                               communityInvestment: Option[Seq[CommunityInvestmentItem]],
+                                               seedEnterpriseInvestment: Option[Seq[SeedEnterpriseInvestmentItem]],
+                                               socialEnterpriseInvestment: Option[Seq[SocialEnterpriseInvestmentItem]]) {
 
   private def isEmpty: Boolean = vctSubscription.isEmpty &&
     eisSubscription.isEmpty &&
@@ -55,6 +55,6 @@ case class AmendReliefInvestmentsBody(vctSubscription: Option[Seq[VctSubscriptio
 
 }
 
-object AmendReliefInvestmentsBody {
-  implicit val format: OFormat[AmendReliefInvestmentsBody] = Json.format[AmendReliefInvestmentsBody]
+object CreateAndAmendReliefInvestmentsBody {
+  implicit val format: OFormat[CreateAndAmendReliefInvestmentsBody] = Json.format[CreateAndAmendReliefInvestmentsBody]
 }
