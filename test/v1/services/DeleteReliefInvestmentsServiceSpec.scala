@@ -57,6 +57,7 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
         await(service.delete(requestData)) shouldBe Right(ResponseWrapper("resultId", ()))
       }
     }
+
     "a service call is unsuccessful" should {
       def serviceError(desErrorCode: String, error: MtdError): Unit =
         s"return ${error.code} error when $desErrorCode error is returned from the connector" in new Test {
@@ -68,7 +69,7 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
 
-      val input = Seq(
+      val errors = Seq(
         ("NO_DATA_FOUND", NotFoundError),
         ("FORMAT_TAX_YEAR", TaxYearFormatError),
         ("SERVER_ERROR", InternalError),
@@ -76,7 +77,12 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = Seq(
+        ("INVALID_CORRELATION_ID", InternalError),
+        ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
 

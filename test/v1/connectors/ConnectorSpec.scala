@@ -180,7 +180,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockAppConfig.tysIfsBaseUrl returns baseUrl
     MockAppConfig.tysIfsToken returns "TYS-IFS-token"
     MockAppConfig.tysIfsEnvironment returns "TYS-IFS-environment"
-    MockAppConfig.tysIfsEnvironmentHeaders returns Some(allowedIfsHeaders)
+    MockAppConfig.tysIfsEnvironmentHeaders returns Some(allowedTysIfsHeaders)
 
     MockAppConfig.featureSwitches returns Configuration("tys-api.enabled" -> true)
   }
