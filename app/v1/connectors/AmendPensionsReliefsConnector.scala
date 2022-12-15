@@ -37,9 +37,9 @@ class AmendPensionsReliefsConnector @Inject() (val http: HttpClient, val appConf
 
     val downstreamUri =
       if (request.taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${request.taxYear.asTysDownstream}/${request.nino.nino}")
+        TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${request.taxYear.asTysDownstream}/${request.nino}")
       } else {
-        DesUri[Unit](s"income-tax/reliefs/pensions/${request.nino.nino}/${request.taxYear.asMtd}")
+        DesUri[Unit](s"income-tax/reliefs/pensions/${request.nino}/${request.taxYear.asMtd}")
       }
 
     put(
