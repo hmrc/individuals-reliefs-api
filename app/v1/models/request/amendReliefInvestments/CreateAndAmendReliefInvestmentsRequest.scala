@@ -19,4 +19,4 @@ package v1.models.request.amendReliefInvestments
 import v1.models.domain.Nino
 import v1.models.request.TaxYear
 
-case class AmendReliefInvestmentsRequest(nino: Nino, taxYear: TaxYear, body: AmendReliefInvestmentsBody)
+case class CreateAndAmendReliefInvestmentsRequest(nino: Nino, taxYear: TaxYear, body: AmendReliefInvestmentsBody)

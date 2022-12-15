@@ -23,7 +23,7 @@ import v1.models.request.amendReliefInvestments._
 
 import scala.concurrent.Future
 
-class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
+class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
   val taxYear: String = "2017-18"
   val nino: String    = "AA123456A"
@@ -79,7 +79,7 @@ class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
   trait Test { _: ConnectorTest =>
 
-    val connector: AmendReliefInvestmentsConnector = new AmendReliefInvestmentsConnector(
+    val connector: CreateAndAmendReliefInvestmentsConnector = new CreateAndAmendReliefInvestmentsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -87,7 +87,7 @@ class AmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
   }
 
   "doConnector" must {
-    val request: AmendReliefInvestmentsRequest = AmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
+    val request: CreateAndAmendReliefInvestmentsRequest = CreateAndAmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
     "put a body and return 204 no body" in new IfsTest with Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))

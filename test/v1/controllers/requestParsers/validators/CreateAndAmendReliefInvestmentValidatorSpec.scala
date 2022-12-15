@@ -20,9 +20,9 @@ import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.errors._
-import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
+import v1.models.request.amendReliefInvestments.CreateAndAmendReliefInvestmentsRawData
 
-class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
+class CreateAndAmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
@@ -79,37 +79,37 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
         """.stripMargin)
 
   class Test {
-    val validator = new AmendReliefInvestmentValidator(mockAppConfig)
+    val validator = new CreateAndAmendReliefInvestmentValidator(mockAppConfig)
   }
 
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in new Test {
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, requestBodyJson)) shouldBe Nil
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, validTaxYear, requestBodyJson)) shouldBe Nil
       }
     }
 
     "return FORMAT_NINO error" when {
       "a bad nino is provided" in new Test {
-        validator.validate(AmendReliefInvestmentsRawData("BALONEY", validTaxYear, requestBodyJson)) shouldBe List(NinoFormatError)
+        validator.validate(CreateAndAmendReliefInvestmentsRawData("BALONEY", validTaxYear, requestBodyJson)) shouldBe List(NinoFormatError)
       }
     }
 
     "return FORMAT_TAX_YEAR error" when {
       "a bad tax year is provided" in new Test {
-        validator.validate(AmendReliefInvestmentsRawData(validNino, "BALONEY", requestBodyJson)) shouldBe List(TaxYearFormatError)
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, "BALONEY", requestBodyJson)) shouldBe List(TaxYearFormatError)
       }
     }
 
     "return RULE_TAX_YEAR_NOT_SUPPORTED error" when {
       "a tax year before the earliest allowed date is supplied" in new Test {
-        validator.validate(AmendReliefInvestmentsRawData(validNino, "2019-20", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, "2019-20", requestBodyJson)) shouldBe List(RuleTaxYearNotSupportedError)
       }
     }
 
     "return RULE_TAX_YEAR_RANGE_INVALID error" when {
       "an invalid tax year range is provided" in new Test {
-        validator.validate(AmendReliefInvestmentsRawData(validNino, "2021-23", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, "2021-23", requestBodyJson)) shouldBe List(RuleTaxYearRangeInvalidError)
       }
     }
 
@@ -172,7 +172,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
             |  ]
             |}
         """.stripMargin)
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           ValueFormatError.copy(paths = Some(Seq(
             "/vctSubscription/0/amountInvested",
             "/vctSubscription/0/reliefClaimed",
@@ -194,7 +194,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
     "return RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED error" when {
       "no JSON fields are provided" in new Test {
         val json = Json.parse("""{}""".stripMargin)
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "at least one empty array is provided" in new Test {
         val json = Json.parse("""
@@ -239,7 +239,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
             |  ]
             |}
         """.stripMargin)
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
       "at least one array contains an empty object" in new Test {
         val json = Json.parse("""
@@ -286,7 +286,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
             |  ]
             |}
         """.stripMargin)
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, validTaxYear, json)) shouldBe List(RuleIncorrectOrEmptyBodyError)
       }
     }
 
@@ -343,7 +343,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
             |}
         """.stripMargin)
 
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           DateOfInvestmentFormatError.copy(paths = Some(Seq(
             "/vctSubscription/0/dateOfInvestment",
             "/eisSubscription/0/dateOfInvestment",
@@ -408,7 +408,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
             |}
         """.stripMargin)
 
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           UniqueInvestmentRefFormatError.copy(paths = Some(Seq(
             "/vctSubscription/0/uniqueInvestmentRef",
             "/eisSubscription/0/uniqueInvestmentRef",
@@ -473,7 +473,7 @@ class AmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppConfig {
             |}
         """.stripMargin)
 
-        validator.validate(AmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+        validator.validate(CreateAndAmendReliefInvestmentsRawData(validNino, validTaxYear, badJson)) shouldBe List(
           NameFormatError.copy(paths = Some(Seq(
             "/vctSubscription/0/name",
             "/eisSubscription/0/name",

@@ -18,14 +18,18 @@ package v1.controllers.requestParsers
 
 import javax.inject.Inject
 import v1.models.domain.Nino
-import v1.controllers.requestParsers.validators.AmendReliefInvestmentValidator
+import v1.controllers.requestParsers.validators.CreateAndAmendReliefInvestmentValidator
 import v1.models.request.TaxYear
-import v1.models.request.amendReliefInvestments.{AmendReliefInvestmentsBody, AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest}
+import v1.models.request.amendReliefInvestments.{
+  AmendReliefInvestmentsBody,
+  CreateAndAmendReliefInvestmentsRawData,
+  CreateAndAmendReliefInvestmentsRequest
+}
 
-class AmendReliefInvestmentsRequestParser @Inject() (val validator: AmendReliefInvestmentValidator)
-    extends RequestParser[AmendReliefInvestmentsRawData, AmendReliefInvestmentsRequest] {
+class CreateAndAmendReliefInvestmentsRequestParser @Inject() (val validator: CreateAndAmendReliefInvestmentValidator)
+    extends RequestParser[CreateAndAmendReliefInvestmentsRawData, CreateAndAmendReliefInvestmentsRequest] {
 
-  override protected def requestFor(data: AmendReliefInvestmentsRawData): AmendReliefInvestmentsRequest =
-    AmendReliefInvestmentsRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear), data.body.as[AmendReliefInvestmentsBody])
+  override protected def requestFor(data: CreateAndAmendReliefInvestmentsRawData): CreateAndAmendReliefInvestmentsRequest =
+    CreateAndAmendReliefInvestmentsRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear), data.body.as[AmendReliefInvestmentsBody])
 
 }

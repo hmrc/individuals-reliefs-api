@@ -19,7 +19,7 @@ package v1.controllers.requestParsers
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.domain.Nino
-import v1.mocks.validators.MockAmendReliefInvestmentValidator
+import v1.mocks.validators.MockCreateAndAmendReliefInvestmentValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import v1.models.request.TaxYear
 import v1.models.request.amendReliefInvestments._
@@ -80,22 +80,22 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
       |}
         """.stripMargin)
 
-  val inputData: AmendReliefInvestmentsRawData =
-    AmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
+  val inputData: CreateAndAmendReliefInvestmentsRawData =
+    CreateAndAmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
 
-  trait Test extends MockAmendReliefInvestmentValidator {
-    lazy val parser = new AmendReliefInvestmentsRequestParser(mockValidator)
+  trait Test extends MockCreateAndAmendReliefInvestmentValidator {
+    lazy val parser = new CreateAndAmendReliefInvestmentsRequestParser(mockValidator)
   }
 
   "parse" should {
 
     "return a request object" when {
       "valid request data is supplied" in new Test {
-        MockAmendReliefInvestmentValidator.validate(inputData).returns(Nil)
+        MockCreateAndAmendReliefInvestmentValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
           Right(
-            AmendReliefInvestmentsRequest(
+            CreateAndAmendReliefInvestmentsRequest(
               Nino(nino),
               TaxYear.fromMtd(taxYear),
               AmendReliefInvestmentsBody(
@@ -111,7 +111,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
     "return an ErrorWrapper" when {
 
       "a single validation error occurs" in new Test {
-        MockAmendReliefInvestmentValidator
+        MockCreateAndAmendReliefInvestmentValidator
           .validate(inputData)
           .returns(List(NinoFormatError))
 
@@ -120,7 +120,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockAmendReliefInvestmentValidator
+        MockCreateAndAmendReliefInvestmentValidator
           .validate(inputData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 

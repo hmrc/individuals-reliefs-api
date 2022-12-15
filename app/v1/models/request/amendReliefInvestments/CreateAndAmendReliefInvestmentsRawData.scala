@@ -19,4 +19,4 @@ package v1.models.request.amendReliefInvestments
 import play.api.libs.json.JsValue
 import v1.models.request.RawData
 
-case class AmendReliefInvestmentsRawData(nino: String, taxYear: String, body: JsValue) extends RawData
+case class CreateAndAmendReliefInvestmentsRawData(nino: String, taxYear: String, body: JsValue) extends RawData

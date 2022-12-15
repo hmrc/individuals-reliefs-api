@@ -18,19 +18,19 @@ package v1.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v1.controllers.requestParsers.validators.AmendReliefInvestmentValidator
+import v1.controllers.requestParsers.validators.CreateAndAmendReliefInvestmentValidator
 import v1.models.errors.MtdError
-import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
+import v1.models.request.amendReliefInvestments.CreateAndAmendReliefInvestmentsRawData
 
-class MockAmendReliefInvestmentValidator extends MockFactory {
+class MockCreateAndAmendReliefInvestmentValidator extends MockFactory {
 
-  val mockValidator: AmendReliefInvestmentValidator = mock[AmendReliefInvestmentValidator]
+  val mockValidator: CreateAndAmendReliefInvestmentValidator = mock[CreateAndAmendReliefInvestmentValidator]
 
-  object MockAmendReliefInvestmentValidator {
+  object MockCreateAndAmendReliefInvestmentValidator {
 
-    def validate(data: AmendReliefInvestmentsRawData): CallHandler1[AmendReliefInvestmentsRawData, List[MtdError]] = {
+    def validate(data: CreateAndAmendReliefInvestmentsRawData): CallHandler1[CreateAndAmendReliefInvestmentsRawData, List[MtdError]] = {
       (mockValidator
-        .validate(_: AmendReliefInvestmentsRawData))
+        .validate(_: CreateAndAmendReliefInvestmentsRawData))
         .expects(data)
     }
 

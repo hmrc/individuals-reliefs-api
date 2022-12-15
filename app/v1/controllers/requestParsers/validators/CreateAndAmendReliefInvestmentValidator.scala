@@ -22,36 +22,36 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors._
 import v1.models.request.amendReliefInvestments._
 
-class AmendReliefInvestmentValidator @Inject() (appConfig: AppConfig) extends Validator[AmendReliefInvestmentsRawData] {
+class CreateAndAmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Validator[CreateAndAmendReliefInvestmentsRawData] {
 
   private val validationSet =
     List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, incorrectOfEmptyBodySubmittedValidation, bodyFieldValidation)
 
-  private def parameterFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = (data: AmendReliefInvestmentsRawData) => {
+  private def parameterFormatValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = (data: CreateAndAmendReliefInvestmentsRawData) => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear)
     )
   }
 
-  private def parameterRuleValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = (data: AmendReliefInvestmentsRawData) => {
+  private def parameterRuleValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = (data: CreateAndAmendReliefInvestmentsRawData) => {
     List(
       MtdTaxYearValidation.validate(data.taxYear, minimumTaxYear)
     )
   }
 
-  private def bodyFormatValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
+  private def bodyFormatValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     List(
       JsonFormatValidation.validate[AmendReliefInvestmentsBody](data.body, RuleIncorrectOrEmptyBodyError)
     )
   }
 
-  private def incorrectOfEmptyBodySubmittedValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
+  private def incorrectOfEmptyBodySubmittedValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendReliefInvestmentsBody]
     if (body.isIncorrectOrEmptyBody) List(List(RuleIncorrectOrEmptyBodyError)) else NoValidationErrors
   }
 
-  private def bodyFieldValidation: AmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
+  private def bodyFieldValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendReliefInvestmentsBody]
 
     val vctSubscriptionErrors = body.vctSubscription.map(_.zipWithIndex.flatMap { case (item, i) =>
@@ -223,7 +223,7 @@ class AmendReliefInvestmentValidator @Inject() (appConfig: AppConfig) extends Va
     ).flatten
   }
 
-  override def validate(data: AmendReliefInvestmentsRawData): List[MtdError] = {
+  override def validate(data: CreateAndAmendReliefInvestmentsRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 

@@ -23,26 +23,26 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.AmendReliefInvestmentsRequestParser
+import v1.controllers.requestParsers.CreateAndAmendReliefInvestmentsRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.audit.{AmendReliefInvestmentsAuditDetail, AuditEvent, AuditResponse}
 import v1.models.errors._
-import v1.models.request.amendReliefInvestments.AmendReliefInvestmentsRawData
+import v1.models.request.amendReliefInvestments.CreateAndAmendReliefInvestmentsRawData
 import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasData
 import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsResponse.LinksFactory
-import v1.services.{AmendReliefInvestmentsService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{CreateAndAmendReliefInvestmentsService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendReliefInvestmentsController @Inject() (val authService: EnrolmentsAuthService,
-                                                  val lookupService: MtdIdLookupService,
-                                                  parser: AmendReliefInvestmentsRequestParser,
-                                                  service: AmendReliefInvestmentsService,
-                                                  auditService: AuditService,
-                                                  hateoasFactory: HateoasFactory,
-                                                  cc: ControllerComponents,
-                                                  val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class CreateAndAmendReliefInvestmentsController @Inject() (val authService: EnrolmentsAuthService,
+                                                           val lookupService: MtdIdLookupService,
+                                                           parser: CreateAndAmendReliefInvestmentsRequestParser,
+                                                           service: CreateAndAmendReliefInvestmentsService,
+                                                           auditService: AuditService,
+                                                           hateoasFactory: HateoasFactory,
+                                                           cc: ControllerComponents,
+                                                           val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with BaseController
     with Logging {
@@ -55,7 +55,7 @@ class AmendReliefInvestmentsController @Inject() (val authService: EnrolmentsAut
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
         s"with correlationId : $correlationId")
-      val rawData = AmendReliefInvestmentsRawData(nino, taxYear, request.body)
+      val rawData = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, request.body)
       val result =
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
@@ -112,7 +112,7 @@ class AmendReliefInvestmentsController @Inject() (val authService: EnrolmentsAut
             UniqueInvestmentRefFormatError.code) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
   }
 

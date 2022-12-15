@@ -164,7 +164,7 @@ class AmendForeignReliefsControllerSpec
           .parseRequest(rawData)
           .returns(Right(requestData))
 
-        MockAmendReliefService
+        MockAmendForeignReliefsService
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
@@ -222,7 +222,7 @@ class AmendForeignReliefsControllerSpec
               .parseRequest(rawData)
               .returns(Right(requestData))
 
-            MockAmendReliefService
+            MockAmendForeignReliefsService
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 

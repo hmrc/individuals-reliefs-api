@@ -20,7 +20,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
-import v1.mocks.connectors.MockAmendReliefInvestmentsConnector
+import v1.mocks.connectors.MockCreateAndAmendReliefInvestmentsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
@@ -29,7 +29,7 @@ import v1.models.request.amendReliefInvestments._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AmendReliefInvestmentsServiceSpec extends UnitSpec {
+class CreateAndAmendReliefInvestmentsServiceSpec extends UnitSpec {
 
   private val nino: String           = "AA123456A"
   private val taxYear: String        = "2017-18"
@@ -84,13 +84,13 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
         )))
   )
 
-  private val requestData = AmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = CreateAndAmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
-  trait Test extends MockAmendReliefInvestmentsConnector {
+  trait Test extends MockCreateAndAmendReliefInvestmentsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new AmendReliefInvestmentsService(
+    val service = new CreateAndAmendReliefInvestmentsService(
       connector = mockConnector
     )
 
@@ -99,7 +99,7 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
   "service" when {
     "service call successsful" must {
       "return mapped result" in new Test {
-        MockAmendReliefInvestmentsConnector
+        MockCreateAndAmendReliefInvestmentsConnector
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
@@ -113,7 +113,7 @@ class AmendReliefInvestmentsServiceSpec extends UnitSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockAmendReliefInvestmentsConnector
+            MockCreateAndAmendReliefInvestmentsConnector
               .amend(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 

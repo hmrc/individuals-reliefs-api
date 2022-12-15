@@ -22,7 +22,7 @@ import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
-import v1.mocks.requestParsers.MockAmendReliefInvestmentsRequestParser
+import v1.mocks.requestParsers.MockCreateAndAmendReliefInvestmentsRequestParser
 import v1.mocks.services._
 import v1.models.audit.{AmendReliefInvestmentsAuditDetail, AuditError, AuditEvent, AuditResponse}
 import v1.models.errors._
@@ -36,12 +36,12 @@ import v1.models.response.amendReliefInvestments.AmendReliefInvestmentsHateoasDa
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AmendReliefInvestmentsControllerSpec
+class CreateAndAmendReliefInvestmentsControllerSpec
     extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockAmendReliefInvestmentsService
-    with MockAmendReliefInvestmentsRequestParser
+    with MockCreateAndAmendReliefInvestmentsService
+    with MockCreateAndAmendReliefInvestmentsRequestParser
     with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator {
@@ -53,10 +53,10 @@ class AmendReliefInvestmentsControllerSpec
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
 
-    val controller = new AmendReliefInvestmentsController(
+    val controller = new CreateAndAmendReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockAmendReliefInvestmentsRequestParser,
+      parser = mockCreateAndAmendReliefInvestmentsRequestParser,
       service = mockService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
@@ -177,8 +177,8 @@ class AmendReliefInvestmentsControllerSpec
         )))
   )
 
-  private val rawData     = AmendReliefInvestmentsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val rawData     = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, requestJson)
+  private val requestData = CreateAndAmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   val hateoasResponse: JsValue = Json.parse("""
       |{
@@ -221,11 +221,11 @@ class AmendReliefInvestmentsControllerSpec
     "return Ok" when {
       "the request received is valid" in new Test {
 
-        MockAmendReliefInvestmentsRequestParser
+        MockCreateAndAmendReliefInvestmentsRequestParser
           .parseRequest(rawData)
           .returns(Right(requestData))
 
-        MockAmendReliefService
+        MockCreateAndAmendReliefService
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
@@ -246,7 +246,7 @@ class AmendReliefInvestmentsControllerSpec
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
-            MockAmendReliefInvestmentsRequestParser
+            MockCreateAndAmendReliefInvestmentsRequestParser
               .parseRequest(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
@@ -281,11 +281,11 @@ class AmendReliefInvestmentsControllerSpec
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
-            MockAmendReliefInvestmentsRequestParser
+            MockCreateAndAmendReliefInvestmentsRequestParser
               .parseRequest(rawData)
               .returns(Right(requestData))
 
-            MockAmendReliefService
+            MockCreateAndAmendReliefService
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
