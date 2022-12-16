@@ -55,14 +55,24 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
   }
 
-  "doConnector" must {
+  "AmendOtherReliefsConnector" must {
 
-    val request: AmendOtherReliefsRequest = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
+
+    val outcome = Right(ResponseWrapper(correlationId, ()))
 
     "put a body and return 204 no body" in new IfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
+      val request: AmendOtherReliefsRequest = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
       willPut(url = s"$baseUrl/income-tax/reliefs/other/$nino/$taxYear", body = body)
+        .returns(Future.successful(outcome))
+
+      await(connector.amend(request)) shouldBe outcome
+    }
+
+    "put a body and return 204 no body for a TYS tax year" in new TysIfsTest with Test {
+      val request: AmendOtherReliefsRequest = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd("2023-24"), body)
+
+      willPut(url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino", body = body)
         .returns(Future.successful(outcome))
 
       await(connector.amend(request)) shouldBe outcome
