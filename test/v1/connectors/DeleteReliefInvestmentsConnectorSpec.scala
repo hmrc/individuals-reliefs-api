@@ -25,8 +25,7 @@ import scala.concurrent.Future
 
 class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
-  val nino: String    = "AA123456A"
-  val taxYear: String = "2019-20"
+  val nino: String = "AA123456A"
 
   trait Test { _: ConnectorTest =>
 
@@ -35,19 +34,34 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
+    val taxYear: TaxYear
+
+    val request: DeleteReliefInvestmentsRequest = DeleteReliefInvestmentsRequest(Nino(nino), taxYear)
   }
 
   "delete" should {
-    val request: DeleteReliefInvestmentsRequest = DeleteReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
     "return a result" when {
       "the downstream call is successful" in new IfsTest with Test {
-        val outcome = Right(ResponseWrapper(correlationId, ()))
+        lazy val taxYear = TaxYear.fromMtd("2019-20")
+        val outcome      = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
-          url = s"$baseUrl/income-tax/reliefs/investment/$nino/$taxYear"
-        )
-          .returns(Future.successful(outcome))
+          url = s"$baseUrl/income-tax/reliefs/investment/$nino/2019-20"
+        ) returns Future.successful(outcome)
+
+        await(connector.delete(request)) shouldBe outcome
+      }
+    }
+
+    "return a result" when {
+      "the downstream call is successful for TYS tax years" in new TysIfsTest with Test {
+        lazy val taxYear = TaxYear.fromMtd("2023-24")
+        val outcome      = Right(ResponseWrapper(correlationId, ()))
+
+        willDelete(
+          url = s"$baseUrl/income-tax/reliefs/investment/23-24/$nino"
+        ) returns Future.successful(outcome)
 
         await(connector.delete(request)) shouldBe outcome
       }
