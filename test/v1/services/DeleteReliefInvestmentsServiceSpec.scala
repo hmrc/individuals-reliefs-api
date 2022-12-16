@@ -59,12 +59,12 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
     }
 
     "a service call is unsuccessful" should {
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"return ${error.code} error when $desErrorCode error is returned from the connector" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"return ${error.code} error when $downstreamErrorCode error is returned from the connector" in new Test {
 
           MockDeleteReliefInvestmentsConnector
             .delete(requestData)
-            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
