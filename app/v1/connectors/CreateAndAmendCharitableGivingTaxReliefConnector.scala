@@ -38,9 +38,9 @@ class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: Http
     implicit val successCode: SuccessCode = SuccessCode(OK)
 
     val downstreamUri = if(request.taxYear.useTaxYearSpecificApi){
-      TaxYearSpecificIfsUri[Unit](s"income-tax/${request.taxYear.asTysDownstream}/${request.nino.nino}/income-source/charity/annual")
+      TaxYearSpecificIfsUri[Unit](s"income-tax/${request.taxYear.asTysDownstream}/${request.nino}/income-source/charity/annual")
     }else{
-      DesUri[Unit](s"income-tax/nino/${request.nino.nino}/income-source/charity/annual/${request.taxYear.asDownstream}")
+      DesUri[Unit](s"income-tax/nino/${request.nino}/income-source/charity/annual/${request.taxYear.asDownstream}")
     }
 
     post(

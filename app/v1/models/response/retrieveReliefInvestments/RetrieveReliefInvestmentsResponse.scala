@@ -39,7 +39,7 @@ object RetrieveReliefInvestmentsResponse extends HateoasLinks {
       import data._
       Seq(
         retrieveReliefInvestments(appConfig, nino, taxYear),
-        amendReliefInvestments(appConfig, nino, taxYear),
+        createAndAmendReliefInvestments(appConfig, nino, taxYear),
         deleteReliefInvestments(appConfig, nino, taxYear)
       )
     }

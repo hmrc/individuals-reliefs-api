@@ -31,7 +31,7 @@ trait MockAmendForeignReliefsService extends MockFactory {
 
   val mockService: AmendForeignReliefsService = mock[AmendForeignReliefsService]
 
-  object MockAmendReliefService {
+  object MockAmendForeignReliefsService {
 
     def amend(requestData: AmendForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockService
