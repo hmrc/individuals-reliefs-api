@@ -17,7 +17,6 @@
 package v1.services
 
 import cats.data.EitherT
-import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
@@ -38,15 +37,13 @@ class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector)
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      responseWrapper <- EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(desErrorMap))
-    } yield responseWrapper
+    val result = EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
 
     result.value
   }
 
-  private def desErrorMap =
-    Map(
+  private def downstreamErrorMap: Map[String, MtdError] = {
+    val desErrors = Map(
       "INVALID_TAXABLE_ENTITY_ID"        -> NinoFormatError,
       "FORMAT_TAX_YEAR"                  -> TaxYearFormatError,
       "INVALID_CORRELATIONID"            -> InternalError,
@@ -54,5 +51,14 @@ class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector)
       "SERVER_ERROR"                     -> InternalError,
       "SERVICE_UNAVAILABLE"              -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_PAYLOAD"        -> InternalError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+      "UNPROCESSABLE_ENTITY"   -> InternalError
+    )
+
+    desErrors ++ extraTysErrors
+  }
 
 }
