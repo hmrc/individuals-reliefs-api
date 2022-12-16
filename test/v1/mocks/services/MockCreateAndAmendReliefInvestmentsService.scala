@@ -22,20 +22,20 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendForeignReliefs.AmendForeignReliefsRequest
-import v1.services.AmendForeignReliefsService
+import v1.models.request.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsRequest
+import v1.services.CreateAndAmendReliefInvestmentsService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAmendForeignReliefsService extends MockFactory {
+trait MockCreateAndAmendReliefInvestmentsService extends MockFactory {
 
-  val mockService: AmendForeignReliefsService = mock[AmendForeignReliefsService]
+  val mockService: CreateAndAmendReliefInvestmentsService = mock[CreateAndAmendReliefInvestmentsService]
 
-  object MockAmendForeignReliefsService {
+  object MockCreateAndAmendReliefService {
 
-    def amend(requestData: AmendForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def amend(requestData: CreateAndAmendReliefInvestmentsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockService
-        .amend(_: AmendForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .amend(_: CreateAndAmendReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(requestData, *, *, *, *)
     }
 

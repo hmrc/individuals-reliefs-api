@@ -14,29 +14,26 @@
  * limitations under the License.
  */
 
-package v1.mocks.services
+package v1.mocks.connectors
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.controllers.EndpointLogContext
-import v1.models.errors.ErrorWrapper
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendForeignReliefs.AmendForeignReliefsRequest
-import v1.services.AmendForeignReliefsService
+import v1.connectors.{CreateAndAmendReliefInvestmentsConnector, DownstreamOutcome}
+import v1.models.request.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAmendForeignReliefsService extends MockFactory {
+trait MockCreateAndAmendReliefInvestmentsConnector extends MockFactory {
 
-  val mockService: AmendForeignReliefsService = mock[AmendForeignReliefsService]
+  val mockConnector: CreateAndAmendReliefInvestmentsConnector = mock[CreateAndAmendReliefInvestmentsConnector]
 
-  object MockAmendForeignReliefsService {
+  object MockCreateAndAmendReliefInvestmentsConnector {
 
-    def amend(requestData: AmendForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
-      (mockService
-        .amend(_: AmendForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
-        .expects(requestData, *, *, *, *)
+    def amend(requestData: CreateAndAmendReliefInvestmentsRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+      (mockConnector
+        .amend(_: CreateAndAmendReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
     }
 
   }

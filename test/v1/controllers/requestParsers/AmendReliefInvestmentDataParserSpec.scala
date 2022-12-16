@@ -19,10 +19,10 @@ package v1.controllers.requestParsers
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.domain.Nino
-import v1.mocks.validators.MockAmendReliefInvestmentValidator
+import v1.mocks.validators.MockCreateAndAmendReliefInvestmentValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import v1.models.request.TaxYear
-import v1.models.request.amendReliefInvestments._
+import v1.models.request.createAndAmendReliefInvestments._
 
 class AmendReliefInvestmentDataParserSpec extends UnitSpec {
   private val nino: String           = "AA123456A"
@@ -80,25 +80,25 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
       |}
         """.stripMargin)
 
-  val inputData: AmendReliefInvestmentsRawData =
-    AmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
+  val inputData: CreateAndAmendReliefInvestmentsRawData =
+    CreateAndAmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
 
-  trait Test extends MockAmendReliefInvestmentValidator {
-    lazy val parser = new AmendReliefInvestmentsRequestParser(mockValidator)
+  trait Test extends MockCreateAndAmendReliefInvestmentValidator {
+    lazy val parser = new CreateAndAmendReliefInvestmentsRequestParser(mockValidator)
   }
 
   "parse" should {
 
     "return a request object" when {
       "valid request data is supplied" in new Test {
-        MockAmendReliefInvestmentValidator.validate(inputData).returns(Nil)
+        MockCreateAndAmendReliefInvestmentValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
           Right(
-            AmendReliefInvestmentsRequest(
+            CreateAndAmendReliefInvestmentsRequest(
               Nino(nino),
               TaxYear.fromMtd(taxYear),
-              AmendReliefInvestmentsBody(
+              CreateAndAmendReliefInvestmentsBody(
                 Some(Seq(VctSubscriptionsItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(23312.00), 1334.00))),
                 Some(Seq(EisSubscriptionsItem("XTAL", Some("EIS Fund X"), true, Some("2020-12-12"), Some(23312.00), 43432.00))),
                 Some(Seq(CommunityInvestmentItem("CIREF", Some("CI X"), Some("2020-12-12"), Some(6442.00), 2344.00))),
@@ -111,7 +111,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
     "return an ErrorWrapper" when {
 
       "a single validation error occurs" in new Test {
-        MockAmendReliefInvestmentValidator
+        MockCreateAndAmendReliefInvestmentValidator
           .validate(inputData)
           .returns(List(NinoFormatError))
 
@@ -120,7 +120,7 @@ class AmendReliefInvestmentDataParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockAmendReliefInvestmentValidator
+        MockCreateAndAmendReliefInvestmentValidator
           .validate(inputData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 
