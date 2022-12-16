@@ -83,7 +83,9 @@ class DeleteOtherReliefsControllerSpec
     )
 
   "handleRequest" should {
+
     "return NoContent" when {
+
       "the request received is valid" in new Test {
 
         MockDeleteOtherReliefsRequestParser
@@ -104,7 +106,9 @@ class DeleteOtherReliefsControllerSpec
       }
     }
     "return the error as per spec" when {
+
       "parser errors occur" should {
+
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
@@ -135,6 +139,7 @@ class DeleteOtherReliefsControllerSpec
       }
 
       "service errors occur" should {
+
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
@@ -160,6 +165,7 @@ class DeleteOtherReliefsControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (InternalError, INTERNAL_SERVER_ERROR)
         )
