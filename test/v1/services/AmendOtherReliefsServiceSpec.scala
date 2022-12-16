@@ -100,6 +100,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
       )
 
       val tysErrors = Seq(
+        "INVALID_CORRELATION_ID" -> InternalError,
         "INVALID_PAYLOAD" -> InternalError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "UNPROCESSABLE_ENTITY" -> InternalError
