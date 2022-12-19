@@ -42,13 +42,12 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
     val response = RetrieveOtherReliefsResponse(submittedOn = "2022-01-01", None, None, None, None, None, None, None)
   }
 
-  "retrieve" should {
-    "return a result" when {
-
-      "the downstream call is successful" in new IfsTest with Test {
+  "RetrieveOtherReliefsConnector" should {
+    "return the expected response for a non-TYS request" when {
+      "a valid request is made" in new IfsTest with Test {
         lazy val taxYear: TaxYear = TaxYear.fromMtd("2017-18")
 
-        val outcome               = Right(ResponseWrapper(correlationId, response))
+        val outcome = Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = s"$baseUrl/income-tax/reliefs/other/$nino/2017-18"
@@ -57,11 +56,13 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
         await(connector.retrieve(request)) shouldBe outcome
       }
+    }
 
-      "the downstream call is successful (TYS)" in new TysIfsTest with Test {
+    "return the expected response for a TYS request" when {
+      "a valid request is made" in new TysIfsTest with Test {
         lazy val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-        val outcome               = Right(ResponseWrapper(correlationId, response))
+        val outcome = Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino"
@@ -72,5 +73,4 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
       }
     }
   }
-
 }
