@@ -76,6 +76,7 @@ class CreateAndAmendReliefInvestmentsServiceSpec extends UnitSpec {
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
           ("INVALID_TAX_YEAR", TaxYearFormatError),
           ("INVALID_PAYLOAD", InternalError),
+          ("INVALID_CORRELATIONID", InternalError),
           ("UNPROCESSABLE_ENTITY", InternalError),
           ("SERVER_ERROR", InternalError),
           ("SERVICE_UNAVAILABLE", InternalError)
