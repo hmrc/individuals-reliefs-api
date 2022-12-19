@@ -16,10 +16,7 @@
 
 package v1.services
 
-import cats.data.EitherT
 import cats.implicits._
-
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveOtherReliefsConnector
@@ -29,6 +26,7 @@ import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsResponse
 import v1.support.DownstreamResponseMappingSupport
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -40,17 +38,13 @@ class RetrieveOtherReliefsService @Inject() (connector: RetrieveOtherReliefsConn
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[RetrieveOtherReliefsResponse]] = {
 
-    val result = for {
-      responseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(errorMap))
-    } yield responseWrapper
-
-    result.value
+    connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(errorMap)))
   }
 
   private val errorMap = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
       "INVALID_CORRELATIONID"     -> InternalError,
       "SERVER_ERROR"              -> InternalError,

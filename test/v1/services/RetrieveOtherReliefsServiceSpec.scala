@@ -91,7 +91,7 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
 
       val errors = Seq(
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
-        ("FORMAT_TAX_YEAR", TaxYearFormatError),
+        ("INVALID_TAX_YEAR", TaxYearFormatError),
         ("NO_DATA_FOUND", NotFoundError),
         "INVALID_CORRELATIONID" -> InternalError,
         ("SERVER_ERROR", InternalError),
