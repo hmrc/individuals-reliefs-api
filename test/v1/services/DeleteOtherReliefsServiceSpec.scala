@@ -31,25 +31,28 @@ import scala.concurrent.Future
 
 class DeleteOtherReliefsServiceSpec extends UnitSpec {
 
-  val validNino: String              = "AA123456A"
-  val validTaxYear: String           = "2019-20"
+  val nino: String    = "AA123456A"
+  val taxYear: String = "2019-20"
+
   implicit val correlationId: String = "X-123"
 
-  val requestData: DeleteOtherReliefsRequest = DeleteOtherReliefsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
+  val requestData: DeleteOtherReliefsRequest = DeleteOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockDeleteOtherReliefsConnector {
+
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new DeleteOtherReliefsService(
-      connector = mockConnector
-    )
+    val service = new DeleteOtherReliefsService(connector = mockConnector)
 
   }
 
   "service" when {
+
     "a service call is successful" should {
+
       "return a mapped result" in new Test {
+
         MockDeleteOtherReliefsConnector
           .delete(requestData)
           .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
@@ -57,26 +60,34 @@ class DeleteOtherReliefsServiceSpec extends UnitSpec {
         await(service.delete(requestData)) shouldBe Right(ResponseWrapper("resultId", ()))
       }
     }
+
     "a service call is unsuccessful" should {
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"return ${error.code} error when $desErrorCode error is returned from the connector" in new Test {
+
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"return ${error.code} error when $downstreamErrorCode error is returned from the connector" in new Test {
 
           MockDeleteOtherReliefsConnector
             .delete(requestData)
-            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
 
-      val input = Seq(
-        ("NO_DATA_FOUND", NotFoundError),
-        ("FORMAT_TAX_YEAR", TaxYearFormatError),
-        ("SERVER_ERROR", InternalError),
-        ("SERVICE_UNAVAILABLE", InternalError),
-        ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
+      val errors = Seq(
+        "NO_DATA_FOUND"             -> NotFoundError,
+        "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
+        "SERVER_ERROR"              -> InternalError,
+        "SERVICE_UNAVAILABLE"       -> InternalError,
+        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+        "INVALID_TAX_YEAR"          -> TaxYearFormatError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = Seq(
+        "INVALID_CORRELATION_ID" -> InternalError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
 

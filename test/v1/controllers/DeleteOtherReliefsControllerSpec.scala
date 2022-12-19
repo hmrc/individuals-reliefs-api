@@ -47,24 +47,6 @@ class DeleteOtherReliefsControllerSpec
   private val taxYear       = "2019-20"
   private val correlationId = "X-123"
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
-
-    val controller = new DeleteOtherReliefsController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
-      service = mockDeleteOtherReliefsService,
-      auditService = mockAuditService,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
-
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
-
   private val rawData     = DeleteOtherReliefsRawData(nino, taxYear)
   private val requestData = DeleteOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
@@ -83,7 +65,9 @@ class DeleteOtherReliefsControllerSpec
     )
 
   "handleRequest" should {
+
     "return NoContent" when {
+
       "the request received is valid" in new Test {
 
         MockDeleteOtherReliefsRequestParser
@@ -104,7 +88,9 @@ class DeleteOtherReliefsControllerSpec
       }
     }
     "return the error as per spec" when {
+
       "parser errors occur" should {
+
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
@@ -135,6 +121,7 @@ class DeleteOtherReliefsControllerSpec
       }
 
       "service errors occur" should {
+
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
@@ -160,6 +147,7 @@ class DeleteOtherReliefsControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (InternalError, INTERNAL_SERVER_ERROR)
         )
@@ -167,6 +155,24 @@ class DeleteOtherReliefsControllerSpec
         input.foreach(args => (serviceErrors _).tupled(args))
       }
     }
+  }
+
+  trait Test {
+    val hc: HeaderCarrier = HeaderCarrier()
+
+    val controller = new DeleteOtherReliefsController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockRequestDataParser,
+      service = mockDeleteOtherReliefsService,
+      auditService = mockAuditService,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
 }
