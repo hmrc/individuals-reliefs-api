@@ -31,53 +31,62 @@ import scala.concurrent.Future
 
 class DeleteForeignReliefsServiceSpec extends UnitSpec {
 
-  val validNino: String              = "AA123456A"
-  val validTaxYear: String           = "2019-20"
-  implicit val correlationId: String = "X-123"
+  "DeleteForeignReliefsServiceSpec" should {
+    "deleteForeignReliefs" must {
+      "return correct result for a success" in new Test {
+        val outcome = Right(ResponseWrapper("resultId", ()))
 
-  val requestData: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
+        MockDeleteForeignReliefsConnector
+          .delete(requestData)
+          .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
+
+        await(service.delete(requestData)) shouldBe outcome
+      }
+
+      "map errors according to spec" when {
+        def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+          s"return ${error.code} error when $downstreamErrorCode error is returned from the connector" in new Test {
+
+            MockDeleteForeignReliefsConnector
+              .delete(requestData)
+              .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
+
+            await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
+          }
+
+        val errors = Seq(
+          ("NO_DATA_FOUND", NotFoundError),
+          ("INVALID_TAX_YEAR", TaxYearFormatError),
+          ("INVALID_CORRELATIONID", InternalError),
+          ("SERVER_ERROR", InternalError),
+          ("SERVICE_UNAVAILABLE", InternalError),
+          ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
+        )
+
+        val extraTysErrors = Seq(
+          ("INVALID_CORRELATION_ID", InternalError),
+          ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      }
+    }
+  }
 
   trait Test extends MockDeleteForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
+    val validNino: String              = "AA123456A"
+    val validTaxYear: String           = "2019-20"
+    implicit val correlationId: String = "X-123"
+
+    val requestData: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
+
     val service = new DeleteForeignReliefsService(
       connector = mockConnector
     )
 
-  }
-
-  "service" when {
-    "a service call is successful" should {
-      "return a mapped result" in new Test {
-        MockDeleteForeignReliefsConnector
-          .delete(requestData)
-          .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
-
-        await(service.delete(requestData)) shouldBe Right(ResponseWrapper("resultId", ()))
-      }
-    }
-    "a service call is unsuccessful" should {
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"return ${error.code} error when $desErrorCode error is returned from the connector" in new Test {
-
-          MockDeleteForeignReliefsConnector
-            .delete(requestData)
-            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
-
-          await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
-        }
-
-      val input = Seq(
-        ("NO_DATA_FOUND", NotFoundError),
-        ("FORMAT_TAX_YEAR", TaxYearFormatError),
-        ("SERVER_ERROR", InternalError),
-        ("SERVICE_UNAVAILABLE", InternalError),
-        ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
-      )
-
-      input.foreach(args => (serviceError _).tupled(args))
-    }
   }
 
 }
