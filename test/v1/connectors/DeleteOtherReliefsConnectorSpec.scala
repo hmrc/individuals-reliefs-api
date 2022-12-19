@@ -40,10 +40,8 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
   }
 
   "DeleteOtherReliefsConnector" should {
-
-    "return a result" when {
-
-      "the downstream call is successful for a non-TYS tax year" in new IfsTest with Test {
+    "return the expected response for a non-TYS request" when {
+      "a valid request is made" in new IfsTest with Test {
 
         def taxYear: String = "2020-21"
         val outcome         = Right(ResponseWrapper(correlationId, ()))
@@ -54,15 +52,17 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
         await(connector.delete(request)) shouldBe outcome
       }
 
-      "the downstream call is successful for a TYS tax year" in new TysIfsTest with Test {
+      "return the expected response for a TYS request" when {
+        "a valid request is made" in new TysIfsTest with Test {
 
-        def taxYear: String = "2023-24"
-        val outcome         = Right(ResponseWrapper(correlationId, ()))
+          def taxYear: String = "2023-24"
+          val outcome         = Right(ResponseWrapper(correlationId, ()))
 
-        willDelete(url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino")
-          .returns(Future.successful(outcome))
+          willDelete(url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino")
+            .returns(Future.successful(outcome))
 
-        await(connector.delete(request)) shouldBe outcome
+          await(connector.delete(request)) shouldBe outcome
+        }
       }
     }
   }

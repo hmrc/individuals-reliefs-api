@@ -78,7 +78,8 @@ class DeleteOtherReliefsServiceSpec extends UnitSpec {
         "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
         "SERVER_ERROR"              -> InternalError,
         "SERVICE_UNAVAILABLE"       -> InternalError,
-        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError
+        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+        "INVALID_TAX_YEAR"          -> TaxYearFormatError
       )
 
       val extraTysErrors = Seq(

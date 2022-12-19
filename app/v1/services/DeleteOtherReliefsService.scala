@@ -38,9 +38,8 @@ class DeleteOtherReliefsService @Inject() (connector: DeleteOtherReliefsConnecto
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      responseWrapper <- EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(errorMap))
-    } yield responseWrapper
+    val result = EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(errorMap))
+
     result.value
   }
 
@@ -51,6 +50,7 @@ class DeleteOtherReliefsService @Inject() (connector: DeleteOtherReliefsConnecto
       "NO_DATA_FOUND"             -> NotFoundError,
       "SERVER_ERROR"              -> InternalError,
       "INVALID_CORRELATIONID"     -> InternalError,
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
 

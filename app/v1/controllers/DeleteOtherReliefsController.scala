@@ -99,7 +99,6 @@ class DeleteOtherReliefsController @Inject() (val authService: EnrolmentsAuthSer
             RuleTaxYearRangeInvalidError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
-
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)

@@ -64,7 +64,7 @@ class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
     def taxYear: String = "2020-21"
 
-    def downstreamUri: String = s"/income-tax/reliefs/other/$nino/$taxYear"
+    def downstreamUri: String = s"/income-tax/reliefs/other/$nino/2020-21"
   }
 
   private trait TysIfsTest extends Test {
@@ -144,6 +144,7 @@ class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "FORMAT_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (NOT_FOUND, "NO_DATA_FOUND", NOT_FOUND, NotFoundError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
