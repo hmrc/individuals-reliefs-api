@@ -26,29 +26,39 @@ import scala.concurrent.Future
 
 class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYear: String = "2017-18"
-  val nino: String    = "AA123456A"
+  val nino: String = "AA123456A"
 
-  trait Test { _: ConnectorTest =>
+  val response = RetrieveForeignReliefsResponse(submittedOn = "2021-01-02", None, None, None)
+
+  trait Test {
+    _: ConnectorTest =>
+    def taxYear: String
 
     val connector: RetrieveForeignReliefsConnector = new RetrieveForeignReliefsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
+    lazy val request: RetrieveForeignReliefsRequest = new RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+
   }
 
   "retrieve" should {
     "return a result" when {
-      val request: RetrieveForeignReliefsRequest = RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
-
       "the downstream call is successful" in new IfsTest with Test {
-        val outcome = Right(ResponseWrapper(correlationId, RetrieveForeignReliefsResponse))
+        def taxYear: String = "2021-22"
+        val outcome         = Right(ResponseWrapper(correlationId, response))
 
-        willGet(
-          url = s"$baseUrl/income-tax/reliefs/foreign/$nino/$taxYear"
-        )
-          .returns(Future.successful(outcome))
+        willGet(s"$baseUrl/income-tax/reliefs/foreign/$nino/$taxYear").returns(Future.successful(outcome))
+
+        await(connector.retrieve(request)) shouldBe outcome
+      }
+
+      "the downstream call is successful for a TYS tax year" in new TysIfsTest with Test {
+        def taxYear: String = "2023-24"
+        val outcome         = Right(ResponseWrapper(correlationId, response))
+
+        willGet(s"$baseUrl/income-tax/reliefs/foreign/23-24/$nino").returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
       }
