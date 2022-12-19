@@ -107,14 +107,26 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
-      case _ if errorWrapper.containsAnyOf(
-        NinoFormatError, BadRequestError, TaxYearFormatError, RuleIncorrectOrEmptyBodyError, RuleTaxYearRangeInvalidError,
-          RuleTaxYearNotSupportedError,  ValueFormatError,  DateFormatError,
-          CustomerReferenceFormatError, ExSpouseNameFormatError, BusinessNameFormatError, NatureOfTradeFormatError,
-          IncomeSourceFormatError, LenderNameFormatError
-      ) => BadRequest(Json.toJson(errorWrapper: ErrorWrapper))
+      case _
+          if errorWrapper.containsAnyOf(
+            NinoFormatError,
+            BadRequestError,
+            TaxYearFormatError,
+            RuleIncorrectOrEmptyBodyError,
+            RuleTaxYearRangeInvalidError,
+            RuleTaxYearNotSupportedError,
+            ValueFormatError,
+            DateFormatError,
+            CustomerReferenceFormatError,
+            ExSpouseNameFormatError,
+            BusinessNameFormatError,
+            NatureOfTradeFormatError,
+            IncomeSourceFormatError,
+            LenderNameFormatError
+          ) =>
+        BadRequest(Json.toJson(errorWrapper: ErrorWrapper))
       case RuleSubmissionFailedError => Forbidden(Json.toJson(errorWrapper))
-      case InternalError           => InternalServerError(Json.toJson(errorWrapper))
+      case InternalError             => InternalServerError(Json.toJson(errorWrapper))
       case _                         => unhandledError(errorWrapper)
     }
   }

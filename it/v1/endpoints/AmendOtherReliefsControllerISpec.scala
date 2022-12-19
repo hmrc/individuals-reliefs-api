@@ -104,8 +104,6 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
     def uri: String = s"/other/$nino/$taxYear"
 
-    def desUri: String = s"/income-tax/reliefs/other/$nino/$taxYear"
-
     def setupStubs(): StubMapping
 
     def request(): WSRequest = {
@@ -127,19 +125,39 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
   }
 
+  private trait nonTysTest extends Test {
+    def downstreamUri: String = s"/income-tax/reliefs/other/$nino/$taxYear"
+  }
+  private trait TysTest extends Test {
+    def downstreamUri: String = s"/income-tax/reliefs/other/23-24/$nino"
+  }
+
   "Calling the amend endpoint" should {
 
     "return a 200 status code" when {
 
-      "any valid request is made" in new Test {
+      "any valid request is made" in new nonTysTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, desUri, NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
         }
 
+        val response: WSResponse = await(request().put(requestBodyJson))
+        response.status shouldBe OK
+        response.json shouldBe responseBody
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+      }
+
+      "any valid Tax-Year-Specific (TYS) request is made" in new TysTest {
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
+        }
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
@@ -305,7 +323,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           |  ]
           |}""".stripMargin)
 
-      val allInvalidvalueFormatRequestBodyJson = Json.parse("""
+      val allInvalidValueFormatRequestBodyJson = Json.parse("""
           |{
           |  "nonDeductibleLoanInterest": {
           |        "customerReference": "myref",
@@ -740,7 +758,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+          s"validation fails with ${expectedBody.code} error" in new nonTysTest {
 
             override val nino: String             = requestNino
             override val taxYear: String          = requestTaxYear
@@ -763,7 +781,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           ("AA123456A", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2020-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "20121", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2021-22", allInvalidvalueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
+          ("AA123456A", "2021-22", allInvalidValueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
           ("AA123456A", "2021-22", allDatesInvalidRequestBodyJson, BAD_REQUEST, allDateFormatError),
           ("AA123456A", "2021-22", allCustomerReferencesInvalidRequestBodyJson, BAD_REQUEST, allCustomerReferenceFormatErrors),
           ("AA123456A", "2021-22", allExSpouseNamesInvalidRequestBodyJson, BAD_REQUEST, allExSpouseNameFormatErrors),
@@ -777,13 +795,13 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new nonTysTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.PUT, desUri, downstreamStatus, errorBody(downstreamCode))
+              DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
             val response: WSResponse = await(request().put(requestBodyJson))
