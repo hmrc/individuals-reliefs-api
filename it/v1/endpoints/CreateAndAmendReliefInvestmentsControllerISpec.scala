@@ -121,7 +121,7 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-        )
+      )
     }
 
     def errorBody(code: String): String =
@@ -704,5 +704,4 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
       }
     }
   }
-
 }
