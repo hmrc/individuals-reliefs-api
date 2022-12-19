@@ -16,9 +16,7 @@
 
 package v1.services
 
-import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveReliefInvestmentsConnector
@@ -28,10 +26,13 @@ import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequ
 import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsResponse
 import v1.support.DownstreamResponseMappingSupport
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveReliefInvestmentsService @Inject() (connector: RetrieveReliefInvestmentsConnector) extends DownstreamResponseMappingSupport with Logging {
+class RetrieveReliefInvestmentsService @Inject() (connector: RetrieveReliefInvestmentsConnector)
+    extends DownstreamResponseMappingSupport
+    with Logging {
 
   def retrieve(request: RetrieveReliefInvestmentsRequest)(implicit
       hc: HeaderCarrier,
@@ -39,20 +40,24 @@ class RetrieveReliefInvestmentsService @Inject() (connector: RetrieveReliefInves
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[RetrieveReliefInvestmentsResponse]] = {
 
-    val result = for {
-      responseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
-    } yield responseWrapper
-
-    result.value
+    connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  private def desErrorMap =
-    Map(
+  private def downstreamErrorMap = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
+
+    val extraTysErrors = Map(
+      "INVALID_CORRELATION_ID" -> InternalError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+    )
+
+    errors ++ extraTysErrors
+  }
 
 }
