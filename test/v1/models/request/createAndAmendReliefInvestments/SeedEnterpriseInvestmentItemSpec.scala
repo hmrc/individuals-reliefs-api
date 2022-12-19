@@ -18,34 +18,16 @@ package v1.models.request.createAndAmendReliefInvestments
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 import v1.models.utils.JsonErrorValidators
 
+
 class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
-
-  val seedEnterpriseInvestmentItem = SeedEnterpriseInvestmentItem(
-    "123412/1A",
-    Some("Company Inc"),
-    Some("2020-12-12"),
-    Some(BigDecimal(123123.22)),
-    BigDecimal(3432.00)
-  )
-
-  val json = Json.parse(
-    """
-      |{
-      |  "uniqueInvestmentRef": "123412/1A",
-      |  "companyName": "Company Inc",
-      |  "dateOfInvestment": "2020-12-12",
-      |  "amountInvested": 123123.22,
-      |  "reliefClaimed": 3432.00
-      |}
-        """.stripMargin
-  )
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        json.as[SeedEnterpriseInvestmentItem] shouldBe seedEnterpriseInvestmentItem
+        seedEnterpriseInvestmentItemJson.as[SeedEnterpriseInvestmentItem] shouldBe seedEnterpriseInvestmentItemModel
       }
     }
   }
@@ -53,7 +35,7 @@ class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(seedEnterpriseInvestmentItem) shouldBe json
+        Json.toJson(seedEnterpriseInvestmentItemModel) shouldBe seedEnterpriseInvestmentItemJson
       }
     }
   }

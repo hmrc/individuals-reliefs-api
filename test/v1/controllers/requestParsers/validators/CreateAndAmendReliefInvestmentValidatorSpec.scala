@@ -19,6 +19,7 @@ package v1.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures.requestBodyJson
 import v1.models.errors._
 import v1.models.request.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsRawData
 
@@ -26,57 +27,6 @@ class CreateAndAmendReliefInvestmentValidatorSpec extends UnitSpec with MockAppC
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
-
-  private val requestBodyJson = Json.parse("""
-      |{
-      |  "vctSubscription":[
-      |    {
-      |      "uniqueInvestmentRef": "VCTREF",
-      |      "name": "VCT Fund X",
-      |      "dateOfInvestment": "2018-04-16",
-      |      "amountInvested": 23312.00,
-      |      "reliefClaimed": 1334.00
-      |      }
-      |  ],
-      |  "eisSubscription":[
-      |    {
-      |      "uniqueInvestmentRef": "XTAL",
-      |      "name": "EIS Fund X",
-      |      "knowledgeIntensive": true,
-      |      "dateOfInvestment": "2020-12-12",
-      |      "amountInvested": 23312.00,
-      |      "reliefClaimed": 43432.00
-      |    }
-      |  ],
-      |  "communityInvestment": [
-      |    {
-      |      "uniqueInvestmentRef": "CIREF",
-      |      "name": "CI X",
-      |      "dateOfInvestment": "2020-12-12",
-      |      "amountInvested": 6442.00,
-      |      "reliefClaimed": 2344.00
-      |    }
-      |  ],
-      |  "seedEnterpriseInvestment": [
-      |    {
-      |      "uniqueInvestmentRef": "1234121A",
-      |      "companyName": "Company Inc",
-      |      "dateOfInvestment": "2020-12-12",
-      |      "amountInvested": 123123.22,
-      |      "reliefClaimed": 3432.00
-      |    }
-      |  ],
-      |  "socialEnterpriseInvestment": [
-      |    {
-      |      "uniqueInvestmentRef": "1234121A",
-      |      "socialEnterpriseName": "SE Inc",
-      |      "dateOfInvestment": "2020-12-12",
-      |      "amountInvested": 123123.22,
-      |      "reliefClaimed": 3432.00
-      |    }
-      |  ]
-      |}
-        """.stripMargin)
 
   class Test {
     val validator = new CreateAndAmendReliefInvestmentValidator(mockAppConfig)
