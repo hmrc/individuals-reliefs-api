@@ -36,6 +36,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
+    val response = RetrieveForeignReliefsResponse( submittedOn = "2021-01-02", None, None, None)
   }
 
   "retrieve" should {
@@ -43,7 +44,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
       val request: RetrieveForeignReliefsRequest = RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
       "the downstream call is successful" in new IfsTest with Test {
-        val outcome = Right(ResponseWrapper(correlationId, RetrieveForeignReliefsResponse))
+        val outcome = Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = s"$baseUrl/income-tax/reliefs/foreign/$nino/$taxYear"
