@@ -60,9 +60,9 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
         for {
           parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
           serviceResponse <- EitherT(service.amend(parsedRequest))
-          vendorResponse <- EitherT.fromEither[Future](
-            hateoasFactory.wrap(serviceResponse.responseData, CreateAndAmendReliefInvestmentsHateoasData(nino, taxYear)).asRight[ErrorWrapper])
         } yield {
+          val vendorResponse = hateoasFactory.wrap(serviceResponse.responseData, CreateAndAmendReliefInvestmentsHateoasData(nino, taxYear))
+
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
@@ -106,10 +106,19 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
   private def errorResult(errorWrapper: ErrorWrapper) = {
 
     errorWrapper.error match {
-      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleIncorrectOrEmptyBodyError | RuleTaxYearNotSupportedError |
-          RuleTaxYearRangeInvalidError | MtdErrorWithCustomMessage(ValueFormatError.code) | MtdErrorWithCustomMessage(
-            DateOfInvestmentFormatError.code) | MtdErrorWithCustomMessage(NameFormatError.code) | MtdErrorWithCustomMessage(
-            UniqueInvestmentRefFormatError.code) =>
+      case _
+          if errorWrapper.containsAnyOf(
+            NinoFormatError,
+            BadRequestError,
+            TaxYearFormatError,
+            RuleIncorrectOrEmptyBodyError,
+            RuleTaxYearNotSupportedError,
+            RuleTaxYearRangeInvalidError,
+            ValueFormatError,
+            DateOfInvestmentFormatError,
+            NameFormatError,
+            UniqueInvestmentRefFormatError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
       case _             => unhandledError(errorWrapper)

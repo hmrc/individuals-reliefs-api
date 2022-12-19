@@ -16,15 +16,16 @@
 
 package v1.controllers
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import play.api.mvc.Result
-import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures.{hateoasResponse, requestBodyJson, requestBodyModel}
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateAndAmendReliefInvestmentsRequestParser
 import v1.mocks.services._
-import v1.models.audit.{CreateAndAmendReliefInvestmentsAuditDetail, AuditError, AuditEvent, AuditResponse}
+import v1.models.audit.{AuditError, AuditEvent, AuditResponse, CreateAndAmendReliefInvestmentsAuditDetail}
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.hateoas.{HateoasWrapper, Link}
@@ -70,137 +71,13 @@ class CreateAndAmendReliefInvestmentsControllerSpec
   }
 
   private val testHateoasLinks: Seq[Link] = Seq(
-    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = PUT, rel = "amend-reliefs-investment"),
     Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-investment")
+    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-investments"),
+    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
   )
 
-  private val requestJson = Json.parse(
-    """|
-       |{
-       |  "vctSubscription":[
-       |    {
-       |      "uniqueInvestmentRef": "VCTREF",
-       |      "name": "VCT Fund X",
-       |      "dateOfInvestment": "2018-04-16",
-       |      "amountInvested": 23312.00,
-       |      "reliefClaimed": 1334.00
-       |      }
-       |  ],
-       |  "eisSubscription":[
-       |    {
-       |      "uniqueInvestmentRef": "XTAL",
-       |      "name": "EIS Fund X",
-       |      "knowledgeIntensive": true,
-       |      "dateOfInvestment": "2020-12-12",
-       |      "amountInvested": 23312.00,
-       |      "reliefClaimed": 43432.00
-       |    }
-       |  ],
-       |  "communityInvestment": [
-       |    {
-       |      "uniqueInvestmentRef": "CIREF",
-       |      "name": "CI X",
-       |      "dateOfInvestment": "2020-12-12",
-       |      "amountInvested": 6442.00,
-       |      "reliefClaimed": 2344.00
-       |    }
-       |  ],
-       |  "seedEnterpriseInvestment": [
-       |    {
-       |      "uniqueInvestmentRef": "123412/1A",
-       |      "companyName": "Company Inc",
-       |      "dateOfInvestment": "2020-12-12",
-       |      "amountInvested": 123123.22,
-       |      "reliefClaimed": 3432.00
-       |    }
-       |  ],
-       |  "socialEnterpriseInvestment": [
-       |    {
-       |      "uniqueInvestmentRef": "123412/1A",
-       |      "socialEnterpriseName": "SE Inc",
-       |      "dateOfInvestment": "2020-12-12",
-       |      "amountInvested": 123123.22,
-       |      "reliefClaimed": 3432.00
-       |    }
-       |  ]
-       |}
-       |""".stripMargin
-  )
-
-  private val requestBody = CreateAndAmendReliefInvestmentsBody(
-    Some(
-      Seq(
-        VctSubscriptionsItem(
-          "VCTREF",
-          Some("VCT Fund X"),
-          Some("2018-04-16"),
-          Some(BigDecimal(23312.00)),
-          BigDecimal(1334.00)
-        ))),
-    Some(
-      Seq(
-        EisSubscriptionsItem(
-          "XTAL",
-          Some("EIS Fund X"),
-          knowledgeIntensive = true,
-          Some("2020-12-12"),
-          Some(BigDecimal(23312.00)),
-          BigDecimal(43432.00)
-        ))),
-    Some(
-      Seq(
-        CommunityInvestmentItem(
-          "CIREF",
-          Some("CI X"),
-          Some("2020-12-12"),
-          Some(BigDecimal(6442.00)),
-          BigDecimal(2344.00)
-        ))),
-    Some(
-      Seq(
-        SeedEnterpriseInvestmentItem(
-          "123412/1A",
-          Some("Company Inc"),
-          Some("2020-12-12"),
-          Some(BigDecimal(123123.22)),
-          BigDecimal(3432.00)
-        ))),
-    Some(
-      Seq(
-        SocialEnterpriseInvestmentItem(
-          "123412/1A",
-          Some("SE Inc"),
-          Some("2020-12-12"),
-          Some(BigDecimal(123123.22)),
-          BigDecimal(3432.00)
-        )))
-  )
-
-  private val rawData     = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, requestJson)
-  private val requestData = CreateAndAmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
-
-  val hateoasResponse: JsValue = Json.parse("""
-      |{
-      |        "links": [
-      |          {
-      |            "href": "/individuals/reliefs/investment/AA123456A/2019-20",
-      |            "rel": "amend-reliefs-investment",
-      |            "method": "PUT"
-      |          },
-      |          {
-      |            "href": "/individuals/reliefs/investment/AA123456A/2019-20",
-      |            "rel": "self",
-      |            "method": "GET"
-      |          },
-      |          {
-      |            "href": "/individuals/reliefs/investment/AA123456A/2019-20",
-      |            "rel": "delete-reliefs-investment",
-      |            "method": "DELETE"
-      |          }
-      |        ]
-      |}
-      |""".stripMargin)
+  private val rawData     = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
+  private val requestData = CreateAndAmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   def event(auditResponse: AuditResponse): AuditEvent[CreateAndAmendReliefInvestmentsAuditDetail] =
     AuditEvent(
@@ -211,7 +88,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
         agentReferenceNumber = None,
         nino,
         taxYear,
-        requestJson,
+        requestBodyJson,
         correlationId,
         response = auditResponse
       )
@@ -233,11 +110,11 @@ class CreateAndAmendReliefInvestmentsControllerSpec
           .wrap((), CreateAndAmendReliefInvestmentsHateoasData(nino, taxYear))
           .returns(HateoasWrapper((), testHateoasLinks))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse()))
         MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
@@ -250,7 +127,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
               .parseRequest(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -289,7 +166,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
               .amend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
@@ -303,7 +180,8 @@ class CreateAndAmendReliefInvestmentsControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (InternalError, INTERNAL_SERVER_ERROR),
-          (TaxYearFormatError, BAD_REQUEST)
+          (TaxYearFormatError, BAD_REQUEST),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

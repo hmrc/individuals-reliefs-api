@@ -16,6 +16,7 @@
 
 package v1.connectors
 
+import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
@@ -25,76 +26,42 @@ import scala.concurrent.Future
 
 class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
-  val taxYear: String = "2017-18"
-  val nino: String    = "AA123456A"
-
-  val body: CreateAndAmendReliefInvestmentsBody = CreateAndAmendReliefInvestmentsBody(
-    Some(
-      Seq(
-        VctSubscriptionsItem(
-          "VCTREF",
-          Some("VCT Fund X"),
-          Some("2018-04-16"),
-          Some(BigDecimal(23312.00)),
-          BigDecimal(1334.00)
-        ))),
-    Some(
-      Seq(
-        EisSubscriptionsItem(
-          "XTAL",
-          Some("EIS Fund X"),
-          true,
-          Some("2020-12-12"),
-          Some(BigDecimal(23312.00)),
-          BigDecimal(43432.00)
-        ))),
-    Some(
-      Seq(
-        CommunityInvestmentItem(
-          "CIREF",
-          Some("CI X"),
-          Some("2020-12-12"),
-          Some(BigDecimal(6442.00)),
-          BigDecimal(2344.00)
-        ))),
-    Some(
-      Seq(
-        SeedEnterpriseInvestmentItem(
-          "123412/1A",
-          Some("Company Inc"),
-          Some("2020-12-12"),
-          Some(BigDecimal(123123.22)),
-          BigDecimal(3432.00)
-        ))),
-    Some(
-      Seq(
-        SocialEnterpriseInvestmentItem(
-          "123412/1A",
-          Some("SE Inc"),
-          Some("2020-12-12"),
-          Some(BigDecimal(123123.22)),
-          BigDecimal(3432.00)
-        )))
-  )
-
   trait Test { _: ConnectorTest =>
+
+    val taxYear: String
 
     val connector: CreateAndAmendReliefInvestmentsConnector = new CreateAndAmendReliefInvestmentsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
+    lazy val request: CreateAndAmendReliefInvestmentsRequest =
+      CreateAndAmendReliefInvestmentsRequest(Nino("AA123456A"), TaxYear.fromMtd(taxYear), requestBodyModel)
+
   }
 
   "doConnector" must {
-    val request: CreateAndAmendReliefInvestmentsRequest = CreateAndAmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
     "put a body and return 204 no body" in new IfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
+      val taxYear: String = "2019-20"
+      val outcome         = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
-        url = s"$baseUrl/income-tax/reliefs/investment/$nino/$taxYear",
-        body = body
+        url = s"$baseUrl/income-tax/reliefs/investment/AA123456A/2019-20",
+        body = requestBodyModel
+      )
+        .returns(Future.successful(outcome))
+
+      await(connector.amend(request)) shouldBe outcome
+    }
+
+    "put a body and return 204 no body for a Tax Year Specific (TYS) tax year" in new TysIfsTest with Test {
+      val taxYear: String = "2023-24"
+      val outcome         = Right(ResponseWrapper(correlationId, ()))
+
+      willPut(
+        url = s"$baseUrl/income-tax/reliefs/investment/23-24/AA123456A",
+        body = requestBodyModel
       )
         .returns(Future.successful(outcome))
 

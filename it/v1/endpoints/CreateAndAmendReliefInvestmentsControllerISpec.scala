@@ -16,145 +16,47 @@
 
 package v1.endpoints
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
+import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
-  private trait Test {
-
-    val nino: String          = "AA123456A"
-    val taxYear: String       = "2021-22"
-    val correlationId: String = "X-123"
-
-    val requestBodyJson: JsValue = Json.parse(
-      s"""
-         |{
-         |  "vctSubscription":[
-         |    {
-         |      "uniqueInvestmentRef": "VCTREF",
-         |      "name": "VCT Fund X",
-         |      "dateOfInvestment": "2018-04-16",
-         |      "amountInvested": 23312.00,
-         |      "reliefClaimed": 1334.00
-         |      }
-         |  ],
-         |  "eisSubscription":[
-         |    {
-         |      "uniqueInvestmentRef": "XTAL",
-         |      "name": "EIS Fund X",
-         |      "knowledgeIntensive": true,
-         |      "dateOfInvestment": "2020-12-12",
-         |      "amountInvested": 23312.00,
-         |      "reliefClaimed": 43432.00
-         |    }
-         |  ],
-         |  "communityInvestment": [
-         |    {
-         |      "uniqueInvestmentRef": "CIREF",
-         |      "name": "CI X",
-         |      "dateOfInvestment": "2020-12-12",
-         |      "amountInvested": 6442.00,
-         |      "reliefClaimed": 2344.00
-         |    }
-         |  ],
-         |  "seedEnterpriseInvestment": [
-         |    {
-         |      "uniqueInvestmentRef": "1234121A",
-         |      "companyName": "Company Inc",
-         |      "dateOfInvestment": "2020-12-12",
-         |      "amountInvested": 123123.22,
-         |      "reliefClaimed": 3432.00
-         |    }
-         |  ],
-         |  "socialEnterpriseInvestment": [
-         |    {
-         |      "uniqueInvestmentRef": "1234121A",
-         |      "socialEnterpriseName": "SE Inc",
-         |      "dateOfInvestment": "2020-12-12",
-         |      "amountInvested": 123123.22,
-         |      "reliefClaimed": 3432.00
-         |    }
-         |  ]
-         |}
-         |""".stripMargin
-    )
-
-    val responseBody = Json.parse(s"""
-         |{
-         |  "links": [
-         |    {
-         |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
-         |      "method": "GET",
-         |      "rel": "self"
-         |    },
-         |    {
-         |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
-         |      "method": "PUT",
-         |      "rel": "create-and-amend-reliefs-investments"
-         |    },
-         |    {
-         |      "href": "/individuals/reliefs/investment/$nino/$taxYear",
-         |      "method": "DELETE",
-         |      "rel": "delete-reliefs-investments"
-         |    }
-         |  ]
-         |}
-         |""".stripMargin)
-
-    def uri: String = s"/investment/$nino/$taxYear"
-
-    def desUri: String = s"/income-tax/reliefs/investment/$nino/$taxYear"
-
-    def setupStubs(): StubMapping
-
-    def request(): WSRequest = {
-      setupStubs()
-      buildRequest(uri)
-        .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.1.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
-    }
-
-    def errorBody(code: String): String =
-      s"""
-         |      {
-         |        "code": "$code",
-         |        "reason": "message"
-         |      }
-    """.stripMargin
-
-  }
-
   "Calling the amend endpoint" should {
-
     "return a 200 status code" when {
+      "any valid request is made" in new NonTysTest {
 
-      "any valid request is made" in new Test {
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, desUri, NO_CONTENT, JsObject.empty)
+        override def setupStubs(): Unit = {
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
-        response.json shouldBe responseBody
+        response.json shouldBe hateoasResponse(mtdTaxYear)
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+      }
+
+      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysIfsTest {
+
+        override def setupStubs(): Unit = {
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
+        }
+
+        val response: WSResponse = await(request().put(requestBodyJson))
+        response.status shouldBe OK
+        response.json shouldBe hateoasResponse(mtdTaxYear)
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
+
     "return a 400 with multiple errors" when {
-      "all field value validations fail on the request body" in new Test {
+      "all field value validations fail on the request body" in new NonTysTest {
 
         val allInvalidValueRequestBodyJson: JsValue = Json.parse(
           """
@@ -275,12 +177,6 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
           errors = Some(allInvalidValueRequestError)
         )
 
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-        }
-
         val response: WSResponse = await(request().put(allInvalidValueRequestBodyJson))
         response.status shouldBe BAD_REQUEST
         response.json shouldBe Json.toJson(wrappedErrors)
@@ -288,65 +184,6 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
     }
 
     "return error according to spec" when {
-
-      val validRequestBodyJson: JsValue = Json.parse(
-        """|{
-           |  "vctSubscription":[
-           |    {
-           |      "uniqueInvestmentRef": "VCTREF",
-           |      "name": "VCT Fund X",
-           |      "dateOfInvestment": "2018-04-16",
-           |      "amountInvested": 23312.00,
-           |      "reliefClaimed": 1334.00
-           |    },
-           |    {
-           |      "uniqueInvestmentRef": "VCTREF",
-           |      "name": "VCT Fund X",
-           |      "dateOfInvestment": "2018-04-16",
-           |      "amountInvested": 23312.00,
-           |      "reliefClaimed": 1334.00
-           |    }
-           |  ],
-           |  "eisSubscription":[
-           |    {
-           |      "uniqueInvestmentRef": "XTAL",
-           |      "name": "EIS Fund X",
-           |      "knowledgeIntensive": true,
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 23312.00,
-           |      "reliefClaimed": 43432.00
-           |    }
-           |  ],
-           |  "communityInvestment": [
-           |    {
-           |      "uniqueInvestmentRef": "CIREF",
-           |      "name": "CI X",
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 6442.00,
-           |      "reliefClaimed": 2344.00
-           |    }
-           |  ],
-           |  "seedEnterpriseInvestment": [
-           |    {
-           |      "uniqueInvestmentRef": "1234121A",
-           |      "companyName": "Company Inc",
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 123123.22,
-           |      "reliefClaimed": 3432.00
-           |    }
-           |  ],
-           |  "socialEnterpriseInvestment": [
-           |    {
-           |      "uniqueInvestmentRef": "1234121A",
-           |      "socialEnterpriseName": "SE Inc",
-           |      "dateOfInvestment": "2020-12-12",
-           |      "amountInvested": 123123.22,
-           |      "reliefClaimed": 3432.00
-           |    }
-           |  ]
-           |}
-           |""".stripMargin
-      )
 
       val allInvalidValueFormatRequestBodyJson: JsValue = Json.parse(
         """
@@ -646,29 +483,22 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
-            override val nino: String             = requestNino
-            override val taxYear: String          = requestTaxYear
-            override val requestBodyJson: JsValue = requestBody
+            override val nino: String       = requestNino
+            override val mtdTaxYear: String = requestTaxYear
 
-            override def setupStubs(): StubMapping = {
-              AuditStub.audit()
-              AuthStub.authorised()
-              MtdIdLookupStub.ninoFound(nino)
-            }
-
-            val response: WSResponse = await(request().put(requestBodyJson))
+            val response: WSResponse = await(request().put(requestBody))
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
         }
 
         val input = Seq(
-          ("AA1123A", "2021-22", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "20177", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2017-19", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA1123A", "2021-22", requestBodyJson, BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "20177", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2017-19", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2019-20", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2021-22", allInvalidValueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
           ("AA123456A", "2021-22", allInvalidDateOfInvestmentRequestBodyJson, BAD_REQUEST, allDateOfInvestmentFormatError),
           ("AA123456A", "2021-22", allInvalidUniqueInvestmentReferenceRequestBodyJson, BAD_REQUEST, allUniqueInvestmentReferenceFormatError),
@@ -679,13 +509,10 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
-            override def setupStubs(): StubMapping = {
-              AuditStub.audit()
-              AuthStub.authorised()
-              MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.PUT, desUri, downstreamStatus, errorBody(downstreamCode))
+            override def setupStubs(): Unit = {
+              DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
             val response: WSResponse = await(request().put(requestBodyJson))
@@ -694,14 +521,69 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
           }
         }
 
-        val input = Seq(
+        val errors = List(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
-          (BAD_REQUEST, "FORMAT_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "UNPROCESSABLE_ENTITY", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError)
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+
+        val extraTysErrors = List(
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }
+
+  private trait Test {
+
+    val nino: String          = "AA123456A"
+    val correlationId: String = "X-123"
+
+    def mtdUri: String = s"/investment/$nino/$mtdTaxYear"
+
+    def mtdTaxYear: String
+    def downstreamUri: String
+
+    def setupStubs(): Unit = {}
+
+    def request(): WSRequest = {
+      AuditStub.audit()
+      AuthStub.authorised()
+      MtdIdLookupStub.ninoFound(nino)
+      setupStubs()
+
+      buildRequest(mtdUri)
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+        )
+    }
+
+    def errorBody(code: String): String =
+      s"""
+         |      {
+         |        "code": "$code",
+         |        "reason": "message"
+         |      }
+    """.stripMargin
+
+  }
+
+  private trait NonTysTest extends Test {
+    def mtdTaxYear: String    = "2021-22"
+    def downstreamUri: String = s"/income-tax/reliefs/investment/$nino/2021-22"
+  }
+
+  private trait TysIfsTest extends Test {
+    def mtdTaxYear: String    = "2023-24"
+    def downstreamUri: String = s"/income-tax/reliefs/investment/23-24/$nino"
+  }
+
 }
