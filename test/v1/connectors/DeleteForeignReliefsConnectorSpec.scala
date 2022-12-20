@@ -25,34 +25,46 @@ import scala.concurrent.Future
 
 class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino: String    = "AA123456A"
-  val taxYear: String = "2019-20"
+  val nino: String = "AA123456A"
 
-  trait Test { _: ConnectorTest =>
-
-    val connector: DeleteForeignReliefsConnector = new DeleteForeignReliefsConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-
-  }
-
-  "delete" should {
-
-    val request: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
-
-    "return a result" when {
-      "the downstream call is successful" in new IfsTest with Test {
-        val outcome = Right(ResponseWrapper(correlationId, ()))
+  "DeleteForeignReliefsConnector" should {
+    "return the expected response for a non-TYS request" when {
+      "a valid request is made" in new IfsTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
+        val outcome          = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
-          url = s"$baseUrl/income-tax/reliefs/foreign/$nino/$taxYear"
+          url = s"$baseUrl/income-tax/reliefs/foreign/$nino/2019-20"
         )
           .returns(Future.successful(outcome))
 
         await(connector.delete(request)) shouldBe outcome
       }
     }
+    "return the expected response for a TYS request" when {
+      "a valid request is made" in new TysIfsTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+        val outcome          = Right(ResponseWrapper(correlationId, ()))
+
+        willDelete(
+          url = s"$baseUrl/income-tax/reliefs/foreign/23-24/$nino"
+        ).returns(Future.successful(outcome))
+
+        await(connector.delete(request)) shouldBe outcome
+      }
+    }
+  }
+
+  trait Test { _: ConnectorTest =>
+
+    def taxYear: TaxYear
+    val request: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(nino), taxYear)
+
+    val connector: DeleteForeignReliefsConnector = new DeleteForeignReliefsConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
+
   }
 
 }
