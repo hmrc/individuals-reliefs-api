@@ -17,10 +17,11 @@
 package v1.connectors
 
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
-import v1.connectors.DownstreamUri.IfsUri
+import v1.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsResponse
@@ -35,10 +36,17 @@ class RetrieveOtherReliefsConnector @Inject() (val http: HttpClient, val appConf
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveOtherReliefsResponse]] = {
 
-    val url = s"income-tax/reliefs/other/${request.nino}/${request.taxYear.asMtd}"
-    get(
-      IfsUri[RetrieveOtherReliefsResponse](s"$url")
-    )
+    import request._
+
+    val url =
+      if (taxYear.useTaxYearSpecificApi) {
+        TaxYearSpecificIfsUri[RetrieveOtherReliefsResponse](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/$nino")
+      } else {
+        // Note: endpoint uses mtd tax year format
+        IfsUri[RetrieveOtherReliefsResponse](s"income-tax/reliefs/other/$nino/${taxYear.asMtd}")
+      }
+
+    get(url)
   }
 
 }

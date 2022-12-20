@@ -36,6 +36,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
+    val response = RetrieveReliefInvestmentsResponse("2021-01-01", None, None , None, None, None)
   }
 
   "RetrieveReliefInvestmentsConnector" when {

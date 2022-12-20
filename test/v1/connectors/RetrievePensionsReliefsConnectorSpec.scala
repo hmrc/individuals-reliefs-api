@@ -19,6 +19,7 @@ package v1.connectors
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
+import v1.models.response.retrievePensionsReliefs.PensionsReliefs
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
 
@@ -43,13 +44,16 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
         nino = Nino(nino),
         taxYear = taxYear,
       )
+
+    val response = RetrievePensionsReliefsResponse(submittedOn = "2021-01-01",
+      PensionsReliefs(None,None,None,None, None))
   }
 
   "RetrievePensionsReliefsConnector" when {
     "retrieving pensions reliefs" must {
       "return a valid response" in new DesTest with Test {
 
-        val outcome = Right(ResponseWrapper(correlationId, RetrievePensionsReliefsResponse))
+        val outcome = Right(ResponseWrapper(correlationId, response))
 
         def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
 
@@ -66,7 +70,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
       "return a 200 status for a success scenario" in
         new TysIfsTest with Test {
 
-          val outcome = Right(ResponseWrapper(correlationId, RetrievePensionsReliefsResponse))
+          val outcome = Right(ResponseWrapper(correlationId, response))
 
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 

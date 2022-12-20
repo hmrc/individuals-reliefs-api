@@ -28,8 +28,6 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
 
   val nino: String = "AA123456A"
 
-  val response = RetrieveForeignReliefsResponse(submittedOn = "2021-01-02", None, None, None)
-
   trait Test {
     _: ConnectorTest =>
     def taxYear: String
@@ -40,6 +38,8 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
     )
 
     lazy val request: RetrieveForeignReliefsRequest = new RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+
+    val response = RetrieveForeignReliefsResponse(submittedOn = "2021-01-02", None, None, None)
 
   }
 
