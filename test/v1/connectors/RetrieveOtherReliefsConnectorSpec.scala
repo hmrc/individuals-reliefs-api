@@ -26,8 +26,7 @@ import scala.concurrent.Future
 
 class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYear: String = "2017-18"
-  val nino: String    = "AA123456A"
+  val nino: String = "AA123456A"
 
   trait Test { _: ConnectorTest =>
 
@@ -36,17 +35,37 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
+    val taxYear: TaxYear
+
+    val request: RetrieveOtherReliefsRequest = RetrieveOtherReliefsRequest(Nino(nino), taxYear)
+
+    val response = RetrieveOtherReliefsResponse(submittedOn = "2022-01-01", None, None, None, None, None, None, None)
   }
 
-  "retrieve" should {
-    "return a result" when {
-      val request: RetrieveOtherReliefsRequest = RetrieveOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  "RetrieveOtherReliefsConnector" should {
+    "return the expected response for a non-TYS request" when {
+      "a valid request is made" in new IfsTest with Test {
+        lazy val taxYear: TaxYear = TaxYear.fromMtd("2017-18")
 
-      "the downstream call is successful" in new IfsTest with Test {
-        val outcome = Right(ResponseWrapper(correlationId, RetrieveOtherReliefsResponse))
+        val outcome = Right(ResponseWrapper(correlationId, response))
 
         willGet(
-          url = s"$baseUrl/income-tax/reliefs/other/$nino/$taxYear"
+          url = s"$baseUrl/income-tax/reliefs/other/$nino/2017-18"
+        )
+          .returns(Future.successful(outcome))
+
+        await(connector.retrieve(request)) shouldBe outcome
+      }
+    }
+
+    "return the expected response for a TYS request" when {
+      "a valid request is made" in new TysIfsTest with Test {
+        lazy val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        val outcome = Right(ResponseWrapper(correlationId, response))
+
+        willGet(
+          url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino"
         )
           .returns(Future.successful(outcome))
 
@@ -54,5 +73,4 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
       }
     }
   }
-
 }
