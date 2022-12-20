@@ -7,7 +7,7 @@ PUT        /other/:nino/:taxYear                            v1.controllers.Amend
 DELETE     /other/:nino/:taxYear                            v1.controllers.DeleteOtherReliefsController.handleRequest(nino: String, taxYear: String)
 
 GET        /foreign/:nino/:taxYear                          v1.controllers.RetrieveForeignReliefsController.handleRequest(nino: String, taxYear: String)
-PUT        /foreign/:nino/:taxYear                          v1.controllers.AmendForeignReliefsController.handleRequest(nino: String, taxYear: String)
+PUT        /foreign/:nino/:taxYear                          v1.controllers.CreateAndAmendForeignReliefsController.handleRequest(nino: String, taxYear: String)
 DELETE     /foreign/:nino/:taxYear                          v1.controllers.DeleteForeignReliefsController.handleRequest(nino: String, taxYear: String)
 
 GET        /pensions/:nino/:taxYear                         v1.controllers.RetrievePensionsReliefsController.handleRequest(nino: String, taxYear: String)

@@ -14,26 +14,17 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveForeignReliefs
+package v1.models.response.createAndAmendForeignReliefs
 
 import config.AppConfig
-import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class RetrieveForeignReliefsResponse(
-    submittedOn: String,
-    foreignTaxCreditRelief: Option[ForeignTaxCreditRelief],
-    foreignIncomeTaxCreditRelief: Option[Seq[ForeignIncomeTaxCreditRelief]],
-    foreignTaxForFtcrNotClaimed: Option[ForeignTaxForFtcrNotClaimed]
-)
+object CreateAndAmendForeignReliefsResponse extends HateoasLinks {
 
-object RetrieveForeignReliefsResponse extends HateoasLinks {
-  implicit val format: OFormat[RetrieveForeignReliefsResponse] = Json.format[RetrieveForeignReliefsResponse]
+  implicit object LinksFactory extends HateoasLinksFactory[Unit, CreateAndAmendForeignReliefsHateoasData] {
 
-  implicit object LinksFactory extends HateoasLinksFactory[RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData] {
-
-    override def links(appConfig: AppConfig, data: RetrieveForeignReliefsHateoasData): Seq[Link] = {
+    override def links(appConfig: AppConfig, data: CreateAndAmendForeignReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
         retrieveForeignReliefs(appConfig, nino, taxYear),
@@ -46,4 +37,4 @@ object RetrieveForeignReliefsResponse extends HateoasLinks {
 
 }
 
-case class RetrieveForeignReliefsHateoasData(nino: String, taxYear: String) extends HateoasData
+case class CreateAndAmendForeignReliefsHateoasData(nino: String, taxYear: String) extends HateoasData

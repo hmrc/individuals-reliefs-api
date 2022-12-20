@@ -61,8 +61,8 @@ trait HateoasLinks {
   def retrieveForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
-  def amendForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_FOREIGN)
+  def createAndAmendForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_RELIEFS_FOREIGN)
 
   def deleteForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_FOREIGN)
