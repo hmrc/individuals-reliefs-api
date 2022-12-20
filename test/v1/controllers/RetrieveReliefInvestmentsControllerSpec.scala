@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import v1.models.domain.Nino
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveInvestmentsRequestParser
@@ -72,56 +73,6 @@ class RetrieveReliefInvestmentsControllerSpec
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
 
-  private val responseBody = RetrieveReliefInvestmentsResponse(
-    "2020-06-17T10:53:38Z",
-    Some(
-      Seq(
-        VctSubscriptionsItem(
-          "VCTREF",
-          Some("VCT Fund X"),
-          Some("2018-04-16"),
-          Some(BigDecimal(23312.00)),
-          BigDecimal(1334.00)
-        ))),
-    Some(
-      Seq(
-        EisSubscriptionsItem(
-          "XTAL",
-          Some("EIS Fund X"),
-          knowledgeIntensive = true,
-          Some("2020-12-12"),
-          Some(BigDecimal(23312.00)),
-          BigDecimal(43432.00)
-        ))),
-    Some(
-      Seq(
-        CommunityInvestmentItem(
-          "CIREF",
-          Some("CI X"),
-          Some("2020-12-12"),
-          Some(BigDecimal(6442.00)),
-          BigDecimal(2344.00)
-        ))),
-    Some(
-      Seq(
-        SeedEnterpriseInvestmentItem(
-          "123412/1A",
-          Some("Company Inc"),
-          Some("2020-12-12"),
-          Some(BigDecimal(123123.22)),
-          BigDecimal(3432.00)
-        ))),
-    Some(
-      Seq(
-        SocialEnterpriseInvestmentItem(
-          "123412/1A",
-          Some("SE Inc"),
-          Some("2020-12-12"),
-          Some(BigDecimal(123123.22)),
-          BigDecimal(3432.00)
-        )))
-  )
-
   "handleRequest" should {
     "return Ok" when {
       "the request received is valid" in new Test {
@@ -132,17 +83,18 @@ class RetrieveReliefInvestmentsControllerSpec
 
         MockRetrieveReliefService
           .retrieve(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseModel))))
 
         MockHateoasFactory
-          .wrap(responseBody, RetrieveReliefInvestmentsHateoasData(nino, taxYear))
-          .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
+          .wrap(responseModel, RetrieveReliefInvestmentsHateoasData(nino, taxYear))
+          .returns(HateoasWrapper(responseModel, Seq(testHateoasLink)))
 
         val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
       }
     }
+
     "return the error as per spec" when {
       "parser errors occur" should {
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
@@ -191,14 +143,18 @@ class RetrieveReliefInvestmentsControllerSpec
           }
         }
 
-        val input = Seq(
+        val errors = List(
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (InternalError, INTERNAL_SERVER_ERROR)
         )
 
-        input.foreach(args => (serviceErrors _).tupled(args))
+        val extraTysErrors = List(
+          (RuleTaxYearNotSupportedError, BAD_REQUEST)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrors _).tupled(args))
       }
     }
   }
