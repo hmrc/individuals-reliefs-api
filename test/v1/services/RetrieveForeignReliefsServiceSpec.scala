@@ -25,7 +25,12 @@ import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
-import v1.models.response.retrieveForeignReliefs.{ForeignIncomeTaxCreditRelief, ForeignTaxCreditRelief, ForeignTaxForFtcrNotClaimed, RetrieveForeignReliefsResponse}
+import v1.models.response.retrieveForeignReliefs.{
+  ForeignIncomeTaxCreditRelief,
+  ForeignTaxCreditRelief,
+  ForeignTaxForFtcrNotClaimed,
+  RetrieveForeignReliefsResponse
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -66,25 +71,31 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
       }
     }
     "map errors according to spec" when {
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"a $desErrorCode error is returned from the service" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"a $downstreamErrorCode error is returned from the service" in new Test {
 
           MockRetrieveForeignReliefsConnector
             .retrieve(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
-        ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
-        ("FORMAT_TAX_YEAR", TaxYearFormatError),
-        ("NO_DATA_FOUND", NotFoundError),
-        ("SERVER_ERROR", InternalError),
-        ("SERVICE_UNAVAILABLE", InternalError)
+      val errors = Seq(
+        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "NO_DATA_FOUND"             -> NotFoundError,
+        "INVALID_CORRELATIONID"     -> InternalError,
+        "SERVER_ERROR"              -> InternalError,
+        "SERVICE_UNAVAILABLE"       -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = Seq(
+        "INVALID_CORRELATION_ID" -> InternalError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
 

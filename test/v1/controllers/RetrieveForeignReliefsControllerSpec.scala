@@ -157,7 +157,9 @@ class RetrieveForeignReliefsControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR)
+          (InternalError, INTERNAL_SERVER_ERROR),
+          (RuleTaxYearNotSupportedError, BAD_REQUEST),
+          (RuleTaxYearRangeInvalidError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))

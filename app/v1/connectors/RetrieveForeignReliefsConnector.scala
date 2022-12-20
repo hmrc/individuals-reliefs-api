@@ -17,10 +17,11 @@
 package v1.connectors
 
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
-import v1.connectors.DownstreamUri.IfsUri
+import v1.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
@@ -35,10 +36,16 @@ class RetrieveForeignReliefsConnector @Inject() (val http: HttpClient, val appCo
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveForeignReliefsResponse]] = {
 
-    val url = s"income-tax/reliefs/foreign/${request.nino}/${request.taxYear.asMtd}"
-    get(
-      IfsUri[RetrieveForeignReliefsResponse](s"$url")
-    )
+    import request._
+
+    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
+      TaxYearSpecificIfsUri[RetrieveForeignReliefsResponse](s"income-tax/reliefs/foreign/${taxYear.asTysDownstream}/$nino")
+    } else {
+      IfsUri[RetrieveForeignReliefsResponse](s"income-tax/reliefs/foreign/$nino/${taxYear.asMtd}")
+    }
+
+    get(downstreamUri)
+
   }
 
 }
