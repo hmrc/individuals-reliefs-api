@@ -18,30 +18,10 @@ package v1.models.request.createAndAmendForeignReliefs
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.fixtures.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel}
 import v1.models.utils.JsonErrorValidators
 
 class CreateAndAmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
-
-  private val amount = 1234.56
-
-  private val createAndAmendForeignReliefsBody = CreateAndAmendForeignReliefsBody(
-    foreignTaxCreditRelief = Some(
-      ForeignTaxCreditRelief(
-        amount = amount
-      )),
-    foreignIncomeTaxCreditRelief = Some(
-      Seq(
-        ForeignIncomeTaxCreditRelief(
-          countryCode = "FRA",
-          foreignTaxPaid = Some(amount),
-          taxableAmount = amount,
-          employmentLumpSum = true
-        ))),
-    foreignTaxForFtcrNotClaimed = Some(
-      ForeignTaxForFtcrNotClaimed(
-        amount = amount
-      ))
-  )
 
   private val emptyCreateAndAmendForeignReliefsBody = CreateAndAmendForeignReliefsBody(
     None,
@@ -49,33 +29,12 @@ class CreateAndAmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValida
     None
   )
 
-  private val json = Json.parse(
-    s"""|
-        |{
-        |  "foreignTaxCreditRelief": {
-        |    "amount": $amount
-        |  },
-        |  "foreignIncomeTaxCreditRelief": [
-        |    {
-        |      "countryCode": "FRA",
-        |      "foreignTaxPaid": $amount,
-        |      "taxableAmount": $amount,
-        |      "employmentLumpSum": true
-        |    }
-        |  ],
-        |  "foreignTaxForFtcrNotClaimed": {
-        |    "amount": $amount
-        |  }
-        |}
-        |""".stripMargin
-  )
-
   private val emptyJson = Json.parse("""{}""")
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        createAndAmendForeignReliefsBody shouldBe json.as[CreateAndAmendForeignReliefsBody]
+        requestBodyModel shouldBe requestBodyJson.as[CreateAndAmendForeignReliefsBody]
       }
     }
   }
@@ -89,7 +48,7 @@ class CreateAndAmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValida
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(createAndAmendForeignReliefsBody) shouldBe json
+        Json.toJson(requestBodyModel) shouldBe requestBodyJson
       }
     }
   }

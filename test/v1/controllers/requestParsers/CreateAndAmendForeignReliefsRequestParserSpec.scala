@@ -18,6 +18,7 @@ package v1.controllers.requestParsers
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.fixtures.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel}
 import v1.models.domain.Nino
 import v1.mocks.validators.MockCreateAndAmendForeignReliefsValidator
 import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
@@ -28,26 +29,6 @@ class CreateAndAmendForeignReliefsRequestParserSpec extends UnitSpec {
   private val nino                   = "AA123456A"
   private val taxYear                = "2018-19"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-  val amount: BigDecimal             = 1234.56
-
-  private val requestBodyJson = Json.parse(s"""|
-        |{
-        |  "foreignTaxCreditRelief": {
-        |    "amount": $amount
-        |  },
-        |  "foreignIncomeTaxCreditRelief": [
-        |    {
-        |      "countryCode": "FRA",
-        |      "foreignTaxPaid": $amount,
-        |      "taxableAmount": $amount,
-        |      "employmentLumpSum": true
-        |    }
-        |  ],
-        |  "foreignTaxForFtcrNotClaimed": {
-        |    "amount": $amount
-        |  }
-        |}
-        |""".stripMargin)
 
   val inputData: CreateAndAmendForeignReliefsRawData =
     CreateAndAmendForeignReliefsRawData(nino, taxYear, requestBodyJson)
@@ -65,32 +46,10 @@ class CreateAndAmendForeignReliefsRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockCreateAndAmendForeignReliefsValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe
-          Right(
-            CreateAndAmendForeignReliefsRequest(
-              Nino(nino),
-              TaxYear.fromMtd(taxYear),
-              CreateAndAmendForeignReliefsBody(
-                foreignTaxCreditRelief = Some(
-                  ForeignTaxCreditRelief(
-                    amount = amount
-                  )),
-                foreignIncomeTaxCreditRelief = Some(
-                  Seq(
-                    ForeignIncomeTaxCreditRelief(
-                      countryCode = "FRA",
-                      foreignTaxPaid = Some(amount),
-                      taxableAmount = amount,
-                      employmentLumpSum = true
-                    ))),
-                foreignTaxForFtcrNotClaimed = Some(
-                  ForeignTaxForFtcrNotClaimed(
-                    amount = amount
-                  ))
-              )
-            ))
+        parser.parseRequest(inputData) shouldBe Right(CreateAndAmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel))
       }
     }
+
     "return an ErrorWrapper" when {
 
       "a single validation error occurs" in new Test {

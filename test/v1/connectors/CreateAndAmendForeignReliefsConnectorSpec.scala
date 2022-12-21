@@ -16,6 +16,7 @@
 
 package v1.connectors
 
+import v1.fixtures.CreateAndAmendForeignReliefsFixtures.requestBodyModel
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
@@ -25,53 +26,47 @@ import scala.concurrent.Future
 
 class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYear: String    = "2017-18"
-  val nino: String       = "AA123456A"
-  val amount: BigDecimal = 1234.56
+  "createAndAmend" must {
 
-  val body: CreateAndAmendForeignReliefsBody = CreateAndAmendForeignReliefsBody(
-    foreignTaxCreditRelief = Some(
-      ForeignTaxCreditRelief(
-        amount = amount
-      )),
-    foreignIncomeTaxCreditRelief = Some(
-      Seq(
-        ForeignIncomeTaxCreditRelief(
-          countryCode = "FRA",
-          foreignTaxPaid = Some(amount),
-          taxableAmount = amount,
-          employmentLumpSum = true
-        ))),
-    foreignTaxForFtcrNotClaimed = Some(
-      ForeignTaxForFtcrNotClaimed(
-        amount = amount
-      ))
-  )
+    "put a body and return 204 no body" in new IfsTest with Test {
+      val taxYear = "2017-18"
+      val outcome = Right(ResponseWrapper(correlationId, ()))
+
+      willPut(
+        url = s"$baseUrl/income-tax/reliefs/foreign/AA123456A/2017-18",
+        body = requestBodyModel
+      )
+        .returns(Future.successful(outcome))
+
+      await(connector.createAndAmend(request)) shouldBe outcome
+    }
+
+    "put a body and return 204 no body for a Tax Year Specific (TYS) tax year" in new TysIfsTest with Test {
+      val taxYear = "2023-24"
+      val outcome = Right(ResponseWrapper(correlationId, ()))
+
+      willPut(
+        url = s"$baseUrl/income-tax/reliefs/foreign/23-24/AA123456A",
+        body = requestBodyModel
+      )
+        .returns(Future.successful(outcome))
+
+      await(connector.createAndAmend(request)) shouldBe outcome
+    }
+  }
 
   trait Test { _: ConnectorTest =>
+
+    val taxYear: String
 
     val connector: CreateAndAmendForeignReliefsConnector = new CreateAndAmendForeignReliefsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-  }
+    lazy val request: CreateAndAmendForeignReliefsRequest =
+      CreateAndAmendForeignReliefsRequest(Nino("AA123456A"), TaxYear.fromMtd(taxYear), requestBodyModel)
 
-  "doConnector" must {
-
-    val request: CreateAndAmendForeignReliefsRequest = CreateAndAmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
-
-    "put a body and return 204 no body" in new IfsTest with Test {
-      val outcome = Right(ResponseWrapper(correlationId, ()))
-
-      willPut(
-        url = s"$baseUrl/income-tax/reliefs/foreign/$nino/$taxYear",
-        body = body
-      )
-        .returns(Future.successful(outcome))
-
-      await(connector.createAndAmend(request)) shouldBe outcome
-    }
   }
 
 }
