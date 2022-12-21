@@ -18,34 +18,15 @@ package v1.models.request.createAndAmendReliefInvestments
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 import v1.models.utils.JsonErrorValidators
 
 class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 
-  val socialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
-    "VCTREF",
-    Some("VCT Fund X"),
-    Some("2018-04-16"),
-    Some(BigDecimal(23312.00)),
-    BigDecimal(1334.00)
-  )
-
-  val json = Json.parse(
-    """
-      |{
-      |  "uniqueInvestmentRef": "VCTREF",
-      |  "socialEnterpriseName": "VCT Fund X",
-      |  "dateOfInvestment": "2018-04-16",
-      |  "amountInvested": 23312.00,
-      |  "reliefClaimed": 1334.00
-      |}
-        """.stripMargin
-  )
-
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        json.as[SocialEnterpriseInvestmentItem] shouldBe socialEnterpriseInvestmentItem
+        socialEnterpriseInvestmentItemJson.as[SocialEnterpriseInvestmentItem] shouldBe socialEnterpriseInvestmentItemModel
       }
     }
   }
@@ -53,7 +34,7 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(socialEnterpriseInvestmentItem) shouldBe json
+        Json.toJson(socialEnterpriseInvestmentItemModel) shouldBe socialEnterpriseInvestmentItemJson
       }
     }
   }

@@ -18,12 +18,13 @@ package v1.services
 
 import cats.data.EitherT
 import cats.implicits._
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.DeleteReliefInvestmentsConnector
 import v1.controllers.EndpointLogContext
-import v1.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import v1.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
 import v1.support.DownstreamResponseMappingSupport
 
@@ -38,18 +39,26 @@ class DeleteReliefInvestmentsService @Inject() (connector: DeleteReliefInvestmen
       logContext: EndpointLogContext,
       correlationId: String): Future[ServiceOutcome[Unit]] = {
     val result = for {
-      responseWrapper <- EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(desErrorMap))
+      responseWrapper <- EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(errorMap))
     } yield responseWrapper
     result.value
   }
 
-  private def desErrorMap: Map[String, MtdError] =
-    Map(
+  private val errorMap: Map[String, MtdError] = {
+    val errors: Map[String, MtdError] = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
+
+    val extraTysErrors: Map[String, MtdError] = Map(
+      "INVALID_CORRELATION_ID" -> InternalError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+    )
+
+    errors ++ extraTysErrors
+  }
 
 }

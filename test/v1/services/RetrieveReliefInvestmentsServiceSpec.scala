@@ -19,13 +19,13 @@ package v1.services
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
+import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v1.mocks.connectors.MockRetrieveReliefInvestmentsConnector
 import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
-import v1.models.response.retrieveReliefInvestments._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -35,56 +35,6 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
   private val nino: String           = "AA123456A"
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
-
-  private val fullResponseModel = RetrieveReliefInvestmentsResponse(
-    "2020-06-17T10:53:38Z",
-    Some(
-      Seq(
-        VctSubscriptionsItem(
-          "VCTREF",
-          Some("VCT Fund X"),
-          Some("2018-04-16"),
-          Some(BigDecimal(23312.00)),
-          BigDecimal(1334.00)
-        ))),
-    Some(
-      Seq(
-        EisSubscriptionsItem(
-          "XTAL",
-          Some("EIS Fund X"),
-          true,
-          Some("2020-12-12"),
-          Some(BigDecimal(23312.00)),
-          BigDecimal(43432.00)
-        ))),
-    Some(
-      Seq(
-        CommunityInvestmentItem(
-          "CIREF",
-          Some("CI X"),
-          Some("2020-12-12"),
-          Some(BigDecimal(6442.00)),
-          BigDecimal(2344.00)
-        ))),
-    Some(
-      Seq(
-        SeedEnterpriseInvestmentItem(
-          "123412/1A",
-          Some("Company Inc"),
-          Some("2020-12-12"),
-          Some(BigDecimal(123123.22)),
-          BigDecimal(3432.00)
-        ))),
-    Some(
-      Seq(
-        SocialEnterpriseInvestmentItem(
-          "123412/1A",
-          Some("SE Inc"),
-          Some("2020-12-12"),
-          Some(BigDecimal(123123.22)),
-          BigDecimal(3432.00)
-        )))
-  )
 
   private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
@@ -103,34 +53,40 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
       "return mapped result" in new Test {
         MockRetrieveReliefInvestmentsConnector
           .retrieve(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, fullResponseModel))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseModel))))
 
-        await(service.retrieve(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullResponseModel))
+        await(service.retrieve(requestData)) shouldBe Right(ResponseWrapper(correlationId, responseModel))
       }
     }
 
     "unsuccessful" must {
       "map errors according to spec" when {
 
-        def serviceError(desErrorCode: String, error: MtdError): Unit =
-          s"a $desErrorCode error is returned from the service" in new Test {
+        def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+          s"a $downstreamErrorCode error is returned from the service" in new Test {
 
             MockRetrieveReliefInvestmentsConnector
               .retrieve(requestData)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
             await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val input = Seq(
+        val errors = List(
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
-          ("FORMAT_TAX_YEAR", TaxYearFormatError),
+          ("INVALID_TAX_YEAR", TaxYearFormatError),
+          ("INVALID_CORRELATIONID", InternalError),
           ("NO_DATA_FOUND", NotFoundError),
           ("SERVER_ERROR", InternalError),
           ("SERVICE_UNAVAILABLE", InternalError)
         )
 
-        input.foreach(args => (serviceError _).tupled(args))
+        val extraTysErrors = List(
+          ("INVALID_CORRELATION_ID", InternalError),
+          ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
       }
     }
   }

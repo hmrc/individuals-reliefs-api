@@ -40,19 +40,27 @@ class RetrieveForeignReliefsService @Inject() (connector: RetrieveForeignReliefs
       correlationId: String): Future[ServiceOutcome[RetrieveForeignReliefsResponse]] = {
 
     val result = for {
-      responseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(desErrorMap))
-    } yield responseWrapper
+      downstreamResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(errorMap))
+    } yield downstreamResponseWrapper
 
     result.value
   }
 
-  private def desErrorMap =
-    Map(
+  private val errorMap = {
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
+      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
+      "INVALID_CORRELATIONID"     -> InternalError,
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
+    val extraTysErrors = Map(
+      "INVALID_CORRELATION_ID" -> InternalError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+    )
+
+    errors ++ extraTysErrors
+  }
 
 }

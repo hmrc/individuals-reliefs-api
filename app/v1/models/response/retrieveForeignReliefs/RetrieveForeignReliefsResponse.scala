@@ -37,7 +37,7 @@ object RetrieveForeignReliefsResponse extends HateoasLinks {
       import data._
       Seq(
         retrieveForeignReliefs(appConfig, nino, taxYear),
-        amendForeignReliefs(appConfig, nino, taxYear),
+        createAndAmendForeignReliefs(appConfig, nino, taxYear),
         deleteForeignReliefs(appConfig, nino, taxYear)
       )
     }

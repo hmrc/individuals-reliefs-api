@@ -17,14 +17,13 @@
 package v1.connectors
 
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
-import v1.connectors.DownstreamUri.IfsUri
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v1.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments._
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -35,10 +34,15 @@ class RetrieveReliefInvestmentsConnector @Inject() (val http: HttpClient, val ap
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveReliefInvestmentsResponse]] = {
 
-    val url = s"income-tax/reliefs/investment/${request.nino}/${request.taxYear.asMtd}"
-    get(
-      IfsUri[RetrieveReliefInvestmentsResponse](s"$url")
-    )
+    import request._
+
+    val url = if (taxYear.useTaxYearSpecificApi) {
+      TaxYearSpecificIfsUri[RetrieveReliefInvestmentsResponse](s"income-tax/reliefs/investment/${taxYear.asTysDownstream}/$nino")
+    } else {
+      IfsUri[RetrieveReliefInvestmentsResponse](s"income-tax/reliefs/investment/$nino/${taxYear.asMtd}")
+    }
+
+    get(url)
   }
 
 }

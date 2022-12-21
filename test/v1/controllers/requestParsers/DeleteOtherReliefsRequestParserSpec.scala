@@ -37,6 +37,7 @@ class DeleteOtherReliefsRequestParserSpec extends UnitSpec {
   "parse" should {
 
     "return a request object" when {
+
       "valid request data is supplied" in new Test {
         MockDeleteOtherReliefsValidator.validate(inputData).returns(Nil)
 
