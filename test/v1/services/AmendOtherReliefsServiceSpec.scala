@@ -31,40 +31,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class AmendOtherReliefsServiceSpec extends UnitSpec {
 
-  val taxYear: String                = "2017-18"
-  val nino: String                   = "AA123456A"
-  implicit val correlationId: String = "X-123"
-
-  val body: AmendOtherReliefsBody = AmendOtherReliefsBody(
-    Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
-    Some(PayrollGiving(Some("myref"), 154.00)),
-    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
-    Some(Seq(MaintenancePayments(Some("myRef"), Some("Hilda"), Some("2000-01-01"), 222.22))),
-    Some(
-      Seq(
-        PostCessationTradeReliefAndCertainOtherLosses(
-          Some("myRef"),
-          Some("ACME Inc"),
-          Some("2019-08-10"),
-          Some("Widgets Manufacturer"),
-          Some("AB12412/A12"),
-          222.22))),
-    Some(AnnualPaymentsMade(Some("myref"), 763.00)),
-    Some(Seq(QualifyingLoanInterestPayments(Some("myRef"), Some("Maurice"), 763.00)))
-  )
-
-  private val requestData = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
-
-  trait Test extends MockAmendOtherReliefsConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new AmendOtherReliefsService(
-      connector = mockAmendOtherReliefsConnector
-    )
-
-  }
-
   "service" when {
     "service call successful" must {
       "return mapped result" in new Test {
@@ -91,24 +57,42 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
         }
 
       val errors = Seq(
-        "INVALID_TAXABLE_ENTITY_ID"        -> NinoFormatError,
-        "FORMAT_TAX_YEAR"                  -> TaxYearFormatError,
-        "INVALID_CORRELATIONID"            -> InternalError,
+        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+        "INVALID_TAX_YEAR" -> TaxYearFormatError,
+        "INVALID_CORRELATIONID" -> InternalError,
         "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailedError,
-        "SERVER_ERROR"                     -> InternalError,
-        "SERVICE_UNAVAILABLE"              -> InternalError
+        "SERVER_ERROR" -> InternalError,
+        "SERVICE_UNAVAILABLE" -> InternalError
       )
 
-      val tysErrors = Seq(
+      val extraTysErrors = Seq(
         "INVALID_CORRELATION_ID" -> InternalError,
-        "INVALID_TAX_YEAR"       -> TaxYearFormatError,
-        "INVALID_PAYLOAD"        -> InternalError,
+
+        "INVALID_PAYLOAD" -> InternalError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "UNPROCESSABLE_ENTITY"   -> InternalError
+        "UNPROCESSABLE_ENTITY" -> InternalError
       )
 
-      (errors ++ tysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
+  }
+
+  trait Test extends MockAmendOtherReliefsConnector {
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    val service = new AmendOtherReliefsService(
+      connector = mockAmendOtherReliefsConnector
+    )
+
+    val taxYear: String = "2017-18"
+    val nino: String = "AA123456A"
+    implicit val correlationId: String = "X-123"
+
+    val body: AmendOtherReliefsBody = AmendOtherReliefsBody(None, None, None, None, None, None, None)
+
+    val requestData = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
+
   }
 
 }

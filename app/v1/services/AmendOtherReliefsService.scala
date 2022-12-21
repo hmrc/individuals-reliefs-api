@@ -43,9 +43,9 @@ class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector)
   }
 
   private def downstreamErrorMap: Map[String, MtdError] = {
-    val desErrors = Map(
+    val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID"        -> NinoFormatError,
-      "FORMAT_TAX_YEAR"                  -> TaxYearFormatError,
+      "INVALID_TAX_YEAR"                 -> TaxYearFormatError,
       "INVALID_CORRELATIONID"            -> InternalError,
       "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailedError,
       "SERVER_ERROR"                     -> InternalError,
@@ -54,13 +54,12 @@ class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector)
 
     val extraTysErrors = Map(
       "INVALID_CORRELATION_ID" -> InternalError,
-      "INVALID_TAX_YEAR"       -> TaxYearFormatError,
       "INVALID_PAYLOAD"        -> InternalError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "UNPROCESSABLE_ENTITY"   -> InternalError
     )
 
-    desErrors ++ extraTysErrors
+    errors ++ extraTysErrors
   }
 
 }

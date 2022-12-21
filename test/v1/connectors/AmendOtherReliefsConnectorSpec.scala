@@ -25,57 +25,47 @@ import scala.concurrent.Future
 
 class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYear: String = "2017-18"
-  val nino: String    = "AA123456A"
+  "AmendOtherReliefsConnector" must {
 
-  val body: AmendOtherReliefsBody = AmendOtherReliefsBody(
-    Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
-    Some(PayrollGiving(Some("myref"), 154.00)),
-    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
-    Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
-    Some(
-      Seq(
-        PostCessationTradeReliefAndCertainOtherLosses(
-          Some("myref"),
-          Some("ACME Inc"),
-          Some("2019-08-10"),
-          Some("Widgets Manufacturer"),
-          Some("AB12412/A12"),
-          222.22))),
-    Some(AnnualPaymentsMade(Some("myref"), 763.00)),
-    Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
-  )
+    "return the expected response for a non-TYS request" when {
+      "a valid request is made" in new IfsTest with Test {
+        val request: AmendOtherReliefsRequest = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd("2017-18"), body)
 
-  trait Test { _: ConnectorTest =>
+        willPut(url = s"$baseUrl/income-tax/reliefs/other/$nino/$taxYear", body = body)
+          .returns(Future.successful(outcome))
+
+        await(connector.amend(request)) shouldBe outcome
+      }
+    }
+
+    "return the expected response for a TYS request" when {
+      "a valid request is made" in new TysIfsTest with Test {
+        val request: AmendOtherReliefsRequest = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd("2023-24"), body)
+
+        willPut(url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino", body = body)
+          .returns(Future.successful(outcome))
+
+        await(connector.amend(request)) shouldBe outcome
+      }
+    }
+
+  }
+
+  trait Test {
+    _: ConnectorTest =>
 
     val connector: AmendOtherReliefsConnector = new AmendOtherReliefsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-  }
+    val taxYear: String = "2017-18"
+    val nino: String    = "AA123456A"
 
-  "AmendOtherReliefsConnector" must {
+    val body: AmendOtherReliefsBody = AmendOtherReliefsBody(None, None, None, None, None, None, None)
 
     val outcome = Right(ResponseWrapper(correlationId, ()))
 
-    "put a body and return 204 no body" in new IfsTest with Test {
-      val request: AmendOtherReliefsRequest = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
-
-      willPut(url = s"$baseUrl/income-tax/reliefs/other/$nino/$taxYear", body = body)
-        .returns(Future.successful(outcome))
-
-      await(connector.amend(request)) shouldBe outcome
-    }
-
-    "put a body and return 204 no body for a TYS tax year" in new TysIfsTest with Test {
-      val request: AmendOtherReliefsRequest = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd("2023-24"), body)
-
-      willPut(url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino", body = body)
-        .returns(Future.successful(outcome))
-
-      await(connector.amend(request)) shouldBe outcome
-    }
   }
 
 }

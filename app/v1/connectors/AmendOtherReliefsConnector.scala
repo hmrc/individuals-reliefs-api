@@ -30,19 +30,18 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AmendOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def amend(request: AmendOtherReliefsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def amend(
+      request: AmendOtherReliefsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     import request._
 
-    val downstreamUrl = if(taxYear.useTaxYearSpecificApi){
+    val downstreamUrl = if (taxYear.useTaxYearSpecificApi) {
       TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/$nino")
-    }else{
-      IfsUri[Unit](s"income-tax/reliefs/other/${nino}/${taxYear.asMtd}")
+    } else {
+      IfsUri[Unit](s"income-tax/reliefs/other/$nino/${taxYear.asMtd}")
     }
 
-    put(
-      body = request.body,
-      downstreamUrl)
+    put(body, downstreamUrl)
 
   }
 
