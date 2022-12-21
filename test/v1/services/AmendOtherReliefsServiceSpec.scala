@@ -80,12 +80,12 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
   "unsuccessful" must {
     "map errors according to spec" when {
 
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"a $desErrorCode error is returned from the service" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"a $downstreamErrorCode error is returned from the service" in new Test {
 
           MockAmendOtherReliefsConnector
             .amend(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
@@ -101,9 +101,10 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
 
       val tysErrors = Seq(
         "INVALID_CORRELATION_ID" -> InternalError,
-        "INVALID_PAYLOAD" -> InternalError,
+        "INVALID_TAX_YEAR"       -> TaxYearFormatError,
+        "INVALID_PAYLOAD"        -> InternalError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "UNPROCESSABLE_ENTITY" -> InternalError
+        "UNPROCESSABLE_ENTITY"   -> InternalError
       )
 
       (errors ++ tysErrors).foreach(args => (serviceError _).tupled(args))

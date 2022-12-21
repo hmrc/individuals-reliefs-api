@@ -128,7 +128,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
   }
 
-  private trait nonTysTest extends Test {
+  private trait NonTysTest extends Test {
     def taxYear:String = "2020-21"
     def downstreamUri: String = s"/income-tax/reliefs/other/$nino/$taxYear"
   }
@@ -141,7 +141,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
     "return a 200 status code" when {
 
-      "any valid request is made" in new nonTysTest {
+      "any valid request is made" in new NonTysTest {
 
         override def setupStubs(): StubMapping = {
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
@@ -164,7 +164,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       }
     }
     "return a 400 with multiple errors" when {
-      "all field value validations fail on the request body" in new nonTysTest {
+      "all field value validations fail on the request body" in new NonTysTest {
 
         val allInvalidValueRequestBodyJson: JsValue = Json.parse("""
             |{
@@ -757,7 +757,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new nonTysTest {
+          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
             override val nino: String             = requestNino
             override val taxYear: String          = requestTaxYear
@@ -794,7 +794,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new nonTysTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -809,7 +809,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val input = Seq(
+        val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "FORMAT_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
@@ -817,7 +817,15 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError)
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+
+        val extraTysErrors = Seq(
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (UNPROCESSABLE_ENTITY, "UNPROCESSABLE_ENTITY", INTERNAL_SERVER_ERROR, InternalError),
+        )
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
   }

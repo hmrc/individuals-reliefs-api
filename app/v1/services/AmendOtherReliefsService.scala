@@ -54,6 +54,7 @@ class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector)
 
     val extraTysErrors = Map(
       "INVALID_CORRELATION_ID" -> InternalError,
+      "INVALID_TAX_YEAR"       -> TaxYearFormatError,
       "INVALID_PAYLOAD"        -> InternalError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "UNPROCESSABLE_ENTITY"   -> InternalError
