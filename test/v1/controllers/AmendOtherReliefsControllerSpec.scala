@@ -265,14 +265,18 @@ class AmendOtherReliefsControllerSpec
           }
         }
 
-        val input = Seq(
+        val errors = Seq(
           (NinoFormatError, BAD_REQUEST),
           (InternalError, INTERNAL_SERVER_ERROR),
           (TaxYearFormatError, BAD_REQUEST),
           (RuleSubmissionFailedError, FORBIDDEN)
         )
 
-        input.foreach(args => (serviceErrors _).tupled(args))
+        val extraTysErrors = Seq(
+          (RuleTaxYearNotSupportedError, BAD_REQUEST)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrors _).tupled(args))
       }
     }
   }

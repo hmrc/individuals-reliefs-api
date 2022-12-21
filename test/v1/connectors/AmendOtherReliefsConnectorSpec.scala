@@ -57,7 +57,6 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
   "AmendOtherReliefsConnector" must {
 
-
     val outcome = Right(ResponseWrapper(correlationId, ()))
 
     "put a body and return 204 no body" in new IfsTest with Test {
