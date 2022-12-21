@@ -32,7 +32,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino                  = "AA123456A"
-    val taxYear: String       = "2021-22"
+    def taxYear: String
     val correlationId: String = "X-123"
 
     val requestBodyJson = Json.parse("""
@@ -107,6 +107,9 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
     def setupStubs(): StubMapping
 
     def request(): WSRequest = {
+      AuditStub.audit()
+      AuthStub.authorised()
+      MtdIdLookupStub.ninoFound(nino)
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
@@ -126,9 +129,11 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
   }
 
   private trait nonTysTest extends Test {
+    def taxYear:String = "2020-21"
     def downstreamUri: String = s"/income-tax/reliefs/other/$nino/$taxYear"
   }
   private trait TysTest extends Test {
+    def taxYear: String = "2023-24"
     def downstreamUri: String = s"/income-tax/reliefs/other/23-24/$nino"
   }
 
@@ -139,9 +144,6 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       "any valid request is made" in new nonTysTest {
 
         override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
         }
 
@@ -153,9 +155,6 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
       "any valid Tax-Year-Specific (TYS) request is made" in new TysTest {
         override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
         }
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -165,7 +164,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
       }
     }
     "return a 400 with multiple errors" when {
-      "all field value validations fail on the request body" in new Test {
+      "all field value validations fail on the request body" in new nonTysTest {
 
         val allInvalidValueRequestBodyJson: JsValue = Json.parse("""
             |{
