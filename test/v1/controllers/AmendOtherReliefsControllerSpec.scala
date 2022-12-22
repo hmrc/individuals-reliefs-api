@@ -18,13 +18,13 @@ package v1.controllers
 
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendOtherReliefsRequestParser
 import v1.mocks.services._
 import v1.models.audit.{AmendOtherReliefsAuditDetail, AuditError, AuditEvent, AuditResponse}
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.hateoas.{HateoasWrapper, Link}
@@ -269,7 +269,7 @@ class AmendOtherReliefsControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (InternalError, INTERNAL_SERVER_ERROR),
           (TaxYearFormatError, BAD_REQUEST),
-          (RuleSubmissionFailedError, FORBIDDEN)
+          (RuleSubmissionFailedError, BAD_REQUEST)
         )
 
         val extraTysErrors = Seq(
