@@ -26,32 +26,36 @@ import scala.concurrent.Future
 
 class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
 
-  "createAndAmend" must {
+  "CreateAndAmendForeignReliefsConnector" must {
 
-    "put a body and return 204 no body" in new IfsTest with Test {
-      val taxYear = "2017-18"
-      val outcome = Right(ResponseWrapper(correlationId, ()))
+    "return the expected response for a non-TYS request" when {
+      "a valid request is made" in new IfsTest with Test {
+        val taxYear = "2021-22"
+        val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      willPut(
-        url = s"$baseUrl/income-tax/reliefs/foreign/AA123456A/2017-18",
-        body = requestBodyModel
-      )
-        .returns(Future.successful(outcome))
+        willPut(
+          url = s"$baseUrl/income-tax/reliefs/foreign/AA123456A/2021-22",
+          body = requestBodyModel
+        )
+          .returns(Future.successful(outcome))
 
-      await(connector.createAndAmend(request)) shouldBe outcome
+        await(connector.createAndAmend(request)) shouldBe outcome
+      }
     }
 
-    "put a body and return 204 no body for a Tax Year Specific (TYS) tax year" in new TysIfsTest with Test {
-      val taxYear = "2023-24"
-      val outcome = Right(ResponseWrapper(correlationId, ()))
+    "return the expected response for a TYS request" when {
+      "a valid request is made" in new TysIfsTest with Test {
+        val taxYear = "2023-24"
+        val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      willPut(
-        url = s"$baseUrl/income-tax/reliefs/foreign/23-24/AA123456A",
-        body = requestBodyModel
-      )
-        .returns(Future.successful(outcome))
+        willPut(
+          url = s"$baseUrl/income-tax/reliefs/foreign/23-24/AA123456A",
+          body = requestBodyModel
+        )
+          .returns(Future.successful(outcome))
 
-      await(connector.createAndAmend(request)) shouldBe outcome
+        await(connector.createAndAmend(request)) shouldBe outcome
+      }
     }
   }
 

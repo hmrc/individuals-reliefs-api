@@ -27,7 +27,7 @@ import v1.models.request.createAndAmendForeignReliefs._
 
 class CreateAndAmendForeignReliefsRequestParserSpec extends UnitSpec {
   private val nino                   = "AA123456A"
-  private val taxYear                = "2018-19"
+  private val taxYear                = "2021-22"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   val inputData: CreateAndAmendForeignReliefsRawData =

@@ -32,7 +32,7 @@ import scala.concurrent.Future
 
 class CreateAndAmendForeignReliefsServiceSpec extends UnitSpec {
 
-  private val taxYear                        = "2017-18"
+  private val taxYear                        = "2021-22"
   private val nino                           = Nino("AA123456A")
   private implicit val correlationId: String = "X-123"
 
