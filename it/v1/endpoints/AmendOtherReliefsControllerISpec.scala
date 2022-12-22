@@ -23,27 +23,7 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v1.endpoints.AmendOtherReliefsControllerISpec.{
-  allBusinessNameFormatErrors,
-  allBusinessNamesInvalidRequestBodyJson,
-  allCustomerReferenceFormatErrors,
-  allCustomerReferencesInvalidRequestBodyJson,
-  allDateFormatError,
-  allDatesInvalidRequestBodyJson,
-  allExSpouseNameFormatErrors,
-  allExSpouseNamesInvalidRequestBodyJson,
-  allIncomeSourceFormatErrors,
-  allIncomeSourcesInvalidRequestBodyJson,
-  allInvalidValueFormatRequestBodyJson,
-  allInvalidValueRequestBodyJson,
-  allInvalidValueRequestError,
-  allLenderNameFormatErrors,
-  allLenderNamesInvalidRequestBodyJson,
-  allNatureOfTradeFormatErrors,
-  allNatureOfTradesInvalidRequestBodyJson,
-  allValueFormatError,
-  validRequestBodyJson
-}
+import v1.endpoints.AmendOtherReliefsControllerISpec._
 import v1.models.errors._
 import v1.models.errors.{BadRequestError, ErrorWrapper, MtdError, ValueFormatError}
 import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
@@ -70,6 +50,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = {
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
         }
+
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
@@ -107,9 +88,9 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
                                 expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
-            override val nino: String             = requestNino
-            override val taxYear: String          = requestTaxYear
-            override val requestBodyJson: JsValue = requestBody
+            override val nino: String    = requestNino
+            override val taxYear: String = requestTaxYear
+            val requestBodyJson: JsValue = requestBody
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -180,75 +161,10 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino = "AA123456A"
+
     def taxYear: String
+
     val correlationId: String = "X-123"
-
-    val requestBodyJson = Json.parse("""
-                                       |{
-                                       |  "nonDeductibleLoanInterest": {
-                                       |        "customerReference": "myref",
-                                       |        "reliefClaimed": 763.00
-                                       |      },
-                                       |  "payrollGiving": {
-                                       |        "customerReference": "myref",
-                                       |        "reliefClaimed": 154.00
-                                       |      },
-                                       |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                       |        "customerReference": "myref",
-                                       |        "amount": 222.22
-                                       |      },
-                                       |  "maintenancePayments": [
-                                       |    {
-                                       |        "customerReference": "myref",
-                                       |        "exSpouseName" : "Hilda",
-                                       |        "exSpouseDateOfBirth": "2000-01-01",
-                                       |        "amount": 222.22
-                                       |      }
-                                       |  ],
-                                       |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                       |    {
-                                       |        "customerReference": "myref",
-                                       |        "businessName": "ACME Inc",
-                                       |        "dateBusinessCeased": "2019-08-10",
-                                       |        "natureOfTrade": "Widgets Manufacturer",
-                                       |        "incomeSource": "AB12412/A12",
-                                       |        "amount": 222.22
-                                       |      }
-                                       |  ],
-                                       |  "annualPaymentsMade": {
-                                       |        "customerReference": "myref",
-                                       |        "reliefClaimed": 763.00
-                                       |      },
-                                       |  "qualifyingLoanInterestPayments": [
-                                       |    {
-                                       |        "customerReference": "myref",
-                                       |        "lenderName": "Maurice",
-                                       |        "reliefClaimed": 763.00
-                                       |      }
-                                       |  ]
-                                       |}""".stripMargin)
-
-    val responseBody = Json.parse(s"""
-                                     |{
-                                     |   "links":[
-                                     |      {
-                                     |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-                                     |         "method":"PUT",
-                                     |         "rel":"create-and-amend-reliefs-other"
-                                     |      },
-                                     |      {
-                                     |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-                                     |         "method":"GET",
-                                     |         "rel":"self"
-                                     |      },
-                                     |      {
-                                     |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-                                     |         "method":"DELETE",
-                                     |         "rel":"delete-reliefs-other"
-                                     |
-                                     |      }
-                                     |   ]
-                                     |}""".stripMargin)
 
     def mtdUri: String = s"/other/$nino/$taxYear"
 
@@ -274,15 +190,39 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |      }
     """.stripMargin
 
+    val responseBody = Json.parse(s"""
+         |{
+         |   "links":[
+         |      {
+         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
+         |         "method":"PUT",
+         |         "rel":"create-and-amend-reliefs-other"
+         |      },
+         |      {
+         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
+         |         "method":"GET",
+         |         "rel":"self"
+         |      },
+         |      {
+         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
+         |         "method":"DELETE",
+         |         "rel":"delete-reliefs-other"
+         |
+         |      }
+         |   ]
+         |}""".stripMargin)
+
   }
 
   private trait NonTysTest extends Test {
-    def taxYear: String       = "2020-21"
+    def taxYear: String = "2020-21"
+
     def downstreamUri: String = s"/income-tax/reliefs/other/$nino/2020-21"
   }
 
   private trait TysTest extends Test {
-    def taxYear: String       = "2023-24"
+    def taxYear: String = "2023-24"
+
     def downstreamUri: String = s"/income-tax/reliefs/other/23-24/$nino"
   }
 
@@ -290,50 +230,95 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
 object AmendOtherReliefsControllerISpec {
 
+  val requestBodyJson = Json.parse("""
+                                     |{
+                                     |  "nonDeductibleLoanInterest": {
+                                     |        "customerReference": "myref",
+                                     |        "reliefClaimed": 763.00
+                                     |      },
+                                     |  "payrollGiving": {
+                                     |        "customerReference": "myref",
+                                     |        "reliefClaimed": 154.00
+                                     |      },
+                                     |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+                                     |        "customerReference": "myref",
+                                     |        "amount": 222.22
+                                     |      },
+                                     |  "maintenancePayments": [
+                                     |    {
+                                     |        "customerReference": "myref",
+                                     |        "exSpouseName" : "Hilda",
+                                     |        "exSpouseDateOfBirth": "2000-01-01",
+                                     |        "amount": 222.22
+                                     |      }
+                                     |  ],
+                                     |  "postCessationTradeReliefAndCertainOtherLosses": [
+                                     |    {
+                                     |        "customerReference": "myref",
+                                     |        "businessName": "ACME Inc",
+                                     |        "dateBusinessCeased": "2019-08-10",
+                                     |        "natureOfTrade": "Widgets Manufacturer",
+                                     |        "incomeSource": "AB12412/A12",
+                                     |        "amount": 222.22
+                                     |      }
+                                     |  ],
+                                     |  "annualPaymentsMade": {
+                                     |        "customerReference": "myref",
+                                     |        "reliefClaimed": 763.00
+                                     |      },
+                                     |  "qualifyingLoanInterestPayments": [
+                                     |    {
+                                     |        "customerReference": "myref",
+                                     |        "lenderName": "Maurice",
+                                     |        "reliefClaimed": 763.00
+                                     |      }
+                                     |  ]
+                                     |}""".stripMargin)
+
   val allInvalidValueRequestBodyJson: JsValue = Json.parse("""
-                                                             |{
-                                                             |  "nonDeductibleLoanInterest": {
-                                                             |        "customerReference": "",
-                                                             |        "reliefClaimed": -763.00
-                                                             |      },
-                                                             |  "payrollGiving": {
-                                                             |        "customerReference": "",
-                                                             |        "reliefClaimed": -154.00
-                                                             |      },
-                                                             |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                                             |        "customerReference": "",
-                                                             |        "amount": -222.22
-                                                             |      },
-                                                             |  "maintenancePayments": [
-                                                             |    {
-                                                             |        "customerReference": "",
-                                                             |        "exSpouseName" : "",
-                                                             |        "exSpouseDateOfBirth": "2000-01",
-                                                             |        "amount": -222.22
-                                                             |      }
-                                                             |  ],
-                                                             |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                                             |    {
-                                                             |        "customerReference": "",
-                                                             |        "businessName": "",
-                                                             |        "dateBusinessCeased": "2019-08",
-                                                             |        "natureOfTrade": "",
-                                                             |        "incomeSource": "",
-                                                             |        "amount": -222.22
-                                                             |      }
-                                                             |  ],
-                                                             |  "annualPaymentsMade": {
-                                                             |        "customerReference": "",
-                                                             |        "reliefClaimed": -763.00
-                                                             |      },
-                                                             |  "qualifyingLoanInterestPayments": [
-                                                             |    {
-                                                             |        "customerReference": "",
-                                                             |        "lenderName": "",
-                                                             |        "reliefClaimed": -763.00
-                                                             |      }
-                                                             |  ]
-                                                             |}""".stripMargin)
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "",
+      |        "reliefClaimed": -763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "",
+      |        "reliefClaimed": -154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "",
+      |        "amount": -222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "",
+      |        "exSpouseName" : "",
+      |        "exSpouseDateOfBirth": "2000-01",
+      |        "amount": -222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "",
+      |        "businessName": "",
+      |        "dateBusinessCeased": "2019-08",
+      |        "natureOfTrade": "",
+      |        "incomeSource": "",
+      |        "amount": -222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "",
+      |        "reliefClaimed": -763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "",
+      |        "lenderName": "",
+      |        "reliefClaimed": -763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   val allInvalidValueRequestError: List[MtdError] = List(
     LenderNameFormatError.copy(paths = Some(
@@ -384,409 +369,409 @@ object AmendOtherReliefsControllerISpec {
   )
 
   val validRequestBodyJson = Json.parse("""
-                                          |{
-                                          |  "nonDeductibleLoanInterest": {
-                                          |        "customerReference": "myref",
-                                          |        "reliefClaimed": 763.00
-                                          |      },
-                                          |  "payrollGiving": {
-                                          |        "customerReference": "myref",
-                                          |        "reliefClaimed": 154.00
-                                          |      },
-                                          |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                          |        "customerReference": "myref",
-                                          |        "amount": 222.22
-                                          |      },
-                                          |  "maintenancePayments": [
-                                          |    {
-                                          |        "customerReference": "myref",
-                                          |        "exSpouseName" : "Hilda",
-                                          |        "exSpouseDateOfBirth": "2000-01-01",
-                                          |        "amount": 222.22
-                                          |      }
-                                          |  ],
-                                          |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                          |    {
-                                          |        "customerReference": "myref",
-                                          |        "businessName": "ACME Inc",
-                                          |        "dateBusinessCeased": "2019-08-10",
-                                          |        "natureOfTrade": "Widgets Manufacturer",
-                                          |        "incomeSource": "AB12412/A12",
-                                          |        "amount": 222.22
-                                          |      }
-                                          |  ],
-                                          |  "annualPaymentsMade": {
-                                          |        "customerReference": "myref",
-                                          |        "reliefClaimed": 763.00
-                                          |      },
-                                          |  "qualifyingLoanInterestPayments": [
-                                          |    {
-                                          |        "customerReference": "myref",
-                                          |        "lenderName": "Maurice",
-                                          |        "reliefClaimed": 763.00
-                                          |      }
-                                          |  ]
-                                          |}""".stripMargin)
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   val allInvalidValueFormatRequestBodyJson = Json.parse("""
-                                                          |{
-                                                          |  "nonDeductibleLoanInterest": {
-                                                          |        "customerReference": "myref",
-                                                          |        "reliefClaimed": -763.00
-                                                          |      },
-                                                          |  "payrollGiving": {
-                                                          |        "customerReference": "myref",
-                                                          |        "reliefClaimed": -154.00
-                                                          |      },
-                                                          |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                                          |        "customerReference": "myref",
-                                                          |        "amount": -222.22
-                                                          |      },
-                                                          |  "maintenancePayments": [
-                                                          |    {
-                                                          |        "customerReference": "myref",
-                                                          |        "exSpouseName" : "Hilda",
-                                                          |        "exSpouseDateOfBirth": "2000-01-01",
-                                                          |        "amount": -222.22
-                                                          |      }
-                                                          |  ],
-                                                          |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                                          |    {
-                                                          |        "customerReference": "myref",
-                                                          |        "businessName": "ACME Inc",
-                                                          |        "dateBusinessCeased": "2019-08-10",
-                                                          |        "natureOfTrade": "Widgets Manufacturer",
-                                                          |        "incomeSource": "AB12412/A12",
-                                                          |        "amount": -222.22
-                                                          |      }
-                                                          |  ],
-                                                          |  "annualPaymentsMade": {
-                                                          |        "customerReference": "myref",
-                                                          |        "reliefClaimed": -763.00
-                                                          |      },
-                                                          |  "qualifyingLoanInterestPayments": [
-                                                          |    {
-                                                          |        "customerReference": "myref",
-                                                          |        "lenderName": "Maurice",
-                                                          |        "reliefClaimed": -763.00
-                                                          |      }
-                                                          |  ]
-                                                          |}""".stripMargin)
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": -763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": -154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": -222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": -222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": -222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": -763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": -763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   val allDatesInvalidRequestBodyJson = Json.parse("""
-                                                    |{
-                                                    |  "nonDeductibleLoanInterest": {
-                                                    |        "customerReference": "myref",
-                                                    |        "reliefClaimed": 763.00
-                                                    |      },
-                                                    |  "payrollGiving": {
-                                                    |        "customerReference": "myref",
-                                                    |        "reliefClaimed": 154.00
-                                                    |      },
-                                                    |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                                    |        "customerReference": "myref",
-                                                    |        "amount": 222.22
-                                                    |      },
-                                                    |  "maintenancePayments": [
-                                                    |    {
-                                                    |        "customerReference": "myref",
-                                                    |        "exSpouseName" : "Hilda",
-                                                    |        "exSpouseDateOfBirth": "01-01-2000",
-                                                    |        "amount": 222.22
-                                                    |      }
-                                                    |  ],
-                                                    |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                                    |    {
-                                                    |        "customerReference": "myref",
-                                                    |        "businessName": "ACME Inc",
-                                                    |        "dateBusinessCeased": "20190810",
-                                                    |        "natureOfTrade": "Widgets Manufacturer",
-                                                    |        "incomeSource": "AB12412/A12",
-                                                    |        "amount": 222.22
-                                                    |      }
-                                                    |  ],
-                                                    |  "annualPaymentsMade": {
-                                                    |        "customerReference": "myref",
-                                                    |        "reliefClaimed": 763.00
-                                                    |      },
-                                                    |  "qualifyingLoanInterestPayments": [
-                                                    |    {
-                                                    |        "customerReference": "myref",
-                                                    |        "lenderName": "Maurice",
-                                                    |        "reliefClaimed": 763.00
-                                                    |      }
-                                                    |  ]
-                                                    |}""".stripMargin)
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "01-01-2000",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "20190810",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   val allCustomerReferencesInvalidRequestBodyJson = Json.parse("""
-                                                                 |{
-                                                                 |  "nonDeductibleLoanInterest": {
-                                                                 |        "customerReference": "",
-                                                                 |        "reliefClaimed": 763.00
-                                                                 |      },
-                                                                 |  "payrollGiving": {
-                                                                 |        "customerReference": "",
-                                                                 |        "reliefClaimed": 154.00
-                                                                 |      },
-                                                                 |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                                                 |        "customerReference": "",
-                                                                 |        "amount": 222.22
-                                                                 |      },
-                                                                 |  "maintenancePayments": [
-                                                                 |    {
-                                                                 |        "customerReference": "",
-                                                                 |        "exSpouseName" : "Hilda",
-                                                                 |        "exSpouseDateOfBirth": "2000-01-01",
-                                                                 |        "amount": 222.22
-                                                                 |      }
-                                                                 |  ],
-                                                                 |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                                                 |    {
-                                                                 |        "customerReference": "",
-                                                                 |        "businessName": "ACME Inc",
-                                                                 |        "dateBusinessCeased": "2019-08-10",
-                                                                 |        "natureOfTrade": "Widgets Manufacturer",
-                                                                 |        "incomeSource": "AB12412/A12",
-                                                                 |        "amount": 222.22
-                                                                 |      }
-                                                                 |  ],
-                                                                 |  "annualPaymentsMade": {
-                                                                 |        "customerReference": "",
-                                                                 |        "reliefClaimed": 763.00
-                                                                 |      },
-                                                                 |  "qualifyingLoanInterestPayments": [
-                                                                 |    {
-                                                                 |        "customerReference": "",
-                                                                 |        "lenderName": "Maurice",
-                                                                 |        "reliefClaimed": 763.00
-                                                                 |      }
-                                                                 |  ]
-                                                                 |}""".stripMargin)
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   val allExSpouseNamesInvalidRequestBodyJson = Json.parse("""
-                                                            |{
-                                                            |  "nonDeductibleLoanInterest": {
-                                                            |        "customerReference": "myref",
-                                                            |        "reliefClaimed": 763.00
-                                                            |      },
-                                                            |  "payrollGiving": {
-                                                            |        "customerReference": "myref",
-                                                            |        "reliefClaimed": 154.00
-                                                            |      },
-                                                            |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                                            |        "customerReference": "myref",
-                                                            |        "amount": 222.22
-                                                            |      },
-                                                            |  "maintenancePayments": [
-                                                            |    {
-                                                            |        "customerReference": "myref",
-                                                            |        "exSpouseName" : "",
-                                                            |        "exSpouseDateOfBirth": "2000-01-01",
-                                                            |        "amount": 222.22
-                                                            |      }
-                                                            |  ],
-                                                            |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                                            |    {
-                                                            |        "customerReference": "myref",
-                                                            |        "businessName": "ACME Inc",
-                                                            |        "dateBusinessCeased": "2019-08-10",
-                                                            |        "natureOfTrade": "Widgets Manufacturer",
-                                                            |        "incomeSource": "AB12412/A12",
-                                                            |        "amount": 222.22
-                                                            |      }
-                                                            |  ],
-                                                            |  "annualPaymentsMade": {
-                                                            |        "customerReference": "myref",
-                                                            |        "reliefClaimed": 763.00
-                                                            |      },
-                                                            |  "qualifyingLoanInterestPayments": [
-                                                            |    {
-                                                            |        "customerReference": "myref",
-                                                            |        "lenderName": "Maurice",
-                                                            |        "reliefClaimed": 763.00
-                                                            |      }
-                                                            |  ]
-                                                            |}""".stripMargin)
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   val allBusinessNamesInvalidRequestBodyJson = Json.parse("""
-                                                            |{
-                                                            |  "nonDeductibleLoanInterest": {
-                                                            |        "customerReference": "myref",
-                                                            |        "reliefClaimed": 763.00
-                                                            |      },
-                                                            |  "payrollGiving": {
-                                                            |        "customerReference": "myref",
-                                                            |        "reliefClaimed": 154.00
-                                                            |      },
-                                                            |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                                            |        "customerReference": "myref",
-                                                            |        "amount": 222.22
-                                                            |      },
-                                                            |  "maintenancePayments": [
-                                                            |    {
-                                                            |        "customerReference": "myref",
-                                                            |        "exSpouseName" : "Hilda",
-                                                            |        "exSpouseDateOfBirth": "2000-01-01",
-                                                            |        "amount": 222.22
-                                                            |      }
-                                                            |  ],
-                                                            |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                                            |    {
-                                                            |        "customerReference": "myref",
-                                                            |        "businessName": "",
-                                                            |        "dateBusinessCeased": "2019-08-10",
-                                                            |        "natureOfTrade": "Widgets Manufacturer",
-                                                            |        "incomeSource": "AB12412/A12",
-                                                            |        "amount": 222.22
-                                                            |      }
-                                                            |  ],
-                                                            |  "annualPaymentsMade": {
-                                                            |        "customerReference": "myref",
-                                                            |        "reliefClaimed": 763.00
-                                                            |      },
-                                                            |  "qualifyingLoanInterestPayments": [
-                                                            |    {
-                                                            |        "customerReference": "myref",
-                                                            |        "lenderName": "Maurice",
-                                                            |        "reliefClaimed": 763.00
-                                                            |      }
-                                                            |  ]
-                                                            |}""".stripMargin)
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   val allNatureOfTradesInvalidRequestBodyJson = Json.parse("""
-                                                             |{
-                                                             |  "nonDeductibleLoanInterest": {
-                                                             |        "customerReference": "myref",
-                                                             |        "reliefClaimed": 763.00
-                                                             |      },
-                                                             |  "payrollGiving": {
-                                                             |        "customerReference": "myref",
-                                                             |        "reliefClaimed": 154.00
-                                                             |      },
-                                                             |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                                             |        "customerReference": "myref",
-                                                             |        "amount": 222.22
-                                                             |      },
-                                                             |  "maintenancePayments": [
-                                                             |    {
-                                                             |        "customerReference": "myref",
-                                                             |        "exSpouseName" : "Hilda",
-                                                             |        "exSpouseDateOfBirth": "2000-01-01",
-                                                             |        "amount": 222.22
-                                                             |      }
-                                                             |  ],
-                                                             |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                                             |    {
-                                                             |        "customerReference": "myref",
-                                                             |        "businessName": "ACME Inc",
-                                                             |        "dateBusinessCeased": "2019-08-10",
-                                                             |        "natureOfTrade": "",
-                                                             |        "incomeSource": "AB12412/A12",
-                                                             |        "amount": 222.22
-                                                             |      }
-                                                             |  ],
-                                                             |  "annualPaymentsMade": {
-                                                             |        "customerReference": "myref",
-                                                             |        "reliefClaimed": 763.00
-                                                             |      },
-                                                             |  "qualifyingLoanInterestPayments": [
-                                                             |    {
-                                                             |        "customerReference": "myref",
-                                                             |        "lenderName": "Maurice",
-                                                             |        "reliefClaimed": 763.00
-                                                             |      }
-                                                             |  ]
-                                                             |}""".stripMargin)
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   val allIncomeSourcesInvalidRequestBodyJson = Json.parse("""
-                                                            |{
-                                                            |  "nonDeductibleLoanInterest": {
-                                                            |        "customerReference": "myref",
-                                                            |        "reliefClaimed": 763.00
-                                                            |      },
-                                                            |  "payrollGiving": {
-                                                            |        "customerReference": "myref",
-                                                            |        "reliefClaimed": 154.00
-                                                            |      },
-                                                            |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                                            |        "customerReference": "myref",
-                                                            |        "amount": 222.22
-                                                            |      },
-                                                            |  "maintenancePayments": [
-                                                            |    {
-                                                            |        "customerReference": "myref",
-                                                            |        "exSpouseName" : "Hilda",
-                                                            |        "exSpouseDateOfBirth": "2000-01-01",
-                                                            |        "amount": 222.22
-                                                            |      }
-                                                            |  ],
-                                                            |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                                            |    {
-                                                            |        "customerReference": "myref",
-                                                            |        "businessName": "ACME Inc",
-                                                            |        "dateBusinessCeased": "2019-08-10",
-                                                            |        "natureOfTrade": "Widgets Manufacturer",
-                                                            |        "incomeSource": "",
-                                                            |        "amount": 222.22
-                                                            |      }
-                                                            |  ],
-                                                            |  "annualPaymentsMade": {
-                                                            |        "customerReference": "myref",
-                                                            |        "reliefClaimed": 763.00
-                                                            |      },
-                                                            |  "qualifyingLoanInterestPayments": [
-                                                            |    {
-                                                            |        "customerReference": "myref",
-                                                            |        "lenderName": "Maurice",
-                                                            |        "reliefClaimed": 763.00
-                                                            |      }
-                                                            |  ]
-                                                            |}""".stripMargin)
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   val allLenderNamesInvalidRequestBodyJson = Json.parse("""
-                                                          |{
-                                                          |  "nonDeductibleLoanInterest": {
-                                                          |        "customerReference": "myref",
-                                                          |        "reliefClaimed": 763.00
-                                                          |      },
-                                                          |  "payrollGiving": {
-                                                          |        "customerReference": "myref",
-                                                          |        "reliefClaimed": 154.00
-                                                          |      },
-                                                          |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                                          |        "customerReference": "myref",
-                                                          |        "amount": 222.22
-                                                          |      },
-                                                          |  "maintenancePayments": [
-                                                          |    {
-                                                          |        "customerReference": "myref",
-                                                          |        "exSpouseName" : "Hilda",
-                                                          |        "exSpouseDateOfBirth": "2000-01-01",
-                                                          |        "amount": 222.22
-                                                          |      }
-                                                          |  ],
-                                                          |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                                          |    {
-                                                          |        "customerReference": "myref",
-                                                          |        "businessName": "ACME Inc",
-                                                          |        "dateBusinessCeased": "2019-08-10",
-                                                          |        "natureOfTrade": "Widgets Manufacturer",
-                                                          |        "incomeSource": "AB12412/A12",
-                                                          |        "amount": 222.22
-                                                          |      }
-                                                          |  ],
-                                                          |  "annualPaymentsMade": {
-                                                          |        "customerReference": "myref",
-                                                          |        "reliefClaimed": 763.00
-                                                          |      },
-                                                          |  "qualifyingLoanInterestPayments": [
-                                                          |    {
-                                                          |        "customerReference": "myref",
-                                                          |        "lenderName": "",
-                                                          |        "reliefClaimed": 763.00
-                                                          |      }
-                                                          |  ]
-                                                          |}""".stripMargin)
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   val allValueFormatError: MtdError = ValueFormatError.copy(
     paths = Some(

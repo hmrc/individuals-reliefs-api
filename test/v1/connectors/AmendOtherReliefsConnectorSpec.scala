@@ -25,13 +25,13 @@ import scala.concurrent.Future
 
 class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
-  "AmendOtherReliefsConnector" must {
+  "AmendOtherReliefsConnector" should {
 
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new IfsTest with Test {
         val request: AmendOtherReliefsRequest = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd("2017-18"), body)
 
-        willPut(url = s"$baseUrl/income-tax/reliefs/other/$nino/$taxYear", body = body)
+        willPut(url = s"$baseUrl/income-tax/reliefs/other/$nino/2017-18", body = body)
           .returns(Future.successful(outcome))
 
         await(connector.amend(request)) shouldBe outcome
@@ -59,8 +59,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    val taxYear: String = "2017-18"
-    val nino: String    = "AA123456A"
+    val nino: String = "AA123456A"
 
     val body: AmendOtherReliefsBody = AmendOtherReliefsBody(None, None, None, None, None, None, None)
 
