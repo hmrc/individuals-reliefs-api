@@ -18,22 +18,15 @@ package v1.models.request.createAndAmendForeignReliefs
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.fixtures.CreateAndAmendForeignReliefsFixtures.{foreignTaxCreditReliefJson, foreignTaxCreditReliefModel}
 import v1.models.utils.JsonErrorValidators
 
 class ForeignTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignTaxCreditRelief = ForeignTaxCreditRelief(2314.32)
-
-  val json = Json.parse(
-    """{
-      |  "amount": 2314.32
-      |}""".stripMargin
-  )
-
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        foreignTaxCreditRelief shouldBe json.as[ForeignTaxCreditRelief]
+        foreignTaxCreditReliefModel shouldBe foreignTaxCreditReliefJson.as[ForeignTaxCreditRelief]
       }
     }
   }
@@ -41,7 +34,7 @@ class ForeignTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(foreignTaxCreditRelief) shouldBe json
+        Json.toJson(foreignTaxCreditReliefModel) shouldBe foreignTaxCreditReliefJson
       }
     }
   }

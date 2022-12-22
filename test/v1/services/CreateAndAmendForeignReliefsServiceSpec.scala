@@ -20,6 +20,7 @@ import support.UnitSpec
 import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
+import v1.fixtures.CreateAndAmendForeignReliefsFixtures.requestBodyModel
 import v1.mocks.connectors.MockCreateAndAmendForeignReliefsConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
@@ -31,31 +32,11 @@ import scala.concurrent.Future
 
 class CreateAndAmendForeignReliefsServiceSpec extends UnitSpec {
 
-  private val taxYear                        = "2017-18"
+  private val taxYear                        = "2021-22"
   private val nino                           = Nino("AA123456A")
   private implicit val correlationId: String = "X-123"
-  private val amount: BigDecimal             = 1234.56
 
-  private val body = CreateAndAmendForeignReliefsBody(
-    foreignTaxCreditRelief = Some(
-      ForeignTaxCreditRelief(
-        amount = amount
-      )),
-    foreignIncomeTaxCreditRelief = Some(
-      Seq(
-        ForeignIncomeTaxCreditRelief(
-          countryCode = "FRA",
-          foreignTaxPaid = Some(amount),
-          taxableAmount = amount,
-          employmentLumpSum = true
-        ))),
-    foreignTaxForFtcrNotClaimed = Some(
-      ForeignTaxForFtcrNotClaimed(
-        amount = amount
-      ))
-  )
-
-  private val requestData = CreateAndAmendForeignReliefsRequest(nino, TaxYear.fromMtd(taxYear), body)
+  private val requestData = CreateAndAmendForeignReliefsRequest(nino, TaxYear.fromMtd(taxYear), requestBodyModel)
 
   trait Test extends MockCreateAndAmendForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -82,24 +63,32 @@ class CreateAndAmendForeignReliefsServiceSpec extends UnitSpec {
   "unsuccessful" must {
     "map errors according to spec" when {
 
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"a $desErrorCode error is returned from the service" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"a $downstreamErrorCode error is returned from the service" in new Test {
 
           MockCreateAndAmendForeignReliefsConnector
             .createAndAmend(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.createAndAmend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val input = Seq(
+      val errors = List(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
+        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "INVALID_PAYLOAD"           -> InternalError,
+        "INVALID_CORRELATIONID"     -> InternalError,
+        "UNPROCESSABLE_ENTITY"      -> InternalError,
         "SERVER_ERROR"              -> InternalError,
         "SERVICE_UNAVAILABLE"       -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = List(
+        "INVALID_CORRELATION_ID" -> InternalError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
   }
 

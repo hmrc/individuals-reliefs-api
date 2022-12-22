@@ -16,15 +16,16 @@
 
 package v1.controllers
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import play.api.mvc.Result
-import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.fixtures.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel, responseWithHateoasLinks}
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateAndAmendForeignReliefsRequestParser
 import v1.mocks.services._
-import v1.models.audit.{CreateAndAmendForeignReliefsAuditDetail, AuditError, AuditEvent, AuditResponse}
+import v1.models.audit.{AuditError, AuditEvent, AuditResponse, CreateAndAmendForeignReliefsAuditDetail}
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.hateoas.{HateoasWrapper, Link}
@@ -49,7 +50,6 @@ class CreateAndAmendForeignReliefsControllerSpec
   private val nino          = "AA123456A"
   private val taxYear       = "2019-20"
   private val correlationId = "X-123"
-  private val amount        = 1234.56
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -72,71 +72,9 @@ class CreateAndAmendForeignReliefsControllerSpec
 
   private val testHateoasLinks = Seq(
     Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = PUT, rel = "amend-reliefs-foreign"),
+    Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-foreign"),
     Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-foreign")
   )
-
-  private val requestJson = Json.parse(
-    s"""|
-        |{
-        |  "foreignTaxCreditRelief": {
-        |    "amount": $amount
-        |  },
-        |  "foreignIncomeTaxCreditRelief": [
-        |    {
-        |      "countryCode": "FRA",
-        |      "foreignTaxPaid": $amount,
-        |      "taxableAmount": $amount,
-        |      "employmentLumpSum": true
-        |    }
-        |  ],
-        |  "foreignTaxForFtcrNotClaimed": {
-        |    "amount": $amount
-        |  }
-        |}
-        |""".stripMargin
-  )
-
-  private val requestBody = CreateAndAmendForeignReliefsBody(
-    foreignTaxCreditRelief = Some(
-      ForeignTaxCreditRelief(
-        amount = amount
-      )),
-    foreignIncomeTaxCreditRelief = Some(
-      Seq(
-        ForeignIncomeTaxCreditRelief(
-          countryCode = "FRA",
-          foreignTaxPaid = Some(amount),
-          taxableAmount = amount,
-          employmentLumpSum = true
-        ))),
-    foreignTaxForFtcrNotClaimed = Some(
-      ForeignTaxForFtcrNotClaimed(
-        amount = amount
-      ))
-  )
-
-  val responseBody: JsValue = Json.parse(s"""
-       |{
-       |  "links": [
-       |    {
-       |      "href": "/individuals/reliefs/foreign/$nino/$taxYear",
-       |      "method": "GET",
-       |      "rel": "self"
-       |    },
-       |    {
-       |      "href": "/individuals/reliefs/foreign/$nino/$taxYear",
-       |      "method": "PUT",
-       |      "rel": "amend-reliefs-foreign"
-       |    },
-       |    {
-       |      "href": "/individuals/reliefs/foreign/$nino/$taxYear",
-       |      "method": "DELETE",
-       |      "rel": "delete-reliefs-foreign"
-       |    }
-       |  ]
-       |}
-       |""".stripMargin)
 
   def event(auditResponse: AuditResponse): AuditEvent[CreateAndAmendForeignReliefsAuditDetail] =
     AuditEvent(
@@ -147,14 +85,14 @@ class CreateAndAmendForeignReliefsControllerSpec
         agentReferenceNumber = None,
         nino,
         taxYear,
-        requestJson,
+        requestBodyJson,
         correlationId,
         response = auditResponse
       )
     )
 
-  private val rawData     = CreateAndAmendForeignReliefsRawData(nino, taxYear, requestJson)
-  private val requestData = CreateAndAmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val rawData     = CreateAndAmendForeignReliefsRawData(nino, taxYear, requestBodyJson)
+  private val requestData = CreateAndAmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
     "return Ok" when {
@@ -172,11 +110,11 @@ class CreateAndAmendForeignReliefsControllerSpec
           .wrap((), CreateAndAmendForeignReliefsHateoasData(nino, taxYear))
           .returns(HateoasWrapper((), testHateoasLinks))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
         status(result) shouldBe OK
         header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(responseBody))
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(responseWithHateoasLinks(taxYear)))
         MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
@@ -189,7 +127,7 @@ class CreateAndAmendForeignReliefsControllerSpec
               .parseRequest(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -226,7 +164,7 @@ class CreateAndAmendForeignReliefsControllerSpec
               .createAndAmend(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
@@ -237,13 +175,17 @@ class CreateAndAmendForeignReliefsControllerSpec
           }
         }
 
-        val input = Seq(
+        val errors = List(
           (NinoFormatError, BAD_REQUEST),
           (InternalError, INTERNAL_SERVER_ERROR),
           (TaxYearFormatError, BAD_REQUEST)
         )
 
-        input.foreach(args => (serviceErrors _).tupled(args))
+        val extraTysErrors = List(
+          (RuleTaxYearNotSupportedError, BAD_REQUEST)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => (serviceErrors _).tupled(args))
       }
     }
   }

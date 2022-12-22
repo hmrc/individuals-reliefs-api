@@ -19,33 +19,14 @@ package v1.controllers.requestParsers.validators
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.fixtures.CreateAndAmendForeignReliefsFixtures.requestBodyJson
 import v1.models.errors._
 import v1.models.request.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsRawData
 
 class CreateAndAmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {
 
-  private val validNino          = "AA123456A"
-  private val validTaxYear       = "2021-22"
-  private val amount: BigDecimal = 1234.56
-
-  private val requestBodyJson = Json.parse(s"""|
-        |{
-        |  "foreignTaxCreditRelief": {
-        |    "amount": $amount
-        |  },
-        |  "foreignIncomeTaxCreditRelief": [
-        |    {
-        |      "countryCode": "FRA",
-        |      "foreignTaxPaid": $amount,
-        |      "taxableAmount": $amount,
-        |      "employmentLumpSum": true
-        |    }
-        |  ],
-        |  "foreignTaxForFtcrNotClaimed": {
-        |    "amount": $amount
-        |  }
-        |}
-        |""".stripMargin)
+  private val validNino    = "AA123456A"
+  private val validTaxYear = "2021-22"
 
   private val requestBodyJsonNoDecimals = Json.parse(
     """
