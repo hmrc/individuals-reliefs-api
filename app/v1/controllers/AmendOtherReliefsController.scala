@@ -18,7 +18,6 @@ package v1.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,6 +31,7 @@ import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsResponse.LinksFactory
 import v1.services.{AmendOtherReliefsService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -115,6 +115,7 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
             RuleIncorrectOrEmptyBodyError,
             RuleTaxYearRangeInvalidError,
             RuleTaxYearNotSupportedError,
+            RuleSubmissionFailedError,
             ValueFormatError,
             DateFormatError,
             CustomerReferenceFormatError,
@@ -125,9 +126,9 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
             LenderNameFormatError
           ) =>
         BadRequest(Json.toJson(errorWrapper: ErrorWrapper))
-      case RuleSubmissionFailedError => Forbidden(Json.toJson(errorWrapper))
-      case InternalError             => InternalServerError(Json.toJson(errorWrapper))
-      case _                         => unhandledError(errorWrapper)
+
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
+      case _             => unhandledError(errorWrapper)
     }
   }
 

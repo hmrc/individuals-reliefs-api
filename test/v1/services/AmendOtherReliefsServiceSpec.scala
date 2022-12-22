@@ -17,17 +17,17 @@
 package v1.services
 
 import support.UnitSpec
-import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendOtherReliefsConnector
+import v1.models.domain.Nino
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.TaxYear
 import v1.models.request.amendOtherReliefs._
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class AmendOtherReliefsServiceSpec extends UnitSpec {
 
@@ -57,20 +57,19 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
         }
 
       val errors = Seq(
-        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_TAX_YEAR" -> TaxYearFormatError,
-        "INVALID_CORRELATIONID" -> InternalError,
+        "INVALID_TAXABLE_ENTITY_ID"        -> NinoFormatError,
+        "INVALID_TAX_YEAR"                 -> TaxYearFormatError,
+        "INVALID_CORRELATIONID"            -> InternalError,
         "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailedError,
-        "SERVER_ERROR" -> InternalError,
-        "SERVICE_UNAVAILABLE" -> InternalError
+        "SERVER_ERROR"                     -> InternalError,
+        "SERVICE_UNAVAILABLE"              -> InternalError
       )
 
       val extraTysErrors = Seq(
         "INVALID_CORRELATION_ID" -> InternalError,
-
-        "INVALID_PAYLOAD" -> InternalError,
+        "INVALID_PAYLOAD"        -> InternalError,
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "UNPROCESSABLE_ENTITY" -> InternalError
+        "UNPROCESSABLE_ENTITY"   -> InternalError
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
@@ -78,15 +77,15 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
   }
 
   trait Test extends MockAmendOtherReliefsConnector {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new AmendOtherReliefsService(
       connector = mockAmendOtherReliefsConnector
     )
 
-    val taxYear: String = "2017-18"
-    val nino: String = "AA123456A"
+    val taxYear: String                = "2017-18"
+    val nino: String                   = "AA123456A"
     implicit val correlationId: String = "X-123"
 
     val body: AmendOtherReliefsBody = AmendOtherReliefsBody(None, None, None, None, None, None, None)
