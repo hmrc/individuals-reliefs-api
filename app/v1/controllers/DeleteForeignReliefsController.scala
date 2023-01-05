@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +72,7 @@ class DeleteForeignReliefsController @Inject() (val authService: EnrolmentsAuthS
           NoContent.withApiHeaders(serviceResponse.correlationId)
 
         }
+
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
         val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)

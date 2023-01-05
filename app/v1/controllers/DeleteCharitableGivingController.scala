@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,18 @@ package v1.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.DeleteCharitableGivingReliefRequestParser
-import v1.models.errors._
-import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRawData
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.services.{AuditService, DeleteCharitableGivingTaxReliefService, EnrolmentsAuthService, MtdIdLookupService}
 import v1.models.audit.{AuditEvent, AuditResponse, CharitableGivingReliefAuditDetail}
+import v1.models.errors._
+import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRawData
+import v1.services.{AuditService, DeleteCharitableGivingTaxReliefService, EnrolmentsAuthService, MtdIdLookupService}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -101,11 +100,19 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
-      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError =>
+      case _
+          if errorWrapper.containsAnyOf(
+            NinoFormatError,
+            BadRequestError,
+            TaxYearFormatError,
+            RuleTaxYearNotSupportedError,
+            RuleTaxYearRangeInvalidError
+          ) =>
         BadRequest(Json.toJson(errorWrapper))
+
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _             => unhandledError(errorWrapper)
     }
   }
 
@@ -119,6 +126,5 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
 
     auditService.auditEvent(event)
   }
-
 
 }

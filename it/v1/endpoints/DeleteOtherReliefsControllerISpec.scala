@@ -27,58 +27,11 @@ import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
-  private trait Test {
-
-    val nino = "AA123456A"
-
-    def taxYear: String
-
-    def mtdUri: String = s"/other/$nino/$taxYear"
-    def downstreamUri: String
-
-    def setupStubs(): Unit = ()
-
-    def request(): WSRequest = {
-      AuthStub.authorised()
-      AuditStub.audit()
-      MtdIdLookupStub.ninoFound(nino)
-      setupStubs()
-      buildRequest(mtdUri)
-        .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.1.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
-        )
-    }
-
-    def errorBody(code: String): String =
-      s"""
-         |      {
-         |        "code": "$code",
-         |        "reason": "message"
-         |      }
-    """.stripMargin
-
-  }
-
-  private trait NonTysTest extends Test {
-
-    def taxYear: String = "2020-21"
-
-    def downstreamUri: String = s"/income-tax/reliefs/other/$nino/2020-21"
-  }
-
-  private trait TysIfsTest extends Test {
-
-    def taxYear: String = "2023-24"
-
-    def downstreamUri: String = s"/income-tax/reliefs/other/23-24/$nino"
-  }
-
   "Calling the delete endpoint" should {
 
     "return a 204 status code" when {
 
-      "any valid request is made for a non-TYS tax year" in new NonTysTest with Test {
+      "any valid request is made for a non-TYS tax year" in new NonTysTest {
 
         override def setupStubs(): Unit =
           DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, NO_CONTENT, JsObject.empty)
@@ -88,7 +41,7 @@ class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
-      "any valid request is made for a TYS tax year" in new TysIfsTest with Test {
+      "any valid request is made for a TYS tax year" in new TysIfsTest {
 
         override def setupStubs(): Unit =
           DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, NO_CONTENT, JsObject.empty)
@@ -129,7 +82,7 @@ class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest with Test {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
             override def setupStubs(): Unit =
               DownstreamStub.onError(DownstreamStub.DELETE, downstreamUri, downstreamStatus, errorBody(downstreamCode))
@@ -157,6 +110,48 @@ class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
       }
     }
+  }
+
+  private trait Test {
+    protected val nino = "AA123456A"
+
+    protected def taxYear: String
+
+    protected def mtdUri: String = s"/other/$nino/$taxYear"
+    protected def downstreamUri: String
+
+    protected def setupStubs(): Unit = ()
+
+    protected def request(): WSRequest = {
+      AuthStub.authorised()
+      AuditStub.audit()
+      MtdIdLookupStub.ninoFound(nino)
+      setupStubs()
+      buildRequest(mtdUri)
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
+          (AUTHORIZATION, "Bearer 123")
+        )
+    }
+
+    protected def errorBody(code: String): String =
+      s"""
+         |      {
+         |        "code": "$code",
+         |        "reason": "message"
+         |      }
+    """.stripMargin
+
+  }
+
+  private trait NonTysTest extends Test {
+    protected def taxYear: String       = "2020-21"
+    protected def downstreamUri: String = s"/income-tax/reliefs/other/$nino/2020-21"
+  }
+
+  private trait TysIfsTest extends Test {
+    protected def taxYear: String       = "2023-24"
+    protected def downstreamUri: String = s"/income-tax/reliefs/other/23-24/$nino"
   }
 
 }
