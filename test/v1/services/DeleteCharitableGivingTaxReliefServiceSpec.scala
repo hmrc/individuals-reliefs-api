@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,23 +31,8 @@ import scala.concurrent.Future
 
 class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
 
-  val validNino: String              = "AA123456A"
-  val validTaxYear: String           = "2019-20"
-  implicit val correlationId: String = "X-123"
-
-  val requestData: DeleteCharitableGivingTaxReliefRequest = DeleteCharitableGivingTaxReliefRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
-
-  trait Test extends MockDeleteCharitableGivingTaxReliefConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    val service = new DeleteCharitableGivingTaxReliefService(
-      connector = mockConnector
-    )
-
-  }
-
   "service" when {
+
     "a service call is successful" should {
       "return a mapped result" in new Test {
         MockDeleteCharitableGivingTaxReliefConnector
@@ -57,18 +42,19 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
         await(service.delete(requestData)) shouldBe Right(ResponseWrapper("resultId", ()))
       }
     }
+
     "a service call is unsuccessful" should {
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"return ${error.code} error when $desErrorCode error is returned from the connector" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"return ${error.code} error when $downstreamErrorCode error is returned from the connector" in new Test {
 
           MockDeleteCharitableGivingTaxReliefConnector
             .delete(requestData)
-            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
 
-      val input = Seq(
+      val errors = List(
         ("INVALID_NINO", NinoFormatError),
         ("INVALID_TYPE", InternalError),
         ("INVALID_TAXYEAR", TaxYearFormatError),
@@ -84,8 +70,36 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
         ("NOT_FOUND", NotFoundError)
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      val extraTysErrors = List(
+        ("INVALID_INCOMESOURCE_ID", InternalError),
+        ("INVALID_INCOMESOURCE_TYPE", InternalError),
+        ("INVALID_TAX_YEAR", TaxYearFormatError),
+        ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError),
+        ("PERIOD_NOT_FOUND", NotFoundError),
+        ("PERIOD_ALREADY_DELETED", NotFoundError),
+        ("INCOME_SOURCE_DATA_NOT_FOUND", NotFoundError),
+        ("INVALID_CORRELATION_ID", InternalError)
+      )
+
+      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
     }
+  }
+
+  trait Test extends MockDeleteCharitableGivingTaxReliefConnector {
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+    implicit protected val correlationId: String          = "X-123"
+
+    val validNino    = "AA123456A"
+    val validTaxYear = "2019-20"
+
+    protected val requestData: DeleteCharitableGivingTaxReliefRequest =
+      DeleteCharitableGivingTaxReliefRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
+
+    protected val service = new DeleteCharitableGivingTaxReliefService(
+      connector = mockConnector
+    )
+
   }
 
 }

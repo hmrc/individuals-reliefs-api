@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,10 +76,10 @@ class DeleteForeignReliefsServiceSpec extends UnitSpec {
   trait Test extends MockDeleteForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+    implicit val correlationId: String          = "X-123"
 
-    val validNino: String              = "AA123456A"
-    val validTaxYear: String           = "2019-20"
-    implicit val correlationId: String = "X-123"
+    val validNino    = "AA123456A"
+    val validTaxYear = "2019-20"
 
     val requestData: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
 

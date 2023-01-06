@@ -30,31 +30,31 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    def taxYear: String
-    def downstreamUri: String
-    def nino: String = "AA123456A"
+    protected def taxYear: String
+    protected def downstreamUri: String
+    protected def nino: String = "AA123456A"
 
-    def setupStubs(): StubMapping
+    protected def setupStubs(): StubMapping
 
-    def mtdRequest(): WSRequest = {
+    protected def mtdRequest(): WSRequest = {
       setupStubs()
       buildRequest(s"/pensions/$nino/$taxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 
   }
 
   private trait NonTysTest extends Test {
-    def taxYear: String       = "2020-21"
-    def downstreamUri: String = s"/income-tax/reliefs/pensions/$nino/2020-21"
+    protected def taxYear       = "2020-21"
+    protected def downstreamUri = s"/income-tax/reliefs/pensions/$nino/2020-21"
   }
 
   private trait TysIfsTest extends Test {
-    def taxYear: String       = "2023-24"
-    def downstreamUri: String = s"/income-tax/reliefs/pensions/23-24/$nino"
+    def taxYear       = "2023-24"
+    def downstreamUri = s"/income-tax/reliefs/pensions/23-24/$nino"
   }
 
   "Calling the delete endpoint" should {
@@ -95,8 +95,8 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
         def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
-            override def nino: String    = requestNino
-            override def taxYear: String = requestTaxYear
+            override protected def nino: String    = requestNino
+            override protected def taxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -111,7 +111,7 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("Walrus", "2020-21", Status.BAD_REQUEST, NinoFormatError),
           ("AA123456A", "203100", Status.BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
@@ -145,7 +145,7 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
              |      }
         """.stripMargin
 
-        val errors = Seq(
+        val errors = List(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
           (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
           (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
@@ -153,7 +153,7 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        val extraTysErrors = Seq(
+        val extraTysErrors = List(
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )

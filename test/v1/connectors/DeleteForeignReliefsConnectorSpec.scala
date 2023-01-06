@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
   val nino: String = "AA123456A"
 
   "DeleteForeignReliefsConnector" should {
+
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
@@ -41,6 +42,7 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
         await(connector.delete(request)) shouldBe outcome
       }
     }
+
     "return the expected response for a TYS request" when {
       "a valid request is made" in new TysIfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")

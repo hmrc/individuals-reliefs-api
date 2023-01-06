@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,35 +26,48 @@ import scala.concurrent.Future
 
 class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
 
-  val nino: String    = "AA123456A"
-  val taxYear: String = "2019-20"
+  private val nino = "AA123456A"
+
+  "delete()" should {
+    "return a success response" when {
+      "given a non-TYS request" in new DesTest with Test {
+
+        willPost(
+          url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/2020",
+          body = JsObject.empty
+        )
+          .returns(Future.successful(expectedOutcome))
+
+        private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2019-20"))
+        private val result  = await(connector.delete(request))
+
+        result shouldBe expectedOutcome
+      }
+
+      "given a TYS request" in new TysIfsTest with Test {
+
+        willDelete(
+          url = s"$baseUrl/income-tax/23-24/$nino/income-source/charity/annual"
+        )
+          .returns(Future.successful(expectedOutcome))
+
+        private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2023-24"))
+        private val result  = await(connector.delete(request))
+
+        result shouldBe expectedOutcome
+      }
+    }
+  }
 
   trait Test { _: ConnectorTest =>
 
-    val connector: DeleteCharitableGivingTaxReliefConnector = new DeleteCharitableGivingTaxReliefConnector(
+    protected val expectedOutcome = Right(ResponseWrapper(correlationId, ()))
+
+    protected val connector: DeleteCharitableGivingTaxReliefConnector = new DeleteCharitableGivingTaxReliefConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-  }
-
-  "delete" should {
-
-    val request: DeleteCharitableGivingTaxReliefRequest = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
-
-    "return a result" when {
-      "the downstream call is successful" in new DesTest with Test {
-        val outcome = Right(ResponseWrapper(correlationId, ()))
-
-        willPost(
-          url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${request.taxYear.asDownstream}",
-          body = JsObject.empty
-        )
-          .returns(Future.successful(outcome))
-
-        await(connector.delete(request)) shouldBe outcome
-      }
-    }
   }
 
 }
