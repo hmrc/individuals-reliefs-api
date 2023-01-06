@@ -16,7 +16,6 @@
 
 package v1.services
 
-import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
@@ -39,10 +38,8 @@ class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharita
       ec: ExecutionContext,
       logContext: EndpointLogContext,
       correlationId: String): Future[DeleteCharitableGivingTaxReliefServiceOutcome] = {
-    val result = for {
-      responseWrapper <- EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield responseWrapper
-    result.value
+
+    connector.delete(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
   private val downstreamErrorMap = {

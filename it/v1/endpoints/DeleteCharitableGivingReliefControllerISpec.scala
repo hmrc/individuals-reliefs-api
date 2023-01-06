@@ -126,11 +126,11 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_INCOMESOURCE_TYPE", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", INTERNAL_SERVER_ERROR, InternalError),
-          (BAD_REQUEST, "PERIOD_NOT_FOUND", NOT_FOUND, NotFoundError),
-          (BAD_REQUEST, "INCOME_SOURCE_DATA_NOT_FOUND", NOT_FOUND, NotFoundError),
-          (BAD_REQUEST, "PERIOD_ALREADY_DELETED", NOT_FOUND, NotFoundError),
+          (NOT_FOUND, "PERIOD_NOT_FOUND", NOT_FOUND, NotFoundError),
+          (NOT_FOUND, "INCOME_SOURCE_DATA_NOT_FOUND", NOT_FOUND, NotFoundError),
+          (GONE, "PERIOD_ALREADY_DELETED", NOT_FOUND, NotFoundError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
-          (BAD_REQUEST, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
@@ -143,13 +143,13 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
     protected val nino = "AA123456A"
     protected def taxYear: String
 
-    private def uri = s"/charitable-giving/$nino/$taxYear"
+    private def mtdUri = s"/charitable-giving/$nino/$taxYear"
 
     protected def setupStubs(): StubMapping
 
     protected def request(): WSRequest = {
       setupStubs()
-      buildRequest(uri)
+      buildRequest(mtdUri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123")

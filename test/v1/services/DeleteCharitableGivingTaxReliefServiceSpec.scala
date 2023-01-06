@@ -32,6 +32,7 @@ import scala.concurrent.Future
 class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
 
   "service" when {
+
     "a service call is successful" should {
       "return a mapped result" in new Test {
         MockDeleteCharitableGivingTaxReliefConnector
@@ -41,18 +42,19 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
         await(service.delete(requestData)) shouldBe Right(ResponseWrapper("resultId", ()))
       }
     }
+
     "a service call is unsuccessful" should {
-      def serviceError(desErrorCode: String, error: MtdError): Unit =
-        s"return ${error.code} error when $desErrorCode error is returned from the connector" in new Test {
+      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+        s"return ${error.code} error when $downstreamErrorCode error is returned from the connector" in new Test {
 
           MockDeleteCharitableGivingTaxReliefConnector
             .delete(requestData)
-            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
 
-      val errors = Seq(
+      val errors = List(
         ("INVALID_NINO", NinoFormatError),
         ("INVALID_TYPE", InternalError),
         ("INVALID_TAXYEAR", TaxYearFormatError),
@@ -68,7 +70,7 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
         ("NOT_FOUND", NotFoundError)
       )
 
-      val extraTysErrors = Seq(
+      val extraTysErrors = List(
         ("INVALID_INCOMESOURCE_ID", InternalError),
         ("INVALID_INCOMESOURCE_TYPE", InternalError),
         ("INVALID_TAX_YEAR", TaxYearFormatError),
