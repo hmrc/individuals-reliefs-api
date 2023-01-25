@@ -16,9 +16,10 @@
 
 package v1.models.audit
 
+import api.models.audit.AuditResponse
+import api.models.auth.UserDetails
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, JsValue, OWrites}
-import v1.models.auth.UserDetails
 
 case class CharitableGivingReliefAuditDetail(versionNumber: String,
                                              userType: String,

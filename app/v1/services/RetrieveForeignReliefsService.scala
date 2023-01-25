@@ -16,18 +16,19 @@
 
 package v1.services
 
+import api.controllers.EndpointLogContext
+import api.models
+import api.models.errors.{NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import api.support.DownstreamResponseMappingSupport
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveForeignReliefsConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors._
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
-import v1.support.DownstreamResponseMappingSupport
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -51,12 +52,12 @@ class RetrieveForeignReliefsService @Inject() (connector: RetrieveForeignReliefs
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "INVALID_CORRELATIONID"     -> InternalError,
-      "SERVER_ERROR"              -> InternalError,
-      "SERVICE_UNAVAILABLE"       -> InternalError
+      "INVALID_CORRELATIONID"     -> models.errors.InternalError,
+      "SERVER_ERROR"              -> models.errors.InternalError,
+      "SERVICE_UNAVAILABLE"       -> models.errors.InternalError
     )
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
+      "INVALID_CORRELATION_ID" -> models.errors.InternalError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 

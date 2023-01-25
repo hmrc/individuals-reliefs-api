@@ -16,6 +16,27 @@
 
 package v1.controllers
 
+import api.models.audit.{AuditError, AuditEvent, AuditResponse}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.{
+  BadRequestError,
+  DateOfInvestmentFormatError,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NameFormatError,
+  NinoFormatError,
+  RuleIncorrectOrEmptyBodyError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError,
+  UniqueInvestmentRefFormatError,
+  ValueFormatError
+}
+import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
+import api.models.{errors, hateoas}
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -24,13 +45,7 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateAndAmendReliefInvestmentsRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AuditError, AuditEvent, AuditResponse, CreateAndAmendReliefInvestmentsAuditDetail}
-import v1.models.domain.Nino
-import v1.models.errors._
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
-import v1.models.hateoas.{HateoasWrapper, Link}
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
+import v1.models.audit.CreateAndAmendReliefInvestmentsAuditDetail
 import v1.models.request.createAndAmendReliefInvestments._
 import v1.models.response.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsHateoasData
 
@@ -71,9 +86,9 @@ class CreateAndAmendReliefInvestmentsControllerSpec
   }
 
   private val testHateoasLinks: Seq[Link] = Seq(
-    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-investments"),
-    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
+    hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self"),
+    hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-investments"),
+    hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
   )
 
   private val rawData     = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
@@ -164,7 +179,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
 
             MockCreateAndAmendReliefService
               .amend(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+              .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 

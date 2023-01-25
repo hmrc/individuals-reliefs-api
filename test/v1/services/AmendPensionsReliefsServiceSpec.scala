@@ -16,23 +16,13 @@
 
 package v1.services
 
+import api.controllers.EndpointLogContext
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
-import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockAmendPensionsReliefsConnector
-import v1.models.errors.{
-  DownstreamErrorCode,
-  DownstreamErrors,
-  ErrorWrapper,
-  InternalError,
-  MtdError,
-  NinoFormatError,
-  RuleTaxYearNotSupportedError,
-  TaxYearFormatError
-}
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
 import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRequest, PensionReliefs}
 
 import scala.concurrent.ExecutionContext.Implicits.global

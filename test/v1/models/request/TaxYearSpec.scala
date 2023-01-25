@@ -16,6 +16,7 @@
 
 package v1.models.request
 
+import api.models.domain.TaxYear
 import support.UnitSpec
 
 class TaxYearSpec extends UnitSpec {

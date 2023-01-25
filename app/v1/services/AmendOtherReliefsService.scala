@@ -16,14 +16,15 @@
 
 package v1.services
 
+import api.controllers.EndpointLogContext
+import api.models
+import api.models.errors._
+import api.support.DownstreamResponseMappingSupport
 import cats.data.EitherT
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.AmendOtherReliefsConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors._
 import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequest
-import v1.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -46,17 +47,17 @@ class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector)
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID"        -> NinoFormatError,
       "INVALID_TAX_YEAR"                 -> TaxYearFormatError,
-      "INVALID_CORRELATIONID"            -> InternalError,
+      "INVALID_CORRELATIONID"            -> models.errors.InternalError,
       "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailedError,
-      "SERVER_ERROR"                     -> InternalError,
-      "SERVICE_UNAVAILABLE"              -> InternalError
+      "SERVER_ERROR"                     -> models.errors.InternalError,
+      "SERVICE_UNAVAILABLE"              -> models.errors.InternalError
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
-      "INVALID_PAYLOAD"        -> InternalError,
+      "INVALID_CORRELATION_ID" -> models.errors.InternalError,
+      "INVALID_PAYLOAD"        -> models.errors.InternalError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "UNPROCESSABLE_ENTITY"   -> InternalError
+      "UNPROCESSABLE_ENTITY"   -> models.errors.InternalError
     )
 
     errors ++ extraTysErrors

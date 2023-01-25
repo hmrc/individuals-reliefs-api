@@ -16,19 +16,30 @@
 
 package v1.controllers
 
+import api.controllers.{AuthorisedController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.errors.{
+  BadRequestError,
+  ErrorWrapper,
+  InternalError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.RetrievePensionsReliefsRequestParser
-import v1.hateoas.HateoasFactory
-import v1.models.errors._
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRawData
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsHateoasData
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrievePensionsReliefsService}
+import v1.services.RetrievePensionsReliefsService
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -83,17 +94,18 @@ class RetrievePensionsReliefsController @Inject() (val authService: EnrolmentsAu
 
     errorWrapper.error match {
       case _
-        if errorWrapper.containsAnyOf(
-          BadRequestError,
-          NinoFormatError,
-          TaxYearFormatError,
-          RuleTaxYearRangeInvalidError,
-          RuleTaxYearNotSupportedError,
-        ) => BadRequest(Json.toJson(errorWrapper))
+          if errorWrapper.containsAnyOf(
+            BadRequestError,
+            NinoFormatError,
+            TaxYearFormatError,
+            RuleTaxYearRangeInvalidError,
+            RuleTaxYearNotSupportedError
+          ) =>
+        BadRequest(Json.toJson(errorWrapper))
 
-      case InternalError   => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _             => unhandledError(errorWrapper)
     }
   }
 

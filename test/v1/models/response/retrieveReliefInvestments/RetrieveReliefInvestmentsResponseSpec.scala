@@ -16,12 +16,12 @@
 
 package v1.models.response.retrieveReliefInvestments
 
+import api.models.hateoas
+import api.models.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.{responseJson, responseModel}
-import v1.models.hateoas.Link
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -49,9 +49,9 @@ class RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig 
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
       RetrieveReliefInvestmentsResponse.LinksFactory.links(mockAppConfig, RetrieveReliefInvestmentsHateoasData(nino, taxYear)) shouldBe
         Seq(
-          Link(s"/my/context/investment/$nino/$taxYear", GET, "self"),
-          Link(s"/my/context/investment/$nino/$taxYear", PUT, "create-and-amend-reliefs-investments"),
-          Link(s"/my/context/investment/$nino/$taxYear", DELETE, "delete-reliefs-investments")
+          hateoas.Link(s"/my/context/investment/$nino/$taxYear", GET, "self"),
+          hateoas.Link(s"/my/context/investment/$nino/$taxYear", PUT, "create-and-amend-reliefs-investments"),
+          hateoas.Link(s"/my/context/investment/$nino/$taxYear", DELETE, "delete-reliefs-investments")
         )
     }
   }

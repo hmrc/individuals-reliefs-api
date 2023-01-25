@@ -16,8 +16,9 @@
 
 package v1.controllers.requestParsers.validators.validations
 
+import api.controllers.requestParsers.validators.validations.NameValidation
+import api.models.errors.NameFormatError
 import support.UnitSpec
-import v1.models.errors.NameFormatError
 
 class NameValidationSpec extends UnitSpec {
 

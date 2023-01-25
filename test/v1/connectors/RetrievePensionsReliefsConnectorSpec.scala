@@ -16,9 +16,8 @@
 
 package v1.connectors
 
-import v1.models.domain.Nino
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import v1.models.response.retrievePensionsReliefs.PensionsReliefs
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
@@ -27,7 +26,7 @@ import scala.concurrent.Future
 
 class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String            = "AA123456A"
   val taxableEntityId: String = "AA123456A"
 
   trait Test {
@@ -39,14 +38,14 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
+
     protected val request: RetrievePensionsReliefsRequest =
       RetrievePensionsReliefsRequest(
         nino = Nino(nino),
-        taxYear = taxYear,
+        taxYear = taxYear
       )
 
-    val response = RetrievePensionsReliefsResponse(submittedOn = "2021-01-01",
-      PensionsReliefs(None,None,None,None, None))
+    val response = RetrievePensionsReliefsResponse(submittedOn = "2021-01-01", PensionsReliefs(None, None, None, None, None))
   }
 
   "RetrievePensionsReliefsConnector" when {
@@ -83,4 +82,5 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
         }
     }
   }
+
 }

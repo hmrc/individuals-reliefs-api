@@ -16,20 +16,23 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.validations.{NoValidationErrors, minimumTaxYear}
+import api.controllers.requestParsers.validators.validations._
+import api.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 import v1.models.request.createAndAmendForeignReliefs._
 
 class CreateAndAmendForeignReliefsValidator extends Validator[CreateAndAmendForeignReliefsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, bodyFieldValidation)
 
-  private def parameterFormatValidation: CreateAndAmendForeignReliefsRawData => List[List[MtdError]] = (data: CreateAndAmendForeignReliefsRawData) => {
-    List(
-      NinoValidation.validate(data.nino),
-      TaxYearValidation.validate(data.taxYear)
-    )
-  }
+  private def parameterFormatValidation: CreateAndAmendForeignReliefsRawData => List[List[MtdError]] = (data: CreateAndAmendForeignReliefsRawData) =>
+    {
+      List(
+        NinoValidation.validate(data.nino),
+        TaxYearValidation.validate(data.taxYear)
+      )
+    }
 
   private def parameterRuleValidation: CreateAndAmendForeignReliefsRawData => List[List[MtdError]] = (data: CreateAndAmendForeignReliefsRawData) => {
     List(

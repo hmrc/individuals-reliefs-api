@@ -16,14 +16,14 @@
 
 package v1.connectors.httpparsers
 
+import api.connectors.connectors.MtdIdLookupOutcome
+import api.connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
+import api.models.errors.{InternalError, InvalidBearerTokenError, NinoFormatError}
 import play.api.libs.json.Writes.StringWrites
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.{FORBIDDEN, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED}
 import support.UnitSpec
 import uk.gov.hmrc.http.HttpResponse
-import v1.connectors.MtdIdLookupOutcome
-import v1.connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
-import v1.models.errors.{InternalError, InvalidBearerTokenError, NinoFormatError}
 
 class MtdIdLookupHttpParserSpec extends UnitSpec {
 

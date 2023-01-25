@@ -16,6 +16,6 @@
 
 package v1.models.request.retrievePensionsReliefs
 
-import v1.models.request.RawData
+import api.models.request.RawData
 
 case class RetrievePensionsReliefsRawData(nino: String, taxYear: String) extends RawData

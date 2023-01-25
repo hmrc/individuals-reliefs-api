@@ -16,8 +16,23 @@
 
 package v1.controllers
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.{
+  BadRequestError,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
+import api.models.hateoas.HateoasWrapper
+import api.models.hateoas.Method.GET
+import api.models.outcomes.ResponseWrapper
+import api.models.{errors, hateoas}
 import play.api.libs.json.Json
-import v1.models.domain.Nino
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
@@ -25,11 +40,6 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveInvestmentsRequestParser
 import v1.mocks.services._
-import v1.models.errors._
-import v1.models.hateoas.Method.GET
-import v1.models.hateoas.{HateoasWrapper, Link}
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
 import v1.models.request.retrieveReliefInvestments.{RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest}
 import v1.models.response.retrieveReliefInvestments._
 
@@ -71,7 +81,7 @@ class RetrieveReliefInvestmentsControllerSpec
   private val rawData     = RetrieveReliefInvestmentsRawData(nino, taxYear)
   private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = hateoas.Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
 
   "handleRequest" should {
     "return Ok" when {
@@ -102,7 +112,7 @@ class RetrieveReliefInvestmentsControllerSpec
 
             MockRetrieveReliefInvestmentsRequestParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+              .returns(Left(errors.ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 

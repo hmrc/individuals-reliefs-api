@@ -16,6 +16,9 @@
 
 package v1.services
 
+import api.models.auth.UserDetails
+import api.models.errors.{ClientNotAuthenticatedError, InternalError}
+import api.services.EnrolmentsAuthService
 import config.ConfidenceLevelConfig
 import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
@@ -24,8 +27,6 @@ import uk.gov.hmrc.auth.core.authorise.{AlternatePredicate, CompositePredicate, 
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.models.auth.UserDetails
-import v1.models.errors.{InternalError, UnauthorisedError}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -212,7 +213,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
 
         MockAppConfig.confidenceLevelCheckEnabled.returns(ConfidenceLevelConfig(definitionEnabled = true, authValidationEnabled = false))
 
-        val expected = Left(UnauthorisedError)
+        val expected = Left(ClientNotAuthenticatedError)
 
         MockedAuthConnector
           .authorised(EmptyPredicate, authRetrievals)
@@ -229,7 +230,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
 
         MockAppConfig.confidenceLevelCheckEnabled.returns(ConfidenceLevelConfig(definitionEnabled = true, authValidationEnabled = false))
 
-        val expected = Left(UnauthorisedError)
+        val expected = Left(ClientNotAuthenticatedError)
 
         MockedAuthConnector
           .authorised(EmptyPredicate, authRetrievals)

@@ -16,11 +16,12 @@
 
 package v1.controllers.requestParsers.validators.validations
 
+import api.controllers.requestParsers.validators.validations.JsonFormatValidation
+import api.models.errors.RuleIncorrectOrEmptyBodyError
 import play.api.libs.json.{Json, OFormat}
 import shapeless.HNil
 import support.UnitSpec
 import utils.EmptinessChecker
-import v1.models.errors.RuleIncorrectOrEmptyBodyError
 import v1.models.utils.JsonErrorValidators
 
 class JsonFormatValidationSpec extends UnitSpec with JsonErrorValidators {

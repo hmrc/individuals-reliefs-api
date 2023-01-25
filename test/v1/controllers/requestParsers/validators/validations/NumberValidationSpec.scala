@@ -16,8 +16,9 @@
 
 package v1.controllers.requestParsers.validators.validations
 
+import api.controllers.requestParsers.validators.validations.NumberValidation
+import api.models.errors.ValueFormatError
 import support.UnitSpec
-import v1.models.errors.ValueFormatError
 
 class NumberValidationSpec extends UnitSpec {
 

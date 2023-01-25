@@ -16,8 +16,9 @@
 
 package v1.controllers.requestParsers.validators.validations
 
+import api.controllers.requestParsers.validators.validations.InvestmentRefValidation
+import api.models.errors.UniqueInvestmentRefFormatError
 import support.UnitSpec
-import v1.models.errors.UniqueInvestmentRefFormatError
 import v1.models.utils.JsonErrorValidators
 
 class InvestmentRefValidationSpec extends UnitSpec with JsonErrorValidators {

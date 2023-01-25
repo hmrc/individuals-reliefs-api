@@ -16,9 +16,11 @@
 
 package v1.connectors
 
+import api.connectors.MtdIdLookupConnector
+import api.connectors.connectors.MtdIdLookupOutcome
+import api.models.errors.InternalError
 import mocks.MockAppConfig
 import v1.mocks.MockHttpClient
-import v1.models.errors.InternalError
 
 import scala.concurrent.Future
 

@@ -16,19 +16,31 @@
 
 package v1.controllers
 
+import api.controllers.{AuthorisedController, EndpointLogContext}
+import api.models.audit.{AuditEvent, AuditResponse}
+import api.models.errors.{
+  BadRequestError,
+  ErrorWrapper,
+  InternalError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.DeleteReliefInvestmentsRequestParser
-import v1.models.audit.{AuditEvent, AuditResponse, DeleteReliefInvestmentsAuditDetail}
-import v1.models.errors._
+import v1.models.audit.DeleteReliefInvestmentsAuditDetail
 import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRawData
-import v1.services.{AuditService, DeleteReliefInvestmentsService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.DeleteReliefInvestmentsService
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -98,8 +110,8 @@ class DeleteReliefInvestmentsController @Inject() (val authService: EnrolmentsAu
       case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _             => unhandledError(errorWrapper)
     }
   }
 

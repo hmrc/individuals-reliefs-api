@@ -16,11 +16,12 @@
 
 package v1.controllers
 
+import api.controllers.EndpointLogContext
+import api.models.errors.{ErrorWrapper, InternalError}
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import play.api.mvc.Results.InternalServerError
 import utils.Logging
-import v1.models.errors.{InternalError, ErrorWrapper}
 
 trait BaseController {
   self: Logging =>

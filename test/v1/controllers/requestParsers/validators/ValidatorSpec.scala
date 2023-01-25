@@ -16,10 +16,12 @@
 
 package v1.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.models.errors.MtdError
+import api.models.request.RawData
 import org.scalamock.scalatest.MockFactory
+import play.api.http.Status.BAD_REQUEST
 import support.UnitSpec
-import v1.models.errors.MtdError
-import v1.models.request.RawData
 
 class ValidatorSpec extends UnitSpec with MockFactory {
 
@@ -58,7 +60,7 @@ class ValidatorSpec extends UnitSpec with MockFactory {
         // Set up the mock validations
         val levelOneValidationOne = new MockFunctionObject("Level: 1    Validation 1")
         val levelOneValidationTwo = new MockFunctionObject("Level: 1    Validation 2")
-        val mockError             = MtdError("MOCK", "SOME ERROR")
+        val mockError             = MtdError("MOCK", "SOME ERROR", BAD_REQUEST)
 
         def levelOneValidations: TestRawData => List[List[MtdError]] = (_: TestRawData) => {
           List(
@@ -86,7 +88,7 @@ class ValidatorSpec extends UnitSpec with MockFactory {
         val levelOneValidationTwo = new MockFunctionObject("Level: 1    Validation 2")
         val levelTwoValidationOne = new MockFunctionObject("Level: 2    Validation 1")
         val levelTwoValidationTwo = new MockFunctionObject("Level: 2    Validation 2")
-        val mockError             = MtdError("MOCK", "SOME ERROR ON LEVEL 2")
+        val mockError             = MtdError("MOCK", "SOME ERROR ON LEVEL 2", BAD_REQUEST)
 
         def levelOneValidations: TestRawData => List[List[MtdError]] = (_: TestRawData) => {
           List(
@@ -121,28 +123,28 @@ class ValidatorSpec extends UnitSpec with MockFactory {
     "flatten errors" when {
       "errors with the same message are passed in" in new Test {
         val errors = List(
-          List(MtdError("CODE", "MSG1", Some(Seq("path 1")))),
-          List(MtdError("CODE", "MSG1", Some(Seq("path 2")))),
-          List(MtdError("CODE", "MSG2", Some(Seq("path 1"))))
+          List(MtdError("CODE", "MSG1", BAD_REQUEST, Some(Seq("path 1")))),
+          List(MtdError("CODE", "MSG1", BAD_REQUEST, Some(Seq("path 2")))),
+          List(MtdError("CODE", "MSG2", BAD_REQUEST, Some(Seq("path 1"))))
         )
 
         validator.flattenErrors(errors) shouldBe List(
-          MtdError("CODE", "MSG1", Some(Seq("path 1", "path 2"))),
-          MtdError("CODE", "MSG2", Some(Seq("path 1"))))
+          MtdError("CODE", "MSG1", BAD_REQUEST, Some(Seq("path 1", "path 2"))),
+          MtdError("CODE", "MSG2", BAD_REQUEST, Some(Seq("path 1"))))
       }
     }
     "flatten nothing" when {
       "no errors with the same message are passed in" in new Test {
         val errors = List(
-          List(MtdError("CODE", "MSG1", Some(Seq("path 1")))),
-          List(MtdError("CODE", "MSG2", Some(Seq("path 2")))),
-          List(MtdError("CODE", "MSG3", Some(Seq("path 3"))))
+          List(MtdError("CODE", "MSG1", BAD_REQUEST, Some(Seq("path 1")))),
+          List(MtdError("CODE", "MSG2", BAD_REQUEST, Some(Seq("path 2")))),
+          List(MtdError("CODE", "MSG3", BAD_REQUEST, Some(Seq("path 3"))))
         )
 
         validator.flattenErrors(errors).sortBy(_.message) shouldBe List(
-          MtdError("CODE", "MSG1", Some(Seq("path 1"))),
-          MtdError("CODE", "MSG2", Some(Seq("path 2"))),
-          MtdError("CODE", "MSG3", Some(Seq("path 3")))
+          MtdError("CODE", "MSG1", BAD_REQUEST, Some(Seq("path 1"))),
+          MtdError("CODE", "MSG2", BAD_REQUEST, Some(Seq("path 2"))),
+          MtdError("CODE", "MSG3", BAD_REQUEST, Some(Seq("path 3")))
         )
       }
     }

@@ -16,19 +16,18 @@
 
 package v1.services
 
+import api.controllers.EndpointLogContext
+import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import api.support.DownstreamResponseMappingSupport
 import cats.data.EitherT
 import cats.implicits._
-
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrievePensionsReliefsConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
-import v1.support.DownstreamResponseMappingSupport
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -57,7 +56,7 @@ class RetrievePensionsReliefsService @Inject() (connector: RetrievePensionsRelie
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATIONID" -> InternalError,
+      "INVALID_CORRELATIONID"  -> InternalError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 

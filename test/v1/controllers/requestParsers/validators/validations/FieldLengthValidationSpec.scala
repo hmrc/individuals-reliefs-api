@@ -16,8 +16,9 @@
 
 package v1.controllers.requestParsers.validators.validations
 
+import api.controllers.requestParsers.validators.validations.FieldLengthValidation
+import api.models.errors.CustomerReferenceFormatError
 import support.UnitSpec
-import v1.models.errors.CustomerReferenceFormatError
 
 class FieldLengthValidationSpec extends UnitSpec {
 

@@ -16,9 +16,10 @@
 
 package v1.models.audit
 
+import api.models.audit.{AuditError, AuditResponse}
+import api.models.errors.NinoFormatError
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.models.errors.NinoFormatError
 
 class DeleteOtherReliefsAuditDetailSpec extends UnitSpec {
 

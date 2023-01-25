@@ -16,12 +16,11 @@
 
 package v1.services
 
-import v1.controllers.EndpointLogContext
+import api.controllers.EndpointLogContext
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import v1.mocks.connectors.MockCreateAndAmendCharitableGivingTaxReliefConnector
-import v1.models.domain.Nino
-import v1.models.errors._
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 
 import scala.concurrent.Future
@@ -111,11 +110,11 @@ class CreateAndAmendCharitableGivingTaxReliefServiceSpec extends ServiceSpec {
         )
 
         val extraTysErrors = Seq(
-          ( "INVALID_INCOMESOURCE_TYPE", InternalError),
-          ( "INVALID_TAX_YEAR", TaxYearFormatError),
+          ("INVALID_INCOMESOURCE_TYPE", InternalError),
+          ("INVALID_TAX_YEAR", TaxYearFormatError),
           ("INVALID_CORRELATIONID", InternalError),
           ("INCOME_SOURCE_NOT_FOUND", NotFoundError),
-          ("INCOMPATIBLE_INCOME_SOURCE",InternalError),
+          ("INCOMPATIBLE_INCOME_SOURCE", InternalError),
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
         )
 

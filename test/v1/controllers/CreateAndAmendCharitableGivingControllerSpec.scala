@@ -16,6 +16,26 @@
 
 package v1.controllers
 
+import api.models.audit.AuditEvent
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.{
+  BadRequestError,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleGiftAidNonUkAmountWithoutNamesError,
+  RuleGiftsNonUkAmountWithoutNamesError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError,
+  ValueFormatError
+}
+import api.models.hateoas.HateoasWrapper
+import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.models.outcomes.ResponseWrapper
+import api.models.{errors, hateoas}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -23,13 +43,7 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateAndAmendCharitableGivingRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AuditEvent, CharitableGivingReliefAuditDetail}
-import v1.models.domain.Nino
-import v1.models.errors._
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
-import v1.models.hateoas.{HateoasWrapper, Link}
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
+import v1.models.audit.CharitableGivingReliefAuditDetail
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 import v1.models.response.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefHateoasData
 
@@ -37,7 +51,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockCreateAndAmendCharitableGivingService
@@ -86,9 +100,12 @@ class CreateAndAmendCharitableGivingControllerSpec
   }
 
   private val testHateoasLinks = Seq(
-    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = PUT, rel = "create-and-amend-charitable-giving-tax-relief"),
-    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
+    hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
+    hateoas.Link(
+      href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear",
+      method = PUT,
+      rel = "create-and-amend-charitable-giving-tax-relief"),
+    hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
   )
 
   private val requestJson = Json.parse(
@@ -215,7 +232,7 @@ class CreateAndAmendCharitableGivingControllerSpec
 
             MockAmendReliefService
               .amend(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+              .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 

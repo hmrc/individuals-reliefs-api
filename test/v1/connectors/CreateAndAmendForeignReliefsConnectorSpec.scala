@@ -16,10 +16,9 @@
 
 package v1.connectors
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import v1.fixtures.CreateAndAmendForeignReliefsFixtures.requestBodyModel
-import v1.models.domain.Nino
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
 import v1.models.request.createAndAmendForeignReliefs._
 
 import scala.concurrent.Future

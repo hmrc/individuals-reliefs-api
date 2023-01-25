@@ -16,6 +16,19 @@
 
 package v1.controllers
 
+import api.controllers.{AuthorisedController, EndpointLogContext}
+import api.models.audit.{AuditEvent, AuditResponse}
+import api.models.errors.{
+  BadRequestError,
+  ErrorWrapper,
+  InternalError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
@@ -24,10 +37,9 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.DeleteCharitableGivingReliefRequestParser
-import v1.models.audit.{AuditEvent, AuditResponse, CharitableGivingReliefAuditDetail}
-import v1.models.errors._
+import v1.models.audit.CharitableGivingReliefAuditDetail
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRawData
-import v1.services.{AuditService, DeleteCharitableGivingTaxReliefService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.DeleteCharitableGivingTaxReliefService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

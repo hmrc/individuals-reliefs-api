@@ -16,9 +16,11 @@
 
 package v1.models.hateoas
 
+import api.models.hateoas
+import api.models.hateoas.Method.GET
+import api.models.hateoas.{HateoasWrapper, Link}
 import play.api.libs.json.{Json, OWrites}
 import support.UnitSpec
-import v1.models.hateoas.Method.GET
 
 class HateoasWrapperSpec extends UnitSpec {
 
@@ -59,7 +61,7 @@ class HateoasWrapperSpec extends UnitSpec {
 
   "HateoasWrapper writesEmpty" must {
     "write links" in {
-      Json.toJson(HateoasWrapper((), Seq(Link("/some/resource", GET, "thing")))) shouldBe
+      Json.toJson(HateoasWrapper((), Seq(hateoas.Link("/some/resource", GET, "thing")))) shouldBe
         Json.parse("""
       |{
       |  "links" : [

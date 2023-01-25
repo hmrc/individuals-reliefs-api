@@ -16,19 +16,30 @@
 
 package v1.controllers
 
+import api.controllers.{AuthorisedController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.errors.{
+  BadRequestError,
+  ErrorWrapper,
+  InternalError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.RetrieveCharitableGivingReliefRequestParser
-import v1.hateoas.HateoasFactory
-import v1.models.errors._
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRawData
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefHateoasData
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveCharitableGivingReliefService}
+import v1.services.RetrieveCharitableGivingReliefService
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

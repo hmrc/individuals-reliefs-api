@@ -16,22 +16,38 @@
 
 package v1.controllers
 
+import api.controllers.{AuthorisedController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse}
+import api.models.errors.{
+  BadRequestError,
+  DateOfInvestmentFormatError,
+  ErrorWrapper,
+  InternalError,
+  NameFormatError,
+  NinoFormatError,
+  RuleIncorrectOrEmptyBodyError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError,
+  UniqueInvestmentRefFormatError,
+  ValueFormatError
+}
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.CreateAndAmendReliefInvestmentsRequestParser
-import v1.hateoas.HateoasFactory
-import v1.models.audit.{CreateAndAmendReliefInvestmentsAuditDetail, AuditEvent, AuditResponse}
-import v1.models.errors._
+import v1.models.audit.CreateAndAmendReliefInvestmentsAuditDetail
 import v1.models.request.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsRawData
 import v1.models.response.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsHateoasData
 import v1.models.response.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsResponse.LinksFactory
-import v1.services.{CreateAndAmendReliefInvestmentsService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.CreateAndAmendReliefInvestmentsService
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

@@ -16,19 +16,29 @@
 
 package v1.controllers
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.{
+  BadRequestError,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
+import api.models.hateoas.HateoasWrapper
+import api.models.hateoas.Method.GET
+import api.models.outcomes.ResponseWrapper
+import api.models.{errors, hateoas}
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrievePensionsReliefsRequestParser
 import v1.mocks.services._
-import v1.models.errors._
-import v1.models.hateoas.{HateoasWrapper, Link}
-import v1.models.hateoas.Method.GET
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
 import v1.models.request.retrievePensionsReliefs.{RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest}
 import v1.models.response.retrievePensionsReliefs._
 
@@ -70,7 +80,7 @@ class RetrievePensionsReliefsControllerSpec
   private val rawData     = RetrievePensionsReliefsRawData(nino, taxYear)
   private val requestData = RetrievePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = hateoas.Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrievePensionsReliefsResponse(
     "2019-04-04T01:01:01Z",
@@ -111,7 +121,7 @@ class RetrievePensionsReliefsControllerSpec
 
             MockRetrievePensionsReliefsRequestParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+              .returns(Left(errors.ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 

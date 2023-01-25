@@ -16,18 +16,19 @@
 
 package v1.services
 
+import api.controllers.EndpointLogContext
+import api.models
+import api.models.errors._
+import api.support.DownstreamResponseMappingSupport
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveCharitableGivingReliefConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors._
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
-import v1.support.DownstreamResponseMappingSupport
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -51,20 +52,20 @@ class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharit
   private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_NINO"            -> NinoFormatError,
-      "INVALID_TYPE"            -> InternalError,
+      "INVALID_TYPE"            -> models.errors.InternalError,
       "INVALID_TAXYEAR"         -> TaxYearFormatError,
-      "INVALID_INCOME_SOURCE"   -> InternalError,
+      "INVALID_INCOME_SOURCE"   -> models.errors.InternalError,
       "NOT_FOUND_PERIOD"        -> NotFoundError,
       "NOT_FOUND_INCOME_SOURCE" -> NotFoundError,
-      "SERVER_ERROR"            -> InternalError,
-      "SERVICE_UNAVAILABLE"     -> InternalError
+      "SERVER_ERROR"            -> models.errors.InternalError,
+      "SERVICE_UNAVAILABLE"     -> models.errors.InternalError
     )
 
     val extraTysErrors = Map(
       "INVALID_TAX_YEAR"             -> TaxYearFormatError,
-      "INVALID_CORRELATION_ID"       -> InternalError,
-      "INVALID_INCOMESOURCE_ID"      -> InternalError,
-      "INVALID_INCOMESOURCE_TYPE"    -> InternalError,
+      "INVALID_CORRELATION_ID"       -> models.errors.InternalError,
+      "INVALID_INCOMESOURCE_ID"      -> models.errors.InternalError,
+      "INVALID_INCOMESOURCE_TYPE"    -> models.errors.InternalError,
       "SUBMISSION_PERIOD_NOT_FOUND"  -> NotFoundError,
       "INCOME_DATA_SOURCE_NOT_FOUND" -> NotFoundError,
       "TAX_YEAR_NOT_SUPPORTED"       -> RuleTaxYearNotSupportedError

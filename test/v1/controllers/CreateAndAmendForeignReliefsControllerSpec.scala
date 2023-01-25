@@ -16,6 +16,25 @@
 
 package v1.controllers
 
+import api.models.audit.{AuditError, AuditEvent, AuditResponse}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.{
+  BadRequestError,
+  CountryCodeFormatError,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  RuleCountryCodeError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError,
+  ValueFormatError
+}
+import api.models.hateoas
+import api.models.hateoas.HateoasWrapper
+import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -24,13 +43,7 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateAndAmendForeignReliefsRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AuditError, AuditEvent, AuditResponse, CreateAndAmendForeignReliefsAuditDetail}
-import v1.models.domain.Nino
-import v1.models.errors._
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
-import v1.models.hateoas.{HateoasWrapper, Link}
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
+import v1.models.audit.CreateAndAmendForeignReliefsAuditDetail
 import v1.models.request.createAndAmendForeignReliefs._
 import v1.models.response.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsHateoasData
 
@@ -71,9 +84,9 @@ class CreateAndAmendForeignReliefsControllerSpec
   }
 
   private val testHateoasLinks = Seq(
-    Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-foreign"),
-    Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-foreign")
+    hateoas.Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self"),
+    hateoas.Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-foreign"),
+    hateoas.Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-foreign")
   )
 
   def event(auditResponse: AuditResponse): AuditEvent[CreateAndAmendForeignReliefsAuditDetail] =

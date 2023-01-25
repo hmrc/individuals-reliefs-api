@@ -16,16 +16,18 @@
 
 package v1.models.errors
 
+import api.models.audit.AuditError
+import api.models.errors
+import api.models.errors.{BadRequestError, DateFormatError, ErrorWrapper, NinoFormatError, StringFormatError, TaxYearFormatError, ValueFormatError}
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.audit.AuditError
 
 class ErrorWrapperSpec extends UnitSpec {
 
   val correlationId: String = "X-123"
 
   "Rendering a error response with one error" should {
-    val error = ErrorWrapper(correlationId, NinoFormatError, Some(Seq.empty))
+    val error = errors.ErrorWrapper(correlationId, NinoFormatError, Some(Seq.empty))
 
     val json = Json.parse(
       """
@@ -42,7 +44,7 @@ class ErrorWrapperSpec extends UnitSpec {
   }
 
   "Rendering a error response with one error and an empty sequence of errors" should {
-    val error = ErrorWrapper(correlationId, NinoFormatError, Some(Seq.empty))
+    val error = errors.ErrorWrapper(correlationId, NinoFormatError, Some(Seq.empty))
 
     val json = Json.parse(
       """
@@ -94,7 +96,7 @@ class ErrorWrapperSpec extends UnitSpec {
   }
 
   "When ErrorWrapper has only one error, containsAnyOf" should {
-    val errorWrapper = ErrorWrapper("correlationId", NinoFormatError, None)
+    val errorWrapper = errors.ErrorWrapper("correlationId", NinoFormatError, None)
 
     "return false" when {
 
@@ -112,7 +114,7 @@ class ErrorWrapperSpec extends UnitSpec {
   }
 
   "When ErrorWrapper has several errors, containsAnyOf" should {
-    val errorWrapper = ErrorWrapper("correlationId", BadRequestError, Some(List(NinoFormatError, TaxYearFormatError, StringFormatError)))
+    val errorWrapper = errors.ErrorWrapper("correlationId", BadRequestError, Some(List(NinoFormatError, TaxYearFormatError, StringFormatError)))
 
     "return false" when {
       "given no matching errors" in {
@@ -134,12 +136,12 @@ class ErrorWrapperSpec extends UnitSpec {
 
   "auditErrors" should {
     "map a single error to a single audit error" in {
-      val singleWrappedError = ErrorWrapper(correlationId, NinoFormatError, None)
+      val singleWrappedError = errors.ErrorWrapper(correlationId, NinoFormatError, None)
       singleWrappedError.auditErrors shouldBe Seq(AuditError(NinoFormatError.code))
     }
 
     "map multiple errors to a sequence of audit errors" in {
-      val singleWrappedError = ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError)))
+      val singleWrappedError = errors.ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError)))
       singleWrappedError.auditErrors shouldBe Seq(AuditError(NinoFormatError.code), AuditError(TaxYearFormatError.code))
     }
   }

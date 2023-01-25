@@ -16,29 +16,34 @@
 
 package v1.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.validations.{NoValidationErrors, minimumTaxYear}
+import api.controllers.requestParsers.validators.validations._
+import api.models.errors._
 import config.AppConfig
-import javax.inject.Inject
-import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors._
 import v1.models.request.createAndAmendReliefInvestments._
 
-class CreateAndAmendReliefInvestmentValidator @Inject()(appConfig: AppConfig) extends Validator[CreateAndAmendReliefInvestmentsRawData] {
+import javax.inject.Inject
+
+class CreateAndAmendReliefInvestmentValidator @Inject() (appConfig: AppConfig) extends Validator[CreateAndAmendReliefInvestmentsRawData] {
 
   private val validationSet =
     List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, incorrectOfEmptyBodySubmittedValidation, bodyFieldValidation)
 
-  private def parameterFormatValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = (data: CreateAndAmendReliefInvestmentsRawData) => {
-    List(
-      NinoValidation.validate(data.nino),
-      TaxYearValidation.validate(data.taxYear)
-    )
-  }
+  private def parameterFormatValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] =
+    (data: CreateAndAmendReliefInvestmentsRawData) => {
+      List(
+        NinoValidation.validate(data.nino),
+        TaxYearValidation.validate(data.taxYear)
+      )
+    }
 
-  private def parameterRuleValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = (data: CreateAndAmendReliefInvestmentsRawData) => {
-    List(
-      MtdTaxYearValidation.validate(data.taxYear, minimumTaxYear)
-    )
-  }
+  private def parameterRuleValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] =
+    (data: CreateAndAmendReliefInvestmentsRawData) => {
+      List(
+        MtdTaxYearValidation.validate(data.taxYear, minimumTaxYear)
+      )
+    }
 
   private def bodyFormatValidation: CreateAndAmendReliefInvestmentsRawData => List[List[MtdError]] = { data =>
     List(

@@ -16,11 +16,12 @@
 
 package v1.controllers.requestParsers
 
-import javax.inject.Inject
-import v1.models.domain.Nino
+import api.controllers.requestParsers.RequestParser
+import api.models.domain.{Nino, TaxYear}
 import v1.controllers.requestParsers.validators.RetrieveReliefInvestmentsValidator
-import v1.models.request.TaxYear
 import v1.models.request.retrieveReliefInvestments.{RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest}
+
+import javax.inject.Inject
 
 class RetrieveReliefInvestmentsRequestParser @Inject() (val validator: RetrieveReliefInvestmentsValidator)
     extends RequestParser[RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest] {

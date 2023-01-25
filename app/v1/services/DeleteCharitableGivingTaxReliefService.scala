@@ -16,14 +16,15 @@
 
 package v1.services
 
+import api.controllers.EndpointLogContext
+import api.models
+import api.models.errors.{NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import api.support.DownstreamResponseMappingSupport
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.DeleteCharitableGivingTaxReliefConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors._
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
-import v1.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,29 +46,29 @@ class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharita
   private val downstreamErrorMap = {
     val errors = Map(
       "INVALID_NINO"                      -> NinoFormatError,
-      "INVALID_TYPE"                      -> InternalError,
+      "INVALID_TYPE"                      -> models.errors.InternalError,
       "INVALID_TAXYEAR"                   -> TaxYearFormatError,
-      "INVALID_PAYLOAD"                   -> InternalError,
+      "INVALID_PAYLOAD"                   -> models.errors.InternalError,
       "NOT_FOUND_INCOME_SOURCE"           -> NotFoundError,
-      "MISSING_CHARITIES_NAME_GIFT_AID"   -> InternalError,
-      "MISSING_CHARITIES_NAME_INVESTMENT" -> InternalError,
-      "MISSING_INVESTMENT_AMOUNT"         -> InternalError,
+      "MISSING_CHARITIES_NAME_GIFT_AID"   -> models.errors.InternalError,
+      "MISSING_CHARITIES_NAME_INVESTMENT" -> models.errors.InternalError,
+      "MISSING_INVESTMENT_AMOUNT"         -> models.errors.InternalError,
       "INVALID_ACCOUNTING_PERIOD"         -> RuleTaxYearNotSupportedError,
-      "SERVER_ERROR"                      -> InternalError,
-      "SERVICE_UNAVAILABLE"               -> InternalError,
+      "SERVER_ERROR"                      -> models.errors.InternalError,
+      "SERVICE_UNAVAILABLE"               -> models.errors.InternalError,
       "GONE"                              -> NotFoundError,
       "NOT_FOUND"                         -> NotFoundError
     )
 
     val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_ID"      -> InternalError,
-      "INVALID_INCOMESOURCE_TYPE"    -> InternalError,
+      "INVALID_INCOMESOURCE_ID"      -> models.errors.InternalError,
+      "INVALID_INCOMESOURCE_TYPE"    -> models.errors.InternalError,
       "INVALID_TAX_YEAR"             -> TaxYearFormatError,
       "TAX_YEAR_NOT_SUPPORTED"       -> RuleTaxYearNotSupportedError,
       "PERIOD_NOT_FOUND"             -> NotFoundError,
       "PERIOD_ALREADY_DELETED"       -> NotFoundError,
       "INCOME_SOURCE_DATA_NOT_FOUND" -> NotFoundError,
-      "INVALID_CORRELATION_ID"       -> InternalError
+      "INVALID_CORRELATION_ID"       -> models.errors.InternalError
     )
 
     errors ++ extraTysErrors

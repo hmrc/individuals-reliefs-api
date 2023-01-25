@@ -16,11 +16,11 @@
 
 package v1.models.response.retrieveForeignReliefs
 
+import api.models.hateoas
+import api.models.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.hateoas.Link
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -84,9 +84,9 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
       RetrieveForeignReliefsResponse.LinksFactory.links(mockAppConfig, RetrieveForeignReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
-          Link(s"/my/context/foreign/$nino/$taxYear", GET, "self"),
-          Link(s"/my/context/foreign/$nino/$taxYear", PUT, "create-and-amend-reliefs-foreign"),
-          Link(s"/my/context/foreign/$nino/$taxYear", DELETE, "delete-reliefs-foreign")
+          hateoas.Link(s"/my/context/foreign/$nino/$taxYear", GET, "self"),
+          hateoas.Link(s"/my/context/foreign/$nino/$taxYear", PUT, "create-and-amend-reliefs-foreign"),
+          hateoas.Link(s"/my/context/foreign/$nino/$taxYear", DELETE, "delete-reliefs-foreign")
         )
     }
   }

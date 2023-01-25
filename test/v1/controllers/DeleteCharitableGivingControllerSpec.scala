@@ -16,25 +16,36 @@
 
 package v1.controllers
 
+import api.models.audit.AuditEvent
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors
+import api.models.errors.{
+  BadRequestError,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
+import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockDeleteCharitableGivingReliefRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AuditEvent, CharitableGivingReliefAuditDetail}
-import v1.models.errors._
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
+import v1.models.audit.CharitableGivingReliefAuditDetail
 import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeleteCharitableGivingControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockDeleteCharitableGivingReliefService
@@ -114,7 +125,7 @@ class DeleteCharitableGivingControllerSpec
 
             MockDeleteCharitableGivingReliefRequestParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+              .returns(Left(errors.ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 

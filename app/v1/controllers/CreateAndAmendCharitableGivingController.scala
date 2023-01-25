@@ -16,23 +16,26 @@
 
 package v1.controllers
 
+import api.controllers.{AuthorisedController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse}
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.AmendCharitableGivingRequestReliefParser
-import v1.hateoas.HateoasFactory
-import v1.models.errors._
+import v1.models.audit.CharitableGivingReliefAuditDetail
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRawData
 import v1.models.response.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefHateoasData
 import v1.models.response.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefResponse.LinksFactory
-import v1.services.{AuditService, CreateAndAmendCharitableGivingTaxReliefService, EnrolmentsAuthService, MtdIdLookupService}
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import v1.models.audit.{AuditEvent, AuditResponse, CharitableGivingReliefAuditDetail}
+import v1.services.CreateAndAmendCharitableGivingTaxReliefService
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -112,13 +115,14 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
   private def errorResult(errorWrapper: ErrorWrapper) = {
 
     errorWrapper.error match {
-      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError |
-          RuleGiftAidNonUkAmountWithoutNamesError | RuleGiftsNonUkAmountWithoutNamesError | MtdErrorWithCustomMessage(StringFormatError.code) |
-          MtdErrorWithCustomMessage(ValueFormatError.code) | MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code) =>
+      case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError
+//          RuleGiftAidNonUkAmountWithoutNamesError | RuleGiftsNonUkAmountWithoutNamesError | MtdErrorWithCustomMessage(StringFormatError.code) |
+//          MtdErrorWithCustomMessage(ValueFormatError.code) | MtdErrorWithCustomMessage(RuleIncorrectOrEmptyBodyError.code)
+          =>
         BadRequest(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+      case _             => unhandledError(errorWrapper)
     }
   }
 

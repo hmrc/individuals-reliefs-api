@@ -16,18 +16,29 @@
 
 package v1.controllers
 
+import api.models.audit.{AuditError, AuditEvent, AuditResponse}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors
+import api.models.errors.{
+  BadRequestError,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError
+}
+import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockDeleteReliefInvestmentsRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeleteReliefInvestmentsAuditDetail}
-import v1.models.errors._
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
+import v1.models.audit.DeleteReliefInvestmentsAuditDetail
 import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -110,7 +121,7 @@ class DeleteReliefInvestmentsControllerSpec
 
             MockDeleteReliefInvestmentsRequestParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+              .returns(Left(errors.ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 

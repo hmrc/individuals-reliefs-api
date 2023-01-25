@@ -16,20 +16,32 @@
 
 package v1.controllers
 
+import api.models.audit.{AuditError, AuditEvent, AuditResponse}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.{
+  BadRequestError,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  RuleIncorrectOrEmptyBodyError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError,
+  ValueFormatError
+}
+import api.models.hateoas.HateoasWrapper
+import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.models.outcomes.ResponseWrapper
+import api.models.{errors, hateoas}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendPensionsReliefsRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AmendPensionsReliefsAuditDetail, AuditError, AuditEvent, AuditResponse}
-import v1.models.errors._
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
-import v1.models.hateoas.{HateoasWrapper, Link}
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
+import v1.models.audit.AmendPensionsReliefsAuditDetail
 import v1.models.request.amendPensionsReliefs._
 import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsHateoasData
 
@@ -51,9 +63,9 @@ class AmendPensionsReliefsControllerSpec
   private val correlationId = "X-123"
 
   private val testHateoasLinks = Seq(
-    Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = PUT, rel = "amend-reliefs-pensions"),
-    Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-pensions")
+    hateoas.Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = PUT, rel = "amend-reliefs-pensions"),
+    hateoas.Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self"),
+    hateoas.Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-pensions")
   )
 
   private val requestJson = Json.parse(
@@ -168,7 +180,7 @@ class AmendPensionsReliefsControllerSpec
 
             MockAmendPensionsReliefsRequestParser
               .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+              .returns(Left(errors.ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 

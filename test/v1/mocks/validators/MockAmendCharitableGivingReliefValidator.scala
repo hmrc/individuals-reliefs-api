@@ -16,10 +16,10 @@
 
 package v1.mocks.validators
 
+import api.models.errors.MtdError
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.validators.AmendCharitableGivingReliefValidator
-import v1.models.errors.MtdError
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRawData
 
 class MockAmendCharitableGivingReliefValidator extends MockFactory {

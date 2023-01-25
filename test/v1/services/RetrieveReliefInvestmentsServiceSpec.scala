@@ -16,15 +16,14 @@
 
 package v1.services
 
+import api.controllers.EndpointLogContext
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.controllers.EndpointLogContext
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v1.mocks.connectors.MockRetrieveReliefInvestmentsConnector
-import v1.models.domain.Nino
-import v1.models.errors._
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 
 import scala.concurrent.ExecutionContext.Implicits.global

@@ -16,6 +16,7 @@
 
 package v1.endpoints
 
+import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
@@ -23,7 +24,6 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec {
@@ -128,7 +128,7 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
         }
 
         s"a taxYear below 2017-18 is provided" in new NonTysTest {
-          override val mtdTaxYear: String = "2016-17"
+          override val mtdTaxYear: String        = "2016-17"
           override val downstreamTaxYear: String = "2018"
 
           override def setupStubs(): StubMapping = {
@@ -198,7 +198,6 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
           (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_INCOME_SOURCE", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
-
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
@@ -208,9 +207,9 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
 
   private trait Test {
 
-    val nino: String       = "AA123456A"
-    def mtdTaxYear:String
-    def downstreamTaxYear:String
+    val nino: String = "AA123456A"
+    def mtdTaxYear: String
+    def downstreamTaxYear: String
 
     val amount: BigDecimal = 5000.99
 
@@ -245,7 +244,7 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
 
     def uri: String = s"/charitable-giving/$nino/$mtdTaxYear"
 
-    def downstreamUri:String
+    def downstreamUri: String
 
     def setupStubs(): StubMapping
 
@@ -269,16 +268,16 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
   }
 
   private trait NonTysTest extends Test {
-    def mtdTaxYear:String = "2019-20"
+    def mtdTaxYear: String        = "2019-20"
     def downstreamTaxYear: String = "2020"
-    def downstreamUri:String = s"/income-tax/nino/$nino/income-source/charity/annual/$downstreamTaxYear"
+    def downstreamUri: String     = s"/income-tax/nino/$nino/income-source/charity/annual/$downstreamTaxYear"
 
   }
 
   private trait TysIfsTest extends Test {
-    def mtdTaxYear:String = "2023-24"
-    def downstreamTaxYear:String = "23-24"
-    def downstreamUri:String = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
+    def mtdTaxYear: String        = "2023-24"
+    def downstreamTaxYear: String = "23-24"
+    def downstreamUri: String     = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
   }
 
 }

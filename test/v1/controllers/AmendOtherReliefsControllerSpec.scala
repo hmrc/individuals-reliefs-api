@@ -16,6 +16,32 @@
 
 package v1.controllers
 
+import api.models.audit.{AuditError, AuditEvent, AuditResponse}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.{
+  BadRequestError,
+  BusinessNameFormatError,
+  CustomerReferenceFormatError,
+  DateFormatError,
+  ErrorWrapper,
+  ExSpouseNameFormatError,
+  IncomeSourceFormatError,
+  InternalError,
+  LenderNameFormatError,
+  MtdError,
+  NatureOfTradeFormatError,
+  NinoFormatError,
+  RuleIncorrectOrEmptyBodyError,
+  RuleSubmissionFailedError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError,
+  ValueFormatError
+}
+import api.models.hateoas
+import api.models.hateoas.HateoasWrapper
+import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
@@ -23,13 +49,7 @@ import v1.mocks.MockIdGenerator
 import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockAmendOtherReliefsRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AmendOtherReliefsAuditDetail, AuditError, AuditEvent, AuditResponse}
-import v1.models.domain.Nino
-import v1.models.errors._
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
-import v1.models.hateoas.{HateoasWrapper, Link}
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
+import v1.models.audit.AmendOtherReliefsAuditDetail
 import v1.models.request.amendOtherReliefs._
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
 
@@ -70,9 +90,9 @@ class AmendOtherReliefsControllerSpec
   }
 
   private val testHateoasLinks = Seq(
-    Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = PUT, rel = "amend-reliefs-other"),
-    Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
+    hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = PUT, rel = "amend-reliefs-other"),
+    hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self"),
+    hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
   )
 
   private val requestJson = Json.parse("""

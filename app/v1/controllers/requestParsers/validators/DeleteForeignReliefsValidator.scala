@@ -16,11 +16,14 @@
 
 package v1.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.validations.minimumTaxYear
+import api.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation}
+import api.models.errors.MtdError
 import config.AppConfig
-import javax.inject.Inject
-import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors.MtdError
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRawData
+
+import javax.inject.Inject
 
 class DeleteForeignReliefsValidator @Inject() (appConfig: AppConfig) extends Validator[DeleteForeignReliefsRawData] {
 

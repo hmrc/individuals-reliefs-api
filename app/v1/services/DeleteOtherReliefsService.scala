@@ -16,17 +16,18 @@
 
 package v1.services
 
+import api.controllers.EndpointLogContext
+import api.models
+import api.models.errors._
+import api.support.DownstreamResponseMappingSupport
 import cats.data.EitherT
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.DeleteOtherReliefsConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors._
 import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRequest
-import v1.support.DownstreamResponseMappingSupport
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -48,14 +49,14 @@ class DeleteOtherReliefsService @Inject() (connector: DeleteOtherReliefsConnecto
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> InternalError,
-      "INVALID_CORRELATIONID"     -> InternalError,
+      "SERVER_ERROR"              -> models.errors.InternalError,
+      "INVALID_CORRELATIONID"     -> models.errors.InternalError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-      "SERVICE_UNAVAILABLE"       -> InternalError
+      "SERVICE_UNAVAILABLE"       -> models.errors.InternalError
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
+      "INVALID_CORRELATION_ID" -> models.errors.InternalError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 

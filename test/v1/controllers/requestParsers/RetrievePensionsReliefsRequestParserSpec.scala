@@ -16,11 +16,11 @@
 
 package v1.controllers.requestParsers
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors
+import api.models.errors.{BadRequestError, NinoFormatError, TaxYearFormatError}
 import support.UnitSpec
-import v1.models.domain.Nino
 import v1.mocks.validators.MockRetrievePensionsReliefsValidator
-import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
-import v1.models.request.TaxYear
 import v1.models.request.retrievePensionsReliefs.{RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest}
 
 class RetrievePensionsReliefsRequestParserSpec extends UnitSpec {
@@ -53,7 +53,7 @@ class RetrievePensionsReliefsRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(correlationId, NinoFormatError, None))
+          Left(errors.ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple validation errors occur" in new Test {
@@ -62,7 +62,7 @@ class RetrievePensionsReliefsRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
+          Left(errors.ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

@@ -16,7 +16,6 @@
 
 package v1.models.request.createAndAmendForeignReliefs
 
-import v1.models.domain.Nino
-import v1.models.request.TaxYear
+import api.models.domain.{Nino, TaxYear}
 
 case class CreateAndAmendForeignReliefsRequest(nino: Nino, taxYear: TaxYear, body: CreateAndAmendForeignReliefsBody)

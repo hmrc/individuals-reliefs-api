@@ -16,28 +16,30 @@
 
 package v1.controllers
 
-import cats.data.EitherT
-import cats.implicits._
-import javax.inject.{Inject, Singleton}
-import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.RetrieveOtherReliefsRequestParser
-import v1.hateoas.HateoasFactory
-import v1.models.errors.{
+import api.controllers.{AuthorisedController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.errors.{
   BadRequestError,
-  InternalError,
   ErrorWrapper,
+  InternalError,
   NinoFormatError,
   NotFoundError,
   RuleTaxYearNotSupportedError,
   RuleTaxYearRangeInvalidError,
   TaxYearFormatError
 }
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import cats.data.EitherT
+import cats.implicits._
+import play.api.libs.json.Json
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import utils.{IdGenerator, Logging}
+import v1.controllers.requestParsers.RetrieveOtherReliefsRequestParser
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRawData
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsHateoasData
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveOtherReliefsService}
+import v1.services.RetrieveOtherReliefsService
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -93,8 +95,8 @@ class RetrieveOtherReliefsController @Inject() (val authService: EnrolmentsAuthS
       case NinoFormatError | BadRequestError | TaxYearFormatError | RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError =>
         BadRequest(Json.toJson(errorWrapper))
       case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _             => unhandledError(errorWrapper)
     }
   }
 
