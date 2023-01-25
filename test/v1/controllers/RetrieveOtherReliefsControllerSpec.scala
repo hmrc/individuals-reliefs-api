@@ -16,6 +16,10 @@
 
 package v1.controllers
 
+import api.controllers.ControllerBaseSpec
+import api.mocks.MockIdGenerator
+import api.mocks.hateoas.MockHateoasFactory
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{
   BadRequestError,
@@ -35,8 +39,6 @@ import api.models.{errors, hateoas}
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.MockIdGenerator
-import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveOtherReliefsRequestParser
 import v1.mocks.services._
 import v1.models.request.retrieveOtherReliefs.{RetrieveOtherReliefsRawData, RetrieveOtherReliefsRequest}

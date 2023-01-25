@@ -16,10 +16,10 @@
 
 package v1.models.audit
 
+import api.models.utils.JsonErrorValidators
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.libs.json.{JsArray, JsString, JsValue, Json}
 import support.UnitSpec
-import v1.models.utils.JsonErrorValidators
 
 class CharitableGivingReliefAuditDetailSpec extends UnitSpec with JsonErrorValidators {
 

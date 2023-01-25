@@ -17,11 +17,9 @@
 package v1.models.response.amendPensionsReliefs
 
 import api.models.hateoas
-import api.models.hateoas.Link
 import api.models.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
 import support.UnitSpec
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class AmendPensionsReliefsResponseSpec extends UnitSpec with MockAppConfig {
 

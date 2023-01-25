@@ -16,6 +16,7 @@
 
 package v1.connectors
 
+import api.connectors.ConnectorSpec
 import api.connectors.connectors.DownstreamOutcome
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
