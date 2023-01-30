@@ -16,7 +16,6 @@
 
 package v1.controllers.requestParsers
 
-import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
 import v1.controllers.requestParsers.validators.AmendPensionsReliefsValidator
 import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRawData, AmendPensionsReliefsRequest}

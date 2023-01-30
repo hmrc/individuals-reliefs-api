@@ -16,7 +16,6 @@
 
 package v1.controllers.requestParsers
 
-import api.controllers.requestParsers.RequestParser
 import api.controllers.requestParsers.validators.Validator
 import api.models.domain.Nino
 import api.models.errors

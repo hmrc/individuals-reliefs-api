@@ -16,13 +16,11 @@
 
 package v1.services
 
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models
 import api.models.errors._
-import api.support.DownstreamResponseMappingSupport
-import cats.data.EitherT
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
+import api.services.BaseService
+import cats.implicits.toBifunctorOps
 import v1.connectors.CreateAndAmendCharitableGivingTaxReliefConnector
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRequest
 
@@ -30,21 +28,13 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: CreateAndAmendCharitableGivingTaxReliefConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: CreateAndAmendCharitableGivingTaxReliefConnector) extends BaseService {
 
-  def amend(request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amend(
+      request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      responseWrapper <- EitherT(connector.createAmend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield responseWrapper
+    connector.createAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
-    result.value
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {

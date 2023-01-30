@@ -16,36 +16,21 @@
 
 package v1.controllers
 
-import api.controllers.ControllerBaseSpec
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.MockIdGenerator
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.audit.AuditEvent
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{
-  BadRequestError,
-  ErrorWrapper,
-  InternalError,
-  MtdError,
-  NinoFormatError,
-  NotFoundError,
-  RuleGiftAidNonUkAmountWithoutNamesError,
-  RuleGiftsNonUkAmountWithoutNamesError,
-  RuleTaxYearNotSupportedError,
-  RuleTaxYearRangeInvalidError,
-  TaxYearFormatError,
-  ValueFormatError
-}
+import api.models.errors._
 import api.models.hateoas.HateoasWrapper
 import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
 import api.models.{errors, hateoas}
+import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.requestParsers.MockCreateAndAmendCharitableGivingRequestParser
 import v1.mocks.services._
-import v1.models.audit.CharitableGivingReliefAuditDetail
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 import v1.models.response.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefHateoasData
 
@@ -54,18 +39,15 @@ import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingControllerSpec
     extends ControllerBaseSpec
-    with MockEnrolmentsAuthService
-    with MockMtdIdLookupService
+    with ControllerTestRunner
     with MockCreateAndAmendCharitableGivingService
-    with MockAuditService
     with MockCreateAndAmendCharitableGivingRequestParser
     with MockHateoasFactory
+    with MockAppConfig
     with MockIdGenerator {
 
-  private val nino          = "AA123456A"
-  private val taxYear       = "2019-20"
-  private val correlationId = "X-123"
-  private val amount        = 1234.56
+  private val taxYear = "2019-20"
+  private val amount  = 1234.56
 
   private val nonUkCharities =
     NonUkCharities(
@@ -81,25 +63,6 @@ class CreateAndAmendCharitableGivingControllerSpec
       amountTreatedAsPreviousTaxYear = Some(amount),
       amountTreatedAsSpecifiedTaxYear = Some(amount)
     )
-
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
-
-    val controller = new CreateAndAmendCharitableGivingController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockCreateAmendCharitableGivingRequestParser,
-      service = mockService,
-      auditService = mockAuditService,
-      hateoasFactory = mockHateoasFactory,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
-
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
 
   private val testHateoasLinks = Seq(
     hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
@@ -125,50 +88,32 @@ class CreateAndAmendCharitableGivingControllerSpec
   )
 
   val responseBody: JsValue = Json.parse(s"""
-       |{
-       |  "links": [
-       |    {
-       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
-       |      "method": "GET",
-       |      "rel": "self"
-       |    },
-       |    {
-       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
-       |      "method": "PUT",
-       |      "rel": "create-and-amend-charitable-giving-tax-relief"
-       |    },
-       |    {
-       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
-       |      "method": "DELETE",
-       |      "rel": "delete-charitable-giving-tax-relief"
-       |    }
-       |  ]
-       |}
-       |""".stripMargin)
+                                            |{
+                                            |  "links": [
+                                            |    {
+                                            |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+                                            |      "method": "GET",
+                                            |      "rel": "self"
+                                            |    },
+                                            |    {
+                                            |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+                                            |      "method": "PUT",
+                                            |      "rel": "create-and-amend-charitable-giving-tax-relief"
+                                            |    },
+                                            |    {
+                                            |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+                                            |      "method": "DELETE",
+                                            |      "rel": "delete-charitable-giving-tax-relief"
+                                            |    }
+                                            |  ]
+                                            |}
+                                            |""".stripMargin)
 
   private val rawData     = CreateAndAmendCharitableGivingTaxReliefRawData(nino, taxYear, requestJson)
   private val requestData = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
-  private def event(response: String, httpStatusCode: Int, errorCodes: Option[Seq[String]]): AuditEvent[CharitableGivingReliefAuditDetail] =
-    AuditEvent(
-      auditType = "CreateAndAmendCharitableGivingTaxRelief",
-      transactionName = "create-and-amend-charitable-giving-tax-relief",
-      detail = CharitableGivingReliefAuditDetail(
-        versionNumber = "1.0",
-        userType = "Individual",
-        agentReferenceNumber = None,
-        nino = nino,
-        taxYear = taxYear,
-        requestBody = Some(requestJson),
-        `X-CorrelationId` = correlationId,
-        response = response,
-        httpStatusCode = httpStatusCode,
-        errorCodes = errorCodes
-      )
-    )
-
   "handleRequest" should {
-    "return Ok" when {
+    "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
 
         MockCreateAndAmendCharitableGivingRequestParser
@@ -183,78 +128,72 @@ class CreateAndAmendCharitableGivingControllerSpec
           .wrap((), CreateAndAmendCharitableGivingTaxReliefHateoasData(nino, taxYear))
           .returns(HateoasWrapper((), testHateoasLinks))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        MockedAuditService.verifyAuditEvent(event("success", OK, None)).once
+        runOkTestWithAudit(
+          expectedStatus = OK,
+          maybeAuditRequestBody = Some(requestJson),
+          maybeExpectedResponseBody = Some(responseBody),
+          maybeAuditResponseBody = Some(responseBody)
+        )
       }
     }
+
     "return the error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
+      "the parser validation fails" in new Test {
 
-            MockCreateAndAmendCharitableGivingRequestParser
-              .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+        MockCreateAndAmendCharitableGivingRequestParser
+          .parseRequest(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+        runErrorTestWithAudit(NinoFormatError, Some(requestJson))
 
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            MockedAuditService.verifyAuditEvent(event("error", expectedStatus, Some(Seq(error.code)))).once
-          }
-        }
-
-        val input = Seq(
-          (NotFoundError, NOT_FOUND),
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (RuleGiftAidNonUkAmountWithoutNamesError, BAD_REQUEST),
-          (RuleGiftsNonUkAmountWithoutNamesError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (ValueFormatError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
       }
 
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
+      "the service returns an error" in new Test {
 
-            MockCreateAndAmendCharitableGivingRequestParser
-              .parseRequest(rawData)
-              .returns(Right(requestData))
+        MockCreateAndAmendCharitableGivingRequestParser
+          .parseRequest(rawData)
+          .returns(Right(requestData))
 
-            MockAmendReliefService
-              .amend(requestData)
-              .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, mtdError))))
+        MockAmendReliefService
+          .amend(requestData)
+          .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            MockedAuditService.verifyAuditEvent(event("error", expectedStatus, Some(Seq(mtdError.code)))).once
-          }
-        }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (TaxYearFormatError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (serviceErrors _).tupled(args))
+        runErrorTestWithAudit(RuleTaxYearNotSupportedError, maybeAuditRequestBody = Some(requestJson))
       }
     }
+  }
+
+  trait Test extends ControllerTest with AuditEventChecking {
+
+    val controller = new CreateAndAmendCharitableGivingController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockCreateAmendCharitableGivingRequestParser,
+      service = mockService,
+      auditService = mockAuditService,
+      hateoasFactory = mockHateoasFactory,
+      appConfig = mockAppConfig,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+      AuditEvent(
+        auditType = "CreateAndAmendCharitableGivingTaxRelief",
+        transactionName = "create-and-amend-charitable-giving-tax-relief",
+        detail = GenericAuditDetail(
+          userType = "Individual",
+          agentReferenceNumber = None,
+          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
+          queryParams = None,
+          requestBody = maybeRequestBody,
+          `X-CorrelationId` = correlationId,
+          auditResponse = auditResponse
+        )
+      )
+
   }
 
 }

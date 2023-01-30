@@ -16,13 +16,10 @@
 
 package v1.services
 
-import api.controllers.EndpointLogContext
-import api.models
+import api.controllers.RequestContext
 import api.models.errors._
-import api.support.DownstreamResponseMappingSupport
-import cats.data.EitherT
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
+import api.services.BaseService
+import cats.implicits.toBifunctorOps
 import v1.connectors.AmendOtherReliefsConnector
 import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequest
 
@@ -30,34 +27,28 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector) extends DownstreamResponseMappingSupport with Logging {
+class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector) extends BaseService {
 
-  def amend(request: AmendOtherReliefsRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amend(request: AmendOtherReliefsRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
-    val result = EitherT(connector.amend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-
-    result.value
+    connector.amend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID"        -> NinoFormatError,
       "INVALID_TAX_YEAR"                 -> TaxYearFormatError,
-      "INVALID_CORRELATIONID"            -> models.errors.InternalError,
+      "INVALID_CORRELATIONID"            -> InternalError,
       "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailedError,
-      "SERVER_ERROR"                     -> models.errors.InternalError,
-      "SERVICE_UNAVAILABLE"              -> models.errors.InternalError
+      "SERVER_ERROR"                     -> InternalError,
+      "SERVICE_UNAVAILABLE"              -> InternalError
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> models.errors.InternalError,
-      "INVALID_PAYLOAD"        -> models.errors.InternalError,
+      "INVALID_CORRELATION_ID" -> InternalError,
+      "INVALID_PAYLOAD"        -> InternalError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "UNPROCESSABLE_ENTITY"   -> models.errors.InternalError
+      "UNPROCESSABLE_ENTITY"   -> InternalError
     )
 
     errors ++ extraTysErrors

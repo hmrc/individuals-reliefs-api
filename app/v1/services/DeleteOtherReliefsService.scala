@@ -16,14 +16,11 @@
 
 package v1.services
 
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models
 import api.models.errors._
-import api.support.DownstreamResponseMappingSupport
-import cats.data.EitherT
+import api.services.BaseService
 import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
 import v1.connectors.DeleteOtherReliefsConnector
 import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRequest
 
@@ -31,17 +28,11 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteOtherReliefsService @Inject() (connector: DeleteOtherReliefsConnector) extends DownstreamResponseMappingSupport with Logging {
+class DeleteOtherReliefsService @Inject() (connector: DeleteOtherReliefsConnector) extends BaseService {
 
-  def delete(request: DeleteOtherReliefsRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def delete(request: DeleteOtherReliefsRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
-    val result = EitherT(connector.delete(request)).leftMap(mapDownstreamErrors(errorMap))
-
-    result.value
+    connector.delete(request).map(_.leftMap(mapDownstreamErrors(errorMap)))
   }
 
   private val errorMap: Map[String, MtdError] = {

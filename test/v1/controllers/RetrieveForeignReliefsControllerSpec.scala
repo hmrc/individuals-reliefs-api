@@ -16,29 +16,16 @@
 
 package v1.controllers
 
-import api.controllers.ControllerBaseSpec
-import api.mocks.MockIdGenerator
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{
-  BadRequestError,
-  ErrorWrapper,
-  InternalError,
-  MtdError,
-  NinoFormatError,
-  NotFoundError,
-  RuleTaxYearNotSupportedError,
-  RuleTaxYearRangeInvalidError,
-  TaxYearFormatError
-}
+import api.models.errors._
 import api.models.hateoas.HateoasWrapper
 import api.models.hateoas.Method.GET
 import api.models.outcomes.ResponseWrapper
 import api.models.{errors, hateoas}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.requestParsers.MockRetrieveForeignReliefsRequestParser
 import v1.mocks.services.MockRetrieveForeignReliefsService
 import v1.models.request.retrieveForeignReliefs.{RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest}
@@ -49,17 +36,12 @@ import scala.concurrent.Future
 
 class RetrieveForeignReliefsControllerSpec
     extends ControllerBaseSpec
-    with MockEnrolmentsAuthService
-    with MockMtdIdLookupService
+    with ControllerTestRunner
     with MockRetrieveForeignReliefsService
     with MockRetrieveForeignReliefsRequestParser
-    with MockHateoasFactory
-    with MockAuditService
-    with MockIdGenerator {
+    with MockHateoasFactory {
 
-  private val nino            = "AA123456A"
   private val taxYear         = "2019-20"
-  private val correlationId   = "X-123"
   private val rawData         = RetrieveForeignReliefsRawData(nino, taxYear)
   private val requestData     = RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
   private val testHateoasLink = hateoas.Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
@@ -78,28 +60,39 @@ class RetrieveForeignReliefsControllerSpec
     Some(ForeignTaxForFtcrNotClaimed(1749.98))
   )
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
-
-    val controller = new RetrieveForeignReliefsController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
-      service = mockService,
-      hateoasFactory = mockHateoasFactory,
-      cc = cc,
-      idGenerator = mockIdGenerator
+  val mtdResponseJson: JsValue = Json
+    .parse(
+      s"""
+         |{
+         |   "submittedOn":"2020-06-17T10:53:38Z",
+         |   "foreignTaxCreditRelief":{
+         |      "amount":2309.95
+         |   },
+         |   "foreignIncomeTaxCreditRelief":[
+         |      {
+         |         "countryCode":"FRA",
+         |         "foreignTaxPaid":1640.32,
+         |         "taxableAmount":1204.78,
+         |         "employmentLumpSum":false
+         |      }
+         |   ],
+         |   "foreignTaxForFtcrNotClaimed":{
+         |      "amount":1749.98
+         |   },
+         |   "links":[
+         |      {
+         |         "href":"individuals/reliefs/foreign/AA123456A/2019-20",
+         |         "method":"GET",
+         |         "rel":"self"
+         |      }
+         |   ]
+         |}
+        """.stripMargin
     )
-
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
 
   "handleRequest" should {
     "return Ok" when {
       "the request received is valid" in new Test {
-
         MockRetrieveForeignReliefsRequestParser
           .parse(rawData)
           .returns(Right(requestData))
@@ -112,71 +105,46 @@ class RetrieveForeignReliefsControllerSpec
           .wrap(responseBody, RetrieveForeignReliefsHateoasData(nino, taxYear))
           .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseJson))
       }
     }
+
     "return the error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
+      "the parser validation fails" in new Test {
+        MockRetrieveForeignReliefsRequestParser
+          .parse(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
 
-            MockRetrieveForeignReliefsRequestParser
-              .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
+        runErrorTest(NinoFormatError)
       }
 
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
+      "the service returns an error" in new Test {
+        MockRetrieveForeignReliefsRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
 
-            MockRetrieveForeignReliefsRequestParser
-              .parse(rawData)
-              .returns(Right(requestData))
+        MockRetrieveReliefService
+          .retrieve(requestData)
+          .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-            MockRetrieveReliefService
-              .retrieve(requestData)
-              .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, mtdError))))
-
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (serviceErrors _).tupled(args))
+        runErrorTest(RuleTaxYearNotSupportedError)
       }
     }
+  }
+
+  trait Test extends ControllerTest {
+
+    val controller = new RetrieveForeignReliefsController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockRequestDataParser,
+      service = mockService,
+      hateoasFactory = mockHateoasFactory,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeGetRequest)
   }
 
 }

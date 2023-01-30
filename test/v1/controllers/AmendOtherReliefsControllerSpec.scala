@@ -16,42 +16,21 @@
 
 package v1.controllers
 
-import api.controllers.ControllerBaseSpec
-import api.mocks.MockIdGenerator
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.audit.{AuditError, AuditEvent, AuditResponse}
+import api.mocks.services.MockAuditService
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{
-  BadRequestError,
-  BusinessNameFormatError,
-  CustomerReferenceFormatError,
-  DateFormatError,
-  ErrorWrapper,
-  ExSpouseNameFormatError,
-  IncomeSourceFormatError,
-  InternalError,
-  LenderNameFormatError,
-  MtdError,
-  NatureOfTradeFormatError,
-  NinoFormatError,
-  RuleIncorrectOrEmptyBodyError,
-  RuleSubmissionFailedError,
-  RuleTaxYearNotSupportedError,
-  RuleTaxYearRangeInvalidError,
-  TaxYearFormatError,
-  ValueFormatError
-}
+import api.models.errors._
 import api.models.hateoas
 import api.models.hateoas.HateoasWrapper
 import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
+import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.requestParsers.MockAmendOtherReliefsRequestParser
 import v1.mocks.services._
-import v1.models.audit.AmendOtherReliefsAuditDetail
 import v1.models.request.amendOtherReliefs._
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
 
@@ -60,36 +39,14 @@ import scala.concurrent.Future
 
 class AmendOtherReliefsControllerSpec
     extends ControllerBaseSpec
-    with MockEnrolmentsAuthService
-    with MockMtdIdLookupService
+    with ControllerTestRunner
     with MockAmendOtherReliefsService
     with MockAmendOtherReliefsRequestParser
     with MockHateoasFactory
-    with MockAuditService
-    with MockIdGenerator {
+    with MockAppConfig
+    with MockAuditService {
 
-  private val nino          = "AA123456A"
-  private val taxYear       = "2019-20"
-  private val correlationId = "X-123"
-
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
-
-    val controller = new AmendOtherReliefsController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockAmendOtherReliefsRequestParser,
-      service = mockService,
-      hateoasFactory = mockHateoasFactory,
-      auditService = mockAuditService,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
-
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
+  private val taxYear = "2019-20"
 
   private val testHateoasLinks = Seq(
     hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = PUT, rel = "amend-reliefs-other"),
@@ -98,49 +55,49 @@ class AmendOtherReliefsControllerSpec
   )
 
   private val requestJson = Json.parse("""
-      |{
-      |  "nonDeductibleLoanInterest": {
-      |        "customerReference": "myref",
-      |        "reliefClaimed": 763.00
-      |      },
-      |  "payrollGiving": {
-      |        "customerReference": "myref",
-      |        "reliefClaimed": 154.00
-      |      },
-      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-      |        "customerReference": "myref",
-      |        "amount": 222.22
-      |      },
-      |  "maintenancePayments": [
-      |    {
-      |        "customerReference": "myref",
-      |        "exSpouseName" : "Hilda",
-      |        "exSpouseDateOfBirth": "2000-01-01",
-      |        "amount": 222.22
-      |      }
-      |  ],
-      |  "postCessationTradeReliefAndCertainOtherLosses": [
-      |    {
-      |        "customerReference": "myref",
-      |        "businessName": "ACME Inc",
-      |        "dateBusinessCeased": "2019-08-10",
-      |        "natureOfTrade": "Widgets Manufacturer",
-      |        "incomeSource": "AB12412/A12",
-      |        "amount": 222.22
-      |      }
-      |  ],
-      |  "annualPaymentsMade": {
-      |        "customerReference": "myref",
-      |        "reliefClaimed": 763.00
-      |      },
-      |  "qualifyingLoanInterestPayments": [
-      |    {
-      |        "customerReference": "myref",
-      |        "lenderName": "Maurice",
-      |        "reliefClaimed": 763.00
-      |      }
-      |  ]
-      |}""".stripMargin)
+                                         |{
+                                         |  "nonDeductibleLoanInterest": {
+                                         |        "customerReference": "myref",
+                                         |        "reliefClaimed": 763.00
+                                         |      },
+                                         |  "payrollGiving": {
+                                         |        "customerReference": "myref",
+                                         |        "reliefClaimed": 154.00
+                                         |      },
+                                         |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+                                         |        "customerReference": "myref",
+                                         |        "amount": 222.22
+                                         |      },
+                                         |  "maintenancePayments": [
+                                         |    {
+                                         |        "customerReference": "myref",
+                                         |        "exSpouseName" : "Hilda",
+                                         |        "exSpouseDateOfBirth": "2000-01-01",
+                                         |        "amount": 222.22
+                                         |      }
+                                         |  ],
+                                         |  "postCessationTradeReliefAndCertainOtherLosses": [
+                                         |    {
+                                         |        "customerReference": "myref",
+                                         |        "businessName": "ACME Inc",
+                                         |        "dateBusinessCeased": "2019-08-10",
+                                         |        "natureOfTrade": "Widgets Manufacturer",
+                                         |        "incomeSource": "AB12412/A12",
+                                         |        "amount": 222.22
+                                         |      }
+                                         |  ],
+                                         |  "annualPaymentsMade": {
+                                         |        "customerReference": "myref",
+                                         |        "reliefClaimed": 763.00
+                                         |      },
+                                         |  "qualifyingLoanInterestPayments": [
+                                         |    {
+                                         |        "customerReference": "myref",
+                                         |        "lenderName": "Maurice",
+                                         |        "reliefClaimed": 763.00
+                                         |      }
+                                         |  ]
+                                         |}""".stripMargin)
 
   private val requestBody = AmendOtherReliefsBody(
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
@@ -164,44 +121,29 @@ class AmendOtherReliefsControllerSpec
   private val requestData = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   val hateoasResponse: JsValue = Json.parse("""
-      |{
-      |   "links":[
-      |      {
-      |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-      |         "method":"PUT",
-      |         "rel":"amend-reliefs-other"
-      |      },
-      |      {
-      |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-      |         "method":"GET",
-      |         "rel":"self"
-      |      },
-      |      {
-      |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-      |         "method":"DELETE",
-      |         "rel":"delete-reliefs-other"
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
-
-  def event(auditResponse: AuditResponse): AuditEvent[AmendOtherReliefsAuditDetail] =
-    AuditEvent(
-      auditType = "CreateAmendOtherReliefs",
-      transactionName = "create-amend-other-reliefs",
-      detail = AmendOtherReliefsAuditDetail(
-        userType = "Individual",
-        agentReferenceNumber = None,
-        nino,
-        taxYear,
-        requestJson,
-        correlationId,
-        response = auditResponse
-      )
-    )
+                                              |{
+                                              |   "links":[
+                                              |      {
+                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
+                                              |         "method":"PUT",
+                                              |         "rel":"amend-reliefs-other"
+                                              |      },
+                                              |      {
+                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
+                                              |         "method":"GET",
+                                              |         "rel":"self"
+                                              |      },
+                                              |      {
+                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
+                                              |         "method":"DELETE",
+                                              |         "rel":"delete-reliefs-other"
+                                              |      }
+                                              |   ]
+                                              |}
+                                              |""".stripMargin)
 
   "handleRequest" should {
-    "return OK" when {
+    "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
 
         MockAmendOtherReliefsRequestParser
@@ -216,91 +158,72 @@ class AmendOtherReliefsControllerSpec
           .wrap((), AmendOtherReliefsHateoasData(nino, taxYear))
           .returns(HateoasWrapper((), testHateoasLinks))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
+        runOkTestWithAudit(
+          expectedStatus = OK,
+          maybeAuditRequestBody = Some(requestJson),
+          maybeExpectedResponseBody = Some(hateoasResponse),
+          maybeAuditResponseBody = Some(hateoasResponse)
+        )
       }
     }
+
     "return the error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
+      "the parser validation fails" in new Test {
 
-            MockAmendOtherReliefsRequestParser
-              .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+        MockAmendOtherReliefsRequestParser
+          .parseRequest(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+        runErrorTestWithAudit(NinoFormatError, Some(requestJson))
 
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (ValueFormatError, BAD_REQUEST),
-          (DateFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleIncorrectOrEmptyBodyError, BAD_REQUEST),
-          (CustomerReferenceFormatError, BAD_REQUEST),
-          (ExSpouseNameFormatError, BAD_REQUEST),
-          (BusinessNameFormatError, BAD_REQUEST),
-          (NatureOfTradeFormatError, BAD_REQUEST),
-          (IncomeSourceFormatError, BAD_REQUEST),
-          (LenderNameFormatError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
       }
 
-      "Service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
+      "the service returns an error" in new Test {
 
-            MockAmendOtherReliefsRequestParser
-              .parseRequest(rawData)
-              .returns(Right(requestData))
+        MockAmendOtherReliefsRequestParser
+          .parseRequest(rawData)
+          .returns(Right(requestData))
 
-            MockAmendOtherReliefsService
-              .amend(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+        MockAmendOtherReliefsService
+          .amend(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleSubmissionFailedError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-          }
-        }
-
-        val errors = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleSubmissionFailedError, BAD_REQUEST)
-        )
-
-        val extraTysErrors = Seq(
-          (RuleTaxYearNotSupportedError, BAD_REQUEST)
-        )
-
-        (errors ++ extraTysErrors).foreach(args => (serviceErrors _).tupled(args))
+        runErrorTestWithAudit(RuleSubmissionFailedError, maybeAuditRequestBody = Some(requestJson))
       }
     }
+  }
+
+  trait Test extends ControllerTest with AuditEventChecking {
+
+    val controller = new AmendOtherReliefsController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockAmendOtherReliefsRequestParser,
+      service = mockService,
+      hateoasFactory = mockHateoasFactory,
+      auditService = mockAuditService,
+      appConfig = mockAppConfig,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+      AuditEvent(
+        auditType = "CreateAmendOtherReliefs",
+        transactionName = "create-amend-other-reliefs",
+        detail = GenericAuditDetail(
+          userType = "Individual",
+          agentReferenceNumber = None,
+          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
+          queryParams = None,
+          requestBody = maybeRequestBody,
+          `X-CorrelationId` = correlationId,
+          auditResponse = auditResponse
+        )
+      )
+
   }
 
 }

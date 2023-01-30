@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package api.mocks
+package api.controllers
 
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
-import utils.IdGenerator
+import api.models.hateoas.Link
+import api.models.hateoas.Method.GET
+import play.api.libs.json.{JsObject, Json}
 
-trait MockIdGenerator extends MockFactory {
+trait ControllerSpecHateoasSupport {
 
-  val mockIdGenerator: IdGenerator = mock[IdGenerator]
+  val hateoaslinks: Seq[Link] = Seq(Link(href = "/foo/bar", method = GET, rel = "test-relationship"))
 
-  object MockIdGenerator {
-    def getCorrelationId: CallHandler[String] = (mockIdGenerator.getCorrelationId _).expects()
-  }
+  val hateoaslinksJson: JsObject = Json
+    .parse("""
+             |{
+             |  "links": [{
+             |    "href": "/foo/bar",
+             |    "method": "GET",
+             |    "rel": "test-relationship"
+             |  }]
+             |}""".stripMargin)
+    .as[JsObject]
 
 }

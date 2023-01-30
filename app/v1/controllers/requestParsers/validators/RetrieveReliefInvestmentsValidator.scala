@@ -17,8 +17,7 @@
 package v1.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.validations.minimumTaxYear
-import api.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation}
+import api.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation, minimumTaxYear}
 import api.models.errors.MtdError
 import config.AppConfig
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRawData

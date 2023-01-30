@@ -16,9 +16,7 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import api.controllers.requestParsers.validators.validations.validations.NoValidationErrors
 import api.models.errors.MtdError
-import play.api.http.dateFormat
 
 import java.time.LocalDate
 import scala.util.{Failure, Success, Try}

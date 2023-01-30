@@ -58,7 +58,8 @@ class GenericAuditDetailSpec extends UnitSpec {
         val model = GenericAuditDetail(
           userType = userType,
           agentReferenceNumber = agentReferenceNumber,
-          params = params,
+          pathParams = params,
+          queryParams = None,
           requestBody = requestBody,
           `X-CorrelationId` = `X-CorrelationId`,
           auditResponse = responseSuccess
@@ -94,7 +95,8 @@ class GenericAuditDetailSpec extends UnitSpec {
         val model = GenericAuditDetail(
           userType = userType,
           agentReferenceNumber = agentReferenceNumber,
-          params = params,
+          pathParams = params,
+          queryParams = None,
           requestBody = requestBody,
           `X-CorrelationId` = `X-CorrelationId`,
           auditResponse = responseFail

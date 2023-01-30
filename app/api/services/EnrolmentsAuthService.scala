@@ -39,11 +39,10 @@ class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConf
     override def authConnector: AuthConnector = connector
   }
 
-  def getAgentReferenceFromEnrolments(enrolments: Enrolments): Option[String] =
-    enrolments
-      .getEnrolment("HMRC-AS-AGENT")
-      .flatMap(_.getIdentifier("AgentReferenceNumber"))
-      .map(_.value)
+  def getAgentReferenceFromEnrolments(enrolments: Enrolments): Option[String] = enrolments
+    .getEnrolment("HMRC-AS-AGENT")
+    .flatMap(_.getIdentifier("AgentReferenceNumber"))
+    .map(_.value)
 
   def buildPredicate(predicate: Predicate): Predicate =
     if (appConfig.confidenceLevelConfig.authValidationEnabled) {
@@ -72,7 +71,6 @@ class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConf
       case unexpected =>
         logger.error(s"[EnrolmentsAuthService][authorised] Unexpected AuthorisedFunction: $unexpected")
         Future.successful(Left(ClientNotAuthorisedError))
-
     } recoverWith {
       case _: MissingBearerToken     => Future.successful(Left(ClientNotAuthorisedError))
       case _: AuthorisationException => Future.successful(Left(ClientNotAuthorisedError))
@@ -86,9 +84,8 @@ class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConf
     authFunction
       .authorised(AffinityGroup.Agent and Enrolment("HMRC-AS-AGENT"))
       .retrieve(Retrievals.agentCode and Retrievals.authorisedEnrolments) {
-        case _ ~ enrolments =>
-          Future.successful(getAgentReferenceFromEnrolments(enrolments))
-        case _ => Future.successful(None)
+        case _ ~ enrolments => Future.successful(getAgentReferenceFromEnrolments(enrolments))
+        case _              => Future.successful(None)
       }
 
 }

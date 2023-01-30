@@ -17,8 +17,7 @@
 package v1.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
-import api.controllers.requestParsers.validators.validations.validations.charitableGivingMinimumTaxYear
-import api.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation}
+import api.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation, charitableGivingMinimumTaxYear}
 import api.models.errors.MtdError
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRawData
 

@@ -16,12 +16,11 @@
 
 package v1.mocks.services
 
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
 import v1.models.request.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsRequest
 import v1.services.CreateAndAmendForeignReliefsService
 
@@ -35,8 +34,8 @@ trait MockCreateAndAmendForeignReliefsService extends MockFactory {
 
     def createAndAmend(requestData: CreateAndAmendForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockService
-        .createAndAmend(_: CreateAndAmendForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
-        .expects(requestData, *, *, *, *)
+        .createAndAmend(_: CreateAndAmendForeignReliefsRequest)(_: RequestContext, _: ExecutionContext))
+        .expects(requestData, *, *)
     }
 
   }

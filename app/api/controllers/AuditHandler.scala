@@ -30,13 +30,15 @@ object AuditHandler {
   def apply(auditService: AuditService,
             auditType: String,
             transactionName: String,
-            params: Map[String, String],
+            pathParams: Map[String, String],
+            queryParams: Option[Map[String, Option[String]]] = None,
             requestBody: Option[JsValue] = None,
             includeResponse: Boolean = false): AuditHandler = new AuditHandler(
     auditService = auditService,
     auditType = auditType,
     transactionName = transactionName,
-    params = params,
+    pathParams = pathParams,
+    queryParams = queryParams,
     requestBody = requestBody,
     responseBodyMap = if (includeResponse) identity else _ => None
   )
@@ -46,7 +48,8 @@ object AuditHandler {
 case class AuditHandler(auditService: AuditService,
                         auditType: String,
                         transactionName: String,
-                        params: Map[String, String],
+                        pathParams: Map[String, String],
+                        queryParams: Option[Map[String, Option[String]]],
                         requestBody: Option[JsValue],
                         responseBodyMap: Option[JsValue] => Option[JsValue])
     extends RequestContextImplicits {
@@ -59,7 +62,8 @@ case class AuditHandler(auditService: AuditService,
 
       val detail = GenericAuditDetail(
         userDetails = userDetails,
-        params = params,
+        pathParams = pathParams,
+        queryParams = queryParams,
         requestBody = requestBody,
         `X-CorrelationId` = ctx.correlationId,
         auditResponse = auditResponse

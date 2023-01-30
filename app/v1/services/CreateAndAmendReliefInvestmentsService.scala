@@ -16,13 +16,11 @@
 
 package v1.services
 
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models
 import api.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
-import api.support.DownstreamResponseMappingSupport
+import api.services.BaseService
 import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
 import v1.connectors.CreateAndAmendReliefInvestmentsConnector
 import v1.models.request.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsRequest
 
@@ -30,15 +28,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAndAmendReliefInvestmentsService @Inject() (connector: CreateAndAmendReliefInvestmentsConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class CreateAndAmendReliefInvestmentsService @Inject() (connector: CreateAndAmendReliefInvestmentsConnector) extends BaseService {
 
-  def amend(request: CreateAndAmendReliefInvestmentsRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amend(request: CreateAndAmendReliefInvestmentsRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.amend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

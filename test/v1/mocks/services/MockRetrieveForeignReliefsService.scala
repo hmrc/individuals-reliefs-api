@@ -16,12 +16,11 @@
 
 package v1.mocks.services
 
-import api.controllers.EndpointLogContext
+import api.controllers.RequestContext
 import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 import v1.services.RetrieveForeignReliefsService
@@ -37,8 +36,8 @@ trait MockRetrieveForeignReliefsService extends MockFactory {
     def retrieve(
         requestData: RetrieveForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignReliefsResponse]]]] = {
       (mockService
-        .retrieve(_: RetrieveForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
-        .expects(requestData, *, *, *, *)
+        .retrieve(_: RetrieveForeignReliefsRequest)(_: RequestContext, _: ExecutionContext))
+        .expects(requestData, *, *)
     }
 
   }

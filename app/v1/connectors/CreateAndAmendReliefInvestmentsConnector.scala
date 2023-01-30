@@ -17,7 +17,7 @@
 package v1.connectors
 
 import api.connectors.BaseDownstreamConnector
-import api.connectors.DownstreamUri.IfsUri
+import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.connectors.DownstreamOutcome
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import config.AppConfig
@@ -29,8 +29,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAndAmendReliefInvestmentsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
-
-  def TaxYearSpecificIfsUri[T](str: String) = ???
 
   def amend(request: CreateAndAmendReliefInvestmentsRequest)(implicit
       hc: HeaderCarrier,
