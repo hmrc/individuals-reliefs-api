@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.Validator
 import api.controllers.requestParsers.validators.validations._
-import api.models.errors.{MtdError, RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError, StringFormatError}
+import api.models.errors._
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 
 class AmendCharitableGivingReliefValidator extends Validator[CreateAndAmendCharitableGivingTaxReliefRawData] {

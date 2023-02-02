@@ -17,8 +17,7 @@
 package v1.services
 
 import api.controllers.RequestContext
-import api.models
-import api.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import api.models.errors._
 import api.services.BaseService
 import cats.implicits._
 import v1.connectors.CreateAndAmendReliefInvestmentsConnector
@@ -39,15 +38,15 @@ class CreateAndAmendReliefInvestmentsService @Inject() (connector: CreateAndAmen
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-      "INVALID_PAYLOAD"           -> models.errors.InternalError,
-      "INVALID_CORRELATIONID"     -> models.errors.InternalError,
-      "UNPROCESSABLE_ENTITY"      -> models.errors.InternalError,
-      "SERVER_ERROR"              -> models.errors.InternalError,
-      "SERVICE_UNAVAILABLE"       -> models.errors.InternalError
+      "INVALID_PAYLOAD"           -> InternalError,
+      "INVALID_CORRELATIONID"     -> InternalError,
+      "UNPROCESSABLE_ENTITY"      -> InternalError,
+      "SERVER_ERROR"              -> InternalError,
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> models.errors.InternalError,
+      "INVALID_CORRELATION_ID" -> InternalError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 

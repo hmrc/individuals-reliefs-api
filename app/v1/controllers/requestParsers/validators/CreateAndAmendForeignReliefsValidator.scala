@@ -25,25 +25,24 @@ class CreateAndAmendForeignReliefsValidator extends Validator[CreateAndAmendFore
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, bodyFieldValidation)
 
-  private def parameterFormatValidation: CreateAndAmendForeignReliefsRawData => List[List[MtdError]] = (data: CreateAndAmendForeignReliefsRawData) =>
-    {
+  private def parameterFormatValidation: CreateAndAmendForeignReliefsRawData => List[List[MtdError]] =
+    (data: CreateAndAmendForeignReliefsRawData) =>
       List(
         NinoValidation.validate(data.nino),
         TaxYearValidation.validate(data.taxYear)
       )
-    }
 
-  private def parameterRuleValidation: CreateAndAmendForeignReliefsRawData => List[List[MtdError]] = (data: CreateAndAmendForeignReliefsRawData) => {
-    List(
-      MtdTaxYearValidation.validate(data.taxYear, minimumTaxYear)
-    )
-  }
+  private def parameterRuleValidation: CreateAndAmendForeignReliefsRawData => List[List[MtdError]] =
+    (data: CreateAndAmendForeignReliefsRawData) =>
+      List(
+        MtdTaxYearValidation.validate(data.taxYear, minimumTaxYear)
+      )
 
-  private def bodyFormatValidation: CreateAndAmendForeignReliefsRawData => List[List[MtdError]] = { data =>
-    List(
-      JsonFormatValidation.validate[CreateAndAmendForeignReliefsBody](data.body, RuleIncorrectOrEmptyBodyError)
-    )
-  }
+  private def bodyFormatValidation: CreateAndAmendForeignReliefsRawData => List[List[MtdError]] =
+    data =>
+      List(
+        JsonFormatValidation.validate[CreateAndAmendForeignReliefsBody](data.body, RuleIncorrectOrEmptyBodyError)
+      )
 
   private def bodyFieldValidation: CreateAndAmendForeignReliefsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[CreateAndAmendForeignReliefsBody]
@@ -62,16 +61,15 @@ class CreateAndAmendForeignReliefsValidator extends Validator[CreateAndAmendFore
     List(flattenErrors(errors))
   }
 
-  private def validateForeignTaxCreditRelief(foreignTaxCreditRelief: ForeignTaxCreditRelief): List[MtdError] = {
+  private def validateForeignTaxCreditRelief(foreignTaxCreditRelief: ForeignTaxCreditRelief): List[MtdError] =
     List(
       NumberValidation.validateOptional(
         field = Some(foreignTaxCreditRelief.amount),
         path = s"/foreignTaxCreditRelief/amount"
       )
     ).flatten
-  }
 
-  private def validateForeignIncomeTaxCreditRelief(foreignIncomeTaxCreditRelief: ForeignIncomeTaxCreditRelief, arrayIndex: Int): List[MtdError] = {
+  private def validateForeignIncomeTaxCreditRelief(foreignIncomeTaxCreditRelief: ForeignIncomeTaxCreditRelief, arrayIndex: Int): List[MtdError] =
     List(
       CountryCodeValidation.validate(
         field = foreignIncomeTaxCreditRelief.countryCode,
@@ -86,19 +84,16 @@ class CreateAndAmendForeignReliefsValidator extends Validator[CreateAndAmendFore
         path = s"/foreignIncomeTaxCreditRelief/$arrayIndex/taxableAmount"
       )
     ).flatten
-  }
 
-  private def validateForeignTaxForFtcrNotClaimed(foreignTaxForFtcrNotClaimed: ForeignTaxForFtcrNotClaimed): List[MtdError] = {
+  private def validateForeignTaxForFtcrNotClaimed(foreignTaxForFtcrNotClaimed: ForeignTaxForFtcrNotClaimed): List[MtdError] =
     List(
       NumberValidation.validateOptional(
         field = Some(foreignTaxForFtcrNotClaimed.amount),
         path = s"/foreignTaxForFtcrNotClaimed/amount"
       )
     ).flatten
-  }
 
-  override def validate(data: CreateAndAmendForeignReliefsRawData): List[MtdError] = {
+  override def validate(data: CreateAndAmendForeignReliefsRawData): List[MtdError] =
     run(validationSet, data).distinct
-  }
 
 }

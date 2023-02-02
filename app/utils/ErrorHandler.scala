@@ -43,10 +43,11 @@ class ErrorHandler @Inject() (config: Configuration, auditConnector: AuditConnec
 
     implicit val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    logger.warn(message = s"[ErrorHandler][onClientError] error in version " +
-      s"${Versions.getFromRequest(request).getOrElse("<unspecified>")}, " +
-      s"for (${request.method}) [${request.uri}] with status: " +
-      s"$statusCode and message: $message")
+    logger.warn(
+      message = s"[ErrorHandler][onClientError] error in version " +
+        s"${Versions.getFromRequest(request).getOrElse("<unspecified>")}, " +
+        s"for (${request.method}) [${request.uri}] with status: " +
+        s"$statusCode and message: $message")
 
     statusCode match {
       case BAD_REQUEST =>

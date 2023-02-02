@@ -17,7 +17,6 @@
 package v1.services
 
 import api.controllers.RequestContext
-import api.models
 import api.models.errors._
 import api.services.BaseService
 import cats.implicits.toBifunctorOps
@@ -40,27 +39,27 @@ class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: Creat
   private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_NINO"                      -> NinoFormatError,
-      "INVALID_TYPE"                      -> models.errors.InternalError,
+      "INVALID_TYPE"                      -> InternalError,
       "INVALID_TAXYEAR"                   -> TaxYearFormatError,
-      "INVALID_PAYLOAD"                   -> models.errors.InternalError,
+      "INVALID_PAYLOAD"                   -> InternalError,
       "NOT_FOUND_INCOME_SOURCE"           -> NotFoundError,
       "MISSING_CHARITIES_NAME_GIFT_AID"   -> RuleGiftAidNonUkAmountWithoutNamesError,
-      "MISSING_GIFT_AID_AMOUNT"           -> models.errors.InternalError,
+      "MISSING_GIFT_AID_AMOUNT"           -> InternalError,
       "MISSING_CHARITIES_NAME_INVESTMENT" -> RuleGiftsNonUkAmountWithoutNamesError,
-      "MISSING_INVESTMENT_AMOUNT"         -> models.errors.InternalError,
+      "MISSING_INVESTMENT_AMOUNT"         -> InternalError,
       "INVALID_ACCOUNTING_PERIOD"         -> RuleTaxYearNotSupportedError,
-      "SERVER_ERROR"                      -> models.errors.InternalError,
-      "SERVICE_UNAVAILABLE"               -> models.errors.InternalError,
-      "GONE"                              -> models.errors.InternalError,
+      "SERVER_ERROR"                      -> InternalError,
+      "SERVICE_UNAVAILABLE"               -> InternalError,
+      "GONE"                              -> InternalError,
       "NOT_FOUND"                         -> NotFoundError
     )
 
     val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_TYPE"  -> models.errors.InternalError,
+      "INVALID_INCOMESOURCE_TYPE"  -> InternalError,
       "INVALID_TAX_YEAR"           -> TaxYearFormatError,
-      "INVALID_CORRELATIONID"      -> models.errors.InternalError,
+      "INVALID_CORRELATIONID"      -> InternalError,
       "INCOME_SOURCE_NOT_FOUND"    -> NotFoundError,
-      "INCOMPATIBLE_INCOME_SOURCE" -> models.errors.InternalError,
+      "INCOMPATIBLE_INCOME_SOURCE" -> InternalError,
       "TAX_YEAR_NOT_SUPPORTED"     -> RuleTaxYearNotSupportedError
     )
 

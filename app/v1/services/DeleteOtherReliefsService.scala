@@ -17,7 +17,6 @@
 package v1.services
 
 import api.controllers.RequestContext
-import api.models
 import api.models.errors._
 import api.services.BaseService
 import cats.implicits._
@@ -40,14 +39,14 @@ class DeleteOtherReliefsService @Inject() (connector: DeleteOtherReliefsConnecto
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> models.errors.InternalError,
-      "INVALID_CORRELATIONID"     -> models.errors.InternalError,
+      "SERVER_ERROR"              -> InternalError,
+      "INVALID_CORRELATIONID"     -> InternalError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-      "SERVICE_UNAVAILABLE"       -> models.errors.InternalError
+      "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> models.errors.InternalError,
+      "INVALID_CORRELATION_ID" -> InternalError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 

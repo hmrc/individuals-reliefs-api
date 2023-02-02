@@ -17,7 +17,6 @@
 package v1.services
 
 import api.controllers.RequestContext
-import api.models
 import api.models.errors._
 import api.services.BaseService
 import cats.implicits._
@@ -41,20 +40,20 @@ class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharit
   private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_NINO"            -> NinoFormatError,
-      "INVALID_TYPE"            -> models.errors.InternalError,
+      "INVALID_TYPE"            -> InternalError,
       "INVALID_TAXYEAR"         -> TaxYearFormatError,
-      "INVALID_INCOME_SOURCE"   -> models.errors.InternalError,
+      "INVALID_INCOME_SOURCE"   -> InternalError,
       "NOT_FOUND_PERIOD"        -> NotFoundError,
       "NOT_FOUND_INCOME_SOURCE" -> NotFoundError,
-      "SERVER_ERROR"            -> models.errors.InternalError,
-      "SERVICE_UNAVAILABLE"     -> models.errors.InternalError
+      "SERVER_ERROR"            -> InternalError,
+      "SERVICE_UNAVAILABLE"     -> InternalError
     )
 
     val extraTysErrors = Map(
       "INVALID_TAX_YEAR"             -> TaxYearFormatError,
-      "INVALID_CORRELATION_ID"       -> models.errors.InternalError,
-      "INVALID_INCOMESOURCE_ID"      -> models.errors.InternalError,
-      "INVALID_INCOMESOURCE_TYPE"    -> models.errors.InternalError,
+      "INVALID_CORRELATION_ID"       -> InternalError,
+      "INVALID_INCOMESOURCE_ID"      -> InternalError,
+      "INVALID_INCOMESOURCE_TYPE"    -> InternalError,
       "SUBMISSION_PERIOD_NOT_FOUND"  -> NotFoundError,
       "INCOME_DATA_SOURCE_NOT_FOUND" -> NotFoundError,
       "TAX_YEAR_NOT_SUPPORTED"       -> RuleTaxYearNotSupportedError
