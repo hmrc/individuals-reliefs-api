@@ -16,10 +16,11 @@
 
 package v1.mocks.connectors
 
+import api.connectors.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{DownstreamOutcome, RetrieveForeignReliefsConnector}
+import v1.connectors.RetrieveForeignReliefsConnector
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 
@@ -31,8 +32,12 @@ trait MockRetrieveForeignReliefsConnector extends MockFactory {
 
   object MockRetrieveForeignReliefsConnector {
 
-    def retrieve(requestData: RetrieveForeignReliefsRequest)
-        : CallHandler4[RetrieveForeignReliefsRequest, HeaderCarrier, ExecutionContext, String, Future[DownstreamOutcome[RetrieveForeignReliefsResponse]]] = {
+    def retrieve(requestData: RetrieveForeignReliefsRequest): CallHandler4[
+      RetrieveForeignReliefsRequest,
+      HeaderCarrier,
+      ExecutionContext,
+      String,
+      Future[DownstreamOutcome[RetrieveForeignReliefsResponse]]] = {
       (mockConnector
         .retrieve(_: RetrieveForeignReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

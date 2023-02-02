@@ -16,12 +16,11 @@
 
 package v1.mocks.services
 
+import api.controllers.RequestContext
+import api.models.errors.ErrorWrapper
+import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.controllers.EndpointLogContext
-import v1.models.errors.ErrorWrapper
-import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
 import v1.services.RetrievePensionsReliefsService
@@ -37,8 +36,8 @@ trait MockRetrievePensionsReliefsService extends MockFactory {
     def retrieve(
         requestData: RetrievePensionsReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrievePensionsReliefsResponse]]]] = {
       (mockService
-        .retrieve(_: RetrievePensionsReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
-        .expects(requestData, *, *, *, *)
+        .retrieve(_: RetrievePensionsReliefsRequest)(_: RequestContext, _: ExecutionContext))
+        .expects(requestData, *, *)
     }
 
   }

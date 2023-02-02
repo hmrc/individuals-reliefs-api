@@ -16,18 +16,16 @@
 
 package v1.controllers
 
-import play.api.libs.json.Json
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.mocks.services.MockAuditService
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
+import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v1.models.domain.Nino
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.MockIdGenerator
-import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockDeletePensionsReliefsRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeletePensionsReliefsAuditDetail}
-import v1.models.errors._
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
 import v1.models.request.deletePensionsReliefs.{DeletePensionsReliefsRawData, DeletePensionsReliefsRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,20 +33,57 @@ import scala.concurrent.Future
 
 class DeletePensionsReliefsControllerSpec
     extends ControllerBaseSpec
-    with MockEnrolmentsAuthService
-    with MockMtdIdLookupService
+    with ControllerTestRunner
     with MockDeletePensionsReliefsService
     with MockDeletePensionsReliefsRequestParser
-    with MockHateoasFactory
-    with MockAuditService
-    with MockIdGenerator {
+    with MockAuditService {
 
-  private val nino          = "AA123456A"
-  private val taxYear       = "2019-20"
-  private val correlationId = "X-123"
+  private val taxYear     = "2019-20"
+  private val rawData     = DeletePensionsReliefsRawData(nino, taxYear)
+  private val requestData = DeletePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
+  "handleRequest" should {
+    "return a successful response with status 204 (No Content)" when {
+      "the request received is valid" in new Test {
+
+        MockDeletePensionsReliefsRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
+
+        MockDeleteService
+          .delete(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+
+        runOkTestWithAudit(expectedStatus = NO_CONTENT)
+      }
+    }
+
+    "return the error as per spec" when {
+      "the parser validation fails" in new Test {
+
+        MockDeletePensionsReliefsRequestParser
+          .parse(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+
+        runErrorTestWithAudit(NinoFormatError)
+      }
+
+      "the service returns an error" in new Test {
+
+        MockDeletePensionsReliefsRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
+
+        MockDeleteService
+          .delete(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
+
+        runErrorTestWithAudit(RuleTaxYearNotSupportedError)
+      }
+    }
+  }
+
+  trait Test extends ControllerTest with AuditEventChecking {
 
     val controller = new DeletePensionsReliefsController(
       authService = mockEnrolmentsAuthService,
@@ -60,117 +95,23 @@ class DeletePensionsReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
-  private val rawData     = DeletePensionsReliefsRawData(nino, taxYear)
-  private val requestData = DeletePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
-
-  def event(auditResponse: AuditResponse): AuditEvent[DeletePensionsReliefsAuditDetail] =
-    AuditEvent(
-      auditType = "DeleteReliefPension",
-      transactionName = "delete-reliefs-pensions",
-      detail = DeletePensionsReliefsAuditDetail(
-        userType = "Individual",
-        agentReferenceNumber = None,
-        nino,
-        taxYear,
-        correlationId,
-        response = auditResponse
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+      AuditEvent(
+        auditType = "DeleteReliefPension",
+        transactionName = "delete-reliefs-pensions",
+        detail = GenericAuditDetail(
+          userType = "Individual",
+          agentReferenceNumber = None,
+          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
+          queryParams = None,
+          requestBody = None,
+          `X-CorrelationId` = correlationId,
+          auditResponse = auditResponse
+        )
       )
-    )
 
-  "handleRequest" should {
-    "return NoContent" when {
-      "the request received is valid" in new Test {
-
-        MockDeletePensionsReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
-
-        MockDeleteService
-          .delete(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
-
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-        status(result) shouldBe NO_CONTENT
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        val auditResponse: AuditResponse = AuditResponse(NO_CONTENT, None, None)
-        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-      }
-    }
-    "return the error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
-
-            MockDeletePensionsReliefsRequestParser
-              .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-          }
-        }
-
-        val errors = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST)
-        )
-
-        errors.foreach(args => (errorsFromParserTester _).tupled(args))
-      }
-
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
-
-            MockDeletePensionsReliefsRequestParser
-              .parse(rawData)
-              .returns(Right(requestData))
-
-            MockDeleteService
-              .delete(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
-
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
-            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
-          }
-        }
-
-        val errors = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR)
-        )
-
-        val extraTysErrors = Seq(
-          (RuleTaxYearNotSupportedError, BAD_REQUEST)
-        )
-
-        (errors ++ extraTysErrors).foreach(args => (serviceErrors _).tupled(args))
-      }
-    }
   }
 
 }

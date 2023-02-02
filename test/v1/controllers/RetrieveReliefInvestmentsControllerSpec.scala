@@ -16,20 +16,19 @@
 
 package v1.controllers
 
-import play.api.libs.json.Json
-import v1.models.domain.Nino
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.mocks.hateoas.MockHateoasFactory
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors._
+import api.models.hateoas.HateoasWrapper
+import api.models.hateoas.Method.GET
+import api.models.outcomes.ResponseWrapper
+import api.models.{errors, hateoas}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
-import v1.mocks.MockIdGenerator
-import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveInvestmentsRequestParser
 import v1.mocks.services._
-import v1.models.errors._
-import v1.models.hateoas.Method.GET
-import v1.models.hateoas.{HateoasWrapper, Link}
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
 import v1.models.request.retrieveReliefInvestments.{RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest}
 import v1.models.response.retrieveReliefInvestments._
 
@@ -38,45 +37,81 @@ import scala.concurrent.Future
 
 class RetrieveReliefInvestmentsControllerSpec
     extends ControllerBaseSpec
-    with MockEnrolmentsAuthService
-    with MockMtdIdLookupService
+    with ControllerTestRunner
     with MockRetrieveReliefInvestmentsService
     with MockRetrieveInvestmentsRequestParser
-    with MockHateoasFactory
-    with MockAuditService
-    with MockIdGenerator {
+    with MockHateoasFactory {
 
-  private val nino          = "AA123456A"
-  private val taxYear       = "2019-20"
-  private val correlationId = "X-123"
+  private val taxYear         = "2019-20"
+  private val rawData         = RetrieveReliefInvestmentsRawData(nino, taxYear)
+  private val requestData     = RetrieveReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val testHateoasLink = hateoas.Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
-
-    val controller = new RetrieveReliefInvestmentsController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
-      service = mockService,
-      hateoasFactory = mockHateoasFactory,
-      cc = cc,
-      idGenerator = mockIdGenerator
+  val mtdResponseJson: JsValue = Json
+    .parse(
+      s"""
+         |{
+         |   "submittedOn":"2020-06-17T10:53:38Z",
+         |   "vctSubscription":[
+         |      {
+         |         "uniqueInvestmentRef":"VCTREF",
+         |         "name":"VCT Fund X",
+         |         "dateOfInvestment":"2018-04-16",
+         |         "amountInvested":23312,
+         |         "reliefClaimed":1334
+         |      }
+         |   ],
+         |   "eisSubscription":[
+         |      {
+         |         "uniqueInvestmentRef":"XTAL",
+         |         "name":"EIS Fund X",
+         |         "knowledgeIntensive":true,
+         |         "dateOfInvestment":"2020-12-12",
+         |         "amountInvested":23312,
+         |         "reliefClaimed":43432
+         |      }
+         |   ],
+         |   "communityInvestment":[
+         |      {
+         |         "uniqueInvestmentRef":"VCTREF",
+         |         "name":"VCT Fund X",
+         |         "dateOfInvestment":"2018-04-16",
+         |         "amountInvested":23312,
+         |         "reliefClaimed":1334
+         |      }
+         |   ],
+         |   "seedEnterpriseInvestment":[
+         |      {
+         |         "uniqueInvestmentRef":"123412/1A",
+         |         "companyName":"Company Inc",
+         |         "dateOfInvestment":"2020-12-12",
+         |         "amountInvested":123123.22,
+         |         "reliefClaimed":3432
+         |      }
+         |   ],
+         |   "socialEnterpriseInvestment":[
+         |      {
+         |         "uniqueInvestmentRef":"123412/1A",
+         |         "socialEnterpriseName":"SE Inc",
+         |         "dateOfInvestment":"2020-12-12",
+         |         "amountInvested":123123.22,
+         |         "reliefClaimed":3432
+         |      }
+         |   ],
+         |   "links":[
+         |      {
+         |         "href":"individuals/reliefs/investment/AA123456A/2019-20",
+         |         "method":"GET",
+         |         "rel":"self"
+         |      }
+         |   ]
+         |}
+        """.stripMargin
     )
-
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
-
-  private val rawData     = RetrieveReliefInvestmentsRawData(nino, taxYear)
-  private val requestData = RetrieveReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
-
-  private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
 
   "handleRequest" should {
     "return Ok" when {
       "the request received is valid" in new Test {
-
         MockRetrieveReliefInvestmentsRequestParser
           .parse(rawData)
           .returns(Right(requestData))
@@ -89,74 +124,46 @@ class RetrieveReliefInvestmentsControllerSpec
           .wrap(responseModel, RetrieveReliefInvestmentsHateoasData(nino, taxYear))
           .returns(HateoasWrapper(responseModel, Seq(testHateoasLink)))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-        status(result) shouldBe OK
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseJson))
       }
     }
 
     "return the error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
+      "the parser validation fails" in new Test {
+        MockRetrieveReliefInvestmentsRequestParser
+          .parse(rawData)
+          .returns(Left(errors.ErrorWrapper(correlationId, NinoFormatError)))
 
-            MockRetrieveReliefInvestmentsRequestParser
-              .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
+        runErrorTest(NinoFormatError)
       }
 
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
+      "the service returns an error" in new Test {
+        MockRetrieveReliefInvestmentsRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
 
-            MockRetrieveReliefInvestmentsRequestParser
-              .parse(rawData)
-              .returns(Right(requestData))
+        MockRetrieveReliefService
+          .retrieve(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-            MockRetrieveReliefService
-              .retrieve(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
-
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val errors = List(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR)
-        )
-
-        val extraTysErrors = List(
-          (RuleTaxYearNotSupportedError, BAD_REQUEST)
-        )
-
-        (errors ++ extraTysErrors).foreach(args => (serviceErrors _).tupled(args))
+        runErrorTest(RuleTaxYearNotSupportedError)
       }
     }
+  }
+
+  trait Test extends ControllerTest {
+
+    val controller = new RetrieveReliefInvestmentsController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockRequestDataParser,
+      service = mockService,
+      hateoasFactory = mockHateoasFactory,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeGetRequest)
   }
 
 }

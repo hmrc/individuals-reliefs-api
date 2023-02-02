@@ -16,34 +16,23 @@
 
 package v1.services
 
-import cats.data.EitherT
+import api.controllers.RequestContext
+import api.models.errors._
+import api.services.BaseService
 import cats.implicits._
+import v1.connectors.AmendPensionsReliefsConnector
+import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequest
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
-import v1.connectors.AmendPensionsReliefsConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors.{InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
-import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequest
-import v1.support.DownstreamResponseMappingSupport
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConnector) extends DownstreamResponseMappingSupport with Logging {
+class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConnector) extends BaseService {
 
-  def amend(request: AmendPensionsReliefsRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amend(request: AmendPensionsReliefsRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      responseWrapper <- EitherT(connector.createOrAmendPensionsRelief(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield responseWrapper
+    connector.createOrAmendPensionsRelief(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
-    result.value
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {

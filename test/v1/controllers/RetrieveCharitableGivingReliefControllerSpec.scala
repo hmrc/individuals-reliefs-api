@@ -16,19 +16,17 @@
 
 package v1.controllers
 
-import play.api.libs.json.Json
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.mocks.hateoas.MockHateoasFactory
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors._
+import api.models.hateoas
+import api.models.hateoas.HateoasWrapper
+import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.models.outcomes.ResponseWrapper
 import play.api.mvc.Result
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.MockIdGenerator
-import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockRetrieveCharitableGivingReliefRequestParser
-import v1.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockRetrieveCharitableGivingReliefService}
-import v1.models.domain.Nino
-import v1.models.errors._
-import v1.models.hateoas.Method._
-import v1.models.hateoas.{HateoasWrapper, Link}
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
+import v1.mocks.services.MockRetrieveCharitableGivingReliefService
 import v1.models.request.retrieveCharitableGivingTaxRelief._
 import v1.models.response.retrieveCharitableGivingTaxRelief._
 
@@ -37,51 +35,31 @@ import scala.concurrent.Future
 
 class RetrieveCharitableGivingReliefControllerSpec
     extends ControllerBaseSpec
-    with MockEnrolmentsAuthService
-    with MockMtdIdLookupService
+    with ControllerTestRunner
     with MockRetrieveCharitableGivingReliefService
     with MockRetrieveCharitableGivingReliefRequestParser
     with MockHateoasFactory
-    with MockIdGenerator
     with RetrieveCharitableGivingReliefFixture {
 
-  private val nino          = "AA123456A"
-  private val taxYear       = "2019-20"
-  private val correlationId = "X-123"
-
+  private val taxYear     = "2019-20"
   private val rawData     = RetrieveCharitableGivingReliefRawData(nino, taxYear)
   private val requestData = RetrieveCharitableGivingReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   private val hateoasLinks = Seq(
-    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = PUT, rel = "create-and-amend-charitable-giving-tax-relief"),
-    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
+    hateoas.Link(
+      href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear",
+      method = PUT,
+      rel = "create-and-amend-charitable-giving-tax-relief"),
+    hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
+    hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
   )
 
   private val responseModel = charitableGivingReliefResponse
   private val responseJson  = charitableGivingReliefResponseMtdJsonWithHateoas(nino, taxYear)
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
-
-    val controller = new RetrieveCharitableGivingReliefController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveCharitableGivingReliefRequestParser,
-      service = mockRetrieveCharitableGivingReliefService,
-      hateoasFactory = mockHateoasFactory,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
-
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
-
   "handleRequest" should {
-    "return OK" when {
-      "the request received is valid" in new Test {
+    "return a successful response with status 200 (OK)" when {
+      "given a valid request" in new Test {
 
         MockRetrieveCharitableGivingReliefRequestParser
           .parse(rawData)
@@ -95,75 +73,51 @@ class RetrieveCharitableGivingReliefControllerSpec
           .wrap(responseModel, RetrieveCharitableGivingReliefHateoasData(nino, taxYear))
           .returns(HateoasWrapper(responseModel, hateoasLinks))
 
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-        status(result) shouldBe OK
-        contentAsJson(result) shouldBe responseJson
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
+        runOkTest(
+          expectedStatus = OK,
+          maybeExpectedResponseBody = Some(responseJson)
+        )
       }
     }
 
     "return the error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
+      "the parser validation fails" in new Test {
 
-            MockRetrieveCharitableGivingReliefRequestParser
-              .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+        MockRetrieveCharitableGivingReliefRequestParser
+          .parse(rawData)
+          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
+        runErrorTest(NinoFormatError)
       }
 
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
+      "the service returns an error" in new Test {
 
-            MockRetrieveCharitableGivingReliefRequestParser
-              .parse(rawData)
-              .returns(Right(requestData))
+        MockRetrieveCharitableGivingReliefRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
 
-            MockRetrieveCharitableGivingReliefService
-              .retrieve(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+        MockRetrieveCharitableGivingReliefService
+          .retrieve(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-          }
-        }
-
-        val errors = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR)
-        )
-
-        val extraTysErrors = Seq(
-          (RuleTaxYearNotSupportedError, BAD_REQUEST)
-        )
-        (errors ++ extraTysErrors).foreach(args => (serviceErrors _).tupled(args))
+        runErrorTest(RuleTaxYearNotSupportedError)
       }
     }
+  }
+
+  trait Test extends ControllerTest {
+
+    val controller = new RetrieveCharitableGivingReliefController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      parser = mockRetrieveCharitableGivingReliefRequestParser,
+      service = mockRetrieveCharitableGivingReliefService,
+      hateoasFactory = mockHateoasFactory,
+      cc = cc,
+      idGenerator = mockIdGenerator
+    )
+
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeGetRequest)
   }
 
 }

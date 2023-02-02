@@ -16,10 +16,10 @@
 
 package v1.models.response.amendOtherReliefs
 
+import api.models.hateoas
+import api.models.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
 import support.UnitSpec
-import v1.models.hateoas.Link
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class AmendOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -31,9 +31,9 @@ class AmendOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
       AmendOtherReliefsResponse.LinksFactory.links(mockAppConfig, AmendOtherReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
-          Link(s"/my/context/other/$nino/$taxYear", PUT, "create-and-amend-reliefs-other"),
-          Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
-          Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
+          hateoas.Link(s"/my/context/other/$nino/$taxYear", PUT, "create-and-amend-reliefs-other"),
+          hateoas.Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
+          hateoas.Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
         )
     }
   }

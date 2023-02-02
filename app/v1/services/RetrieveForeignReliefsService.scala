@@ -16,34 +16,25 @@
 
 package v1.services
 
-import cats.data.EitherT
+import api.controllers.RequestContext
+import api.models.errors._
+import api.services.BaseService
 import cats.implicits._
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
 import v1.connectors.RetrieveForeignReliefsConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors._
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
-import v1.support.DownstreamResponseMappingSupport
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveForeignReliefsService @Inject() (connector: RetrieveForeignReliefsConnector) extends DownstreamResponseMappingSupport with Logging {
+class RetrieveForeignReliefsService @Inject() (connector: RetrieveForeignReliefsConnector) extends BaseService {
 
   def retrieve(request: RetrieveForeignReliefsRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[RetrieveForeignReliefsResponse]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignReliefsResponse]] = {
 
-    val result = for {
-      downstreamResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDownstreamErrors(errorMap))
-    } yield downstreamResponseWrapper
-
-    result.value
+    connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(errorMap)))
   }
 
   private val errorMap = {

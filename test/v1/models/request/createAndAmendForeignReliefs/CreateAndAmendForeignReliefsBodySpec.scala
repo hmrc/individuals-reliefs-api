@@ -16,10 +16,10 @@
 
 package v1.models.request.createAndAmendForeignReliefs
 
+import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel}
-import v1.models.utils.JsonErrorValidators
 
 class CreateAndAmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {
 

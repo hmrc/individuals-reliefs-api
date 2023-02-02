@@ -16,28 +16,22 @@
 
 package v1.services
 
+import api.controllers.RequestContext
+import api.models.errors._
+import api.services.BaseService
 import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
 import v1.connectors.DeleteCharitableGivingTaxReliefConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors._
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
-import v1.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharitableGivingTaxReliefConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharitableGivingTaxReliefConnector) extends BaseService {
 
   def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[DeleteCharitableGivingTaxReliefServiceOutcome] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[DeleteCharitableGivingTaxReliefServiceOutcome] = {
 
     connector.delete(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

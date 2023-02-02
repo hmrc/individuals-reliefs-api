@@ -16,11 +16,13 @@
 
 package v1.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations._
+import api.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 import config.AppConfig
-import javax.inject.Inject
-import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
 import v1.models.request.amendPensionsReliefs._
+
+import javax.inject.Inject
 
 class AmendPensionsReliefsValidator @Inject() (appConfig: AppConfig) extends Validator[AmendPensionsReliefsRawData] {
 

@@ -16,11 +16,13 @@
 
 package v1.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations._
+import api.models.errors._
 import config.AppConfig
-import javax.inject.Inject
-import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors._
 import v1.models.request.amendOtherReliefs._
+
+import javax.inject.Inject
 
 class AmendOtherReliefsValidator @Inject() (appConfig: AppConfig) extends Validator[AmendOtherReliefsRawData] {
 

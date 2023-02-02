@@ -16,6 +16,8 @@
 
 package v1.endpoints
 
+import api.models.errors
+import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
@@ -24,7 +26,6 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v1.endpoints.AmendOtherReliefsControllerISpec._
-import v1.models.errors.{BadRequestError, ErrorWrapper, MtdError, ValueFormatError, _}
 import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
@@ -59,7 +60,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
     "return a 400 with multiple errors" when {
       "all field value validations fail on the request body" in new NonTysTest {
 
-        val wrappedErrors: ErrorWrapper = ErrorWrapper(
+        val wrappedErrors: ErrorWrapper = errors.ErrorWrapper(
           correlationId = correlationId,
           error = BadRequestError,
           errors = Some(allInvalidValueRequestError)

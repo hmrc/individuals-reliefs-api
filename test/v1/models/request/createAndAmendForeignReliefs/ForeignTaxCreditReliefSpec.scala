@@ -16,10 +16,10 @@
 
 package v1.models.request.createAndAmendForeignReliefs
 
+import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.CreateAndAmendForeignReliefsFixtures.{foreignTaxCreditReliefJson, foreignTaxCreditReliefModel}
-import v1.models.utils.JsonErrorValidators
 
 class ForeignTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
 

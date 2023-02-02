@@ -16,11 +16,11 @@
 
 package v1.controllers.requestParsers.validators
 
+import api.models.errors._
+import api.models.utils.JsonErrorValidators
 import play.api.libs.json._
 import support.UnitSpec
-import v1.models.errors._
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRawData
-import v1.models.utils.JsonErrorValidators
 
 class AmendCharitableGivingReliefValidatorSpec extends UnitSpec with JsonErrorValidators {
 

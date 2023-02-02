@@ -16,34 +16,24 @@
 
 package v1.services
 
-import cats.data.EitherT
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
+import api.controllers.RequestContext
+import api.models.errors._
+import api.services.BaseService
+import cats.implicits.toBifunctorOps
 import v1.connectors.CreateAndAmendCharitableGivingTaxReliefConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors._
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRequest
-import v1.support.DownstreamResponseMappingSupport
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: CreateAndAmendCharitableGivingTaxReliefConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: CreateAndAmendCharitableGivingTaxReliefConnector) extends BaseService {
 
-  def amend(request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def amend(
+      request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
-    val result = for {
-      responseWrapper <- EitherT(connector.createAmend(request)).leftMap(mapDownstreamErrors(downstreamErrorMap))
-    } yield responseWrapper
+    connector.createAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
-    result.value
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {
@@ -65,16 +55,15 @@ class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: Creat
     )
 
     val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_TYPE" -> InternalError,
-      "INVALID_TAX_YEAR" -> TaxYearFormatError,
-      "INVALID_CORRELATIONID" -> InternalError,
-      "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
+      "INVALID_INCOMESOURCE_TYPE"  -> InternalError,
+      "INVALID_TAX_YEAR"           -> TaxYearFormatError,
+      "INVALID_CORRELATIONID"      -> InternalError,
+      "INCOME_SOURCE_NOT_FOUND"    -> NotFoundError,
       "INCOMPATIBLE_INCOME_SOURCE" -> InternalError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      "TAX_YEAR_NOT_SUPPORTED"     -> RuleTaxYearNotSupportedError
     )
 
     errors ++ extraTysErrors
   }
-
 
 }

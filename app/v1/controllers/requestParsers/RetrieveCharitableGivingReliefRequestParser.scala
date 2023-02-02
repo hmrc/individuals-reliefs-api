@@ -16,9 +16,8 @@
 
 package v1.controllers.requestParsers
 
+import api.models.domain.{Nino, TaxYear}
 import v1.controllers.requestParsers.validators.RetrieveCharitableGivingReliefValidator
-import v1.models.domain.Nino
-import v1.models.request.TaxYear
 import v1.models.request.retrieveCharitableGivingTaxRelief.{RetrieveCharitableGivingReliefRawData, RetrieveCharitableGivingReliefRequest}
 
 import javax.inject.Inject

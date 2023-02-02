@@ -16,39 +16,76 @@
 
 package v1.controllers
 
-import play.api.libs.json.Json
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.mocks.services.MockAuditService
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors
+import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import api.models.outcomes.ResponseWrapper
+import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v1.models.domain.Nino
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.MockIdGenerator
-import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockDeleteCharitableGivingReliefRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AuditEvent, CharitableGivingReliefAuditDetail}
-import v1.models.errors._
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
 import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeleteCharitableGivingControllerSpec
-  extends ControllerBaseSpec
-    with MockEnrolmentsAuthService
-    with MockMtdIdLookupService
+    extends ControllerBaseSpec
+    with ControllerTestRunner
     with MockDeleteCharitableGivingReliefService
     with MockAuditService
-    with MockDeleteCharitableGivingReliefRequestParser
-    with MockHateoasFactory
-    with MockIdGenerator {
+    with MockDeleteCharitableGivingReliefRequestParser {
 
-  private val nino          = "AA123456A"
-  private val taxYear       = "2019-20"
-  private val correlationId = "X-123"
+  private val taxYear     = "2019-20"
+  private val rawData     = DeleteCharitableGivingTaxReliefRawData(nino, taxYear)
+  private val requestData = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test {
-    val hc: HeaderCarrier = HeaderCarrier()
+  "handleRequest" should {
+    "return a successful response with status 204 (No Content)" when {
+      "a valid request is supplied" in new Test {
+
+        MockDeleteCharitableGivingReliefRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
+
+        MockDeleteService
+          .delete(requestData)
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
+
+        runOkTestWithAudit(expectedStatus = NO_CONTENT)
+
+      }
+    }
+
+    "return the error as per spec" when {
+      "the parser validation fails" in new Test {
+
+        MockDeleteCharitableGivingReliefRequestParser
+          .parse(rawData)
+          .returns(Left(errors.ErrorWrapper(correlationId, NinoFormatError)))
+
+        runErrorTestWithAudit(NinoFormatError)
+      }
+
+      "the service returns an error" in new Test {
+
+        MockDeleteCharitableGivingReliefRequestParser
+          .parse(rawData)
+          .returns(Right(requestData))
+
+        MockDeleteService
+          .delete(requestData)
+          .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
+
+        runErrorTestWithAudit(RuleTaxYearNotSupportedError)
+      }
+    }
+  }
+
+  trait Test extends ControllerTest with AuditEventChecking {
 
     val controller = new DeleteCharitableGivingController(
       authService = mockEnrolmentsAuthService,
@@ -60,117 +97,23 @@ class DeleteCharitableGivingControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-    MockIdGenerator.getCorrelationId.returns(correlationId)
-  }
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
-  private val rawData     = DeleteCharitableGivingTaxReliefRawData(nino, taxYear)
-  private val requestData = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
-
-  private def event(response: String, httpStatusCode: Int, errorCodes: Option[Seq[String]]): AuditEvent[CharitableGivingReliefAuditDetail] =
-    AuditEvent(
-      auditType = "DeleteCharitableGivingTaxRelief",
-      transactionName = "delete-charitable-giving-tax-relief",
-      detail = CharitableGivingReliefAuditDetail(
-        versionNumber = "1.0",
-        userType = "Individual",
-        agentReferenceNumber = None,
-        nino = nino,
-        taxYear = taxYear,
-        requestBody = None,
-        `X-CorrelationId` = correlationId,
-        response = response,
-        httpStatusCode = httpStatusCode,
-        errorCodes = errorCodes
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+      AuditEvent(
+        auditType = "DeleteCharitableGivingTaxRelief",
+        transactionName = "delete-charitable-giving-tax-relief",
+        detail = GenericAuditDetail(
+          userType = "Individual",
+          agentReferenceNumber = None,
+          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
+          queryParams = None,
+          requestBody = None,
+          `X-CorrelationId` = correlationId,
+          auditResponse = auditResponse
+        )
       )
-    )
 
-  "handleRequest" should {
-    "return NoContent" when {
-      "the request received is valid" in new Test {
-
-        MockDeleteCharitableGivingReliefRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
-
-        MockDeleteService
-          .delete(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
-
-        val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-        status(result) shouldBe NO_CONTENT
-        header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-        MockedAuditService.verifyAuditEvent(event("success", NO_CONTENT, None)).once
-
-      }
-    }
-    "return the error as per spec" when {
-      "parser errors occur" should {
-        def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
-          s"a ${error.code} error is returned from the parser" in new Test {
-
-            MockDeleteCharitableGivingReliefRequestParser
-              .parse(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
-
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(error)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            MockedAuditService.verifyAuditEvent(event("error", expectedStatus, Some(Seq(error.code)))).once
-
-          }
-        }
-
-        val input = Seq(
-          (BadRequestError, BAD_REQUEST),
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (RuleTaxYearNotSupportedError, BAD_REQUEST),
-          (RuleTaxYearRangeInvalidError, BAD_REQUEST)
-        )
-
-        input.foreach(args => (errorsFromParserTester _).tupled(args))
-      }
-
-      "service errors occur" should {
-        def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
-          s"a $mtdError error is returned from the service" in new Test {
-
-            MockDeleteCharitableGivingReliefRequestParser
-              .parse(rawData)
-              .returns(Right(requestData))
-
-            MockDeleteService
-              .delete(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
-
-            val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
-
-            status(result) shouldBe expectedStatus
-            contentAsJson(result) shouldBe Json.toJson(mtdError)
-            header("X-CorrelationId", result) shouldBe Some(correlationId)
-
-            MockedAuditService.verifyAuditEvent(event("error", expectedStatus, Some(Seq(mtdError.code)))).once
-
-          }
-        }
-
-        val input = Seq(
-          (NinoFormatError, BAD_REQUEST),
-          (TaxYearFormatError, BAD_REQUEST),
-          (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR)
-        )
-
-        input.foreach(args => (serviceErrors _).tupled(args))
-      }
-    }
   }
 
 }

@@ -16,6 +16,7 @@
 
 package v1.endpoints
 
+import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
@@ -23,7 +24,6 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.{IntegrationBaseSpec, WireMockMethods}
-import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with WireMockMethods {
@@ -67,7 +67,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
         def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new NonTysTest {
 
-            override val nino: String = requestNino
+            override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
@@ -146,8 +146,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
 
     def nino: String = "AA123456A"
 
-    val downstreamResponse: JsValue = Json.parse(
-      s"""
+    val downstreamResponse: JsValue = Json.parse(s"""
          |{
          |   "submittedOn":"2020-07-14T10:30:18Z",
          |   "pensionReliefs":{
@@ -160,8 +159,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
          |}
          |""".stripMargin)
 
-    val mtdResponse: JsValue = Json.parse(
-      s"""
+    val mtdResponse: JsValue = Json.parse(s"""
          |{
          |   "submittedOn":"2020-07-14T10:30:18Z",
          |   "pensionReliefs":{
@@ -201,6 +199,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
           (AUTHORIZATION, "Bearer 123")
         )
     }
+
   }
 
   private trait NonTysTest extends Test {
@@ -222,4 +221,5 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
     def downstreamUri: String = s"/income-tax/reliefs/pensions/$downstreamTaxYear/$taxableEntityId"
 
   }
+
 }

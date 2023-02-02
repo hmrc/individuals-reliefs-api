@@ -16,10 +16,10 @@
 
 package v1.models.response.retrieveReliefInvestments
 
+import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.{eisSubscriptionsItemJson, eisSubscriptionsItemModel}
-import v1.models.utils.JsonErrorValidators
 
 class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
 

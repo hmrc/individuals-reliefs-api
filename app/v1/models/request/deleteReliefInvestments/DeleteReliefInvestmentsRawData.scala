@@ -16,6 +16,6 @@
 
 package v1.models.request.deleteReliefInvestments
 
-import v1.models.request.RawData
+import api.models.request.RawData
 
 case class DeleteReliefInvestmentsRawData(nino: String, taxYear: String) extends RawData

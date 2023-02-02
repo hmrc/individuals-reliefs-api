@@ -16,12 +16,11 @@
 
 package v1.mocks.services
 
+import api.controllers.RequestContext
+import api.models.errors.ErrorWrapper
+import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.controllers.EndpointLogContext
-import v1.models.errors.ErrorWrapper
-import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
 import v1.services.RetrieveCharitableGivingReliefService
@@ -34,11 +33,16 @@ trait MockRetrieveCharitableGivingReliefService extends MockFactory {
 
   object MockRetrieveCharitableGivingReliefService {
 
-    def retrieve(
-        request: RetrieveCharitableGivingReliefRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveCharitableGivingReliefResponse]]]] = {
-      (mockRetrieveCharitableGivingReliefService
-        .retrieve(_: RetrieveCharitableGivingReliefRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
-        .expects(request, *, *, *, *)
+    def retrieve(request: RetrieveCharitableGivingReliefRequest)
+        : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveCharitableGivingReliefResponse]]]] = {
+      (
+        mockRetrieveCharitableGivingReliefService
+          .retrieve(_: RetrieveCharitableGivingReliefRequest)(
+            _: RequestContext,
+            _: ExecutionContext
+          )
+        )
+        .expects(request, *, *)
     }
 
   }

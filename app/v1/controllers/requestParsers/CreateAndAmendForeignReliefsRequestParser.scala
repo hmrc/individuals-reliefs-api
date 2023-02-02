@@ -16,11 +16,15 @@
 
 package v1.controllers.requestParsers
 
-import javax.inject.Inject
-import v1.models.domain.Nino
+import api.models.domain.{Nino, TaxYear}
 import v1.controllers.requestParsers.validators.CreateAndAmendForeignReliefsValidator
-import v1.models.request.TaxYear
-import v1.models.request.createAndAmendForeignReliefs.{CreateAndAmendForeignReliefsBody, CreateAndAmendForeignReliefsRawData, CreateAndAmendForeignReliefsRequest}
+import v1.models.request.createAndAmendForeignReliefs.{
+  CreateAndAmendForeignReliefsBody,
+  CreateAndAmendForeignReliefsRawData,
+  CreateAndAmendForeignReliefsRequest
+}
+
+import javax.inject.Inject
 
 class CreateAndAmendForeignReliefsRequestParser @Inject() (val validator: CreateAndAmendForeignReliefsValidator)
     extends RequestParser[CreateAndAmendForeignReliefsRawData, CreateAndAmendForeignReliefsRequest] {
