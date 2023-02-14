@@ -3,7 +3,6 @@ openapi: "3.0.3"
 info:
   version: "1.0"
   title: Individuals Reliefs (MTD)
-  summary: Retrieve, create, amend, or delete relief investments and other reliefs.
   description: |
     # Send fraud prevention data
     HMRC monitors transactions to help protect your customers' confidential data from criminals and fraudsters. 
