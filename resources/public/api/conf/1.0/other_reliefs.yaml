@@ -1,16 +1,16 @@
-put:
-  $ref: "./other_reliefs_amend.yaml"
-  summary: Create and Amend Other Reliefs
-  security:
-    - User-Restricted:
-        - write:self-assessment
-
 get:
   $ref: "./other_reliefs_retrieve.yaml"
   summary: Retrieve Other Reliefs
   security:
     - User-Restricted:
         - read:self-assessment
+
+put:
+  $ref: "./other_reliefs_amend.yaml"
+  summary: Create and Amend Other Reliefs
+  security:
+    - User-Restricted:
+        - write:self-assessment
 
 delete:
   $ref: "./other_reliefs_delete.yaml"

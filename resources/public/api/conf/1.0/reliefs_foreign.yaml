@@ -1,16 +1,16 @@
-put:
-  $ref: "./reliefs_foreign_amend.yaml"
-  summary: Create and Amend Foreign Reliefs
-  security:
-    - User-Restricted:
-        - write:self-assessment
-
 get:
   $ref: "./reliefs_foreign_retrieve.yaml"
   summary: Retrieve Foreign Reliefs
   security:
     - User-Restricted:
         - read:self-assessment
+
+put:
+  $ref: "./reliefs_foreign_amend.yaml"
+  summary: Create and Amend Foreign Reliefs
+  security:
+    - User-Restricted:
+        - write:self-assessment
 
 delete:
   $ref: "./reliefs_foreign_delete.yaml"

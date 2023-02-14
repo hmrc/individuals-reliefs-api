@@ -1,11 +1,7 @@
-summary: Create and Amend Relief Investments
+summary: Create and Amend Foreign Reliefs
 description: |
-  This endpoint enables you to create and amend relief investments from: 
-  VCT subscriptions, EIS subscriptions, Community Investments, Seed Enterprise Investments and Social Enterprise Investments. 
-
-  A National Insurance number and tax year must be provided.
-
-  Amending an expense will override the expense and remove the "dateIgnored" flag from HMRC-provided expenses.
+  This endpoint enables you to create and amend foreign reliefs. A National Insurance number and tax year must be provided.
+  
   ### Test data
   <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
   <table>
@@ -20,10 +16,6 @@ description: |
               <td><p>N/A - DEFAULT</p></td>
               <td><p>Simulate a success response.</p></td>
           </tr>
-          <tr>
-              <td><p>NOT_FOUND</p></td>
-              <td><p>Scenario to simulate not found error.</p></td>
-           </tr>
       </tbody>
   </table>
 tags:
@@ -34,8 +26,8 @@ parameters:
   - $ref: "./common/pathParameters.yaml#/components/parameters/taxYear"
   - $ref: "./common/headers.yaml#/components/parameters/acceptHeader"
   - $ref: "./common/headers.yaml#/components/parameters/contentTypeJson"
-  - $ref: "./common/headers.yaml#/components/parameters/authorizationWriteScopeHeader"
   - $ref: "./common/headers.yaml#/components/parameters/testScenarioHeader"
+  - $ref: "./common/headers.yaml#/components/parameters/authorizationWriteScopeHeader"
 
 security:
   - User-Restricted:
@@ -79,16 +71,16 @@ responses:
             $ref: "./common/errors.yaml#/components/examples/formatNino"
           FORMAT_TAX_YEAR:
             $ref: "./common/errors.yaml#/components/examples/formatTaxYear"
-          FORMAT_VALUE:
-            $ref: "./common/errors.yaml#/components/examples/formatValue"
-          FORMAT_COUNTRY_CODE:
-            $ref: "./common/errors.yaml#/components/examples/formatCountryCode"
-          RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
-            $ref: "./common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody"
           RULE_TAX_YEAR_NOT_SUPPORTED:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearNotSupported"
+          FORMAT_VALUE:
+            $ref: "./common/errors.yaml#/components/examples/formatValue"
           RULE_TAX_YEAR_RANGE_INVALID:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid"
+          RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
+            $ref: "./common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody"
+          FORMAT_COUNTRY_CODE:
+            $ref: "./common/errors.yaml#/components/examples/formatCountryCode"
           RULE_COUNTRY_CODE:
             $ref: "./common/errors.yaml#/components/examples/ruleCountryCode"
 

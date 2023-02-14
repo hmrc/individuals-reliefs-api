@@ -1,3 +1,10 @@
+get:
+  $ref: "./charitable_giving_relief_retrieve.yaml"
+  summary: Retrieve Charitable Giving Tax Relief
+  security:
+    - User-Restricted:
+        - read:self-assessment
+
 put:
   $ref: "./charitable_giving_relief_amend.yaml"
   summary: Create and Amend Charitable Giving Tax Relief
@@ -5,12 +12,6 @@ put:
     - User-Restricted:
         - write:self-assessment
 
-get:
-  $ref: "./charitable_giving_relief_retrieve.yaml"
-  summary: Retrieve Charitable Giving Tax Relief
-  security:
-    - User-Restricted:
-        - read:self-assessment
 
 delete:
   $ref: "./charitable_giving_relief_delete.yaml"
