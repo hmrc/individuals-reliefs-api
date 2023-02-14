@@ -1,4 +1,3 @@
-summary: Create and Amend Pensions Reliefs
 description: |
   This endpoint enables you to create and amend pensions reliefs for a tax year. A National Insurance number and tax year must be provided.
 
