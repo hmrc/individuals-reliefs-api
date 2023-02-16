@@ -31,8 +31,8 @@ parameters:
   - $ref: "./common/pathParameters.yaml#/components/parameters/taxYear"
   - $ref: "./common/headers.yaml#/components/parameters/acceptHeader"
   - $ref: "./common/headers.yaml#/components/parameters/contentTypeJson"
-  - $ref: "./common/headers.yaml#/components/parameters/testScenarioHeader"
   - $ref: "./common/headers.yaml#/components/parameters/authorizationWriteScopeHeader"
+  - $ref: "./common/headers.yaml#/components/parameters/testScenarioHeader"
 
 security:
   - User-Restricted:
@@ -100,3 +100,17 @@ responses:
         examples:
           CLIENT_OR_AGENT_NOT_AUTHORISED:
             $ref: "./common/errors.yaml#/components/examples/clientOrAgentNotAuthorised"
+
+
+
+
+
+  "404":
+    description: Not Found
+    content:
+      application/json:
+        schema:
+          $ref: "./schemas/error-response.yaml"
+        examples:
+          MATCHING_RESOURCE_NOT_FOUND:
+            $ref: "./common/errors.yaml#/components/examples/notFound"
