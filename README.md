@@ -2,6 +2,7 @@ Individuals Reliefs API
 ========================
 
 The Individuals Reliefs API allows a developer to retrieve, create and amend, and delete:
+
 - Relief Investments
 - Other Reliefs
 - Foreign Reliefs
@@ -12,8 +13,8 @@ The Individuals Reliefs API allows a developer to retrieve, create and amend, an
 
 - Scala 2.12.x
 - Java 8
-- sbt > 1.6.x
-- [Service Manager](https://github.com/hmrc/service-manager)
+- sbt 1.7.x
+- [Service Manager 2](https://github.com/hmrc/sm2)
 
 ## Running the microservice
 
@@ -27,29 +28,28 @@ Run unit tests: `sbt test`
 
 Run integration tests: `sbt it:test`
 
-## Viewing RAML
+## Viewing Open API Spec (OAS) docs
 
-To view documentation locally ensure the Obligations API is running, and run api-documentation-frontend:
-```
-./run_local_with_dependencies.sh
-```
-Then go to http://localhost:9680/api-documentation/docs/api/preview and use this port and version:
-```
-http://localhost:7796/api/conf/1.0/application.raml
-```
+To view documentation locally ensure the Individuals Reliefs API is running, and run api-documentation-frontend:
+`./run_local_with_dependencies.sh`
+
+Then go to http://localhost:9680/api-documentation/docs/openapi/preview and use this port and version:
+`http://localhost:7796/api/conf/1.0/application.yaml`
 
 ## Changelog
 
-You can see our changelog [here](https://github.com/hmrc/income-tax-mtd-changelog/wiki)
+You can see our changelog [here](https://github.com/hmrc/income-tax-mtd-changelog)
 
 ## Support and Reporting Issues
 
 You can create a GitHub issue [here](https://github.com/hmrc/income-tax-mtd-changelog/issues)
 
-## API Reference / Documentation 
+## API Reference / Documentation
 
-Available on the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individuals-reliefs-api/1.0)
+Available on
+the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individuals-reliefs-api)
 
 ## License
 
-This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html")
+This code is open source software licensed under
+the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html")
