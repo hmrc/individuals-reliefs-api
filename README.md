@@ -13,8 +13,8 @@ The Individuals Reliefs API allows a developer to retrieve, create and amend, an
 
 - Scala 2.12.x
 - Java 8
-- sbt > 1.6.x
-- [Service Manager](https://github.com/hmrc/service-manager)
+- sbt 1.7.x
+- [Service Manager 2](https://github.com/hmrc/sm2)
 
 ## Running the microservice
 
@@ -38,7 +38,7 @@ Then go to http://localhost:9680/api-documentation/docs/openapi/preview and use 
 
 ## Changelog
 
-You can see our changelog [here](https://github.com/hmrc/income-tax-mtd-changelog/wiki)
+You can see our changelog [here](https://github.com/hmrc/income-tax-mtd-changelog)
 
 ## Support and Reporting Issues
 
@@ -47,7 +47,7 @@ You can create a GitHub issue [here](https://github.com/hmrc/income-tax-mtd-chan
 ## API Reference / Documentation
 
 Available on
-the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individuals-reliefs-api/1.0)
+the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individuals-reliefs-api)
 
 ## License
 
