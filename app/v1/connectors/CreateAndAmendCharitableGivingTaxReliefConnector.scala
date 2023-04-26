@@ -16,9 +16,8 @@
 
 package v1.connectors
 
-import api.connectors.BaseDownstreamConnector
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
-import api.connectors.connectors.DownstreamOutcome
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import config.AppConfig
 import play.api.http.Status.OK

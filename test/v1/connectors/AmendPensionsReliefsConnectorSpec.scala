@@ -16,8 +16,7 @@
 
 package v1.connectors
 
-import api.connectors.ConnectorSpec
-import api.connectors.connectors.DownstreamOutcome
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import v1.models.request.amendPensionsReliefs._
