@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1
+package api
 
 import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
@@ -22,7 +22,5 @@ import api.models.outcomes.ResponseWrapper
 package object services {
 
   type ServiceOutcome[A] = Either[ErrorWrapper, ResponseWrapper[A]]
-
-  type DeleteCharitableGivingTaxReliefServiceOutcome = ServiceOutcome[Unit]
 
 }

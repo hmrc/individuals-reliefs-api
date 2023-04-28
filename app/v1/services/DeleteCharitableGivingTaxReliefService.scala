@@ -18,7 +18,7 @@ package v1.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v1.connectors.DeleteCharitableGivingTaxReliefConnector
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
@@ -29,9 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharitableGivingTaxReliefConnector) extends BaseService {
 
-  def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[DeleteCharitableGivingTaxReliefServiceOutcome] = {
+  def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.delete(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

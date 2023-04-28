@@ -16,7 +16,7 @@
 
 package api.connectors.httpparsers
 
-import api.connectors.connectors.DownstreamOutcome
+import api.connectors.DownstreamOutcome
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.http.Status._

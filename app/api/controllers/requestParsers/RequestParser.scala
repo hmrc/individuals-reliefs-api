@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers
+package api.controllers.requestParsers
 
 import api.controllers.requestParsers.validators.Validator
 import api.models.errors.{BadRequestError, ErrorWrapper}
