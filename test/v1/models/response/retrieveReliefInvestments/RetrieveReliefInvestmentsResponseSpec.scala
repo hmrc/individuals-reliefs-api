@@ -46,7 +46,7 @@ class RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig 
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes
+      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
       RetrieveReliefInvestmentsResponse.LinksFactory.links(mockAppConfig, RetrieveReliefInvestmentsHateoasData(nino, taxYear)) shouldBe
         Seq(
           hateoas.Link(s"/my/context/investment/$nino/$taxYear", GET, "self"),

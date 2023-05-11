@@ -42,7 +42,7 @@ class RetrieveCharitableGivingReliefResponseSpec extends UnitSpec with MockAppCo
       val taxYear = "mytaxyear"
       val context = "individuals/reliefs"
 
-      MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes
+      MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
       RetrieveCharitableGivingReliefResponse.LinksFactory.links(mockAppConfig, RetrieveCharitableGivingReliefHateoasData(nino, taxYear)) shouldBe
         Seq(
           hateoas.Link(s"/$context/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
