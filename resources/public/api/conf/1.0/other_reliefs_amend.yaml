@@ -17,11 +17,15 @@ description: |
       <tbody>
           <tr>
               <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulate success response.</p></td>
+              <td><p>Simulates a success response.</p></td>
           </tr>
           <tr>
                <td><p>SUBMISSION_FAILED</p></td>
                <td><p>Simulates the scenario where a submission has failed.</p></td>
+          </tr>
+          <tr>
+               <td><p>STATEFUL</p></td>
+               <td><p>Simulates a stateful success response.</p></td>
           </tr>
       </tbody>
   </table>
