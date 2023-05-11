@@ -16,9 +16,9 @@
 
 package v1.models.response.retrieveOtherReliefs
 
+import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.utils.JsonErrorValidators
 
 class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
   val maintenancePayments: MaintenancePayments = MaintenancePayments(Some("myRef"), Some("Hilda"), Some("2000-01-01"), 222.22)

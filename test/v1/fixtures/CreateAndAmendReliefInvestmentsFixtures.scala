@@ -44,7 +44,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
   val eisSubscriptionsItemModel: EisSubscriptionsItem = EisSubscriptionsItem(
     uniqueInvestmentRef = "XTAL",
     name = Some("EIS Fund X"),
-    knowledgeIntensive = true,
+    knowledgeIntensive = Some(true),
     dateOfInvestment = Some("2018-04-16"),
     amountInvested = Some(BigDecimal(23312.00)),
     reliefClaimed = BigDecimal(43432.00)

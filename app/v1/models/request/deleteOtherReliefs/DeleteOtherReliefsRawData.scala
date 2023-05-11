@@ -16,6 +16,6 @@
 
 package v1.models.request.deleteOtherReliefs
 
-import v1.models.request.RawData
+import api.models.request.RawData
 
 case class DeleteOtherReliefsRawData(nino: String, taxYear: String) extends RawData

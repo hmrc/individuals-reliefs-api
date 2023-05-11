@@ -16,11 +16,13 @@
 
 package v1.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.validations.{MtdTaxYearValidation, NinoValidation, TaxYearValidation, minimumTaxYear}
+import api.models.errors.MtdError
 import config.AppConfig
-import javax.inject.Inject
-import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors.MtdError
 import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRawData
+
+import javax.inject.Inject
 
 class RetrieveOtherReliefsValidator @Inject() (appConfig: AppConfig) extends Validator[RetrieveOtherReliefsRawData] {
 

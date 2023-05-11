@@ -16,23 +16,21 @@
 
 package v1.controllers
 
-import cats.data.EitherT
-import cats.implicits._
-import javax.inject.{Inject, Singleton}
-import play.api.libs.json.{JsValue, Json}
+import api.controllers._
+import api.hateoas.HateoasFactory
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.CreateAndAmendForeignReliefsRequestParser
-import v1.hateoas.HateoasFactory
-import v1.models.audit.{CreateAndAmendForeignReliefsAuditDetail, AuditEvent, AuditResponse}
-import v1.models.errors._
 import v1.models.request.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsRawData
 import v1.models.response.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsHateoasData
 import v1.models.response.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsResponse.LinksFactory
-import v1.services.{CreateAndAmendForeignReliefsService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.CreateAndAmendForeignReliefsService
 
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class CreateAndAmendForeignReliefsController @Inject() (val authService: EnrolmentsAuthService,
@@ -41,10 +39,10 @@ class CreateAndAmendForeignReliefsController @Inject() (val authService: Enrolme
                                                         service: CreateAndAmendForeignReliefsService,
                                                         auditService: AuditService,
                                                         hateoasFactory: HateoasFactory,
+                                                        appConfig: AppConfig,
                                                         cc: ControllerComponents,
                                                         val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
-    with BaseController
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -52,81 +50,24 @@ class CreateAndAmendForeignReliefsController @Inject() (val authService: Enrolme
 
   def handleRequest(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
-      implicit val correlationId: String = idGenerator.getCorrelationId
-      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
-        s"with correlationId : $correlationId")
+      implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
+
       val rawData = CreateAndAmendForeignReliefsRawData(nino, taxYear, request.body)
-      val result =
-        for {
-          parsedRequest   <- EitherT.fromEither[Future](parser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.createAndAmend(parsedRequest))
-        } yield {
-          val vendorResponse = hateoasFactory.wrap(serviceResponse.responseData, CreateAndAmendForeignReliefsHateoasData(nino, taxYear))
 
-          logger.info(
-            s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
+      val requestHandler = RequestHandler
+        .withParser(parser)
+        .withService(service.createAndAmend)
+        .withAuditing(AuditHandler(
+          auditService = auditService,
+          auditType = "CreateAmendForeignReliefs",
+          transactionName = "create-amend-foreign-reliefs",
+          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
+          requestBody = Some(request.body),
+          includeResponse = true
+        ))
+        .withHateoasResult(hateoasFactory)(CreateAndAmendForeignReliefsHateoasData(nino, taxYear))
 
-          val response = Json.toJson(vendorResponse)
-
-          auditSubmission(
-            CreateAndAmendForeignReliefsAuditDetail(
-              request.userDetails,
-              nino,
-              taxYear,
-              request.body,
-              serviceResponse.correlationId,
-              AuditResponse(OK, Right(Some(response)))))
-
-          Ok(Json.toJson(vendorResponse))
-            .withApiHeaders(serviceResponse.correlationId)
-        }
-
-      result.leftMap { errorWrapper =>
-        val resCorrelationId = errorWrapper.correlationId
-        val result           = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
-
-        logger.warn(
-          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-            s"Error response received with CorrelationId: $resCorrelationId")
-
-        auditSubmission(
-          CreateAndAmendForeignReliefsAuditDetail(
-            request.userDetails,
-            nino,
-            taxYear,
-            request.body,
-            correlationId,
-            AuditResponse(result.header.status, Left(errorWrapper.auditErrors))))
-
-        result
-      }.merge
+      requestHandler.handleRequest(rawData)
     }
-
-  private def errorResult(errorWrapper: ErrorWrapper) = {
-
-    errorWrapper.error match {
-      case _
-          if errorWrapper.containsAnyOf(
-            NinoFormatError,
-            BadRequestError,
-            TaxYearFormatError,
-            RuleIncorrectOrEmptyBodyError,
-            RuleTaxYearNotSupportedError,
-            RuleTaxYearRangeInvalidError,
-            ValueFormatError,
-            CountryCodeFormatError,
-            RuleCountryCodeError
-          ) =>
-        BadRequest(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
-    }
-  }
-
-  private def auditSubmission(details: CreateAndAmendForeignReliefsAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
-    val event = AuditEvent("CreateAmendForeignReliefs", "create-amend-foreign-reliefs", details)
-    auditService.auditEvent(event)
-  }
 
 }

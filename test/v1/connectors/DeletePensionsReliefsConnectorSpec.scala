@@ -16,11 +16,10 @@
 
 package v1.connectors
 
-import v1.models.domain.Nino
-import v1.models.outcomes.ResponseWrapper
-import v1.models.request.TaxYear
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequest
-//import v1.connectors.{ConnectorSpec, DownstreamOutcome}
 
 import scala.concurrent.Future
 

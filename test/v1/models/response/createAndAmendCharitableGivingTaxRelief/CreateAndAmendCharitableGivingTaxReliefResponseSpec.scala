@@ -16,10 +16,10 @@
 
 package v1.models.response.createAndAmendCharitableGivingTaxRelief
 
+import api.models.hateoas
+import api.models.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
 import support.UnitSpec
-import v1.models.hateoas.Link
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
 
 class CreateAndAmendCharitableGivingTaxReliefResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -29,12 +29,15 @@ class CreateAndAmendCharitableGivingTaxReliefResponseSpec extends UnitSpec with 
       val taxYear = "mytaxyear"
 
       MockAppConfig.apiGatewayContext.returns("individuals/reliefs").anyNumberOfTimes
-      CreateAndAmendCharitableGivingTaxReliefResponse.LinksFactory.links(mockAppConfig, CreateAndAmendCharitableGivingTaxReliefHateoasData(nino, taxYear)) shouldBe
+      CreateAndAmendCharitableGivingTaxReliefResponse.LinksFactory.links(
+        mockAppConfig,
+        CreateAndAmendCharitableGivingTaxReliefHateoasData(nino, taxYear)) shouldBe
         Seq(
-          Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", GET, "self"),
-          Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
-          Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
+          hateoas.Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", GET, "self"),
+          hateoas.Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
+          hateoas.Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
         )
     }
   }
+
 }

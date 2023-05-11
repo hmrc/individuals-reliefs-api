@@ -16,10 +16,11 @@
 
 package v1.connectors
 
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import config.AppConfig
+import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsRequest
 
 import javax.inject.{Inject, Singleton}

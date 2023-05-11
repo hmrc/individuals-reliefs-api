@@ -16,11 +16,11 @@
 
 package v1.controllers.requestParsers.validators
 
+import api.models.errors._
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.CreateAndAmendForeignReliefsFixtures.requestBodyJson
-import v1.models.errors._
 import v1.models.request.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsRawData
 
 class CreateAndAmendForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {

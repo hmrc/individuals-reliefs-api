@@ -16,9 +16,9 @@
 
 package v1.controllers.requestParsers.validators
 
+import api.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import mocks.MockAppConfig
 import support.UnitSpec
-import v1.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRawData
 
 class DeleteForeignReliefsValidatorSpec extends UnitSpec with MockAppConfig {

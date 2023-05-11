@@ -16,12 +16,12 @@
 
 package v1.controllers.requestParsers
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors
+import api.models.errors.{BadRequestError, NinoFormatError, TaxYearFormatError}
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.mocks.validators.MockAmendCharitableGivingReliefValidator
-import v1.models.domain.Nino
-import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
-import v1.models.request.TaxYear
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.{
   CreateAndAmendCharitableGivingTaxReliefBody,
   CreateAndAmendCharitableGivingTaxReliefRawData,
@@ -71,14 +71,14 @@ class AmendCharitableGivingRequestReliefParserSpec extends UnitSpec {
       "a single validation error occurs" in new Test {
         MockAmendCharitableGivingReliefValidator.validate(rawData) returns List(NinoFormatError)
 
-        parser.parseRequest(rawData) shouldBe Left(ErrorWrapper(correlationId, NinoFormatError, None))
+        parser.parseRequest(rawData) shouldBe Left(errors.ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple validation errors occur" in new Test {
         MockAmendCharitableGivingReliefValidator.validate(rawData) returns List(NinoFormatError, TaxYearFormatError)
 
         parser.parseRequest(rawData) shouldBe
-          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
+          Left(errors.ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

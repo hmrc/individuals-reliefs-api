@@ -1,0 +1,116 @@
+summary: Create and Amend Charitable Giving Tax Relief
+description: |
+  This endpoint enables you to create and amend charitable giving tax relief for a tax year. A National Insurance number and tax year must be provided.
+  
+  ### Test data
+  <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+  <table>
+      <thead>
+          <tr>
+              <th>Header Value (Gov-Test-Scenario)</th>
+              <th>Scenario</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td><p>N/A - DEFAULT</p></td>
+              <td><p>Simulate success response.</p></td>
+          </tr>
+          <tr>
+              <td><p>NOT_FOUND</p></td>
+              <td><p>Simulates the scenario where no income source was found.</p></td>
+          </tr>
+      </tbody>
+  </table>
+
+tags:
+  - Charitable Givings
+
+parameters:
+  - $ref: "./common/pathParameters.yaml#/components/parameters/nino"
+  - $ref: "./common/pathParameters.yaml#/components/parameters/taxYear"
+  - $ref: "./common/headers.yaml#/components/parameters/acceptHeader"
+  - $ref: "./common/headers.yaml#/components/parameters/contentTypeJson"
+  - $ref: "./common/headers.yaml#/components/parameters/authorizationWriteScopeHeader"
+  - $ref: "./common/headers.yaml#/components/parameters/testScenarioHeader"
+
+security:
+  - User-Restricted:
+      - write:self-assessment
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: "./schemas/amend_charitable_giving_request.json"
+      examples:
+        example-1:
+          description: Default Example
+          value:
+            $ref: "./examples/amend_charitable_giving_request.json"
+
+responses:
+  "200":
+    description: Success
+    headers:
+      X-CorrelationId:
+        $ref: "./common/headers.yaml#/components/parameters/correlationId"
+    content:
+      application/json:
+        schema:
+          $ref: "./schemas/amend_charitable_giving_response.json"
+        examples:
+          example-response:
+            description: Example Response
+            value:
+              $ref: "./examples/amend_charitable_giving_response.json"
+
+  "400":
+    description: Bad request
+    content:
+      application/json:
+        schema:
+          $ref: "./schemas/error-response.yaml"
+        examples:
+          FORMAT_NINO:
+            $ref: "./common/errors.yaml#/components/examples/formatNino"
+          FORMAT_TAX_YEAR:
+            $ref: "./common/errors.yaml#/components/examples/formatTaxYear"
+          RULE_TAX_YEAR_RANGE_INVALID:
+            $ref: "./common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid"
+          RULE_TAX_YEAR_NOT_SUPPORTED:
+            $ref: "./common/errors.yaml#/components/examples/ruleTaxYearNotSupported"
+          FORMAT_VALUE:
+            $ref: "./common/errors.yaml#/components/examples/formatValue"
+          FORMAT_STRING:
+            $ref: "./common/errors.yaml#/components/examples/formatString"
+          RULE_GIFT_AID_NON_UK_AMOUNT_WITHOUT_NAMES:
+            $ref: "./common/errors.yaml#/components/examples/ruleGiftAidNonUkAmountWithoutNames"
+          RULE_GIFTS_NON_UK_AMOUNT_WITHOUT_NAMES:
+            $ref: "./common/errors.yaml#/components/examples/ruleNonUkGiftsAmountWithoutNames"
+          RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
+            $ref: "./common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody"
+
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          $ref: "./schemas/error-response.yaml"
+        examples:
+          CLIENT_OR_AGENT_NOT_AUTHORISED:
+            $ref: "./common/errors.yaml#/components/examples/clientOrAgentNotAuthorised"
+
+
+
+
+
+  "404":
+    description: Not Found
+    content:
+      application/json:
+        schema:
+          $ref: "./schemas/error-response.yaml"
+        examples:
+          MATCHING_RESOURCE_NOT_FOUND:
+            $ref: "./common/errors.yaml#/components/examples/notFound"

@@ -16,28 +16,21 @@
 
 package v1.services
 
+import api.controllers.RequestContext
+import api.models.errors._
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
 import v1.connectors.CreateAndAmendForeignReliefsConnector
-import v1.controllers.EndpointLogContext
-import v1.models.errors._
 import v1.models.request.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsRequest
-import v1.support.DownstreamResponseMappingSupport
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAndAmendForeignReliefsService @Inject() (connector: CreateAndAmendForeignReliefsConnector)
-    extends DownstreamResponseMappingSupport
-    with Logging {
+class CreateAndAmendForeignReliefsService @Inject() (connector: CreateAndAmendForeignReliefsConnector) extends BaseService {
 
-  def createAndAmend(request: CreateAndAmendForeignReliefsRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      logContext: EndpointLogContext,
-      correlationId: String): Future[ServiceOutcome[Unit]] = {
+  def createAndAmend(
+      request: CreateAndAmendForeignReliefsRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createAndAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

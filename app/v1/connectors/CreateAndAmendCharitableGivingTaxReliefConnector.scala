@@ -16,15 +16,15 @@
 
 package v1.connectors
 
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
+import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import config.AppConfig
-
-import javax.inject.{Inject, Singleton}
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
-import v1.connectors.httpparsers.StandardDownstreamHttpParser._
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRequest
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -37,9 +37,9 @@ class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: Http
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
 
-    val downstreamUri = if(request.taxYear.useTaxYearSpecificApi){
+    val downstreamUri = if (request.taxYear.useTaxYearSpecificApi) {
       TaxYearSpecificIfsUri[Unit](s"income-tax/${request.taxYear.asTysDownstream}/${request.nino}/income-source/charity/annual")
-    }else{
+    } else {
       DesUri[Unit](s"income-tax/nino/${request.nino}/income-source/charity/annual/${request.taxYear.asDownstream}")
     }
 

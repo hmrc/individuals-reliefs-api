@@ -16,9 +16,9 @@
 
 package v1.models.response.createAndAmendForeignReliefs
 
+import api.hateoas.{HateoasLinks, HateoasLinksFactory}
+import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
-import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
-import v1.models.hateoas.{HateoasData, Link}
 
 object CreateAndAmendForeignReliefsResponse extends HateoasLinks {
 

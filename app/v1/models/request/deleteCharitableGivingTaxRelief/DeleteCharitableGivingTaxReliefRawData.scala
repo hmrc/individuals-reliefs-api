@@ -16,6 +16,6 @@
 
 package v1.models.request.deleteCharitableGivingTaxRelief
 
-import v1.models.request.RawData
+import api.models.request.RawData
 
 case class DeleteCharitableGivingTaxReliefRawData(nino: String, taxYear: String) extends RawData

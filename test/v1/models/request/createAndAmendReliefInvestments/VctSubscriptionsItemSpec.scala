@@ -16,10 +16,10 @@
 
 package v1.models.request.createAndAmendReliefInvestments
 
+import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
-import v1.models.utils.JsonErrorValidators
 
 class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
 

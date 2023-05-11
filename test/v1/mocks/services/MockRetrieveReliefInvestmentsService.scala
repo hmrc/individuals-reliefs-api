@@ -16,12 +16,11 @@
 
 package v1.mocks.services
 
+import api.controllers.RequestContext
+import api.models.errors.ErrorWrapper
+import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.controllers.EndpointLogContext
-import v1.models.errors.ErrorWrapper
-import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
 import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsResponse
 import v1.services.RetrieveReliefInvestmentsService
@@ -37,8 +36,8 @@ trait MockRetrieveReliefInvestmentsService extends MockFactory {
     def retrieve(requestData: RetrieveReliefInvestmentsRequest)
         : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveReliefInvestmentsResponse]]]] = {
       (mockService
-        .retrieve(_: RetrieveReliefInvestmentsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
-        .expects(requestData, *, *, *, *)
+        .retrieve(_: RetrieveReliefInvestmentsRequest)(_: RequestContext, _: ExecutionContext))
+        .expects(requestData, *, *)
     }
 
   }
