@@ -60,7 +60,10 @@ object JsonFormatValidation {
     } else {
       data.validate[A] match {
         case JsSuccess(a, _) => Right(a)
-        case JsError(errors) => Left(handleErrors(errors.map(e => (e._1, e._2.toList)).toList))
+        case JsError(errors) => {
+          val immutableErrors = errors.map { case (path, errors) => (path, errors.toList) }.toList
+          Left(handleErrors(immutableErrors))
+        }
       }
     }
   }
