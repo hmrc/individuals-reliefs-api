@@ -59,8 +59,11 @@ object JsonFormatValidation {
       Left(List(RuleIncorrectOrEmptyBodyError))
     } else {
       data.validate[A] match {
-        case JsSuccess(a, _)                                          => Right(a)
-        case JsError(errors: Seq[(JsPath, Seq[JsonValidationError])]) => Left(handleErrors(errors))
+        case JsSuccess(a, _) => Right(a)
+        case JsError(errors) => {
+          val immutableErrors = errors.map { case (path, errors) => (path, errors.toList) }.toList
+          Left(handleErrors(immutableErrors))
+        }
       }
     }
   }

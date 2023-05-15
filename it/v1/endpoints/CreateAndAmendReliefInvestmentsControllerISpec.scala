@@ -131,17 +131,6 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
                 "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
               ))
           ),
-          NameFormatError.copy(
-            paths = Some(
-              Seq(
-                "/vctSubscription/0/name",
-                "/vctSubscription/1/name",
-                "/eisSubscription/0/name",
-                "/communityInvestment/0/name",
-                "/seedEnterpriseInvestment/0/companyName",
-                "/socialEnterpriseInvestment/0/socialEnterpriseName"
-              ))
-          ),
           DateOfInvestmentFormatError.copy(
             paths = Some(
               List(
@@ -151,6 +140,17 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
                 "/communityInvestment/0/dateOfInvestment",
                 "/seedEnterpriseInvestment/0/dateOfInvestment",
                 "/socialEnterpriseInvestment/0/dateOfInvestment"
+              ))
+          ),
+          NameFormatError.copy(
+            paths = Some(
+              Seq(
+                "/vctSubscription/0/name",
+                "/vctSubscription/1/name",
+                "/eisSubscription/0/name",
+                "/communityInvestment/0/name",
+                "/seedEnterpriseInvestment/0/companyName",
+                "/socialEnterpriseInvestment/0/socialEnterpriseName"
               ))
           ),
           ValueFormatError.copy(
