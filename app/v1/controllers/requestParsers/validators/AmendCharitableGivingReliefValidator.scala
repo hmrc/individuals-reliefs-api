@@ -21,6 +21,8 @@ import api.controllers.requestParsers.validators.validations._
 import api.models.errors._
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 
+import scala.annotation.nowarn
+
 class AmendCharitableGivingReliefValidator extends Validator[CreateAndAmendCharitableGivingTaxReliefRawData] {
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, bodyFieldValidation)
 
@@ -39,6 +41,7 @@ class AmendCharitableGivingReliefValidator extends Validator[CreateAndAmendChari
       )
     }
 
+  @nowarn("cat=lint-byname-implicit")
   private def bodyFormatValidation: CreateAndAmendCharitableGivingTaxReliefRawData => List[List[MtdError]] = { data =>
     JsonFormatValidation.validateAndCheckNonEmpty[CreateAndAmendCharitableGivingTaxReliefBody](data.body) match {
       case Nil          => NoValidationErrors

@@ -335,15 +335,6 @@ object AmendOtherReliefsControllerISpec {
         "/annualPaymentsMade/customerReference",
         "/qualifyingLoanInterestPayments/0/customerReference"
       ))),
-    DateFormatError.copy(paths = Some(
-      List(
-        "/maintenancePayments/0/exSpouseDateOfBirth",
-        "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
-      ))),
-    ExSpouseNameFormatError.copy(paths = Some(
-      Seq(
-        "/maintenancePayments/0/exSpouseName"
-      ))),
     IncomeSourceFormatError.copy(paths = Some(
       Seq(
         "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
@@ -365,6 +356,15 @@ object AmendOtherReliefsControllerISpec {
         "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
         "/annualPaymentsMade/reliefClaimed",
         "/qualifyingLoanInterestPayments/0/reliefClaimed"
+      ))),
+    DateFormatError.copy(paths = Some(
+      List(
+        "/maintenancePayments/0/exSpouseDateOfBirth",
+        "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
+      ))),
+    ExSpouseNameFormatError.copy(paths = Some(
+      Seq(
+        "/maintenancePayments/0/exSpouseName"
       )))
   )
 

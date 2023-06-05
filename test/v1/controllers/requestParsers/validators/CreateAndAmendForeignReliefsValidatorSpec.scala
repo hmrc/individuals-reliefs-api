@@ -262,16 +262,16 @@ class CreateAndAmendForeignReliefsValidatorSpec extends UnitSpec with MockAppCon
               |""".stripMargin)
 
         validator.validate(CreateAndAmendForeignReliefsRawData(validNino, validTaxYear, badJson)) shouldBe List(
+          RuleCountryCodeError.copy(paths = Some(
+            Seq(
+              "/foreignIncomeTaxCreditRelief/0/countryCode"
+            ))),
           ValueFormatError.copy(paths = Some(Seq(
             "/foreignTaxCreditRelief/amount",
             "/foreignIncomeTaxCreditRelief/0/foreignTaxPaid",
             "/foreignIncomeTaxCreditRelief/0/taxableAmount",
             "/foreignTaxForFtcrNotClaimed/amount"
-          ))),
-          RuleCountryCodeError.copy(paths = Some(
-            Seq(
-              "/foreignIncomeTaxCreditRelief/0/countryCode"
-            )))
+          )))
         )
       }
     }

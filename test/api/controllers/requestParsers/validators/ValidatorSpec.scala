@@ -128,8 +128,9 @@ class ValidatorSpec extends UnitSpec with MockFactory {
         )
 
         validator.flattenErrors(errors) shouldBe List(
-          MtdError("CODE", "MSG1", BAD_REQUEST, Some(Seq("path 1", "path 2"))),
-          MtdError("CODE", "MSG2", BAD_REQUEST, Some(Seq("path 1"))))
+          MtdError("CODE", "MSG2", BAD_REQUEST, Some(Seq("path 1"))),
+          MtdError("CODE", "MSG1", BAD_REQUEST, Some(Seq("path 1", "path 2")))
+        )
       }
     }
     "flatten nothing" when {

@@ -21,7 +21,7 @@ import api.mocks.MockHttpClient
 import api.models.outcomes.ResponseWrapper
 import config.AppConfig
 import mocks.MockAppConfig
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
+import uk.gov.hmrc.http.{HttpClient, HttpReads}
 
 import scala.concurrent.Future
 
@@ -37,63 +37,25 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
 
   implicit val httpReads: HttpReads[DownstreamOutcome[Result]] = mock[HttpReads[DownstreamOutcome[Result]]]
 
-  class DesTest extends MockHttpClient with MockAppConfig {
+  class Test extends MockHttpClient with MockAppConfig {
 
     val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
       val http: HttpClient     = mockHttpClient
       val appConfig: AppConfig = mockAppConfig
     }
 
-    MockAppConfig.desBaseUrl returns baseUrl
-    MockAppConfig.desToken returns "des-token"
-    MockAppConfig.desEnvironment returns "des-environment"
-    MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
-
-    val qps = Seq("param1" -> "value1")
-  }
-
-  class IfsTest extends MockHttpClient with MockAppConfig {
-
-    val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
-      val http: HttpClient     = mockHttpClient
-      val appConfig: AppConfig = mockAppConfig
-    }
-
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
-
-    val qps = Seq("param1" -> "value1")
-  }
-
-  class TysIfsTest extends MockHttpClient with MockAppConfig {
-
-    val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
-      val http: HttpClient     = mockHttpClient
-      val appConfig: AppConfig = mockAppConfig
-    }
-
-    MockAppConfig.tysIfsBaseUrl returns baseUrl
-    MockAppConfig.tysIfsToken returns "TYS-IFS-token"
-    MockAppConfig.tysIfsEnvironment returns "TYS-IFS-environment"
-    MockAppConfig.tysIfsEnvironmentHeaders returns Some(allowedTysIfsHeaders)
-
-    val qps = Seq("param1" -> "value1")
+    val qps: Seq[(String, String)] = Seq("param1" -> "value1")
   }
 
   "for DES" when {
     "post" must {
-      "posts with the required headers and returns the result" in new DesTest {
-        implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-        val requiredDesHeadersPost: Seq[(String, String)] = requiredDesHeaders ++ Seq("Content-Type" -> "application/json")
-
+      "posts with the required headers and returns the result" in new Test with DesTest {
         MockedHttpClient
           .post(
             absoluteUrl,
             config = dummyHeaderCarrierConfig,
             body,
-            requiredHeaders = requiredDesHeadersPost,
+            requiredHeaders = requiredDesHeaders,
             excludedHeaders = Seq("AnotherHeader" -> "HeaderValue"))
           .returns(Future.successful(outcome))
 
@@ -102,9 +64,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "get" must {
-      "get with the required headers and return the result" in new DesTest {
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-
+      "get with the required headers and return the result" in new Test with DesTest {
         MockedHttpClient
           .get(
             absoluteUrl,
@@ -119,9 +79,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "delete" must {
-      "delete with the required headers and return the result" in new DesTest {
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-
+      "delete with the required headers and return the result" in new Test with DesTest {
         MockedHttpClient
           .delete(
             absoluteUrl,
@@ -135,16 +93,13 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "put" must {
-      "put with the required headers and return result" in new DesTest {
-        implicit val hc: HeaderCarrier                   = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-        val requiredDesHeadersPut: Seq[(String, String)] = requiredDesHeaders ++ Seq("Content-Type" -> "application/json")
-
+      "put with the required headers and return result" in new Test with DesTest {
         MockedHttpClient
           .put(
             absoluteUrl,
             config = dummyHeaderCarrierConfig,
             body,
-            requiredHeaders = requiredDesHeadersPut,
+            requiredHeaders = requiredDesHeaders,
             excludedHeaders = Seq("AnotherHeader" -> "HeaderValue"))
           .returns(Future.successful(outcome))
 
@@ -158,15 +113,13 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
         testNoDuplicatedContentType("content-type" -> "application/user-type")
 
         def testNoDuplicatedContentType(userContentType: (String, String)): Unit =
-          s"for user content type header $userContentType" in new DesTest {
-            implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq(userContentType))
-
+          s"for user content type header $userContentType" in new Test with DesTest {
             MockedHttpClient
               .put(
                 absoluteUrl,
                 config = dummyHeaderCarrierConfig,
                 body,
-                requiredHeaders = requiredDesHeaders ++ Seq("Content-Type" -> "application/json"),
+                requiredHeaders = requiredDesHeaders,
                 excludedHeaders = Seq(userContentType)
               )
               .returns(Future.successful(outcome))
@@ -179,16 +132,13 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
 
   "for IFS" when {
     "post" must {
-      "posts with the required ifs headers and returns the result" in new IfsTest {
-        implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-        val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
+      "posts with the required ifs headers and returns the result" in new Test with IfsTest {
         MockedHttpClient
           .post(
             absoluteUrl,
             config = dummyHeaderCarrierConfig,
             body,
-            requiredHeaders = requiredIfsHeadersPost,
+            requiredHeaders = requiredIfsHeaders,
             excludedHeaders = Seq("AnotherHeader" -> "HeaderValue"))
           .returns(Future.successful(outcome))
 
@@ -197,9 +147,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "get" must {
-      "get with the required headers and return the result" in new IfsTest {
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-
+      "get with the required headers and return the result" in new Test with IfsTest {
         MockedHttpClient
           .get(
             absoluteUrl,
@@ -214,9 +162,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "delete" must {
-      "delete with the required headers and return the result" in new IfsTest {
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-
+      "delete with the required headers and return the result" in new Test with IfsTest {
         MockedHttpClient
           .delete(
             absoluteUrl,
@@ -230,16 +176,13 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "put" must {
-      "put with the required headers and return result" in new IfsTest {
-        implicit val hc: HeaderCarrier                   = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-        val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
+      "put with the required headers and return result" in new Test with IfsTest {
         MockedHttpClient
           .put(
             absoluteUrl,
             config = dummyHeaderCarrierConfig,
             body,
-            requiredHeaders = requiredIfsHeadersPut,
+            requiredHeaders = requiredIfsHeaders,
             excludedHeaders = Seq("AnotherHeader" -> "HeaderValue"))
           .returns(Future.successful(outcome))
 
@@ -253,15 +196,13 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
         testNoDuplicatedContentType("content-type" -> "application/user-type")
 
         def testNoDuplicatedContentType(userContentType: (String, String)): Unit =
-          s"for user content type header $userContentType" in new IfsTest {
-            implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq(userContentType))
-
+          s"for user content type header $userContentType" in new Test with IfsTest {
             MockedHttpClient
               .put(
                 absoluteUrl,
                 config = dummyHeaderCarrierConfig,
                 body,
-                requiredHeaders = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json"),
+                requiredHeaders = requiredIfsHeaders,
                 excludedHeaders = Seq(userContentType)
               )
               .returns(Future.successful(outcome))
@@ -274,16 +215,13 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
 
   "for TYS IFS" when {
     "post" must {
-      "posts with the required tysIfs headers and returns the result" in new TysIfsTest {
-        implicit val hc: HeaderCarrier                       = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-        val requiredTysIfsHeadersPost: Seq[(String, String)] = requiredTysIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
+      "posts with the required tysIfs headers and returns the result" in new Test with TysIfsTest {
         MockedHttpClient
           .post(
             absoluteUrl,
             config = dummyHeaderCarrierConfig,
             body,
-            requiredHeaders = requiredTysIfsHeadersPost,
+            requiredHeaders = requiredTysIfsHeaders,
             excludedHeaders = Seq("AnotherHeader" -> "HeaderValue"))
           .returns(Future.successful(outcome))
 
@@ -292,9 +230,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "get" must {
-      "get with the required headers and return the result" in new TysIfsTest {
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-
+      "get with the required headers and return the result" in new Test with TysIfsTest {
         MockedHttpClient
           .get(
             absoluteUrl,
@@ -309,9 +245,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "delete" must {
-      "delete with the required headers and return the result" in new TysIfsTest {
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-
+      "delete with the required headers and return the result" in new Test with TysIfsTest {
         MockedHttpClient
           .delete(
             absoluteUrl,
@@ -325,16 +259,13 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "put" must {
-      "put with the required headers and return result" in new TysIfsTest {
-        implicit val hc: HeaderCarrier                      = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-        val requiredTysIfsHeadersPut: Seq[(String, String)] = requiredTysIfsHeaders ++ Seq("Content-Type" -> "application/json")
-
+      "put with the required headers and return result" in new Test with TysIfsTest {
         MockedHttpClient
           .put(
             absoluteUrl,
             config = dummyHeaderCarrierConfig,
             body,
-            requiredHeaders = requiredTysIfsHeadersPut,
+            requiredHeaders = requiredTysIfsHeaders,
             excludedHeaders = Seq("AnotherHeader" -> "HeaderValue"))
           .returns(Future.successful(outcome))
 
@@ -348,15 +279,13 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
         testNoDuplicatedContentType("content-type" -> "application/user-type")
 
         def testNoDuplicatedContentType(userContentType: (String, String)): Unit =
-          s"for user content type header $userContentType" in new TysIfsTest {
-            implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq(userContentType))
-
+          s"for user content type header $userContentType" in new Test with TysIfsTest {
             MockedHttpClient
               .put(
                 absoluteUrl,
                 config = dummyHeaderCarrierConfig,
                 body,
-                requiredHeaders = requiredTysIfsHeaders ++ Seq("Content-Type" -> "application/json"),
+                requiredHeaders = requiredTysIfsHeaders,
                 excludedHeaders = Seq(userContentType)
               )
               .returns(Future.successful(outcome))
