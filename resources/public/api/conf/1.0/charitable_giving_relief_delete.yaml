@@ -20,6 +20,10 @@ description: |
                <td><p>NOT_FOUND</p></td>
                <td><p>Simulates the scenario where no data is found.</p></td>
           </tr>
+          <tr>
+              <td><p>STATEFUL_DELETE</p></td>
+              <td><p>Performs a stateful delete.</p></td>
+          </tr>
       </tbody>
   </table>
 tags:
@@ -42,7 +46,7 @@ responses:
     headers:
       X-CorrelationId:
         $ref: "./common/headers.yaml#/components/parameters/correlationId"
-    content: {}
+    content: { }
 
   "400":
     description: Bad request

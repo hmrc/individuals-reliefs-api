@@ -20,6 +20,10 @@ description: |
               <td><p>NOT_FOUND</p></td>
               <td><p>Simulates the scenario where no income source was found.</p></td>
           </tr>
+          <tr>
+              <td><p>STATEFUL</p></td>
+              <td><p>Performs a stateful create or update.</p></td>
+          </tr>
       </tbody>
   </table>
 
