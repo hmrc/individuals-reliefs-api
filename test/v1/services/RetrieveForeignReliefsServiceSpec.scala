@@ -17,7 +17,7 @@
 package v1.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
@@ -41,7 +41,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
   implicit val correlationId: String = "X-123"
 
   private val responseModel = RetrieveForeignReliefsResponse(
-    "2020-06-17T10:53:38Z",
+    Timestamp("2020-06-17T10:53:38.000Z"),
     Some(ForeignTaxCreditRelief(234567.89)),
     Some(Seq(ForeignIncomeTaxCreditRelief("FRA", Some(540.32), 204.78, false))),
     Some(ForeignTaxForFtcrNotClaimed(549.98))

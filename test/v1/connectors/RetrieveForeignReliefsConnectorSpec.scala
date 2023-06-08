@@ -17,7 +17,7 @@
 package v1.connectors
 
 import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
@@ -39,7 +39,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
 
     lazy val request: RetrieveForeignReliefsRequest = new RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
-    val response = RetrieveForeignReliefsResponse(submittedOn = "2021-01-02", None, None, None)
+    val response = RetrieveForeignReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None)
 
   }
 

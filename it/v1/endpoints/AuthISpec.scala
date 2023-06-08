@@ -39,14 +39,14 @@ class AuthISpec extends IntegrationBaseSpec {
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
 
     def desUri: String = s"/income-tax/reliefs/investment/$nino/$taxYear"
 
     val desResponse: JsValue = Json.parse("""
         |{
-        |  "submittedOn": "2020-06-17T10:53:38Z",
+        |  "submittedOn": "2020-06-17T10:53:38.000Z",
         |  "vctSubscription":[
         |    {
         |      "uniqueInvestmentRef": "VCTREF",
@@ -162,4 +162,5 @@ class AuthISpec extends IntegrationBaseSpec {
       }
     }
   }
+
 }

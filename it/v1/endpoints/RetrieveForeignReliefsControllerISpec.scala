@@ -35,7 +35,7 @@ class RetrieveForeignReliefsControllerISpec extends IntegrationBaseSpec {
     val responseBody: JsValue = Json.parse(
       s"""
          |{
-         |  "submittedOn": "2020-06-17T10:53:38Z",
+         |  "submittedOn": "2020-06-17T10:53:38.000Z",
          |  "foreignTaxCreditRelief": {
          |      "amount": 2309.95
          |  },
@@ -73,7 +73,7 @@ class RetrieveForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
     val downstreamResponseBody: JsValue = Json.parse(s"""
          |{
-         |  "submittedOn": "2020-06-17T10:53:38Z",
+         |  "submittedOn": "2020-06-17T10:53:38.000Z",
          |  "foreignTaxCreditRelief":{
          |    "amount" : 2309.95
          |  },

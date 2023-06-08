@@ -16,6 +16,7 @@
 
 package v1.models.response.retrieveForeignReliefs
 
+import api.models.domain.Timestamp
 import api.models.hateoas
 import api.models.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
@@ -25,7 +26,7 @@ import support.UnitSpec
 class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
   val retrieveForeignReliefsBody: RetrieveForeignReliefsResponse = RetrieveForeignReliefsResponse(
-    "2020-06-17T10:53:38Z",
+    Timestamp("2020-06-17T10:53:38.000Z"),
     Some(ForeignTaxCreditRelief(763.00)),
     Some(
       Seq(
@@ -40,7 +41,7 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
   val json = Json.parse(
     """{
-      |  "submittedOn": "2020-06-17T10:53:38Z",
+      |  "submittedOn": "2020-06-17T10:53:38.000Z",
       |  "foreignTaxCreditRelief": {
       |    "amount": 763.00
       |  },

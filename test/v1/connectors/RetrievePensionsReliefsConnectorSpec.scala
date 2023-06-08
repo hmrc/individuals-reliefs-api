@@ -17,7 +17,7 @@
 package v1.connectors
 
 import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
 import v1.models.response.retrievePensionsReliefs.PensionsReliefs
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
@@ -46,7 +46,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
         taxYear = taxYear
       )
 
-    val response = RetrievePensionsReliefsResponse(submittedOn = "2021-01-01", PensionsReliefs(None, None, None, None, None))
+    val response = RetrievePensionsReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), PensionsReliefs(None, None, None, None, None))
   }
 
   "RetrievePensionsReliefsConnector" when {

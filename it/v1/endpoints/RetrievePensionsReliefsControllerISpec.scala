@@ -148,7 +148,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
 
     val downstreamResponse: JsValue = Json.parse(s"""
          |{
-         |   "submittedOn":"2020-07-14T10:30:18Z",
+         |   "submittedOn":"2020-07-14T10:30:18.000Z",
          |   "pensionReliefs":{
          |      "regularPensionContributions":1999.99,
          |      "oneOffPensionContributionsPaid":1999.99,
@@ -161,7 +161,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
 
     val mtdResponse: JsValue = Json.parse(s"""
          |{
-         |   "submittedOn":"2020-07-14T10:30:18Z",
+         |   "submittedOn":"2020-07-14T10:30:18.000Z",
          |   "pensionReliefs":{
          |      "regularPensionContributions":1999.99,
          |      "oneOffPensionContributionsPaid":1999.99,
