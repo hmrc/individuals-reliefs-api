@@ -16,6 +16,7 @@
 
 package v1.models.response.retrieveOtherReliefs
 
+import api.models.domain.Timestamp
 import api.models.hateoas
 import api.models.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
@@ -25,7 +26,7 @@ import support.UnitSpec
 class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
   val retrieveOtherReliefsBody: RetrieveOtherReliefsResponse = RetrieveOtherReliefsResponse(
-    "2020-06-17T10:53:38Z",
+    Timestamp("2020-06-17T10:53:38.000Z"),
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
     Some(PayrollGiving(Some("myref"), 154.00)),
     Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
@@ -45,7 +46,7 @@ class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
   val json = Json.parse(
     """{
-      |  "submittedOn": "2020-06-17T10:53:38Z",
+      |  "submittedOn": "2020-06-17T10:53:38.000Z",
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
       |        "reliefClaimed": 763.00

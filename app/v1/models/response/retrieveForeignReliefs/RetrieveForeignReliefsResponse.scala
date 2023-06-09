@@ -17,12 +17,13 @@
 package v1.models.response.retrieveForeignReliefs
 
 import api.hateoas.{HateoasLinks, HateoasLinksFactory}
+import api.models.domain.Timestamp
 import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
 
 case class RetrieveForeignReliefsResponse(
-    submittedOn: String,
+    submittedOn: Timestamp,
     foreignTaxCreditRelief: Option[ForeignTaxCreditRelief],
     foreignIncomeTaxCreditRelief: Option[Seq[ForeignIncomeTaxCreditRelief]],
     foreignTaxForFtcrNotClaimed: Option[ForeignTaxForFtcrNotClaimed]

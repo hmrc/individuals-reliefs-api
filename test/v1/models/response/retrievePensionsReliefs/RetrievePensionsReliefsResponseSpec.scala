@@ -16,6 +16,7 @@
 
 package v1.models.response.retrievePensionsReliefs
 
+import api.models.domain.Timestamp
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
@@ -23,7 +24,7 @@ import support.UnitSpec
 class RetrievePensionsReliefsResponseSpec extends UnitSpec with JsonErrorValidators {
 
   val pensionsReliefsResponseItem: RetrievePensionsReliefsResponse = RetrievePensionsReliefsResponse(
-    "2019-04-04T01:01:01Z",
+    Timestamp("2019-04-04T01:01:01.000Z"),
     PensionsReliefs(
       Some(1999.99),
       Some(1999.99),
@@ -36,7 +37,7 @@ class RetrievePensionsReliefsResponseSpec extends UnitSpec with JsonErrorValidat
   val json = Json.parse(
     """
       |{
-      |  "submittedOn": "2019-04-04T01:01:01Z",
+      |  "submittedOn": "2019-04-04T01:01:01.000Z",
       |  "pensionReliefs": {
       |    "regularPensionContributions": 1999.99,
       |    "oneOffPensionContributionsPaid": 1999.99,

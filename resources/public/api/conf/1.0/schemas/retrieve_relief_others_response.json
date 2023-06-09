@@ -7,7 +7,7 @@
     "submittedOn": {
       "description": "The date the other reliefs was added. It must be provided in the format YYYY-MM-DDThh:mm:ssZ",
       "type": "string",
-      "example": "2019-04-04T01:01:01Z"
+      "example": "2019-04-04T01:01:01.000Z"
     },
     "nonDeductibleLoanInterest": {
       "description": "Details of non-deductible loan interest claimed",

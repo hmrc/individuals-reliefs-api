@@ -18,7 +18,7 @@ package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.hateoas.HateoasWrapper
 import api.models.hateoas.Method.GET
@@ -47,7 +47,7 @@ class RetrieveForeignReliefsControllerSpec
   private val testHateoasLink = hateoas.Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveForeignReliefsResponse(
-    "2020-06-17T10:53:38Z",
+    Timestamp("2020-06-17T10:53:38.000Z"),
     Some(ForeignTaxCreditRelief(2309.95)),
     Some(
       Seq(
@@ -64,7 +64,7 @@ class RetrieveForeignReliefsControllerSpec
     .parse(
       s"""
          |{
-         |   "submittedOn":"2020-06-17T10:53:38Z",
+         |   "submittedOn":"2020-06-17T10:53:38.000Z",
          |   "foreignTaxCreditRelief":{
          |      "amount":2309.95
          |   },

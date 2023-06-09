@@ -17,12 +17,13 @@
 package v1.models.response.retrieveReliefInvestments
 
 import api.hateoas.{HateoasLinks, HateoasLinksFactory}
+import api.models.domain.Timestamp
 import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
 
 case class RetrieveReliefInvestmentsResponse(
-    submittedOn: String,
+    submittedOn: Timestamp,
     vctSubscription: Option[Seq[VctSubscriptionsItem]],
     eisSubscription: Option[Seq[EisSubscriptionsItem]],
     communityInvestment: Option[Seq[CommunityInvestmentItem]],
