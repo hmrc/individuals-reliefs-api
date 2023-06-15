@@ -232,3 +232,11 @@ object InvalidBodyTypeError
       message = "Expecting text/json or application/json body",
       httpStatus = UNSUPPORTED_MEDIA_TYPE
     )
+
+//Stub Errors
+object RuleIncorrectGovTestScenarioError
+  extends MtdError(
+    code = "RULE_INCORRECT_GOV_TEST_SCENARIO",
+    message = "The Gov-Test-Scenario was not found",
+    httpStatus = BAD_REQUEST
+  )
