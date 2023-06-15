@@ -82,6 +82,8 @@ responses:
             $ref: "./common/errors.yaml#/components/examples/formatCountryCode"
           RULE_COUNTRY_CODE:
             $ref: "./common/errors.yaml#/components/examples/ruleCountryCode"
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 
   "403":
     description: Forbidden
