@@ -21,7 +21,7 @@ description: |
                <td><p>Simulates the scenario where no data is found.</p></td>
           </tr>
           <tr>
-              <td><p>STATEFUL</p></td>
+              <td><p>STATEFUL_DELETE</p></td>
               <td><p>Performs a stateful delete.</p></td>
           </tr>
       </tbody>
