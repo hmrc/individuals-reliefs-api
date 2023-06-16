@@ -17,12 +17,13 @@
 package v1.models.response.retrieveOtherReliefs
 
 import api.hateoas.{HateoasLinks, HateoasLinksFactory}
+import api.models.domain.Timestamp
 import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
 
 case class RetrieveOtherReliefsResponse(
-    submittedOn: String,
+    submittedOn: Timestamp,
     nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
     payrollGiving: Option[PayrollGiving],
     qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],

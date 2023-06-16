@@ -35,7 +35,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
     val responseBody: JsValue = Json.parse(
       s"""
          |{
-         |    "submittedOn": "2020-06-17T10:53:38Z",
+         |    "submittedOn": "2020-06-17T10:53:38.000Z",
          |    "nonDeductibleLoanInterest": {
          |        "customerReference": "INPOLY123A",
          |        "reliefClaimed": 2000.99
@@ -100,7 +100,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
     val downstreamResponseBody: JsValue = Json.parse(s"""
          |{
-         |    "submittedOn": "2020-06-17T10:53:38Z",
+         |    "submittedOn": "2020-06-17T10:53:38.000Z",
          |    "nonDeductibleLoanInterest": {
          |        "customerReference": "INPOLY123A",
          |        "reliefClaimed": 2000.99

@@ -18,7 +18,7 @@ package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.hateoas.MockHateoasFactory
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.hateoas.HateoasWrapper
 import api.models.hateoas.Method.GET
@@ -48,7 +48,7 @@ class RetrievePensionsReliefsControllerSpec
   private val testHateoasLink = hateoas.Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrievePensionsReliefsResponse(
-    "2019-04-04T01:01:01Z",
+    Timestamp("2019-04-04T01:01:01.000Z"),
     PensionsReliefs(
       Some(1999.99),
       Some(1999.99),
@@ -62,7 +62,7 @@ class RetrievePensionsReliefsControllerSpec
     .parse(
       s"""
          |{
-         |   "submittedOn":"2019-04-04T01:01:01Z",
+         |   "submittedOn":"2019-04-04T01:01:01.000Z",
          |   "pensionReliefs":{
          |      "regularPensionContributions":1999.99,
          |      "oneOffPensionContributionsPaid":1999.99,

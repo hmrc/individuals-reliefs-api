@@ -7,7 +7,7 @@
     "submittedOn": {
       "description": "The date the foreign reliefs were added. It must be provided in the format YYYY-MM-DDThh:mm:ssZ",
       "type": "string",
-      "example": "2019-04-04T01:01:01Z"
+      "example": "2019-04-04T01:01:01.000Z"
     },
     "foreignTaxCreditRelief": {
       "description": "Relief on foreign tax paid to another country on overseas income.",

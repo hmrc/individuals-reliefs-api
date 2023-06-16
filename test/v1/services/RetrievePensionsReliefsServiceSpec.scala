@@ -17,7 +17,7 @@
 package v1.services
 
 import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
@@ -36,7 +36,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
   implicit val correlationId: String = "X-123"
 
   private val fullResponseModel = RetrievePensionsReliefsResponse(
-    "2019-04-04T01:01:01Z",
+    Timestamp("2019-04-04T01:01:01.000Z"),
     PensionsReliefs(
       Some(1999.99),
       Some(1999.99),

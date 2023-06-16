@@ -17,11 +17,12 @@
 package v1.models.response.retrievePensionsReliefs
 
 import api.hateoas.{HateoasLinks, HateoasLinksFactory}
+import api.models.domain.Timestamp
 import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
 
-case class RetrievePensionsReliefsResponse(submittedOn: String, pensionReliefs: PensionsReliefs)
+case class RetrievePensionsReliefsResponse(submittedOn: Timestamp, pensionReliefs: PensionsReliefs)
 
 object RetrievePensionsReliefsResponse extends HateoasLinks {
   implicit val format: OFormat[RetrievePensionsReliefsResponse] = Json.format[RetrievePensionsReliefsResponse]
