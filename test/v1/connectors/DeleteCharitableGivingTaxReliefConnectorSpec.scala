@@ -19,6 +19,7 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import play.api.Configuration
 import play.api.libs.json.JsObject
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
 
@@ -39,27 +40,47 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
           .returns(Future.successful(expectedOutcome))
 
         private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2019-20"))
-        private val result  = await(connector.delete(request))
+        private val result = await(connector.delete(request))
 
         result shouldBe expectedOutcome
       }
 
-      "given a TYS request" in new TysIfsTest with Test {
+      "given a TYS request" when {
+        "passIntentEnabled feature switch is on" in new TysIfsTest with Test {
 
-        willDelete(
-          url = s"$baseUrl/income-tax/23-24/$nino/income-source/charity/annual"
-        )
-          .returns(Future.successful(expectedOutcome))
+          willDelete(
+            url = s"$baseUrl/income-tax/23-24/$nino/income-source/charity/annual"
+          )
+            .returns(Future.successful(expectedOutcome))
 
-        private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2023-24"))
-        private val result  = await(connector.delete(request))
+          MockAppConfig.featureSwitches returns Configuration("pass-intent-header.enabled" -> true)
 
-        result shouldBe expectedOutcome
+          private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2023-24"))
+          private val result = await(connector.delete(request))
+
+          result shouldBe expectedOutcome
+        }
+        "passIntentEnabled feature switch is off" in new TysIfsTest with Test {
+
+          willDelete(
+            url = s"$baseUrl/income-tax/23-24/$nino/income-source/charity/annual"
+          )
+            .returns(Future.successful(expectedOutcome))
+
+          MockAppConfig.featureSwitches returns Configuration("pass-intent-header.enabled" -> false)
+
+          private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2023-24"))
+          private val result = await(connector.delete(request))
+
+          result shouldBe expectedOutcome
+        }
       }
+
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    _: ConnectorTest =>
 
     protected val expectedOutcome = Right(ResponseWrapper(correlationId, ()))
 

@@ -30,8 +30,11 @@ trait AppConfig {
 
   // DES config
   def desBaseUrl: String
+
   def desEnv: String
+
   def desToken: String
+
   def desEnvironmentHeaders: Option[Seq[String]]
 
   lazy val desDownstreamConfig: DownstreamConfig =
@@ -39,8 +42,11 @@ trait AppConfig {
 
   // ifs Config
   def ifsBaseUrl: String
+
   def ifsEnv: String
+
   def ifsToken: String
+
   def ifsEnvironmentHeaders: Option[Seq[String]]
 
   lazy val ifsDownstreamConfig: DownstreamConfig =
@@ -48,8 +54,11 @@ trait AppConfig {
 
   // Tax Year Specific (TYS) IFS Config
   def tysIfsBaseUrl: String
+
   def tysIfsEnv: String
+
   def tysIfsToken: String
+
   def tysIfsEnvironmentHeaders: Option[Seq[String]]
 
   lazy val taxYearSpecificIfsDownstreamConfig: DownstreamConfig =
@@ -57,9 +66,13 @@ trait AppConfig {
 
   // API Config
   def apiGatewayContext: String
+
   def apiStatus(version: String): String
+
   def featureSwitches: Configuration
+
   def endpointsEnabled(version: String): Boolean
+
   def confidenceLevelConfig: ConfidenceLevelConfig
 
 }
@@ -89,12 +102,14 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
   val tysIfsEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.tys-ifs.environmentHeaders")
 
   // API Config
-  val apiGatewayContext: String          = config.getString("api.gateway.context")
+  val apiGatewayContext: String = config.getString("api.gateway.context")
+
   def apiStatus(version: String): String = config.getString(s"api.$version.status")
 
   def featureSwitches: Configuration = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
 
-  def endpointsEnabled(version: String): Boolean   = config.getBoolean(s"api.$version.endpoints.enabled")
+  def endpointsEnabled(version: String): Boolean = config.getBoolean(s"api.$version.endpoints.enabled")
+
   val confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
 
 }

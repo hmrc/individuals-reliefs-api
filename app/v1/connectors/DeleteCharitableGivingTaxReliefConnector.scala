@@ -39,12 +39,13 @@ class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, 
 
     if (taxYear.useTaxYearSpecificApi) {
       val downstreamUri = TaxYearSpecificIfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
-      delete(downstreamUri)
-
+      val intent        = if (featureSwitches.isPassIntentEnabled) Some("DELETE") else None
+      delete(downstreamUri, intent = intent)
     } else {
       val downstreamUri = DesUri[Unit](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
       post(JsObject.empty, downstreamUri)
     }
+
   }
 
 }

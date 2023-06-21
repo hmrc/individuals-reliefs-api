@@ -84,7 +84,7 @@ trait BaseDownstreamConnector extends Logging {
     doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
   }
 
-  def delete[Resp](uri: DownstreamUri[Resp])(implicit
+  def delete[Resp](uri: DownstreamUri[Resp], intent: Option[String] = None)(implicit
       ec: ExecutionContext,
       hc: HeaderCarrier,
       httpReads: HttpReads[DownstreamOutcome[Resp]],
@@ -94,7 +94,11 @@ trait BaseDownstreamConnector extends Logging {
       http.DELETE(getBackendUri(uri))
     }
 
-    doDelete(getBackendHeaders(uri, hc, correlationId))
+    intent match {
+      case Some(x) => doDelete(getBackendHeaders(uri, hc, correlationId, ("intent", x)))
+      case _       => doDelete(getBackendHeaders(uri, hc, correlationId))
+    }
+
   }
 
   private def getBackendUri[Resp](uri: DownstreamUri[Resp]): String =
