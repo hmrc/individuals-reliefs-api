@@ -20,7 +20,6 @@ import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import config.{AppConfig, FeatureSwitches}
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.Writes
-import shapeless.syntax.std.tuple.productTupleOps
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 import utils.Logging
 
