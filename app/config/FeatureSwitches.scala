@@ -39,7 +39,7 @@ case class FeatureSwitches(featureSwitchConfig: Configuration) {
 
   val isCharitableGivingRoutingEnabled: Boolean = isEnabled("charitable-giving-endpoints.enabled")
   val isTaxYearSpecificApiEnabled: Boolean      = isEnabled("tys-api.enabled")
-  val isPassIntentEnabled: Boolean              = isEnabled("pass-intent-header.enabled")
+  val isPassIntentEnabled: Boolean              = isEnabled("individuals-reliefs-api.passes-delete-intent")
 
   private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
 }
