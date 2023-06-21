@@ -20,6 +20,7 @@ import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import config.{AppConfig, FeatureSwitches}
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.Writes
+import shapeless.syntax.std.tuple.productTupleOps
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 import utils.Logging
 
@@ -33,7 +34,7 @@ trait BaseDownstreamConnector extends Logging {
 
   implicit protected lazy val featureSwitches: FeatureSwitches = FeatureSwitches(appConfig.featureSwitches)
 
-  def post[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp])(implicit
+  def post[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp], intent: Option[String] = None)(implicit
       ec: ExecutionContext,
       hc: HeaderCarrier,
       httpReads: HttpReads[DownstreamOutcome[Resp]],
@@ -43,7 +44,11 @@ trait BaseDownstreamConnector extends Logging {
       http.POST(getBackendUri(uri), body)
     }
 
-    doPost(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
+    intent match {
+      case Some(x) => doPost(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader, ("intent", x)))
+      case _       => doPost(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
+    }
+
   }
 
   def get[Resp](uri: DownstreamUri[Resp])(implicit
