@@ -53,7 +53,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
           )
             .returns(Future.successful(expectedOutcome))
 
-          MockAppConfig.featureSwitches returns Configuration("individuals-reliefs-api.passes-delete-intent" -> true)
+          MockAppConfig.featureSwitches returns Configuration("passDeleteIntentHeader.enabled" -> true)
 
           private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2023-24"))
           private val result  = await(connector.delete(request))
@@ -67,7 +67,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
           )
             .returns(Future.successful(expectedOutcome))
 
-          MockAppConfig.featureSwitches returns Configuration("individuals-reliefs-api.passes-delete-intent" -> false)
+          MockAppConfig.featureSwitches returns Configuration("passDeleteIntentHeader.enabled" -> false)
 
           private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2023-24"))
           private val result  = await(connector.delete(request))
