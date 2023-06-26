@@ -1,9 +1,11 @@
 description: |
-  This endpoint enables you to create and amend relief investments from: VCT subscriptions, EIS subscriptions, Community Investments, Seed Enterprise Investments and Social Enterprise Investments. A National Insurance number and tax year must be provided. 
-  
+  This endpoint enables you to create and amend relief investments from: VCT subscriptions, EIS subscriptions, 
+  Community Investments, Seed Enterprise Investments and Social Enterprise Investments. A National Insurance number and 
+  tax year must be provided.
+
   > <span style="color:red"> **Warning:**
   > Social Enterprise Investments must not be created for tax years 2023-24 onwards.</span>
-  
+
   ### Test data
   <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
   <table>
@@ -16,7 +18,11 @@ description: |
       <tbody>
           <tr>
               <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulate a success response.</p></td>
+              <td><p>Simulates a success response.</p></td>
+          </tr>
+          <tr>
+              <td><p>STATEFUL</p></td>
+              <td><p>Performs a stateful create or update.</p></td>
           </tr>
       </tbody>
   </table>
