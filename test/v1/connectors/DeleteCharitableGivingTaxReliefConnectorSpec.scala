@@ -31,7 +31,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
   "delete()" should {
     "return a success response" when {
       "given a non-TYS request" when {
-        "isPassIntentEnabled feature switch is on" in new DesTest with Test {
+        "isPassDeleteIntentEnabled feature switch is on" in new DesTest with Test {
           override lazy val requiredHeaders: scala.Seq[(String, String)] = requiredDesHeaders :+ ("intent" -> "DELETE")
 
           willPost(
@@ -43,12 +43,12 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
           MockFeatureSwitches.isPassDeleteIntentEnabled returns true
 
           private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2019-20"))
-          private val result = await(connector.delete(request))
+          private val result  = await(connector.delete(request))
 
           result shouldBe expectedOutcome
         }
 
-        "isPassIntentEnabled feature switch is off" in new DesTest with Test {
+        "isPassDeleteIntentEnabled feature switch is off" in new DesTest with Test {
           override lazy val excludedHeaders: scala.Seq[(String, String)] = super.excludedHeaders :+ ("intent" -> "DELETE")
 
           willPost(
@@ -60,14 +60,14 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
           MockFeatureSwitches.isPassDeleteIntentEnabled returns false
 
           private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2019-20"))
-          private val result = await(connector.delete(request))
+          private val result  = await(connector.delete(request))
 
           result shouldBe expectedOutcome
         }
       }
 
       "given a TYS request" when {
-        "isPassIntentEnabled feature switch is on" in new TysIfsTest with Test {
+        "isPassDeleteIntentEnabled feature switch is on" in new TysIfsTest with Test {
           override lazy val requiredHeaders: scala.Seq[(String, String)] = requiredTysIfsHeaders :+ ("intent" -> "DELETE")
 
           willDelete(
@@ -83,7 +83,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
           result shouldBe expectedOutcome
         }
 
-        "isPassIntentEnabled feature switch is off" in new TysIfsTest with Test {
+        "isPassDeleteIntentEnabled feature switch is off" in new TysIfsTest with Test {
           override lazy val excludedHeaders: scala.Seq[(String, String)] = super.excludedHeaders :+ ("intent" -> "DELETE")
 
           willDelete(
@@ -91,7 +91,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
           )
             .returns(Future.successful(expectedOutcome))
 
-          MockFeatureSwitches.isPassDeleteIntentEnabled  returns false
+          MockFeatureSwitches.isPassDeleteIntentEnabled returns false
 
           private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2023-24"))
           private val result  = await(connector.delete(request))
