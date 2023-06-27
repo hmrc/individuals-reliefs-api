@@ -26,7 +26,7 @@ trait MockFeatureSwitches extends MockFactory {
   object MockFeatureSwitches {
     def isTaxYearSpecificApiEnabled: CallHandler[Boolean] = (() => mockFeatureSwitches.isTaxYearSpecificApiEnabled).expects()
 
-    def isPassDeleteIntentEnabled: CallHandler[Boolean] = (() => mockFeatureSwitches.isPassIntentEnabled).expects()
+    def isPassDeleteIntentEnabled: CallHandler[Boolean] = (() => mockFeatureSwitches.isPassDeleteIntentEnabled).expects()
 
   }
 
