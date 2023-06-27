@@ -1,5 +1,6 @@
 description: |
-  This endpoint enables you to delete reliefs that have been previously submitted. A National Insurance number and tax year must be provided.
+  This endpoint enables you to delete reliefs that have been previously submitted. A National Insurance number and tax 
+  year must be provided.
 
   ### Test data
   <p>Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
@@ -13,12 +14,16 @@ description: |
       <tbody>
           <tr>
               <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulate a success response.</p></td>
+              <td><p>Simulates a success response.</p></td>
           </tr>
           <tr>
               <td><p>NOT_FOUND</p></td>
               <td><p>Simulates the scenario where no data is found.</p></td>
-           </tr>
+          </tr>
+          <tr>
+              <td><p>STATEFUL</p></td>
+              <td><p>Performs a stateful delete.</p></td>
+          </tr>
       </tbody>
   </table>
 tags:
@@ -58,6 +63,8 @@ responses:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearNotSupported"
           RULE_TAX_YEAR_RANGE_INVALID:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid"
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 
   "403":
     description: Forbidden

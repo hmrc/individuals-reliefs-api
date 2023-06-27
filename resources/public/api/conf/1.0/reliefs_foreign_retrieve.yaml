@@ -19,6 +19,10 @@ description: |
                <td><p>NOT_FOUND</p></td>
                <td><p>Simulates the scenario where no data is found.</p></td>
           </tr>
+          <tr>
+              <td><p>STATEFUL</p></td>
+              <td><p>Performs a stateful retrieve.</p></td>
+          </tr>
       </tbody>
   </table>
 tags:
@@ -66,6 +70,8 @@ responses:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearNotSupported"
           RULE_TAX_YEAR_RANGE_INVALID:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid"
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 
   "403":
     description: Forbidden
