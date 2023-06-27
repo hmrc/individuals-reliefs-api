@@ -17,9 +17,8 @@
 package api.connectors
 
 import api.mocks.MockHttpClient
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockFeatureSwitches}
 import org.scalamock.handlers.CallHandler
-import play.api.Configuration
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -97,12 +96,14 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     "X-Session-Id"
   )
 
-  protected trait ConnectorTest extends MockHttpClient with MockAppConfig {
+  protected trait ConnectorTest extends MockHttpClient with MockAppConfig with MockFeatureSwitches {
     protected val baseUrl: String = "http://test-BaseUrl"
 
     implicit protected val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders)
 
     protected val requiredHeaders: Seq[(String, String)]
+
+    protected def excludedHeaders: Seq[(String, String)] = Seq("AnotherHeader" -> "HeaderValue")
 
     protected def willGet[T](url: String): CallHandler[Future[T]] = {
       MockedHttpClient
@@ -110,7 +111,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           url = url,
           config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          excludedHeaders = excludedHeaders
         )
     }
 
@@ -121,7 +122,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           config = dummyHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredHeaders ++ Seq("Content-Type" -> "application/json"),
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          excludedHeaders = excludedHeaders
         )
     }
 
@@ -132,7 +133,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           config = dummyHeaderCarrierConfig,
           body = body,
           requiredHeaders = requiredHeaders ++ Seq("Content-Type" -> "application/json"),
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          excludedHeaders = excludedHeaders
         )
     }
 
@@ -142,7 +143,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           url = url,
           config = dummyHeaderCarrierConfig,
           requiredHeaders = requiredHeaders,
-          excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
+          excludedHeaders = excludedHeaders
         )
     }
 
@@ -157,8 +158,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockAppConfig.desEnvironment returns "des-environment"
     MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
 
-    MockAppConfig.featureSwitches returns Configuration("tys-api.enabled" -> false)
-
+    MockFeatureSwitches.isTaxYearSpecificApiEnabled returns false
   }
 
   protected trait IfsTest extends ConnectorTest {
@@ -170,7 +170,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockAppConfig.ifsEnvironment returns "ifs-environment"
     MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
 
-    MockAppConfig.featureSwitches returns Configuration("tys-api.enabled" -> false)
+    MockFeatureSwitches.isTaxYearSpecificApiEnabled returns false
   }
 
   protected trait TysIfsTest extends ConnectorTest {
@@ -182,7 +182,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockAppConfig.tysIfsEnvironment returns "TYS-IFS-environment"
     MockAppConfig.tysIfsEnvironmentHeaders returns Some(allowedTysIfsHeaders)
 
-    MockAppConfig.featureSwitches returns Configuration("tys-api.enabled" -> true)
+    MockFeatureSwitches.isTaxYearSpecificApiEnabled returns true
   }
 
 }

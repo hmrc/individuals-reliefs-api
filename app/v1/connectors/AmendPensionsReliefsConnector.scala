@@ -18,7 +18,7 @@ package v1.connectors
 
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
-import config.AppConfig
+import config.{AppConfig, FeatureSwitches}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequest
@@ -27,7 +27,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendPensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendPensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit val featureSwitches: FeatureSwitches)
+    extends BaseDownstreamConnector {
 
   def createOrAmendPensionsRelief(request: AmendPensionsReliefsRequest)(implicit
       hc: HeaderCarrier,

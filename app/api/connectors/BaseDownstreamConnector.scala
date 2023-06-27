@@ -28,10 +28,9 @@ import scala.concurrent.{ExecutionContext, Future}
 trait BaseDownstreamConnector extends Logging {
   val http: HttpClient
   val appConfig: AppConfig
+  val featureSwitches: FeatureSwitches
 
   private val jsonContentTypeHeader = HeaderNames.CONTENT_TYPE -> MimeTypes.JSON
-
-  implicit protected lazy val featureSwitches: FeatureSwitches = FeatureSwitches(appConfig.featureSwitches)
 
   def post[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp], intent: Option[String] = None)(implicit
       ec: ExecutionContext,

@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import config.AppConfig
+import config.{AppConfig, FeatureSwitches}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
@@ -28,7 +28,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit val featureSwitches: FeatureSwitches)
+    extends BaseDownstreamConnector {
 
   def retrieve(request: RetrievePensionsReliefsRequest)(implicit
       hc: HeaderCarrier,
