@@ -18,7 +18,7 @@ package v1.connectors
 
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
-import config.AppConfig
+import config.{AppConfig, FeatureSwitches}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
@@ -28,7 +28,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
+    extends BaseDownstreamConnector {
 
   def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
       hc: HeaderCarrier,
@@ -37,14 +38,16 @@ class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, 
 
     import request._
 
+    val intent = if (featureSwitches.isPassDeleteIntentEnabled) Some("DELETE") else None
+
     if (taxYear.useTaxYearSpecificApi) {
       val downstreamUri = TaxYearSpecificIfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
-      delete(downstreamUri)
-
+      delete(downstreamUri, intent)
     } else {
       val downstreamUri = DesUri[Unit](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
-      post(JsObject.empty, downstreamUri)
+      post(JsObject.empty, downstreamUri, intent)
     }
+
   }
 
 }

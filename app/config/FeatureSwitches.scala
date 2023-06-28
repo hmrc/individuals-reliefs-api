@@ -16,9 +16,26 @@
 
 package config
 
+import com.google.inject.ImplementedBy
 import play.api.Configuration
 
-case class FeatureSwitches(featureSwitchConfig: Configuration) {
+import javax.inject.{Inject, Singleton}
+
+@ImplementedBy(classOf[FeatureSwitchesImpl])
+trait FeatureSwitches {
+
+  def isVersionEnabled(version: String): Boolean
+
+  def isCharitableGivingRoutingEnabled: Boolean
+  def isTaxYearSpecificApiEnabled: Boolean
+  def isPassDeleteIntentEnabled: Boolean
+}
+
+@Singleton
+class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwitches {
+
+  @Inject
+  def this(appConfig: AppConfig) = this(appConfig.featureSwitches)
 
   private val versionRegex = """(\d)\.\d""".r
 
@@ -39,6 +56,11 @@ case class FeatureSwitches(featureSwitchConfig: Configuration) {
 
   val isCharitableGivingRoutingEnabled: Boolean = isEnabled("charitable-giving-endpoints.enabled")
   val isTaxYearSpecificApiEnabled: Boolean      = isEnabled("tys-api.enabled")
+  val isPassDeleteIntentEnabled: Boolean        = isEnabled("passDeleteIntentHeader.enabled")
 
   private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
+}
+
+object FeatureSwitches {
+  def apply(configuration: Configuration): FeatureSwitches = new FeatureSwitchesImpl(configuration)
 }
