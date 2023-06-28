@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit val featureSwitches: FeatureSwitches)
+class DeleteOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
     extends BaseDownstreamConnector {
 
   def delete(request: DeleteOtherReliefsRequest)(implicit

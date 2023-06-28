@@ -28,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit val featureSwitches: FeatureSwitches)
+class RetrieveOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
     extends BaseDownstreamConnector {
 
   def retrieve(request: RetrieveOtherReliefsRequest)(implicit

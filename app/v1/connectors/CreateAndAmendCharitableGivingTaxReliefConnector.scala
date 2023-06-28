@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit
-    val featureSwitches: FeatureSwitches)
+    featureSwitches: FeatureSwitches)
     extends BaseDownstreamConnector {
 
   def createAmend(request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit

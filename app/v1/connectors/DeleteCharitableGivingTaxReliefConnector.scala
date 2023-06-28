@@ -28,8 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit
-    val featureSwitches: FeatureSwitches)
+class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
     extends BaseDownstreamConnector {
 
   def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
@@ -43,10 +42,10 @@ class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, 
 
     if (taxYear.useTaxYearSpecificApi) {
       val downstreamUri = TaxYearSpecificIfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
-      delete(downstreamUri, intent = intent)
+      delete(downstreamUri, intent)
     } else {
       val downstreamUri = DesUri[Unit](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
-      post(JsObject.empty, downstreamUri, intent = intent)
+      post(JsObject.empty, downstreamUri, intent)
     }
 
   }

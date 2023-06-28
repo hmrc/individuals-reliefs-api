@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendPensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit val featureSwitches: FeatureSwitches)
+class AmendPensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
     extends BaseDownstreamConnector {
 
   def createOrAmendPensionsRelief(request: AmendPensionsReliefsRequest)(implicit

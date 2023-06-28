@@ -17,7 +17,7 @@
 package api.connectors
 
 import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
-import config.{AppConfig, FeatureSwitches}
+import config.AppConfig
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
@@ -28,7 +28,6 @@ import scala.concurrent.{ExecutionContext, Future}
 trait BaseDownstreamConnector extends Logging {
   val http: HttpClient
   val appConfig: AppConfig
-  val featureSwitches: FeatureSwitches
 
   private val jsonContentTypeHeader = HeaderNames.CONTENT_TYPE -> MimeTypes.JSON
 
