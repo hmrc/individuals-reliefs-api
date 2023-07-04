@@ -17,7 +17,7 @@
 package api.connectors
 
 import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
-import config.{AppConfig, FeatureSwitches}
+import config.AppConfig
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
@@ -31,9 +31,7 @@ trait BaseDownstreamConnector extends Logging {
 
   private val jsonContentTypeHeader = HeaderNames.CONTENT_TYPE -> MimeTypes.JSON
 
-  implicit protected lazy val featureSwitches: FeatureSwitches = FeatureSwitches(appConfig.featureSwitches)
-
-  def post[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp])(implicit
+  def post[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp], intent: Option[String] = None)(implicit
       ec: ExecutionContext,
       hc: HeaderCarrier,
       httpReads: HttpReads[DownstreamOutcome[Resp]],
@@ -43,7 +41,11 @@ trait BaseDownstreamConnector extends Logging {
       http.POST(getBackendUri(uri), body)
     }
 
-    doPost(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
+    intent match {
+      case Some(x) => doPost(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader, ("intent", x)))
+      case _       => doPost(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
+    }
+
   }
 
   def get[Resp](uri: DownstreamUri[Resp])(implicit
@@ -84,7 +86,7 @@ trait BaseDownstreamConnector extends Logging {
     doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
   }
 
-  def delete[Resp](uri: DownstreamUri[Resp])(implicit
+  def delete[Resp](uri: DownstreamUri[Resp], intent: Option[String] = None)(implicit
       ec: ExecutionContext,
       hc: HeaderCarrier,
       httpReads: HttpReads[DownstreamOutcome[Resp]],
@@ -94,7 +96,11 @@ trait BaseDownstreamConnector extends Logging {
       http.DELETE(getBackendUri(uri))
     }
 
-    doDelete(getBackendHeaders(uri, hc, correlationId))
+    intent match {
+      case Some(x) => doDelete(getBackendHeaders(uri, hc, correlationId, ("intent", x)))
+      case _       => doDelete(getBackendHeaders(uri, hc, correlationId))
+    }
+
   }
 
   private def getBackendUri[Resp](uri: DownstreamUri[Resp]): String =
