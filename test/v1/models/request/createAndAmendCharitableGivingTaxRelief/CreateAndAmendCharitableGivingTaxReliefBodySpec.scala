@@ -49,9 +49,7 @@ class CreateAndAmendCharitableGivingTaxReliefBodySpec extends UnitSpec {
       gifts = Some(giftModel)
     )
 
-
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |   "giftAidPayments":{
       |      "nonUkCharities":{
@@ -80,8 +78,7 @@ class CreateAndAmendCharitableGivingTaxReliefBodySpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse(
-    """
+  val desJson: JsValue = Json.parse("""
       |{
       |   "giftAidPayments":{
       |      "nonUkCharitiesCharityNames":[
@@ -121,4 +118,5 @@ class CreateAndAmendCharitableGivingTaxReliefBodySpec extends UnitSpec {
       }
     }
   }
+
 }

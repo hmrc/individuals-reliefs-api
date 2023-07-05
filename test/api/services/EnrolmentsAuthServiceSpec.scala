@@ -120,7 +120,6 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
     "the user is an authorised individual" should {
       "return the 'Individual' user type in the user details" in new Test {
 
-
         mockConfidenceLevelCheckConfig(authValidationEnabled = false)
         val retrievalsResult = new ~(Some(AffinityGroup.Individual), Enrolments(Set.empty))
         val expected         = Right(UserDetails("", "Individual", None))
@@ -137,7 +136,6 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
 
     "the user is an authorised organisation" should {
       "return the 'Organisation' user type in the user details" in new Test {
-
 
         mockConfidenceLevelCheckConfig(authValidationEnabled = false)
         val retrievalsResult = new ~(Some(AffinityGroup.Organisation), Enrolments(Set.empty))
@@ -169,7 +167,6 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
 
       "return an error" in new Test {
 
-
         mockConfidenceLevelCheckConfig(authValidationEnabled = false)
         val expected = Left(InternalError)
 
@@ -186,7 +183,6 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
     "the user is not logged in" should {
       "return an unauthenticated error" in new Test {
 
-
         mockConfidenceLevelCheckConfig(authValidationEnabled = false)
         val expected = Left(ClientNotAuthorisedError)
 
@@ -202,7 +198,6 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
 
     "the user is not authorised" should {
       "return an unauthorised error" in new Test {
-
 
         mockConfidenceLevelCheckConfig(authValidationEnabled = false)
         val expected = Left(ClientNotAuthorisedError)
@@ -265,6 +260,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
         )
       )
     }
+
   }
 
 }

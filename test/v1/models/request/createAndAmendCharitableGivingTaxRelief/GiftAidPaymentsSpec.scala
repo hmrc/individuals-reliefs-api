@@ -36,8 +36,7 @@ class GiftAidPaymentsSpec extends UnitSpec {
       amountTreatedAsSpecifiedTaxYear = Some(10000.89)
     )
 
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |   "nonUkCharities": {
       |      "charityNames":[
@@ -52,8 +51,7 @@ class GiftAidPaymentsSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse(
-    """
+  val desJson: JsValue = Json.parse("""
       |{
       |   "nonUkCharitiesCharityNames":[
       |      "abcdefghijklmnopqr"
@@ -81,4 +79,5 @@ class GiftAidPaymentsSpec extends UnitSpec {
       }
     }
   }
+
 }

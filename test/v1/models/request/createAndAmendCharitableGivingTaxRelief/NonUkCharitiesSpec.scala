@@ -27,8 +27,7 @@ class NonUkCharitiesSpec extends UnitSpec {
       totalAmount = 10000.89
     )
 
-  val json: JsValue = Json.parse(
-    """
+  val json: JsValue = Json.parse("""
       |{
       |   "charityNames": [
       |     "abcdefg"
@@ -52,4 +51,5 @@ class NonUkCharitiesSpec extends UnitSpec {
       }
     }
   }
+
 }

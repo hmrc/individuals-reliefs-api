@@ -67,7 +67,8 @@ trait RetrieveCharitableGivingReliefFixture {
            |  ]
            |}
         """.stripMargin
-      ).as[JsObject]
+      )
+      .as[JsObject]
 
   val charitableGivingReliefResponse: RetrieveCharitableGivingReliefResponse =
     RetrieveCharitableGivingReliefResponse(

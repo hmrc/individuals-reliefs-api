@@ -84,8 +84,7 @@ object CreateAndAmendForeignReliefsFixtures {
         |""".stripMargin
   )
 
-  def responseWithHateoasLinks(taxYear: String): JsValue = Json.parse(
-    s"""
+  def responseWithHateoasLinks(taxYear: String): JsValue = Json.parse(s"""
        |{
        |  "links": [
        |    {
