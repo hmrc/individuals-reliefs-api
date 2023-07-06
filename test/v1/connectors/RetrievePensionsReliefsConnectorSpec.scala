@@ -19,9 +19,8 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
-import v1.models.response.retrievePensionsReliefs.PensionsReliefs
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
-import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
+import v1.models.response.retrievePensionsReliefs.{PensionsReliefs, RetrievePensionsReliefsResponse}
 
 import scala.concurrent.Future
 

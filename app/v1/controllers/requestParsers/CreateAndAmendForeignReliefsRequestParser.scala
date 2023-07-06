@@ -19,11 +19,7 @@ package v1.controllers.requestParsers
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
 import v1.controllers.requestParsers.validators.CreateAndAmendForeignReliefsValidator
-import v1.models.request.createAndAmendForeignReliefs.{
-  CreateAndAmendForeignReliefsBody,
-  CreateAndAmendForeignReliefsRawData,
-  CreateAndAmendForeignReliefsRequest
-}
+import v1.models.request.createAndAmendForeignReliefs.{CreateAndAmendForeignReliefsBody, CreateAndAmendForeignReliefsRawData, CreateAndAmendForeignReliefsRequest}
 
 import javax.inject.Inject
 
