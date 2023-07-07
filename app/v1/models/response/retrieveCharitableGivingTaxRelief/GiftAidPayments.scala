@@ -16,8 +16,8 @@
 
 package v1.models.response.retrieveCharitableGivingTaxRelief
 
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class GiftAidPayments(nonUkCharities: Option[NonUkCharities],
                            totalAmount: Option[BigDecimal],

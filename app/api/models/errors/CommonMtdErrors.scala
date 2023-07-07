@@ -235,8 +235,8 @@ object InvalidBodyTypeError
 
 //Stub Errors
 object RuleIncorrectGovTestScenarioError
-  extends MtdError(
-    code = "RULE_INCORRECT_GOV_TEST_SCENARIO",
-    message = "The Gov-Test-Scenario was not found",
-    httpStatus = BAD_REQUEST
-  )
+    extends MtdError(
+      code = "RULE_INCORRECT_GOV_TEST_SCENARIO",
+      message = "The Gov-Test-Scenario was not found",
+      httpStatus = BAD_REQUEST
+    )

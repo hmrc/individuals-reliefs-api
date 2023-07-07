@@ -24,12 +24,7 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.connectors.MockRetrieveForeignReliefsConnector
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
-import v1.models.response.retrieveForeignReliefs.{
-  ForeignIncomeTaxCreditRelief,
-  ForeignTaxCreditRelief,
-  ForeignTaxForFtcrNotClaimed,
-  RetrieveForeignReliefsResponse
-}
+import v1.models.response.retrieveForeignReliefs.{ForeignIncomeTaxCreditRelief, ForeignTaxCreditRelief, ForeignTaxForFtcrNotClaimed, RetrieveForeignReliefsResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

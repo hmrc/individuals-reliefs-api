@@ -17,12 +17,7 @@
 package v1.fixtures
 
 import play.api.libs.json.{JsValue, Json}
-import v1.models.request.createAndAmendForeignReliefs.{
-  CreateAndAmendForeignReliefsBody,
-  ForeignIncomeTaxCreditRelief,
-  ForeignTaxCreditRelief,
-  ForeignTaxForFtcrNotClaimed
-}
+import v1.models.request.createAndAmendForeignReliefs.{CreateAndAmendForeignReliefsBody, ForeignIncomeTaxCreditRelief, ForeignTaxCreditRelief, ForeignTaxForFtcrNotClaimed}
 
 object CreateAndAmendForeignReliefsFixtures {
 
@@ -84,8 +79,7 @@ object CreateAndAmendForeignReliefsFixtures {
         |""".stripMargin
   )
 
-  def responseWithHateoasLinks(taxYear: String): JsValue = Json.parse(
-    s"""
+  def responseWithHateoasLinks(taxYear: String): JsValue = Json.parse(s"""
        |{
        |  "links": [
        |    {

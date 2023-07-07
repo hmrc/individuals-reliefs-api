@@ -31,11 +31,10 @@ class GiftsSpec extends UnitSpec {
     Gifts(
       nonUkCharities = Some(nonUkCharitiesModel),
       landAndBuildings = Some(231.29),
-      sharesOrSecurities = Some(10000.89),
+      sharesOrSecurities = Some(10000.89)
     )
 
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json.parse("""
       |{
       |   "nonUkCharities": {
       |      "charityNames":[
@@ -48,8 +47,7 @@ class GiftsSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse(
-    """
+  val desJson: JsValue = Json.parse("""
       |{
       |   "investmentsNonUkCharitiesCharityNames":[
       |      "abcdefghijklmnopqr"
@@ -75,4 +73,5 @@ class GiftsSpec extends UnitSpec {
       }
     }
   }
+
 }

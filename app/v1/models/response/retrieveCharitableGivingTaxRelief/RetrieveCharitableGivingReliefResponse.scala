@@ -19,7 +19,6 @@ package v1.models.response.retrieveCharitableGivingTaxRelief
 import api.hateoas.{HateoasLinks, HateoasLinksFactory}
 import api.models.hateoas.{HateoasData, Link}
 import config.AppConfig
-
 import play.api.libs.json.{Json, OFormat}
 
 case class RetrieveCharitableGivingReliefResponse(giftAidPayments: Option[GiftAidPayments], gifts: Option[Gifts])
