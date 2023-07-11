@@ -25,8 +25,6 @@ import javax.inject.{Inject, Singleton}
 trait FeatureSwitches {
 
   def isVersionEnabled(version: String): Boolean
-
-  def isCharitableGivingRoutingEnabled: Boolean
   def isPassDeleteIntentEnabled: Boolean
 }
 
@@ -53,8 +51,7 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
     enabled.getOrElse(false)
   }
 
-  val isCharitableGivingRoutingEnabled: Boolean = isEnabled("charitable-giving-endpoints.enabled")
-  val isPassDeleteIntentEnabled: Boolean        = isEnabled("passDeleteIntentHeader.enabled")
+  val isPassDeleteIntentEnabled: Boolean = isEnabled("passDeleteIntentHeader.enabled")
 
   private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
 }

@@ -36,25 +36,13 @@ trait VersionRoutingMap {
 }
 
 // Add routes corresponding to available versions...
-case class VersionRoutingMapImpl @Inject() (appConfig: AppConfig,
-                                            defaultRouter: Router,
-                                            v1Router: v1.Routes,
-                                            charitableGivingRouter: v1WithCharitableGiving.Routes)
-    extends VersionRoutingMap {
+case class VersionRoutingMapImpl @Inject() (appConfig: AppConfig, defaultRouter: Router, v1Router: v1.Routes) extends VersionRoutingMap {
 
   val featureSwitches: FeatureSwitches = FeatureSwitches(appConfig.featureSwitches)
   protected val logger: Logger         = Logger(this.getClass)
 
   val map: Map[Version, Router] = Map(
-    Version1 -> {
-      if (featureSwitches.isCharitableGivingRoutingEnabled) {
-        logger.info("[VersionRoutingMap][map] using charitableGivingRouter to include charitable giving routes")
-        charitableGivingRouter
-      } else {
-        logger.info("[VersionRoutingMap][map] using v1Router without charitable giving routes")
-        v1Router
-      }
-    }
+    Version1 -> v1Router
   )
 
 }
