@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.{AppConfig, FeatureSwitches}
+import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
@@ -28,21 +28,20 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveCharitableGivingReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
-    extends BaseDownstreamConnector {
+class RetrieveCharitableGivingReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieve(request: RetrieveCharitableGivingReliefRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveCharitableGivingReliefResponse]] = {
 
+    import request._
+
     val downstreamUri =
-      if (request.taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[RetrieveCharitableGivingReliefResponse](
-          s"income-tax/${request.taxYear.asTysDownstream}/${request.nino}/income-source/charity/annual")
+      if (taxYear.useTaxYearSpecificApi) {
+        TaxYearSpecificIfsUri[RetrieveCharitableGivingReliefResponse](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
       } else {
-        DesUri[RetrieveCharitableGivingReliefResponse](
-          s"income-tax/nino/${request.nino}/income-source/charity/annual/${request.taxYear.asDownstream}")
+        DesUri[RetrieveCharitableGivingReliefResponse](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
       }
 
     get(downstreamUri)
