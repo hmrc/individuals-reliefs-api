@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.{AppConfig, FeatureSwitches}
+import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRequest
 
@@ -27,8 +27,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
-    extends BaseDownstreamConnector {
+class DeleteOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def delete(request: DeleteOtherReliefsRequest)(implicit
       hc: HeaderCarrier,
@@ -38,9 +37,9 @@ class DeleteOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig
     import request._
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/${nino.value}")
+      TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/$nino")
     } else {
-      IfsUri[Unit](s"income-tax/reliefs/other/${nino.value}/${taxYear.asMtd}")
+      IfsUri[Unit](s"income-tax/reliefs/other/$nino/${taxYear.asMtd}")
     }
 
     delete(uri = downstreamUri)

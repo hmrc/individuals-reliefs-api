@@ -27,7 +27,6 @@ trait FeatureSwitches {
   def isVersionEnabled(version: String): Boolean
 
   def isCharitableGivingRoutingEnabled: Boolean
-  def isTaxYearSpecificApiEnabled: Boolean
   def isPassDeleteIntentEnabled: Boolean
 }
 
@@ -55,7 +54,6 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
   }
 
   val isCharitableGivingRoutingEnabled: Boolean = isEnabled("charitable-giving-endpoints.enabled")
-  val isTaxYearSpecificApiEnabled: Boolean      = isEnabled("tys-api.enabled")
   val isPassDeleteIntentEnabled: Boolean        = isEnabled("passDeleteIntentHeader.enabled")
 
   private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)

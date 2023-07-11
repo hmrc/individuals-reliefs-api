@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.{AppConfig, FeatureSwitches}
+import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
@@ -28,20 +28,21 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
-    extends BaseDownstreamConnector {
+class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieve(request: RetrievePensionsReliefsRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrievePensionsReliefsResponse]] = {
 
+    import request._
+
     val downstreamUri =
-      if (request.taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/${request.taxYear.asTysDownstream}/${request.nino}")
+      if (taxYear.useTaxYearSpecificApi) {
+        TaxYearSpecificIfsUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
       } else {
-        val downstreamTaxYearParam = request.taxYear.asMtd // Supposed to be MTD format for this downstream endpoint
-        DesUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/${request.nino}/$downstreamTaxYearParam")
+        val downstreamTaxYearParam = taxYear.asMtd // Supposed to be MTD format for this downstream endpoint
+        DesUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/$nino/$downstreamTaxYearParam")
       }
     get(downstreamUri)
   }

@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.{AppConfig, FeatureSwitches}
+import config.AppConfig
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRequest
@@ -28,9 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit
-    featureSwitches: FeatureSwitches)
-    extends BaseDownstreamConnector {
+class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def createAmend(request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit
       hc: HeaderCarrier,
@@ -39,14 +37,16 @@ class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: Http
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
 
-    val downstreamUri = if (request.taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/${request.taxYear.asTysDownstream}/${request.nino}/income-source/charity/annual")
+    import request._
+
+    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
+      TaxYearSpecificIfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
     } else {
-      DesUri[Unit](s"income-tax/nino/${request.nino}/income-source/charity/annual/${request.taxYear.asDownstream}")
+      DesUri[Unit](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
     }
 
     post(
-      body = request.body,
+      body = body,
       uri = downstreamUri
     )
   }
