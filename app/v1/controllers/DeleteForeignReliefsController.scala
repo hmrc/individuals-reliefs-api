@@ -47,10 +47,10 @@ class DeleteForeignReliefsController @Inject() (val authService: EnrolmentsAuthS
 
       val rawData = DeleteForeignReliefsRawData(nino, taxYear)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.delete)
-        .withAuditing(AuditHandler(
+        .withAuditing(AuditHandlerOld(
           auditService = auditService,
           auditType = "DeleteForeignReliefs",
           transactionName = "delete-foreign-reliefs",

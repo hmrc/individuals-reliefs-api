@@ -17,16 +17,14 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.MockIdGenerator
-import api.mocks.hateoas.MockHateoasFactory
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.hateoas.Method._
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.domain.{Nino, TaxYear}
+import api.models.errors
 import api.models.errors._
-import api.models.hateoas.HateoasWrapper
-import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
-import api.models.{errors, hateoas}
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.mocks.requestParsers.MockCreateAndAmendCharitableGivingRequestParser
@@ -65,12 +63,10 @@ class CreateAndAmendCharitableGivingControllerSpec
     )
 
   private val testHateoasLinks = Seq(
-    hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
-    hateoas.Link(
-      href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear",
-      method = PUT,
-      rel = "create-and-amend-charitable-giving-tax-relief"),
-    hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
+    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
+    api.hateoas
+      .Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = PUT, rel = "create-and-amend-charitable-giving-tax-relief"),
+    api.hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
   )
 
   private val requestJson = Json.parse(
@@ -179,11 +175,11 @@ class CreateAndAmendCharitableGivingControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
         auditType = "CreateAndAmendCharitableGivingTaxRelief",
         transactionName = "create-and-amend-charitable-giving-tax-relief",
-        detail = GenericAuditDetail(
+        detail = GenericAuditDetailOld(
           userType = "Individual",
           agentReferenceNumber = None,
           pathParams = Map("nino" -> nino, "taxYear" -> taxYear),

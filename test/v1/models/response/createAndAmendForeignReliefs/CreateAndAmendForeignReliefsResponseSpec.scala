@@ -16,8 +16,8 @@
 
 package v1.models.response.createAndAmendForeignReliefs
 
-import api.models.hateoas
-import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.hateoas.Link
+import api.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
 
@@ -31,9 +31,9 @@ class CreateAndAmendForeignReliefsResponseSpec extends UnitSpec with MockAppConf
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
       CreateAndAmendForeignReliefsResponse.LinksFactory.links(mockAppConfig, CreateAndAmendForeignReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
-          hateoas.Link(s"/my/context/foreign/$nino/$taxYear", GET, "self"),
-          hateoas.Link(s"/my/context/foreign/$nino/$taxYear", PUT, "create-and-amend-reliefs-foreign"),
-          hateoas.Link(s"/my/context/foreign/$nino/$taxYear", DELETE, "delete-reliefs-foreign")
+          Link(s"/my/context/foreign/$nino/$taxYear", GET, "self"),
+          api.hateoas.Link(s"/my/context/foreign/$nino/$taxYear", PUT, "create-and-amend-reliefs-foreign"),
+          api.hateoas.Link(s"/my/context/foreign/$nino/$taxYear", DELETE, "delete-reliefs-foreign")
         )
     }
   }

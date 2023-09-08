@@ -49,7 +49,7 @@ class RetrieveForeignReliefsController @Inject() (val authService: EnrolmentsAut
 
       val rawData = RetrieveForeignReliefsRawData(nino, taxYear)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.retrieve)
         .withHateoasResult(hateoasFactory)(RetrieveForeignReliefsHateoasData(nino, taxYear))

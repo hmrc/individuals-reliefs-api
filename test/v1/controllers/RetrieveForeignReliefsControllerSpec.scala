@@ -17,13 +17,12 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
+import api.hateoas.Method._
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.errors
 import api.models.errors._
-import api.models.hateoas.HateoasWrapper
-import api.models.hateoas.Method.GET
 import api.models.outcomes.ResponseWrapper
-import api.models.{errors, hateoas}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.mocks.requestParsers.MockRetrieveForeignReliefsRequestParser
@@ -44,7 +43,7 @@ class RetrieveForeignReliefsControllerSpec
   private val taxYear         = "2019-20"
   private val rawData         = RetrieveForeignReliefsRawData(nino, taxYear)
   private val requestData     = RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
-  private val testHateoasLink = hateoas.Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveForeignReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),

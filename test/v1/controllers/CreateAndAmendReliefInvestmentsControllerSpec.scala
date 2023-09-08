@@ -17,15 +17,14 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.hateoas.Method._
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.domain.{Nino, TaxYear}
+import api.models.errors
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.hateoas.Method.{DELETE, GET, PUT}
-import api.models.hateoas.{HateoasWrapper, Link}
 import api.models.outcomes.ResponseWrapper
-import api.models.{errors, hateoas}
+import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
@@ -50,9 +49,9 @@ class CreateAndAmendReliefInvestmentsControllerSpec
   private val taxYear = "2019-20"
 
   private val testHateoasLinks: Seq[Link] = Seq(
-    hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self"),
-    hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-investments"),
-    hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
+    api.hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self"),
+    api.hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-investments"),
+    api.hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
   )
 
   private val rawData     = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
@@ -125,11 +124,11 @@ class CreateAndAmendReliefInvestmentsControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
         auditType = "CreateAmendReliefsInvestment",
         transactionName = "create-amend-reliefs-investment",
-        detail = GenericAuditDetail(
+        detail = GenericAuditDetailOld(
           userType = "Individual",
           agentReferenceNumber = None,
           pathParams = Map("nino" -> nino, "taxYear" -> taxYear),

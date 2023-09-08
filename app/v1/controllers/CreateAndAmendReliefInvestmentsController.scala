@@ -54,10 +54,10 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
 
       val rawData = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, request.body)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.amend)
-        .withAuditing(AuditHandler(
+        .withAuditing(AuditHandlerOld(
           auditService = auditService,
           auditType = "CreateAmendReliefsInvestment",
           transactionName = "create-amend-reliefs-investment",

@@ -54,10 +54,10 @@ class AmendPensionsReliefsController @Inject() (val authService: EnrolmentsAuthS
 
       val rawData = AmendPensionsReliefsRawData(nino, taxYear, request.body)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.amend)
-        .withAuditing(AuditHandler(
+        .withAuditing(AuditHandlerOld(
           auditService = auditService,
           auditType = "CreateAmendReliefPension",
           transactionName = "create-amend-reliefs-pensions",

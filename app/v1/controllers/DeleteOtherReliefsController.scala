@@ -47,10 +47,10 @@ class DeleteOtherReliefsController @Inject() (val authService: EnrolmentsAuthSer
 
       val rawData = DeleteOtherReliefsRawData(nino, taxYear)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.delete)
-        .withAuditing(AuditHandler(
+        .withAuditing(AuditHandlerOld(
           auditService = auditService,
           auditType = "DeleteOtherReliefs",
           transactionName = "delete-other-reliefs",

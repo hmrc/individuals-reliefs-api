@@ -17,12 +17,12 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.services.MockAuditService
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
+import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.mocks.requestParsers.MockDeleteForeignReliefsRequestParser
@@ -98,11 +98,11 @@ class DeleteForeignReliefsControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
         auditType = "DeleteForeignReliefs",
         transactionName = "delete-foreign-reliefs",
-        detail = GenericAuditDetail(
+        detail = GenericAuditDetailOld(
           userType = "Individual",
           agentReferenceNumber = None,
           pathParams = Map("nino" -> nino, "taxYear" -> taxYear),

@@ -16,8 +16,8 @@
 
 package v1.models.response.amendPensionsReliefs
 
-import api.models.hateoas
-import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.hateoas.Link
+import api.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
 
@@ -31,9 +31,9 @@ class AmendPensionsReliefsResponseSpec extends UnitSpec with MockAppConfig {
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
       AmendPensionsReliefsResponse.LinksFactory.links(mockAppConfig, AmendPensionsReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
-          hateoas.Link(s"/my/context/pensions/$nino/$taxYear", GET, "self"),
-          hateoas.Link(s"/my/context/pensions/$nino/$taxYear", PUT, "create-and-amend-reliefs-pensions"),
-          hateoas.Link(s"/my/context/pensions/$nino/$taxYear", DELETE, "delete-reliefs-pensions")
+          Link(s"/my/context/pensions/$nino/$taxYear", GET, "self"),
+          api.hateoas.Link(s"/my/context/pensions/$nino/$taxYear", PUT, "create-and-amend-reliefs-pensions"),
+          api.hateoas.Link(s"/my/context/pensions/$nino/$taxYear", DELETE, "delete-reliefs-pensions")
         )
     }
   }

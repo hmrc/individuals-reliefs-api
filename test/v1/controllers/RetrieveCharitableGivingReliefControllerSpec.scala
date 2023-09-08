@@ -17,12 +17,10 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
+import api.hateoas.Method._
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas
-import api.models.hateoas.HateoasWrapper
-import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
 import play.api.mvc.Result
 import v1.mocks.requestParsers.MockRetrieveCharitableGivingReliefRequestParser
@@ -46,12 +44,9 @@ class RetrieveCharitableGivingReliefControllerSpec
   private val requestData = RetrieveCharitableGivingReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   private val hateoasLinks = Seq(
-    hateoas.Link(
-      href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear",
-      method = PUT,
-      rel = "create-and-amend-charitable-giving-tax-relief"),
-    hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
-    hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
+    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = PUT, rel = "create-and-amend-charitable-giving-tax-relief"),
+    api.hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
+    api.hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
   )
 
   private val responseModel = charitableGivingReliefResponse
