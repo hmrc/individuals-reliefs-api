@@ -54,10 +54,10 @@ class CreateAndAmendForeignReliefsController @Inject() (val authService: Enrolme
 
       val rawData = CreateAndAmendForeignReliefsRawData(nino, taxYear, request.body)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.createAndAmend)
-        .withAuditing(AuditHandler(
+        .withAuditing(AuditHandlerOld(
           auditService = auditService,
           auditType = "CreateAmendForeignReliefs",
           transactionName = "create-amend-foreign-reliefs",

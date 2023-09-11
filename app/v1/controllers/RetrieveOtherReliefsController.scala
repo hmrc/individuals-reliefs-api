@@ -16,7 +16,7 @@
 
 package v1.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandlerOld}
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -49,7 +49,7 @@ class RetrieveOtherReliefsController @Inject() (val authService: EnrolmentsAuthS
 
       val rawData = RetrieveOtherReliefsRawData(nino, taxYear)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.retrieve)
         .withHateoasResult(hateoasFactory)(RetrieveOtherReliefsHateoasData(nino, taxYear))

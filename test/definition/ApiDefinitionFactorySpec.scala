@@ -16,10 +16,9 @@
 
 package definition
 
-import api.mocks.MockHttpClient
 import config.ConfidenceLevelConfig
 import definition.APIStatus.{ALPHA, BETA}
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockHttpClient}
 import play.api.Configuration
 import routing.Version1
 import support.UnitSpec

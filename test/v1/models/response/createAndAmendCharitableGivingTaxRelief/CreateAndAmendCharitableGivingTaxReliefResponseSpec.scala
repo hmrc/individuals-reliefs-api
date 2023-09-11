@@ -16,8 +16,8 @@
 
 package v1.models.response.createAndAmendCharitableGivingTaxRelief
 
-import api.models.hateoas
-import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.hateoas.Link
+import api.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
 
@@ -33,9 +33,9 @@ class CreateAndAmendCharitableGivingTaxReliefResponseSpec extends UnitSpec with 
         mockAppConfig,
         CreateAndAmendCharitableGivingTaxReliefHateoasData(nino, taxYear)) shouldBe
         Seq(
-          hateoas.Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", GET, "self"),
-          hateoas.Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
-          hateoas.Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
+          Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", GET, "self"),
+          api.hateoas.Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
+          api.hateoas.Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
         )
     }
   }

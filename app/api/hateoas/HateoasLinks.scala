@@ -16,10 +16,8 @@
 
 package api.hateoas
 
-import api.models.hateoas
-import api.models.hateoas.Link
-import api.models.hateoas.Method.{DELETE, GET, PUT}
-import api.models.hateoas.RelType._
+import api.hateoas.Method._
+import api.hateoas.RelType._
 import config.AppConfig
 
 trait HateoasLinks {
@@ -42,48 +40,48 @@ trait HateoasLinks {
 
   // API resource links
   def retrieveReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+    api.hateoas.Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
   def createAndAmendReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_RELIEF_INVESTMENTS)
+    api.hateoas.Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_RELIEF_INVESTMENTS)
 
   def deleteReliefInvestments(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEF_INVESTMENTS)
+    api.hateoas.Link(href = reliefInvestmentsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEF_INVESTMENTS)
 
   def retrieveOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = otherReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+    api.hateoas.Link(href = otherReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
   def amendOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = otherReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_OTHER)
+    api.hateoas.Link(href = otherReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_OTHER)
 
   def deleteOtherReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = otherReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_OTHER)
+    api.hateoas.Link(href = otherReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_OTHER)
 
   def retrieveForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+    api.hateoas.Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
   def createAndAmendForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_RELIEFS_FOREIGN)
+    api.hateoas.Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_RELIEFS_FOREIGN)
 
   def deleteForeignReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_FOREIGN)
+    api.hateoas.Link(href = foreignReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_FOREIGN)
 
   def retrievePensionsReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+    api.hateoas.Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
   def amendPensionsReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_PENSIONS)
+    api.hateoas.Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_RELIEFS_PENSIONS)
 
   def deletePensionsReliefs(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_PENSIONS)
+    api.hateoas.Link(href = pensionsReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_RELIEFS_PENSIONS)
 
   def retrieveCharitableGivingTaxRelief(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = charitableGivingTaxReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+    api.hateoas.Link(href = charitableGivingTaxReliefsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
   def createAndAmendCharitableGivingTaxRelief(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = charitableGivingTaxReliefsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_CHARITABLE_GIVING_TAX_RELIEF)
+    api.hateoas.Link(href = charitableGivingTaxReliefsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AMEND_CHARITABLE_GIVING_TAX_RELIEF)
 
   def deleteCharitableGivingTaxRelief(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = charitableGivingTaxReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_CHARITABLE_GIVING_TAX_RELIEF)
+    api.hateoas.Link(href = charitableGivingTaxReliefsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_CHARITABLE_GIVING_TAX_RELIEF)
 
 }

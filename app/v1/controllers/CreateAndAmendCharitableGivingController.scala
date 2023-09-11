@@ -54,10 +54,10 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
 
       val rawData = CreateAndAmendCharitableGivingTaxReliefRawData(nino, taxYear, request.body)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.amend)
-        .withAuditing(AuditHandler(
+        .withAuditing(AuditHandlerOld(
           auditService = auditService,
           auditType = "CreateAndAmendCharitableGivingTaxRelief",
           transactionName = "create-and-amend-charitable-giving-tax-relief",

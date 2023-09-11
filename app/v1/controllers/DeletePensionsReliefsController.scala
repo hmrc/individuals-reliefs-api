@@ -47,10 +47,10 @@ class DeletePensionsReliefsController @Inject() (val authService: EnrolmentsAuth
 
       val rawData = DeletePensionsReliefsRawData(nino, taxYear)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.delete)
-        .withAuditing(AuditHandler(
+        .withAuditing(AuditHandlerOld(
           auditService = auditService,
           auditType = "DeleteReliefPension",
           transactionName = "delete-reliefs-pensions",

@@ -17,13 +17,12 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
+import api.hateoas.Method._
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.errors
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.hateoas.HateoasWrapper
-import api.models.hateoas.Method.GET
 import api.models.outcomes.ResponseWrapper
-import api.models.{errors, hateoas}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.mocks.requestParsers.MockRetrieveOtherReliefsRequestParser
@@ -45,7 +44,7 @@ class RetrieveOtherReliefsControllerSpec
   private val rawData     = RetrieveOtherReliefsRawData(nino, taxYear)
   private val requestData = RetrieveOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  private val testHateoasLink = hateoas.Link(href = s"individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveOtherReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),

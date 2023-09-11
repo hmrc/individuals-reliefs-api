@@ -49,7 +49,7 @@ class RetrieveCharitableGivingReliefController @Inject() (val authService: Enrol
 
       val rawData = RetrieveCharitableGivingReliefRawData(nino, taxYear)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.retrieve)
         .withHateoasResult(hateoasFactory)(RetrieveCharitableGivingReliefHateoasData(nino, taxYear))

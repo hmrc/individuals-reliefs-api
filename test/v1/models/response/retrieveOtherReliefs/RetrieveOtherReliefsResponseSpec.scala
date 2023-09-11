@@ -16,9 +16,9 @@
 
 package v1.models.response.retrieveOtherReliefs
 
+import api.hateoas.Link
+import api.hateoas.Method._
 import api.models.domain.Timestamp
-import api.models.hateoas
-import api.models.hateoas.Method.{DELETE, GET, PUT}
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
@@ -117,9 +117,9 @@ class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
       MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
       RetrieveOtherReliefsResponse.LinksFactory.links(mockAppConfig, RetrieveOtherReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
-          hateoas.Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
-          hateoas.Link(s"/my/context/other/$nino/$taxYear", PUT, "create-and-amend-reliefs-other"),
-          hateoas.Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
+          Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
+          api.hateoas.Link(s"/my/context/other/$nino/$taxYear", PUT, "create-and-amend-reliefs-other"),
+          api.hateoas.Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
         )
     }
   }

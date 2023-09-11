@@ -47,10 +47,10 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
 
       val rawData = DeleteCharitableGivingTaxReliefRawData(nino, taxYear)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.delete)
-        .withAuditing(AuditHandler(
+        .withAuditing(AuditHandlerOld(
           auditService = auditService,
           auditType = "DeleteCharitableGivingTaxRelief",
           transactionName = "delete-charitable-giving-tax-relief",
