@@ -20,30 +20,28 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.Method._
 import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import v1.controllers.validators.MockRetrieveReliefInvestmentsValidatorFactory
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
-import v1.mocks.requestParsers.MockRetrieveInvestmentsRequestParser
 import v1.mocks.services._
-import v1.models.request.retrieveReliefInvestments.{RetrieveReliefInvestmentsRawData, RetrieveReliefInvestmentsRequest}
+import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequestData
 import v1.models.response.retrieveReliefInvestments._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveReliefInvestmentsControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveReliefInvestmentsService
-    with MockRetrieveInvestmentsRequestParser
+    with MockRetrieveReliefInvestmentsValidatorFactory
     with MockHateoasFactory {
 
-  private val taxYear         = "2019-20"
-  private val rawData         = RetrieveReliefInvestmentsRawData(nino, taxYear)
-  private val requestData     = RetrieveReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val taxYear = "2019-20"
+  private val requestData = RetrieveReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
   private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
 
   val mtdResponseJson: JsValue = Json
@@ -111,9 +109,7 @@ class RetrieveReliefInvestmentsControllerSpec
   "handleRequest" should {
     "return Ok" when {
       "the request received is valid" in new Test {
-        MockRetrieveReliefInvestmentsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveReliefService
           .retrieve(requestData)
@@ -129,17 +125,12 @@ class RetrieveReliefInvestmentsControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrieveReliefInvestmentsRequestParser
-          .parse(rawData)
-          .returns(Left(errors.ErrorWrapper(correlationId, NinoFormatError)))
-
+        willUseValidator(returning(NinoFormatError))
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveReliefInvestmentsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveReliefService
           .retrieve(requestData)
@@ -155,7 +146,7 @@ class RetrieveReliefInvestmentsControllerSpec
     val controller = new RetrieveReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
+      validatorFactory = mockValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,

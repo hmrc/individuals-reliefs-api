@@ -48,7 +48,7 @@ class ValidatorSpec extends UnitSpec with MockFactory {
   case class TestParsedRequestBody(value1: String, value2: Boolean)
   implicit val testParsedRequestBodyReads: Reads[TestParsedRequestBody] = Json.reads[TestParsedRequestBody]
 
-  /** The main/outermost validator.
+  /** The main/outermost validatorFactory.
     */
   private class TestValidator(nino: String = "AA123456A", taxYear: String = "2023-24", jsonBody: JsValue = validBody)
       extends Validator[TestParsedRequest] {

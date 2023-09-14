@@ -18,4 +18,4 @@ package v1.models.request.retrievePensionsReliefs
 
 import api.models.domain.{Nino, TaxYear}
 
-case class RetrievePensionsReliefsRequest(nino: Nino, taxYear: TaxYear)
+case class RetrievePensionsReliefsRequestData(nino: Nino, taxYear: TaxYear)

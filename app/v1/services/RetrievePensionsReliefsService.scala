@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v1.connectors.RetrievePensionsReliefsConnector
-import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
+import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequestData
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
 
 import javax.inject.{Inject, Singleton}
@@ -30,9 +30,9 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrievePensionsReliefsService @Inject() (connector: RetrievePensionsReliefsConnector) extends BaseService {
 
-  def retrieve(request: RetrievePensionsReliefsRequest)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[RetrievePensionsReliefsResponse]] = {
+  def retrieve(request: RetrievePensionsReliefsRequestData)(implicit
+                                                            ctx: RequestContext,
+                                                            ec: ExecutionContext): Future[ServiceOutcome[RetrievePensionsReliefsResponse]] = {
 
     connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
