@@ -21,7 +21,7 @@ import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
-import v1.controllers.validators.RetrieveForeignReliefsControllerValidatorFactory
+import v1.controllers.validators.RetrieveForeignReliefsValidatorFactory
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsHateoasData
 import v1.services.RetrieveForeignReliefsService
 
@@ -31,7 +31,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class RetrieveForeignReliefsController @Inject()(val authService: EnrolmentsAuthService,
                                                  val lookupService: MtdIdLookupService,
-                                                 validatorFactory: RetrieveForeignReliefsControllerValidatorFactory,
+                                                 validatorFactory: RetrieveForeignReliefsValidatorFactory,
                                                  service: RetrieveForeignReliefsService,
                                                  hateoasFactory: HateoasFactory,
                                                  cc: ControllerComponents,

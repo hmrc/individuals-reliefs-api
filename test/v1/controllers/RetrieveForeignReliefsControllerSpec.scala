@@ -25,7 +25,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.controllers.validators.MockRetrieveForeignReliefsControllerValidatorFactory
+import v1.controllers.validators.MockRetrieveForeignReliefsValidatorFactory
 import v1.mocks.services.MockRetrieveForeignReliefsService
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
 import v1.models.response.retrieveForeignReliefs._
@@ -37,7 +37,7 @@ class RetrieveForeignReliefsControllerSpec
   extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveForeignReliefsService
-    with MockRetrieveForeignReliefsControllerValidatorFactory
+    with MockRetrieveForeignReliefsValidatorFactory
     with MockHateoasFactory {
 
   private val taxYear = "2019-20"

@@ -22,7 +22,7 @@ import api.models.utils.JsonErrorValidators
 import support.UnitSpec
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
 
-class RetrieveForeignReliefsControllerValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
+class RetrieveForeignReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
   private val validNino = "AA123456A"
@@ -32,7 +32,7 @@ class RetrieveForeignReliefsControllerValidatorFactorySpec extends UnitSpec with
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
   class Test {
-    val validatorFactory = new RetrieveForeignReliefsControllerValidatorFactory
+    val validatorFactory = new RetrieveForeignReliefsValidatorFactory
   }
 
   "running a validation" should {

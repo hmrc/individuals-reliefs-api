@@ -22,18 +22,18 @@ import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
-import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
+import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequestData
 
 import javax.inject.Singleton
 
 @Singleton
-class RetrieveForeignReliefsControllerValidatorFactory {
-  def validator(nino: String, taxYear: String): Validator[RetrieveForeignReliefsRequestData] = new Validator[RetrieveForeignReliefsRequestData] {
-    override def validate: Validated[Seq[MtdError], RetrieveForeignReliefsRequestData] = {
+class RetrieveOtherReliefsValidatorFactory {
+  def validator(nino: String, taxYear: String): Validator[RetrieveOtherReliefsRequestData] = new Validator[RetrieveOtherReliefsRequestData] {
+    override def validate: Validated[Seq[MtdError], RetrieveOtherReliefsRequestData] = {
       (
         ResolveNino(nino),
         ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
-        ).mapN(RetrieveForeignReliefsRequestData)
+        ).mapN(RetrieveOtherReliefsRequestData)
     }
   }
 

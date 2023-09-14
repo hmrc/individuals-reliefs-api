@@ -16,6 +16,6 @@
 
 package v1.models.request.retrieveOtherReliefs
 
-import api.models.request.RawData
+import api.models.domain.{Nino, TaxYear}
 
-case class RetrieveOtherReliefsRawData(nino: String, taxYear: String) extends RawData
+case class RetrieveOtherReliefsRequestData(nino: Nino, taxYear: TaxYear)

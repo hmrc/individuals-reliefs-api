@@ -22,35 +22,35 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
+import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequestData
 
-trait MockRetrieveForeignReliefsControllerValidatorFactory extends MockFactory {
+trait MockRetrieveOtherReliefsValidatorFactory extends MockFactory {
 
-  val mockValidatorFactory: RetrieveForeignReliefsControllerValidatorFactory = mock[RetrieveForeignReliefsControllerValidatorFactory]
+  val mockValidatorFactory: RetrieveOtherReliefsValidatorFactory = mock[RetrieveOtherReliefsValidatorFactory]
 
   object MockRetrieveCharitableGivingReliefValidatorFactory {
 
-    def validator(): CallHandler[Validator[RetrieveForeignReliefsRequestData]] =
+    def validator(): CallHandler[Validator[RetrieveOtherReliefsRequestData]] =
       (mockValidatorFactory.validator(_: String, _: String)).expects(*, *)
   }
 
-  def willUseValidator(use: Validator[RetrieveForeignReliefsRequestData]): CallHandler[Validator[RetrieveForeignReliefsRequestData]] = {
+  def willUseValidator(use: Validator[RetrieveOtherReliefsRequestData]): CallHandler[Validator[RetrieveOtherReliefsRequestData]] = {
     MockRetrieveCharitableGivingReliefValidatorFactory
       .validator()
       .anyNumberOfTimes()
       .returns(use)
   }
 
-  def returningSuccess(result: RetrieveForeignReliefsRequestData): Validator[RetrieveForeignReliefsRequestData] =
-    new Validator[RetrieveForeignReliefsRequestData] {
-      def validate: Validated[Seq[MtdError], RetrieveForeignReliefsRequestData] = Valid(result)
+  def returningSuccess(result: RetrieveOtherReliefsRequestData): Validator[RetrieveOtherReliefsRequestData] =
+    new Validator[RetrieveOtherReliefsRequestData] {
+      def validate: Validated[Seq[MtdError], RetrieveOtherReliefsRequestData] = Valid(result)
     }
 
-  def returning(result: MtdError*): Validator[RetrieveForeignReliefsRequestData] = returningErrors(result)
+  def returning(result: MtdError*): Validator[RetrieveOtherReliefsRequestData] = returningErrors(result)
 
-  def returningErrors(result: Seq[MtdError]): Validator[RetrieveForeignReliefsRequestData] =
-    new Validator[RetrieveForeignReliefsRequestData] {
-      def validate: Validated[Seq[MtdError], RetrieveForeignReliefsRequestData] = Invalid(result)
+  def returningErrors(result: Seq[MtdError]): Validator[RetrieveOtherReliefsRequestData] =
+    new Validator[RetrieveOtherReliefsRequestData] {
+      def validate: Validated[Seq[MtdError], RetrieveOtherReliefsRequestData] = Invalid(result)
     }
 
 }

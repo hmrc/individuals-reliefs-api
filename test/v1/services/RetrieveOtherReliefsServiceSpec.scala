@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.connectors.MockRetrieveOtherReliefsConnector
-import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
+import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequestData
 import v1.models.response.retrieveOtherReliefs._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -54,7 +54,7 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val requestData = RetrieveOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = RetrieveOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveOtherReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
