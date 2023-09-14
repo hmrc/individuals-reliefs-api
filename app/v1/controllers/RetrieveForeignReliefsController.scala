@@ -21,8 +21,7 @@ import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.RetrieveForeignReliefsRequestParser
-import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRawData
+import v1.controllers.validators.RetrieveForeignReliefsControllerValidatorFactory
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsHateoasData
 import v1.services.RetrieveForeignReliefsService
 
@@ -30,14 +29,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveForeignReliefsController @Inject() (val authService: EnrolmentsAuthService,
-                                                  val lookupService: MtdIdLookupService,
-                                                  parser: RetrieveForeignReliefsRequestParser,
-                                                  service: RetrieveForeignReliefsService,
-                                                  hateoasFactory: HateoasFactory,
-                                                  cc: ControllerComponents,
-                                                  val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
+class RetrieveForeignReliefsController @Inject()(val authService: EnrolmentsAuthService,
+                                                 val lookupService: MtdIdLookupService,
+                                                 validatorFactory: RetrieveForeignReliefsControllerValidatorFactory,
+                                                 service: RetrieveForeignReliefsService,
+                                                 hateoasFactory: HateoasFactory,
+                                                 cc: ControllerComponents,
+                                                 val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+  extends AuthorisedController(cc)
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -47,14 +46,14 @@ class RetrieveForeignReliefsController @Inject() (val authService: EnrolmentsAut
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = RetrieveForeignReliefsRawData(nino, taxYear)
+      val validate = validatorFactory.validator(nino, taxYear)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validate)
         .withService(service.retrieve)
         .withHateoasResult(hateoasFactory)(RetrieveForeignReliefsHateoasData(nino, taxYear))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

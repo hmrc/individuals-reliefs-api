@@ -25,24 +25,23 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockRetrieveForeignReliefsRequestParser
+import v1.controllers.validators.MockRetrieveForeignReliefsControllerValidatorFactory
 import v1.mocks.services.MockRetrieveForeignReliefsService
-import v1.models.request.retrieveForeignReliefs.{RetrieveForeignReliefsRawData, RetrieveForeignReliefsRequest}
+import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
 import v1.models.response.retrieveForeignReliefs._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignReliefsControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveForeignReliefsService
-    with MockRetrieveForeignReliefsRequestParser
+    with MockRetrieveForeignReliefsControllerValidatorFactory
     with MockHateoasFactory {
 
-  private val taxYear         = "2019-20"
-  private val rawData         = RetrieveForeignReliefsRawData(nino, taxYear)
-  private val requestData     = RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val taxYear = "2019-20"
+  private val requestData = RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
   private val testHateoasLink = Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveForeignReliefsResponse(
@@ -54,7 +53,7 @@ class RetrieveForeignReliefsControllerSpec
           "FRA",
           Some(1640.32),
           1204.78,
-          false
+          employmentLumpSum = false
         ))),
     Some(ForeignTaxForFtcrNotClaimed(1749.98))
   )
@@ -92,9 +91,7 @@ class RetrieveForeignReliefsControllerSpec
   "handleRequest" should {
     "return Ok" when {
       "the request received is valid" in new Test {
-        MockRetrieveForeignReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveReliefService
           .retrieve(requestData)
@@ -110,17 +107,13 @@ class RetrieveForeignReliefsControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrieveForeignReliefsRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveForeignReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveReliefService
           .retrieve(requestData)
@@ -136,7 +129,7 @@ class RetrieveForeignReliefsControllerSpec
     val controller = new RetrieveForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
+      validatorFactory = mockValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
