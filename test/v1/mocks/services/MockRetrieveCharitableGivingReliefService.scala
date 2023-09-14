@@ -21,7 +21,7 @@ import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
+import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequestData
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
 import v1.services.RetrieveCharitableGivingReliefService
 
@@ -33,11 +33,11 @@ trait MockRetrieveCharitableGivingReliefService extends MockFactory {
 
   object MockRetrieveCharitableGivingReliefService {
 
-    def retrieve(request: RetrieveCharitableGivingReliefRequest)
+    def retrieve(request: RetrieveCharitableGivingReliefRequestData)
         : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveCharitableGivingReliefResponse]]]] = {
       (
         mockRetrieveCharitableGivingReliefService
-          .retrieve(_: RetrieveCharitableGivingReliefRequest)(
+          .retrieve(_: RetrieveCharitableGivingReliefRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

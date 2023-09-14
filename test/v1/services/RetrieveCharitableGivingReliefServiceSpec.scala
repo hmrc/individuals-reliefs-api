@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v1.mocks.connectors.MockRetrieveCharitableGivingReliefConnector
-import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
+import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequestData
 import v1.models.response.retrieveCharitableGivingTaxRelief._
 
 import scala.concurrent.Future
@@ -32,7 +32,7 @@ class RetrieveCharitableGivingReliefServiceSpec extends ServiceSpec {
   private val nino    = "AA123456A"
   private val taxYear = "2017-18"
 
-  private val request = RetrieveCharitableGivingReliefRequest(
+  private val request = RetrieveCharitableGivingReliefRequestData(
     nino = Nino(nino),
     taxYear = TaxYear.fromMtd(taxYear)
   )

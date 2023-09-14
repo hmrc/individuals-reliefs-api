@@ -18,4 +18,4 @@ package v1.models.request.retrieveCharitableGivingTaxRelief
 
 import api.models.domain.{Nino, TaxYear}
 
-case class RetrieveCharitableGivingReliefRequest(nino: Nino, taxYear: TaxYear)
+case class RetrieveCharitableGivingReliefRequestData(nino: Nino, taxYear: TaxYear)
