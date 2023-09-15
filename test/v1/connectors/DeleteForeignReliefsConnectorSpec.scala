@@ -19,20 +19,20 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
+import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequestData
 
 import scala.concurrent.Future
 
 class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  private val nino = Nino("AA123456A")
 
   "DeleteForeignReliefsConnector" should {
 
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
-        val outcome          = Right(ResponseWrapper(correlationId, ()))
+        private val outcome  = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
           url = s"$baseUrl/income-tax/reliefs/foreign/$nino/2019-20"
@@ -46,7 +46,7 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
     "return the expected response for a TYS request" when {
       "a valid request is made" in new TysIfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-        val outcome          = Right(ResponseWrapper(correlationId, ()))
+        private val outcome  = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
           url = s"$baseUrl/income-tax/reliefs/foreign/23-24/$nino"
@@ -60,7 +60,7 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
   trait Test { _: ConnectorTest =>
 
     def taxYear: TaxYear
-    val request: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(nino), taxYear)
+    val request: DeleteForeignReliefsRequestData = DeleteForeignReliefsRequestData(nino, taxYear)
 
     val connector: DeleteForeignReliefsConnector = new DeleteForeignReliefsConnector(
       http = mockHttpClient,
