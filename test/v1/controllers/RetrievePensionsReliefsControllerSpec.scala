@@ -118,7 +118,7 @@ class RetrievePensionsReliefsControllerSpec
     val controller = new RetrievePensionsReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      validatorFactory = mockValidatorFactory,
+      validatorFactory = mockRetrievePensionsReliefsValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,

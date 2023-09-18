@@ -24,18 +24,18 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequestData
 
-trait MockRetrieveCharitableGivingReliefValidatorFactory extends MockFactory {
+trait MockedRetrieveCharitableGivingReliefValidatorFactory extends MockFactory {
 
-  val mockValidatorFactory: RetrieveCharitableGivingReliefValidatorFactory = mock[RetrieveCharitableGivingReliefValidatorFactory]
+  val mockRetrieveCharitableGivingReliefValidatorFactory: RetrieveCharitableGivingReliefValidatorFactory = mock[RetrieveCharitableGivingReliefValidatorFactory]
 
-  object MockRetrieveCharitableGivingReliefValidatorFactory {
+  object MockedRetrieveCharitableGivingReliefValidatorFactory {
 
     def validator(): CallHandler[Validator[RetrieveCharitableGivingReliefRequestData]] =
-      (mockValidatorFactory.validator(_: String, _: String)).expects(*, *)
+      (mockRetrieveCharitableGivingReliefValidatorFactory.validator(_: String, _: String)).expects(*, *)
   }
 
   def willUseValidator(use: Validator[RetrieveCharitableGivingReliefRequestData]): CallHandler[Validator[RetrieveCharitableGivingReliefRequestData]] = {
-    MockRetrieveCharitableGivingReliefValidatorFactory
+    MockedRetrieveCharitableGivingReliefValidatorFactory
       .validator()
       .anyNumberOfTimes()
       .returns(use)

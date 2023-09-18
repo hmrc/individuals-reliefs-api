@@ -23,7 +23,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.mvc.Result
-import v1.controllers.validators.MockRetrieveCharitableGivingReliefValidatorFactory
+import v1.controllers.validators.MockedRetrieveCharitableGivingReliefValidatorFactory
 import v1.mocks.services.MockRetrieveCharitableGivingReliefService
 import v1.models.request.retrieveCharitableGivingTaxRelief._
 import v1.models.response.retrieveCharitableGivingTaxRelief._
@@ -35,7 +35,7 @@ class RetrieveCharitableGivingReliefControllerSpec
   extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveCharitableGivingReliefService
-    with MockRetrieveCharitableGivingReliefValidatorFactory
+    with MockedRetrieveCharitableGivingReliefValidatorFactory
     with MockHateoasFactory
     with RetrieveCharitableGivingReliefFixture {
 
@@ -96,7 +96,7 @@ class RetrieveCharitableGivingReliefControllerSpec
     val controller = new RetrieveCharitableGivingReliefController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      validatorFactory = mockValidatorFactory,
+      validatorFactory = mockRetrieveCharitableGivingReliefValidatorFactory,
       service = mockRetrieveCharitableGivingReliefService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,

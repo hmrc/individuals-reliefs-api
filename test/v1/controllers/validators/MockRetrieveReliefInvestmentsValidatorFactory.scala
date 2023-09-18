@@ -26,16 +26,16 @@ import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequ
 
 trait MockRetrieveReliefInvestmentsValidatorFactory extends MockFactory {
 
-  val mockValidatorFactory: RetrieveReliefInvestmentsValidatorFactory = mock[RetrieveReliefInvestmentsValidatorFactory]
+  val mockRetrieveReliefInvestmentsValidatorFactory: RetrieveReliefInvestmentsValidatorFactory = mock[RetrieveReliefInvestmentsValidatorFactory]
 
-  object MockRetrieveCharitableGivingReliefValidatorFactory {
+  object MockedRetrieveCharitableGivingReliefValidatorFactory {
 
     def validator(): CallHandler[Validator[RetrieveReliefInvestmentsRequestData]] =
-      (mockValidatorFactory.validator(_: String, _: String)).expects(*, *)
+      (mockRetrieveReliefInvestmentsValidatorFactory.validator(_: String, _: String)).expects(*, *)
   }
 
   def willUseValidator(use: Validator[RetrieveReliefInvestmentsRequestData]): CallHandler[Validator[RetrieveReliefInvestmentsRequestData]] = {
-    MockRetrieveCharitableGivingReliefValidatorFactory
+    MockedRetrieveCharitableGivingReliefValidatorFactory
       .validator()
       .anyNumberOfTimes()
       .returns(use)

@@ -45,7 +45,7 @@ class RequestParserSpec extends UnitSpec {
 
   "parse" should {
     "return a Request" when {
-      "the validatorFactory returns no errors" in new Test {
+      "the validator returns no errors" in new Test {
         lazy val validator: Validator[Raw] = (_: Raw) => Nil
 
         parser.parseRequest(Raw(nino)) shouldBe Right(Request(Nino(nino)))
@@ -53,7 +53,7 @@ class RequestParserSpec extends UnitSpec {
     }
 
     "return a single error" when {
-      "the validatorFactory returns a single error" in new Test {
+      "the validator returns a single error" in new Test {
         lazy val validator: Validator[Raw] = (_: Raw) => List(NinoFormatError)
 
         parser.parseRequest(Raw(nino)) shouldBe Left(ErrorWrapper(correlationId, NinoFormatError, None))
@@ -61,7 +61,7 @@ class RequestParserSpec extends UnitSpec {
     }
 
     "return multiple errors" when {
-      "the validatorFactory returns multiple errors" in new Test {
+      "the validator returns multiple errors" in new Test {
         lazy val validator: Validator[Raw] = (_: Raw) => List(NinoFormatError, RuleIncorrectOrEmptyBodyError)
 
         parser.parseRequest(Raw(nino)) shouldBe Left(

@@ -129,7 +129,7 @@ class RetrieveForeignReliefsControllerSpec
     val controller = new RetrieveForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      validatorFactory = mockValidatorFactory,
+      validatorFactory = mockRetrieveForeignReliefsValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,

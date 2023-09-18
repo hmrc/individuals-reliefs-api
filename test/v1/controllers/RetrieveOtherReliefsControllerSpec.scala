@@ -163,7 +163,7 @@ class RetrieveOtherReliefsControllerSpec
     val controller = new RetrieveOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      validatorFactory = mockValidatorFactory,
+      validatorFactory = mockRetrieveOtherReliefsValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,

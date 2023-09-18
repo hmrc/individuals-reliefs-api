@@ -146,7 +146,7 @@ class RetrieveReliefInvestmentsControllerSpec
     val controller = new RetrieveReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      validatorFactory = mockValidatorFactory,
+      validatorFactory = mockRetrieveReliefInvestmentsValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,

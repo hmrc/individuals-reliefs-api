@@ -26,16 +26,16 @@ import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequestData
 
 trait MockRetrieveOtherReliefsValidatorFactory extends MockFactory {
 
-  val mockValidatorFactory: RetrieveOtherReliefsValidatorFactory = mock[RetrieveOtherReliefsValidatorFactory]
+  val mockRetrieveOtherReliefsValidatorFactory: RetrieveOtherReliefsValidatorFactory = mock[RetrieveOtherReliefsValidatorFactory]
 
-  object MockRetrieveCharitableGivingReliefValidatorFactory {
+  object MockedRetrieveCharitableGivingReliefValidatorFactory {
 
     def validator(): CallHandler[Validator[RetrieveOtherReliefsRequestData]] =
-      (mockValidatorFactory.validator(_: String, _: String)).expects(*, *)
+      (mockRetrieveOtherReliefsValidatorFactory.validator(_: String, _: String)).expects(*, *)
   }
 
   def willUseValidator(use: Validator[RetrieveOtherReliefsRequestData]): CallHandler[Validator[RetrieveOtherReliefsRequestData]] = {
-    MockRetrieveCharitableGivingReliefValidatorFactory
+    MockedRetrieveCharitableGivingReliefValidatorFactory
       .validator()
       .anyNumberOfTimes()
       .returns(use)

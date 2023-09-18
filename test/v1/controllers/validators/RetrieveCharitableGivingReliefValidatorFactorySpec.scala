@@ -31,44 +31,44 @@ class RetrieveCharitableGivingReliefValidatorFactorySpec extends UnitSpec with J
   private val parsedNino = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  class Test {
-    val validatorFactory = new RetrieveCharitableGivingReliefValidatorFactory
-  }
+  val validatorFactory = new RetrieveCharitableGivingReliefValidatorFactory
+
+  private def validator(nino: String, taxYear: String) = validatorFactory.validator(nino, taxYear)
 
   "running a validation" should {
     "return no errors" when {
-      "a valid request is supplied" in new Test {
-        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validatorFactory.validator(validNino, validTaxYear).validateAndWrapResult()
+      "a valid request is supplied" in {
+        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validator(validNino, validTaxYear).validateAndWrapResult()
         result shouldBe Right(RetrieveCharitableGivingReliefRequestData(parsedNino, parsedTaxYear))
       }
     }
     "return NinoFormatError" when {
-      "an invalid nino is supplied" in new Test {
-        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validatorFactory.validator("A12344A", validTaxYear).validateAndWrapResult()
+      "an invalid nino is supplied" in {
+        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validator("A12344A", validTaxYear).validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
     }
     "return TaxYearFormatError" when {
-      "an invalid tax year is supplied" in new Test {
-        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validatorFactory.validator(validNino, "201831").validateAndWrapResult()
+      "an invalid tax year is supplied" in {
+        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validator(validNino, "201831").validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
     }
     "return RuleTaxYearRangeInvalidError" when {
-      "the tax year range exceeds 1" in new Test {
-        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validatorFactory.validator(validNino, "2019-21").validateAndWrapResult()
+      "the tax year range exceeds 1" in {
+        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validator(validNino, "2019-21").validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
     }
     "return RULE_TAX_YEAR_NOT_SUPPORTED error" when {
-      "a tax year before the earliest allowed date is supplied" in new Test {
-        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validatorFactory.validator(validNino, "2016-17").validateAndWrapResult()
+      "a tax year before the earliest allowed date is supplied" in {
+        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validator(validNino, "2016-17").validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
     }
     "return multiple errors" when {
-      "request supplied has multiple errors" in new Test {
-        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validatorFactory.validator("A12344A", "20178").validateAndWrapResult()
+      "request supplied has multiple errors" in {
+        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefRequestData] = validator("A12344A", "20178").validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
       }
     }
