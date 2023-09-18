@@ -20,7 +20,7 @@ import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.JsObject
-import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
+import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequestData
 
 import scala.concurrent.Future
 
@@ -42,7 +42,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
 
           MockFeatureSwitches.isPassDeleteIntentEnabled returns true
 
-          private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2019-20"))
+          private val request = DeleteCharitableGivingTaxReliefRequestData(Nino(nino), TaxYear.fromMtd("2019-20"))
           private val result  = await(connector.delete(request))
 
           result shouldBe expectedOutcome
@@ -59,7 +59,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
 
           MockFeatureSwitches.isPassDeleteIntentEnabled returns false
 
-          private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2019-20"))
+          private val request = DeleteCharitableGivingTaxReliefRequestData(Nino(nino), TaxYear.fromMtd("2019-20"))
           private val result  = await(connector.delete(request))
 
           result shouldBe expectedOutcome
@@ -77,7 +77,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
 
           MockFeatureSwitches.isPassDeleteIntentEnabled returns true
 
-          private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2023-24"))
+          private val request = DeleteCharitableGivingTaxReliefRequestData(Nino(nino), TaxYear.fromMtd("2023-24"))
           private val result  = await(connector.delete(request))
 
           result shouldBe expectedOutcome
@@ -93,7 +93,7 @@ class DeleteCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec {
 
           MockFeatureSwitches.isPassDeleteIntentEnabled returns false
 
-          private val request = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd("2023-24"))
+          private val request = DeleteCharitableGivingTaxReliefRequestData(Nino(nino), TaxYear.fromMtd("2023-24"))
           private val result  = await(connector.delete(request))
 
           result shouldBe expectedOutcome

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteReliefInvestments
+package v1.models.request.deleteOtherReliefs
 
 import api.models.domain.{Nino, TaxYear}
 
-case class DeleteReliefInvestmentsRequest(nino: Nino, taxYear: TaxYear)
+case class DeleteOtherReliefsRequestData(nino: Nino, taxYear: TaxYear)

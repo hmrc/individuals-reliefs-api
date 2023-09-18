@@ -20,36 +20,35 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors
 import api.models.errors.{BadRequestError, NinoFormatError, TaxYearFormatError}
 import support.UnitSpec
-import v1.mocks.validators.MockDeleteOtherReliefsValidator
-import v1.models.request.deleteOtherReliefs.{DeleteOtherReliefsRawData, DeleteOtherReliefsRequest}
+import v1.mocks.validators.MockDeleteReliefInvestmentsValidator
+import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequestData}
 
-class DeleteOtherReliefsRequestParserSpec extends UnitSpec {
+class DeleteReliefInvestmentsRequestDataParserSpec extends UnitSpec {
   val nino: String                   = "AA123456B"
   val taxYear: String                = "2018-19"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  val inputData: DeleteOtherReliefsRawData = DeleteOtherReliefsRawData(nino, taxYear)
+  val inputData: DeleteReliefInvestmentsRawData = DeleteReliefInvestmentsRawData(nino, taxYear)
 
-  trait Test extends MockDeleteOtherReliefsValidator {
-    lazy val parser = new DeleteOtherReliefsRequestParser(mockValidator)
+  trait Test extends MockDeleteReliefInvestmentsValidator {
+    lazy val parser = new DeleteReliefInvestmentsRequestParser(mockValidator)
   }
 
   "parse" should {
 
     "return a request object" when {
-
       "valid request data is supplied" in new Test {
-        MockDeleteOtherReliefsValidator.validate(inputData).returns(Nil)
+        MockDeleteReliefInvestmentsValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(DeleteOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
+          Right(DeleteReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear)))
       }
     }
 
     "return an ErrorWrapper" when {
 
       "a single validation error occurs" in new Test {
-        MockDeleteOtherReliefsValidator
+        MockDeleteReliefInvestmentsValidator
           .validate(inputData)
           .returns(List(NinoFormatError))
 
@@ -58,7 +57,7 @@ class DeleteOtherReliefsRequestParserSpec extends UnitSpec {
       }
 
       "multiple validation errors occur" in new Test {
-        MockDeleteOtherReliefsValidator
+        MockDeleteReliefInvestmentsValidator
           .validate(inputData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 

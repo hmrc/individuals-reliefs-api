@@ -19,16 +19,16 @@ package v1.controllers.requestParsers
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
 import v1.controllers.requestParsers.validators.DeleteCharitableGivingReliefValidator
-import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequest}
+import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequestData}
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class DeleteCharitableGivingReliefRequestParser @Inject() (val validator: DeleteCharitableGivingReliefValidator)
-    extends RequestParser[DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequest] {
+    extends RequestParser[DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequestData] {
 
-  override protected def requestFor(data: DeleteCharitableGivingTaxReliefRawData): DeleteCharitableGivingTaxReliefRequest = {
-    DeleteCharitableGivingTaxReliefRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear))
+  override protected def requestFor(data: DeleteCharitableGivingTaxReliefRawData): DeleteCharitableGivingTaxReliefRequestData = {
+    DeleteCharitableGivingTaxReliefRequestData(Nino(data.nino), TaxYear.fromMtd(data.taxYear))
   }
 
 }

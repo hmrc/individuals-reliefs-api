@@ -24,7 +24,7 @@ import support.UnitSpec
 import v1.mocks.validators.MockAmendPensionsReliefsValidator
 import v1.models.request.amendPensionsReliefs._
 
-class AmendPensionsReliefsRequestParserSpec extends UnitSpec {
+class AmendPensionsReliefsRequestDataParserSpec extends UnitSpec {
   private val nino: String           = "AA123456A"
   private val taxYear: String        = "2019-20"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
@@ -58,7 +58,7 @@ class AmendPensionsReliefsRequestParserSpec extends UnitSpec {
 
         parser.parseRequest(inputData) shouldBe
           Right(
-            AmendPensionsReliefsRequest(
+            AmendPensionsReliefsRequestData(
               Nino(nino),
               TaxYear.fromMtd(taxYear),
               AmendPensionsReliefsBody(

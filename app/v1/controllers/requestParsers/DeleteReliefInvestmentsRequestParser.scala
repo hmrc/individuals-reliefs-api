@@ -19,15 +19,15 @@ package v1.controllers.requestParsers
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
 import v1.controllers.requestParsers.validators.DeleteReliefInvestmentsValidator
-import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest}
+import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequestData}
 
 import javax.inject.Inject
 
 class DeleteReliefInvestmentsRequestParser @Inject() (val validator: DeleteReliefInvestmentsValidator)
-    extends RequestParser[DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest] {
+    extends RequestParser[DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequestData] {
 
-  override protected def requestFor(data: DeleteReliefInvestmentsRawData): DeleteReliefInvestmentsRequest = {
-    DeleteReliefInvestmentsRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear))
+  override protected def requestFor(data: DeleteReliefInvestmentsRawData): DeleteReliefInvestmentsRequestData = {
+    DeleteReliefInvestmentsRequestData(Nino(data.nino), TaxYear.fromMtd(data.taxYear))
   }
 
 }

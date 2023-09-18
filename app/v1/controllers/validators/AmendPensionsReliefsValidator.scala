@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendPensionsReliefs
+package v1.controllers.validators
 
-import api.models.domain.{Nino, TaxYear}
+import api.controllers.validators.RulesValidator
+import api.models.errors.MtdError
+import cats.data.Validated
+import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequestData
 
-case class AmendPensionsReliefsRequest(nino: Nino, taxYear: TaxYear, body: AmendPensionsReliefsBody)
+object AmendPensionsReliefsValidator extends RulesValidator[AmendPensionsReliefsRequestData] {
+  def validateBusinessRules(parsed: AmendPensionsReliefsRequestData): Validated[Seq[MtdError], AmendPensionsReliefsRequestData] = {
+    ???
+  }
+}

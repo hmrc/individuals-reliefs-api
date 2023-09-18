@@ -21,7 +21,7 @@ import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
+import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequestData
 import v1.services.DeleteCharitableGivingTaxReliefService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,10 +32,10 @@ trait MockDeleteCharitableGivingReliefService extends MockFactory {
 
   object MockDeleteService {
 
-    def delete(requestData: DeleteCharitableGivingTaxReliefRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def delete(requestData: DeleteCharitableGivingTaxReliefRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (
         mockDeleteCharitableGivingReliefService
-          .delete(_: DeleteCharitableGivingTaxReliefRequest)(
+          .delete(_: DeleteCharitableGivingTaxReliefRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

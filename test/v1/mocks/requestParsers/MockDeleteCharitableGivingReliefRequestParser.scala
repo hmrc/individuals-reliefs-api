@@ -20,7 +20,7 @@ import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.DeleteCharitableGivingReliefRequestParser
-import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequest}
+import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequestData}
 
 trait MockDeleteCharitableGivingReliefRequestParser extends MockFactory {
 
@@ -28,7 +28,7 @@ trait MockDeleteCharitableGivingReliefRequestParser extends MockFactory {
 
   object MockDeleteCharitableGivingReliefRequestParser {
 
-    def parse(data: DeleteCharitableGivingTaxReliefRawData): CallHandler[Either[ErrorWrapper, DeleteCharitableGivingTaxReliefRequest]] = {
+    def parse(data: DeleteCharitableGivingTaxReliefRawData): CallHandler[Either[ErrorWrapper, DeleteCharitableGivingTaxReliefRequestData]] = {
       (mockRequestDataParser.parseRequest(_: DeleteCharitableGivingTaxReliefRawData)(_: String)).expects(data, *)
     }
 

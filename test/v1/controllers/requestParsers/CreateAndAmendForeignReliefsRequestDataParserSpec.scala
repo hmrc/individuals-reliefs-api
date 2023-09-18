@@ -25,7 +25,7 @@ import v1.fixtures.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, reques
 import v1.mocks.validators.MockCreateAndAmendForeignReliefsValidator
 import v1.models.request.createAndAmendForeignReliefs._
 
-class CreateAndAmendForeignReliefsRequestParserSpec extends UnitSpec {
+class CreateAndAmendForeignReliefsRequestDataParserSpec extends UnitSpec {
   private val nino                   = "AA123456A"
   private val taxYear                = "2021-22"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
@@ -46,7 +46,7 @@ class CreateAndAmendForeignReliefsRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockCreateAndAmendForeignReliefsValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(CreateAndAmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel))
+        parser.parseRequest(inputData) shouldBe Right(CreateAndAmendForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel))
       }
     }
 

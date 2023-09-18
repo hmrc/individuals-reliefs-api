@@ -21,7 +21,7 @@ import api.models.errors
 import api.models.errors.{BadRequestError, NinoFormatError, TaxYearFormatError}
 import support.UnitSpec
 import v1.mocks.validators.MockDeleteCharitableGivingReliefValidator
-import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequest}
+import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequestData}
 
 class DeleteCharitableGivingReliefRequestParserSpec extends UnitSpec with MockDeleteCharitableGivingReliefValidator {
   val nino: String                   = "AA123456B"
@@ -39,7 +39,7 @@ class DeleteCharitableGivingReliefRequestParserSpec extends UnitSpec with MockDe
         MockDeleteCharitableGivingReliefValidator.validate(inputData).returns(Nil)
 
         parser.parseRequest(inputData) shouldBe
-          Right(DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear)))
+          Right(DeleteCharitableGivingTaxReliefRequestData(Nino(nino), TaxYear.fromMtd(taxYear)))
       }
     }
 

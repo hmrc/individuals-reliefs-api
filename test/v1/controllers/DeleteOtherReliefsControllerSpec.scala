@@ -25,9 +25,9 @@ import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockDeleteOtherReliefsRequestParser
+import v1.mocks.requestParsers.MockDeleteOtherReliefsRequestDataParser
 import v1.mocks.services._
-import v1.models.request.deleteOtherReliefs.{DeleteOtherReliefsRawData, DeleteOtherReliefsRequest}
+import v1.models.request.deleteOtherReliefs.{DeleteOtherReliefsRawData, DeleteOtherReliefsRequestData}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -36,12 +36,12 @@ class DeleteOtherReliefsControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockDeleteOtherReliefsService
-    with MockDeleteOtherReliefsRequestParser
+    with MockDeleteOtherReliefsRequestDataParser
     with MockAuditService {
 
   private val taxYear     = "2019-20"
   private val rawData     = DeleteOtherReliefsRawData(nino, taxYear)
-  private val requestData = DeleteOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {

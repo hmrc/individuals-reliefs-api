@@ -27,7 +27,7 @@ import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.mocks.requestParsers.MockDeleteCharitableGivingReliefRequestParser
 import v1.mocks.services._
-import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequest}
+import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequestData}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +41,7 @@ class DeleteCharitableGivingControllerSpec
 
   private val taxYear     = "2019-20"
   private val rawData     = DeleteCharitableGivingTaxReliefRawData(nino, taxYear)
-  private val requestData = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = DeleteCharitableGivingTaxReliefRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteCharitableGivingTaxRelief
+package v1.models.request.amendPensionsReliefs
 
 import api.models.domain.{Nino, TaxYear}
 
-case class DeleteCharitableGivingTaxReliefRequest(nino: Nino, taxYear: TaxYear)
+case class AmendPensionsReliefsRequestData(nino: Nino, taxYear: TaxYear, body: AmendPensionsReliefsBody)

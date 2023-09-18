@@ -25,9 +25,9 @@ import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockDeleteReliefInvestmentsRequestParser
+import v1.mocks.requestParsers.MockDeleteReliefInvestmentsRequestDataParser
 import v1.mocks.services._
-import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequest}
+import v1.models.request.deleteReliefInvestments.{DeleteReliefInvestmentsRawData, DeleteReliefInvestmentsRequestData}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -36,12 +36,12 @@ class DeleteReliefInvestmentsControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockDeleteReliefInvestmentsService
-    with MockDeleteReliefInvestmentsRequestParser
+    with MockDeleteReliefInvestmentsRequestDataParser
     with MockAuditService {
 
   private val taxYear     = "2019-20"
   private val rawData     = DeleteReliefInvestmentsRawData(nino, taxYear)
-  private val requestData = DeleteReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = DeleteReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {
