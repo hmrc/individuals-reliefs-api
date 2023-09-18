@@ -60,7 +60,7 @@ class DeleteForeignReliefsValidatorFactorySpec extends UnitSpec with MockAppConf
       }
       "a tax year before the earliest allowed date is supplied" in {
         val result: Either[ErrorWrapper, DeleteForeignReliefsRequestData] =
-          validator(validNino, "2016-17").validateAndWrapResult()
+          validator(validNino, "2019-20").validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError, None))
       }
