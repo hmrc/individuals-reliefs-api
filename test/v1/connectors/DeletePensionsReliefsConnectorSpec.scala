@@ -19,13 +19,13 @@ package v1.connectors
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequest
+import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequestData
 
 import scala.concurrent.Future
 
 class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  private val nino = Nino("AA123456A")
 
   trait Test { _: ConnectorTest =>
     def taxYear: TaxYear
@@ -36,11 +36,8 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
         appConfig = mockAppConfig
       )
 
-    protected val request: DeletePensionsReliefsRequest =
-      DeletePensionsReliefsRequest(
-        nino = Nino(nino),
-        taxYear = taxYear
-      )
+    protected val request: DeletePensionsReliefsRequestData =
+      DeletePensionsReliefsRequestData(nino = nino, taxYear = taxYear)
 
   }
 
@@ -50,14 +47,14 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
         new DesTest with Test {
           def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
-          val outcome = Right(ResponseWrapper(correlationId, ()))
+          val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
           willDelete(
             url = s"$baseUrl/income-tax/reliefs/pensions/$nino/2019-20"
           )
             .returns(Future.successful(outcome))
 
-          val result: DownstreamOutcome[Unit] = await(connector.delete(request))
+          val result: DownstreamOutcome[Unit] = await(connector.deletePensionsReliefs(request))
           result shouldBe outcome
         }
     }
@@ -67,14 +64,14 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
         new TysIfsTest with Test {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-          val outcome = Right(ResponseWrapper(correlationId, ()))
+          val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
           willDelete(
             url = s"$baseUrl/income-tax/reliefs/pensions/23-24/$nino"
           )
             .returns(Future.successful(outcome))
 
-          val result: DownstreamOutcome[Unit] = await(connector.delete(request))
+          val result: DownstreamOutcome[Unit] = await(connector.deletePensionsReliefs(request))
           result shouldBe outcome
         }
     }
