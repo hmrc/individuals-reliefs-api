@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v1.connectors.CreateAndAmendForeignReliefsConnector
-import v1.models.request.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsRequestData
+import v1.models.request.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsRequest
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAndAmendForeignReliefsService @Inject() (connector: CreateAndAmendForeignReliefsConnector) extends BaseService {
 
   def createAndAmend(
-      request: CreateAndAmendForeignReliefsRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+      request: CreateAndAmendForeignReliefsRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createAndAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
