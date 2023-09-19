@@ -28,7 +28,7 @@ import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockAmendPensionsReliefsRequestDataParser
+import v1.mocks.requestParsers.MockAmendPensionsReliefsRequestParser
 import v1.mocks.services._
 import v1.models.request.amendPensionsReliefs._
 import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsHateoasData
@@ -40,7 +40,7 @@ class AmendPensionsReliefsControllerSpec
   extends ControllerBaseSpec
     with ControllerTestRunner
     with MockAmendPensionsReliefsService
-    with MockAmendPensionsReliefsRequestDataParser
+    with MockAmendPensionsReliefsRequestParser
     with MockHateoasFactory
     with MockAppConfig
     with MockAuditService {
@@ -76,7 +76,7 @@ class AmendPensionsReliefsControllerSpec
   )
 
   private val rawData = AmendPensionsReliefsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendPensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = AmendPensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   val hateoasResponse: JsValue = Json.parse(
     """

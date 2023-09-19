@@ -70,7 +70,7 @@ class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    protected val request: AmendPensionsReliefsRequestData = AmendPensionsReliefsRequestData(
+    protected val request: AmendPensionsReliefsRequest = AmendPensionsReliefsRequest(
       nino = Nino(nino),
       taxYear = taxYear,
       body = body

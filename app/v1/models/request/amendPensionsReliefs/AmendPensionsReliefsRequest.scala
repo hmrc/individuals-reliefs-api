@@ -18,4 +18,4 @@ package v1.models.request.amendPensionsReliefs
 
 import api.models.domain.{Nino, TaxYear}
 
-case class AmendPensionsReliefsRequestData(nino: Nino, taxYear: TaxYear, body: AmendPensionsReliefsBody)
+case class AmendPensionsReliefsRequest(nino: Nino, taxYear: TaxYear, body: AmendPensionsReliefsBody)
