@@ -36,7 +36,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockCreateAndAmendCharitableGivingService
     with MockCreateAndAmendCharitableGivingRequestParser
@@ -45,7 +45,7 @@ class CreateAndAmendCharitableGivingControllerSpec
     with MockIdGenerator {
 
   private val taxYear = "2019-20"
-  private val amount  = 1234.56
+  private val amount = 1234.56
 
   private val nonUkCharities =
     NonUkCharities(
@@ -83,29 +83,30 @@ class CreateAndAmendCharitableGivingControllerSpec
     gifts = None
   )
 
-  val responseBody: JsValue = Json.parse(s"""
-                                            |{
-                                            |  "links": [
-                                            |    {
-                                            |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
-                                            |      "method": "GET",
-                                            |      "rel": "self"
-                                            |    },
-                                            |    {
-                                            |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
-                                            |      "method": "PUT",
-                                            |      "rel": "create-and-amend-charitable-giving-tax-relief"
-                                            |    },
-                                            |    {
-                                            |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
-                                            |      "method": "DELETE",
-                                            |      "rel": "delete-charitable-giving-tax-relief"
-                                            |    }
-                                            |  ]
-                                            |}
-                                            |""".stripMargin)
+  val responseBody: JsValue = Json.parse(
+    s"""
+       |{
+       |  "links": [
+       |    {
+       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+       |      "method": "GET",
+       |      "rel": "self"
+       |    },
+       |    {
+       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+       |      "method": "PUT",
+       |      "rel": "create-and-amend-charitable-giving-tax-relief"
+       |    },
+       |    {
+       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+       |      "method": "DELETE",
+       |      "rel": "delete-charitable-giving-tax-relief"
+       |    }
+       |  ]
+       |}
+       |""".stripMargin)
 
-  private val rawData     = CreateAndAmendCharitableGivingTaxReliefRawData(nino, taxYear, requestJson)
+  private val rawData = CreateAndAmendCharitableGivingTaxReliefRawData(nino, taxYear, requestJson)
   private val requestData = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   "handleRequest" should {
@@ -159,7 +160,7 @@ class CreateAndAmendCharitableGivingControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     val controller = new CreateAndAmendCharitableGivingController(
       authService = mockEnrolmentsAuthService,

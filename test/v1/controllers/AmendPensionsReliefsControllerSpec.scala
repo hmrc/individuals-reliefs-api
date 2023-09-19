@@ -37,7 +37,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendPensionsReliefsControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockAmendPensionsReliefsService
     with MockAmendPensionsReliefsRequestDataParser
@@ -75,30 +75,31 @@ class AmendPensionsReliefsControllerSpec
     )
   )
 
-  private val rawData     = AmendPensionsReliefsRawData(nino, taxYear, requestJson)
+  private val rawData = AmendPensionsReliefsRawData(nino, taxYear, requestJson)
   private val requestData = AmendPensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
-  val hateoasResponse: JsValue = Json.parse("""
-                                              |{
-                                              |        "links": [
-                                              |          {
-                                              |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
-                                              |            "rel": "amend-reliefs-pensions",
-                                              |            "method": "PUT"
-                                              |          },
-                                              |          {
-                                              |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
-                                              |            "rel": "self",
-                                              |            "method": "GET"
-                                              |          },
-                                              |          {
-                                              |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
-                                              |            "rel": "delete-reliefs-pensions",
-                                              |            "method": "DELETE"
-                                              |          }
-                                              |        ]
-                                              |      }
-                                              |""".stripMargin)
+  val hateoasResponse: JsValue = Json.parse(
+    """
+      |{
+      |        "links": [
+      |          {
+      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
+      |            "rel": "amend-reliefs-pensions",
+      |            "method": "PUT"
+      |          },
+      |          {
+      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
+      |            "rel": "self",
+      |            "method": "GET"
+      |          },
+      |          {
+      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
+      |            "rel": "delete-reliefs-pensions",
+      |            "method": "DELETE"
+      |          }
+      |        ]
+      |      }
+      |""".stripMargin)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
@@ -150,7 +151,7 @@ class AmendPensionsReliefsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     val controller = new AmendPensionsReliefsController(
       authService = mockEnrolmentsAuthService,

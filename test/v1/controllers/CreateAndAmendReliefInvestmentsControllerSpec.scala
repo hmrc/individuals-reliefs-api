@@ -38,7 +38,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAndAmendReliefInvestmentsControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockCreateAndAmendReliefInvestmentsService
     with MockCreateAndAmendReliefInvestmentsRequestParser
@@ -54,7 +54,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
     api.hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
   )
 
-  private val rawData     = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
+  private val rawData = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
   private val requestData = CreateAndAmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
@@ -108,7 +108,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     val controller = new CreateAndAmendReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
