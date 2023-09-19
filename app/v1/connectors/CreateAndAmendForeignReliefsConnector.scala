@@ -30,9 +30,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAndAmendForeignReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def createAndAmend(request: CreateAndAmendForeignReliefsRequest)(implicit
-                                                                   hc: HeaderCarrier,
-                                                                   ec: ExecutionContext,
-                                                                   correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     import request._
 
