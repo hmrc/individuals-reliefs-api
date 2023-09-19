@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.retrievePensionsReliefs
+package v1.models.request.retrieveForeignReliefs
 
 import api.models.domain.{Nino, TaxYear}
 
-case class RetrievePensionsReliefsRequest(nino: Nino, taxYear: TaxYear)
+case class RetrieveForeignReliefsRequestData(nino: Nino, taxYear: TaxYear)

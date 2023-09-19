@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.retrieveCharitableGivingTaxRelief
+package v1.models.request.retrieveOtherReliefs
 
-import api.models.request.RawData
+import api.models.domain.{Nino, TaxYear}
 
-case class RetrieveCharitableGivingReliefRawData(nino: String, taxYear: String) extends RawData
+case class RetrieveOtherReliefsRequestData(nino: Nino, taxYear: TaxYear)

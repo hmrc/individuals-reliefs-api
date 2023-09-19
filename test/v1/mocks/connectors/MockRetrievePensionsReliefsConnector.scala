@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.RetrievePensionsReliefsConnector
-import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
+import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequestData
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsResponse
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,14 +32,14 @@ trait MockRetrievePensionsReliefsConnector extends MockFactory {
 
   object MockRetrievePensionsReliefsConnector {
 
-    def retrieve(requestData: RetrievePensionsReliefsRequest): CallHandler4[
-      RetrievePensionsReliefsRequest,
+    def retrieve(requestData: RetrievePensionsReliefsRequestData): CallHandler4[
+      RetrievePensionsReliefsRequestData,
       HeaderCarrier,
       ExecutionContext,
       String,
       Future[DownstreamOutcome[RetrievePensionsReliefsResponse]]] = {
       (mockConnector
-        .retrieve(_: RetrievePensionsReliefsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .retrieve(_: RetrievePensionsReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
 

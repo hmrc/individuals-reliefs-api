@@ -20,7 +20,7 @@ import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
-import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequestData
 
 import scala.concurrent.Future
 
@@ -35,7 +35,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    lazy val request: RetrieveReliefInvestmentsRequest = RetrieveReliefInvestmentsRequest(Nino("AA123456A"), TaxYear.fromMtd(taxYear))
+    lazy val request: RetrieveReliefInvestmentsRequestData = RetrieveReliefInvestmentsRequestData(Nino("AA123456A"), TaxYear.fromMtd(taxYear))
   }
 
   "RetrieveReliefInvestmentsConnector" when {

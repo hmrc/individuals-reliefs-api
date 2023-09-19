@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v1.connectors.RetrieveForeignReliefsConnector
-import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
+import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 
 import javax.inject.{Inject, Singleton}
@@ -30,9 +30,9 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveForeignReliefsService @Inject() (connector: RetrieveForeignReliefsConnector) extends BaseService {
 
-  def retrieve(request: RetrieveForeignReliefsRequest)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignReliefsResponse]] = {
+  def retrieve(request: RetrieveForeignReliefsRequestData)(implicit
+                                                           ctx: RequestContext,
+                                                           ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignReliefsResponse]] = {
 
     connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(errorMap)))
   }
