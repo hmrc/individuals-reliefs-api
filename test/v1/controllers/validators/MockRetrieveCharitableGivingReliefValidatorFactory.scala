@@ -24,7 +24,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequestData
 
-trait MockedRetrieveForeignReliefsValidatorFactory extends MockFactory {
+trait MockRetrieveCharitableGivingReliefValidatorFactory extends MockFactory {
 
   val mockRetrieveCharitableGivingReliefValidatorFactory: RetrieveCharitableGivingReliefValidatorFactory = mock[RetrieveCharitableGivingReliefValidatorFactory]
 
