@@ -46,7 +46,7 @@ class CreateAndAmendForeignReliefsRequestParserSpec extends UnitSpec {
       "valid request data is supplied" in new Test {
         MockCreateAndAmendForeignReliefsValidator.validate(inputData).returns(Nil)
 
-        parser.parseRequest(inputData) shouldBe Right(CreateAndAmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel))
+        parser.parseRequest(inputData) shouldBe Right(CreateAndAmendForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel))
       }
     }
 

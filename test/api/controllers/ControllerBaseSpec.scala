@@ -17,7 +17,7 @@
 package api.controllers
 
 import api.controllers.ControllerTestRunner.validNino
-import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse}
 import api.models.errors.MtdError
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockIdGenerator
@@ -86,10 +86,10 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
     protected def callController(): Future[Result]
   }
 
-  trait AuditEventChecking {
+  trait AuditEventChecking[DETAIL] {
     _: ControllerTest =>
 
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld]
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[DETAIL]
 
     protected def runOkTestWithAudit(expectedStatus: Int,
                                      maybeExpectedResponseBody: Option[JsValue] = None,

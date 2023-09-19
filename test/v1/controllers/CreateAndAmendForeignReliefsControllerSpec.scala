@@ -54,7 +54,7 @@ class CreateAndAmendForeignReliefsControllerSpec
   )
 
   private val rawData     = CreateAndAmendForeignReliefsRawData(nino, taxYear, requestBodyJson)
-  private val requestData = CreateAndAmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = CreateAndAmendForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
@@ -106,7 +106,7 @@ class CreateAndAmendForeignReliefsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     val controller = new CreateAndAmendForeignReliefsController(
       authService = mockEnrolmentsAuthService,

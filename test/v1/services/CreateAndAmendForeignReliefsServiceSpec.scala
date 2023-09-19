@@ -35,7 +35,7 @@ class CreateAndAmendForeignReliefsServiceSpec extends UnitSpec {
   private val nino                           = Nino("AA123456A")
   private implicit val correlationId: String = "X-123"
 
-  private val requestData = CreateAndAmendForeignReliefsRequest(nino, TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = CreateAndAmendForeignReliefsRequestData(nino, TaxYear.fromMtd(taxYear), requestBodyModel)
 
   trait Test extends MockCreateAndAmendForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
