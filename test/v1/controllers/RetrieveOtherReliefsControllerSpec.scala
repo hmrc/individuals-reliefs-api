@@ -21,28 +21,27 @@ import api.hateoas.Method._
 import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import api.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockRetrieveOtherReliefsRequestParser
+import v1.controllers.validators.MockRetrieveOtherReliefsValidatorFactory
 import v1.mocks.services._
-import v1.models.request.retrieveOtherReliefs.{RetrieveOtherReliefsRawData, RetrieveOtherReliefsRequest}
+import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequestData
 import v1.models.response.retrieveOtherReliefs._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveOtherReliefsControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveOtherReliefsService
-    with MockRetrieveOtherReliefsRequestParser
+    with MockRetrieveOtherReliefsValidatorFactory
     with MockHateoasFactory {
 
-  private val taxYear     = "2019-20"
-  private val rawData     = RetrieveOtherReliefsRawData(nino, taxYear)
-  private val requestData = RetrieveOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val taxYear = "2019-20"
+  private val requestData = RetrieveOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self")
 
@@ -126,9 +125,7 @@ class RetrieveOtherReliefsControllerSpec
     "return Ok" when {
       "the request received is valid" in new Test {
 
-        MockRetrieveOtherReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveReliefService
           .retrieve(requestData)
@@ -144,17 +141,13 @@ class RetrieveOtherReliefsControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrieveOtherReliefsRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveOtherReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveReliefService
           .retrieve(requestData)
@@ -170,7 +163,7 @@ class RetrieveOtherReliefsControllerSpec
     val controller = new RetrieveOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
+      validatorFactory = mockRetrieveOtherReliefsValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,

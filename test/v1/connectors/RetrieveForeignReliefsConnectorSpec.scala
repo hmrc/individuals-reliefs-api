@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
+import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 
 import scala.concurrent.Future
@@ -37,7 +37,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    lazy val request: RetrieveForeignReliefsRequest = new RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+    lazy val request: RetrieveForeignReliefsRequestData = new RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
     val response = RetrieveForeignReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None)
 

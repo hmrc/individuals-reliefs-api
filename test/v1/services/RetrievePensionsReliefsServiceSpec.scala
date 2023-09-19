@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.connectors.MockRetrievePensionsReliefsConnector
-import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
+import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequestData
 import v1.models.response.retrievePensionsReliefs.{PensionsReliefs, RetrievePensionsReliefsResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -46,7 +46,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
     )
   )
 
-  private val requestData = RetrievePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = RetrievePensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrievePensionsReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

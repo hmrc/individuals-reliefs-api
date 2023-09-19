@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v1.connectors.RetrieveReliefInvestmentsConnector
-import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequestData
 import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsResponse
 
 import javax.inject.{Inject, Singleton}
@@ -30,9 +30,9 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveReliefInvestmentsService @Inject() (connector: RetrieveReliefInvestmentsConnector) extends BaseService {
 
-  def retrieve(request: RetrieveReliefInvestmentsRequest)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[RetrieveReliefInvestmentsResponse]] = {
+  def retrieve(request: RetrieveReliefInvestmentsRequestData)(implicit
+                                                              ctx: RequestContext,
+                                                              ec: ExecutionContext): Future[ServiceOutcome[RetrieveReliefInvestmentsResponse]] = {
 
     connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

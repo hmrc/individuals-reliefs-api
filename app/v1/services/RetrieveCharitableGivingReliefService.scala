@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v1.connectors.RetrieveCharitableGivingReliefConnector
-import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
+import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequestData
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefResponse
 
 import javax.inject.{Inject, Singleton}
@@ -30,9 +30,9 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveCharitableGivingReliefService @Inject() (connector: RetrieveCharitableGivingReliefConnector) extends BaseService {
 
-  def retrieve(request: RetrieveCharitableGivingReliefRequest)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[RetrieveCharitableGivingReliefResponse]] = {
+  def retrieve(request: RetrieveCharitableGivingReliefRequestData)(implicit
+                                                                   ctx: RequestContext,
+                                                                   ec: ExecutionContext): Future[ServiceOutcome[RetrieveCharitableGivingReliefResponse]] = {
 
     connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

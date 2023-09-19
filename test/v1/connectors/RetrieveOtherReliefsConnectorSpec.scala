@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
+import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequestData
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsResponse
 
 import scala.concurrent.Future
@@ -37,7 +37,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
     val taxYear: TaxYear
 
-    val request: RetrieveOtherReliefsRequest = RetrieveOtherReliefsRequest(Nino(nino), taxYear)
+    val request: RetrieveOtherReliefsRequestData = RetrieveOtherReliefsRequestData(Nino(nino), taxYear)
 
     val response = RetrieveOtherReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None, None, None, None, None)
   }

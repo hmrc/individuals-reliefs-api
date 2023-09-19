@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.retrieveCharitableGivingTaxRelief
+package v1.models.request.retrieveReliefInvestments
 
 import api.models.domain.{Nino, TaxYear}
 
-case class RetrieveCharitableGivingReliefRequest(nino: Nino, taxYear: TaxYear)
+case class RetrieveReliefInvestmentsRequestData(nino: Nino, taxYear: TaxYear)
