@@ -68,8 +68,8 @@ class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    lazy val request: CreateAndAmendForeignReliefsRequestData =
-      CreateAndAmendForeignReliefsRequestData(Nino("AA123456A"), TaxYear.fromMtd(taxYear), requestBodyModel)
+    lazy val request: CreateAndAmendForeignReliefsRequest =
+      CreateAndAmendForeignReliefsRequest(Nino("AA123456A"), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   }
 

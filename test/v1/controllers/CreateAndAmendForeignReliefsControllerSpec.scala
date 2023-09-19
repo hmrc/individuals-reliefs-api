@@ -28,7 +28,7 @@ import mocks.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.fixtures.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel, responseWithHateoasLinks}
-import v1.mocks.requestParsers.MockCreateAndAmendForeignReliefsRequestDataParser
+import v1.mocks.requestParsers.MockCreateAndAmendForeignReliefsRequestParser
 import v1.mocks.services._
 import v1.models.request.createAndAmendForeignReliefs._
 import v1.models.response.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsHateoasData
@@ -40,7 +40,7 @@ class CreateAndAmendForeignReliefsControllerSpec
   extends ControllerBaseSpec
     with ControllerTestRunner
     with MockCreateAndAmendForeignReliefsService
-    with MockCreateAndAmendForeignReliefsRequestDataParser
+    with MockCreateAndAmendForeignReliefsRequestParser
     with MockHateoasFactory
     with MockAppConfig
     with MockAuditService {
@@ -54,7 +54,7 @@ class CreateAndAmendForeignReliefsControllerSpec
   )
 
   private val rawData = CreateAndAmendForeignReliefsRawData(nino, taxYear, requestBodyJson)
-  private val requestData = CreateAndAmendForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = CreateAndAmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {

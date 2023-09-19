@@ -19,14 +19,14 @@ package v1.controllers.requestParsers
 import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
 import v1.controllers.requestParsers.validators.CreateAndAmendForeignReliefsValidator
-import v1.models.request.createAndAmendForeignReliefs.{CreateAndAmendForeignReliefsBody, CreateAndAmendForeignReliefsRawData, CreateAndAmendForeignReliefsRequestData}
+import v1.models.request.createAndAmendForeignReliefs.{CreateAndAmendForeignReliefsBody, CreateAndAmendForeignReliefsRawData, CreateAndAmendForeignReliefsRequest}
 
 import javax.inject.Inject
 
 class CreateAndAmendForeignReliefsRequestParser @Inject() (val validator: CreateAndAmendForeignReliefsValidator)
-    extends RequestParser[CreateAndAmendForeignReliefsRawData, CreateAndAmendForeignReliefsRequestData] {
+    extends RequestParser[CreateAndAmendForeignReliefsRawData, CreateAndAmendForeignReliefsRequest] {
 
-  override protected def requestFor(data: CreateAndAmendForeignReliefsRawData): CreateAndAmendForeignReliefsRequestData =
-    CreateAndAmendForeignReliefsRequestData(Nino(data.nino), TaxYear.fromMtd(data.taxYear), data.body.as[CreateAndAmendForeignReliefsBody])
+  override protected def requestFor(data: CreateAndAmendForeignReliefsRawData): CreateAndAmendForeignReliefsRequest =
+    CreateAndAmendForeignReliefsRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear), data.body.as[CreateAndAmendForeignReliefsBody])
 
 }

@@ -20,15 +20,15 @@ import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.CreateAndAmendForeignReliefsRequestParser
-import v1.models.request.createAndAmendForeignReliefs.{CreateAndAmendForeignReliefsRawData, CreateAndAmendForeignReliefsRequestData}
+import v1.models.request.createAndAmendForeignReliefs.{CreateAndAmendForeignReliefsRawData, CreateAndAmendForeignReliefsRequest}
 
-trait MockCreateAndAmendForeignReliefsRequestDataParser extends MockFactory {
+trait MockCreateAndAmendForeignReliefsRequestParser extends MockFactory {
 
   val mockCreateAndAmendForeignReliefsRequestParser: CreateAndAmendForeignReliefsRequestParser = mock[CreateAndAmendForeignReliefsRequestParser]
 
   object MockCreateAndAmendForeignReliefsRequestParser {
 
-    def parseRequest(data: CreateAndAmendForeignReliefsRawData): CallHandler[Either[ErrorWrapper, CreateAndAmendForeignReliefsRequestData]] = {
+    def parseRequest(data: CreateAndAmendForeignReliefsRawData): CallHandler[Either[ErrorWrapper, CreateAndAmendForeignReliefsRequest]] = {
       (mockCreateAndAmendForeignReliefsRequestParser.parseRequest(_: CreateAndAmendForeignReliefsRawData)(_: String)).expects(data, *)
     }
 
