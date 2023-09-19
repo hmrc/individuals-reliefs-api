@@ -31,7 +31,7 @@ class RetrieveCharitableGivingReliefValidatorFactorySpec extends UnitSpec with J
   private val parsedNino = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  val validatorFactory = new RetrieveCharitableGivingReliefValidatorFactory
+  private val validatorFactory = new RetrieveCharitableGivingReliefValidatorFactory
 
   private def validator(nino: String, taxYear: String) = validatorFactory.validator(nino, taxYear)
 

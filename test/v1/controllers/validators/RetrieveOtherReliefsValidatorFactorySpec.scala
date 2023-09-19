@@ -31,7 +31,7 @@ class RetrieveOtherReliefsValidatorFactorySpec extends UnitSpec {
   private val parsedNino = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  val validatorFactory = new RetrieveOtherReliefsValidatorFactory
+  private val validatorFactory = new RetrieveOtherReliefsValidatorFactory
 
   private def validator(nino: String, taxYear: String) = validatorFactory.validator(nino, taxYear)
 

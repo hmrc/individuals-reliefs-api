@@ -28,14 +28,14 @@ trait MockRetrieveReliefInvestmentsValidatorFactory extends MockFactory {
 
   val mockRetrieveReliefInvestmentsValidatorFactory: RetrieveReliefInvestmentsValidatorFactory = mock[RetrieveReliefInvestmentsValidatorFactory]
 
-  object MockedRetrieveCharitableGivingReliefValidatorFactory {
+  object MockedRetrieveReliefInvestmentsValidatorFactory {
 
     def validator(): CallHandler[Validator[RetrieveReliefInvestmentsRequestData]] =
       (mockRetrieveReliefInvestmentsValidatorFactory.validator(_: String, _: String)).expects(*, *)
   }
 
   def willUseValidator(use: Validator[RetrieveReliefInvestmentsRequestData]): CallHandler[Validator[RetrieveReliefInvestmentsRequestData]] = {
-    MockedRetrieveCharitableGivingReliefValidatorFactory
+    MockedRetrieveReliefInvestmentsValidatorFactory
       .validator()
       .anyNumberOfTimes()
       .returns(use)

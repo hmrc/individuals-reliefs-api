@@ -28,14 +28,14 @@ trait MockRetrieveForeignReliefsValidatorFactory extends MockFactory {
 
   val mockRetrieveForeignReliefsValidatorFactory: RetrieveForeignReliefsValidatorFactory = mock[RetrieveForeignReliefsValidatorFactory]
 
-  object MockedRetrieveCharitableGivingReliefValidatorFactory {
+  object MockedRetrieveForeignReliefsValidatorFactory {
 
     def validator(): CallHandler[Validator[RetrieveForeignReliefsRequestData]] =
       (mockRetrieveForeignReliefsValidatorFactory.validator(_: String, _: String)).expects(*, *)
   }
 
   def willUseValidator(use: Validator[RetrieveForeignReliefsRequestData]): CallHandler[Validator[RetrieveForeignReliefsRequestData]] = {
-    MockedRetrieveCharitableGivingReliefValidatorFactory
+    MockedRetrieveForeignReliefsValidatorFactory
       .validator()
       .anyNumberOfTimes()
       .returns(use)
