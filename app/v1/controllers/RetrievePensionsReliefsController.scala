@@ -16,13 +16,12 @@
 
 package v1.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandlerOld}
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.RetrievePensionsReliefsRequestParser
-import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRawData
+import utils.IdGenerator
+import v1.controllers.validators.RetrievePensionsReliefsValidatorFactory
 import v1.models.response.retrievePensionsReliefs.RetrievePensionsReliefsHateoasData
 import v1.services.RetrievePensionsReliefsService
 
@@ -30,15 +29,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrievePensionsReliefsController @Inject() (val authService: EnrolmentsAuthService,
-                                                   val lookupService: MtdIdLookupService,
-                                                   parser: RetrievePensionsReliefsRequestParser,
-                                                   service: RetrievePensionsReliefsService,
-                                                   hateoasFactory: HateoasFactory,
-                                                   cc: ControllerComponents,
-                                                   val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with Logging {
+class RetrievePensionsReliefsController @Inject()(val authService: EnrolmentsAuthService,
+                                                  val lookupService: MtdIdLookupService,
+                                                  validatorFactory: RetrievePensionsReliefsValidatorFactory,
+                                                  service: RetrievePensionsReliefsService,
+                                                  hateoasFactory: HateoasFactory,
+                                                  cc: ControllerComponents,
+                                                  val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+  extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrievePensionsReliefsController", endpointName = "retrievePensionsReliefs")
@@ -47,14 +45,14 @@ class RetrievePensionsReliefsController @Inject() (val authService: EnrolmentsAu
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = RetrievePensionsReliefsRawData(nino, taxYear)
+      val validator = validatorFactory.validator(nino, taxYear)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService(service.retrieve)
         .withHateoasResult(hateoasFactory)(RetrievePensionsReliefsHateoasData(nino, taxYear))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

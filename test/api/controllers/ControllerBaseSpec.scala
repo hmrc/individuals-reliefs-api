@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 
 class ControllerBaseSpec
-    extends UnitSpec
+  extends UnitSpec
     with Status
     with MimeTypes
     with HeaderNames
@@ -55,8 +55,9 @@ class ControllerBaseSpec
   def fakePostRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 }
 
-trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator { _: ControllerBaseSpec =>
-  protected val nino: String  = validNino
+trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator {
+  _: ControllerBaseSpec =>
+  protected val nino: String = validNino
   protected val correlationId = "X-123"
 
   trait ControllerTest {
@@ -74,7 +75,7 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
 
       maybeExpectedResponseBody match {
         case Some(jsBody) => contentAsJson(result) shouldBe jsBody
-        case None         => contentType(result) shouldBe empty
+        case None => contentType(result) shouldBe empty
       }
     }
 

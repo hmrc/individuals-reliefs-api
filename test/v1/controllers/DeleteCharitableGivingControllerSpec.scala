@@ -17,17 +17,16 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockDeleteCharitableGivingReliefRequestParser
+import v1.controllers.validators.MockDeleteCharitableGivingValidatorFactory
 import v1.mocks.services._
-import v1.models.request.deleteCharitableGivingTaxRelief.{DeleteCharitableGivingTaxReliefRawData, DeleteCharitableGivingTaxReliefRequest}
+import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,19 +36,15 @@ class DeleteCharitableGivingControllerSpec
     with ControllerTestRunner
     with MockDeleteCharitableGivingReliefService
     with MockAuditService
-    with MockDeleteCharitableGivingReliefRequestParser {
+    with MockDeleteCharitableGivingValidatorFactory {
 
   private val taxYear     = "2019-20"
-  private val rawData     = DeleteCharitableGivingTaxReliefRawData(nino, taxYear)
-  private val requestData = DeleteCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = DeleteCharitableGivingTaxReliefRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {
       "a valid request is supplied" in new Test {
-
-        MockDeleteCharitableGivingReliefRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockDeleteService
           .delete(requestData)
@@ -62,19 +57,12 @@ class DeleteCharitableGivingControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-
-        MockDeleteCharitableGivingReliefRequestParser
-          .parse(rawData)
-          .returns(Left(errors.ErrorWrapper(correlationId, NinoFormatError)))
-
+        willUseValidator(returning(NinoFormatError))
         runErrorTestWithAudit(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-
-        MockDeleteCharitableGivingReliefRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockDeleteService
           .delete(requestData)
@@ -85,12 +73,12 @@ class DeleteCharitableGivingControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new DeleteCharitableGivingController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
+      validatorFactory = mockDeleteCharitableGivingValidatorFactory,
       service = mockDeleteCharitableGivingReliefService,
       auditService = mockAuditService,
       cc = cc,
@@ -99,15 +87,15 @@ class DeleteCharitableGivingControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "DeleteCharitableGivingTaxRelief",
         transactionName = "delete-charitable-giving-tax-relief",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
+          versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
+          params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = None,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

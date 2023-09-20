@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequest
+import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequestData
 import v1.models.response.retrievePensionsReliefs.{PensionsReliefs, RetrievePensionsReliefsResponse}
 
 import scala.concurrent.Future
@@ -39,8 +39,8 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    protected val request: RetrievePensionsReliefsRequest =
-      RetrievePensionsReliefsRequest(
+    protected val request: RetrievePensionsReliefsRequestData =
+      RetrievePensionsReliefsRequestData(
         nino = Nino(nino),
         taxYear = taxYear
       )

@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequest
+import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequestData
 import v1.models.response.retrieveCharitableGivingTaxRelief._
 
 import scala.concurrent.Future
@@ -61,7 +61,7 @@ class RetrieveCharitableGivingReliefConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    protected val request = RetrieveCharitableGivingReliefRequest(
+    protected val request = RetrieveCharitableGivingReliefRequestData(
       nino = Nino(nino),
       taxYear = taxYear
     )
