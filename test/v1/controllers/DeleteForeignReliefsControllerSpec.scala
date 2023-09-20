@@ -33,14 +33,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeleteForeignReliefsControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockDeleteForeignReliefsService
     with MockDeleteForeignReliefsRequestParser
     with MockAuditService {
 
-  private val taxYear     = "2019-20"
-  private val rawData     = DeleteForeignReliefsRawData(nino, taxYear)
+  private val taxYear = "2019-20"
+  private val rawData = DeleteForeignReliefsRawData(nino, taxYear)
   private val requestData = DeleteForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {

@@ -19,24 +19,23 @@ package v1.controllers
 import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.DeleteOtherReliefsRequestParser
-import v1.models.request.deleteOtherReliefs.DeleteOtherReliefsRawData
+import routing.{Version, Version1}
+import utils.IdGenerator
+import v1.controllers.validators.DeleteOtherReliefsValidatorFactory
 import v1.services.DeleteOtherReliefsService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class DeleteOtherReliefsController @Inject() (val authService: EnrolmentsAuthService,
-                                              val lookupService: MtdIdLookupService,
-                                              parser: DeleteOtherReliefsRequestParser,
-                                              service: DeleteOtherReliefsService,
-                                              auditService: AuditService,
-                                              cc: ControllerComponents,
-                                              val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with Logging {
+class DeleteOtherReliefsController @Inject()(val authService: EnrolmentsAuthService,
+                                             val lookupService: MtdIdLookupService,
+                                             validatorFactory: DeleteOtherReliefsValidatorFactory,
+                                             service: DeleteOtherReliefsService,
+                                             auditService: AuditService,
+                                             cc: ControllerComponents,
+                                             val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+  extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "DeleteOtherReliefsController", endpointName = "deleteOtherReliefs")
@@ -45,21 +44,20 @@ class DeleteOtherReliefsController @Inject() (val authService: EnrolmentsAuthSer
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = DeleteOtherReliefsRawData(nino, taxYear)
+      val validator = validatorFactory.validator(nino, taxYear)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService(service.delete)
-        .withAuditing(AuditHandlerOld(
+        .withAuditing(AuditHandler(
           auditService = auditService,
           auditType = "DeleteOtherReliefs",
           transactionName = "delete-other-reliefs",
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
-          requestBody = None
+          apiVersion = Version.from(request, orElse = Version1),
+          params = Map("nino" -> nino, "taxYear" -> taxYear)
         ))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

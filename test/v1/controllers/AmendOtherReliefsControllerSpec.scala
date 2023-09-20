@@ -36,7 +36,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendOtherReliefsControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockAmendOtherReliefsService
     with MockAmendOtherReliefsRequestParser
@@ -52,50 +52,51 @@ class AmendOtherReliefsControllerSpec
     api.hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
   )
 
-  private val requestJson = Json.parse("""
-                                         |{
-                                         |  "nonDeductibleLoanInterest": {
-                                         |        "customerReference": "myref",
-                                         |        "reliefClaimed": 763.00
-                                         |      },
-                                         |  "payrollGiving": {
-                                         |        "customerReference": "myref",
-                                         |        "reliefClaimed": 154.00
-                                         |      },
-                                         |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-                                         |        "customerReference": "myref",
-                                         |        "amount": 222.22
-                                         |      },
-                                         |  "maintenancePayments": [
-                                         |    {
-                                         |        "customerReference": "myref",
-                                         |        "exSpouseName" : "Hilda",
-                                         |        "exSpouseDateOfBirth": "2000-01-01",
-                                         |        "amount": 222.22
-                                         |      }
-                                         |  ],
-                                         |  "postCessationTradeReliefAndCertainOtherLosses": [
-                                         |    {
-                                         |        "customerReference": "myref",
-                                         |        "businessName": "ACME Inc",
-                                         |        "dateBusinessCeased": "2019-08-10",
-                                         |        "natureOfTrade": "Widgets Manufacturer",
-                                         |        "incomeSource": "AB12412/A12",
-                                         |        "amount": 222.22
-                                         |      }
-                                         |  ],
-                                         |  "annualPaymentsMade": {
-                                         |        "customerReference": "myref",
-                                         |        "reliefClaimed": 763.00
-                                         |      },
-                                         |  "qualifyingLoanInterestPayments": [
-                                         |    {
-                                         |        "customerReference": "myref",
-                                         |        "lenderName": "Maurice",
-                                         |        "reliefClaimed": 763.00
-                                         |      }
-                                         |  ]
-                                         |}""".stripMargin)
+  private val requestJson = Json.parse(
+    """
+      |{
+      |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin)
 
   private val requestBody = AmendOtherReliefsBody(
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
@@ -115,30 +116,31 @@ class AmendOtherReliefsControllerSpec
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val rawData     = AmendOtherReliefsRawData(nino, taxYear, requestJson)
+  private val rawData = AmendOtherReliefsRawData(nino, taxYear, requestJson)
   private val requestData = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
-  val hateoasResponse: JsValue = Json.parse("""
-                                              |{
-                                              |   "links":[
-                                              |      {
-                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-                                              |         "method":"PUT",
-                                              |         "rel":"amend-reliefs-other"
-                                              |      },
-                                              |      {
-                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-                                              |         "method":"GET",
-                                              |         "rel":"self"
-                                              |      },
-                                              |      {
-                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-                                              |         "method":"DELETE",
-                                              |         "rel":"delete-reliefs-other"
-                                              |      }
-                                              |   ]
-                                              |}
-                                              |""".stripMargin)
+  val hateoasResponse: JsValue = Json.parse(
+    """
+      |{
+      |   "links":[
+      |      {
+      |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
+      |         "method":"PUT",
+      |         "rel":"amend-reliefs-other"
+      |      },
+      |      {
+      |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
+      |         "method":"GET",
+      |         "rel":"self"
+      |      },
+      |      {
+      |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
+      |         "method":"DELETE",
+      |         "rel":"delete-reliefs-other"
+      |      }
+      |   ]
+      |}
+      |""".stripMargin)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {

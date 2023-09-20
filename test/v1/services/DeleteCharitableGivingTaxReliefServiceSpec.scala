@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.connectors.MockDeleteCharitableGivingTaxReliefConnector
-import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
+import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -92,8 +92,8 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
     val validNino    = "AA123456A"
     val validTaxYear = "2019-20"
 
-    protected val requestData: DeleteCharitableGivingTaxReliefRequest =
-      DeleteCharitableGivingTaxReliefRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
+    protected val requestData: DeleteCharitableGivingTaxReliefRequestData =
+      DeleteCharitableGivingTaxReliefRequestData(Nino(validNino), TaxYear.fromMtd(validTaxYear))
 
     protected val service = new DeleteCharitableGivingTaxReliefService(
       connector = mockConnector
