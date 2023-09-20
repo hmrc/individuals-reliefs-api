@@ -87,9 +87,9 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
     val nino: String                   = "AA123456A"
     implicit val correlationId: String = "X-123"
 
-    val body: AmendOtherReliefsBody = AmendOtherReliefsBody(None, None, None, None, None, None, None)
+    val body: AmendOtherReliefsRequestBody = AmendOtherReliefsRequestBody(None, None, None, None, None, None, None)
 
-    val requestData = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), body)
+    protected val requestData: AmendOtherReliefsRequestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
   }
 

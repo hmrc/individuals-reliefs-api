@@ -16,7 +16,6 @@
 
 package v1.models.request.amendOtherReliefs
 
-import api.models.request.RawData
-import play.api.libs.json.JsValue
+import api.models.domain.{Nino, TaxYear}
 
-case class AmendOtherReliefsRawData(nino: String, taxYear: String, body: JsValue) extends RawData
+case class AmendOtherReliefsRequestData(nino: Nino, taxYear: TaxYear, body: AmendOtherReliefsRequestBody)

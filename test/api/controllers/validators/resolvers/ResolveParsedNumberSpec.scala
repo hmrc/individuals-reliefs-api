@@ -30,7 +30,7 @@ class ResolveParsedNumberSpec extends UnitSpec with ScalaCheckDrivenPropertyChec
     "min and max are specified" must {
       val min: BigDecimal = -100
       val max: BigDecimal = 100.99
-      val error           = ValueFormatError.copy(paths = Some(Seq(path)), message = "The value must be between -100 and 100.99")
+      val error           = ValueFormatError.copy(paths = Some(Seq(path)), message = "The field should be between -100 and 100.99")
 
       val resolve = ResolveParsedNumber(min, max)
 
@@ -73,7 +73,7 @@ class ResolveParsedNumberSpec extends UnitSpec with ScalaCheckDrivenPropertyChec
     "min and max are not specified" must {
       val resolve = ResolveParsedNumber()
 
-      val error = ValueFormatError.copy(paths = Some(List(path)), message = "The value must be between 0 and 99999999999.99")
+      val error = ValueFormatError.copy(paths = Some(List(path)), message = "The field should be between 0 and 99999999999.99")
 
       "allow 0" in {
         val result = resolve(0, path)
@@ -101,7 +101,7 @@ class ResolveParsedNumberSpec extends UnitSpec with ScalaCheckDrivenPropertyChec
       val resolveAdjustment = ResolveParsedNumber(min = -99999999999.99, disallowZero = true)
 
       "min and max are not specified" must {
-        val error = ValueFormatError.copy(paths = Some(Seq(path)), message = "The value must be between -99999999999.99 and 99999999999.99")
+        val error = ValueFormatError.copy(paths = Some(Seq(path)), message = "The field should be between -99999999999.99 and 99999999999.99")
 
         "allow -99999999999.99" in {
           val value  = BigDecimal(-99999999999.99)

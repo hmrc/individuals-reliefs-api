@@ -18,13 +18,14 @@ package v1.models.request.amendOtherReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AmendOtherReliefsBody(nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
-                                 payrollGiving: Option[PayrollGiving],
-                                 qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
-                                 maintenancePayments: Option[Seq[MaintenancePayments]],
-                                 postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
-                                 annualPaymentsMade: Option[AnnualPaymentsMade],
-                                 qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]) {
+case class AmendOtherReliefsRequestBody(
+    nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
+    payrollGiving: Option[PayrollGiving],
+    qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
+    maintenancePayments: Option[Seq[MaintenancePayments]],
+    postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
+    annualPaymentsMade: Option[AnnualPaymentsMade],
+    qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]) {
 
   private def isEmpty: Boolean =
     nonDeductibleLoanInterest.isEmpty &&
@@ -52,6 +53,6 @@ case class AmendOtherReliefsBody(nonDeductibleLoanInterest: Option[NonDeductible
 
 }
 
-object AmendOtherReliefsBody {
-  implicit val format: OFormat[AmendOtherReliefsBody] = Json.format[AmendOtherReliefsBody]
+object AmendOtherReliefsRequestBody {
+  implicit val format: OFormat[AmendOtherReliefsRequestBody] = Json.format[AmendOtherReliefsRequestBody]
 }

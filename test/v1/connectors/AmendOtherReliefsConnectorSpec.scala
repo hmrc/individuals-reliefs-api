@@ -29,7 +29,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new IfsTest with Test {
-        val request: AmendOtherReliefsRequest = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd("2017-18"), body)
+        val request: AmendOtherReliefsRequestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2017-18"), body)
 
         willPut(url = s"$baseUrl/income-tax/reliefs/other/$nino/2017-18", body = body)
           .returns(Future.successful(outcome))
@@ -40,7 +40,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
     "return the expected response for a TYS request" when {
       "a valid request is made" in new TysIfsTest with Test {
-        val request: AmendOtherReliefsRequest = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd("2023-24"), body)
+        val request: AmendOtherReliefsRequestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"), body)
 
         willPut(url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino", body = body)
           .returns(Future.successful(outcome))
@@ -61,9 +61,9 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
     val nino: String = "AA123456A"
 
-    val body: AmendOtherReliefsBody = AmendOtherReliefsBody(None, None, None, None, None, None, None)
+    val body: AmendOtherReliefsRequestBody = AmendOtherReliefsRequestBody(None, None, None, None, None, None, None)
 
-    val outcome = Right(ResponseWrapper(correlationId, ()))
+    protected val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
   }
 
