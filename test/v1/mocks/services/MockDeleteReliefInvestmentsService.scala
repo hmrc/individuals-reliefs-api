@@ -21,7 +21,7 @@ import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
+import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequestData
 import v1.services.DeleteReliefInvestmentsService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,9 +32,9 @@ trait MockDeleteReliefInvestmentsService extends MockFactory {
 
   object MockDeleteService {
 
-    def delete(requestData: DeleteReliefInvestmentsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def delete(requestData: DeleteReliefInvestmentsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockService
-        .delete(_: DeleteReliefInvestmentsRequest)(_: RequestContext, _: ExecutionContext))
+        .delete(_: DeleteReliefInvestmentsRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
     }
 

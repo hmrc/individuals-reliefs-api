@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.connectors.MockDeleteReliefInvestmentsConnector
-import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
+import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -34,7 +34,7 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
   val validTaxYear: String           = "2019-20"
   implicit val correlationId: String = "X-123"
 
-  val requestData: DeleteReliefInvestmentsRequest = DeleteReliefInvestmentsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
+  val requestData: DeleteReliefInvestmentsRequestData = DeleteReliefInvestmentsRequestData(Nino(validNino), TaxYear.fromMtd(validTaxYear))
 
   trait Test extends MockDeleteReliefInvestmentsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

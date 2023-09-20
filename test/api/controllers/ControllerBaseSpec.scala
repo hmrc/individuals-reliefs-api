@@ -17,7 +17,7 @@
 package api.controllers
 
 import api.controllers.ControllerTestRunner.validNino
-import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse}
 import api.models.errors.MtdError
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockIdGenerator
@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 
 class ControllerBaseSpec
-    extends UnitSpec
+  extends UnitSpec
     with Status
     with MimeTypes
     with HeaderNames
@@ -51,8 +51,9 @@ class ControllerBaseSpec
   def fakePostRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 }
 
-trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator { _: ControllerBaseSpec =>
-  protected val nino: String  = validNino
+trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator {
+  _: ControllerBaseSpec =>
+  protected val nino: String = validNino
   protected val correlationId = "X-123"
 
   trait ControllerTest {
@@ -70,7 +71,7 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
 
       maybeExpectedResponseBody match {
         case Some(jsBody) => contentAsJson(result) shouldBe jsBody
-        case None         => contentType(result) shouldBe empty
+        case None => contentType(result) shouldBe empty
       }
     }
 
@@ -86,10 +87,10 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
     protected def callController(): Future[Result]
   }
 
-  trait AuditEventChecking {
+  trait AuditEventChecking[DETAIL] {
     _: ControllerTest =>
 
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld]
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[DETAIL]
 
     protected def runOkTestWithAudit(expectedStatus: Int,
                                      maybeExpectedResponseBody: Option[JsValue] = None,

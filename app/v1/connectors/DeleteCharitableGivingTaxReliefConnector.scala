@@ -22,7 +22,7 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.{AppConfig, FeatureSwitches}
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequest
+import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,10 +31,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
     extends BaseDownstreamConnector {
 
-  def delete(request: DeleteCharitableGivingTaxReliefRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def delete(request: DeleteCharitableGivingTaxReliefRequestData)(implicit
+                                                                  hc: HeaderCarrier,
+                                                                  ec: ExecutionContext,
+                                                                  correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     import request._
 

@@ -37,7 +37,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAndAmendForeignReliefsControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockCreateAndAmendForeignReliefsService
     with MockCreateAndAmendForeignReliefsRequestParser
@@ -53,7 +53,7 @@ class CreateAndAmendForeignReliefsControllerSpec
     api.hateoas.Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-foreign")
   )
 
-  private val rawData     = CreateAndAmendForeignReliefsRawData(nino, taxYear, requestBodyJson)
+  private val rawData = CreateAndAmendForeignReliefsRawData(nino, taxYear, requestBodyJson)
   private val requestData = CreateAndAmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
@@ -106,7 +106,7 @@ class CreateAndAmendForeignReliefsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     val controller = new CreateAndAmendForeignReliefsController(
       authService = mockEnrolmentsAuthService,

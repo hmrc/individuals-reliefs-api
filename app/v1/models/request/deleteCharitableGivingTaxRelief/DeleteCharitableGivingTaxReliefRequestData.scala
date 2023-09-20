@@ -18,4 +18,4 @@ package v1.models.request.deleteCharitableGivingTaxRelief
 
 import api.models.domain.{Nino, TaxYear}
 
-case class DeleteCharitableGivingTaxReliefRequest(nino: Nino, taxYear: TaxYear)
+case class DeleteCharitableGivingTaxReliefRequestData(nino: Nino, taxYear: TaxYear)

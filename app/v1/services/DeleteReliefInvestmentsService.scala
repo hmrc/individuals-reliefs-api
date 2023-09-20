@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v1.connectors.DeleteReliefInvestmentsConnector
-import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
+import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeleteReliefInvestmentsService @Inject() (connector: DeleteReliefInvestmentsConnector) extends BaseService {
 
-  def delete(request: DeleteReliefInvestmentsRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def delete(request: DeleteReliefInvestmentsRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.delete(request).map(_.leftMap(mapDownstreamErrors(errorMap)))
   }
