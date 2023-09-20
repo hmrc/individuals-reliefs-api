@@ -33,13 +33,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeleteOtherReliefsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockDeleteOtherReliefsService
     with MockDeleteOtherReliefsValidatorFactory
     with MockAuditService {
 
-  private val taxYear = "2019-20"
+  private val taxYear     = "2019-20"
   private val requestData = DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
@@ -74,7 +74,7 @@ class DeleteOtherReliefsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new DeleteOtherReliefsController(
       authService = mockEnrolmentsAuthService,

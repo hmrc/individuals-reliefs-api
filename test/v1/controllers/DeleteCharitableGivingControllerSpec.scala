@@ -32,13 +32,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeleteCharitableGivingControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockDeleteCharitableGivingReliefService
     with MockAuditService
     with MockDeleteCharitableGivingValidatorFactory {
 
-  private val taxYear = "2019-20"
+  private val taxYear     = "2019-20"
   private val requestData = DeleteCharitableGivingTaxReliefRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
@@ -73,7 +73,7 @@ class DeleteCharitableGivingControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new DeleteCharitableGivingController(
       authService = mockEnrolmentsAuthService,
