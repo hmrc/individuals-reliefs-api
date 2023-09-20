@@ -240,7 +240,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
           val response: WSResponse = await(request().put(requestBodyJson))
           response.status shouldBe BAD_REQUEST
-          response.json shouldBe Json.toJson(RuleIncorrectOrEmptyBodyError)
+          response.json shouldBe Json.toJson(RuleIncorrectOrEmptyBodyError.withPath("/pensionReliefs"))
         }
       }
 

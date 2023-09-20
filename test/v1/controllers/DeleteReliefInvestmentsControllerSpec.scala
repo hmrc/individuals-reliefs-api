@@ -32,13 +32,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeleteReliefInvestmentsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockDeleteReliefInvestmentsService
     with MockDeleteReliefInvestmentsValidatorFactory
     with MockAuditService {
 
-  private val taxYear = "2019-20"
+  private val taxYear     = "2019-20"
   private val requestData = DeleteReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {

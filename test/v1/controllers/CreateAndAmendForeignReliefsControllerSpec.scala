@@ -19,7 +19,7 @@ package v1.controllers
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.Method._
 import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
@@ -27,8 +27,8 @@ import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import v1.controllers.validators.MockCreateAndAmendForeignReliefsValidatorFactory
 import v1.fixtures.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel, responseWithHateoasLinks}
-import v1.mocks.requestParsers.MockCreateAndAmendForeignReliefsRequestParser
 import v1.mocks.services._
 import v1.models.request.createAndAmendForeignReliefs._
 import v1.models.response.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsHateoasData
@@ -40,7 +40,7 @@ class CreateAndAmendForeignReliefsControllerSpec
   extends ControllerBaseSpec
     with ControllerTestRunner
     with MockCreateAndAmendForeignReliefsService
-    with MockCreateAndAmendForeignReliefsRequestParser
+    with MockCreateAndAmendForeignReliefsValidatorFactory
     with MockHateoasFactory
     with MockAppConfig
     with MockAuditService {
@@ -53,16 +53,12 @@ class CreateAndAmendForeignReliefsControllerSpec
     api.hateoas.Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-foreign")
   )
 
-  private val rawData = CreateAndAmendForeignReliefsRawData(nino, taxYear, requestBodyJson)
-  private val requestData = CreateAndAmendForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = CreateAndAmendForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-
-        MockCreateAndAmendForeignReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAndAmendForeignReliefsService
           .createAndAmend(requestData)
@@ -83,19 +79,13 @@ class CreateAndAmendForeignReliefsControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-
-        MockCreateAndAmendForeignReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
       }
 
       "the service returns an error" in new Test {
-
-        MockCreateAndAmendForeignReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAndAmendForeignReliefsService
           .createAndAmend(requestData)
@@ -106,12 +96,12 @@ class CreateAndAmendForeignReliefsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new CreateAndAmendForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateAndAmendForeignReliefsRequestParser,
+      validatorFactory = mockCreateAndAmendForeignReliefsValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
@@ -122,15 +112,15 @@ class CreateAndAmendForeignReliefsControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendForeignReliefs",
         transactionName = "create-amend-foreign-reliefs",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
           userType = "Individual",
           agentReferenceNumber = None,
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
+          versionNumber = "1.0",
+          params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

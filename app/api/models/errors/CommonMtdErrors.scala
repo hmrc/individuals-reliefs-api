@@ -40,7 +40,7 @@ object ValueFormatError
     ) {
 
   def forPathAndRange(path: String, min: String, max: String): MtdError =
-    ValueFormatError.copy(paths = Some(Seq(path)), message = s"The value must be between $min and $max")
+    ValueFormatError.copy(paths = Some(Seq(path)), message = s"The field should be between $min and $max")
 
 }
 
