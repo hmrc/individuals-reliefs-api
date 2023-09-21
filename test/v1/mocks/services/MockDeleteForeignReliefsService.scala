@@ -21,7 +21,7 @@ import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
+import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequestData
 import v1.services.DeleteForeignReliefsService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,11 +30,11 @@ trait MockDeleteForeignReliefsService extends MockFactory {
 
   val mockDeleteForeignReliefsService: DeleteForeignReliefsService = mock[DeleteForeignReliefsService]
 
-  object MockDeleteService {
+  object MockDeleteForeignReliefsService {
 
-    def delete(requestData: DeleteForeignReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def delete(requestData: DeleteForeignReliefsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockDeleteForeignReliefsService
-        .delete(_: DeleteForeignReliefsRequest)(_: RequestContext, _: ExecutionContext))
+        .delete(_: DeleteForeignReliefsRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
     }
 

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendOtherReliefs
+package v1.models.request.deletePensionsReliefs
 
-import api.models.request.RawData
-import play.api.libs.json.JsValue
+import api.models.domain.{Nino, TaxYear}
 
-case class AmendOtherReliefsRawData(nino: String, taxYear: String, body: JsValue) extends RawData
+case class DeletePensionsReliefsRequestData(nino: Nino, taxYear: TaxYear)

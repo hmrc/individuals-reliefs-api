@@ -19,7 +19,7 @@ package v1.controllers
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.Method._
 import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
@@ -27,7 +27,7 @@ import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockAmendOtherReliefsRequestParser
+import v1.controllers.validators.MockAmendOtherReliefsValidatorFactory
 import v1.mocks.services._
 import v1.models.request.amendOtherReliefs._
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
@@ -36,10 +36,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AmendOtherReliefsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockAmendOtherReliefsService
-    with MockAmendOtherReliefsRequestParser
+    with MockAmendOtherReliefsValidatorFactory
     with MockHateoasFactory
     with MockAppConfig
     with MockAuditService {
@@ -52,53 +52,52 @@ class AmendOtherReliefsControllerSpec
     api.hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
   )
 
-  private val requestJson = Json.parse(
-    """
-      |{
-      |  "nonDeductibleLoanInterest": {
-      |        "customerReference": "myref",
-      |        "reliefClaimed": 763.00
-      |      },
-      |  "payrollGiving": {
-      |        "customerReference": "myref",
-      |        "reliefClaimed": 154.00
-      |      },
-      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
-      |        "customerReference": "myref",
-      |        "amount": 222.22
-      |      },
-      |  "maintenancePayments": [
-      |    {
-      |        "customerReference": "myref",
-      |        "exSpouseName" : "Hilda",
-      |        "exSpouseDateOfBirth": "2000-01-01",
-      |        "amount": 222.22
-      |      }
-      |  ],
-      |  "postCessationTradeReliefAndCertainOtherLosses": [
-      |    {
-      |        "customerReference": "myref",
-      |        "businessName": "ACME Inc",
-      |        "dateBusinessCeased": "2019-08-10",
-      |        "natureOfTrade": "Widgets Manufacturer",
-      |        "incomeSource": "AB12412/A12",
-      |        "amount": 222.22
-      |      }
-      |  ],
-      |  "annualPaymentsMade": {
-      |        "customerReference": "myref",
-      |        "reliefClaimed": 763.00
-      |      },
-      |  "qualifyingLoanInterestPayments": [
-      |    {
-      |        "customerReference": "myref",
-      |        "lenderName": "Maurice",
-      |        "reliefClaimed": 763.00
-      |      }
-      |  ]
-      |}""".stripMargin)
+  private val requestJson = Json.parse("""
+                                         |{
+                                         |  "nonDeductibleLoanInterest": {
+                                         |        "customerReference": "myref",
+                                         |        "reliefClaimed": 763.00
+                                         |      },
+                                         |  "payrollGiving": {
+                                         |        "customerReference": "myref",
+                                         |        "reliefClaimed": 154.00
+                                         |      },
+                                         |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+                                         |        "customerReference": "myref",
+                                         |        "amount": 222.22
+                                         |      },
+                                         |  "maintenancePayments": [
+                                         |    {
+                                         |        "customerReference": "myref",
+                                         |        "exSpouseName" : "Hilda",
+                                         |        "exSpouseDateOfBirth": "2000-01-01",
+                                         |        "amount": 222.22
+                                         |      }
+                                         |  ],
+                                         |  "postCessationTradeReliefAndCertainOtherLosses": [
+                                         |    {
+                                         |        "customerReference": "myref",
+                                         |        "businessName": "ACME Inc",
+                                         |        "dateBusinessCeased": "2019-08-10",
+                                         |        "natureOfTrade": "Widgets Manufacturer",
+                                         |        "incomeSource": "AB12412/A12",
+                                         |        "amount": 222.22
+                                         |      }
+                                         |  ],
+                                         |  "annualPaymentsMade": {
+                                         |        "customerReference": "myref",
+                                         |        "reliefClaimed": 763.00
+                                         |      },
+                                         |  "qualifyingLoanInterestPayments": [
+                                         |    {
+                                         |        "customerReference": "myref",
+                                         |        "lenderName": "Maurice",
+                                         |        "reliefClaimed": 763.00
+                                         |      }
+                                         |  ]
+                                         |}""".stripMargin)
 
-  private val requestBody = AmendOtherReliefsBody(
+  private val requestBody = AmendOtherReliefsRequestBody(
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
     Some(PayrollGiving(Some("myref"), 154.00)),
     Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
@@ -116,39 +115,35 @@ class AmendOtherReliefsControllerSpec
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val rawData = AmendOtherReliefsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
-  val hateoasResponse: JsValue = Json.parse(
-    """
-      |{
-      |   "links":[
-      |      {
-      |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-      |         "method":"PUT",
-      |         "rel":"amend-reliefs-other"
-      |      },
-      |      {
-      |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-      |         "method":"GET",
-      |         "rel":"self"
-      |      },
-      |      {
-      |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-      |         "method":"DELETE",
-      |         "rel":"delete-reliefs-other"
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
+  val hateoasResponse: JsValue = Json.parse("""
+                                              |{
+                                              |   "links":[
+                                              |      {
+                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
+                                              |         "method":"PUT",
+                                              |         "rel":"amend-reliefs-other"
+                                              |      },
+                                              |      {
+                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
+                                              |         "method":"GET",
+                                              |         "rel":"self"
+                                              |      },
+                                              |      {
+                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
+                                              |         "method":"DELETE",
+                                              |         "rel":"delete-reliefs-other"
+                                              |      }
+                                              |   ]
+                                              |}
+                                              |""".stripMargin)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
 
-        MockAmendOtherReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendOtherReliefsService
           .amend(requestData)
@@ -170,9 +165,7 @@ class AmendOtherReliefsControllerSpec
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
 
-        MockAmendOtherReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, Some(requestJson))
 
@@ -180,9 +173,7 @@ class AmendOtherReliefsControllerSpec
 
       "the service returns an error" in new Test {
 
-        MockAmendOtherReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendOtherReliefsService
           .amend(requestData)
@@ -193,12 +184,12 @@ class AmendOtherReliefsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new AmendOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockAmendOtherReliefsRequestParser,
+      validatorFactory = mockAmendOtherReliefsValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
@@ -209,15 +200,15 @@ class AmendOtherReliefsControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendOtherReliefs",
         transactionName = "create-amend-other-reliefs",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
+          versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
+          params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

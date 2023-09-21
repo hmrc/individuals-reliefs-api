@@ -76,7 +76,7 @@ object TaxYear {
 
   val tysTaxYear: Int = 2024
 
-  val minimumTaxYear = new TaxYear("2021")
+  val minimumTaxYear                 = new TaxYear("2021")
   val charitableGivingMinimumTaxYear = new TaxYear("2018")
 
   /** UK tax year starts on 6 April.

@@ -23,25 +23,25 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.connectors.MockDeletePensionsReliefsConnector
-import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequest
+import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeletePensionsReliefsServiceSpec extends UnitSpec {
 
-  val validNino: String              = "AA123456A"
-  val validTaxYear: String           = "2019-20"
   implicit val correlationId: String = "X-123"
+  private val validNino              = Nino("AA123456A")
+  private val validTaxYear           = TaxYear.fromMtd("2019-20")
 
-  val requestData: DeletePensionsReliefsRequest = DeletePensionsReliefsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
+  protected val requestData: DeletePensionsReliefsRequestData = DeletePensionsReliefsRequestData(validNino, validTaxYear)
 
   trait Test extends MockDeletePensionsReliefsConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new DeletePensionsReliefsService(
-      connector = mockConnector
+    protected val service = new DeletePensionsReliefsService(
+      connector = mockDeletePensionsReliefsConnector
     )
 
   }
@@ -50,10 +50,10 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
     "a service call is successful" should {
       "return a mapped result" in new Test {
         MockDeletePensionsReliefsConnector
-          .delete(requestData)
+          .deletePensionsReliefs(requestData)
           .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
 
-        await(service.delete(requestData)) shouldBe Right(ResponseWrapper("resultId", ()))
+        await(service.deletePensionsReliefs(requestData)) shouldBe Right(ResponseWrapper("resultId", ()))
       }
     }
     "a service call is unsuccessful" should {
@@ -61,10 +61,10 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
         s"return ${error.code} error when $desErrorCode error is returned from the connector" in new Test {
 
           MockDeletePensionsReliefsConnector
-            .delete(requestData)
+            .deletePensionsReliefs(requestData)
             .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(desErrorCode))))))
 
-          await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
+          await(service.deletePensionsReliefs(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
         }
 
       val errors = Seq(

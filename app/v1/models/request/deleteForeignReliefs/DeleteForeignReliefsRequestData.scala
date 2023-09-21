@@ -16,6 +16,6 @@
 
 package v1.models.request.deleteForeignReliefs
 
-import api.models.request.RawData
+import api.models.domain.{Nino, TaxYear}
 
-case class DeleteForeignReliefsRawData(nino: String, taxYear: String) extends RawData
+case class DeleteForeignReliefsRequestData(nino: Nino, taxYear: TaxYear)

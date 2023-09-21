@@ -17,65 +17,56 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockDeleteForeignReliefsRequestParser
-import v1.mocks.services._
-import v1.models.request.deleteForeignReliefs.{DeleteForeignReliefsRawData, DeleteForeignReliefsRequest}
+import v1.controllers.validators.MockDeleteForeignReliefsValidatorFactory
+import v1.mocks.services.MockDeleteForeignReliefsService
+import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeleteForeignReliefsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockDeleteForeignReliefsService
-    with MockDeleteForeignReliefsRequestParser
+    with MockDeleteForeignReliefsValidatorFactory
     with MockAuditService {
 
-  private val taxYear = "2019-20"
-  private val rawData = DeleteForeignReliefsRawData(nino, taxYear)
-  private val requestData = DeleteForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val taxYear = TaxYear.fromMtd("2019-20")
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {
       "the request received is valid" in new Test {
 
-        MockDeleteForeignReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
-        MockDeleteService
+        MockDeleteForeignReliefsService
           .delete(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        runOkTestWithAudit(expectedStatus = NO_CONTENT)
+        runOkTest(expectedStatus = NO_CONTENT, maybeExpectedResponseBody = None)
       }
     }
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
 
-        MockDeleteForeignReliefsRequestParser
-          .parse(rawData)
-          .returns(Left(errors.ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError)
       }
 
       "service errors occur" in new Test {
 
-        MockDeleteForeignReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
-        MockDeleteService
+        MockDeleteForeignReliefsService
           .delete(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
@@ -84,34 +75,36 @@ class DeleteForeignReliefsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new DeleteForeignReliefsController(
+    private val controller = new DeleteForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
+      validatorFactory = mockDeleteForeignReliefsValidatorFactory,
       service = mockDeleteForeignReliefsService,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear.asMtd)(fakeDeleteRequest)
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "DeleteForeignReliefs",
         transactionName = "delete-foreign-reliefs",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
+          versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
-          requestBody = None,
+          params = Map("nino" -> nino, "taxYear" -> taxYear.asMtd),
+          requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
         )
       )
+
+    protected val requestData: DeleteForeignReliefsRequestData = DeleteForeignReliefsRequestData(Nino(nino), taxYear)
 
   }
 

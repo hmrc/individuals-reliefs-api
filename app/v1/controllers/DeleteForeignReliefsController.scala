@@ -19,9 +19,9 @@ package v1.controllers
 import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.DeleteForeignReliefsRequestParser
-import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRawData
+import routing.{Version, Version1}
+import utils.IdGenerator
+import v1.controllers.validators.DeleteForeignReliefsValidatorFactory
 import v1.services.DeleteForeignReliefsService
 
 import javax.inject.{Inject, Singleton}
@@ -30,13 +30,12 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class DeleteForeignReliefsController @Inject() (val authService: EnrolmentsAuthService,
                                                 val lookupService: MtdIdLookupService,
-                                                parser: DeleteForeignReliefsRequestParser,
+                                                validatorFactory: DeleteForeignReliefsValidatorFactory,
                                                 service: DeleteForeignReliefsService,
                                                 auditService: AuditService,
                                                 cc: ControllerComponents,
                                                 val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "DeleteForeignReliefsController", endpointName = "deleteForeignReliefs")
@@ -45,21 +44,20 @@ class DeleteForeignReliefsController @Inject() (val authService: EnrolmentsAuthS
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = DeleteForeignReliefsRawData(nino, taxYear)
+      val validator = validatorFactory.validator(nino, taxYear)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService(service.delete)
-        .withAuditing(AuditHandlerOld(
+        .withAuditing(AuditHandler(
           auditService = auditService,
           auditType = "DeleteForeignReliefs",
           transactionName = "delete-foreign-reliefs",
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
-          requestBody = None
+          apiVersion = Version.from(request, orElse = Version1),
+          params = Map("nino" -> nino, "taxYear" -> taxYear)
         ))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
 
     }
 

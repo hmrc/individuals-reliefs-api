@@ -19,7 +19,7 @@ package v1.endpoints
 import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status
+import play.api.http.Status._
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -53,8 +53,8 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
   }
 
   private trait TysIfsTest extends Test {
-    def taxYear       = "2023-24"
-    def downstreamUri = s"/income-tax/reliefs/pensions/23-24/$nino"
+    def taxYear: String       = "2023-24"
+    def downstreamUri: String = s"/income-tax/reliefs/pensions/23-24/$nino"
   }
 
   "Calling the delete endpoint" should {
@@ -67,11 +67,11 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, Status.NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(mtdRequest().delete())
-        response.status shouldBe Status.NO_CONTENT
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
@@ -80,11 +80,11 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, Status.NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(mtdRequest().delete())
-        response.status shouldBe Status.NO_CONTENT
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
@@ -112,10 +112,10 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = List(
-          ("Walrus", "2020-21", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "203100", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2018-20", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
+          ("Walrus", "2020-21", BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "203100", BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2018-20", BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2019-20", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -146,16 +146,16 @@ class DeletePensionsReliefsControllerISpec extends IntegrationBaseSpec {
         """.stripMargin
 
         val errors = List(
-          (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
-          (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
+          (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
         val extraTysErrors = List(
-          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
         (errors ++ extraTysErrors).foreach(args => (nonTysServiceErrorTest _).tupled(args))

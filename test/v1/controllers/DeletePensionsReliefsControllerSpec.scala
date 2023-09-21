@@ -17,16 +17,16 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockDeletePensionsReliefsRequestParser
-import v1.mocks.services._
-import v1.models.request.deletePensionsReliefs.{DeletePensionsReliefsRawData, DeletePensionsReliefsRequest}
+import v1.controllers.validators.MockDeletePensionsReliefsValidatorFactory
+import v1.mocks.services.MockDeletePensionsReliefsService
+import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -35,47 +35,39 @@ class DeletePensionsReliefsControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockDeletePensionsReliefsService
-    with MockDeletePensionsReliefsRequestParser
+    with MockDeletePensionsReliefsValidatorFactory
     with MockAuditService {
 
-  private val taxYear     = "2019-20"
-  private val rawData     = DeletePensionsReliefsRawData(nino, taxYear)
-  private val requestData = DeletePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val taxYear = TaxYear.fromMtd("2019-20")
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {
       "the request received is valid" in new Test {
 
-        MockDeletePensionsReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
-        MockDeleteService
-          .delete(requestData)
+        MockDeletePensionsReliefsService
+          .deletePensionsReliefs(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        runOkTestWithAudit(expectedStatus = NO_CONTENT)
+        runOkTest(expectedStatus = NO_CONTENT, maybeExpectedResponseBody = None)
       }
     }
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
 
-        MockDeletePensionsReliefsRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
 
-        MockDeletePensionsReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
-        MockDeleteService
-          .delete(requestData)
+        MockDeletePensionsReliefsService
+          .deletePensionsReliefs(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
         runErrorTestWithAudit(RuleTaxYearNotSupportedError)
@@ -83,34 +75,36 @@ class DeletePensionsReliefsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new DeletePensionsReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
+      validatorFactory = mockDeletePensionsReliefsValidatorFactory,
       service = mockDeletePensionsReliefsService,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear.asMtd)(fakeRequest)
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "DeleteReliefPension",
         transactionName = "delete-reliefs-pensions",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
+          versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
-          requestBody = None,
+          params = Map("nino" -> nino, "taxYear" -> taxYear.asMtd),
+          requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
         )
       )
+
+    protected val requestData: DeletePensionsReliefsRequestData = DeletePensionsReliefsRequestData(Nino(nino), taxYear)
 
   }
 

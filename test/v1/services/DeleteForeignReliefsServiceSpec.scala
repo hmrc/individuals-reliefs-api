@@ -23,37 +23,40 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.connectors.MockDeleteForeignReliefsConnector
-import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequest
+import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeleteForeignReliefsServiceSpec extends UnitSpec {
 
-  "DeleteForeignReliefsServiceSpec" should {
-    "deleteForeignReliefs" must {
-      "return correct result for a success" in new Test {
-        val outcome = Right(ResponseWrapper("resultId", ()))
+  implicit private val correlationId: String = "X-123"
+  private val nino                           = Nino("AA123456A")
+  private val taxYear                        = TaxYear.fromMtd("2019-20")
 
+  "Delete Foreign Reliefs Service" when {
+    "service call successful" should {
+      "return mapped result" in new Test {
         MockDeleteForeignReliefsConnector
           .delete(requestData)
-          .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        await(service.delete(requestData)) shouldBe outcome
+        await(service.delete(requestData)) shouldBe Right(ResponseWrapper(correlationId, ()))
       }
-
+    }
+    "unsuccessful" should {
       "map errors according to spec" when {
         def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
-          s"return ${error.code} error when $downstreamErrorCode error is returned from the connector" in new Test {
+          s"a $downstreamErrorCode error is returned from the service" in new Test {
 
             MockDeleteForeignReliefsConnector
               .delete(requestData)
-              .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-            await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
+            await(service.delete(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        val errors = Seq(
+        val errors = List(
           ("NO_DATA_FOUND", NotFoundError),
           ("INVALID_TAX_YEAR", TaxYearFormatError),
           ("INVALID_CORRELATIONID", InternalError),
@@ -62,7 +65,7 @@ class DeleteForeignReliefsServiceSpec extends UnitSpec {
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
         )
 
-        val extraTysErrors = Seq(
+        val extraTysErrors = List(
           ("INVALID_CORRELATION_ID", InternalError),
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
         )
@@ -73,18 +76,12 @@ class DeleteForeignReliefsServiceSpec extends UnitSpec {
   }
 
   trait Test extends MockDeleteForeignReliefsConnector {
-    implicit val hc: HeaderCarrier              = HeaderCarrier()
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-    implicit val correlationId: String          = "X-123"
+    implicit protected val hc: HeaderCarrier              = HeaderCarrier()
+    implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val validNino    = "AA123456A"
-    val validTaxYear = "2019-20"
+    protected val service = new DeleteForeignReliefsService(connector = mockDeleteForeignReliefsConnector)
 
-    val requestData: DeleteForeignReliefsRequest = DeleteForeignReliefsRequest(Nino(validNino), TaxYear.fromMtd(validTaxYear))
-
-    val service = new DeleteForeignReliefsService(
-      connector = mockConnector
-    )
+    val requestData: DeleteForeignReliefsRequestData = DeleteForeignReliefsRequestData(nino, taxYear)
 
   }
 

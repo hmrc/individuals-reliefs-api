@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteForeignReliefs
+package v1.models.request.amendOtherReliefs
 
 import api.models.domain.{Nino, TaxYear}
 
-case class DeleteForeignReliefsRequest(nino: Nino, taxYear: TaxYear)
+case class AmendOtherReliefsRequestData(nino: Nino, taxYear: TaxYear, body: AmendOtherReliefsRequestBody)

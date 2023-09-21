@@ -19,9 +19,9 @@ package v1.controllers
 import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import routing.{Version, Version1}
 import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.DeletePensionsReliefsRequestParser
-import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRawData
+import v1.controllers.validators.DeletePensionsReliefsValidatorFactory
 import v1.services.DeletePensionsReliefsService
 
 import javax.inject.{Inject, Singleton}
@@ -30,7 +30,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class DeletePensionsReliefsController @Inject() (val authService: EnrolmentsAuthService,
                                                  val lookupService: MtdIdLookupService,
-                                                 parser: DeletePensionsReliefsRequestParser,
+                                                 validatorFactory: DeletePensionsReliefsValidatorFactory,
                                                  service: DeletePensionsReliefsService,
                                                  auditService: AuditService,
                                                  cc: ControllerComponents,
@@ -45,21 +45,20 @@ class DeletePensionsReliefsController @Inject() (val authService: EnrolmentsAuth
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = DeletePensionsReliefsRawData(nino, taxYear)
+      val validator = validatorFactory.validator(nino, taxYear)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
-        .withService(service.delete)
-        .withAuditing(AuditHandlerOld(
+      val requestHandler = RequestHandler
+        .withValidator(validator)
+        .withService(service.deletePensionsReliefs)
+        .withAuditing(AuditHandler(
           auditService = auditService,
           auditType = "DeleteReliefPension",
           transactionName = "delete-reliefs-pensions",
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
-          requestBody = None
+          apiVersion = Version.from(request, orElse = Version1),
+          params = Map("nino" -> nino, "taxYear" -> taxYear)
         ))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

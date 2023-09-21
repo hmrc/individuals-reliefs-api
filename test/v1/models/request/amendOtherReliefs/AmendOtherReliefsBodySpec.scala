@@ -22,7 +22,7 @@ import support.UnitSpec
 
 class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
 
-  val amendOtherReliefsBody = AmendOtherReliefsBody(
+  private val amendOtherReliefsBody = AmendOtherReliefsRequestBody(
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
     Some(PayrollGiving(Some("myref"), 154.00)),
     Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
@@ -40,7 +40,7 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  val emptyAmendOtherReliefsBody = AmendOtherReliefsBody(
+  private val emptyAmendOtherReliefsBody = AmendOtherReliefsRequestBody(
     None,
     None,
     None,
@@ -50,7 +50,7 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
     None
   )
 
-  val json = Json.parse(
+  private val json = Json.parse(
     """{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
@@ -96,19 +96,19 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
       |}""".stripMargin
   )
 
-  val emptyJson = Json.parse("""{}""")
+  private val emptyJson = Json.parse("""{}""")
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        amendOtherReliefsBody shouldBe json.as[AmendOtherReliefsBody]
+        amendOtherReliefsBody shouldBe json.as[AmendOtherReliefsRequestBody]
       }
     }
   }
 
   "read from empty JSON" should {
     "convert empty MTD JSON into an empty AmendSecuritiesItems object" in {
-      emptyAmendOtherReliefsBody shouldBe emptyJson.as[AmendOtherReliefsBody]
+      emptyAmendOtherReliefsBody shouldBe emptyJson.as[AmendOtherReliefsRequestBody]
     }
   }
 
@@ -131,7 +131,7 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
   "isIncorrectOrEmptyBodyError" should {
     "return false" when {
       "all arrays are provided, none are empty, no objects in the arrays are empty" in {
-        val model = AmendOtherReliefsBody(
+        val model = AmendOtherReliefsRequestBody(
           Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
           Some(PayrollGiving(Some("myref"), 154.00)),
           Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
@@ -151,7 +151,7 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
         model.isIncorrectOrEmptyBody shouldBe false
       }
       "only some arrays are provided, none are empty, no objects in the arrays are empty" in {
-        val model = AmendOtherReliefsBody(
+        val model = AmendOtherReliefsRequestBody(
           None,
           Some(PayrollGiving(Some("myref"), 154.00)),
           Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
@@ -173,7 +173,7 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
     }
     "return true" when {
       "no arrays are provided" in {
-        val model = AmendOtherReliefsBody(
+        val model = AmendOtherReliefsRequestBody(
           None,
           None,
           None,
@@ -185,7 +185,7 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
         model.isIncorrectOrEmptyBody shouldBe true
       }
       "at least one empty array is provided" in {
-        val model = AmendOtherReliefsBody(
+        val model = AmendOtherReliefsRequestBody(
           Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
           Some(PayrollGiving(Some("myref"), 154.00)),
           Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),

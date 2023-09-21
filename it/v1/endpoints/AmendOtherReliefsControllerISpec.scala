@@ -104,7 +104,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val input = Seq(
+        val input = List(
           ("AA1123A", "2021-22", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
           ("AA123456A", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2020-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
@@ -138,7 +138,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        val errors = Seq(
+        val errors = List(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
@@ -147,7 +147,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        val extraTysErrors = Seq(
+        val extraTysErrors = List(
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
@@ -190,7 +190,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |      }
     """.stripMargin
 
-    val responseBody = Json.parse(s"""
+    protected val responseBody: JsValue = Json.parse(s"""
          |{
          |   "links":[
          |      {
@@ -230,7 +230,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
 object AmendOtherReliefsControllerISpec {
 
-  val requestBodyJson = Json.parse("""
+  private val requestBodyJson = Json.parse("""
      |{
      |  "nonDeductibleLoanInterest": {
      |        "customerReference": "myref",
@@ -321,54 +321,39 @@ object AmendOtherReliefsControllerISpec {
       |}""".stripMargin)
 
   val allInvalidValueRequestError: List[MtdError] = List(
-    LenderNameFormatError.copy(paths = Some(
-      Seq(
-        "/qualifyingLoanInterestPayments/0/lenderName"
-      ))),
-    CustomerReferenceFormatError.copy(paths = Some(
+    LenderNameFormatError.withPath("/qualifyingLoanInterestPayments/0/lenderName"),
+    CustomerReferenceFormatError.withPaths(
       List(
         "/nonDeductibleLoanInterest/customerReference",
         "/payrollGiving/customerReference",
         "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
-        "/maintenancePayments/0/customerReference",
         "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
+        "/maintenancePayments/0/customerReference",
         "/annualPaymentsMade/customerReference",
         "/qualifyingLoanInterestPayments/0/customerReference"
-      ))),
-    IncomeSourceFormatError.copy(paths = Some(
-      Seq(
-        "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
-      ))),
-    BusinessNameFormatError.copy(paths = Some(
-      Seq(
-        "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
-      ))),
-    NatureOfTradeFormatError.copy(paths = Some(
-      Seq(
-        "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
-      ))),
-    ValueFormatError.copy(paths = Some(
+      )),
+    IncomeSourceFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"),
+    BusinessNameFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/businessName"),
+    NatureOfTradeFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"),
+    ValueFormatError.withPaths(
       List(
         "/nonDeductibleLoanInterest/reliefClaimed",
         "/payrollGiving/reliefClaimed",
         "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
-        "/maintenancePayments/0/amount",
         "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
+        "/maintenancePayments/0/amount",
         "/annualPaymentsMade/reliefClaimed",
         "/qualifyingLoanInterestPayments/0/reliefClaimed"
-      ))),
-    DateFormatError.copy(paths = Some(
+      )),
+    DateFormatError.withPaths(
       List(
-        "/maintenancePayments/0/exSpouseDateOfBirth",
-        "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
-      ))),
-    ExSpouseNameFormatError.copy(paths = Some(
-      Seq(
-        "/maintenancePayments/0/exSpouseName"
-      )))
+        "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased",
+        "/maintenancePayments/0/exSpouseDateOfBirth"
+      )),
+    ExSpouseNameFormatError.withPath("/maintenancePayments/0/exSpouseName")
   )
 
-  val validRequestBodyJson = Json.parse("""
+  private val validRequestBodyJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
@@ -413,7 +398,7 @@ object AmendOtherReliefsControllerISpec {
       |  ]
       |}""".stripMargin)
 
-  val allInvalidValueFormatRequestBodyJson = Json.parse("""
+  private val allInvalidValueFormatRequestBodyJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
@@ -458,7 +443,7 @@ object AmendOtherReliefsControllerISpec {
       |  ]
       |}""".stripMargin)
 
-  val allDatesInvalidRequestBodyJson = Json.parse("""
+  private val allDatesInvalidRequestBodyJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
@@ -503,7 +488,7 @@ object AmendOtherReliefsControllerISpec {
       |  ]
       |}""".stripMargin)
 
-  val allCustomerReferencesInvalidRequestBodyJson = Json.parse("""
+  private val allCustomerReferencesInvalidRequestBodyJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "",
@@ -548,7 +533,7 @@ object AmendOtherReliefsControllerISpec {
       |  ]
       |}""".stripMargin)
 
-  val allExSpouseNamesInvalidRequestBodyJson = Json.parse("""
+  private val allExSpouseNamesInvalidRequestBodyJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
@@ -593,7 +578,7 @@ object AmendOtherReliefsControllerISpec {
       |  ]
       |}""".stripMargin)
 
-  val allBusinessNamesInvalidRequestBodyJson = Json.parse("""
+  private val allBusinessNamesInvalidRequestBodyJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
@@ -638,7 +623,7 @@ object AmendOtherReliefsControllerISpec {
       |  ]
       |}""".stripMargin)
 
-  val allNatureOfTradesInvalidRequestBodyJson = Json.parse("""
+  private val allNatureOfTradesInvalidRequestBodyJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
@@ -683,7 +668,7 @@ object AmendOtherReliefsControllerISpec {
       |  ]
       |}""".stripMargin)
 
-  val allIncomeSourcesInvalidRequestBodyJson = Json.parse("""
+  private val allIncomeSourcesInvalidRequestBodyJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
@@ -728,7 +713,7 @@ object AmendOtherReliefsControllerISpec {
       |  ]
       |}""".stripMargin)
 
-  val allLenderNamesInvalidRequestBodyJson = Json.parse("""
+  private val allLenderNamesInvalidRequestBodyJson = Json.parse("""
       |{
       |  "nonDeductibleLoanInterest": {
       |        "customerReference": "myref",
@@ -773,73 +758,45 @@ object AmendOtherReliefsControllerISpec {
       |  ]
       |}""".stripMargin)
 
-  val allValueFormatError: MtdError = ValueFormatError.copy(
-    paths = Some(
-      Seq(
-        "/nonDeductibleLoanInterest/reliefClaimed",
-        "/payrollGiving/reliefClaimed",
-        "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
-        "/maintenancePayments/0/amount",
-        "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
-        "/annualPaymentsMade/reliefClaimed",
-        "/qualifyingLoanInterestPayments/0/reliefClaimed"
-      ))
+  val allValueFormatError: MtdError = ValueFormatError.withPaths(
+    List(
+      "/nonDeductibleLoanInterest/reliefClaimed",
+      "/payrollGiving/reliefClaimed",
+      "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
+      "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
+      "/maintenancePayments/0/amount",
+      "/annualPaymentsMade/reliefClaimed",
+      "/qualifyingLoanInterestPayments/0/reliefClaimed"
+    )
   )
 
-  val allDateFormatError: MtdError = DateFormatError.copy(
-    paths = Some(
-      List(
-        "/maintenancePayments/0/exSpouseDateOfBirth",
-        "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased"
-      ))
+  val allDateFormatError: MtdError = DateFormatError.withPaths(
+    List(
+      "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased",
+      "/maintenancePayments/0/exSpouseDateOfBirth"
+    )
   )
 
-  val allCustomerReferenceFormatErrors: MtdError = CustomerReferenceFormatError.copy(
-    paths = Some(
-      List(
-        "/nonDeductibleLoanInterest/customerReference",
-        "/payrollGiving/customerReference",
-        "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
-        "/maintenancePayments/0/customerReference",
-        "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
-        "/annualPaymentsMade/customerReference",
-        "/qualifyingLoanInterestPayments/0/customerReference"
-      ))
+  val allCustomerReferenceFormatErrors: MtdError = CustomerReferenceFormatError.withPaths(
+    List(
+      "/nonDeductibleLoanInterest/customerReference",
+      "/payrollGiving/customerReference",
+      "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
+      "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
+      "/maintenancePayments/0/customerReference",
+      "/annualPaymentsMade/customerReference",
+      "/qualifyingLoanInterestPayments/0/customerReference"
+    )
   )
 
-  val allExSpouseNameFormatErrors: MtdError = ExSpouseNameFormatError.copy(
-    paths = Some(
-      List(
-        "/maintenancePayments/0/exSpouseName"
-      ))
-  )
+  val allExSpouseNameFormatErrors: MtdError = ExSpouseNameFormatError.withPath("/maintenancePayments/0/exSpouseName")
 
-  val allBusinessNameFormatErrors: MtdError = BusinessNameFormatError.copy(
-    paths = Some(
-      List(
-        "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
-      ))
-  )
+  val allBusinessNameFormatErrors: MtdError = BusinessNameFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/businessName")
 
-  val allNatureOfTradeFormatErrors: MtdError = NatureOfTradeFormatError.copy(
-    paths = Some(
-      List(
-        "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
-      ))
-  )
+  val allNatureOfTradeFormatErrors: MtdError = NatureOfTradeFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade")
 
-  val allIncomeSourceFormatErrors: MtdError = IncomeSourceFormatError.copy(
-    paths = Some(
-      List(
-        "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
-      ))
-  )
+  val allIncomeSourceFormatErrors: MtdError = IncomeSourceFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource")
 
-  val allLenderNameFormatErrors: MtdError = LenderNameFormatError.copy(
-    paths = Some(
-      List(
-        "/qualifyingLoanInterestPayments/0/lenderName"
-      ))
-  )
+  val allLenderNameFormatErrors: MtdError = LenderNameFormatError.withPath("/qualifyingLoanInterestPayments/0/lenderName")
 
 }
