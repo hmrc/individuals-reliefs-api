@@ -758,73 +758,45 @@ object AmendOtherReliefsControllerISpec {
       |  ]
       |}""".stripMargin)
 
-  val allValueFormatError: MtdError = ValueFormatError.copy(
-    paths = Some(
-      List(
-        "/nonDeductibleLoanInterest/reliefClaimed",
-        "/payrollGiving/reliefClaimed",
-        "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
-        "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
-        "/maintenancePayments/0/amount",
-        "/annualPaymentsMade/reliefClaimed",
-        "/qualifyingLoanInterestPayments/0/reliefClaimed"
-      ))
+  val allValueFormatError: MtdError = ValueFormatError.withPaths(
+    List(
+      "/nonDeductibleLoanInterest/reliefClaimed",
+      "/payrollGiving/reliefClaimed",
+      "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
+      "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
+      "/maintenancePayments/0/amount",
+      "/annualPaymentsMade/reliefClaimed",
+      "/qualifyingLoanInterestPayments/0/reliefClaimed"
+    )
   )
 
-  val allDateFormatError: MtdError = DateFormatError.copy(
-    paths = Some(
-      List(
-        "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased",
-        "/maintenancePayments/0/exSpouseDateOfBirth"
-      ))
+  val allDateFormatError: MtdError = DateFormatError.withPaths(
+    List(
+      "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased",
+      "/maintenancePayments/0/exSpouseDateOfBirth"
+    )
   )
 
-  val allCustomerReferenceFormatErrors: MtdError = CustomerReferenceFormatError.copy(
-    paths = Some(
-      List(
-        "/nonDeductibleLoanInterest/customerReference",
-        "/payrollGiving/customerReference",
-        "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
-        "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
-        "/maintenancePayments/0/customerReference",
-        "/annualPaymentsMade/customerReference",
-        "/qualifyingLoanInterestPayments/0/customerReference"
-      ))
+  val allCustomerReferenceFormatErrors: MtdError = CustomerReferenceFormatError.withPaths(
+    List(
+      "/nonDeductibleLoanInterest/customerReference",
+      "/payrollGiving/customerReference",
+      "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
+      "/postCessationTradeReliefAndCertainOtherLosses/0/customerReference",
+      "/maintenancePayments/0/customerReference",
+      "/annualPaymentsMade/customerReference",
+      "/qualifyingLoanInterestPayments/0/customerReference"
+    )
   )
 
-  val allExSpouseNameFormatErrors: MtdError = ExSpouseNameFormatError.copy(
-    paths = Some(
-      List(
-        "/maintenancePayments/0/exSpouseName"
-      ))
-  )
+  val allExSpouseNameFormatErrors: MtdError = ExSpouseNameFormatError.withPath("/maintenancePayments/0/exSpouseName")
 
-  val allBusinessNameFormatErrors: MtdError = BusinessNameFormatError.copy(
-    paths = Some(
-      List(
-        "/postCessationTradeReliefAndCertainOtherLosses/0/businessName"
-      ))
-  )
+  val allBusinessNameFormatErrors: MtdError = BusinessNameFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/businessName")
 
-  val allNatureOfTradeFormatErrors: MtdError = NatureOfTradeFormatError.copy(
-    paths = Some(
-      List(
-        "/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"
-      ))
-  )
+  val allNatureOfTradeFormatErrors: MtdError = NatureOfTradeFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade")
 
-  val allIncomeSourceFormatErrors: MtdError = IncomeSourceFormatError.copy(
-    paths = Some(
-      List(
-        "/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"
-      ))
-  )
+  val allIncomeSourceFormatErrors: MtdError = IncomeSourceFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource")
 
-  val allLenderNameFormatErrors: MtdError = LenderNameFormatError.copy(
-    paths = Some(
-      List(
-        "/qualifyingLoanInterestPayments/0/lenderName"
-      ))
-  )
+  val allLenderNameFormatErrors: MtdError = LenderNameFormatError.withPath("/qualifyingLoanInterestPayments/0/lenderName")
 
 }

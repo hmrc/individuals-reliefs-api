@@ -48,11 +48,7 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
 
     def zipAndValidate[A](fields: Option[Seq[A]], validate: (A, Int) => Validated[Seq[MtdError], Unit]) =
       fields
-        .map(
-          _.zipWithIndex
-            .map { case (entry, index) => validate(entry, index) }
-            .sequence
-            .andThen(_ => valid))
+        .map(_.zipWithIndex.traverse(validate.tupled))
         .getOrElse(valid)
 
     val validatedPostCessationTradeReliefAndCertainOtherLosses =
@@ -80,7 +76,7 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
     import nonDeductibleLoanInterest._
 
     val validatedCustomerReference =
-      customerReference.map(ref => validateCustomerRef(ref, "/nonDeductibleLoanInterest/customerReference")).getOrElse(valid)
+      customerReference.map(validateCustomerRef(_, "/nonDeductibleLoanInterest/customerReference")).getOrElse(valid)
 
     val validatedReliefClaimed = resolveParsedNumber(reliefClaimed, None, Some("/nonDeductibleLoanInterest/reliefClaimed"))
 
@@ -91,7 +87,7 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
     import payrollGiving._
 
     val validatedCustomerReference =
-      customerReference.map(ref => validateCustomerRef(ref, "/payrollGiving/customerReference")).getOrElse(valid)
+      customerReference.map(validateCustomerRef(_, "/payrollGiving/customerReference")).getOrElse(valid)
 
     val validatedReliefClaimed = resolveParsedNumber(reliefClaimed, None, Some("/payrollGiving/reliefClaimed"))
 
@@ -104,9 +100,7 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
     import qualifyingDistributionRedemptionOfSharesAndSecurities._
 
     val validatedCustomerReference =
-      customerReference
-        .map(ref => validateCustomerRef(ref, "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference"))
-        .getOrElse(valid)
+      customerReference.map(validateCustomerRef(_, "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference")).getOrElse(valid)
 
     val validatedAmount = resolveParsedNumber(amount, None, Some("/qualifyingDistributionRedemptionOfSharesAndSecurities/amount"))
 
@@ -120,27 +114,27 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
 
     val validatedCustomerReference =
       customerReference
-        .map(ref => validateCustomerRef(ref, s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference"))
+        .map(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference"))
         .getOrElse(valid)
 
     val validatedBusinessName =
       businessName
-        .map(name => validateFieldLength(name, s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName", BusinessNameFormatError))
+        .map(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName", BusinessNameFormatError))
         .getOrElse(valid)
 
     val validatedDateBusinessCeased =
       dateBusinessCeased
-        .map(date => ResolveIsoDate(date, Some(DateFormatError), Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased")))
+        .map(ResolveIsoDate(_, Some(DateFormatError), Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased")))
         .getOrElse(valid)
 
     val validatedNatureOfTrade =
       natureOfTrade
-        .map(nature => validateCustomerRef(nature, s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade", NatureOfTradeFormatError))
+        .map(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade", NatureOfTradeFormatError))
         .getOrElse(valid)
 
     val validatedIncomeSource =
       incomeSource
-        .map(source => validateFieldLength(source, s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource", IncomeSourceFormatError))
+        .map(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource", IncomeSourceFormatError))
         .getOrElse(valid)
 
     val validatedAmount = resolveParsedNumber(amount, None, Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/amount"))
@@ -158,14 +152,14 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
     import maintenancePayments._
 
     val validatedCustomerReference =
-      customerReference.map(ref => validateCustomerRef(ref, s"/maintenancePayments/$index/customerReference")).getOrElse(valid)
+      customerReference.map(validateCustomerRef(_, s"/maintenancePayments/$index/customerReference")).getOrElse(valid)
 
     val validatedExSpouseName =
-      exSpouseName.map(name => validateFieldLength(name, s"/maintenancePayments/$index/exSpouseName", ExSpouseNameFormatError)).getOrElse(valid)
+      exSpouseName.map(validateFieldLength(_, s"/maintenancePayments/$index/exSpouseName", ExSpouseNameFormatError)).getOrElse(valid)
 
     val validatedExSpouseDOB =
       exSpouseDateOfBirth
-        .map(date => ResolveIsoDate(date, Some(DateFormatError), Some(s"/maintenancePayments/$index/exSpouseDateOfBirth")))
+        .map(ResolveIsoDate(_, Some(DateFormatError), Some(s"/maintenancePayments/$index/exSpouseDateOfBirth")))
         .getOrElse(valid)
 
     val validatedAmount = resolveParsedNumber(amount, None, Some(s"/maintenancePayments/$index/amount"))
@@ -177,7 +171,7 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
     import annualPaymentsMade._
 
     val validatedCustomerReference =
-      customerReference.map(ref => validateCustomerRef(ref, "/annualPaymentsMade/customerReference")).getOrElse(valid)
+      customerReference.map(validateCustomerRef(_, "/annualPaymentsMade/customerReference")).getOrElse(valid)
 
     val validatedReliefClaimed = resolveParsedNumber(reliefClaimed, None, Some("/annualPaymentsMade/reliefClaimed"))
 
@@ -189,10 +183,10 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
     import qualifyingLoanInterestPayments._
 
     val validatedCustomerReference =
-      customerReference.map(ref => validateCustomerRef(ref, s"/qualifyingLoanInterestPayments/$index/customerReference")).getOrElse(valid)
+      customerReference.map(validateCustomerRef(_, s"/qualifyingLoanInterestPayments/$index/customerReference")).getOrElse(valid)
 
     val validatedFieldLength =
-      lenderName.map(name => validateFieldLength(name, s"/qualifyingLoanInterestPayments/$index/lenderName", LenderNameFormatError)).getOrElse(valid)
+      lenderName.map(validateFieldLength(_, s"/qualifyingLoanInterestPayments/$index/lenderName", LenderNameFormatError)).getOrElse(valid)
 
     val validatedReliefClaimed = resolveParsedNumber(reliefClaimed, None, Some(s"/qualifyingLoanInterestPayments/$index/reliefClaimed"))
 

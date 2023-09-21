@@ -50,19 +50,19 @@ class DeleteForeignReliefsValidatorFactorySpec extends UnitSpec with MockAppConf
         val result: Either[ErrorWrapper, DeleteForeignReliefsRequestData] =
           validator("A12344A", validTaxYear).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError, None))
+        result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
       "an invalid tax year format is supplied" in {
         val result: Either[ErrorWrapper, DeleteForeignReliefsRequestData] =
           validator(validNino, "201831").validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError, None))
+        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
       "a tax year before the earliest allowed date is supplied" in {
         val result: Either[ErrorWrapper, DeleteForeignReliefsRequestData] =
           validator(validNino, "2019-20").validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError, None))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
       "a tax year spanning an invalid tax year range is supplied" in {
         val result: Either[ErrorWrapper, DeleteForeignReliefsRequestData] =

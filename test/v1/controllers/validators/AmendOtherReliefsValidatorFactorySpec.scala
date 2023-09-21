@@ -90,12 +90,6 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig 
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private val emptyJson = Json.parse(
-    """
-      |{}
-      |""".stripMargin
-  )
-
   private val parsedNonDeductibleLoanInterest = NonDeductibleLoanInterest(
     customerReference = Some("myref"),
     reliefClaimed = 763.00
@@ -210,7 +204,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig 
     "return a RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED error" when {
       "an empty JSON body is submitted" in {
         val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
-          validator(validNino, validTaxYear, emptyJson).validateAndWrapResult()
+          validator(validNino, validTaxYear, JsObject.empty).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
 
@@ -383,7 +377,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig 
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
-            ValueFormatError.withPaths(Seq(
+            ValueFormatError.withPaths(List(
               "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
               "/postCessationTradeReliefAndCertainOtherLosses/0/amount",
               "/maintenancePayments/0/amount",
@@ -463,7 +457,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig 
             Some(
               List(
                 LenderNameFormatError.withPath("/qualifyingLoanInterestPayments/0/lenderName"),
-                CustomerReferenceFormatError.withPaths(Seq(
+                CustomerReferenceFormatError.withPaths(List(
                   "/nonDeductibleLoanInterest/customerReference",
                   "/payrollGiving/customerReference",
                   "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference",
@@ -475,7 +469,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig 
                 IncomeSourceFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"),
                 BusinessNameFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/businessName"),
                 NatureOfTradeFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"),
-                ValueFormatError.withPaths(Seq(
+                ValueFormatError.withPaths(List(
                   "/nonDeductibleLoanInterest/reliefClaimed",
                   "/payrollGiving/reliefClaimed",
                   "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount",
@@ -485,7 +479,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig 
                   "/qualifyingLoanInterestPayments/0/reliefClaimed"
                 )),
                 DateFormatError.withPaths(
-                  Seq(
+                  List(
                     "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased",
                     "/maintenancePayments/0/exSpouseDateOfBirth"
                   )),
