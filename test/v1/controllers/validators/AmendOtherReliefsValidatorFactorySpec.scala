@@ -19,12 +19,11 @@ package v1.controllers.validators
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v1.models.request.amendOtherReliefs._
 
-class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
 
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
@@ -90,59 +89,39 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig 
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private val parsedNonDeductibleLoanInterest = NonDeductibleLoanInterest(
-    customerReference = Some("myref"),
-    reliefClaimed = 763.00
-  )
+  private val parsedNonDeductibleLoanInterest = NonDeductibleLoanInterest(Some("myref"), 763.00)
 
-  private val parsedPayrollGiving = PayrollGiving(
-    customerReference = Some("myref"),
-    reliefClaimed = 154.00
-  )
+  private val parsedPayrollGiving = PayrollGiving(Some("myref"), 154.00)
 
-  private val parsedQualifyingDistributionRedemptionOfSharesAndSecurities = QualifyingDistributionRedemptionOfSharesAndSecurities(
-    customerReference = Some("myref"),
-    amount = 222.22
-  )
+  private val parsedQualifyingDistributionRedemptionOfSharesAndSecurities =
+    QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)
 
-  private val parsedMaintenancePayments = MaintenancePayments(
-    customerReference = Some("myref"),
-    exSpouseName = Some("Hilda"),
-    exSpouseDateOfBirth = Some("2000-01-01"),
-    amount = 222.22
-  )
+  private val parsedMaintenancePayments = MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22)
 
-  private val parsedPostCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
-    customerReference = Some("myref"),
-    businessName = Some("ACME Inc"),
-    dateBusinessCeased = Some("2019-08-10"),
-    natureOfTrade = Some("Widgets Manufacturer"),
-    incomeSource = Some("AB12412/A12"),
-    amount = 222.22
-  )
+  private val parsedPostCessationTradeReliefAndCertainOtherLosses =
+    PostCessationTradeReliefAndCertainOtherLosses(
+      Some("myref"),
+      Some("ACME Inc"),
+      Some("2019-08-10"),
+      Some("Widgets Manufacturer"),
+      Some("AB12412/A12"),
+      222.22)
 
-  private val parsedAnnualPaymentsMade = AnnualPaymentsMade(
-    customerReference = Some("myref"),
-    reliefClaimed = 763.00
-  )
+  private val parsedAnnualPaymentsMade = AnnualPaymentsMade(Some("myref"), 763.00)
 
-  private val parsedQualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
-    customerReference = Some("myref"),
-    lenderName = Some("Maurice"),
-    reliefClaimed = 763.00
-  )
+  private val parsedQualifyingLoanInterestPayments = QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)
 
   private val parsedBody = AmendOtherReliefsRequestBody(
     Some(parsedNonDeductibleLoanInterest),
-    payrollGiving = Some(parsedPayrollGiving),
-    qualifyingDistributionRedemptionOfSharesAndSecurities = Some(parsedQualifyingDistributionRedemptionOfSharesAndSecurities),
-    maintenancePayments = Some(Seq(parsedMaintenancePayments)),
-    postCessationTradeReliefAndCertainOtherLosses = Some(Seq(parsedPostCessationTradeReliefAndCertainOtherLosses)),
-    annualPaymentsMade = Some(parsedAnnualPaymentsMade),
-    qualifyingLoanInterestPayments = Some(Seq(parsedQualifyingLoanInterestPayments))
+    Some(parsedPayrollGiving),
+    Some(parsedQualifyingDistributionRedemptionOfSharesAndSecurities),
+    Some(List(parsedMaintenancePayments)),
+    Some(List(parsedPostCessationTradeReliefAndCertainOtherLosses)),
+    Some(parsedAnnualPaymentsMade),
+    Some(List(parsedQualifyingLoanInterestPayments))
   )
 
-  private val validatorFactory = new AmendOtherReliefsValidatorFactory(mockAppConfig)
+  private val validatorFactory = new AmendOtherReliefsValidatorFactory()
 
   private def validator(nino: String, taxYear: String, body: JsValue) = validatorFactory.validator(nino, taxYear, body)
 

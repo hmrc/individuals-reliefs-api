@@ -22,12 +22,9 @@ import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
-import config.AppConfig
 import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequestData
 
-import javax.inject.Inject
-
-class DeletePensionsReliefsValidatorFactory @Inject() (appConfig: AppConfig) {
+class DeletePensionsReliefsValidatorFactory {
 
   def validator(nino: String, taxYear: String): Validator[DeletePensionsReliefsRequestData] = new Validator[DeletePensionsReliefsRequestData] {
 

@@ -19,51 +19,45 @@ package v1.controllers
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.Method._
 import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import api.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import mocks.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import v1.controllers.validators.MockCreateAndAmendReliefInvestmentsValidatorFactory
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures.{hateoasResponse, requestBodyJson, requestBodyModel}
-import v1.mocks.requestParsers.MockCreateAndAmendReliefInvestmentsRequestParser
-import v1.mocks.services._
 import v1.models.request.createAndAmendReliefInvestments._
 import v1.models.response.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsHateoasData
+import v1.services.MockCreateAndAmendReliefInvestmentsService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAndAmendReliefInvestmentsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockCreateAndAmendReliefInvestmentsService
-    with MockCreateAndAmendReliefInvestmentsRequestParser
+    with MockCreateAndAmendReliefInvestmentsValidatorFactory
     with MockHateoasFactory
-    with MockAuditService
-    with MockAppConfig {
+    with MockAuditService {
 
   private val taxYear = "2019-20"
 
-  private val testHateoasLinks: Seq[Link] = Seq(
-    api.hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self"),
-    api.hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-investments"),
-    api.hateoas.Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
+  private val testHateoasLinks = List(
+    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self"),
+    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-investments"),
+    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
   )
 
-  private val rawData = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, requestBodyJson)
-  private val requestData = CreateAndAmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = CreateAndAmendReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-
-        MockCreateAndAmendReliefInvestmentsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAndAmendReliefService
           .amend(requestData)
@@ -84,20 +78,14 @@ class CreateAndAmendReliefInvestmentsControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-
-        MockCreateAndAmendReliefInvestmentsRequestParser
-          .parseRequest(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
 
       }
 
       "the service returns an error" in new Test {
-
-        MockCreateAndAmendReliefInvestmentsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAndAmendReliefService
           .amend(requestData)
@@ -108,31 +96,30 @@ class CreateAndAmendReliefInvestmentsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new CreateAndAmendReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateAndAmendReliefInvestmentsRequestParser,
+      validatorFactory = mockCreateAndAmendReliefInvestmentsValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
-      appConfig = mockAppConfig,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendReliefsInvestment",
         transactionName = "create-amend-reliefs-investment",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
+          versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
+          params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

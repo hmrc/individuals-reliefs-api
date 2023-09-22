@@ -28,9 +28,9 @@ import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.controllers.validators.MockAmendPensionsReliefsValidatorFactory
-import v1.mocks.services._
 import v1.models.request.amendPensionsReliefs._
 import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsHateoasData
+import v1.services.MockAmendPensionsReliefsService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

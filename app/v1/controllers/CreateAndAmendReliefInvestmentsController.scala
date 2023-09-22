@@ -19,12 +19,11 @@ package v1.controllers
 import api.controllers._
 import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.CreateAndAmendReliefInvestmentsRequestParser
-import v1.models.request.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsRawData
+import routing.{Version, Version1}
+import utils.IdGenerator
+import v1.controllers.validators.CreateAndAmendReliefInvestmentsValidatorFactory
 import v1.models.response.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsHateoasData
 import v1.models.response.createAndAmendReliefInvestments.CreateAndAmendReliefInvestmentsResponse.LinksFactory
 import v1.services.CreateAndAmendReliefInvestmentsService
@@ -35,15 +34,13 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class CreateAndAmendReliefInvestmentsController @Inject() (val authService: EnrolmentsAuthService,
                                                            val lookupService: MtdIdLookupService,
-                                                           parser: CreateAndAmendReliefInvestmentsRequestParser,
+                                                           validatorFactory: CreateAndAmendReliefInvestmentsValidatorFactory,
                                                            service: CreateAndAmendReliefInvestmentsService,
                                                            auditService: AuditService,
                                                            hateoasFactory: HateoasFactory,
-                                                           appConfig: AppConfig,
                                                            cc: ControllerComponents,
                                                            val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "CreateAndAmendReliefInvestmentsController", endpointName = "createAndAmendReliefInvestments")
@@ -52,22 +49,23 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = CreateAndAmendReliefInvestmentsRawData(nino, taxYear, request.body)
+      val validator = validatorFactory.validator(nino, taxYear, request.body)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService(service.amend)
-        .withAuditing(AuditHandlerOld(
-          auditService = auditService,
-          auditType = "CreateAmendReliefsInvestment",
-          transactionName = "create-amend-reliefs-investment",
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          requestBody = Some(request.body),
+        .withAuditing(AuditHandler(
+          auditService,
+          "CreateAmendReliefsInvestment",
+          "create-amend-reliefs-investment",
+          Version.from(request, orElse = Version1),
+          Map("nino" -> nino, "taxYear" -> taxYear),
+          Some(request.body),
           includeResponse = true
         ))
         .withHateoasResult(hateoasFactory)(CreateAndAmendReliefInvestmentsHateoasData(nino, taxYear))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

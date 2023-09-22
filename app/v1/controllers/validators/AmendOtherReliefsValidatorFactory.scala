@@ -18,21 +18,19 @@ package v1.controllers.validators
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers._
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import config.AppConfig
 import play.api.libs.json.JsValue
 import v1.controllers.validators.AmendOtherReliefsValidator.validateBusinessRules
 import v1.models.request.amendOtherReliefs._
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 import scala.annotation.nowarn
 
 @Singleton
-class AmendOtherReliefsValidatorFactory @Inject() (appConfig: AppConfig) {
-
-  private lazy val minTaxYear = 2021
+class AmendOtherReliefsValidatorFactory {
 
   @nowarn("cat=lint-byname-implicit")
   private val resolveJson = new ResolveNonEmptyJsonObject[AmendOtherReliefsRequestBody]()
@@ -43,7 +41,7 @@ class AmendOtherReliefsValidatorFactory @Inject() (appConfig: AppConfig) {
       def validate: Validated[Seq[MtdError], AmendOtherReliefsRequestData] =
         (
           ResolveNino(nino),
-          ResolveTaxYear(minTaxYear, taxYear, None, None),
+          ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
           resolveJson(body)
         ).mapN(AmendOtherReliefsRequestData) andThen validateBusinessRules
 

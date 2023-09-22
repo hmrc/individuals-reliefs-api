@@ -19,12 +19,11 @@ package v1.controllers
 import api.controllers._
 import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.AmendCharitableGivingRequestReliefParser
-import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRawData
+import routing.{Version, Version1}
+import utils.IdGenerator
+import v1.controllers.validators.CreateAndAmendCharitableGivingReliefValidatorFactory
 import v1.models.response.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefHateoasData
 import v1.models.response.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefResponse.LinksFactory
 import v1.services.CreateAndAmendCharitableGivingTaxReliefService
@@ -35,15 +34,13 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class CreateAndAmendCharitableGivingController @Inject() (val authService: EnrolmentsAuthService,
                                                           val lookupService: MtdIdLookupService,
-                                                          parser: AmendCharitableGivingRequestReliefParser,
+                                                          validatorFactory: CreateAndAmendCharitableGivingReliefValidatorFactory,
                                                           service: CreateAndAmendCharitableGivingTaxReliefService,
                                                           auditService: AuditService,
                                                           hateoasFactory: HateoasFactory,
-                                                          appConfig: AppConfig,
                                                           cc: ControllerComponents,
                                                           val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "CreateAndAmendCharitableGivingController", endpointName = "createAndAmendCharitableGivingReliefs")
@@ -52,22 +49,25 @@ class CreateAndAmendCharitableGivingController @Inject() (val authService: Enrol
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = CreateAndAmendCharitableGivingTaxReliefRawData(nino, taxYear, request.body)
+      val validator = validatorFactory.validator(nino, taxYear, request.body)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService(service.amend)
-        .withAuditing(AuditHandlerOld(
-          auditService = auditService,
-          auditType = "CreateAndAmendCharitableGivingTaxRelief",
-          transactionName = "create-and-amend-charitable-giving-tax-relief",
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          requestBody = Some(request.body),
-          includeResponse = true
-        ))
+        .withAuditing(
+          AuditHandler(
+            auditService,
+            "CreateAndAmendCharitableGivingTaxRelief",
+            "create-and-amend-charitable-giving-tax-relief",
+            Version.from(request, orElse = Version1),
+            Map("nino" -> nino, "taxYear" -> taxYear),
+            Some(request.body),
+            includeResponse = true
+          )
+        )
         .withHateoasResult(hateoasFactory)(CreateAndAmendCharitableGivingTaxReliefHateoasData(nino, taxYear))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
 
     }
 

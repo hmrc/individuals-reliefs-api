@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.connectors.MockRetrievePensionsReliefsConnector
+import v1.connectors.MockRetrievePensionsReliefsConnector
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequestData
 import v1.models.response.retrievePensionsReliefs.{PensionsReliefs, RetrievePensionsReliefsResponse}
 

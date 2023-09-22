@@ -92,8 +92,8 @@ class CreateAndAmendCharitableGivingTaxReliefConnectorSpec extends ConnectorSpec
     protected val connector: CreateAndAmendCharitableGivingTaxReliefConnector =
       new CreateAndAmendCharitableGivingTaxReliefConnector(http = mockHttpClient, appConfig = mockAppConfig)
 
-    protected val request: CreateAndAmendCharitableGivingTaxReliefRequest =
-      CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), taxYear, requestBody)
+    protected val request: CreateAndAmendCharitableGivingTaxReliefRequestData =
+      CreateAndAmendCharitableGivingTaxReliefRequestData(Nino(nino), taxYear, requestBody)
 
     protected val outcome = Right(ResponseWrapper(correlationId, ()))
 

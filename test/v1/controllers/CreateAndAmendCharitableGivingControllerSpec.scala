@@ -19,54 +19,42 @@ package v1.controllers
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.hateoas.Method._
 import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import mocks.{MockAppConfig, MockIdGenerator}
+import mocks.MockIdGenerator
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockCreateAndAmendCharitableGivingRequestParser
-import v1.mocks.services._
+import v1.controllers.validators.MockCreateAndAmendCharitableGivingValidatorFactory
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 import v1.models.response.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefHateoasData
+import v1.services.MockCreateAndAmendCharitableGivingService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockCreateAndAmendCharitableGivingService
-    with MockCreateAndAmendCharitableGivingRequestParser
+    with MockCreateAndAmendCharitableGivingValidatorFactory
     with MockHateoasFactory
-    with MockAppConfig
     with MockIdGenerator {
 
   private val taxYear = "2019-20"
-  private val amount = 1234.56
+  private val amount  = 1234.56
 
-  private val nonUkCharities =
-    NonUkCharities(
-      charityNames = Some(Seq("non-UK charity 1", "non-UK charity 2")),
-      totalAmount = amount
-    )
+  private val nonUkCharities = NonUkCharities(Some(List("non-UK charity 1", "non-UK charity 2")), amount)
 
   private val giftAidPayments =
-    GiftAidPayments(
-      nonUkCharities = Some(nonUkCharities),
-      totalAmount = Some(amount),
-      oneOffAmount = Some(amount),
-      amountTreatedAsPreviousTaxYear = Some(amount),
-      amountTreatedAsSpecifiedTaxYear = Some(amount)
-    )
+    GiftAidPayments(Some(nonUkCharities), Some(amount), Some(amount), Some(amount), Some(amount))
 
-  private val testHateoasLinks = Seq(
+  private val testHateoasLinks = List(
     Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
-    api.hateoas
-      .Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = PUT, rel = "create-and-amend-charitable-giving-tax-relief"),
-    api.hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
+    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = PUT, rel = "create-and-amend-charitable-giving-tax-relief"),
+    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
   )
 
   private val requestJson = Json.parse(
@@ -78,13 +66,9 @@ class CreateAndAmendCharitableGivingControllerSpec
         |""".stripMargin
   )
 
-  private val requestBody = CreateAndAmendCharitableGivingTaxReliefBody(
-    giftAidPayments = Some(giftAidPayments),
-    gifts = None
-  )
+  private val requestBody = CreateAndAmendCharitableGivingTaxReliefBody(Some(giftAidPayments), None)
 
-  val responseBody: JsValue = Json.parse(
-    s"""
+  val responseBody: JsValue = Json.parse(s"""
        |{
        |  "links": [
        |    {
@@ -106,16 +90,12 @@ class CreateAndAmendCharitableGivingControllerSpec
        |}
        |""".stripMargin)
 
-  private val rawData = CreateAndAmendCharitableGivingTaxReliefRawData(nino, taxYear, requestJson)
-  private val requestData = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = CreateAndAmendCharitableGivingTaxReliefRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-
-        MockCreateAndAmendCharitableGivingRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendReliefService
           .amend(requestData)
@@ -136,20 +116,14 @@ class CreateAndAmendCharitableGivingControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-
-        MockCreateAndAmendCharitableGivingRequestParser
-          .parseRequest(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, Some(requestJson))
 
       }
 
       "the service returns an error" in new Test {
-
-        MockCreateAndAmendCharitableGivingRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendReliefService
           .amend(requestData)
@@ -160,31 +134,30 @@ class CreateAndAmendCharitableGivingControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new CreateAndAmendCharitableGivingController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateAmendCharitableGivingRequestParser,
+      validatorFactory = mockCreateAndAmendCharitableGivingValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
-      appConfig = mockAppConfig,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAndAmendCharitableGivingTaxRelief",
         transactionName = "create-and-amend-charitable-giving-tax-relief",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
+          versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
+          params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

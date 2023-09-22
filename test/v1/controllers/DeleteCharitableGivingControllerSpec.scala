@@ -25,8 +25,8 @@ import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.controllers.validators.MockDeleteCharitableGivingValidatorFactory
-import v1.mocks.services._
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequestData
+import v1.services.MockDeleteCharitableGivingReliefService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -16,13 +16,12 @@
 
 package v1.controllers.validators
 
-import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber, ResolveTaxYear}
+import api.controllers.validators.{Validator, ValidatorOps}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
-import cats.data.Validated.Valid
-import cats.implicits.{catsSyntaxTuple3Semigroupal, toTraverseOps}
+import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
 import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRequestData, PensionReliefs}
 
@@ -30,14 +29,12 @@ import javax.inject.Singleton
 import scala.annotation.nowarn
 
 @Singleton
-class AmendPensionsReliefsValidatorFactory {
+class AmendPensionsReliefsValidatorFactory extends ValidatorOps {
 
   @nowarn("cat=lint-byname-implicit")
   private val resolveJson = new ResolveNonEmptyJsonObject[AmendPensionsReliefsBody]()
 
   private val resolveParsedNumber = ResolveParsedNumber()
-
-  private val valid = Valid(())
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[AmendPensionsReliefsRequestData] =
     new Validator[AmendPensionsReliefsRequestData] {
@@ -60,20 +57,14 @@ class AmendPensionsReliefsValidatorFactory {
   private def validatePensionsReliefs(pensionReliefs: PensionReliefs): Validated[Seq[MtdError], Unit] = {
     import pensionReliefs._
 
-    val valuesWithPaths = List(
+    validateWithPaths(
       (regularPensionContributions, s"/pensionReliefs/regularPensionContributions"),
       (oneOffPensionContributionsPaid, s"/pensionReliefs/oneOffPensionContributionsPaid"),
       (retirementAnnuityPayments, s"/pensionReliefs/retirementAnnuityPayments"),
       (paymentToEmployersSchemeNoTaxRelief, s"/pensionReliefs/paymentToEmployersSchemeNoTaxRelief"),
       (overseasPensionSchemeContributions, s"/pensionReliefs/overseasPensionSchemeContributions")
-    )
+    )(resolveParsedNumber(_: BigDecimal, None, _: Option[String]))
 
-    val validatedNumberFields = valuesWithPaths.map {
-      case (None, _)            => valid
-      case (Some(number), path) => resolveParsedNumber(number, None, Some(path))
-    }
-
-    validatedNumberFields.sequence.andThen(_ => valid)
   }
 
 }

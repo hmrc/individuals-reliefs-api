@@ -22,13 +22,12 @@ import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
-import config.AppConfig
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class DeleteForeignReliefsValidatorFactory @Inject() (appConfig: AppConfig) {
+class DeleteForeignReliefsValidatorFactory {
 
   def validator(nino: String, taxYear: String): Validator[DeleteForeignReliefsRequestData] = new Validator[DeleteForeignReliefsRequestData] {
 
