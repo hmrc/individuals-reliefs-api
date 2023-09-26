@@ -23,6 +23,11 @@ case class SocialEnterpriseInvestmentItem(uniqueInvestmentRef: String,
                                           dateOfInvestment: Option[String],
                                           amountInvested: Option[BigDecimal],
                                           reliefClaimed: BigDecimal)
+    extends ReliefsInvestmentItem {
+
+  @transient val name: Option[String] = socialEnterpriseName
+
+}
 
 object SocialEnterpriseInvestmentItem {
   implicit val format: OFormat[SocialEnterpriseInvestmentItem] = Json.format[SocialEnterpriseInvestmentItem]

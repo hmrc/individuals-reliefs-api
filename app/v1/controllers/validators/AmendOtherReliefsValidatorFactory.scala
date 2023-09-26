@@ -23,7 +23,7 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import play.api.libs.json.JsValue
-import v1.controllers.validators.AmendOtherReliefsValidator.validateBusinessRules
+import v1.controllers.validators.AmendOtherReliefsRulesValidator.validateBusinessRules
 import v1.models.request.amendOtherReliefs._
 
 import javax.inject.Singleton

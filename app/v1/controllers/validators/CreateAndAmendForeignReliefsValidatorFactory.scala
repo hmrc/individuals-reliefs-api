@@ -16,28 +16,24 @@
 
 package v1.controllers.validators
 
-import api.controllers.validators.{Validator, ValidatorOps}
-import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedCountryCode, ResolveParsedNumber, ResolveTaxYear}
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers._
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
-import cats.data.Validated.Valid
-import cats.implicits.{catsSyntaxTuple3Semigroupal, toTraverseOps}
+import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
+import v1.controllers.validators.CreateAndAmendForeignReliefsRulesValidator.validateBusinessRules
 import v1.models.request.createAndAmendForeignReliefs._
 
 import javax.inject.Singleton
 import scala.annotation.nowarn
 
 @Singleton
-class CreateAndAmendForeignReliefsValidatorFactory extends ValidatorOps {
-
-  private val resolveParsedNumber = ResolveParsedNumber()
+class CreateAndAmendForeignReliefsValidatorFactory {
 
   @nowarn("cat=lint-byname-implicit")
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateAndAmendForeignReliefsBody]()
-
-  private val valid = Valid(())
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAndAmendForeignReliefsRequestData] =
     new Validator[CreateAndAmendForeignReliefsRequestData] {
@@ -49,34 +45,6 @@ class CreateAndAmendForeignReliefsValidatorFactory extends ValidatorOps {
           resolveJson(body)
         ).mapN(CreateAndAmendForeignReliefsRequestData) andThen validateBusinessRules
 
-      private def validateBusinessRules(
-          parsed: CreateAndAmendForeignReliefsRequestData): Validated[Seq[MtdError], CreateAndAmendForeignReliefsRequestData] = {
-        import parsed.body._
-
-        List(
-          foreignTaxCreditRelief.mapOrElse(validateForeignTaxCreditRelief),
-          foreignIncomeTaxCreditRelief.mapOrElse(validateForeignIncomeTaxCreditRelief),
-          foreignTaxForFtcrNotClaimed.mapOrElse(validateForeignTaxForFtcrNotClaimed)
-        ).sequence.map(_ => parsed)
-      }
-
     }
-
-  private def validateForeignTaxCreditRelief(foreignTaxCreditRelief: ForeignTaxCreditRelief): Validated[Seq[MtdError], Unit] =
-    resolveParsedNumber(foreignTaxCreditRelief.amount, None, Some("/foreignTaxCreditRelief/amount")).andThen(_ => valid)
-
-  private def validateForeignIncomeTaxCreditRelief(foreignIncomeTaxCreditRelief: Seq[ForeignIncomeTaxCreditRelief]): Validated[Seq[MtdError], Unit] =
-    foreignIncomeTaxCreditRelief.zipAndValidate { case (entry, index) =>
-      import entry._
-
-      List(
-        ResolveParsedCountryCode(countryCode, s"/foreignIncomeTaxCreditRelief/$index/countryCode"),
-        foreignTaxPaid.map(resolveParsedNumber(_, None, Some(s"/foreignIncomeTaxCreditRelief/$index/foreignTaxPaid"))).getOrElse(valid),
-        resolveParsedNumber(taxableAmount, None, Some(s"/foreignIncomeTaxCreditRelief/$index/taxableAmount"))
-      ).sequence.andThen(_ => valid)
-    }
-
-  private def validateForeignTaxForFtcrNotClaimed(foreignTaxForFtcrNotClaimed: ForeignTaxForFtcrNotClaimed): Validated[Seq[MtdError], Unit] =
-    resolveParsedNumber(foreignTaxForFtcrNotClaimed.amount, None, Some("/foreignTaxForFtcrNotClaimed/amount")).andThen(_ => valid)
 
 }

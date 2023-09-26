@@ -119,7 +119,7 @@ class CreateAndAmendReliefInvestmentsValidatorFactorySpec extends UnitSpec with 
     VctSubscriptionsItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(BigDecimal(23312.00)), BigDecimal(1334.00))
 
   private val parsedEisSubscriptionsItem =
-    EisSubscriptionsItem("XTAL", Some("EIS Fund X"), Some(true), Some("2018-04-16"), Some(BigDecimal(23312.00)), BigDecimal(43432.00))
+    EisSubscriptionsItem("XTAL", Some("EIS Fund X"), Some("2018-04-16"), Some(BigDecimal(23312.00)), BigDecimal(43432.00), Some(true))
 
   private val parsedCommunityInvestmentItem =
     CommunityInvestmentItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(BigDecimal(23312.00)), BigDecimal(1334.00))

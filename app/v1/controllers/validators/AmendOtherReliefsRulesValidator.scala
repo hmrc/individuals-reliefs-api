@@ -16,18 +16,23 @@
 
 package v1.controllers.validators
 
-import api.controllers.validators.{RulesValidator, ValidatorOps}
+import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
 import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
+import cats.implicits.toFoldableOps
 import v1.models.request.amendOtherReliefs._
 
-object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsRequestData] with ValidatorOps {
+object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsRequestData] {
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
   private val stringRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
+
+  private def zipAndValidate[FIELD](maybeFields: Option[Seq[FIELD]],
+                                    validate: (FIELD, Int) => Validated[Seq[MtdError], Unit]): Validated[Seq[MtdError], Unit] =
+    maybeFields.traverse_(_.zipWithIndex.traverse_(validate.tupled))
 
   private def validateCustomerRef(ref: String, path: String, error: MtdError = CustomerReferenceFormatError): Validated[Seq[MtdError], Unit] =
     if (stringRegex.matches(ref)) valid
@@ -41,13 +46,13 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
     import parsed.body._
 
     combine(
-      nonDeductibleLoanInterest.mapOrElse(validateNonDeductibleLoanInterest),
-      payrollGiving.mapOrElse(validatePayrollGiving),
-      qualifyingDistributionRedemptionOfSharesAndSecurities.mapOrElse(validateQualifyingDistributionRedemptionOfSharesAndSecurities),
-      postCessationTradeReliefAndCertainOtherLosses.zipAndValidate(validatePostCessationTradeReliefAndCertainOtherLosses),
-      maintenancePayments.zipAndValidate(validateMaintenancePayments),
-      annualPaymentsMade.mapOrElse(validateAnnualPaymentsMade),
-      qualifyingLoanInterestPayments.zipAndValidate(validateQualifyingLoanInterestPayments)
+      nonDeductibleLoanInterest.traverse_(validateNonDeductibleLoanInterest),
+      payrollGiving.traverse_(validatePayrollGiving),
+      qualifyingDistributionRedemptionOfSharesAndSecurities.traverse_(validateQualifyingDistributionRedemptionOfSharesAndSecurities),
+      zipAndValidate(postCessationTradeReliefAndCertainOtherLosses, validatePostCessationTradeReliefAndCertainOtherLosses),
+      zipAndValidate(maintenancePayments, validateMaintenancePayments),
+      annualPaymentsMade.traverse_(validateAnnualPaymentsMade),
+      zipAndValidate(qualifyingLoanInterestPayments, validateQualifyingLoanInterestPayments)
     ).onSuccess(parsed)
   }
 
@@ -55,18 +60,18 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
     import nonDeductibleLoanInterest._
 
     combine(
-      customerReference.mapOrElse(validateCustomerRef(_, "/nonDeductibleLoanInterest/customerReference")),
+      customerReference.traverse_(validateCustomerRef(_, "/nonDeductibleLoanInterest/customerReference")),
       resolveParsedNumber(reliefClaimed, None, Some("/nonDeductibleLoanInterest/reliefClaimed"))
-    ).andThen(_ => valid)
+    )
   }
 
   private def validatePayrollGiving(payrollGiving: PayrollGiving): Validated[Seq[MtdError], Unit] = {
     import payrollGiving._
 
     combine(
-      customerReference.mapOrElse(validateCustomerRef(_, "/payrollGiving/customerReference")),
-      resolveParsedNumber(reliefClaimed, None, Some("/payrollGiving/reliefClaimed"))
-    ).andThen(_ => valid)
+      customerReference.traverse_(validateCustomerRef(_, "/payrollGiving/customerReference")),
+      resolveParsedNumber(reliefClaimed, path = Some("/payrollGiving/reliefClaimed"))
+    )
   }
 
   private def validateQualifyingDistributionRedemptionOfSharesAndSecurities(
@@ -75,9 +80,9 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
     import qualifyingDistributionRedemptionOfSharesAndSecurities._
 
     combine(
-      customerReference.mapOrElse(validateCustomerRef(_, "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference")),
-      resolveParsedNumber(amount, None, Some("/qualifyingDistributionRedemptionOfSharesAndSecurities/amount"))
-    ).andThen(_ => valid)
+      customerReference.traverse_(validateCustomerRef(_, "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference")),
+      resolveParsedNumber(amount, path = Some("/qualifyingDistributionRedemptionOfSharesAndSecurities/amount"))
+    )
   }
 
   private def validatePostCessationTradeReliefAndCertainOtherLosses(
@@ -87,25 +92,23 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
 
     val validatedCustomerReference =
       customerReference
-        .mapOrElse(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference"))
+        .traverse_(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference"))
 
     val validatedBusinessName =
       businessName
-        .mapOrElse(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName", BusinessNameFormatError))
+        .traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName", BusinessNameFormatError))
 
     val validatedDateBusinessCeased =
       dateBusinessCeased
-        .mapOrElse(
-          ResolveIsoDate(_, Some(DateFormatError), Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased")).andThen(_ =>
-            valid))
+        .traverse_(ResolveIsoDate(_, Some(DateFormatError), Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased")))
 
     val validatedNatureOfTrade =
       natureOfTrade
-        .mapOrElse(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade", NatureOfTradeFormatError))
+        .traverse_(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade", NatureOfTradeFormatError))
 
     val validatedIncomeSource =
       incomeSource
-        .mapOrElse(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource", IncomeSourceFormatError))
+        .traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource", IncomeSourceFormatError))
 
     val validatedAmount = resolveParsedNumber(amount, None, Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/amount"))
 
@@ -115,31 +118,27 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
       validatedDateBusinessCeased,
       validatedNatureOfTrade,
       validatedIncomeSource,
-      validatedAmount).andThen(_ => valid)
+      validatedAmount)
   }
 
   private def validateMaintenancePayments(maintenancePayments: MaintenancePayments, index: Int): Validated[Seq[MtdError], Unit] = {
     import maintenancePayments._
 
-    val validatedExSpouseDOB =
-      exSpouseDateOfBirth
-        .mapOrElse(ResolveIsoDate(_, Some(DateFormatError), Some(s"/maintenancePayments/$index/exSpouseDateOfBirth")).andThen(_ => valid))
-
     combine(
-      customerReference.mapOrElse(validateCustomerRef(_, s"/maintenancePayments/$index/customerReference")),
-      exSpouseName.mapOrElse(validateFieldLength(_, s"/maintenancePayments/$index/exSpouseName", ExSpouseNameFormatError)),
-      validatedExSpouseDOB,
-      resolveParsedNumber(amount, None, Some(s"/maintenancePayments/$index/amount"))
-    ).andThen(_ => valid)
+      customerReference.traverse_(validateCustomerRef(_, s"/maintenancePayments/$index/customerReference")),
+      exSpouseName.traverse_(validateFieldLength(_, s"/maintenancePayments/$index/exSpouseName", ExSpouseNameFormatError)),
+      exSpouseDateOfBirth.traverse_(ResolveIsoDate(_, Some(DateFormatError), Some(s"/maintenancePayments/$index/exSpouseDateOfBirth"))),
+      resolveParsedNumber(amount, path = Some(s"/maintenancePayments/$index/amount"))
+    )
   }
 
   private def validateAnnualPaymentsMade(annualPaymentsMade: AnnualPaymentsMade): Validated[Seq[MtdError], Unit] = {
     import annualPaymentsMade._
 
     combine(
-      customerReference.mapOrElse(validateCustomerRef(_, "/annualPaymentsMade/customerReference")),
-      resolveParsedNumber(reliefClaimed, None, Some("/annualPaymentsMade/reliefClaimed"))
-    ).andThen(_ => valid)
+      customerReference.traverse_(validateCustomerRef(_, "/annualPaymentsMade/customerReference")),
+      resolveParsedNumber(reliefClaimed, path = Some("/annualPaymentsMade/reliefClaimed"))
+    )
   }
 
   private def validateQualifyingLoanInterestPayments(qualifyingLoanInterestPayments: QualifyingLoanInterestPayments,
@@ -147,10 +146,10 @@ object AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsReques
     import qualifyingLoanInterestPayments._
 
     combine(
-      customerReference.mapOrElse(validateCustomerRef(_, s"/qualifyingLoanInterestPayments/$index/customerReference")),
-      lenderName.mapOrElse(validateFieldLength(_, s"/qualifyingLoanInterestPayments/$index/lenderName", LenderNameFormatError)),
-      resolveParsedNumber(reliefClaimed, None, Some(s"/qualifyingLoanInterestPayments/$index/reliefClaimed"))
-    ).andThen(_ => valid)
+      customerReference.traverse_(validateCustomerRef(_, s"/qualifyingLoanInterestPayments/$index/customerReference")),
+      lenderName.traverse_(validateFieldLength(_, s"/qualifyingLoanInterestPayments/$index/lenderName", LenderNameFormatError)),
+      resolveParsedNumber(reliefClaimed, path = Some(s"/qualifyingLoanInterestPayments/$index/reliefClaimed"))
+    )
   }
 
 }
