@@ -30,18 +30,6 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
 
   private val stringRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
 
-  private def zipAndValidate[FIELD](maybeFields: Option[Seq[FIELD]],
-                                    validate: (FIELD, Int) => Validated[Seq[MtdError], Unit]): Validated[Seq[MtdError], Unit] =
-    maybeFields.traverse_(_.zipWithIndex.traverse_(validate.tupled))
-
-  private def validateCustomerRef(ref: String, path: String, error: MtdError = CustomerReferenceFormatError): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(ref)) valid
-    else Invalid(List(error.withPath(path)))
-
-  private def validateFieldLength(field: String, path: String, error: MtdError): Validated[Seq[MtdError], Unit] =
-    if (field.nonEmpty && field.length <= 105) valid
-    else Invalid(List(error.withPath(path)))
-
   def validateBusinessRules(parsed: AmendOtherReliefsRequestData): Validated[Seq[MtdError], AmendOtherReliefsRequestData] = {
     import parsed.body._
 
@@ -55,6 +43,18 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
       zipAndValidate(qualifyingLoanInterestPayments, validateQualifyingLoanInterestPayments)
     ).onSuccess(parsed)
   }
+
+  private def zipAndValidate[VALUE](maybeFields: Option[Seq[VALUE]],
+                                    validate: (VALUE, Int) => Validated[Seq[MtdError], Unit]): Validated[Seq[MtdError], Unit] =
+    maybeFields.traverse_(_.zipWithIndex.traverse_(validate.tupled))
+
+  private def validateCustomerRef(ref: String, path: String, error: MtdError = CustomerReferenceFormatError): Validated[Seq[MtdError], Unit] =
+    if (stringRegex.matches(ref)) valid
+    else Invalid(List(error.withPath(path)))
+
+  private def validateFieldLength(field: String, path: String, error: MtdError): Validated[Seq[MtdError], Unit] =
+    if (field.nonEmpty && field.length <= 105) valid
+    else Invalid(List(error.withPath(path)))
 
   private def validateNonDeductibleLoanInterest(nonDeductibleLoanInterest: NonDeductibleLoanInterest): Validated[Seq[MtdError], Unit] = {
     import nonDeductibleLoanInterest._
@@ -90,35 +90,16 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
       index: Int): Validated[Seq[MtdError], Unit] = {
     import postCessationTradeReliefAndCertainOtherLosses._
 
-    val validatedCustomerReference =
-      customerReference
-        .traverse_(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference"))
-
-    val validatedBusinessName =
-      businessName
-        .traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName", BusinessNameFormatError))
-
-    val validatedDateBusinessCeased =
-      dateBusinessCeased
-        .traverse_(ResolveIsoDate(_, Some(DateFormatError), Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased")))
-
-    val validatedNatureOfTrade =
-      natureOfTrade
-        .traverse_(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade", NatureOfTradeFormatError))
-
-    val validatedIncomeSource =
-      incomeSource
-        .traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource", IncomeSourceFormatError))
-
-    val validatedAmount = resolveParsedNumber(amount, None, Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/amount"))
-
     combine(
-      validatedCustomerReference,
-      validatedBusinessName,
-      validatedDateBusinessCeased,
-      validatedNatureOfTrade,
-      validatedIncomeSource,
-      validatedAmount)
+      customerReference.traverse_(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference")),
+      businessName.traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName", BusinessNameFormatError)),
+      dateBusinessCeased.traverse_(
+        ResolveIsoDate(_, Some(DateFormatError), Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased"))),
+      natureOfTrade.traverse_(
+        validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade", NatureOfTradeFormatError)),
+      incomeSource.traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource", IncomeSourceFormatError)),
+      resolveParsedNumber(amount, None, Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/amount"))
+    )
   }
 
   private def validateMaintenancePayments(maintenancePayments: MaintenancePayments, index: Int): Validated[Seq[MtdError], Unit] = {

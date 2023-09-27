@@ -32,9 +32,6 @@ object CreateAndAmendForeignReliefsRulesValidator extends RulesValidator[CreateA
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
-  private def zipAndValidate[FIELD](fields: Seq[FIELD], validate: (FIELD, Int) => Validated[Seq[MtdError], Unit]): Validated[Seq[MtdError], Unit] =
-    fields.zipWithIndex.traverse_(validate.tupled)
-
   def validateBusinessRules(parsed: CreateAndAmendForeignReliefsRequestData): Validated[Seq[MtdError], CreateAndAmendForeignReliefsRequestData] = {
     import parsed.body._
 
@@ -44,6 +41,9 @@ object CreateAndAmendForeignReliefsRulesValidator extends RulesValidator[CreateA
       foreignTaxForFtcrNotClaimed.traverse_(validate)
     ).onSuccess(parsed)
   }
+
+  private def zipAndValidate[VALUE](fields: Seq[VALUE], validate: (VALUE, Int) => Validated[Seq[MtdError], Unit]): Validated[Seq[MtdError], Unit] =
+    fields.zipWithIndex.traverse_(validate.tupled)
 
   private def validate(foreignTaxCreditRelief: ForeignTaxCreditRelief): Validated[Seq[MtdError], Unit] =
     resolveParsedNumber(foreignTaxCreditRelief.amount, None, Some("/foreignTaxCreditRelief/amount")).andThen(_ => valid)

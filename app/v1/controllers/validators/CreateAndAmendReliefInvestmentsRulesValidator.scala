@@ -32,7 +32,7 @@ object CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator[Crea
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
-  private def zipAndValidate[FIELD](fields: Seq[FIELD], validate: (FIELD, Int) => Validated[Seq[MtdError], Unit]): Validated[Seq[MtdError], Unit] =
+  private def zipAndValidate[VALUE](fields: Seq[VALUE], validate: (VALUE, Int) => Validated[Seq[MtdError], Unit]): Validated[Seq[MtdError], Unit] =
     fields.zipWithIndex.traverse_(validate.tupled)
 
   def validateBusinessRules(
