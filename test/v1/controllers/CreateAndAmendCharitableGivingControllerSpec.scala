@@ -17,16 +17,14 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.MockIdGenerator
-import api.mocks.hateoas.MockHateoasFactory
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.hateoas.Method._
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.domain.{Nino, TaxYear}
+import api.models.errors
 import api.models.errors._
-import api.models.hateoas.HateoasWrapper
-import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
-import api.models.{errors, hateoas}
-import mocks.MockAppConfig
+import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.mocks.requestParsers.MockCreateAndAmendCharitableGivingRequestParser
@@ -38,7 +36,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockCreateAndAmendCharitableGivingService
     with MockCreateAndAmendCharitableGivingRequestParser
@@ -47,7 +45,7 @@ class CreateAndAmendCharitableGivingControllerSpec
     with MockIdGenerator {
 
   private val taxYear = "2019-20"
-  private val amount  = 1234.56
+  private val amount = 1234.56
 
   private val nonUkCharities =
     NonUkCharities(
@@ -65,12 +63,10 @@ class CreateAndAmendCharitableGivingControllerSpec
     )
 
   private val testHateoasLinks = Seq(
-    hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
-    hateoas.Link(
-      href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear",
-      method = PUT,
-      rel = "create-and-amend-charitable-giving-tax-relief"),
-    hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
+    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
+    api.hateoas
+      .Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = PUT, rel = "create-and-amend-charitable-giving-tax-relief"),
+    api.hateoas.Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
   )
 
   private val requestJson = Json.parse(
@@ -87,29 +83,30 @@ class CreateAndAmendCharitableGivingControllerSpec
     gifts = None
   )
 
-  val responseBody: JsValue = Json.parse(s"""
-                                            |{
-                                            |  "links": [
-                                            |    {
-                                            |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
-                                            |      "method": "GET",
-                                            |      "rel": "self"
-                                            |    },
-                                            |    {
-                                            |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
-                                            |      "method": "PUT",
-                                            |      "rel": "create-and-amend-charitable-giving-tax-relief"
-                                            |    },
-                                            |    {
-                                            |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
-                                            |      "method": "DELETE",
-                                            |      "rel": "delete-charitable-giving-tax-relief"
-                                            |    }
-                                            |  ]
-                                            |}
-                                            |""".stripMargin)
+  val responseBody: JsValue = Json.parse(
+    s"""
+       |{
+       |  "links": [
+       |    {
+       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+       |      "method": "GET",
+       |      "rel": "self"
+       |    },
+       |    {
+       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+       |      "method": "PUT",
+       |      "rel": "create-and-amend-charitable-giving-tax-relief"
+       |    },
+       |    {
+       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+       |      "method": "DELETE",
+       |      "rel": "delete-charitable-giving-tax-relief"
+       |    }
+       |  ]
+       |}
+       |""".stripMargin)
 
-  private val rawData     = CreateAndAmendCharitableGivingTaxReliefRawData(nino, taxYear, requestJson)
+  private val rawData = CreateAndAmendCharitableGivingTaxReliefRawData(nino, taxYear, requestJson)
   private val requestData = CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   "handleRequest" should {
@@ -163,7 +160,7 @@ class CreateAndAmendCharitableGivingControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     val controller = new CreateAndAmendCharitableGivingController(
       authService = mockEnrolmentsAuthService,
@@ -179,11 +176,11 @@ class CreateAndAmendCharitableGivingControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
         auditType = "CreateAndAmendCharitableGivingTaxRelief",
         transactionName = "create-and-amend-charitable-giving-tax-relief",
-        detail = GenericAuditDetail(
+        detail = GenericAuditDetailOld(
           userType = "Individual",
           agentReferenceNumber = None,
           pathParams = Map("nino" -> nino, "taxYear" -> taxYear),

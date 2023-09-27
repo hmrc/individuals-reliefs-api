@@ -22,9 +22,9 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.AmendOtherReliefsRequestParser
-import v1.models.request.amendOtherReliefs.AmendOtherReliefsRawData
+import routing.{Version, Version1}
+import utils.IdGenerator
+import v1.controllers.validators.AmendOtherReliefsValidatorFactory
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsResponse.LinksFactory
 import v1.services.AmendOtherReliefsService
@@ -35,15 +35,14 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthService,
                                              val lookupService: MtdIdLookupService,
-                                             parser: AmendOtherReliefsRequestParser,
+                                             validatorFactory: AmendOtherReliefsValidatorFactory,
                                              service: AmendOtherReliefsService,
                                              auditService: AuditService,
                                              hateoasFactory: HateoasFactory,
                                              appConfig: AppConfig,
                                              cc: ControllerComponents,
                                              val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendOtherReliefsController", endpointName = "amendOtherReliefs")
@@ -52,22 +51,23 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = AmendOtherReliefsRawData(nino, taxYear, request.body)
+      val validator = validatorFactory.validator(nino, taxYear, request.body)
 
       val requestHandler = RequestHandler
-        .withParser(parser)
+        .withValidator(validator)
         .withService(service.amend)
         .withAuditing(AuditHandler(
-          auditService = auditService,
-          auditType = "CreateAmendOtherReliefs",
-          transactionName = "create-amend-other-reliefs",
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          requestBody = Some(request.body),
+          auditService,
+          "CreateAmendOtherReliefs",
+          "create-amend-other-reliefs",
+          Version.from(request, orElse = Version1),
+          Map("nino" -> nino, "taxYear" -> taxYear),
+          Some(request.body),
           includeResponse = true
         ))
         .withHateoasResult(hateoasFactory)(AmendOtherReliefsHateoasData(nino, taxYear))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

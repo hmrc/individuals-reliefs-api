@@ -20,9 +20,8 @@ import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.RetrieveReliefInvestmentsRequestParser
-import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRawData
+import utils.IdGenerator
+import v1.controllers.validators.RetrieveReliefInvestmentsValidatorFactory
 import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsHateoasData
 import v1.services.RetrieveReliefInvestmentsService
 
@@ -30,15 +29,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveReliefInvestmentsController @Inject() (val authService: EnrolmentsAuthService,
-                                                     val lookupService: MtdIdLookupService,
-                                                     parser: RetrieveReliefInvestmentsRequestParser,
-                                                     service: RetrieveReliefInvestmentsService,
-                                                     hateoasFactory: HateoasFactory,
-                                                     cc: ControllerComponents,
-                                                     val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with Logging {
+class RetrieveReliefInvestmentsController @Inject()(val authService: EnrolmentsAuthService,
+                                                    val lookupService: MtdIdLookupService,
+                                                    validatorFactory: RetrieveReliefInvestmentsValidatorFactory,
+                                                    service: RetrieveReliefInvestmentsService,
+                                                    hateoasFactory: HateoasFactory,
+                                                    cc: ControllerComponents,
+                                                    val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+  extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveReliefInvestmentsController", endpointName = "retrieveReliefInvestments")
@@ -47,14 +45,14 @@ class RetrieveReliefInvestmentsController @Inject() (val authService: Enrolments
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = RetrieveReliefInvestmentsRawData(nino, taxYear)
+      val validator = validatorFactory.validator(nino, taxYear)
 
       val requestHandler = RequestHandler
-        .withParser(parser)
+        .withValidator(validator)
         .withService(service.retrieve)
         .withHateoasResult(hateoasFactory)(RetrieveReliefInvestmentsHateoasData(nino, taxYear))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

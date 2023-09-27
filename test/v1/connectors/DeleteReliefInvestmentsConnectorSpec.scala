@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequest
+import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequestData
 
 import scala.concurrent.Future
 
@@ -36,7 +36,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
     val taxYear: TaxYear
 
-    val request: DeleteReliefInvestmentsRequest = DeleteReliefInvestmentsRequest(Nino(nino), taxYear)
+    val request: DeleteReliefInvestmentsRequestData = DeleteReliefInvestmentsRequestData(Nino(nino), taxYear)
   }
 
   "delete" should {

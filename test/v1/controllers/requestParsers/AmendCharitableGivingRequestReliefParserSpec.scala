@@ -22,12 +22,7 @@ import api.models.errors.{BadRequestError, NinoFormatError, TaxYearFormatError}
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.mocks.validators.MockAmendCharitableGivingReliefValidator
-import v1.models.request.createAndAmendCharitableGivingTaxRelief.{
-  CreateAndAmendCharitableGivingTaxReliefBody,
-  CreateAndAmendCharitableGivingTaxReliefRawData,
-  CreateAndAmendCharitableGivingTaxReliefRequest,
-  GiftAidPayments
-}
+import v1.models.request.createAndAmendCharitableGivingTaxRelief.{CreateAndAmendCharitableGivingTaxReliefBody, CreateAndAmendCharitableGivingTaxReliefRawData, CreateAndAmendCharitableGivingTaxReliefRequest, GiftAidPayments}
 
 class AmendCharitableGivingRequestReliefParserSpec extends UnitSpec {
   private val nino                   = "AA123456A"

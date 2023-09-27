@@ -16,8 +16,8 @@
 
 package v1.models.response.retrieveCharitableGivingTaxRelief
 
-import api.models.hateoas
-import api.models.hateoas.Method.{DELETE, GET, PUT}
+import api.hateoas.Link
+import api.hateoas.Method._
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
@@ -45,9 +45,9 @@ class RetrieveCharitableGivingReliefResponseSpec extends UnitSpec with MockAppCo
       MockAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
       RetrieveCharitableGivingReliefResponse.LinksFactory.links(mockAppConfig, RetrieveCharitableGivingReliefHateoasData(nino, taxYear)) shouldBe
         Seq(
-          hateoas.Link(s"/$context/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
-          hateoas.Link(s"/$context/charitable-giving/$nino/$taxYear", GET, "self"),
-          hateoas.Link(s"/$context/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
+          Link(s"/$context/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
+          api.hateoas.Link(s"/$context/charitable-giving/$nino/$taxYear", GET, "self"),
+          api.hateoas.Link(s"/$context/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
         )
     }
   }

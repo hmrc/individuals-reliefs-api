@@ -22,9 +22,9 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.CreateAndAmendForeignReliefsRequestParser
-import v1.models.request.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsRawData
+import routing.{Version, Version1}
+import utils.IdGenerator
+import v1.controllers.validators.CreateAndAmendForeignReliefsValidatorFactory
 import v1.models.response.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsHateoasData
 import v1.models.response.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsResponse.LinksFactory
 import v1.services.CreateAndAmendForeignReliefsService
@@ -35,15 +35,14 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class CreateAndAmendForeignReliefsController @Inject() (val authService: EnrolmentsAuthService,
                                                         val lookupService: MtdIdLookupService,
-                                                        parser: CreateAndAmendForeignReliefsRequestParser,
+                                                        validatorFactory: CreateAndAmendForeignReliefsValidatorFactory,
                                                         service: CreateAndAmendForeignReliefsService,
                                                         auditService: AuditService,
                                                         hateoasFactory: HateoasFactory,
                                                         appConfig: AppConfig,
                                                         cc: ControllerComponents,
                                                         val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "CreateAndAmendForeignReliefsController", endpointName = "createAndAmendForeignReliefs")
@@ -52,22 +51,23 @@ class CreateAndAmendForeignReliefsController @Inject() (val authService: Enrolme
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = CreateAndAmendForeignReliefsRawData(nino, taxYear, request.body)
+      val validator = validatorFactory.validator(nino, taxYear, request.body)
 
       val requestHandler = RequestHandler
-        .withParser(parser)
+        .withValidator(validator)
         .withService(service.createAndAmend)
         .withAuditing(AuditHandler(
-          auditService = auditService,
-          auditType = "CreateAmendForeignReliefs",
-          transactionName = "create-amend-foreign-reliefs",
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          requestBody = Some(request.body),
+          auditService,
+          "CreateAmendForeignReliefs",
+          "create-amend-foreign-reliefs",
+          Version.from(request, orElse = Version1),
+          Map("nino" -> nino, "taxYear" -> taxYear),
+          Some(request.body),
           includeResponse = true
         ))
         .withHateoasResult(hateoasFactory)(CreateAndAmendForeignReliefsHateoasData(nino, taxYear))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

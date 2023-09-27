@@ -20,10 +20,7 @@ import api.models.errors.ErrorWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.AmendCharitableGivingRequestReliefParser
-import v1.models.request.createAndAmendCharitableGivingTaxRelief.{
-  CreateAndAmendCharitableGivingTaxReliefRawData,
-  CreateAndAmendCharitableGivingTaxReliefRequest
-}
+import v1.models.request.createAndAmendCharitableGivingTaxRelief.{CreateAndAmendCharitableGivingTaxReliefRawData, CreateAndAmendCharitableGivingTaxReliefRequest}
 
 trait MockCreateAndAmendCharitableGivingRequestParser extends MockFactory {
 

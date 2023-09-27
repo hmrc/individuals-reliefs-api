@@ -16,25 +16,24 @@
 
 package v1.connectors
 
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import config.{AppConfig, FeatureSwitches}
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequestData
 import v1.models.response.retrieveReliefInvestments._
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveReliefInvestmentsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
-    extends BaseDownstreamConnector {
+class RetrieveReliefInvestmentsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieve(request: RetrieveReliefInvestmentsRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[RetrieveReliefInvestmentsResponse]] = {
+  def retrieve(request: RetrieveReliefInvestmentsRequestData)(implicit
+                                                              hc: HeaderCarrier,
+                                                              ec: ExecutionContext,
+                                                              correlationId: String): Future[DownstreamOutcome[RetrieveReliefInvestmentsResponse]] = {
 
     import request._
 

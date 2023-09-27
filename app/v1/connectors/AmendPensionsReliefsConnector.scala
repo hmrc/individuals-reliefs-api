@@ -16,34 +16,35 @@
 
 package v1.connectors
 
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
-import config.{AppConfig, FeatureSwitches}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequest
+import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendPensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
-    extends BaseDownstreamConnector {
+class AmendPensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def createOrAmendPensionsRelief(request: AmendPensionsReliefsRequest)(implicit
+  def createOrAmendPensionsRelief(request: AmendPensionsReliefsRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
+    import request._
+
     val downstreamUri =
-      if (request.taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${request.taxYear.asTysDownstream}/${request.nino}")
+      if (taxYear.useTaxYearSpecificApi) {
+        TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
       } else {
-        DesUri[Unit](s"income-tax/reliefs/pensions/${request.nino}/${request.taxYear.asMtd}")
+        DesUri[Unit](s"income-tax/reliefs/pensions/$nino/${taxYear.asMtd}")
       }
 
     put(
-      body = request.body,
+      body = body,
       uri = downstreamUri
     )
   }

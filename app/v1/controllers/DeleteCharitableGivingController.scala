@@ -19,24 +19,23 @@ package v1.controllers
 import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.DeleteCharitableGivingReliefRequestParser
-import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRawData
+import routing.{Version, Version1}
+import utils.IdGenerator
+import v1.controllers.validators.DeleteCharitableGivingValidatorFactory
 import v1.services.DeleteCharitableGivingTaxReliefService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAuthService,
-                                                  val lookupService: MtdIdLookupService,
-                                                  parser: DeleteCharitableGivingReliefRequestParser,
-                                                  service: DeleteCharitableGivingTaxReliefService,
-                                                  auditService: AuditService,
-                                                  cc: ControllerComponents,
-                                                  val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with Logging {
+class DeleteCharitableGivingController @Inject()(val authService: EnrolmentsAuthService,
+                                                 val lookupService: MtdIdLookupService,
+                                                 validatorFactory: DeleteCharitableGivingValidatorFactory,
+                                                 service: DeleteCharitableGivingTaxReliefService,
+                                                 auditService: AuditService,
+                                                 cc: ControllerComponents,
+                                                 val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+  extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "DeleteCharitableGivingController", endpointName = "deleteCharitableGiving")
@@ -45,21 +44,22 @@ class DeleteCharitableGivingController @Inject() (val authService: EnrolmentsAut
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = DeleteCharitableGivingTaxReliefRawData(nino, taxYear)
+      val validator = validatorFactory.validator(nino, taxYear)
 
       val requestHandler = RequestHandler
-        .withParser(parser)
+        .withValidator(validator)
         .withService(service.delete)
-        .withAuditing(AuditHandler(
-          auditService = auditService,
-          auditType = "DeleteCharitableGivingTaxRelief",
-          transactionName = "delete-charitable-giving-tax-relief",
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
-          requestBody = None
-        ))
+        .withAuditing(
+          AuditHandler(
+            auditService = auditService,
+            auditType = "DeleteCharitableGivingTaxRelief",
+            transactionName = "delete-charitable-giving-tax-relief",
+            apiVersion = Version.from(request, orElse = Version1),
+            params = Map("nino" -> nino, "taxYear" -> taxYear)
+          )
+        )
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

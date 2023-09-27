@@ -41,7 +41,6 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
   def versionHeader: (String, String) = ACCEPT -> s"application/vnd.hmrc.1.0+json"
 
   class Test() {
-
     val method = "some-method"
 
     val requestHeader: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withHeaders(versionHeader)
@@ -57,7 +56,7 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
       eventId = "",
       tags = eventTags,
       detail = Map("test" -> "test"),
-      generatedAt = Instant.now()
+      generatedAt = Instant.now
     )
 
     (httpAuditEvent
@@ -123,7 +122,7 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
         private val result: Future[Result] = handler.onClientError(requestHeader, METHOD_NOT_ALLOWED, "test")
         status(result) shouldBe METHOD_NOT_ALLOWED
 
-        contentAsJson(result) shouldBe MtdError("INVALID_REQUEST", "test", BAD_REQUEST).asJson
+        contentAsJson(result) shouldBe InvalidHttpMethodError.asJson
       }
     }
   }

@@ -21,7 +21,7 @@ import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequest
+import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequestData
 import v1.models.response.retrieveReliefInvestments.RetrieveReliefInvestmentsResponse
 import v1.services.RetrieveReliefInvestmentsService
 
@@ -33,10 +33,10 @@ trait MockRetrieveReliefInvestmentsService extends MockFactory {
 
   object MockRetrieveReliefService {
 
-    def retrieve(requestData: RetrieveReliefInvestmentsRequest)
+    def retrieve(requestData: RetrieveReliefInvestmentsRequestData)
         : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveReliefInvestmentsResponse]]]] = {
       (mockService
-        .retrieve(_: RetrieveReliefInvestmentsRequest)(_: RequestContext, _: ExecutionContext))
+        .retrieve(_: RetrieveReliefInvestmentsRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
     }
 

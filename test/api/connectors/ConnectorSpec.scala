@@ -16,8 +16,7 @@
 
 package api.connectors
 
-import api.mocks.MockHttpClient
-import mocks.{MockAppConfig, MockFeatureSwitches}
+import mocks.{MockAppConfig, MockFeatureSwitches, MockHttpClient}
 import org.scalamock.handlers.CallHandler
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import support.UnitSpec
@@ -158,7 +157,6 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockAppConfig.desEnvironment returns "des-environment"
     MockAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
 
-    MockFeatureSwitches.isTaxYearSpecificApiEnabled returns false
   }
 
   protected trait IfsTest extends ConnectorTest {
@@ -170,7 +168,6 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockAppConfig.ifsEnvironment returns "ifs-environment"
     MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
 
-    MockFeatureSwitches.isTaxYearSpecificApiEnabled returns false
   }
 
   protected trait TysIfsTest extends ConnectorTest {
@@ -182,7 +179,6 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockAppConfig.tysIfsEnvironment returns "TYS-IFS-environment"
     MockAppConfig.tysIfsEnvironmentHeaders returns Some(allowedTysIfsHeaders)
 
-    MockFeatureSwitches.isTaxYearSpecificApiEnabled returns true
   }
 
 }

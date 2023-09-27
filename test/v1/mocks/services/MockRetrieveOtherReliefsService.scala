@@ -21,7 +21,7 @@ import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequest
+import v1.models.request.retrieveOtherReliefs.RetrieveOtherReliefsRequestData
 import v1.models.response.retrieveOtherReliefs.RetrieveOtherReliefsResponse
 import v1.services.RetrieveOtherReliefsService
 
@@ -34,9 +34,9 @@ trait MockRetrieveOtherReliefsService extends MockFactory {
   object MockRetrieveReliefService {
 
     def retrieve(
-        requestData: RetrieveOtherReliefsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveOtherReliefsResponse]]]] = {
+        requestData: RetrieveOtherReliefsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveOtherReliefsResponse]]]] = {
       (mockService
-        .retrieve(_: RetrieveOtherReliefsRequest)(_: RequestContext, _: ExecutionContext))
+        .retrieve(_: RetrieveOtherReliefsRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
     }
 

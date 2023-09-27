@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
 import v1.connectors.AmendOtherReliefsConnector
-import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequest
+import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector) extends BaseService {
 
-  def amend(request: AmendOtherReliefsRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def amend(request: AmendOtherReliefsRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.amend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

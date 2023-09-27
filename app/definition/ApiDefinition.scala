@@ -16,8 +16,9 @@
 
 package definition
 
-import uk.gov.hmrc.auth.core.ConfidenceLevel
 import play.api.libs.json.{Format, Json, OFormat}
+import routing.Version
+import uk.gov.hmrc.auth.core.ConfidenceLevel
 import utils.enums.Enums
 
 case class Parameter(name: String, required: Boolean = false)
@@ -46,10 +47,7 @@ object APIStatus extends Enumeration {
   val parser: PartialFunction[String, APIStatus]   = Enums.parser[APIStatus]
 }
 
-case class APIVersion(version: String, status: APIStatus, endpointsEnabled: Boolean) {
-
-  require(version.nonEmpty, "version is required")
-}
+case class APIVersion(version: Version, status: APIStatus, endpointsEnabled: Boolean)
 
 object APIVersion {
   implicit val formatAPIVersion: OFormat[APIVersion] = Json.format[APIVersion]

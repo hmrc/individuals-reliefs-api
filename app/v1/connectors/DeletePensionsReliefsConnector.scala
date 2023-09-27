@@ -16,32 +16,30 @@
 
 package v1.connectors
 
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import config.{AppConfig, FeatureSwitches}
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequest
+import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeletePensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
-    extends BaseDownstreamConnector {
+class DeletePensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def delete(request: DeletePensionsReliefsRequest)(implicit
+  def deletePensionsReliefs(request: DeletePensionsReliefsRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request.{nino, taxYear}
+    import request._
 
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
         TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
       } else {
-        // Note the downstream endpoint uses the MTD tax year format
         DesUri[Unit](s"income-tax/reliefs/pensions/$nino/${taxYear.asMtd}")
       }
 

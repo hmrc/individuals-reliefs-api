@@ -23,13 +23,8 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.connectors.MockRetrieveForeignReliefsConnector
-import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
-import v1.models.response.retrieveForeignReliefs.{
-  ForeignIncomeTaxCreditRelief,
-  ForeignTaxCreditRelief,
-  ForeignTaxForFtcrNotClaimed,
-  RetrieveForeignReliefsResponse
-}
+import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
+import v1.models.response.retrieveForeignReliefs.{ForeignIncomeTaxCreditRelief, ForeignTaxCreditRelief, ForeignTaxForFtcrNotClaimed, RetrieveForeignReliefsResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -47,7 +42,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
     Some(ForeignTaxForFtcrNotClaimed(549.98))
   )
 
-  private val requestData = RetrieveForeignReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

@@ -17,19 +17,17 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.hateoas.Method._
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas
-import api.models.hateoas.HateoasWrapper
-import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
+import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockAmendOtherReliefsRequestParser
+import v1.controllers.validators.MockAmendOtherReliefsValidatorFactory
 import v1.mocks.services._
 import v1.models.request.amendOtherReliefs._
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
@@ -41,7 +39,7 @@ class AmendOtherReliefsControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockAmendOtherReliefsService
-    with MockAmendOtherReliefsRequestParser
+    with MockAmendOtherReliefsValidatorFactory
     with MockHateoasFactory
     with MockAppConfig
     with MockAuditService {
@@ -49,9 +47,9 @@ class AmendOtherReliefsControllerSpec
   private val taxYear = "2019-20"
 
   private val testHateoasLinks = Seq(
-    hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = PUT, rel = "amend-reliefs-other"),
-    hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self"),
-    hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
+    Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = PUT, rel = "amend-reliefs-other"),
+    api.hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self"),
+    api.hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
   )
 
   private val requestJson = Json.parse("""
@@ -99,7 +97,7 @@ class AmendOtherReliefsControllerSpec
                                          |  ]
                                          |}""".stripMargin)
 
-  private val requestBody = AmendOtherReliefsBody(
+  private val requestBody = AmendOtherReliefsRequestBody(
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
     Some(PayrollGiving(Some("myref"), 154.00)),
     Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
@@ -117,8 +115,7 @@ class AmendOtherReliefsControllerSpec
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val rawData     = AmendOtherReliefsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendOtherReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   val hateoasResponse: JsValue = Json.parse("""
                                               |{
@@ -146,9 +143,7 @@ class AmendOtherReliefsControllerSpec
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
 
-        MockAmendOtherReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendOtherReliefsService
           .amend(requestData)
@@ -170,9 +165,7 @@ class AmendOtherReliefsControllerSpec
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
 
-        MockAmendOtherReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, Some(requestJson))
 
@@ -180,9 +173,7 @@ class AmendOtherReliefsControllerSpec
 
       "the service returns an error" in new Test {
 
-        MockAmendOtherReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendOtherReliefsService
           .amend(requestData)
@@ -193,12 +184,12 @@ class AmendOtherReliefsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new AmendOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockAmendOtherReliefsRequestParser,
+      validatorFactory = mockAmendOtherReliefsValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
@@ -214,10 +205,10 @@ class AmendOtherReliefsControllerSpec
         auditType = "CreateAmendOtherReliefs",
         transactionName = "create-amend-other-reliefs",
         detail = GenericAuditDetail(
+          versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
+          params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

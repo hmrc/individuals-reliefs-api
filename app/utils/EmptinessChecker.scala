@@ -30,7 +30,7 @@ object EmptyPathsResult {
 /** Type class to locate paths to empty objects or arrays within an instance of an object.
   */
 trait EmptinessChecker[A] {
-  import EmptinessChecker._
+  import utils.EmptinessChecker._
 
   final def findEmptyPaths(a: A): EmptyPathsResult = {
 
@@ -69,7 +69,7 @@ trait EmptinessChecker[A] {
 
 // Internal specialization of EmptinessChecker for object instances so we can directly access its fields
 private[utils] trait ObjEmptinessChecker[A] extends EmptinessChecker[A] {
-  import EmptinessChecker._
+  import utils.EmptinessChecker._
 
   def structureOf(value: A): Structure.Obj
 }

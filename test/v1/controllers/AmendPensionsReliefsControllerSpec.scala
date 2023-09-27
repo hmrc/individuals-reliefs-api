@@ -17,19 +17,17 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
-import api.mocks.services.MockAuditService
+import api.hateoas.Method._
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.hateoas.HateoasWrapper
-import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
-import api.models.{errors, hateoas}
+import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockAmendPensionsReliefsRequestParser
+import v1.controllers.validators.MockAmendPensionsReliefsValidatorFactory
 import v1.mocks.services._
 import v1.models.request.amendPensionsReliefs._
 import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsHateoasData
@@ -41,17 +39,17 @@ class AmendPensionsReliefsControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockAmendPensionsReliefsService
-    with MockAmendPensionsReliefsRequestParser
+    with MockAmendPensionsReliefsValidatorFactory
     with MockHateoasFactory
     with MockAppConfig
     with MockAuditService {
 
   private val taxYear = "2019-20"
 
-  private val testHateoasLinks = Seq(
-    hateoas.Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = PUT, rel = "amend-reliefs-pensions"),
-    hateoas.Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self"),
-    hateoas.Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-pensions")
+  private val testHateoasLinks = List(
+    Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = PUT, rel = "amend-reliefs-pensions"),
+    Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self"),
+    Link(href = s"/individuals/reliefs/pensions/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-pensions")
   )
 
   private val requestJson = Json.parse(
@@ -76,38 +74,34 @@ class AmendPensionsReliefsControllerSpec
     )
   )
 
-  private val rawData     = AmendPensionsReliefsRawData(nino, taxYear, requestJson)
-  private val requestData = AmendPensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = AmendPensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
-  val hateoasResponse: JsValue = Json.parse("""
-                                              |{
-                                              |        "links": [
-                                              |          {
-                                              |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
-                                              |            "rel": "amend-reliefs-pensions",
-                                              |            "method": "PUT"
-                                              |          },
-                                              |          {
-                                              |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
-                                              |            "rel": "self",
-                                              |            "method": "GET"
-                                              |          },
-                                              |          {
-                                              |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
-                                              |            "rel": "delete-reliefs-pensions",
-                                              |            "method": "DELETE"
-                                              |          }
-                                              |        ]
-                                              |      }
-                                              |""".stripMargin)
+  private val hateoasResponse = Json.parse("""
+      |{
+      |        "links": [
+      |          {
+      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
+      |            "rel": "amend-reliefs-pensions",
+      |            "method": "PUT"
+      |          },
+      |          {
+      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
+      |            "rel": "self",
+      |            "method": "GET"
+      |          },
+      |          {
+      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
+      |            "rel": "delete-reliefs-pensions",
+      |            "method": "DELETE"
+      |          }
+      |        ]
+      |      }
+      |""".stripMargin)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-
-        MockAmendPensionsReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendReliefService
           .amend(requestData)
@@ -128,19 +122,13 @@ class AmendPensionsReliefsControllerSpec
 
     "return the error as per spec" when {
       "parser validation fails" in new Test {
-
-        MockAmendPensionsReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Left(errors.ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, Some(requestJson))
       }
 
       "service errors occur" in new Test {
-
-        MockAmendPensionsReliefsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockAmendReliefService
           .amend(requestData)
@@ -151,12 +139,12 @@ class AmendPensionsReliefsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new AmendPensionsReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockAmendPensionsReliefsRequestParser,
+      validatorFactory = mockAmendPensionsReliefsValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
       hateoasFactory = mockHateoasFactory,
@@ -172,10 +160,10 @@ class AmendPensionsReliefsControllerSpec
         auditType = "CreateAmendReliefPension",
         transactionName = "create-amend-reliefs-pensions",
         detail = GenericAuditDetail(
+          versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
+          params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

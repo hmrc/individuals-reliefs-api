@@ -16,25 +16,24 @@
 
 package v1.connectors
 
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import config.{AppConfig, FeatureSwitches}
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequest
+import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
 import v1.models.response.retrieveForeignReliefs.RetrieveForeignReliefsResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveForeignReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
-    extends BaseDownstreamConnector {
+class RetrieveForeignReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieve(request: RetrieveForeignReliefsRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[RetrieveForeignReliefsResponse]] = {
+  def retrieve(request: RetrieveForeignReliefsRequestData)(implicit
+                                                           hc: HeaderCarrier,
+                                                           ec: ExecutionContext,
+                                                           correlationId: String): Future[DownstreamOutcome[RetrieveForeignReliefsResponse]] = {
 
     import request._
 

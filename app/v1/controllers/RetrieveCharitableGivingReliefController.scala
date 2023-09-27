@@ -20,9 +20,8 @@ import api.controllers._
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.RetrieveCharitableGivingReliefRequestParser
-import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRawData
+import utils.IdGenerator
+import v1.controllers.validators.RetrieveCharitableGivingReliefValidatorFactory
 import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefHateoasData
 import v1.services.RetrieveCharitableGivingReliefService
 
@@ -30,15 +29,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveCharitableGivingReliefController @Inject() (val authService: EnrolmentsAuthService,
-                                                          val lookupService: MtdIdLookupService,
-                                                          parser: RetrieveCharitableGivingReliefRequestParser,
-                                                          service: RetrieveCharitableGivingReliefService,
-                                                          hateoasFactory: HateoasFactory,
-                                                          cc: ControllerComponents,
-                                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
-    with Logging {
+class RetrieveCharitableGivingReliefController @Inject()(val authService: EnrolmentsAuthService,
+                                                         val lookupService: MtdIdLookupService,
+                                                         validatorFactory: RetrieveCharitableGivingReliefValidatorFactory,
+                                                         service: RetrieveCharitableGivingReliefService,
+                                                         hateoasFactory: HateoasFactory,
+                                                         cc: ControllerComponents,
+                                                         val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+  extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveCharitableGivingReliefController", endpointName = "retrieveCharitableGivingTaxRelief")
@@ -47,14 +45,14 @@ class RetrieveCharitableGivingReliefController @Inject() (val authService: Enrol
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = RetrieveCharitableGivingReliefRawData(nino, taxYear)
+      val validator = validatorFactory.validator(nino, taxYear)
 
       val requestHandler = RequestHandler
-        .withParser(parser)
+        .withValidator(validator)
         .withService(service.retrieve)
         .withHateoasResult(hateoasFactory)(RetrieveCharitableGivingReliefHateoasData(nino, taxYear))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

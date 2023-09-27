@@ -17,35 +17,32 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.hateoas.MockHateoasFactory
+import api.hateoas.Method._
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
-import api.models.hateoas.HateoasWrapper
-import api.models.hateoas.Method.GET
 import api.models.outcomes.ResponseWrapper
-import api.models.{errors, hateoas}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockRetrievePensionsReliefsRequestParser
+import v1.controllers.validators.MockRetrievePensionsReliefsValidatorFactory
 import v1.mocks.services._
-import v1.models.request.retrievePensionsReliefs.{RetrievePensionsReliefsRawData, RetrievePensionsReliefsRequest}
+import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequestData
 import v1.models.response.retrievePensionsReliefs._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrievePensionsReliefsControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrievePensionsReliefsService
-    with MockRetrievePensionsReliefsRequestParser
+    with MockRetrievePensionsReliefsValidatorFactory
     with MockHateoasFactory {
 
-  private val taxYear     = "2019-20"
-  private val rawData     = RetrievePensionsReliefsRawData(nino, taxYear)
-  private val requestData = RetrievePensionsReliefsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val taxYear = "2019-20"
+  private val requestData = RetrievePensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  private val testHateoasLink = hateoas.Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrievePensionsReliefsResponse(
     Timestamp("2019-04-04T01:01:01.000Z"),
@@ -84,10 +81,7 @@ class RetrievePensionsReliefsControllerSpec
   "handleRequest" should {
     "return Ok" when {
       "the request received is valid" in new Test {
-
-        MockRetrievePensionsReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrievePensionsReliefsService
           .retrieve(requestData)
@@ -103,17 +97,12 @@ class RetrievePensionsReliefsControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrievePensionsReliefsRequestParser
-          .parse(rawData)
-          .returns(Left(errors.ErrorWrapper(correlationId, NinoFormatError)))
-
+        willUseValidator(returning(NinoFormatError))
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrievePensionsReliefsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrievePensionsReliefsService
           .retrieve(requestData)
@@ -129,7 +118,7 @@ class RetrievePensionsReliefsControllerSpec
     val controller = new RetrievePensionsReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRequestDataParser,
+      validatorFactory = mockRetrievePensionsReliefsValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,

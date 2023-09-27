@@ -17,10 +17,10 @@
 package api.controllers
 
 import api.controllers.ControllerTestRunner.validNino
-import api.mocks.MockIdGenerator
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse}
 import api.models.errors.MtdError
+import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import mocks.MockIdGenerator
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import play.api.libs.json.JsValue
 import play.api.mvc.{AnyContentAsEmpty, ControllerComponents, Result}
@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 
 class ControllerBaseSpec
-    extends UnitSpec
+  extends UnitSpec
     with Status
     with MimeTypes
     with HeaderNames
@@ -48,11 +48,16 @@ class ControllerBaseSpec
     HeaderNames.AUTHORIZATION -> "Bearer Token"
   )
 
+  lazy val fakeDeleteRequest: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withHeaders(
+    HeaderNames.AUTHORIZATION -> "Bearer Token"
+  )
+
   def fakePostRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 }
 
-trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator { _: ControllerBaseSpec =>
-  protected val nino: String  = validNino
+trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator {
+  _: ControllerBaseSpec =>
+  protected val nino: String = validNino
   protected val correlationId = "X-123"
 
   trait ControllerTest {
@@ -70,7 +75,7 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
 
       maybeExpectedResponseBody match {
         case Some(jsBody) => contentAsJson(result) shouldBe jsBody
-        case None         => contentType(result) shouldBe empty
+        case None => contentType(result) shouldBe empty
       }
     }
 
@@ -86,10 +91,10 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
     protected def callController(): Future[Result]
   }
 
-  trait AuditEventChecking {
+  trait AuditEventChecking[DETAIL] {
     _: ControllerTest =>
 
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail]
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[DETAIL]
 
     protected def runOkTestWithAudit(expectedStatus: Int,
                                      maybeExpectedResponseBody: Option[JsValue] = None,
