@@ -22,8 +22,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.connectors.MockCreateAndAmendReliefInvestmentsConnector
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures.requestBodyModel
-import v1.mocks.connectors.MockCreateAndAmendReliefInvestmentsConnector
 import v1.models.request.createAndAmendReliefInvestments._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,7 +35,7 @@ class CreateAndAmendReliefInvestmentsServiceSpec extends UnitSpec {
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
-  private val requestData = CreateAndAmendReliefInvestmentsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = CreateAndAmendReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   trait Test extends MockCreateAndAmendReliefInvestmentsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

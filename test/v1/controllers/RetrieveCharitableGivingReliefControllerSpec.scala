@@ -24,22 +24,22 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.mvc.Result
 import v1.controllers.validators.MockRetrieveCharitableGivingReliefValidatorFactory
-import v1.mocks.services.MockRetrieveCharitableGivingReliefService
 import v1.models.request.retrieveCharitableGivingTaxRelief._
 import v1.models.response.retrieveCharitableGivingTaxRelief._
+import v1.services.MockRetrieveCharitableGivingReliefService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveCharitableGivingReliefControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveCharitableGivingReliefService
     with MockRetrieveCharitableGivingReliefValidatorFactory
     with MockHateoasFactory
     with RetrieveCharitableGivingReliefFixture {
 
-  private val taxYear = "2019-20"
+  private val taxYear     = "2019-20"
   private val requestData = RetrieveCharitableGivingReliefRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   private val hateoasLinks = Seq(
@@ -49,7 +49,7 @@ class RetrieveCharitableGivingReliefControllerSpec
   )
 
   private val responseModel = charitableGivingReliefResponse
-  private val responseJson = charitableGivingReliefResponseMtdJsonWithHateoas(nino, taxYear)
+  private val responseJson  = charitableGivingReliefResponseMtdJsonWithHateoas(nino, taxYear)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {

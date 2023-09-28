@@ -29,9 +29,9 @@ import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.controllers.validators.MockCreateAndAmendForeignReliefsValidatorFactory
 import v1.fixtures.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel, responseWithHateoasLinks}
-import v1.mocks.services._
 import v1.models.request.createAndAmendForeignReliefs._
 import v1.models.response.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsHateoasData
+import v1.services.MockCreateAndAmendForeignReliefsService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -47,10 +47,10 @@ class CreateAndAmendForeignReliefsControllerSpec
 
   private val taxYear = "2019-20"
 
-  private val testHateoasLinks = Seq(
+  private val testHateoasLinks = List(
     Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self"),
-    api.hateoas.Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-foreign"),
-    api.hateoas.Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-foreign")
+    Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-foreign"),
+    Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-foreign")
   )
 
   private val requestData = CreateAndAmendForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)

@@ -28,9 +28,9 @@ import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.controllers.validators.MockAmendOtherReliefsValidatorFactory
-import v1.mocks.services._
 import v1.models.request.amendOtherReliefs._
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
+import v1.services.MockAmendOtherReliefsService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -46,10 +46,10 @@ class AmendOtherReliefsControllerSpec
 
   private val taxYear = "2019-20"
 
-  private val testHateoasLinks = Seq(
+  private val testHateoasLinks = List(
     Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = PUT, rel = "amend-reliefs-other"),
-    api.hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self"),
-    api.hateoas.Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
+    Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self"),
+    Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
   )
 
   private val requestJson = Json.parse("""

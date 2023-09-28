@@ -25,8 +25,8 @@ import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.controllers.validators.MockDeleteForeignReliefsValidatorFactory
-import v1.mocks.services.MockDeleteForeignReliefsService
 import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequestData
+import v1.services.MockDeleteForeignReliefsService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
 import v1.connectors.CreateAndAmendCharitableGivingTaxReliefConnector
-import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRequest
+import v1.models.request.createAndAmendCharitableGivingTaxRelief.CreateAndAmendCharitableGivingTaxReliefRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,8 +29,9 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateAndAmendCharitableGivingTaxReliefService @Inject() (connector: CreateAndAmendCharitableGivingTaxReliefConnector) extends BaseService {
 
-  def amend(
-      request: CreateAndAmendCharitableGivingTaxReliefRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def amend(request: CreateAndAmendCharitableGivingTaxReliefRequestData)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 

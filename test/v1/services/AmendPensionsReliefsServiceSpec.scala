@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.connectors.MockAmendPensionsReliefsConnector
+import v1.connectors.MockAmendPensionsReliefsConnector
 import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRequestData, PensionReliefs}
 
 import scala.concurrent.ExecutionContext.Implicits.global

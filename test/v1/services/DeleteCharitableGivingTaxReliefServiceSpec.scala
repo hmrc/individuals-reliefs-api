@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.connectors.MockDeleteCharitableGivingTaxReliefConnector
+import v1.connectors.MockDeleteCharitableGivingTaxReliefConnector
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global

@@ -22,8 +22,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.connectors.MockCreateAndAmendForeignReliefsConnector
 import v1.fixtures.CreateAndAmendForeignReliefsFixtures.requestBodyModel
-import v1.mocks.connectors.MockCreateAndAmendForeignReliefsConnector
 import v1.models.request.createAndAmendForeignReliefs._
 
 import scala.concurrent.ExecutionContext.Implicits.global

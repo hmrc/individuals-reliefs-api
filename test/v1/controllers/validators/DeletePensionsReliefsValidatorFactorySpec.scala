@@ -18,11 +18,10 @@ package v1.controllers.validators
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
 import support.UnitSpec
 import v1.models.request.deletePensionsReliefs.DeletePensionsReliefsRequestData
 
-class DeletePensionsReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class DeletePensionsReliefsValidatorFactorySpec extends UnitSpec {
 
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
   private val validNino              = "AA123456A"
@@ -31,7 +30,7 @@ class DeletePensionsReliefsValidatorFactorySpec extends UnitSpec with MockAppCon
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private val validatorFactory = new DeletePensionsReliefsValidatorFactory(mockAppConfig)
+  private val validatorFactory = new DeletePensionsReliefsValidatorFactory()
 
   private def validator(nino: String, taxYear: String) = validatorFactory.validator(nino, taxYear)
 

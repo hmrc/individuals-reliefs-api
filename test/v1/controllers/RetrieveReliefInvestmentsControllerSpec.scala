@@ -26,22 +26,22 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.controllers.validators.MockRetrieveReliefInvestmentsValidatorFactory
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
-import v1.mocks.services._
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequestData
 import v1.models.response.retrieveReliefInvestments._
+import v1.services.MockRetrieveReliefInvestmentsService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveReliefInvestmentsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveReliefInvestmentsService
     with MockRetrieveReliefInvestmentsValidatorFactory
     with MockHateoasFactory {
 
-  private val taxYear = "2019-20"
-  private val requestData = RetrieveReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val taxYear         = "2019-20"
+  private val requestData     = RetrieveReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
   private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
 
   val mtdResponseJson: JsValue = Json

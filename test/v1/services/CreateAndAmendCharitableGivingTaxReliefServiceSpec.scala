@@ -21,7 +21,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
-import v1.mocks.connectors.MockCreateAndAmendCharitableGivingTaxReliefConnector
+import v1.connectors.MockCreateAndAmendCharitableGivingTaxReliefConnector
 import v1.models.request.createAndAmendCharitableGivingTaxRelief._
 
 import scala.concurrent.Future
@@ -58,8 +58,8 @@ class CreateAndAmendCharitableGivingTaxReliefServiceSpec extends ServiceSpec {
       gifts = Some(giftModel)
     )
 
-  val requestData: CreateAndAmendCharitableGivingTaxReliefRequest =
-    CreateAndAmendCharitableGivingTaxReliefRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  val requestData: CreateAndAmendCharitableGivingTaxReliefRequestData =
+    CreateAndAmendCharitableGivingTaxReliefRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   trait Test extends MockCreateAndAmendCharitableGivingTaxReliefConnector {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")

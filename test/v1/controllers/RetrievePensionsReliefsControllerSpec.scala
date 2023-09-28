@@ -25,21 +25,21 @@ import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.controllers.validators.MockRetrievePensionsReliefsValidatorFactory
-import v1.mocks.services._
 import v1.models.request.retrievePensionsReliefs.RetrievePensionsReliefsRequestData
 import v1.models.response.retrievePensionsReliefs._
+import v1.services.MockRetrievePensionsReliefsService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrievePensionsReliefsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrievePensionsReliefsService
     with MockRetrievePensionsReliefsValidatorFactory
     with MockHateoasFactory {
 
-  private val taxYear = "2019-20"
+  private val taxYear     = "2019-20"
   private val requestData = RetrievePensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")

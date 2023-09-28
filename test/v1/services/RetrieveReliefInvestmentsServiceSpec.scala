@@ -22,8 +22,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.connectors.MockRetrieveReliefInvestmentsConnector
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
-import v1.mocks.connectors.MockRetrieveReliefInvestmentsConnector
 import v1.models.request.retrieveReliefInvestments.RetrieveReliefInvestmentsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global

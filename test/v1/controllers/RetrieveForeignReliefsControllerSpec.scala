@@ -26,22 +26,22 @@ import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.controllers.validators.MockRetrieveForeignReliefsValidatorFactory
-import v1.mocks.services.MockRetrieveForeignReliefsService
 import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
 import v1.models.response.retrieveForeignReliefs._
+import v1.services.MockRetrieveForeignReliefsService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveForeignReliefsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveForeignReliefsService
     with MockRetrieveForeignReliefsValidatorFactory
     with MockHateoasFactory {
 
-  private val taxYear = "2019-20"
-  private val requestData = RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val taxYear         = "2019-20"
+  private val requestData     = RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
   private val testHateoasLink = Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = RetrieveForeignReliefsResponse(

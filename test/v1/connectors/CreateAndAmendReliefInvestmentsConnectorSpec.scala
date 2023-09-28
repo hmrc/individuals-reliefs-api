@@ -35,8 +35,8 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    lazy val request: CreateAndAmendReliefInvestmentsRequest =
-      CreateAndAmendReliefInvestmentsRequest(Nino("AA123456A"), TaxYear.fromMtd(taxYear), requestBodyModel)
+    lazy val request: CreateAndAmendReliefInvestmentsRequestData =
+      CreateAndAmendReliefInvestmentsRequestData(Nino("AA123456A"), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   }
 

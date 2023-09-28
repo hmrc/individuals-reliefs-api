@@ -20,10 +20,11 @@ import play.api.libs.json.{Json, OFormat}
 
 case class EisSubscriptionsItem(uniqueInvestmentRef: String,
                                 name: Option[String],
-                                knowledgeIntensive: Option[Boolean],
                                 dateOfInvestment: Option[String],
                                 amountInvested: Option[BigDecimal],
-                                reliefClaimed: BigDecimal)
+                                reliefClaimed: BigDecimal,
+                                knowledgeIntensive: Option[Boolean])
+    extends ReliefsInvestmentItem
 
 object EisSubscriptionsItem {
   implicit val format: OFormat[EisSubscriptionsItem] = Json.format[EisSubscriptionsItem]
