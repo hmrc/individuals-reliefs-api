@@ -1,16 +1,17 @@
 summary: Delete Charitable Giving Tax Relief
 description: |
-  This endpoint enables you to delete charitable giving tax relief for a tax year. A National Insurance number and tax year must be provided.
+  This endpoint enables you to delete charitable giving tax relief for a tax year. A National Insurance number and tax 
+  year must be provided.
 
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.  
   
-  | Header Value (Gov-Test-Scenario) | Scenario                                       |
-  |----------------------------------|------------------------------------------------|
-  | DELETE                           | Simulates success response.                    |
-  | NOT_FOUND                        | Simulates the scenario where no data is found. |
-  | STATEFUL_DELETE                  | Performs a stateful delete.<br/>This Gov-Test-Scenario will be deprecated and no longer available on 05 September 2023. It will be replaced by the STATEFUL Gov-Test-Scenario. |
-  | STATEFUL                         | Performs a stateful delete.                    |
+  | Header Value (Gov-Test-Scenario) | Scenario                                                                                                                                                    |
+  |----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+  | DELETE                           | Simulates success response.                                                                                                                                 |
+  | NOT_FOUND                        | Simulates the scenario where no data is found.                                                                                                              |
+  | STATEFUL_DELETE                  | Performs a stateful delete. <br></br>This Gov-Test-Scenario is no longer available in this version. It has been replaced by the STATEFUL Gov-Test-Scenario. |
+  | STATEFUL                         | Performs a stateful delete.                                                                                                                                 |
 
 
 tags:
