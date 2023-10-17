@@ -20,15 +20,20 @@ import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
 import api.models.errors._
 import cats.data.Validated
-import cats.data.Validated.Invalid
+import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
 import v1.models.request.amendOtherReliefs._
+
+import java.time.LocalDate
 
 object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsRequestData] {
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
   private val stringRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
+
+  private val minYear = 1900
+  private val maxYear = 2100
 
   def validateBusinessRules(parsed: AmendOtherReliefsRequestData): Validated[Seq[MtdError], AmendOtherReliefsRequestData] = {
     import parsed.body._
@@ -89,12 +94,13 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
       postCessationTradeReliefAndCertainOtherLosses: PostCessationTradeReliefAndCertainOtherLosses,
       index: Int): Validated[Seq[MtdError], Unit] = {
     import postCessationTradeReliefAndCertainOtherLosses._
-
+    val dateBusinessCeasedPath = s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased"
     combine(
       customerReference.traverse_(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference")),
       businessName.traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName", BusinessNameFormatError)),
       dateBusinessCeased.traverse_(
-        ResolveIsoDate(_, Some(DateFormatError), Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased"))),
+        ResolveIsoDate(_, Some(DateFormatError), Some(dateBusinessCeasedPath))
+          .andThen(isDateInRange(_, dateBusinessCeasedPath))),
       natureOfTrade.traverse_(
         validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade", NatureOfTradeFormatError)),
       incomeSource.traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource", IncomeSourceFormatError)),
@@ -105,10 +111,12 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
   private def validateMaintenancePayments(maintenancePayments: MaintenancePayments, index: Int): Validated[Seq[MtdError], Unit] = {
     import maintenancePayments._
 
+    val exSpouseDateOfBirthPath = s"/maintenancePayments/$index/exSpouseDateOfBirth"
     combine(
       customerReference.traverse_(validateCustomerRef(_, s"/maintenancePayments/$index/customerReference")),
       exSpouseName.traverse_(validateFieldLength(_, s"/maintenancePayments/$index/exSpouseName", ExSpouseNameFormatError)),
-      exSpouseDateOfBirth.traverse_(ResolveIsoDate(_, Some(DateFormatError), Some(s"/maintenancePayments/$index/exSpouseDateOfBirth"))),
+      exSpouseDateOfBirth.traverse_(
+        ResolveIsoDate(_, Some(DateFormatError), Some(exSpouseDateOfBirthPath)).andThen(isDateInRange(_, exSpouseDateOfBirthPath))),
       resolveParsedNumber(amount, path = Some(s"/maintenancePayments/$index/amount"))
     )
   }
@@ -131,6 +139,10 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
       lenderName.traverse_(validateFieldLength(_, s"/qualifyingLoanInterestPayments/$index/lenderName", LenderNameFormatError)),
       resolveParsedNumber(reliefClaimed, path = Some(s"/qualifyingLoanInterestPayments/$index/reliefClaimed"))
     )
+  }
+
+  private def isDateInRange(date: LocalDate, path: String): Validated[Seq[MtdError], Unit] = {
+    if (date.getYear >= minYear && date.getYear < maxYear) Valid(()) else Invalid(List(DateFormatError.withPath(path)))
   }
 
 }

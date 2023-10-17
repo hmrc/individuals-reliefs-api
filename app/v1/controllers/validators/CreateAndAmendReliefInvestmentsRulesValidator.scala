@@ -20,11 +20,16 @@ import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
 import api.models.errors.{DateOfInvestmentFormatError, MtdError, NameFormatError, UniqueInvestmentRefFormatError}
 import cats.data.Validated
-import cats.data.Validated.Invalid
+import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
 import v1.models.request.createAndAmendReliefInvestments.{CreateAndAmendReliefInvestmentsRequestData, ReliefsInvestmentItem}
 
+import java.time.LocalDate
+
 object CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator[CreateAndAmendReliefInvestmentsRequestData] {
+
+  private val minYear = 1900
+  private val maxYear = 2100
 
   private val uniqueInvestmentRefRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
 
@@ -63,19 +68,24 @@ object CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator[Crea
   }
 
   private def validateUniqueInvestmentRef(uniqueInvestmentRef: String, itemType: String, index: Int): Validated[Seq[MtdError], Unit] =
-    if (uniqueInvestmentRefRegex.matches(uniqueInvestmentRef))
+    if (uniqueInvestmentRefRegex.matches(uniqueInvestmentRef)) {
       valid
-    else
+    } else {
       Invalid(List(UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")))
+    }
 
   private def validateName(maybeName: Option[String], path: String): Validated[Seq[MtdError], Unit] =
     maybeName
-      .traverse_(name =>
-        if (nameRegex.matches(name)) valid
-        else Invalid(List(NameFormatError.withPath(path))))
+      .traverse_(name => if (nameRegex.matches(name)) valid else Invalid(List(NameFormatError.withPath(path))))
 
-  private def validateDate(maybeDate: Option[String], itemType: String, index: Int): Validated[Seq[MtdError], Unit] =
-    maybeDate.traverse_(ResolveIsoDate(_, Some(DateOfInvestmentFormatError), Some(s"/$itemType/$index/dateOfInvestment")))
+  private def validateDate(maybeDate: Option[String], itemType: String, index: Int): Validated[Seq[MtdError], Unit] = {
+    val path = s"/$itemType/$index/dateOfInvestment"
+    maybeDate.traverse_(ResolveIsoDate(_, Some(DateOfInvestmentFormatError), Some(path)).andThen(isDateInRange(_, path)))
+  }
+
+  private def isDateInRange(date: LocalDate, path: String): Validated[Seq[MtdError], Unit] = {
+    if (date.getYear >= minYear && date.getYear < maxYear) Valid(()) else Invalid(List(DateOfInvestmentFormatError.withPath(path)))
+  }
 
   private def validateNumericFields(amountInvested: Option[BigDecimal],
                                     reliefClaimed: BigDecimal,

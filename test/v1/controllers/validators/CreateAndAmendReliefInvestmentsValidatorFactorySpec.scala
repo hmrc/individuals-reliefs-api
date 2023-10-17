@@ -276,6 +276,37 @@ class CreateAndAmendReliefInvestmentsValidatorFactorySpec extends UnitSpec with 
           ))
       }
 
+      "passed a body with out of range formatted date of investments" in {
+        val invalidVctSubscriptionsItem = validVctSubscriptionsItem.update("/dateOfInvestment", JsString("1879-09-23"))
+        val invalidEisSubscriptionsItem = validEisSubscriptionsItem.update("/dateOfInvestment", JsString("2109-01-30"))
+        val invalidCommunityInvestmentItem = validCommunityInvestmentItem.update("/dateOfInvestment", JsString("1150-09-23"))
+        val invalidSeedEnterpriseInvestmentItem = validSeedEnterpriseInvestmentItem.update("/dateOfInvestment", JsString("2100-01-01"))
+        val invalidSocialEnterpriseInvestmentItem = validSocialEnterpriseInvestmentItem.update("/dateOfInvestment", JsString("1899-12-31"))
+
+        val invalidBody = bodyWith(
+          List(invalidVctSubscriptionsItem),
+          List(invalidEisSubscriptionsItem),
+          List(invalidCommunityInvestmentItem),
+          List(invalidSeedEnterpriseInvestmentItem),
+          List(invalidSocialEnterpriseInvestmentItem)
+        )
+        val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
+          validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            DateOfInvestmentFormatError.withPaths(List(
+              "/vctSubscription/0/dateOfInvestment",
+              "/eisSubscription/0/dateOfInvestment",
+              "/communityInvestment/0/dateOfInvestment",
+              "/seedEnterpriseInvestment/0/dateOfInvestment",
+              "/socialEnterpriseInvestment/0/dateOfInvestment"
+            ))
+          ))
+      }
+
+
       "passed a body with invalidly formatted unique investment references" in {
         val invalidVctSubscriptionsItem           = validVctSubscriptionsItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
         val invalidEisSubscriptionsItem           = validEisSubscriptionsItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
