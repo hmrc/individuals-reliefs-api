@@ -79,7 +79,7 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
       s"return the documentation for $version" in {
         val response = get(s"/api/conf/${version.name}/application.yaml")
 
-        val body         = response.body[String]
+        val body         = response.body
         val parserResult = Try(new OpenAPIV3Parser().readContents(body)).getOrElse(fail("openAPI couldn't read contents"))
 
         val openAPI = Option(parserResult.getOpenAPI).getOrElse(fail("openAPI wasn't defined"))
@@ -93,7 +93,7 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
 
       s"return the documentation with the correct accept header for version $version" in {
         val response = get(s"/api/conf/${version.name}/common/headers.yaml")
-        val body     = response.body[String]
+        val body     = response.body
 
         val headerRegex = """(?s).*?application/vnd\.hmrc\.(\d+\.\d+)\+json.*?""".r
         val header      = headerRegex.findFirstMatchIn(body)
