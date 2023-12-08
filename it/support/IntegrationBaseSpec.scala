@@ -47,7 +47,6 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
     .in(Environment.simple(mode = Mode.Dev))
     .configure(servicesConfig)
-    .configure("metrics.enabled" -> "false")
     .build()
 
   override def beforeAll(): Unit = {
