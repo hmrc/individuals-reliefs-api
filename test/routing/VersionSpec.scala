@@ -24,7 +24,7 @@ import support.UnitSpec
 
 class VersionSpec extends UnitSpec {
 
-  "serialized to Json" must {
+  "Serializing the version to Json" must {
     "return the expected Json output" in {
       val version: Version = Version1
       val expected         = Json.parse(""" "1.0" """)

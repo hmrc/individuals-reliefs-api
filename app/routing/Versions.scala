@@ -36,14 +36,14 @@ object Version {
   object VersionReads extends Reads[Version] {
 
     /** @param version
-     * expecting a JsString e.g. "1.0"
-     */
+      *   expecting a JsString e.g. "1.0"
+      */
     override def reads(version: JsValue): JsResult[Version] =
       version
         .validate[String]
         .flatMap(name =>
           Versions.getFrom(name) match {
-            case Left(_) => JsError("Version not recognised")
+            case Left(_)        => JsError("Version not recognised")
             case Right(version) => JsSuccess(version)
           })
 
