@@ -13,14 +13,14 @@ The Individuals Reliefs API allows a developer to retrieve, create and amend, an
 
 - Scala 2.13.x
 - Java 11
-- sbt 1.7.x
+- sbt 1.9.x
 - [Service Manager 2](https://github.com/hmrc/sm2)
 
 ## Running the microservice
 
 Run from the console using: `sbt run` (starts on port 7796 by default)
 
-Start the service manager profile: `sm --start MTDFB_INDIVIDUALS_RELIEFS`
+Start the service manager profile: `sm2 --start MTDFB_INDIVIDUALS_RELIEFS`
 
 ## Running test
 

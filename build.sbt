@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import sbt._
+import sbt.*
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import uk.gov.hmrc.SbtAutoBuildPlugin
