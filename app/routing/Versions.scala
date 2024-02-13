@@ -35,11 +35,17 @@ object Version {
 
   object VersionReads extends Reads[Version] {
 
+    /** @param version
+      *   expecting a JsString e.g. "1.0"
+      */
     override def reads(version: JsValue): JsResult[Version] =
-      version.validate[String].flatMap {
-        case Version1.name => JsSuccess(Version1)
-        case _             => JsError("Unrecognised version")
-      }
+      version
+        .validate[String]
+        .flatMap(name =>
+          Versions.getFrom(name) match {
+            case Left(_)        => JsError("Version not recognised")
+            case Right(version) => JsSuccess(version)
+          })
 
   }
 
@@ -72,7 +78,7 @@ object Versions {
   private def getFrom(headers: Seq[(String, String)]): Either[GetFromRequestError, String] =
     headers.collectFirst { case (ACCEPT, versionRegex(ver)) => ver }.toRight(left = InvalidHeader)
 
-  private def getFrom(name: String): Either[GetFromRequestError, Version] =
+  def getFrom(name: String): Either[GetFromRequestError, Version] =
     versionsByName.get(name).toRight(left = VersionNotFound)
 
 }
