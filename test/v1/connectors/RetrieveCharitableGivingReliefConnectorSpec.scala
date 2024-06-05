@@ -16,9 +16,10 @@
 
 package v1.connectors
 
-import api.connectors.ConnectorSpec
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import play.api.Configuration
 import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequestData
 import v1.models.response.retrieveCharitableGivingTaxRelief._
 
@@ -52,34 +53,33 @@ class RetrieveCharitableGivingReliefConnectorSpec extends ConnectorSpec {
     gifts = Some(giftsModel)
   )
 
-  trait Test { _: ConnectorTest =>
-
-    def taxYear: TaxYear
-
-    val connector: RetrieveCharitableGivingReliefConnector = new RetrieveCharitableGivingReliefConnector(
-      http = mockHttpClient,
-      appConfig = mockAppConfig
-    )
-
-    protected val request = RetrieveCharitableGivingReliefRequestData(
-      nino = Nino(nino),
-      taxYear = taxYear
-    )
-
-  }
-
   "RetrieveCharitableGivingReliefConnector" when {
     "retrieve" must {
-      "return a 200 status for a success scenario" in new DesTest with Test {
+      "return a 200 status for a success scenario with desIf_Migration disabled" in new DesTest with Test {
+        MockedAppConfig.featureSwitches returns Configuration("desIf_Migration.enabled" -> false)
+
         val outcome = Right(ResponseWrapper(correlationId, response))
         def taxYear = TaxYear.fromMtd("2018-19")
 
-        willGet(
-          url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
-        )
+        willGet(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
           .returns(Future.successful(outcome))
 
-        await(connector.retrieve(request)) shouldBe outcome
+        val result: DownstreamOutcome[RetrieveCharitableGivingReliefResponse] = await(connector.retrieve(request))
+        result shouldBe outcome
+      }
+
+      "return a 200 status for a success scenario with desIf_Migration enabled" in new IfsTest with Test {
+        MockedAppConfig.featureSwitches returns Configuration("desIf_Migration.enabled" -> true)
+
+        val outcome = Right(ResponseWrapper(correlationId, response))
+
+        def taxYear = TaxYear.fromMtd("2018-19")
+
+        willGet(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
+          .returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[RetrieveCharitableGivingReliefResponse] = await(connector.retrieve(request))
+        result shouldBe outcome
       }
     }
 
@@ -97,6 +97,25 @@ class RetrieveCharitableGivingReliefConnectorSpec extends ConnectorSpec {
         }
       }
     }
+  }
+
+  trait Test {
+    _: ConnectorTest =>
+
+    protected def taxYear: TaxYear
+
+    val connector: RetrieveCharitableGivingReliefConnector =
+      new RetrieveCharitableGivingReliefConnector(
+        http = mockHttpClient,
+        appConfig = mockAppConfig
+      )
+
+    protected val request: RetrieveCharitableGivingReliefRequestData =
+      RetrieveCharitableGivingReliefRequestData(
+        nino = Nino(nino),
+        taxYear = taxYear
+      )
+
   }
 
 }

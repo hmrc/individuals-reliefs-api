@@ -16,10 +16,10 @@
 
 package v1.connectors
 
-import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.{AppConfig, FeatureSwitches}
+import config.AppConfig
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequestData
@@ -28,8 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit featureSwitches: FeatureSwitches)
-    extends BaseDownstreamConnector {
+class DeleteCharitableGivingReliefConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def delete(request: DeleteCharitableGivingTaxReliefRequestData)(implicit
                                                                   hc: HeaderCarrier,
@@ -40,14 +39,26 @@ class DeleteCharitableGivingTaxReliefConnector @Inject() (val http: HttpClient, 
 
     val intent = if (featureSwitches.isPassDeleteIntentEnabled) Some("DELETE") else None
 
+    def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
+
     if (taxYear.useTaxYearSpecificApi) {
-      val downstreamUri = TaxYearSpecificIfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
+      val downstreamUri =
+        TaxYearSpecificIfsUri[Unit](
+          s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual"
+        )
+
       delete(downstreamUri, intent)
+
     } else {
-      val downstreamUri = DesUri[Unit](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
+
+      val downstreamUri =
+        if (featureSwitches.isDesIf_MigrationEnabled)
+          IfsUri[Unit](preTysPath)
+        else
+          DesUri[Unit](preTysPath)
+
       post(JsObject.empty, downstreamUri, intent)
     }
-
   }
 
 }

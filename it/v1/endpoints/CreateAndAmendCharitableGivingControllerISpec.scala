@@ -44,7 +44,7 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
         val response: WSResponse = await(request().put(requestJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
 
       "any valid request is made with a TYS tax year" in new TysIfsTest {
@@ -58,7 +58,7 @@ class CreateAndAmendCharitableGivingControllerISpec extends IntegrationBaseSpec 
         val response: WSResponse = await(request().put(requestJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
 
     }

@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.MockDeleteCharitableGivingTaxReliefConnector
+import v1.connectors.MockDeleteCharitableGivingReliefConnector
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,7 +34,7 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
 
     "a service call is successful" should {
       "return a mapped result" in new Test {
-        MockDeleteCharitableGivingTaxReliefConnector
+        MockedDeleteCharitableGivingReliefConnector
           .delete(requestData)
           .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
 
@@ -46,7 +46,7 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
       def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
         s"return ${error.code} error when $downstreamErrorCode error is returned from the connector" in new Test {
 
-          MockDeleteCharitableGivingTaxReliefConnector
+          MockedDeleteCharitableGivingReliefConnector
             .delete(requestData)
             .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
@@ -84,7 +84,7 @@ class DeleteCharitableGivingTaxReliefServiceSpec extends UnitSpec {
     }
   }
 
-  trait Test extends MockDeleteCharitableGivingTaxReliefConnector {
+  trait Test extends MockDeleteCharitableGivingReliefConnector {
     implicit protected val hc: HeaderCarrier              = HeaderCarrier()
     implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
     implicit protected val correlationId: String          = "X-123"

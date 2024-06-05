@@ -41,7 +41,7 @@ class CreateAndAmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseWithHateoasLinks(mtdTaxYear)
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
 
       "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysIfsTest {
@@ -53,7 +53,7 @@ class CreateAndAmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseWithHateoasLinks(mtdTaxYear)
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
     }
 

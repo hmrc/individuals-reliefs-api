@@ -20,17 +20,21 @@ import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import v1.connectors.DeleteCharitableGivingTaxReliefConnector
+import v1.connectors.DeleteCharitableGivingReliefConnector
 import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingTaxReliefRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharitableGivingTaxReliefConnector) extends BaseService {
+class DeleteCharitableGivingTaxReliefService @Inject()(connector: DeleteCharitableGivingReliefConnector) extends BaseService {
 
-  def delete(request: DeleteCharitableGivingTaxReliefRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
-
+  def delete(
+              request: DeleteCharitableGivingTaxReliefRequestData
+            )(implicit
+              ctx: RequestContext,
+              ec: ExecutionContext
+            ): Future[ServiceOutcome[Unit]] = {
     connector.delete(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
@@ -58,8 +62,7 @@ class DeleteCharitableGivingTaxReliefService @Inject() (connector: DeleteCharita
       "TAX_YEAR_NOT_SUPPORTED"       -> RuleTaxYearNotSupportedError,
       "PERIOD_NOT_FOUND"             -> NotFoundError,
       "PERIOD_ALREADY_DELETED"       -> NotFoundError,
-      "INCOME_SOURCE_DATA_NOT_FOUND" -> NotFoundError,
-      "INVALID_CORRELATION_ID"       -> InternalError
+      "INCOME_SOURCE_DATA_NOT_FOUND" -> NotFoundError
     )
 
     errors ++ extraTysErrors

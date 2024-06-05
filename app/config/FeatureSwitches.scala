@@ -24,12 +24,20 @@ import javax.inject.{Inject, Singleton}
 @ImplementedBy(classOf[FeatureSwitchesImpl])
 trait FeatureSwitches {
 
+  protected val featureSwitchConfig: Configuration
+
   def isVersionEnabled(version: String): Boolean
   def isPassDeleteIntentEnabled: Boolean
+
+  def isDesIf_MigrationEnabled: Boolean
+
+  def isEnabled(feature: String): Boolean = isConfigTrue(feature + ".enabled")
+
+  private def isConfigTrue(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
 }
 
 @Singleton
-class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwitches {
+class FeatureSwitchesImpl(protected val featureSwitchConfig: Configuration) extends FeatureSwitches {
 
   @Inject
   def this(appConfig: AppConfig) = this(appConfig.featureSwitches)
@@ -51,9 +59,9 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
     enabled.getOrElse(false)
   }
 
-  val isPassDeleteIntentEnabled: Boolean = isEnabled("passDeleteIntentHeader.enabled")
+  val isPassDeleteIntentEnabled: Boolean = isEnabled("passDeleteIntentHeader")
+  val isDesIf_MigrationEnabled: Boolean = isEnabled("desIf_Migration")
 
-  private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
 }
 
 object FeatureSwitches {

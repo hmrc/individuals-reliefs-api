@@ -43,7 +43,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
 
       "any valid Tax-Year-Specific (TYS) request is made" in new TysTest {
@@ -54,7 +54,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
     }
     "return a 400 with multiple errors" when {

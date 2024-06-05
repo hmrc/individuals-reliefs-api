@@ -28,7 +28,7 @@ class CreateAndAmendCharitableGivingTaxReliefResponseSpec extends UnitSpec with 
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockAppConfig.apiGatewayContext.returns("individuals/reliefs").anyNumberOfTimes()
+      MockedAppConfig.apiGatewayContext.returns("individuals/reliefs").anyNumberOfTimes()
       CreateAndAmendCharitableGivingTaxReliefResponse.LinksFactory.links(
         mockAppConfig,
         CreateAndAmendCharitableGivingTaxReliefHateoasData(nino, taxYear)) shouldBe

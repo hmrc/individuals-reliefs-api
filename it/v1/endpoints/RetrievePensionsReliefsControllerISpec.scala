@@ -42,7 +42,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
         val response: WSResponse = await(mtdRequest.get())
         response.status shouldBe OK
         response.json shouldBe mtdResponse
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
@@ -57,7 +57,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
         val response: WSResponse = await(mtdRequest.get())
         response.status shouldBe OK
         response.json shouldBe mtdResponse
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
         response.header("Content-Type") shouldBe Some("application/json")
       }
     }
