@@ -121,7 +121,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
 
       "any valid request is made with a Tax Year Specific year" in new TysIfsTest {
@@ -136,7 +136,7 @@ class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
         val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe OK
         response.json shouldBe responseBody
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
     }
 

@@ -82,7 +82,7 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
       RetrieveForeignReliefsResponse.LinksFactory.links(mockAppConfig, RetrieveForeignReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/foreign/$nino/$taxYear", GET, "self"),

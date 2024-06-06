@@ -41,7 +41,7 @@ class DeleteForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().delete())
         response.status shouldBe NO_CONTENT
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
 
       "any valid request with a Tax Year Specific (TYS) tax year is made" in new TysIfsTest with Test {
@@ -55,7 +55,7 @@ class DeleteForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().delete())
         response.status shouldBe NO_CONTENT
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
     }
 

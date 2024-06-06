@@ -81,7 +81,7 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
         val response: WSResponse = await(request().get())
         response.status shouldBe OK
         response.json shouldBe mtdResponse
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
@@ -97,7 +97,7 @@ class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec 
         val response: WSResponse = await(request().get())
         response.status shouldBe OK
         response.json shouldBe mtdResponse
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
         response.header("Content-Type") shouldBe Some("application/json")
       }
     }

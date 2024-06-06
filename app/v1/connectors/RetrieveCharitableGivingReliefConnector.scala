@@ -16,7 +16,7 @@
 
 package v1.connectors
 
-import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
@@ -30,18 +30,25 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveCharitableGivingReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieve(request: RetrieveCharitableGivingReliefRequestData)(implicit
-                                                                   hc: HeaderCarrier,
-                                                                   ec: ExecutionContext,
-                                                                   correlationId: String): Future[DownstreamOutcome[RetrieveCharitableGivingReliefResponse]] = {
+  def retrieve(
+                request: RetrieveCharitableGivingReliefRequestData
+              )(implicit
+                hc: HeaderCarrier,
+                ec: ExecutionContext,
+                correlationId: String
+              ): Future[DownstreamOutcome[RetrieveCharitableGivingReliefResponse]] = {
 
     import request._
+
+    def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
 
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
         TaxYearSpecificIfsUri[RetrieveCharitableGivingReliefResponse](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
+      } else if (featureSwitches.isDesIf_MigrationEnabled) {
+        IfsUri[RetrieveCharitableGivingReliefResponse](preTysPath)
       } else {
-        DesUri[RetrieveCharitableGivingReliefResponse](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
+        DesUri[RetrieveCharitableGivingReliefResponse](preTysPath)
       }
 
     get(downstreamUri)

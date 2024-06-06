@@ -23,10 +23,10 @@ import org.scalamock.scalatest.MockFactory
 trait MockFeatureSwitches extends MockFactory {
   implicit val mockFeatureSwitches: FeatureSwitches = mock[FeatureSwitches]
 
-  object MockFeatureSwitches {
-
+  object MockedFeatureSwitches {
     def isPassDeleteIntentEnabled: CallHandler[Boolean] = (() => mockFeatureSwitches.isPassDeleteIntentEnabled).expects()
 
+    def isDesIf_MigrationEnabled: CallHandler[Boolean] = (() => mockFeatureSwitches.isDesIf_MigrationEnabled).expects()
   }
 
 }

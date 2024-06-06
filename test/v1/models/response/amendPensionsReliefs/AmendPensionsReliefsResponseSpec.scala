@@ -28,7 +28,7 @@ class AmendPensionsReliefsResponseSpec extends UnitSpec with MockAppConfig {
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
       AmendPensionsReliefsResponse.LinksFactory.links(mockAppConfig, AmendPensionsReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/pensions/$nino/$taxYear", GET, "self"),

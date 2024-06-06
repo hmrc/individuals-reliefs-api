@@ -24,11 +24,11 @@ import v1.models.request.deleteCharitableGivingTaxRelief.DeleteCharitableGivingT
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCharitableGivingTaxReliefConnector extends MockFactory {
+trait MockDeleteCharitableGivingReliefConnector extends MockFactory {
 
-  val mockConnector: DeleteCharitableGivingTaxReliefConnector = mock[DeleteCharitableGivingTaxReliefConnector]
+  val mockConnector: DeleteCharitableGivingReliefConnector = mock[DeleteCharitableGivingReliefConnector]
 
-  object MockDeleteCharitableGivingTaxReliefConnector {
+  object MockedDeleteCharitableGivingReliefConnector {
 
     def delete(requestData: DeleteCharitableGivingTaxReliefRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockConnector
