@@ -24,7 +24,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v1.models.response.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefFixture
+import v1.RetrieveCharitableGiving.def1.model.request.RetrieveCharitableGivingReliefFixture
 import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class RetrieveCharitableGivingReliefControllerISpec extends IntegrationBaseSpec with RetrieveCharitableGivingReliefFixture {

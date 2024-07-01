@@ -22,19 +22,23 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.retrieveCharitableGivingTaxRelief.RetrieveCharitableGivingReliefRequestData
+import v1.RetrieveCharitableGiving.RetrieveCharitableGivingReliefValidatorFactory
+import v1.RetrieveCharitableGiving.model.request.RetrieveCharitableGivingReliefRequestData
 
 trait MockRetrieveCharitableGivingReliefValidatorFactory extends MockFactory {
 
-  val mockRetrieveCharitableGivingReliefValidatorFactory: RetrieveCharitableGivingReliefValidatorFactory = mock[RetrieveCharitableGivingReliefValidatorFactory]
+  val mockRetrieveCharitableGivingReliefValidatorFactory: RetrieveCharitableGivingReliefValidatorFactory =
+    mock[RetrieveCharitableGivingReliefValidatorFactory]
 
   object MockedRetrieveCharitableGivingReliefValidatorFactory {
 
     def validator(): CallHandler[Validator[RetrieveCharitableGivingReliefRequestData]] =
       (mockRetrieveCharitableGivingReliefValidatorFactory.validator(_: String, _: String)).expects(*, *)
+
   }
 
-  def willUseValidator(use: Validator[RetrieveCharitableGivingReliefRequestData]): CallHandler[Validator[RetrieveCharitableGivingReliefRequestData]] = {
+  def willUseValidator(
+      use: Validator[RetrieveCharitableGivingReliefRequestData]): CallHandler[Validator[RetrieveCharitableGivingReliefRequestData]] = {
     MockedRetrieveCharitableGivingReliefValidatorFactory
       .validator()
       .anyNumberOfTimes()

@@ -20,6 +20,7 @@ import api.hateoas.Link
 import api.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
+import v1.CreateAndAmendCharitableGiving.model.response.{CreateAndAmendCharitableGivingTaxReliefHateoasData, CreateAndAmendCharitableGivingTaxReliefResponse}
 
 class CreateAndAmendCharitableGivingTaxReliefResponseSpec extends UnitSpec with MockAppConfig {
 
