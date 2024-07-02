@@ -22,10 +22,8 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.CreateAndAmendCharitableGiving.model.request.{
-  CreateAndAmendCharitableGivingTaxReliefRequestData,
-  Def1_CreateAndAmendCharitableGivingTaxReliefRequestData
-}
+import v1.CreateAndAmendCharitableGiving.def1.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefRequestData
+import v1.CreateAndAmendCharitableGiving.model.request.CreateAndAmendCharitableGivingTaxReliefRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -59,6 +57,7 @@ class CreateAndAmendCharitableGivingTaxReliefConnector @Inject() (val http: Http
           body = body,
           uri = downstreamUri
         )
+      case _ => throw new IllegalArgumentException("Request type is not known")
 
     }
   }

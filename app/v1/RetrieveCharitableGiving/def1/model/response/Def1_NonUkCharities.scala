@@ -21,8 +21,7 @@ import play.api.libs.json.{Format, Json}
 case class Def1_NonUkCharities(charityNames: Option[Seq[String]], totalAmount: BigDecimal)
 
 object Def1_NonUkCharities {
-  //implicit val writes: Writes[Def1_NonUkCharities] = Json.writes
-  //implicit val reads: Reads[Def1_NonUkCharities]   = Json.reads[Def1_NonUkCharities]
+
   implicit val format: Format[Def1_NonUkCharities] = Json.format[Def1_NonUkCharities]
 
   /*private[response]*/

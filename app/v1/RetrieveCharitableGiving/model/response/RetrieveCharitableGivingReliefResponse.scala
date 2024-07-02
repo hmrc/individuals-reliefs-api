@@ -28,8 +28,6 @@ trait RetrieveCharitableGivingReliefResponse {
 
 object RetrieveCharitableGivingReliefResponse extends HateoasLinks {
 
-  // implicit val reads: Reads[RetrieveCharitableGivingReliefResponse] = Json.reads[RetrieveCharitableGivingReliefResponse]
-
   implicit val writes: OWrites[RetrieveCharitableGivingReliefResponse] = {
     case def1: Def1_RetrieveCharitableGivingReliefResponse =>
       Json.toJsObject(def1)

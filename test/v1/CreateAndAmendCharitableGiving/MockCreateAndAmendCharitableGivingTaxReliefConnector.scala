@@ -20,7 +20,7 @@ import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.CreateAndAmendCharitableGiving.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefRequestData
+import v1.CreateAndAmendCharitableGiving.def1.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 

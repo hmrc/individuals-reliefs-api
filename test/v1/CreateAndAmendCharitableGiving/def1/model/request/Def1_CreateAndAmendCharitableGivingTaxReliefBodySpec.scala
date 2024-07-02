@@ -18,7 +18,6 @@ package v1.CreateAndAmendCharitableGiving.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.CreateAndAmendCharitableGiving.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefBody
 
 class Def1_CreateAndAmendCharitableGivingTaxReliefBodySpec extends UnitSpec {
 

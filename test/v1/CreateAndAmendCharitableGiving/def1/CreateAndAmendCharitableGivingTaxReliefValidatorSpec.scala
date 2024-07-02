@@ -22,8 +22,8 @@ import api.models.utils.JsonErrorValidators
 import play.api.libs.json.{JsArray, JsNumber, JsObject, JsString, JsValue, Json}
 import support.UnitSpec
 import v1.CreateAndAmendCharitableGiving.CreateAndAmendCharitableGivingReliefValidatorFactory
-import v1.CreateAndAmendCharitableGiving.def1.model.request.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
-import v1.CreateAndAmendCharitableGiving.model.request.{CreateAndAmendCharitableGivingTaxReliefRequestData, Def1_CreateAndAmendCharitableGivingTaxReliefBody, Def1_CreateAndAmendCharitableGivingTaxReliefRequestData}
+import v1.CreateAndAmendCharitableGiving.def1.model.request.{Def1_CreateAndAmendCharitableGivingTaxReliefBody, Def1_CreateAndAmendCharitableGivingTaxReliefRequestData, Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
+import v1.CreateAndAmendCharitableGiving.model.request.CreateAndAmendCharitableGivingTaxReliefRequestData
 
 class CreateAndAmendCharitableGivingTaxReliefValidatorSpec extends UnitSpec with JsonErrorValidators {
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"

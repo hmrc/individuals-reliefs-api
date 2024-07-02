@@ -40,5 +40,5 @@ object Def1_GiftAidPayments {
   }
 
   implicit val writes: Writes[Def1_GiftAidPayments] = Json.writes
-  //implicit val format: Format[Def1_GiftAidPayments] = Json.format[Def1_GiftAidPayments]
+
 }

@@ -30,8 +30,6 @@ case class Def1_RetrieveCharitableGivingReliefResponse(giftAidPayments: Option[D
 object Def1_RetrieveCharitableGivingReliefResponse extends HateoasLinks {
   implicit val formats: OFormat[Def1_RetrieveCharitableGivingReliefResponse] = Json.format[Def1_RetrieveCharitableGivingReliefResponse]
 
-//  implicit val writes: OWrites[Def1_RetrieveCharitableGivingReliefResponse] = Json.writes[Def1_RetrieveCharitableGivingReliefResponse]
-//  implicit val reads: Reads[Def1_RetrieveCharitableGivingReliefResponse]    = Json.reads
   implicit object Def1_RetrieveCharitableGivingReliefLinksFactory
       extends HateoasLinksFactory[Def1_RetrieveCharitableGivingReliefResponse, RetrieveCharitableGivingReliefHateoasData] {
 

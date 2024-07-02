@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,4 @@
 
 package v1.CreateAndAmendCharitableGiving.model.request
 
-import play.api.libs.json.{Json, OFormat}
-import v1.CreateAndAmendCharitableGiving.def1.model.request.{Def1_GiftAidPayments, Def1_Gifts}
-
-sealed trait CreateAndAmendCharitableGivingTaxReliefBody
-
-case class Def1_CreateAndAmendCharitableGivingTaxReliefBody(giftAidPayments: Option[Def1_GiftAidPayments], gifts: Option[Def1_Gifts])
-    extends CreateAndAmendCharitableGivingTaxReliefBody
-
-object Def1_CreateAndAmendCharitableGivingTaxReliefBody {
-  implicit val format: OFormat[Def1_CreateAndAmendCharitableGivingTaxReliefBody] = Json.format[Def1_CreateAndAmendCharitableGivingTaxReliefBody]
-
-}
+trait CreateAndAmendCharitableGivingTaxReliefBody

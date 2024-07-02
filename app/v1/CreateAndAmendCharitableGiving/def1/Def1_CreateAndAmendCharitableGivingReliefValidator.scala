@@ -23,7 +23,11 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
-import v1.CreateAndAmendCharitableGiving.model.request.{CreateAndAmendCharitableGivingTaxReliefRequestData, Def1_CreateAndAmendCharitableGivingTaxReliefBody, Def1_CreateAndAmendCharitableGivingTaxReliefRequestData}
+import v1.CreateAndAmendCharitableGiving.def1.model.request.{
+  Def1_CreateAndAmendCharitableGivingTaxReliefBody,
+  Def1_CreateAndAmendCharitableGivingTaxReliefRequestData
+}
+import v1.CreateAndAmendCharitableGiving.model.request.CreateAndAmendCharitableGivingTaxReliefRequestData
 
 import scala.annotation.nowarn
 

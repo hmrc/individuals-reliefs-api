@@ -22,8 +22,12 @@ import api.models.errors.{MtdError, RuleGiftAidNonUkAmountWithoutNamesError, Rul
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.{toFoldableOps, toTraverseOps}
-import v1.CreateAndAmendCharitableGiving.def1.model.request.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
-import v1.CreateAndAmendCharitableGiving.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefRequestData
+import v1.CreateAndAmendCharitableGiving.def1.model.request.{
+  Def1_CreateAndAmendCharitableGivingTaxReliefRequestData,
+  Def1_GiftAidPayments,
+  Def1_Gifts,
+  Def1_NonUkCharities
+}
 
 class Def1_CreateAndAmendCharitableGivingReliefRulesValidator extends RulesValidator[Def1_CreateAndAmendCharitableGivingTaxReliefRequestData] {
 
@@ -31,8 +35,8 @@ class Def1_CreateAndAmendCharitableGivingReliefRulesValidator extends RulesValid
 
   private val charityNamesRegex = "^[A-Za-z0-9 &'()*,\\-./@£]{1,75}$".r
 
-  def validateBusinessRules(
-      parsed: Def1_CreateAndAmendCharitableGivingTaxReliefRequestData): Validated[Seq[MtdError], Def1_CreateAndAmendCharitableGivingTaxReliefRequestData] = {
+  def validateBusinessRules(parsed: Def1_CreateAndAmendCharitableGivingTaxReliefRequestData)
+      : Validated[Seq[MtdError], Def1_CreateAndAmendCharitableGivingTaxReliefRequestData] = {
 
     import parsed.body._
     combine(giftAidPayments.traverse_(validateGiftAid), gifts.traverse_(validate)).onSuccess(parsed)
