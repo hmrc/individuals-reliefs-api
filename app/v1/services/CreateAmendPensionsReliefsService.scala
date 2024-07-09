@@ -20,16 +20,16 @@ import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import v1.connectors.AmendPensionsReliefsConnector
-import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequestData
+import v1.connectors.CreateAmendPensionsReliefsConnector
+import v1.models.request.createAmendPensionsReliefs.CreateAmendPensionsReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConnector) extends BaseService {
+class CreateAmendPensionsReliefsService @Inject()(connector: CreateAmendPensionsReliefsConnector) extends BaseService {
 
-  def amend(request: AmendPensionsReliefsRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def amend(request: CreateAmendPensionsReliefsRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createOrAmendPensionsRelief(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
@@ -45,7 +45,6 @@ class AmendPensionsReliefsService @Inject() (connector: AmendPensionsReliefsConn
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATIONID"  -> InternalError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 

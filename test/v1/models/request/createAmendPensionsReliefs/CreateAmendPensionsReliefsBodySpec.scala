@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendPensionsReliefs
+package v1.models.request.createAmendPensionsReliefs
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class AmendPensionsReliefsBodySpec extends UnitSpec {
+class CreateAmendPensionsReliefsBodySpec extends UnitSpec {
 
   val json: JsValue = Json.parse("""
      |{
@@ -32,7 +32,7 @@ class AmendPensionsReliefsBodySpec extends UnitSpec {
      |  }
      |}""".stripMargin)
 
-  val model: AmendPensionsReliefsBody = AmendPensionsReliefsBody(
+  val model: CreateAmendPensionsReliefsBody = CreateAmendPensionsReliefsBody(
     pensionReliefs = PensionReliefs(
       regularPensionContributions = Some(1999.99),
       oneOffPensionContributionsPaid = Some(1999.99),
@@ -44,7 +44,7 @@ class AmendPensionsReliefsBodySpec extends UnitSpec {
 
   "reads" should {
     "read JSON to a model" in {
-      json.as[AmendPensionsReliefsBody] shouldBe model
+      json.as[CreateAmendPensionsReliefsBody] shouldBe model
     }
   }
 
@@ -58,11 +58,11 @@ class AmendPensionsReliefsBodySpec extends UnitSpec {
     "return true" when {
       "pensionReliefs is empty" in {
         val pensionReliefs = PensionReliefs(None, None, None, None, None)
-        AmendPensionsReliefsBody(pensionReliefs).isIncorrectOrEmptyBody shouldBe true
+        CreateAmendPensionsReliefsBody(pensionReliefs).isIncorrectOrEmptyBody shouldBe true
       }
       "pensionReliefs is not empty" in {
         val pensionReliefs = PensionReliefs(Some(1), None, None, None, None)
-        AmendPensionsReliefsBody(pensionReliefs).isIncorrectOrEmptyBody shouldBe false
+        CreateAmendPensionsReliefsBody(pensionReliefs).isIncorrectOrEmptyBody shouldBe false
       }
     }
   }

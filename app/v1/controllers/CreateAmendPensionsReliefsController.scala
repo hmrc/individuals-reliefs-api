@@ -24,24 +24,24 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version1}
 import utils.IdGenerator
-import v1.controllers.validators.AmendPensionsReliefsValidatorFactory
-import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsHateoasData
-import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsResponse.LinksFactory
-import v1.services.AmendPensionsReliefsService
+import v1.controllers.validators.CreateAmendPensionsReliefsValidatorFactory
+import v1.models.response.createAmendPensionsReliefs.CreateAmendPensionsReliefsHateoasData
+import v1.models.response.createAmendPensionsReliefs.CreateAmendPensionsReliefsResponse.LinksFactory
+import v1.services.CreateAmendPensionsReliefsService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class AmendPensionsReliefsController @Inject() (val authService: EnrolmentsAuthService,
-                                                val lookupService: MtdIdLookupService,
-                                                validatorFactory: AmendPensionsReliefsValidatorFactory,
-                                                service: AmendPensionsReliefsService,
-                                                auditService: AuditService,
-                                                appConfig: AppConfig,
-                                                hateoasFactory: HateoasFactory,
-                                                cc: ControllerComponents,
-                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class CreateAmendPensionsReliefsController @Inject()(val authService: EnrolmentsAuthService,
+                                                     val lookupService: MtdIdLookupService,
+                                                     validatorFactory: CreateAmendPensionsReliefsValidatorFactory,
+                                                     service: CreateAmendPensionsReliefsService,
+                                                     auditService: AuditService,
+                                                     appConfig: AppConfig,
+                                                     hateoasFactory: HateoasFactory,
+                                                     cc: ControllerComponents,
+                                                     idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -67,7 +67,7 @@ class AmendPensionsReliefsController @Inject() (val authService: EnrolmentsAuthS
             includeResponse = true
           )
         )
-        .withHateoasResult(hateoasFactory)(AmendPensionsReliefsHateoasData(nino, taxYear))
+        .withHateoasResult(hateoasFactory)(CreateAmendPensionsReliefsHateoasData(nino, taxYear))
 
       requestHandler.handleRequest()
 

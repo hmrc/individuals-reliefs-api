@@ -16,37 +16,38 @@
 
 package v1.connectors
 
-import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequestData
+import v1.models.request.createAmendPensionsReliefs.CreateAmendPensionsReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendPensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateAmendPensionsReliefsConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def createOrAmendPensionsRelief(request: AmendPensionsReliefsRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def createOrAmendPensionsRelief(request: CreateAmendPensionsReliefsRequestData)(implicit
+                                                                                  hc: HeaderCarrier,
+                                                                                  ec: ExecutionContext,
+                                                                                  correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     import request._
+
+    def preTysPath = s"income-tax/reliefs/pensions/$nino/${taxYear.asMtd}"
 
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
         TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
+      } else if (featureSwitches.isDesIf_MigrationEnabled) {
+        IfsUri[Unit](preTysPath)
       } else {
-        DesUri[Unit](s"income-tax/reliefs/pensions/$nino/${taxYear.asMtd}")
+        DesUri[Unit](preTysPath)
       }
 
-    put(
-      body = body,
-      uri = downstreamUri
-    )
+    put(body, downstreamUri)
   }
 
 }

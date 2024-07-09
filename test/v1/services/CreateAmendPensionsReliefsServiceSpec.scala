@@ -22,19 +22,19 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.MockAmendPensionsReliefsConnector
-import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRequestData, PensionReliefs}
+import v1.connectors.MockCreateAmendPensionsReliefsConnector
+import v1.models.request.createAmendPensionsReliefs.{CreateAmendPensionsReliefsBody, CreateAmendPensionsReliefsRequestData, PensionReliefs}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AmendPensionsReliefsServiceSpec extends UnitSpec {
+class CreateAmendPensionsReliefsServiceSpec extends UnitSpec {
 
   val taxYear: String                = "2017-18"
   val nino: String                   = "AA123456A"
   implicit val correlationId: String = "X-123"
 
-  val body: AmendPensionsReliefsBody = AmendPensionsReliefsBody(
+  val body: CreateAmendPensionsReliefsBody = CreateAmendPensionsReliefsBody(
     PensionReliefs(
       Some(1999.99),
       Some(1999.99),
@@ -44,13 +44,13 @@ class AmendPensionsReliefsServiceSpec extends UnitSpec {
     )
   )
 
-  private val requestData = AmendPensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
+  private val requestData = CreateAmendPensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
-  trait Test extends MockAmendPensionsReliefsConnector {
+  trait Test extends MockCreateAmendPensionsReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new AmendPensionsReliefsService(
+    val service = new CreateAmendPensionsReliefsService(
       connector = mockAmendPensionsReliefsConnector
     )
 

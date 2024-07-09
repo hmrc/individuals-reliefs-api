@@ -23,27 +23,27 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
-import v1.controllers.validators.AmendPensionsReliefsRulesValidator.validateBusinessRules
-import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRequestData}
+import v1.controllers.validators.CreateAmendPensionsReliefsRulesValidator.validateBusinessRules
+import v1.models.request.createAmendPensionsReliefs.{CreateAmendPensionsReliefsBody, CreateAmendPensionsReliefsRequestData}
 
 import javax.inject.Singleton
 import scala.annotation.nowarn
 
 @Singleton
-class AmendPensionsReliefsValidatorFactory {
+class CreateAmendPensionsReliefsValidatorFactory {
 
   @nowarn("cat=lint-byname-implicit")
-  private val resolveJson = new ResolveNonEmptyJsonObject[AmendPensionsReliefsBody]()
+  private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendPensionsReliefsBody]()
 
-  def validator(nino: String, taxYear: String, body: JsValue): Validator[AmendPensionsReliefsRequestData] =
-    new Validator[AmendPensionsReliefsRequestData] {
+  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendPensionsReliefsRequestData] =
+    new Validator[CreateAmendPensionsReliefsRequestData] {
 
-      def validate: Validated[Seq[MtdError], AmendPensionsReliefsRequestData] =
+      def validate: Validated[Seq[MtdError], CreateAmendPensionsReliefsRequestData] =
         (
           ResolveNino(nino),
           ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
           resolveJson(body)
-        ).mapN(AmendPensionsReliefsRequestData) andThen validateBusinessRules
+        ).mapN(CreateAmendPensionsReliefsRequestData) andThen validateBusinessRules
 
     }
 

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendPensionsReliefs
+package v1.models.request.createAmendPensionsReliefs
 
 import api.models.domain.{Nino, TaxYear}
 
-case class AmendPensionsReliefsRequestData(nino: Nino, taxYear: TaxYear, body: AmendPensionsReliefsBody)
+case class CreateAmendPensionsReliefsRequestData(nino: Nino, taxYear: TaxYear, body: CreateAmendPensionsReliefsBody)

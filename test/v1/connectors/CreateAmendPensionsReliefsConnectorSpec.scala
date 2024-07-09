@@ -19,15 +19,16 @@ package v1.connectors
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.amendPensionsReliefs._
+import play.api.Configuration
+import v1.models.request.createAmendPensionsReliefs._
 
 import scala.concurrent.Future
 
-class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
+class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
 
   val nino: String = "AA123456A"
 
-  val body: AmendPensionsReliefsBody = AmendPensionsReliefsBody(
+  val body: CreateAmendPensionsReliefsBody = CreateAmendPensionsReliefsBody(
     PensionReliefs(
       Some(1999.99),
       Some(1999.99),
@@ -39,9 +40,29 @@ class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
 
   "AmendPensionsReliefsConnector" when {
     "createOrAmendPensionsRelief called" must {
-      "return a 204 status for a success scenario" in new DesTest with Test {
+      "return a 204 status for a success scenario with desIf_Migration disabled" in new DesTest with Test {
+
+        MockedAppConfig.featureSwitches returns Configuration(
+          "desIf_Migration.enabled" -> false
+        )
+
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
         val outcome          = Right(ResponseWrapper(correlationId, ()))
+        willPut(url = s"$baseUrl/income-tax/reliefs/pensions/$nino/${taxYear.asMtd}", body = body)
+          .returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.createOrAmendPensionsRelief(request))
+        result shouldBe outcome
+      }
+      "return a 204 status for a success scenario with desIf_Migration enabled" in new IfsTest with Test {
+
+        MockedAppConfig.featureSwitches returns Configuration(
+          "desIf_Migration.enabled" -> true
+        )
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
+
+        val outcome = Right(ResponseWrapper(correlationId, ()))
         willPut(url = s"$baseUrl/income-tax/reliefs/pensions/$nino/${taxYear.asMtd}", body = body)
           .returns(Future.successful(outcome))
 
@@ -65,12 +86,12 @@ class AmendPensionsReliefsConnectorSpec extends ConnectorSpec {
   trait Test { _: ConnectorTest =>
     def taxYear: TaxYear
 
-    protected val connector: AmendPensionsReliefsConnector = new AmendPensionsReliefsConnector(
+    protected val connector: CreateAmendPensionsReliefsConnector = new CreateAmendPensionsReliefsConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
 
-    protected val request: AmendPensionsReliefsRequestData = AmendPensionsReliefsRequestData(
+    protected val request: CreateAmendPensionsReliefsRequestData = CreateAmendPensionsReliefsRequestData(
       nino = Nino(nino),
       taxYear = taxYear,
       body = body
