@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendPensionsReliefs
+package v1.models.request.createAmendPensionsReliefs
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AmendPensionsReliefsBody(pensionReliefs: PensionReliefs) {
+case class CreateAmendPensionsReliefsBody(pensionReliefs: PensionReliefs) {
   def isIncorrectOrEmptyBody: Boolean = pensionReliefs.isEmpty
 }
 
-object AmendPensionsReliefsBody {
-  implicit val format: OFormat[AmendPensionsReliefsBody] = Json.format[AmendPensionsReliefsBody]
+object CreateAmendPensionsReliefsBody {
+  implicit val format: OFormat[CreateAmendPensionsReliefsBody] = Json.format[CreateAmendPensionsReliefsBody]
 }

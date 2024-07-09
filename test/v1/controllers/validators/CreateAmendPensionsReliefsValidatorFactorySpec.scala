@@ -17,24 +17,14 @@
 package v1.controllers.validators
 
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{
-  BadRequestError,
-  ErrorWrapper,
-  MtdError,
-  NinoFormatError,
-  RuleIncorrectOrEmptyBodyError,
-  RuleTaxYearNotSupportedError,
-  RuleTaxYearRangeInvalidError,
-  TaxYearFormatError,
-  ValueFormatError
-}
+import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import mocks.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import support.UnitSpec
-import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsBody, AmendPensionsReliefsRequestData, PensionReliefs}
+import v1.models.request.createAmendPensionsReliefs.{CreateAmendPensionsReliefsBody, CreateAmendPensionsReliefsRequestData, PensionReliefs}
 
-class AmendPensionsReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class CreateAmendPensionsReliefsValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
 
   implicit val correlationId: String = "X-12345"
 
@@ -74,68 +64,68 @@ class AmendPensionsReliefsValidatorFactorySpec extends UnitSpec with MockAppConf
   private val parsedPensionsReliefsNoDecimals =
     PensionReliefs(Some(1999), Some(1998), Some(1997), Some(1996), Some(1995))
 
-  private val parsedBody           = AmendPensionsReliefsBody(parsedPensionsReliefs)
-  private val parsedBodyNoDecimals = AmendPensionsReliefsBody(parsedPensionsReliefsNoDecimals)
+  private val parsedBody           = CreateAmendPensionsReliefsBody(parsedPensionsReliefs)
+  private val parsedBodyNoDecimals = CreateAmendPensionsReliefsBody(parsedPensionsReliefsNoDecimals)
 
-  private val validatorFactory = new AmendPensionsReliefsValidatorFactory()
+  private val validatorFactory = new CreateAmendPensionsReliefsValidatorFactory()
 
   private def validator(nino: String, taxYear: String, body: JsValue) = validatorFactory.validator(nino, taxYear, body)
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        val result: Either[ErrorWrapper, AmendPensionsReliefsRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendPensionsReliefsRequestData] =
           validator(validNino, validTaxYear, validBody).validateAndWrapResult()
 
-        result shouldBe Right(AmendPensionsReliefsRequestData(parsedNino, parsedTaxYear, parsedBody))
+        result shouldBe Right(CreateAmendPensionsReliefsRequestData(parsedNino, parsedTaxYear, parsedBody))
       }
 
       "passed a valid request with no decimal places" in {
-        val result: Either[ErrorWrapper, AmendPensionsReliefsRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendPensionsReliefsRequestData] =
           validator(validNino, validTaxYear, validBodyNoDecimals).validateAndWrapResult()
 
-        result shouldBe Right(AmendPensionsReliefsRequestData(parsedNino, parsedTaxYear, parsedBodyNoDecimals))
+        result shouldBe Right(CreateAmendPensionsReliefsRequestData(parsedNino, parsedTaxYear, parsedBodyNoDecimals))
       }
     }
 
     "return a single error" when {
       "passed an invalid nino" in {
-        val result: Either[ErrorWrapper, AmendPensionsReliefsRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendPensionsReliefsRequestData] =
           validator("invalid", validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
       "passed an invalidly formatted tax year" in {
-        val result: Either[ErrorWrapper, AmendPensionsReliefsRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendPensionsReliefsRequestData] =
           validator(validNino, "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
 
       "passed an invalid tax year range" in {
-        val result: Either[ErrorWrapper, AmendPensionsReliefsRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendPensionsReliefsRequestData] =
           validator(validNino, "2019-21", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
       "passed a tax year that precedes the minimum" in {
-        val result: Either[ErrorWrapper, AmendPensionsReliefsRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendPensionsReliefsRequestData] =
           validator(validNino, "2019-20", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed an empty request body" in {
-        val result: Either[ErrorWrapper, AmendPensionsReliefsRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendPensionsReliefsRequestData] =
           validator(validNino, validTaxYear, JsObject.empty).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
       "passed a body containing an empty pensionReliefs object" in {
-        val result: Either[ErrorWrapper, AmendPensionsReliefsRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendPensionsReliefsRequestData] =
           validator(validNino, validTaxYear, validBody.replaceWithEmptyObject("/pensionReliefs")).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/pensionReliefs")))
@@ -143,7 +133,7 @@ class AmendPensionsReliefsValidatorFactorySpec extends UnitSpec with MockAppConf
 
       def testWith(error: MtdError)(path: String, body: JsValue): Unit =
         s"for $path" in {
-          val result: Either[ErrorWrapper, AmendPensionsReliefsRequestData] =
+          val result: Either[ErrorWrapper, CreateAmendPensionsReliefsRequestData] =
             validator(validNino, validTaxYear, body).validateAndWrapResult()
 
           result shouldBe Left(ErrorWrapper(correlationId, error))
@@ -175,7 +165,7 @@ class AmendPensionsReliefsValidatorFactorySpec extends UnitSpec with MockAppConf
     }
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        val result: Either[ErrorWrapper, AmendPensionsReliefsRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendPensionsReliefsRequestData] =
           validator("invalid", "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(

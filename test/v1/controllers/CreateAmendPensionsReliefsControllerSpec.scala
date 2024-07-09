@@ -27,19 +27,19 @@ import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.controllers.validators.MockAmendPensionsReliefsValidatorFactory
-import v1.models.request.amendPensionsReliefs._
-import v1.models.response.amendPensionsReliefs.AmendPensionsReliefsHateoasData
-import v1.services.MockAmendPensionsReliefsService
+import v1.controllers.validators.MockCreateAmendPensionsReliefsValidatorFactory
+import v1.models.request.createAmendPensionsReliefs._
+import v1.models.response.createAmendPensionsReliefs.CreateAmendPensionsReliefsHateoasData
+import v1.services.MockCreateAmendPensionsReliefsService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AmendPensionsReliefsControllerSpec
+class CreateAmendPensionsReliefsControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
-    with MockAmendPensionsReliefsService
-    with MockAmendPensionsReliefsValidatorFactory
+    with MockCreateAmendPensionsReliefsService
+    with MockCreateAmendPensionsReliefsValidatorFactory
     with MockHateoasFactory
     with MockAppConfig
     with MockAuditService {
@@ -64,7 +64,7 @@ class AmendPensionsReliefsControllerSpec
        |}""".stripMargin
   )
 
-  private val requestBody = AmendPensionsReliefsBody(
+  private val requestBody = CreateAmendPensionsReliefsBody(
     pensionReliefs = PensionReliefs(
       regularPensionContributions = Some(1999.99),
       oneOffPensionContributionsPaid = Some(1999.99),
@@ -74,7 +74,7 @@ class AmendPensionsReliefsControllerSpec
     )
   )
 
-  private val requestData = AmendPensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = CreateAmendPensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   private val hateoasResponse = Json.parse("""
       |{
@@ -108,7 +108,7 @@ class AmendPensionsReliefsControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), AmendPensionsReliefsHateoasData(nino, taxYear))
+          .wrap((), CreateAmendPensionsReliefsHateoasData(nino, taxYear))
           .returns(HateoasWrapper((), testHateoasLinks))
 
         runOkTestWithAudit(
@@ -141,7 +141,7 @@ class AmendPensionsReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new AmendPensionsReliefsController(
+    val controller = new CreateAmendPensionsReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockAmendPensionsReliefsValidatorFactory,

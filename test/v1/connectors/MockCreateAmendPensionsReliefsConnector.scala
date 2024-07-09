@@ -20,19 +20,19 @@ import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequestData
+import v1.models.request.createAmendPensionsReliefs.CreateAmendPensionsReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAmendPensionsReliefsConnector extends MockFactory {
+trait MockCreateAmendPensionsReliefsConnector extends MockFactory {
 
-  val mockAmendPensionsReliefsConnector: AmendPensionsReliefsConnector = mock[AmendPensionsReliefsConnector]
+  val mockAmendPensionsReliefsConnector: CreateAmendPensionsReliefsConnector = mock[CreateAmendPensionsReliefsConnector]
 
   object MockAmendPensionsReliefsConnector {
 
-    def amend(requestData: AmendPensionsReliefsRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+    def amend(requestData: CreateAmendPensionsReliefsRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockAmendPensionsReliefsConnector
-        .createOrAmendPensionsRelief(_: AmendPensionsReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .createOrAmendPensionsRelief(_: CreateAmendPensionsReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
 

@@ -23,36 +23,36 @@ import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.JsValue
-import v1.models.request.amendPensionsReliefs.AmendPensionsReliefsRequestData
+import v1.models.request.createAmendPensionsReliefs.CreateAmendPensionsReliefsRequestData
 
-trait MockAmendPensionsReliefsValidatorFactory extends MockFactory {
+trait MockCreateAmendPensionsReliefsValidatorFactory extends MockFactory {
 
-  val mockAmendPensionsReliefsValidatorFactory: AmendPensionsReliefsValidatorFactory = mock[AmendPensionsReliefsValidatorFactory]
+  val mockAmendPensionsReliefsValidatorFactory: CreateAmendPensionsReliefsValidatorFactory = mock[CreateAmendPensionsReliefsValidatorFactory]
 
   object MockedAmendPensionsReliefsValidatorFactory {
 
-    def validator(): CallHandler[Validator[AmendPensionsReliefsRequestData]] =
+    def validator(): CallHandler[Validator[CreateAmendPensionsReliefsRequestData]] =
       (mockAmendPensionsReliefsValidatorFactory.validator(_: String, _: String, _: JsValue)).expects(*, *, *)
 
   }
 
-  def willUseValidator(use: Validator[AmendPensionsReliefsRequestData]): CallHandler[Validator[AmendPensionsReliefsRequestData]] = {
+  def willUseValidator(use: Validator[CreateAmendPensionsReliefsRequestData]): CallHandler[Validator[CreateAmendPensionsReliefsRequestData]] = {
     MockedAmendPensionsReliefsValidatorFactory
       .validator()
       .anyNumberOfTimes()
       .returns(use)
   }
 
-  def returningSuccess(result: AmendPensionsReliefsRequestData): Validator[AmendPensionsReliefsRequestData] =
-    new Validator[AmendPensionsReliefsRequestData] {
-      def validate: Validated[Seq[MtdError], AmendPensionsReliefsRequestData] = Valid(result)
+  def returningSuccess(result: CreateAmendPensionsReliefsRequestData): Validator[CreateAmendPensionsReliefsRequestData] =
+    new Validator[CreateAmendPensionsReliefsRequestData] {
+      def validate: Validated[Seq[MtdError], CreateAmendPensionsReliefsRequestData] = Valid(result)
     }
 
-  def returning(result: MtdError*): Validator[AmendPensionsReliefsRequestData] = returningErrors(result)
+  def returning(result: MtdError*): Validator[CreateAmendPensionsReliefsRequestData] = returningErrors(result)
 
-  def returningErrors(result: Seq[MtdError]): Validator[AmendPensionsReliefsRequestData] =
-    new Validator[AmendPensionsReliefsRequestData] {
-      def validate: Validated[Seq[MtdError], AmendPensionsReliefsRequestData] = Invalid(result)
+  def returningErrors(result: Seq[MtdError]): Validator[CreateAmendPensionsReliefsRequestData] =
+    new Validator[CreateAmendPensionsReliefsRequestData] {
+      def validate: Validated[Seq[MtdError], CreateAmendPensionsReliefsRequestData] = Invalid(result)
     }
 
 }

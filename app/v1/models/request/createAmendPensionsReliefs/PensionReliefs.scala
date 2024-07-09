@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendPensionsReliefs
+package v1.models.request.createAmendPensionsReliefs
 
 import play.api.libs.json.{Json, OFormat}
 

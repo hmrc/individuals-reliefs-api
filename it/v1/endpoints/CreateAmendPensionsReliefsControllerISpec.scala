@@ -26,7 +26,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v1.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
-class AmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
+class CreateAmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
   private trait NonTysTest extends Test {
     def mtdTaxYear: String        = "2020-21"

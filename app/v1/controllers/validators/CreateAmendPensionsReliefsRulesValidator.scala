@@ -21,13 +21,13 @@ import api.controllers.validators.resolvers.ResolveParsedNumber
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.toFoldableOps
-import v1.models.request.amendPensionsReliefs.{AmendPensionsReliefsRequestData, PensionReliefs}
+import v1.models.request.createAmendPensionsReliefs.{CreateAmendPensionsReliefsRequestData, PensionReliefs}
 
-object AmendPensionsReliefsRulesValidator extends RulesValidator[AmendPensionsReliefsRequestData] {
+object CreateAmendPensionsReliefsRulesValidator extends RulesValidator[CreateAmendPensionsReliefsRequestData] {
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
-  def validateBusinessRules(parsed: AmendPensionsReliefsRequestData): Validated[Seq[MtdError], AmendPensionsReliefsRequestData] =
+  def validateBusinessRules(parsed: CreateAmendPensionsReliefsRequestData): Validated[Seq[MtdError], CreateAmendPensionsReliefsRequestData] =
     validate(parsed.body.pensionReliefs).onSuccess(parsed)
 
   private def validate(pensionReliefs: PensionReliefs): Validated[Seq[MtdError], Unit] = {
