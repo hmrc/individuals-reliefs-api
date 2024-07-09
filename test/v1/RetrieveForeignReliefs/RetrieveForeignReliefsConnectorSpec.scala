@@ -19,8 +19,8 @@ package v1.RetrieveForeignReliefs
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
-import v1.RetrieveForeignReliefs.def1.model.response.Def1_RetrieveForeignReliefsResponse
 import v1.RetrieveForeignReliefs.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
+import v1.RetrieveForeignReliefs.model.response.Def1_RetrieveForeignReliefsResponse
 
 import scala.concurrent.Future
 

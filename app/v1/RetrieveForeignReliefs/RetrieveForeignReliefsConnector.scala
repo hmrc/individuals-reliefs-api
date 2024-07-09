@@ -17,13 +17,12 @@
 package v1.RetrieveForeignReliefs
 
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.RetrieveForeignReliefs.def1.model.response.Def1_RetrieveForeignReliefsResponse
 import v1.RetrieveForeignReliefs.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
-import v1.RetrieveForeignReliefs.model.response.RetrieveForeignReliefsResponse
+import v1.RetrieveForeignReliefs.model.response.{Def1_RetrieveForeignReliefsResponse, RetrieveForeignReliefsResponse}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

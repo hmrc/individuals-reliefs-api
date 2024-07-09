@@ -17,18 +17,22 @@
 package v1.RetrieveForeignReliefs.model.response
 
 import api.hateoas.{HateoasData, HateoasLinks, HateoasLinksFactory, Link}
+import api.models.domain.Timestamp
 import config.AppConfig
-import play.api.libs.json.{Json, OWrites}
-import v1.RetrieveForeignReliefs.def1.model.response.Def1_RetrieveForeignReliefsResponse
-import v1.RetrieveForeignReliefs.def1.model.response.Def1_RetrieveForeignReliefsResponse.Def1_RetrieveForeignReliefsLinksFactory
+import play.api.libs.json.{Json, OWrites, Reads}
+import v1.RetrieveForeignReliefs.def1.model.response.{
+  Def1_ForeignIncomeTaxCreditRelief,
+  Def1_ForeignTaxCreditRelief,
+  Def1_ForeignTaxForFtcrNotClaimed
+}
+import v1.RetrieveForeignReliefs.model.response.Def1_RetrieveForeignReliefsResponse.Def1_RetrieveForeignReliefsLinksFactory
 
-trait RetrieveForeignReliefsResponse
+sealed trait RetrieveForeignReliefsResponse
 
 object RetrieveForeignReliefsResponse extends HateoasLinks {
 
   implicit val writes: OWrites[RetrieveForeignReliefsResponse] = OWrites[RetrieveForeignReliefsResponse] {
     case def1: Def1_RetrieveForeignReliefsResponse => Json.toJsObject(def1)
-    case _                                         => throw new IllegalArgumentException("Unknown type")
   }
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData] {
@@ -44,3 +48,34 @@ object RetrieveForeignReliefsResponse extends HateoasLinks {
 }
 
 case class RetrieveForeignReliefsHateoasData(nino: String, taxYear: String) extends HateoasData
+
+case class Def1_RetrieveForeignReliefsResponse(
+    submittedOn: Timestamp,
+    foreignTaxCreditRelief: Option[Def1_ForeignTaxCreditRelief],
+    foreignIncomeTaxCreditRelief: Option[Seq[Def1_ForeignIncomeTaxCreditRelief]],
+    foreignTaxForFtcrNotClaimed: Option[Def1_ForeignTaxForFtcrNotClaimed]
+) extends RetrieveForeignReliefsResponse {
+  implicit val reads: Reads[Def1_RetrieveForeignReliefsResponse] = Json.reads[Def1_RetrieveForeignReliefsResponse]
+}
+
+object Def1_RetrieveForeignReliefsResponse extends HateoasLinks {
+
+  implicit val reads: Reads[Def1_RetrieveForeignReliefsResponse]    = Json.reads[Def1_RetrieveForeignReliefsResponse]
+  implicit val writes: OWrites[Def1_RetrieveForeignReliefsResponse] = Json.writes[Def1_RetrieveForeignReliefsResponse]
+
+  implicit object Def1_RetrieveForeignReliefsLinksFactory
+      extends HateoasLinksFactory[Def1_RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData] {
+
+    override def links(appConfig: AppConfig, data: RetrieveForeignReliefsHateoasData): Seq[Link] = {
+      import data._
+
+      Seq(
+        retrieveForeignReliefs(appConfig, nino, taxYear),
+        createAndAmendForeignReliefs(appConfig, nino, taxYear),
+        deleteForeignReliefs(appConfig, nino, taxYear)
+      )
+    }
+
+  }
+
+}

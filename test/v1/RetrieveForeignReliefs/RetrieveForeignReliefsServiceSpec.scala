@@ -22,13 +22,9 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.RetrieveForeignReliefs.def1.model.response.{
-  Def1_ForeignIncomeTaxCreditRelief,
-  Def1_ForeignTaxCreditRelief,
-  Def1_ForeignTaxForFtcrNotClaimed,
-  Def1_RetrieveForeignReliefsResponse
-}
+import v1.RetrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
 import v1.RetrieveForeignReliefs.model.request.Def1_RetrieveForeignReliefsRequestData
+import v1.RetrieveForeignReliefs.model.response.Def1_RetrieveForeignReliefsResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

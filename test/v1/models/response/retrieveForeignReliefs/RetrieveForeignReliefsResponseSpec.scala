@@ -22,8 +22,8 @@ import api.models.domain.Timestamp
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.RetrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed, Def1_RetrieveForeignReliefsResponse}
-import v1.RetrieveForeignReliefs.model.response.{RetrieveForeignReliefsHateoasData, RetrieveForeignReliefsResponse}
+import v1.RetrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
+import v1.RetrieveForeignReliefs.model.response.{Def1_RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData, RetrieveForeignReliefsResponse}
 
 class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
 

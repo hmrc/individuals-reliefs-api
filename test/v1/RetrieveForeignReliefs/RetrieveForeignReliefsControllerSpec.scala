@@ -25,9 +25,9 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.RetrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed, Def1_RetrieveForeignReliefsResponse}
+import v1.RetrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
 import v1.RetrieveForeignReliefs.model.request.Def1_RetrieveForeignReliefsRequestData
-import v1.RetrieveForeignReliefs.model.response.RetrieveForeignReliefsHateoasData
+import v1.RetrieveForeignReliefs.model.response.{Def1_RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData}
 import v1.controllers.validators.MockRetrieveForeignReliefsValidatorFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
