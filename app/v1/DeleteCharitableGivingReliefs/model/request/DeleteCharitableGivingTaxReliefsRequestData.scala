@@ -16,4 +16,10 @@
 
 package v1.DeleteCharitableGivingReliefs.model.request
 
-trait DeleteCharitableGivingTaxReliefsRequestData
+import api.models.domain.{Nino, TaxYear}
+
+sealed trait DeleteCharitableGivingTaxReliefsRequestData
+
+
+case class Def1_DeleteCharitableGivingTaxReliefsRequestData(nino: Nino, taxYear: TaxYear) extends DeleteCharitableGivingTaxReliefsRequestData
+

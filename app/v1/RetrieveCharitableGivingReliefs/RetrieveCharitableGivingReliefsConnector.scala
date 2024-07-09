@@ -21,9 +21,8 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.RetrieveCharitableGivingReliefs.def1.model.response.Def1_RetrieveCharitableGivingReliefsResponse
 import v1.RetrieveCharitableGivingReliefs.model.request.{Def1_RetrieveCharitableGivingReliefsRequestData, RetrieveCharitableGivingReliefsRequestData}
-import v1.RetrieveCharitableGivingReliefs.model.response.RetrieveCharitableGivingReliefsResponse
+import v1.RetrieveCharitableGivingReliefs.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -64,8 +63,6 @@ class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClient, 
     request match {
       case def1: Def1_RetrieveCharitableGivingReliefsRequestData =>
         completeDef1Request(def1)
-      case _ =>
-        Future.failed(new IllegalArgumentException("Request type is not known"))
     }
   }
 

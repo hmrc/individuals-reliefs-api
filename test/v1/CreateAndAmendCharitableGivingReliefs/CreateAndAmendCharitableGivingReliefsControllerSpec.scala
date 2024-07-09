@@ -28,6 +28,7 @@ import mocks.MockIdGenerator
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request._
+import v1.CreateAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 import v1.CreateAndAmendCharitableGivingReliefs.model.response.CreateAndAmendCharitableGivingTaxReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global

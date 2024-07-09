@@ -21,13 +21,9 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
-import v1.RetrieveCharitableGivingReliefs.def1.model.response.{
-  Def1_GiftAidPayments,
-  Def1_Gifts,
-  Def1_NonUkCharities,
-  Def1_RetrieveCharitableGivingReliefsResponse
-}
+import v1.RetrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
 import v1.RetrieveCharitableGivingReliefs.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v1.RetrieveCharitableGivingReliefs.model.response.Def1_RetrieveCharitableGivingReliefsResponse
 
 import scala.concurrent.Future
 

@@ -17,12 +17,8 @@
 package v1.RetrieveCharitableGivingReliefs.def1.model.request
 
 import play.api.libs.json.{JsObject, JsValue, Json}
-import v1.RetrieveCharitableGivingReliefs.def1.model.response.{
-  Def1_GiftAidPayments,
-  Def1_Gifts,
-  Def1_NonUkCharities,
-  Def1_RetrieveCharitableGivingReliefsResponse
-}
+import v1.RetrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
+import v1.RetrieveCharitableGivingReliefs.model.response.Def1_RetrieveCharitableGivingReliefsResponse
 
 trait RetrieveCharitableGivingReliefsFixture {
 

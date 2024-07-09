@@ -17,9 +17,16 @@
 package v1.CreateAndAmendCharitableGivingReliefs.model.request
 
 import api.models.domain.{Nino, TaxYear}
+import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsBody
 
-trait CreateAndAmendCharitableGivingTaxReliefsRequestData {
+sealed trait CreateAndAmendCharitableGivingTaxReliefsRequestData {
   val nino: Nino
   val taxYear: TaxYear
   val body: CreateAndAmendCharitableGivingTaxReliefsBody
 }
+
+
+case class Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData(nino: Nino,
+                                                                    taxYear: TaxYear,
+                                                                    body: Def1_CreateAndAmendCharitableGivingTaxReliefsBody)
+  extends CreateAndAmendCharitableGivingTaxReliefsRequestData

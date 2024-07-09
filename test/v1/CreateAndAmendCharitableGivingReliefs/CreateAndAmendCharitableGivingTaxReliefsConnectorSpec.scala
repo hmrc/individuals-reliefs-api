@@ -21,6 +21,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request._
+import v1.CreateAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
+
 import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpec {

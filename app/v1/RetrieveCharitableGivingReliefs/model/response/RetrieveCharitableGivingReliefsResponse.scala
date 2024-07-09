@@ -18,20 +18,18 @@ package v1.RetrieveCharitableGivingReliefs.model.response
 
 import api.hateoas.{HateoasData, HateoasLinks, HateoasLinksFactory, Link}
 import config.AppConfig
-import play.api.libs.json.{Json, OWrites}
-import v1.RetrieveCharitableGivingReliefs.def1.model.response.Def1_RetrieveCharitableGivingReliefsResponse
-import v1.RetrieveCharitableGivingReliefs.def1.model.response.Def1_RetrieveCharitableGivingReliefsResponse.Def1_RetrieveCharitableGivingReliefsLinksFactory
+import play.api.libs.json.{Json, OFormat, OWrites, Reads}
+import v1.RetrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts}
+import v1.RetrieveCharitableGivingReliefs.model.response.Def1_RetrieveCharitableGivingReliefsResponse.Def1_RetrieveCharitableGivingReliefsLinksFactory
 
-trait RetrieveCharitableGivingReliefsResponse {
+sealed trait RetrieveCharitableGivingReliefsResponse {
   def retrieveCharitableGivingReliefResponse: RetrieveCharitableGivingReliefsResponse
 }
 
 object RetrieveCharitableGivingReliefsResponse extends HateoasLinks {
 
-  implicit val writes: OWrites[RetrieveCharitableGivingReliefsResponse] = {
-    case def1: Def1_RetrieveCharitableGivingReliefsResponse =>
-      Json.toJsObject(def1)
-    case _ => throw new IllegalArgumentException("Request type is not known")
+  implicit val writes: OWrites[RetrieveCharitableGivingReliefsResponse] = { case def1: Def1_RetrieveCharitableGivingReliefsResponse =>
+    Json.toJsObject(def1)
   }
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsHateoasData] {
@@ -47,3 +45,28 @@ object RetrieveCharitableGivingReliefsResponse extends HateoasLinks {
 }
 
 case class RetrieveCharitableGivingReliefsHateoasData(nino: String, taxYear: String) extends HateoasData
+
+case class Def1_RetrieveCharitableGivingReliefsResponse(giftAidPayments: Option[Def1_GiftAidPayments], gifts: Option[Def1_Gifts])
+    extends RetrieveCharitableGivingReliefsResponse {
+  implicit val reads: Reads[Def1_RetrieveCharitableGivingReliefsResponse]                  = Json.reads[Def1_RetrieveCharitableGivingReliefsResponse]
+  def retrieveCharitableGivingReliefResponse: Def1_RetrieveCharitableGivingReliefsResponse = this
+}
+
+object Def1_RetrieveCharitableGivingReliefsResponse extends HateoasLinks {
+  implicit val formats: OFormat[Def1_RetrieveCharitableGivingReliefsResponse] = Json.format[Def1_RetrieveCharitableGivingReliefsResponse]
+
+  implicit object Def1_RetrieveCharitableGivingReliefsLinksFactory
+      extends HateoasLinksFactory[Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsHateoasData] {
+
+    override def links(appConfig: AppConfig, data: RetrieveCharitableGivingReliefsHateoasData): Seq[Link] = {
+      import data._
+      Seq(
+        createAndAmendCharitableGivingTaxRelief(appConfig, nino, taxYear),
+        retrieveCharitableGivingTaxRelief(appConfig, nino, taxYear),
+        deleteCharitableGivingTaxRelief(appConfig, nino, taxYear)
+      )
+    }
+
+  }
+
+}

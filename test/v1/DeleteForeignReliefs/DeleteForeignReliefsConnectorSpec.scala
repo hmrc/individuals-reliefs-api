@@ -19,7 +19,7 @@ package v1.DeleteForeignReliefs
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.DeleteForeignReliefs.def1.model.request.Def1_DeleteForeignReliefsRequestData
+import v1.DeleteForeignReliefs.model.Def1_DeleteForeignReliefsRequestData
 
 import scala.concurrent.Future
 

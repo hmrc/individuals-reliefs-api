@@ -23,11 +23,11 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
-import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request.{
-  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
+import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsBody
+import v1.CreateAndAmendCharitableGivingReliefs.model.request.{
+  CreateAndAmendCharitableGivingTaxReliefsRequestData,
   Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 }
-import v1.CreateAndAmendCharitableGivingReliefs.model.request.CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 import scala.annotation.nowarn
 
@@ -38,7 +38,8 @@ class Def1_CreateAndAmendCharitableGivingReliefsValidator(nino: String, taxYear:
   private val resolveJson: ResolveNonEmptyJsonObject[Def1_CreateAndAmendCharitableGivingTaxReliefsBody] =
     new ResolveNonEmptyJsonObject[Def1_CreateAndAmendCharitableGivingTaxReliefsBody]()
 
-  private val rulesValidator: Def1_CreateAndAmendCharitableGivingReliefsRulesValidator = new Def1_CreateAndAmendCharitableGivingReliefsRulesValidator()
+  private val rulesValidator =
+    new Def1_CreateAndAmendCharitableGivingReliefsRulesValidator()
 
   def validate: Validated[Seq[MtdError], CreateAndAmendCharitableGivingTaxReliefsRequestData] =
     (

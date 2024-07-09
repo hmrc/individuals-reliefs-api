@@ -22,8 +22,7 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.DeleteForeignReliefs.def1.model.request.Def1_DeleteForeignReliefsRequestData
-import v1.DeleteForeignReliefs.model.DeleteForeignReliefsRequestData
+import v1.DeleteForeignReliefs.model.{Def1_DeleteForeignReliefsRequestData, DeleteForeignReliefsRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -55,8 +54,6 @@ class DeleteForeignReliefsConnector @Inject() (val http: HttpClient, val appConf
       case def1: Def1_DeleteForeignReliefsRequestData =>
         import def1._
         completeRequest(nino, taxYear)
-      case _ =>
-        Future.failed(new IllegalArgumentException("Request type is not known"))
     }
 
 }

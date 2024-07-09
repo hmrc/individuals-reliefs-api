@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.DeleteForeignReliefs.def1.model.request.Def1_DeleteForeignReliefsRequestData
+import v1.DeleteForeignReliefs.model.Def1_DeleteForeignReliefsRequestData
 import v1.DeleteForeignReliefs.{DeleteForeignReliefsService, MockDeleteForeignReliefsConnector}
 
 import scala.concurrent.ExecutionContext.Implicits.global

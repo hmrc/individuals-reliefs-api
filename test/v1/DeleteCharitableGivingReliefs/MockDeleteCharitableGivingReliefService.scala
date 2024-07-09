@@ -21,7 +21,7 @@ import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.DeleteCharitableGivingReliefs.def1.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
+import v1.DeleteCharitableGivingReliefs.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 

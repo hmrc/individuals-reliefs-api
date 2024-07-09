@@ -22,8 +22,7 @@ import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
-import v1.DeleteCharitableGivingReliefs.def1.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
-import v1.DeleteCharitableGivingReliefs.model.request.DeleteCharitableGivingTaxReliefsRequestData
+import v1.DeleteCharitableGivingReliefs.model.request.{Def1_DeleteCharitableGivingTaxReliefsRequestData, DeleteCharitableGivingTaxReliefsRequestData}
 
 class Def1_DeleteCharitableGivingReliefsValidator(nino: String, taxYear: String) extends Validator[DeleteCharitableGivingTaxReliefsRequestData] {
 

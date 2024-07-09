@@ -20,11 +20,9 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
-import v1.RetrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities,
-  Def1_RetrieveCharitableGivingReliefsResponse
-}
+import v1.RetrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
 import v1.RetrieveCharitableGivingReliefs.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
-import v1.RetrieveCharitableGivingReliefs.model.response.RetrieveCharitableGivingReliefsResponse
+import v1.RetrieveCharitableGivingReliefs.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
 
 import scala.concurrent.Future
 

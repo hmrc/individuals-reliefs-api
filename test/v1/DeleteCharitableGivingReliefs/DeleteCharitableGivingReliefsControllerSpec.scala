@@ -24,7 +24,8 @@ import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v1.DeleteCharitableGivingReliefs.def1.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
+import v1.DeleteCharitableGivingReliefs.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

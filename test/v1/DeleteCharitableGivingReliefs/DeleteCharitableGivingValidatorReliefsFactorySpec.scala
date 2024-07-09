@@ -19,8 +19,7 @@ package v1.DeleteCharitableGivingReliefs
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import support.UnitSpec
-import v1.DeleteCharitableGivingReliefs.def1.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
-import v1.DeleteCharitableGivingReliefs.model.request.DeleteCharitableGivingTaxReliefsRequestData
+import v1.DeleteCharitableGivingReliefs.model.request.{Def1_DeleteCharitableGivingTaxReliefsRequestData, DeleteCharitableGivingTaxReliefsRequestData}
 
 class DeleteCharitableGivingValidatorReliefsFactorySpec extends UnitSpec {
   private implicit val correlationId: String = "1234"

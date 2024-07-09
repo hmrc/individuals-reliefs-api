@@ -22,8 +22,7 @@ import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
-import v1.DeleteForeignReliefs.def1.model.request.Def1_DeleteForeignReliefsRequestData
-import v1.DeleteForeignReliefs.model.DeleteForeignReliefsRequestData
+import v1.DeleteForeignReliefs.model.{Def1_DeleteForeignReliefsRequestData, DeleteForeignReliefsRequestData}
 
 class Def1_DeleteForeignReliefsValidator(nino: String, taxYear: String) extends Validator[DeleteForeignReliefsRequestData] {
 

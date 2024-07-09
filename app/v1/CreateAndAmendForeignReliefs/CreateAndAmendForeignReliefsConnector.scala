@@ -43,11 +43,11 @@ class CreateAndAmendForeignReliefsConnector @Inject() (val http: HttpClient, val
       IfsUri[Unit](s"income-tax/reliefs/foreign/$nino/${taxYear.asMtd}")
     }
 
-    request match {
+    request.asInstanceOf[Def1_CreateAndAmendForeignReliefsRequestData] match {
       case def1: Def1_CreateAndAmendForeignReliefsRequestData =>
         import def1._
+
         put(body, url)
-      case _ => throw new IllegalArgumentException("Request type is not known")
     }
 
   }

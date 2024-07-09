@@ -21,14 +21,17 @@ import api.hateoas.Method._
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.RetrieveCharitableGivingReliefs.def1.model.response.Def1_RetrieveCharitableGivingReliefsResponse
-import v1.RetrieveCharitableGivingReliefs.model.response.{RetrieveCharitableGivingReliefsHateoasData, RetrieveCharitableGivingReliefsResponse}
+import v1.RetrieveCharitableGivingReliefs.model.response.{
+  Def1_RetrieveCharitableGivingReliefsResponse,
+  RetrieveCharitableGivingReliefsHateoasData,
+  RetrieveCharitableGivingReliefsResponse
+}
 
 class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockAppConfig with RetrieveCharitableGivingReliefsFixture {
 
   "RetrieveCharitableGivingReliefResponse reads" must {
     "read from downstream JSON" in {
-        charitableGivingReliefsResponseDownstreamJson.as[Def1_RetrieveCharitableGivingReliefsResponse] shouldBe charitableGivingReliefsResponse
+      charitableGivingReliefsResponseDownstreamJson.as[Def1_RetrieveCharitableGivingReliefsResponse] shouldBe charitableGivingReliefsResponse
     }
   }
 
@@ -45,7 +48,7 @@ class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockAppC
       val context = "individuals/reliefs"
 
       MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
-        RetrieveCharitableGivingReliefsResponse.LinksFactory.links(mockAppConfig,RetrieveCharitableGivingReliefsHateoasData(nino, taxYear)) shouldBe
+      RetrieveCharitableGivingReliefsResponse.LinksFactory.links(mockAppConfig, RetrieveCharitableGivingReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/$context/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
           api.hateoas.Link(s"/$context/charitable-giving/$nino/$taxYear", GET, "self"),

@@ -20,8 +20,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import support.UnitSpec
 import v1.DeleteForeignReliefs.DeleteForeignReliefsValidatorFactory
-import v1.DeleteForeignReliefs.def1.model.request.Def1_DeleteForeignReliefsRequestData
-import v1.DeleteForeignReliefs.model.DeleteForeignReliefsRequestData
+import v1.DeleteForeignReliefs.model.{Def1_DeleteForeignReliefsRequestData, DeleteForeignReliefsRequestData}
 
 class DeleteForeignReliefsValidatorFactorySpec extends UnitSpec {
 

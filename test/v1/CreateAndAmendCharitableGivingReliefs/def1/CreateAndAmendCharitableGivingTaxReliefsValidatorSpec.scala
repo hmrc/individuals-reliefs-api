@@ -36,12 +36,14 @@ import support.UnitSpec
 import v1.CreateAndAmendCharitableGivingReliefs.CreateAndAmendCharitableGivingReliefsValidatorFactory
 import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request.{
   Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
-  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData,
   Def1_GiftAidPayments,
   Def1_Gifts,
   Def1_NonUkCharities
 }
-import v1.CreateAndAmendCharitableGivingReliefs.model.request.CreateAndAmendCharitableGivingTaxReliefsRequestData
+import v1.CreateAndAmendCharitableGivingReliefs.model.request.{
+  CreateAndAmendCharitableGivingTaxReliefsRequestData,
+  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
+}
 
 class CreateAndAmendCharitableGivingTaxReliefsValidatorSpec extends UnitSpec with JsonErrorValidators {
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"

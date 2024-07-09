@@ -22,12 +22,8 @@ import api.models.errors.{MtdError, RuleGiftAidNonUkAmountWithoutNamesError, Rul
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.{toFoldableOps, toTraverseOps}
-import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request.{
-  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData,
-  Def1_GiftAidPayments,
-  Def1_Gifts,
-  Def1_NonUkCharities
-}
+import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
+import v1.CreateAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 class Def1_CreateAndAmendCharitableGivingReliefsRulesValidator extends RulesValidator[Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData] {
 

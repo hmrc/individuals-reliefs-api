@@ -21,7 +21,7 @@ import api.models.errors.ErrorWrapper
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.DeleteForeignReliefs.def1.model.request.Def1_DeleteForeignReliefsRequestData
+import v1.DeleteForeignReliefs.model.Def1_DeleteForeignReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 

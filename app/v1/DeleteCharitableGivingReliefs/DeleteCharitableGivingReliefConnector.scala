@@ -23,8 +23,7 @@ import api.models.domain.{Nino, TaxYear}
 import config.AppConfig
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.DeleteCharitableGivingReliefs.def1.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
-import v1.DeleteCharitableGivingReliefs.model.request.DeleteCharitableGivingTaxReliefsRequestData
+import v1.DeleteCharitableGivingReliefs.model.request.{Def1_DeleteCharitableGivingTaxReliefsRequestData, DeleteCharitableGivingTaxReliefsRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -68,8 +67,6 @@ class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val
       case def1: Def1_DeleteCharitableGivingTaxReliefsRequestData =>
         import def1._
         completeRequest(nino, taxYear)
-      case _ =>
-        Future.failed(new IllegalArgumentException("Request type is not known"))
     }
   }
 
