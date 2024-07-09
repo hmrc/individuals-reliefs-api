@@ -19,9 +19,11 @@ package v1.controllers.validators
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import play.api.libs.json.{JsArray, JsNumber, JsObject, JsString, JsValue, Json}
+import play.api.libs.json._
 import support.UnitSpec
-import v1.models.request.createAndAmendForeignReliefs._
+import v1.CreateAndAmendForeignReliefs.CreateAndAmendForeignReliefsValidatorFactory
+import v1.CreateAndAmendForeignReliefs.def1.model.request.{Def1_CreateAndAmendForeignReliefsBody, Def1_CreateAndAmendForeignReliefsRequestData, Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
+import v1.CreateAndAmendForeignReliefs.model.request.CreateAndAmendForeignReliefsRequestData
 
 class CreateAndAmendForeignReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
@@ -69,24 +71,24 @@ class CreateAndAmendForeignReliefsValidatorFactorySpec extends UnitSpec with Jso
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private val parsedForeignTaxCreditRelief           = ForeignTaxCreditRelief(1000.99)
-  private val parsedForeignTaxCreditReliefNoDecimals = ForeignTaxCreditRelief(1000)
+  private val parsedForeignTaxCreditRelief           = Def1_ForeignTaxCreditRelief(1000.99)
+  private val parsedForeignTaxCreditReliefNoDecimals = Def1_ForeignTaxCreditRelief(1000)
 
   private val parsedForeignIncomeTaxCreditRelief =
-    ForeignIncomeTaxCreditRelief("FRA", Some(1200.99), 1300.99, employmentLumpSum = true)
+    Def1_ForeignIncomeTaxCreditRelief("FRA", Some(1200.99), 1300.99, employmentLumpSum = true)
 
   private val parsedForeignIncomeTaxCreditReliefNoDecimals =
-    ForeignIncomeTaxCreditRelief("FRA", Some(1200), 1300, employmentLumpSum = true)
+    Def1_ForeignIncomeTaxCreditRelief("FRA", Some(1200), 1300, employmentLumpSum = true)
 
-  private val parsedForeignTaxForFtcrNotClaimed           = ForeignTaxForFtcrNotClaimed(1400.99)
-  private val parsedForeignTaxForFtcrNotClaimedNoDecimals = ForeignTaxForFtcrNotClaimed(1400)
+  private val parsedForeignTaxForFtcrNotClaimed           = Def1_ForeignTaxForFtcrNotClaimed(1400.99)
+  private val parsedForeignTaxForFtcrNotClaimedNoDecimals = Def1_ForeignTaxForFtcrNotClaimed(1400)
 
-  private val parsedBody = CreateAndAmendForeignReliefsBody(
+  private val parsedBody = Def1_CreateAndAmendForeignReliefsBody(
     Some(parsedForeignTaxCreditRelief),
     Some(List(parsedForeignIncomeTaxCreditRelief)),
     Some(parsedForeignTaxForFtcrNotClaimed))
 
-  private val parsedBodyNoDecimals = CreateAndAmendForeignReliefsBody(
+  private val parsedBodyNoDecimals = Def1_CreateAndAmendForeignReliefsBody(
     Some(parsedForeignTaxCreditReliefNoDecimals),
     Some(List(parsedForeignIncomeTaxCreditReliefNoDecimals)),
     Some(parsedForeignTaxForFtcrNotClaimedNoDecimals)
@@ -102,14 +104,14 @@ class CreateAndAmendForeignReliefsValidatorFactorySpec extends UnitSpec with Jso
         val result: Either[ErrorWrapper, CreateAndAmendForeignReliefsRequestData] =
           validator(validNino, validTaxYear, validBody).validateAndWrapResult()
 
-        result shouldBe Right(CreateAndAmendForeignReliefsRequestData(parsedNino, parsedTaxYear, parsedBody))
+        result shouldBe Right(Def1_CreateAndAmendForeignReliefsRequestData(parsedNino, parsedTaxYear, parsedBody))
       }
 
       "passed a valid request with no decimal places" in {
         val result: Either[ErrorWrapper, CreateAndAmendForeignReliefsRequestData] =
           validator(validNino, validTaxYear, validBodyNoDecimals).validateAndWrapResult()
 
-        result shouldBe Right(CreateAndAmendForeignReliefsRequestData(parsedNino, parsedTaxYear, parsedBodyNoDecimals))
+        result shouldBe Right(Def1_CreateAndAmendForeignReliefsRequestData(parsedNino, parsedTaxYear, parsedBodyNoDecimals))
       }
     }
 

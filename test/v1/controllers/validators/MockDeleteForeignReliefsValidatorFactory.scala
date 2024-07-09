@@ -22,7 +22,8 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequestData
+import v1.DeleteForeignReliefs.DeleteForeignReliefsValidatorFactory
+import v1.DeleteForeignReliefs.model.DeleteForeignReliefsRequestData
 
 trait MockDeleteForeignReliefsValidatorFactory extends MockFactory {
 
