@@ -30,7 +30,7 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.mtdIdBaseUrl returns baseUrl
+    MockedAppConfig.mtdIdBaseUrl returns baseUrl
   }
 
   val nino  = "test-nino"

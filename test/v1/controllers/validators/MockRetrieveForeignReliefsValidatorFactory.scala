@@ -22,7 +22,8 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
+import v1.RetrieveForeignReliefs.RetrieveForeignReliefsValidatorFactory
+import v1.RetrieveForeignReliefs.model.request.RetrieveForeignReliefsRequestData
 
 trait MockRetrieveForeignReliefsValidatorFactory extends MockFactory {
 
@@ -32,6 +33,7 @@ trait MockRetrieveForeignReliefsValidatorFactory extends MockFactory {
 
     def validator(): CallHandler[Validator[RetrieveForeignReliefsRequestData]] =
       (mockRetrieveForeignReliefsValidatorFactory.validator(_: String, _: String)).expects(*, *)
+
   }
 
   def willUseValidator(use: Validator[RetrieveForeignReliefsRequestData]): CallHandler[Validator[RetrieveForeignReliefsRequestData]] = {

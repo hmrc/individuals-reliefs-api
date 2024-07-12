@@ -20,15 +20,16 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import support.UnitSpec
-import v1.models.request.retrieveForeignReliefs.RetrieveForeignReliefsRequestData
+import v1.RetrieveForeignReliefs.RetrieveForeignReliefsValidatorFactory
+import v1.RetrieveForeignReliefs.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
 
 class RetrieveForeignReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
-  private val validNino = "AA123456A"
+  private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
 
-  private val parsedNino = Nino(validNino)
+  private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
   private val validatorFactory = new RetrieveForeignReliefsValidatorFactory
@@ -39,7 +40,7 @@ class RetrieveForeignReliefsValidatorFactorySpec extends UnitSpec with JsonError
     "return no errors" when {
       "a valid request is supplied" in {
         val result: Either[ErrorWrapper, RetrieveForeignReliefsRequestData] = validator(validNino, validTaxYear).validateAndWrapResult()
-        result shouldBe Right(RetrieveForeignReliefsRequestData(parsedNino, parsedTaxYear))
+        result shouldBe Right(Def1_RetrieveForeignReliefsRequestData(parsedNino, parsedTaxYear))
       }
     }
     "return NinoFormatError" when {
@@ -73,5 +74,5 @@ class RetrieveForeignReliefsValidatorFactorySpec extends UnitSpec with JsonError
       }
     }
   }
-}
 
+}

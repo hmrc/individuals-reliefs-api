@@ -19,7 +19,8 @@ package v1.controllers.validators
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import support.UnitSpec
-import v1.models.request.deleteForeignReliefs.DeleteForeignReliefsRequestData
+import v1.DeleteForeignReliefs.DeleteForeignReliefsValidatorFactory
+import v1.DeleteForeignReliefs.model.{Def1_DeleteForeignReliefsRequestData, DeleteForeignReliefsRequestData}
 
 class DeleteForeignReliefsValidatorFactorySpec extends UnitSpec {
 
@@ -40,7 +41,7 @@ class DeleteForeignReliefsValidatorFactorySpec extends UnitSpec {
         val result: Either[ErrorWrapper, DeleteForeignReliefsRequestData] =
           validator(validNino, validTaxYear).validateAndWrapResult()
 
-        result shouldBe Right(DeleteForeignReliefsRequestData(parsedNino, parsedTaxYear))
+        result shouldBe Right(Def1_DeleteForeignReliefsRequestData(parsedNino, parsedTaxYear))
 
       }
     }

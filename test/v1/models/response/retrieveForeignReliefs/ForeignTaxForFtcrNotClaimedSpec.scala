@@ -19,10 +19,11 @@ package v1.models.response.retrieveForeignReliefs
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.RetrieveForeignReliefs.def1.model.response.Def1_ForeignTaxForFtcrNotClaimed
 
 class ForeignTaxForFtcrNotClaimedSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignTaxForFtcrNotClaimed: ForeignTaxForFtcrNotClaimed = ForeignTaxForFtcrNotClaimed(1429.99)
+  val foreignTaxForFtcrNotClaimed: Def1_ForeignTaxForFtcrNotClaimed = Def1_ForeignTaxForFtcrNotClaimed(1429.99)
 
   val json = Json.parse(
     """{
@@ -33,7 +34,7 @@ class ForeignTaxForFtcrNotClaimedSpec extends UnitSpec with JsonErrorValidators 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        foreignTaxForFtcrNotClaimed shouldBe json.as[ForeignTaxForFtcrNotClaimed]
+        foreignTaxForFtcrNotClaimed shouldBe json.as[Def1_ForeignTaxForFtcrNotClaimed]
       }
     }
   }

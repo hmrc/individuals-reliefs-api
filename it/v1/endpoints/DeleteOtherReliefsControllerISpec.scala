@@ -38,7 +38,7 @@ class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().delete())
         response.status shouldBe NO_CONTENT
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
 
       "any valid request is made for a TYS tax year" in new TysIfsTest {
@@ -48,7 +48,7 @@ class DeleteOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().delete())
         response.status shouldBe NO_CONTENT
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
 
     }

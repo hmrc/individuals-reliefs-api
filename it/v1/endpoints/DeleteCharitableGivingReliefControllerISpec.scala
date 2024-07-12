@@ -42,7 +42,7 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().delete())
         response.status shouldBe Status.NO_CONTENT
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
 
       "any valid request is made for a Tax Year Specific tax year" in new TysIfsTest {
@@ -54,7 +54,7 @@ class DeleteCharitableGivingReliefControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().delete())
         response.status shouldBe Status.NO_CONTENT
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
     }
 

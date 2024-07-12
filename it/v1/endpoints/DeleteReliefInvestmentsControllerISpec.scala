@@ -80,7 +80,7 @@ class DeleteReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().delete())
         response.status shouldBe NO_CONTENT
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
 
       "any valid request is made (TYS)" in new TysTest {
@@ -90,7 +90,7 @@ class DeleteReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().delete())
         response.status shouldBe NO_CONTENT
-        response.header("X-CorrelationId").nonEmpty shouldBe true
+        response.header("X-CorrelationId") should not be empty
       }
     }
 
