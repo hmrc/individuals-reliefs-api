@@ -19,15 +19,16 @@ package v1.models.request.amendOtherReliefs
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request.Def1_PayrollGiving
 
 class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
 
-  val payrollGiving = PayrollGiving(
+  val payrollGiving = Def1_PayrollGiving(
     Some("myRef"),
     154.00
   )
 
-  val noRefPayrollGiving = PayrollGiving(
+  val noRefPayrollGiving = Def1_PayrollGiving(
     None,
     154.00
   )
@@ -48,7 +49,7 @@ class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        payrollGiving shouldBe json.as[PayrollGiving]
+        payrollGiving shouldBe json.as[Def1_PayrollGiving]
       }
     }
   }
@@ -56,7 +57,7 @@ class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
   "reads from a JSON with no reference" when {
     "passed a JSON with no customer reference" should {
       "return a model with no customer reference " in {
-        noRefPayrollGiving shouldBe noRefJson.as[PayrollGiving]
+        noRefPayrollGiving shouldBe noRefJson.as[Def1_PayrollGiving]
       }
     }
   }

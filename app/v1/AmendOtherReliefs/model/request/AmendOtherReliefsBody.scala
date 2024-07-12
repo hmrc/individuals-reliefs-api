@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendOtherReliefs
+package v1.AmendOtherReliefs.model.request
 
-import play.api.libs.json.{Json, OFormat}
-
-case class AnnualPaymentsMade(customerReference: Option[String], reliefClaimed: BigDecimal)
-
-object AnnualPaymentsMade {
-  implicit val format: OFormat[AnnualPaymentsMade] = Json.format[AnnualPaymentsMade]
-}
+trait AmendOtherReliefsBody

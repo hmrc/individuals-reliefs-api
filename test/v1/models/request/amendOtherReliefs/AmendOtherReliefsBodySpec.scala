@@ -19,28 +19,29 @@ package v1.models.request.amendOtherReliefs
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request.{Def1_AmendOtherReliefsRequestBody, Def1_AnnualPaymentsMade, Def1_MaintenancePayments, Def1_NonDeductibleLoanInterest, Def1_PayrollGiving, Def1_PostCessationTradeReliefAndCertainOtherLosses, Def1_QualifyingDistributionRedemptionOfSharesAndSecurities, Def1_QualifyingLoanInterestPayments}
 
 class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
 
-  private val amendOtherReliefsBody = AmendOtherReliefsRequestBody(
-    Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
-    Some(PayrollGiving(Some("myref"), 154.00)),
-    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
-    Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
+  private val amendOtherReliefsBody = Def1_AmendOtherReliefsRequestBody(
+    Some(Def1_NonDeductibleLoanInterest(Some("myref"), 763.00)),
+    Some(Def1_PayrollGiving(Some("myref"), 154.00)),
+    Some(Def1_QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+    Some(Seq(Def1_MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
     Some(
       Seq(
-        PostCessationTradeReliefAndCertainOtherLosses(
+        Def1_PostCessationTradeReliefAndCertainOtherLosses(
           Some("myref"),
           Some("ACME Inc"),
           Some("2019-08-10"),
           Some("Widgets Manufacturer"),
           Some("AB12412/A12"),
           222.22))),
-    Some(AnnualPaymentsMade(Some("myref"), 763.00)),
-    Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
+    Some(Def1_AnnualPaymentsMade(Some("myref"), 763.00)),
+    Some(Seq(Def1_QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val emptyAmendOtherReliefsBody = AmendOtherReliefsRequestBody(
+  private val emptyAmendOtherReliefsBody = Def1_AmendOtherReliefsRequestBody(
     None,
     None,
     None,
@@ -101,14 +102,14 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        amendOtherReliefsBody shouldBe json.as[AmendOtherReliefsRequestBody]
+        amendOtherReliefsBody shouldBe json.as[Def1_AmendOtherReliefsRequestBody]
       }
     }
   }
 
   "read from empty JSON" should {
     "convert empty MTD JSON into an empty AmendSecuritiesItems object" in {
-      emptyAmendOtherReliefsBody shouldBe emptyJson.as[AmendOtherReliefsRequestBody]
+      emptyAmendOtherReliefsBody shouldBe emptyJson.as[Def1_AmendOtherReliefsRequestBody]
     }
   }
 
@@ -131,49 +132,49 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
   "isIncorrectOrEmptyBodyError" should {
     "return false" when {
       "all arrays are provided, none are empty, no objects in the arrays are empty" in {
-        val model = AmendOtherReliefsRequestBody(
-          Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
-          Some(PayrollGiving(Some("myref"), 154.00)),
-          Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
-          Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
+        val model = Def1_AmendOtherReliefsRequestBody(
+          Some(Def1_NonDeductibleLoanInterest(Some("myref"), 763.00)),
+          Some(Def1_PayrollGiving(Some("myref"), 154.00)),
+          Some(Def1_QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+          Some(Seq(Def1_MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
           Some(
             Seq(
-              PostCessationTradeReliefAndCertainOtherLosses(
+              Def1_PostCessationTradeReliefAndCertainOtherLosses(
                 Some("myref"),
                 Some("ACME Inc"),
                 Some("2019-08-10"),
                 Some("Widgets Manufacturer"),
                 Some("AB12412/A12"),
                 222.22))),
-          Some(AnnualPaymentsMade(Some("myref"), 763.00)),
-          Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
+          Some(Def1_AnnualPaymentsMade(Some("myref"), 763.00)),
+          Some(Seq(Def1_QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
         )
         model.isIncorrectOrEmptyBody shouldBe false
       }
       "only some arrays are provided, none are empty, no objects in the arrays are empty" in {
-        val model = AmendOtherReliefsRequestBody(
+        val model = Def1_AmendOtherReliefsRequestBody(
           None,
-          Some(PayrollGiving(Some("myref"), 154.00)),
-          Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+          Some(Def1_PayrollGiving(Some("myref"), 154.00)),
+          Some(Def1_QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
           None,
           Some(
             Seq(
-              PostCessationTradeReliefAndCertainOtherLosses(
+              Def1_PostCessationTradeReliefAndCertainOtherLosses(
                 Some("myref"),
                 Some("ACME Inc"),
                 Some("2019-08-10"),
                 Some("Widgets Manufacturer"),
                 Some("AB12412/A12"),
                 222.22))),
-          Some(AnnualPaymentsMade(Some("myref"), 763.00)),
-          Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
+          Some(Def1_AnnualPaymentsMade(Some("myref"), 763.00)),
+          Some(Seq(Def1_QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
         )
         model.isIncorrectOrEmptyBody shouldBe false
       }
     }
     "return true" when {
       "no arrays are provided" in {
-        val model = AmendOtherReliefsRequestBody(
+        val model = Def1_AmendOtherReliefsRequestBody(
           None,
           None,
           None,
@@ -185,13 +186,13 @@ class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
         model.isIncorrectOrEmptyBody shouldBe true
       }
       "at least one empty array is provided" in {
-        val model = AmendOtherReliefsRequestBody(
-          Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
-          Some(PayrollGiving(Some("myref"), 154.00)),
-          Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
-          Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
+        val model = Def1_AmendOtherReliefsRequestBody(
+          Some(Def1_NonDeductibleLoanInterest(Some("myref"), 763.00)),
+          Some(Def1_PayrollGiving(Some("myref"), 154.00)),
+          Some(Def1_QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+          Some(Seq(Def1_MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
           Some(Seq()),
-          Some(AnnualPaymentsMade(Some("myref"), 763.00)),
+          Some(Def1_AnnualPaymentsMade(Some("myref"), 763.00)),
           Some(Seq())
         )
         model.isIncorrectOrEmptyBody shouldBe true

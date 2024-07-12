@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package v1.controllers
+package v1.AmendOtherReliefs
 
 import api.controllers._
+import api.controllers.validators.Validator
 import api.hateoas.HateoasFactory
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
@@ -24,10 +25,9 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version1}
 import utils.IdGenerator
-import v1.controllers.validators.AmendOtherReliefsValidatorFactory
+import v1.AmendOtherReliefs.model.request.AmendOtherReliefsRequestData
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsResponse.LinksFactory
-import v1.services.AmendOtherReliefsService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -51,7 +51,7 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val validator = validatorFactory.validator(nino, taxYear, request.body)
+      val validator: Validator[AmendOtherReliefsRequestData] = validatorFactory.validator(nino, taxYear, request.body)
 
       val requestHandler = RequestHandler
         .withValidator(validator)

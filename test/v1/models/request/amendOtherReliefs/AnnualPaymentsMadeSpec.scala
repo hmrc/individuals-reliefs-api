@@ -19,11 +19,12 @@ package v1.models.request.amendOtherReliefs
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request.Def1_AnnualPaymentsMade
 
 class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
-  val annualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)
+  val annualPaymentsMade = Def1_AnnualPaymentsMade(Some("myRef"), 763.00)
 
-  val noRefAnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
+  val noRefAnnualPaymentsMade = Def1_AnnualPaymentsMade(None, 763.00)
 
   val json = Json.parse(
     """{
@@ -41,7 +42,7 @@ class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        annualPaymentsMade shouldBe json.as[AnnualPaymentsMade]
+        annualPaymentsMade shouldBe json.as[Def1_AnnualPaymentsMade]
       }
     }
   }
@@ -49,7 +50,7 @@ class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
   "reads from a JSON with no reference" when {
     "passed a JSON with no customer reference" should {
       "return a model with no customer reference " in {
-        noRefAnnualPaymentsMade shouldBe noRefJson.as[AnnualPaymentsMade]
+        noRefAnnualPaymentsMade shouldBe noRefJson.as[Def1_AnnualPaymentsMade]
       }
     }
   }

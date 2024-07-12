@@ -19,15 +19,16 @@ package v1.models.request.amendOtherReliefs
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request.Def1_QualifyingDistributionRedemptionOfSharesAndSecurities
 
 class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec with JsonErrorValidators {
 
-  val qualifyingDistributionRedemptionOfSharesAndSecurities = QualifyingDistributionRedemptionOfSharesAndSecurities(
+  val qualifyingDistributionRedemptionOfSharesAndSecurities = Def1_QualifyingDistributionRedemptionOfSharesAndSecurities(
     Some("myref"),
     222.22
   )
 
-  val noRefQualifyingDistributionRedemptionOfSharesAndSecurities = QualifyingDistributionRedemptionOfSharesAndSecurities(
+  val noRefQualifyingDistributionRedemptionOfSharesAndSecurities = Def1_QualifyingDistributionRedemptionOfSharesAndSecurities(
     None,
     222.22
   )
@@ -48,7 +49,7 @@ class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        qualifyingDistributionRedemptionOfSharesAndSecurities shouldBe json.as[QualifyingDistributionRedemptionOfSharesAndSecurities]
+        qualifyingDistributionRedemptionOfSharesAndSecurities shouldBe json.as[Def1_QualifyingDistributionRedemptionOfSharesAndSecurities]
       }
     }
   }
@@ -56,7 +57,7 @@ class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec
   "reads from a JSON with no reference" when {
     "passed a JSON with no customer reference" should {
       "return a model with no customer reference " in {
-        noRefQualifyingDistributionRedemptionOfSharesAndSecurities shouldBe noRefJson.as[QualifyingDistributionRedemptionOfSharesAndSecurities]
+        noRefQualifyingDistributionRedemptionOfSharesAndSecurities shouldBe noRefJson.as[Def1_QualifyingDistributionRedemptionOfSharesAndSecurities]
       }
     }
   }

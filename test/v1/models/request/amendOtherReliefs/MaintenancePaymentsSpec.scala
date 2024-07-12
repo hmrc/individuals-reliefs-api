@@ -19,17 +19,18 @@ package v1.models.request.amendOtherReliefs
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request.Def1_MaintenancePayments
 
 class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
 
-  val maintenancePayments = MaintenancePayments(
+  val maintenancePayments = Def1_MaintenancePayments(
     Some("myRef"),
     Some("Hilda"),
     Some("2000-01-01"),
     222.22
   )
 
-  val noOptionsMaintenancePayments = MaintenancePayments(
+  val noOptionsMaintenancePayments = Def1_MaintenancePayments(
     None,
     None,
     None,
@@ -54,7 +55,7 @@ class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        json.as[MaintenancePayments] shouldBe maintenancePayments
+        json.as[Def1_MaintenancePayments] shouldBe maintenancePayments
       }
     }
   }
@@ -62,7 +63,7 @@ class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
   "reads from a json with no optional fields supplied" when {
     "passed a JSON with no optional fields" should {
       "return a model with no optional fields" in {
-        noOptionsJson.as[MaintenancePayments] shouldBe noOptionsMaintenancePayments
+        noOptionsJson.as[Def1_MaintenancePayments] shouldBe noOptionsMaintenancePayments
       }
     }
   }

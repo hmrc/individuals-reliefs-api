@@ -22,6 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.AmendOtherReliefs.def1.model.request.{Def1_AmendOtherReliefsRequestBody, Def1_AmendOtherReliefsRequestData}
 import v1.connectors.MockAmendOtherReliefsConnector
 import v1.models.request.amendOtherReliefs._
 
@@ -87,9 +88,9 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
     val nino: String                   = "AA123456A"
     implicit val correlationId: String = "X-123"
 
-    val body: AmendOtherReliefsRequestBody = AmendOtherReliefsRequestBody(None, None, None, None, None, None, None)
+    val body: Def1_AmendOtherReliefsRequestBody = Def1_AmendOtherReliefsRequestBody(None, None, None, None, None, None, None)
 
-    protected val requestData: AmendOtherReliefsRequestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
+    protected val requestData: Def1_AmendOtherReliefsRequestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
   }
 

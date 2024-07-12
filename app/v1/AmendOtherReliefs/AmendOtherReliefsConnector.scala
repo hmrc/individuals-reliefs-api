@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.AmendOtherReliefs
 
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequestData
+import v1.AmendOtherReliefs.model.request.{AmendOtherReliefsRequestData, Def1_AmendOtherReliefsRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,11 @@ class AmendOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig:
       IfsUri[Unit](s"income-tax/reliefs/other/$nino/${taxYear.asMtd}")
     }
 
-    put(body, downstreamUrl)
+    request match {
+      case def1: Def1_AmendOtherReliefsRequestData =>
+        import def1._
+        put(body, downstreamUrl)
+    }
 
   }
 

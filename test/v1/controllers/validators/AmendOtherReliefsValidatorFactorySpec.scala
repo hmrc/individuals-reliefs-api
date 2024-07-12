@@ -21,6 +21,7 @@ import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json._
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request.{Def1_AmendOtherReliefsRequestBody, Def1_AmendOtherReliefsRequestData, Def1_AnnualPaymentsMade, Def1_MaintenancePayments, Def1_NonDeductibleLoanInterest, Def1_PayrollGiving, Def1_PostCessationTradeReliefAndCertainOtherLosses, Def1_QualifyingDistributionRedemptionOfSharesAndSecurities, Def1_QualifyingLoanInterestPayments}
 import v1.models.request.amendOtherReliefs._
 
 class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
@@ -89,17 +90,17 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private val parsedNonDeductibleLoanInterest = NonDeductibleLoanInterest(Some("myref"), 763.00)
+  private val parsedNonDeductibleLoanInterest = Def1_NonDeductibleLoanInterest(Some("myref"), 763.00)
 
-  private val parsedPayrollGiving = PayrollGiving(Some("myref"), 154.00)
+  private val parsedPayrollGiving = Def1_PayrollGiving(Some("myref"), 154.00)
 
   private val parsedQualifyingDistributionRedemptionOfSharesAndSecurities =
-    QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)
+    Def1_QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)
 
-  private val parsedMaintenancePayments = MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22)
+  private val parsedMaintenancePayments = Def1_MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22)
 
   private val parsedPostCessationTradeReliefAndCertainOtherLosses =
-    PostCessationTradeReliefAndCertainOtherLosses(
+    Def1_PostCessationTradeReliefAndCertainOtherLosses(
       Some("myref"),
       Some("ACME Inc"),
       Some("2019-08-10"),
@@ -107,11 +108,11 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
       Some("AB12412/A12"),
       222.22)
 
-  private val parsedAnnualPaymentsMade = AnnualPaymentsMade(Some("myref"), 763.00)
+  private val parsedAnnualPaymentsMade = Def1_AnnualPaymentsMade(Some("myref"), 763.00)
 
-  private val parsedQualifyingLoanInterestPayments = QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)
+  private val parsedQualifyingLoanInterestPayments = Def1_QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)
 
-  private val parsedBody = AmendOtherReliefsRequestBody(
+  private val parsedBody = Def1_AmendOtherReliefsRequestBody(
     Some(parsedNonDeductibleLoanInterest),
     Some(parsedPayrollGiving),
     Some(parsedQualifyingDistributionRedemptionOfSharesAndSecurities),
@@ -128,15 +129,15 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, validBody).validateAndWrapResult()
 
-        result shouldBe Right(AmendOtherReliefsRequestData(parsedNino, parsedTaxYear, parsedBody))
+        result shouldBe Right(Def1_AmendOtherReliefsRequestData(parsedNino, parsedTaxYear, parsedBody))
       }
     }
     "return NinoFormatError" when {
       "an invalid nino is supplied" in {
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator("invalid", validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
@@ -144,7 +145,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
     }
     "return TaxYearFormatError" when {
       "an invalid tax year is supplied" in {
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, "201831", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
@@ -152,7 +153,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
     }
     "return RuleTaxYearRangeInvalidError" when {
       "the tax year range exceeds 1" in {
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, "2021-24", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
@@ -160,7 +161,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
     }
     "return RuleTaxYearNotSupportedError" when {
       "the given tax year is before the minimum tax year" in {
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, "2019-20", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
@@ -168,7 +169,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
     }
     "return multiple errors" when {
       "request supplied has multiple errors" in {
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator("invalid", "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -182,7 +183,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
     }
     "return a RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED error" when {
       "an empty JSON body is submitted" in {
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, JsObject.empty).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
@@ -191,7 +192,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
       "at least one empty array is provided" in {
         val invalidBody = validBody.update("/maintenancePayments", JsArray(List.empty))
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/maintenancePayments")))
@@ -199,7 +200,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
       "at least one array contains an empty object" in {
         val invalidBody = validBody.update("/maintenancePayments", JsArray(List(JsObject.empty)))
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/maintenancePayments/0/amount")))
@@ -219,7 +220,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
           .update("/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference", invalidCustomerReference)
           .update("/annualPaymentsMade/customerReference", invalidCustomerReference)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -245,7 +246,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
 
         val invalidBody = bodyWith(invalidMaintenancePaymentsEntry)(validPostCessationEntry)(validQualifyingEntry)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, ExSpouseNameFormatError.withPath("/maintenancePayments/0/exSpouseName")))
@@ -259,7 +260,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
 
         val invalidBody = bodyWith(validMaintenancePaymentsEntry)(invalidPostCessationEntry)(validQualifyingEntry)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -274,7 +275,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
         println(invalidPostCessationEntry)
         val invalidBody = bodyWith(validMaintenancePaymentsEntry)(invalidPostCessationEntry)(validQualifyingEntry)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -287,7 +288,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
 
         val invalidBody = bodyWith(validMaintenancePaymentsEntry)(invalidPostCessationEntry)(validQualifyingEntry)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -300,7 +301,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
 
         val invalidBody = bodyWith(validMaintenancePaymentsEntry)(validPostCessationEntry)(invalidQualifyingEntry)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, LenderNameFormatError.withPath("/qualifyingLoanInterestPayments/0/lenderName")))
@@ -321,7 +322,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
             .update("/qualifyingDistributionRedemptionOfSharesAndSecurities/amount", invalidValue)
             .update("/annualPaymentsMade/reliefClaimed", invalidValue)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -350,7 +351,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
             .update("/qualifyingDistributionRedemptionOfSharesAndSecurities/amount", invalidValue)
             .update("/annualPaymentsMade/reliefClaimed", invalidValue)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -375,7 +376,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
         val invalidBody =
           bodyWith(invalidMaintenancePaymentsEntry)(invalidPostCessationEntry)(validQualifyingEntry)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -399,7 +400,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
         val invalidBody =
           bodyWith(invalidMaintenancePaymentsEntry)(invalidPostCessationEntry)(validQualifyingEntry)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -450,7 +451,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
             .update("/qualifyingDistributionRedemptionOfSharesAndSecurities/amount", invalidValue)
             .update("/annualPaymentsMade/reliefClaimed", invalidValue)
 
-        val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
+        val result: Either[ErrorWrapper, Def1_AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(

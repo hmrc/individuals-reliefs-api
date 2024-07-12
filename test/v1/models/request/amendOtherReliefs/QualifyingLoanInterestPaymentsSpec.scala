@@ -19,16 +19,17 @@ package v1.models.request.amendOtherReliefs
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request.Def1_QualifyingLoanInterestPayments
 
 class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidators {
 
-  val qualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
+  val qualifyingLoanInterestPayments = Def1_QualifyingLoanInterestPayments(
     Some("myRef"),
     Some("Maurice"),
     763.00
   )
 
-  val noOptionsQualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
+  val noOptionsQualifyingLoanInterestPayments = Def1_QualifyingLoanInterestPayments(
     None,
     None,
     763.00
@@ -51,7 +52,7 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        qualifyingLoanInterestPayments shouldBe json.as[QualifyingLoanInterestPayments]
+        qualifyingLoanInterestPayments shouldBe json.as[Def1_QualifyingLoanInterestPayments]
       }
     }
   }
@@ -59,7 +60,7 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
   "reads from a JSON with no lender name" when {
     "passed a JSON with no customer lender name" should {
       "return a model with no customer lender name" in {
-        noOptionsQualifyingLoanInterestPayments shouldBe noOptionsQualifyingLoanInterestPaymentsJson.as[QualifyingLoanInterestPayments]
+        noOptionsQualifyingLoanInterestPayments shouldBe noOptionsQualifyingLoanInterestPaymentsJson.as[Def1_QualifyingLoanInterestPayments]
       }
     }
   }
