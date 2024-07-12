@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.AmendOtherReliefs.def1
 
 import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
@@ -22,11 +22,20 @@ import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
-import v1.models.request.amendOtherReliefs._
+import v1.AmendOtherReliefs.def1.model.request.{
+  Def1_AnnualPaymentsMade,
+  Def1_MaintenancePayments,
+  Def1_NonDeductibleLoanInterest,
+  Def1_PayrollGiving,
+  Def1_PostCessationTradeReliefAndCertainOtherLosses,
+  Def1_QualifyingDistributionRedemptionOfSharesAndSecurities,
+  Def1_QualifyingLoanInterestPayments
+}
+import v1.AmendOtherReliefs.model.request.Def1_AmendOtherReliefsRequestData
 
 import java.time.LocalDate
 
-object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsRequestData] {
+object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOtherReliefsRequestData] {
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
@@ -35,7 +44,7 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
   private val minYear = 1900
   private val maxYear = 2100
 
-  def validateBusinessRules(parsed: AmendOtherReliefsRequestData): Validated[Seq[MtdError], AmendOtherReliefsRequestData] = {
+  def validateBusinessRules(parsed: Def1_AmendOtherReliefsRequestData): Validated[Seq[MtdError], Def1_AmendOtherReliefsRequestData] = {
     import parsed.body._
 
     combine(
@@ -61,7 +70,7 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
     if (field.nonEmpty && field.length <= 105) valid
     else Invalid(List(error.withPath(path)))
 
-  private def validateNonDeductibleLoanInterest(nonDeductibleLoanInterest: NonDeductibleLoanInterest): Validated[Seq[MtdError], Unit] = {
+  private def validateNonDeductibleLoanInterest(nonDeductibleLoanInterest: Def1_NonDeductibleLoanInterest): Validated[Seq[MtdError], Unit] = {
     import nonDeductibleLoanInterest._
 
     combine(
@@ -70,7 +79,7 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
     )
   }
 
-  private def validatePayrollGiving(payrollGiving: PayrollGiving): Validated[Seq[MtdError], Unit] = {
+  private def validatePayrollGiving(payrollGiving: Def1_PayrollGiving): Validated[Seq[MtdError], Unit] = {
     import payrollGiving._
 
     combine(
@@ -80,7 +89,7 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
   }
 
   private def validateQualifyingDistributionRedemptionOfSharesAndSecurities(
-      qualifyingDistributionRedemptionOfSharesAndSecurities: QualifyingDistributionRedemptionOfSharesAndSecurities)
+      qualifyingDistributionRedemptionOfSharesAndSecurities: Def1_QualifyingDistributionRedemptionOfSharesAndSecurities)
       : Validated[Seq[MtdError], Unit] = {
     import qualifyingDistributionRedemptionOfSharesAndSecurities._
 
@@ -91,7 +100,7 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
   }
 
   private def validatePostCessationTradeReliefAndCertainOtherLosses(
-      postCessationTradeReliefAndCertainOtherLosses: PostCessationTradeReliefAndCertainOtherLosses,
+      postCessationTradeReliefAndCertainOtherLosses: Def1_PostCessationTradeReliefAndCertainOtherLosses,
       index: Int): Validated[Seq[MtdError], Unit] = {
     import postCessationTradeReliefAndCertainOtherLosses._
     val dateBusinessCeasedPath = s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased"
@@ -108,7 +117,7 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
     )
   }
 
-  private def validateMaintenancePayments(maintenancePayments: MaintenancePayments, index: Int): Validated[Seq[MtdError], Unit] = {
+  private def validateMaintenancePayments(maintenancePayments: Def1_MaintenancePayments, index: Int): Validated[Seq[MtdError], Unit] = {
     import maintenancePayments._
 
     val exSpouseDateOfBirthPath = s"/maintenancePayments/$index/exSpouseDateOfBirth"
@@ -121,7 +130,7 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
     )
   }
 
-  private def validateAnnualPaymentsMade(annualPaymentsMade: AnnualPaymentsMade): Validated[Seq[MtdError], Unit] = {
+  private def validateAnnualPaymentsMade(annualPaymentsMade: Def1_AnnualPaymentsMade): Validated[Seq[MtdError], Unit] = {
     import annualPaymentsMade._
 
     combine(
@@ -130,7 +139,7 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
     )
   }
 
-  private def validateQualifyingLoanInterestPayments(qualifyingLoanInterestPayments: QualifyingLoanInterestPayments,
+  private def validateQualifyingLoanInterestPayments(qualifyingLoanInterestPayments: Def1_QualifyingLoanInterestPayments,
                                                      index: Int): Validated[Seq[MtdError], Unit] = {
     import qualifyingLoanInterestPayments._
 

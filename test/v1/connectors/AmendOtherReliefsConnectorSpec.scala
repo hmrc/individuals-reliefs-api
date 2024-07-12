@@ -19,6 +19,8 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import v1.AmendOtherReliefs.AmendOtherReliefsConnector
+import v1.AmendOtherReliefs.def1.model.request.{Def1_AmendOtherReliefsRequestBody, Def1_AmendOtherReliefsRequestData}
 import v1.models.request.amendOtherReliefs._
 
 import scala.concurrent.Future
@@ -29,7 +31,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new IfsTest with Test {
-        val request: AmendOtherReliefsRequestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2017-18"), body)
+        val request: Def1_AmendOtherReliefsRequestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2017-18"), body)
 
         willPut(url = s"$baseUrl/income-tax/reliefs/other/$nino/2017-18", body = body)
           .returns(Future.successful(outcome))
@@ -40,7 +42,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
     "return the expected response for a TYS request" when {
       "a valid request is made" in new TysIfsTest with Test {
-        val request: AmendOtherReliefsRequestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"), body)
+        val request: Def1_AmendOtherReliefsRequestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"), body)
 
         willPut(url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino", body = body)
           .returns(Future.successful(outcome))
@@ -61,7 +63,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
     val nino: String = "AA123456A"
 
-    val body: AmendOtherReliefsRequestBody = AmendOtherReliefsRequestBody(None, None, None, None, None, None, None)
+    val body: Def1_AmendOtherReliefsRequestBody = Def1_AmendOtherReliefsRequestBody(None, None, None, None, None, None, None)
 
     protected val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 

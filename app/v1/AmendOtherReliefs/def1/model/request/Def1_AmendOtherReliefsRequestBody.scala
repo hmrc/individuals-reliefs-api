@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendOtherReliefs
+package v1.AmendOtherReliefs.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
+import v1.AmendOtherReliefs.model.request.AmendOtherReliefsBody
 
-case class AmendOtherReliefsRequestBody(
-    nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
-    payrollGiving: Option[PayrollGiving],
-    qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
-    maintenancePayments: Option[Seq[MaintenancePayments]],
-    postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
-    annualPaymentsMade: Option[AnnualPaymentsMade],
-    qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]) {
+case class Def1_AmendOtherReliefsRequestBody(
+    nonDeductibleLoanInterest: Option[Def1_NonDeductibleLoanInterest],
+    payrollGiving: Option[Def1_PayrollGiving],
+    qualifyingDistributionRedemptionOfSharesAndSecurities: Option[Def1_QualifyingDistributionRedemptionOfSharesAndSecurities],
+    maintenancePayments: Option[Seq[Def1_MaintenancePayments]],
+    postCessationTradeReliefAndCertainOtherLosses: Option[Seq[Def1_PostCessationTradeReliefAndCertainOtherLosses]],
+    annualPaymentsMade: Option[Def1_AnnualPaymentsMade],
+    qualifyingLoanInterestPayments: Option[Seq[Def1_QualifyingLoanInterestPayments]])
+    extends AmendOtherReliefsBody {
 
   private def isEmpty: Boolean =
     nonDeductibleLoanInterest.isEmpty &&
@@ -53,6 +55,6 @@ case class AmendOtherReliefsRequestBody(
 
 }
 
-object AmendOtherReliefsRequestBody {
-  implicit val format: OFormat[AmendOtherReliefsRequestBody] = Json.format[AmendOtherReliefsRequestBody]
+object Def1_AmendOtherReliefsRequestBody {
+  implicit val format: OFormat[Def1_AmendOtherReliefsRequestBody] = Json.format[Def1_AmendOtherReliefsRequestBody]
 }

@@ -19,10 +19,11 @@ package v1.models.request.amendOtherReliefs
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request.Def1_PostCessationTradeReliefAndCertainOtherLosses
 
 class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with JsonErrorValidators {
 
-  val postCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
+  val postCessationTradeReliefAndCertainOtherLosses = Def1_PostCessationTradeReliefAndCertainOtherLosses(
     Some("myRef"),
     Some("ACME Inc"),
     Some("2019-08-10"),
@@ -31,7 +32,7 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
     222.22
   )
 
-  val noOptionsPostCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
+  val noOptionsPostCessationTradeReliefAndCertainOtherLosses = Def1_PostCessationTradeReliefAndCertainOtherLosses(
     None,
     None,
     None,
@@ -60,7 +61,7 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        postCessationTradeReliefAndCertainOtherLosses shouldBe json.as[PostCessationTradeReliefAndCertainOtherLosses]
+        postCessationTradeReliefAndCertainOtherLosses shouldBe json.as[Def1_PostCessationTradeReliefAndCertainOtherLosses]
       }
     }
   }
@@ -68,7 +69,7 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
   "reads from a JSON with no optional fields supplied" when {
     "passed a JSON with no optional fields" should {
       "return a model with no optional fields" in {
-        noOptionsPostCessationTradeReliefAndCertainOtherLosses shouldBe noOptionsJson.as[PostCessationTradeReliefAndCertainOtherLosses]
+        noOptionsPostCessationTradeReliefAndCertainOtherLosses shouldBe noOptionsJson.as[Def1_PostCessationTradeReliefAndCertainOtherLosses]
       }
     }
   }

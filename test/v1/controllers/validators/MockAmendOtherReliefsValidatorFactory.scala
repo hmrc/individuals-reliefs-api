@@ -23,7 +23,7 @@ import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.JsValue
-import v1.models.request.amendOtherReliefs.AmendOtherReliefsRequestData
+import v1.AmendOtherReliefs.def1.model.request.Def1_AmendOtherReliefsRequestData
 
 trait MockAmendOtherReliefsValidatorFactory extends MockFactory {
 
@@ -32,28 +32,28 @@ trait MockAmendOtherReliefsValidatorFactory extends MockFactory {
 
   object MockedAmendOtherReliefsValidatorFactory {
 
-    def validator(): CallHandler[Validator[AmendOtherReliefsRequestData]] =
+    def validator(): CallHandler[Validator[Def1_AmendOtherReliefsRequestData]] =
       (mockAmendOtherReliefsValidatorFactory.validator(_: String, _: String, _: JsValue)).expects(*, *, *)
 
   }
 
-  def willUseValidator(use: Validator[AmendOtherReliefsRequestData]): CallHandler[Validator[AmendOtherReliefsRequestData]] = {
+  def willUseValidator(use: Validator[Def1_AmendOtherReliefsRequestData]): CallHandler[Validator[Def1_AmendOtherReliefsRequestData]] = {
     MockedAmendOtherReliefsValidatorFactory
       .validator()
       .anyNumberOfTimes()
       .returns(use)
   }
 
-  def returningSuccess(result: AmendOtherReliefsRequestData): Validator[AmendOtherReliefsRequestData] =
-    new Validator[AmendOtherReliefsRequestData] {
-      def validate: Validated[Seq[MtdError], AmendOtherReliefsRequestData] = Valid(result)
+  def returningSuccess(result: Def1_AmendOtherReliefsRequestData): Validator[Def1_AmendOtherReliefsRequestData] =
+    new Validator[Def1_AmendOtherReliefsRequestData] {
+      def validate: Validated[Seq[MtdError], Def1_AmendOtherReliefsRequestData] = Valid(result)
     }
 
-  def returning(result: MtdError*): Validator[AmendOtherReliefsRequestData] = returningErrors(result)
+  def returning(result: MtdError*): Validator[Def1_AmendOtherReliefsRequestData] = returningErrors(result)
 
-  def returningErrors(result: Seq[MtdError]): Validator[AmendOtherReliefsRequestData] =
-    new Validator[AmendOtherReliefsRequestData] {
-      def validate: Validated[Seq[MtdError], AmendOtherReliefsRequestData] = Invalid(result)
+  def returningErrors(result: Seq[MtdError]): Validator[Def1_AmendOtherReliefsRequestData] =
+    new Validator[Def1_AmendOtherReliefsRequestData] {
+      def validate: Validated[Seq[MtdError], Def1_AmendOtherReliefsRequestData] = Invalid(result)
     }
 
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.AmendOtherReliefs.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers._
@@ -23,28 +23,25 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import play.api.libs.json.JsValue
-import v1.controllers.validators.AmendOtherReliefsRulesValidator.validateBusinessRules
-import v1.models.request.amendOtherReliefs._
+import v1.AmendOtherReliefs.def1.model.request.Def1_AmendOtherReliefsRequestBody
+import v1.AmendOtherReliefs.model.request.{AmendOtherReliefsRequestData, Def1_AmendOtherReliefsRequestData}
 
 import javax.inject.Singleton
 import scala.annotation.nowarn
 
 @Singleton
-class AmendOtherReliefsValidatorFactory {
+class Def1_AmendOtherReliefsValidator(nino: String, taxYear: String, body: JsValue) extends Validator[AmendOtherReliefsRequestData] {
 
   @nowarn("cat=lint-byname-implicit")
-  private val resolveJson = new ResolveNonEmptyJsonObject[AmendOtherReliefsRequestBody]()
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_AmendOtherReliefsRequestBody]()
 
-  def validator(nino: String, taxYear: String, body: JsValue): Validator[AmendOtherReliefsRequestData] =
-    new Validator[AmendOtherReliefsRequestData] {
+  private val rulesValidator = Def1_AmendOtherReliefsRulesValidator
 
-      def validate: Validated[Seq[MtdError], AmendOtherReliefsRequestData] =
-        (
-          ResolveNino(nino),
-          ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
-          resolveJson(body)
-        ).mapN(AmendOtherReliefsRequestData) andThen validateBusinessRules
-
-    }
+  override def validate: Validated[Seq[MtdError], AmendOtherReliefsRequestData] =
+    (
+      ResolveNino(nino),
+      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
+      resolveJson(body)
+    ).mapN(Def1_AmendOtherReliefsRequestData) andThen rulesValidator.validateBusinessRules
 
 }

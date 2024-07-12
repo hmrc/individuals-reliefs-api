@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendOtherReliefs
+package v1.AmendOtherReliefs.def1.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import play.api.libs.json.{Json, OFormat}
 
-case class AmendOtherReliefsRequestData(nino: Nino, taxYear: TaxYear, body: AmendOtherReliefsRequestBody)
+case class Def1_QualifyingDistributionRedemptionOfSharesAndSecurities(customerReference: Option[String], amount: BigDecimal)
+
+object Def1_QualifyingDistributionRedemptionOfSharesAndSecurities {
+
+  implicit val format: OFormat[Def1_QualifyingDistributionRedemptionOfSharesAndSecurities] =
+    Json.format[Def1_QualifyingDistributionRedemptionOfSharesAndSecurities]
+
+}

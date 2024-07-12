@@ -27,6 +27,8 @@ import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import v1.AmendOtherReliefs.AmendOtherReliefsController
+import v1.AmendOtherReliefs.def1.model.request.{Def1_AmendOtherReliefsRequestBody, Def1_AmendOtherReliefsRequestData, Def1_AnnualPaymentsMade, Def1_MaintenancePayments, Def1_NonDeductibleLoanInterest, Def1_PayrollGiving, Def1_PostCessationTradeReliefAndCertainOtherLosses, Def1_QualifyingDistributionRedemptionOfSharesAndSecurities, Def1_QualifyingLoanInterestPayments}
 import v1.controllers.validators.MockAmendOtherReliefsValidatorFactory
 import v1.models.request.amendOtherReliefs._
 import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
@@ -97,25 +99,25 @@ class AmendOtherReliefsControllerSpec
                                          |  ]
                                          |}""".stripMargin)
 
-  private val requestBody = AmendOtherReliefsRequestBody(
-    Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
-    Some(PayrollGiving(Some("myref"), 154.00)),
-    Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
-    Some(Seq(MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
+  private val requestBody = Def1_AmendOtherReliefsRequestBody(
+    Some(Def1_NonDeductibleLoanInterest(Some("myref"), 763.00)),
+    Some(Def1_PayrollGiving(Some("myref"), 154.00)),
+    Some(Def1_QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
+    Some(Seq(Def1_MaintenancePayments(Some("myref"), Some("Hilda"), Some("2000-01-01"), 222.22))),
     Some(
       Seq(
-        PostCessationTradeReliefAndCertainOtherLosses(
+        Def1_PostCessationTradeReliefAndCertainOtherLosses(
           Some("myref"),
           Some("ACME Inc"),
           Some("2019-08-10"),
           Some("Widgets Manufacturer"),
           Some("AB12412/A12"),
           222.22))),
-    Some(AnnualPaymentsMade(Some("myref"), 763.00)),
-    Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
+    Some(Def1_AnnualPaymentsMade(Some("myref"), 763.00)),
+    Some(Seq(Def1_QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val requestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   val hateoasResponse: JsValue = Json.parse("""
                                               |{

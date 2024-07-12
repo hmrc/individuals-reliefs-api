@@ -19,15 +19,16 @@ package v1.models.request.amendOtherReliefs
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request.Def1_NonDeductibleLoanInterest
 
 class NonDeductibleLoanInterestSpec extends UnitSpec with JsonErrorValidators {
 
-  val nonDeductibleLoanInterest = NonDeductibleLoanInterest(
+  val nonDeductibleLoanInterest = Def1_NonDeductibleLoanInterest(
     Some("myref"),
     763.00
   )
 
-  val noRefNoneDeductibleLoanInterest = NonDeductibleLoanInterest(
+  val noRefNoneDeductibleLoanInterest = Def1_NonDeductibleLoanInterest(
     None,
     763.00
   )
@@ -48,7 +49,7 @@ class NonDeductibleLoanInterestSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        nonDeductibleLoanInterest shouldBe json.as[NonDeductibleLoanInterest]
+        nonDeductibleLoanInterest shouldBe json.as[Def1_NonDeductibleLoanInterest]
       }
     }
   }
@@ -56,7 +57,7 @@ class NonDeductibleLoanInterestSpec extends UnitSpec with JsonErrorValidators {
   "reads from a JSON with no reference" when {
     "passed a JSON with no reference" should {
       "return a model with no reference" in {
-        noRefNoneDeductibleLoanInterest shouldBe noRefJson.as[NonDeductibleLoanInterest]
+        noRefNoneDeductibleLoanInterest shouldBe noRefJson.as[Def1_NonDeductibleLoanInterest]
       }
     }
   }
