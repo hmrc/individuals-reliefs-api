@@ -16,7 +16,7 @@
 
 package api.connectors
 
-import api.models.errors.InternalError
+import api.connectors.MtdIdLookupConnector.Outcome
 import mocks.{MockAppConfig, MockHttpClient}
 
 import scala.concurrent.Future
@@ -40,59 +40,32 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
     "return an MtdId" when {
       "the http client returns a mtd id" in new Test {
         MockedHttpClient
-          .get[MtdIdLookupOutcome](
+          .get[MtdIdLookupConnector.Outcome](
             url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
             config = dummyHeaderCarrierConfig
           )
           .returns(Future.successful(Right(mtdId)))
 
-        val result: MtdIdLookupOutcome = await(connector.getMtdId(nino))
+        val result: Outcome = await(connector.getMtdId(nino))
+
         result shouldBe Right(mtdId)
       }
     }
 
     "return a InternalError" when {
       "the http client returns a InternalError" in new Test {
+
+        val statusCode: Int = IM_A_TEAPOT
+
         MockedHttpClient
-          .get[MtdIdLookupOutcome](
-            url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
-            config = dummyHeaderCarrierConfig
-          )
-          .returns(Future.successful(Left(InternalError)))
+          .get[MtdIdLookupConnector.Outcome](s"$baseUrl/mtd-identifier-lookup/nino/$nino", config = dummyHeaderCarrierConfig)
+          .returns(Future.successful(Left(MtdIdLookupConnector.Error(statusCode))))
 
-        val result: MtdIdLookupOutcome = await(connector.getMtdId(nino))
-        result shouldBe Left(InternalError)
+        val result: Outcome = await(connector.getMtdId(nino))
+
+        result shouldBe Left(MtdIdLookupConnector.Error(statusCode))
       }
 
-      "getMtdId" should {
-        "return an MtdId" when {
-          "the http client returns a mtd id" in new Test {
-            MockedHttpClient
-              .get[MtdIdLookupOutcome](
-                url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
-                config = dummyHeaderCarrierConfig
-              )
-              .returns(Future.successful(Right(mtdId)))
-
-            val result: MtdIdLookupOutcome = await(connector.getMtdId(nino))
-            result shouldBe Right(mtdId)
-          }
-        }
-
-        "return a InternalError" when {
-          "the http client returns a InternalError" in new Test {
-            MockedHttpClient
-              .get[MtdIdLookupOutcome](
-                url = s"$baseUrl/mtd-identifier-lookup/nino/$nino",
-                config = dummyHeaderCarrierConfig
-              )
-              .returns(Future.successful(Left(InternalError)))
-
-            val result: MtdIdLookupOutcome = await(connector.getMtdId(nino))
-            result shouldBe Left(InternalError)
-          }
-        }
-      }
     }
   }
 
