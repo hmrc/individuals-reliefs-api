@@ -20,8 +20,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import support.UnitSpec
-import v1.RetrieveForeignReliefs.RetrieveForeignReliefsValidatorFactory
-import v1.RetrieveForeignReliefs.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
+import v1.retrieveForeignReliefs.RetrieveForeignReliefsValidatorFactory
+import v1.retrieveForeignReliefs.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
 
 class RetrieveForeignReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"

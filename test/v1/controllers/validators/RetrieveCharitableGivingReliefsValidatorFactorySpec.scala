@@ -20,8 +20,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import support.UnitSpec
-import v1.RetrieveCharitableGivingReliefs.RetrieveCharitableGivingReliefsValidatorFactory
-import v1.RetrieveCharitableGivingReliefs.model.request.{Def1_RetrieveCharitableGivingReliefsRequestData, RetrieveCharitableGivingReliefsRequestData}
+import v1.retrieveCharitableGivingReliefs.RetrieveCharitableGivingReliefsValidatorFactory
+import v1.retrieveCharitableGivingReliefs.model.request.{Def1_RetrieveCharitableGivingReliefsRequestData, RetrieveCharitableGivingReliefsRequestData}
 
 class RetrieveCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
