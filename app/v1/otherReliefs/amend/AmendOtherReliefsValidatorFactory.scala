@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package api.connectors
+package v1.otherReliefs.amend
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import api.controllers.validators.Validator
+import play.api.libs.json.JsValue
+import v1.otherReliefs.amend.def1.Def1_AmendOtherReliefsValidator
+import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
-object DownstreamUri {
+import javax.inject.Singleton
 
-  case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+@Singleton
+class AmendOtherReliefsValidatorFactory {
+
+  def validator(nino: String, taxYear: String, body: JsValue): Validator[AmendOtherReliefsRequestData] = {
+
+    val schema = AmendOtherReliefsSchema.schemaFor(Some(taxYear))
+
+    schema match {
+      case _ => new Def1_AmendOtherReliefsValidator(nino, taxYear, body)
+    }
+  }
+
 }

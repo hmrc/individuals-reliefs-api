@@ -14,15 +14,30 @@
  * limitations under the License.
  */
 
-package api.connectors
+package v1.otherReliefs.amend
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import api.controllers.validators.resolvers.ResolveTaxYear
+import api.models.domain.TaxYear
 
-object DownstreamUri {
+sealed trait AmendOtherReliefsSchema
 
-  case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+object AmendOtherReliefsSchema {
+  private case object Def1 extends AmendOtherReliefsSchema
+
+  private val defaultSchema = Def1
+
+  def schemaFor(maybeTaxYear: Option[String]): AmendOtherReliefsSchema = {
+    maybeTaxYear
+      .map(ResolveTaxYear.apply)
+      .flatMap(_.toOption.map(schemaFor))
+      .getOrElse(defaultSchema)
+  }
+
+  def schemaFor(taxYear: TaxYear): AmendOtherReliefsSchema = {
+    taxYear match {
+      case _ => Def1
+    }
+
+  }
+
 }

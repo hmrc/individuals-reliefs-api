@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package api.connectors
+package v1.otherReliefs.amend.def1.model.request
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import play.api.libs.json.{Json, OFormat}
 
-object DownstreamUri {
+case class MaintenancePayments(customerReference: Option[String],
+                               exSpouseName: Option[String],
+                               exSpouseDateOfBirth: Option[String],
+                               amount: BigDecimal)
 
-  case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+object MaintenancePayments {
+  implicit val format: OFormat[MaintenancePayments] = Json.format[MaintenancePayments]
 }

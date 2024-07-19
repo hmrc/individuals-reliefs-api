@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package api.connectors
+package v1.otherReliefs.retrieve.model.request
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import api.models.domain.{Nino, TaxYear}
+import v1.otherReliefs.retrieve.RetrieveOtherReliefsSchema
 
-object DownstreamUri {
+trait RetrieveOtherReliefsRequestData{
+  def nino: Nino
+  def taxYear: TaxYear
 
-  case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+  val schema: RetrieveOtherReliefsSchema
 }

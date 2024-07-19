@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package api.connectors
+package v1.otherReliefs.delete
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import api.controllers.validators.Validator
+import v1.otherReliefs.delete.def1.Def1_DeleteOtherReliefsValidator
+import v1.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
-object DownstreamUri {
+import javax.inject.Singleton
 
-  case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+@Singleton
+class DeleteOtherReliefsValidatorFactory {
+
+  def validator(nino: String, taxYear: String): Validator[DeleteOtherReliefsRequestData] = {
+
+    val schema = DeleteOtherReliefsSchema.schemaFor(Some(taxYear))
+
+    schema match {
+      case _ => new Def1_DeleteOtherReliefsValidator(nino, taxYear)
+    }
+  }
+
 }

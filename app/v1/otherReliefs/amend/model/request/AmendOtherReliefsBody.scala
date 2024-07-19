@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package api.connectors
+package v1.otherReliefs.amend.model.request
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import play.api.libs.json.OWrites
+import shared.utils.JsonWritesUtil
+import v1.otherReliefs.amend.def1.model.request.Def1_AmendOtherReliefsRequestBody
 
-object DownstreamUri {
+trait AmendOtherReliefsBody
 
-  case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+object AmendOtherReliefsBody extends JsonWritesUtil {
+
+  implicit val writes: OWrites[AmendOtherReliefsBody] = writesFrom { case def1: Def1_AmendOtherReliefsRequestBody =>
+    implicitly[OWrites[Def1_AmendOtherReliefsRequestBody]].writes(def1)
+
+  }
+
 }

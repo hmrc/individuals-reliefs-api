@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package api.connectors
+package v1.otherReliefs.delete.model
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import api.models.domain.{Nino, TaxYear}
 
-object DownstreamUri {
-
-  case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+trait DeleteOtherReliefsRequestData {
+  def nino: Nino
+  def taxYear: TaxYear
 }

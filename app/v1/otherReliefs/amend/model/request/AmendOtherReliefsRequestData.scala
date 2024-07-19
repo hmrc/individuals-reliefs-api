@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package api.connectors
+package v1.otherReliefs.amend.model.request
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import api.models.domain.{Nino, TaxYear}
 
-object DownstreamUri {
-
-  case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+trait AmendOtherReliefsRequestData {
+  val nino: Nino
+  val taxYear: TaxYear
+  val body: AmendOtherReliefsBody
 }
