@@ -27,7 +27,7 @@ import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.AmendOtherReliefs.model.request._
+import v1.AmendOtherReliefs.def1.model.request._
 import v1.AmendOtherReliefs.model.response.AmendOtherReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -113,7 +113,7 @@ class AmendOtherReliefsControllerSpec
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val requestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   val hateoasResponse: JsValue = Json.parse("""
                                               |{

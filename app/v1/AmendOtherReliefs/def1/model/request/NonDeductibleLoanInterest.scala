@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v1.AmendOtherReliefs.model.request
+package v1.AmendOtherReliefs.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
 
-case class QualifyingLoanInterestPayments(customerReference: Option[String], lenderName: Option[String], reliefClaimed: BigDecimal)
+case class NonDeductibleLoanInterest(customerReference: Option[String], reliefClaimed: BigDecimal)
 
-object QualifyingLoanInterestPayments {
-  implicit val format: OFormat[QualifyingLoanInterestPayments] = Json.format[QualifyingLoanInterestPayments]
+object NonDeductibleLoanInterest {
+  implicit val format: OFormat[NonDeductibleLoanInterest] = Json.format[NonDeductibleLoanInterest]
 }

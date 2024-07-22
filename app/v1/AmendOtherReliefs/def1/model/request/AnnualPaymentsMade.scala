@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package v1.AmendOtherReliefs.model.request
+package v1.AmendOtherReliefs.def1.model.request
 
-import api.models.domain.{Nino, TaxYear}
-import v1.AmendOtherReliefs.def1.model.request.AmendOtherReliefsRequestBody
+import play.api.libs.json.{Json, OFormat}
 
-trait AmendOtherReliefsRequestData {
-  def nino: Nino
-  def taxYear: TaxYear
-  def body: AmendOtherReliefsRequestBody
+case class AnnualPaymentsMade(customerReference: Option[String], reliefClaimed: BigDecimal)
 
+object AnnualPaymentsMade {
+  implicit val format: OFormat[AnnualPaymentsMade] = Json.format[AnnualPaymentsMade]
 }

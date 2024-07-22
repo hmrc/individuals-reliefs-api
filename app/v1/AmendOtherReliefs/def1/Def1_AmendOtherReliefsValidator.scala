@@ -14,19 +14,39 @@
  * limitations under the License.
  */
 
-package v1.AmendOtherReliefs
+package v1.AmendOtherReliefs.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import api.controllers.validators.resolvers._
+import api.controllers.validators.{RulesValidator, Validator}
+import api.models.domain.TaxYear
 import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
-import cats.implicits.toFoldableOps
-import v1.AmendOtherReliefs.model.request._
+import cats.implicits._
+import play.api.libs.json.JsValue
+import v1.AmendOtherReliefs.def1.Def1_AmendOtherReliefsValidator.validateBusinessRules
+import v1.AmendOtherReliefs.def1.model.request._
+import v1.AmendOtherReliefs.model.request.AmendOtherReliefsRequestData
 
 import java.time.LocalDate
+import javax.inject.Inject
+import scala.annotation.nowarn
 
-object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsRequestData] {
+class Def1_AmendOtherReliefsValidator @Inject() (nino: String, taxYear: String, body: JsValue) extends Validator[AmendOtherReliefsRequestData] {
+
+  @nowarn("cat=lint-byname-implicit")
+  private val resolveJson = new ResolveNonEmptyJsonObject[AmendOtherReliefsRequestBody]()
+
+  def validate: Validated[Seq[MtdError], AmendOtherReliefsRequestData] =
+    (
+      ResolveNino(nino),
+      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
+      resolveJson(body)
+    ).mapN(Def1_AmendOtherReliefsRequestData) andThen validateBusinessRules
+
+}
+
+object Def1_AmendOtherReliefsValidator extends RulesValidator[AmendOtherReliefsRequestData] {
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
@@ -36,16 +56,17 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
   private val maxYear = 2100
 
   def validateBusinessRules(parsed: AmendOtherReliefsRequestData): Validated[Seq[MtdError], AmendOtherReliefsRequestData] = {
-    import parsed.body._
+
+    val body = parsed.body
 
     combine(
-      nonDeductibleLoanInterest.traverse_(validateNonDeductibleLoanInterest),
-      payrollGiving.traverse_(validatePayrollGiving),
-      qualifyingDistributionRedemptionOfSharesAndSecurities.traverse_(validateQualifyingDistributionRedemptionOfSharesAndSecurities),
-      zipAndValidate(postCessationTradeReliefAndCertainOtherLosses, validatePostCessationTradeReliefAndCertainOtherLosses),
-      zipAndValidate(maintenancePayments, validateMaintenancePayments),
-      annualPaymentsMade.traverse_(validateAnnualPaymentsMade),
-      zipAndValidate(qualifyingLoanInterestPayments, validateQualifyingLoanInterestPayments)
+      body.nonDeductibleLoanInterest.traverse_(validateNonDeductibleLoanInterest),
+      body.payrollGiving.traverse_(validatePayrollGiving),
+      body.qualifyingDistributionRedemptionOfSharesAndSecurities.traverse_(validateQualifyingDistributionRedemptionOfSharesAndSecurities),
+      zipAndValidate(body.postCessationTradeReliefAndCertainOtherLosses, validatePostCessationTradeReliefAndCertainOtherLosses),
+      zipAndValidate(body.maintenancePayments, validateMaintenancePayments),
+      body.annualPaymentsMade.traverse_(validateAnnualPaymentsMade),
+      zipAndValidate(body.qualifyingLoanInterestPayments, validateQualifyingLoanInterestPayments)
     ).onSuccess(parsed)
   }
 
@@ -144,5 +165,4 @@ object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsR
   private def isDateInRange(date: LocalDate, path: String): Validated[Seq[MtdError], Unit] = {
     if (date.getYear >= minYear && date.getYear < maxYear) Valid(()) else Invalid(List(DateFormatError.withPath(path)))
   }
-
 }

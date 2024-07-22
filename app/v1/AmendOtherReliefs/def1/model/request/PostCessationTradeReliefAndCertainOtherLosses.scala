@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.AmendOtherReliefs.model.request
+package v1.AmendOtherReliefs.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
 

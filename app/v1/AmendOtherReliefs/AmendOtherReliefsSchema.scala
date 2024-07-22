@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package v1.AmendOtherReliefs.model.request
+package v1.AmendOtherReliefs
 
-import play.api.libs.json.{Json, OFormat}
+sealed trait AmendOtherReliefsSchema
 
-case class AnnualPaymentsMade(customerReference: Option[String], reliefClaimed: BigDecimal)
+object AmendOtherReliefsSchema {
 
-object AnnualPaymentsMade {
-  implicit val format: OFormat[AnnualPaymentsMade] = Json.format[AnnualPaymentsMade]
+  case object Def1 extends AmendOtherReliefsSchema
+
+  val schema: AmendOtherReliefsSchema = Def1
+
 }

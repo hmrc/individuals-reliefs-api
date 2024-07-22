@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package v1.AmendOtherReliefs.model.request
+package v1.AmendOtherReliefs.def1.model.request
 
-import play.api.libs.json.{Json, OFormat}
+import api.models.domain.{Nino, TaxYear}
+import v1.AmendOtherReliefs.AmendOtherReliefsSchema
+import v1.AmendOtherReliefs.model.request.AmendOtherReliefsRequestData
 
-case class MaintenancePayments(customerReference: Option[String],
-                               exSpouseName: Option[String],
-                               exSpouseDateOfBirth: Option[String],
-                               amount: BigDecimal)
-
-object MaintenancePayments {
-  implicit val format: OFormat[MaintenancePayments] = Json.format[MaintenancePayments]
+case class Def1_AmendOtherReliefsRequestData(nino: Nino, taxYear: TaxYear, body: AmendOtherReliefsRequestBody)
+    extends AmendOtherReliefsRequestData {
+  val schema: AmendOtherReliefsSchema = AmendOtherReliefsSchema.Def1
 }

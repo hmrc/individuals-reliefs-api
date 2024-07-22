@@ -21,6 +21,7 @@ import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json._
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request._
 import v1.AmendOtherReliefs.model.request._
 
 class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
@@ -131,7 +132,7 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValid
         val result: Either[ErrorWrapper, AmendOtherReliefsRequestData] =
           validator(validNino, validTaxYear, validBody).validateAndWrapResult()
 
-        result shouldBe Right(AmendOtherReliefsRequestData(parsedNino, parsedTaxYear, parsedBody))
+        result shouldBe Right(Def1_AmendOtherReliefsRequestData(parsedNino, parsedTaxYear, parsedBody))
       }
     }
     "return NinoFormatError" when {

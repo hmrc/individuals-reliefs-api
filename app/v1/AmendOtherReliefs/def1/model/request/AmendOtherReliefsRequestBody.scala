@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package v1.AmendOtherReliefs.model.request
+package v1.AmendOtherReliefs.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
 
 case class AmendOtherReliefsRequestBody(
-    nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
-    payrollGiving: Option[PayrollGiving],
-    qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
-    maintenancePayments: Option[Seq[MaintenancePayments]],
-    postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
-    annualPaymentsMade: Option[AnnualPaymentsMade],
-    qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]) {
+                                         nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
+                                         payrollGiving: Option[PayrollGiving],
+                                         qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
+                                         maintenancePayments: Option[Seq[MaintenancePayments]],
+                                         postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
+                                         annualPaymentsMade: Option[AnnualPaymentsMade],
+                                         qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]) {
 
   private def isEmpty: Boolean =
     nonDeductibleLoanInterest.isEmpty &&

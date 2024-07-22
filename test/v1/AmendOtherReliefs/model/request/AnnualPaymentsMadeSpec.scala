@@ -19,6 +19,7 @@ package v1.AmendOtherReliefs.model.request
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.AmendOtherReliefs.def1.model.request.AnnualPaymentsMade
 
 class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
   val annualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)

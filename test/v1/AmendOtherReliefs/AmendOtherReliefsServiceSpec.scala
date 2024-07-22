@@ -22,7 +22,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.AmendOtherReliefs.model.request.{AmendOtherReliefsRequestBody, AmendOtherReliefsRequestData}
+import v1.AmendOtherReliefs.def1.model.request.{AmendOtherReliefsRequestBody, Def1_AmendOtherReliefsRequestData}
+import v1.AmendOtherReliefs.model.request.AmendOtherReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -88,7 +89,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
 
     val body: AmendOtherReliefsRequestBody = AmendOtherReliefsRequestBody(None, None, None, None, None, None, None)
 
-    protected val requestData: AmendOtherReliefsRequestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
+    protected val requestData: AmendOtherReliefsRequestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
   }
 
