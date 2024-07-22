@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package api.connectors
+package v1.otherReliefs.retrieve.def1.model.response
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import play.api.libs.json.{Json, OFormat}
 
-object DownstreamUri {
+case class NonDeductibleLoanInterest(customerReference: Option[String], reliefClaimed: BigDecimal)
 
-  case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+object NonDeductibleLoanInterest {
+  implicit val format: OFormat[NonDeductibleLoanInterest] = Json.format[NonDeductibleLoanInterest]
 }

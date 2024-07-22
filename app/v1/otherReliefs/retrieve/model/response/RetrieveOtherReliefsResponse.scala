@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package api.connectors
+package v1.otherReliefs.retrieve.model.response
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import play.api.libs.json._
+import shared.utils.JsonWritesUtil
+import v1.otherReliefs.retrieve.def1.model.response.Def1_RetrieveOtherReliefsResponse
 
-object DownstreamUri {
+trait RetrieveOtherReliefsResponse
 
-  case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+object RetrieveOtherReliefsResponse extends JsonWritesUtil {
+
+  implicit val writes: OWrites[RetrieveOtherReliefsResponse] = writesFrom { case def1: Def1_RetrieveOtherReliefsResponse =>
+    implicitly[OWrites[Def1_RetrieveOtherReliefsResponse]].writes(def1)
+  }
+
 }
