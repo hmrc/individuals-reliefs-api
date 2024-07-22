@@ -5,7 +5,7 @@ DELETE     /investment/:nino/:taxYear                       v1.controllers.Delet
 
 # Other Reliefs endpoints
 GET        /other/:nino/:taxYear                            v1.RetreiveOtherReliefs.RetrieveOtherReliefsController.handleRequest(nino: String, taxYear: String)
-PUT        /other/:nino/:taxYear                            v1.AmendOtherReliefs.AmendOtherReliefsController.handleRequest(nino: String, taxYear: String)
+PUT        /other/:nino/:taxYear                            v1.otherReliefs.amend.AmendOtherReliefsController.handleRequest(nino: String, taxYear: String)
 DELETE     /other/:nino/:taxYear                            v1.DeleteOtherReliefs.DeleteOtherReliefsController.handleRequest(nino: String, taxYear: String)
 
 # Foreign Reliefs endpoints
