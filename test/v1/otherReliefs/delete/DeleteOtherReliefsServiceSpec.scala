@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.DeleteOtherReliefs
+package v1.otherReliefs.delete
 
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear}
@@ -22,7 +22,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.DeleteOtherReliefs.model.request.DeleteOtherReliefsRequestData
+import v1.otherReliefs.delete.def1.model.request.Def1_DeleteOtherReliefsRequestData
+import v1.otherReliefs.delete.model.request.DeleteOtherReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -34,7 +35,7 @@ class DeleteOtherReliefsServiceSpec extends UnitSpec {
 
   implicit val correlationId: String = "X-123"
 
-  val requestData: DeleteOtherReliefsRequestData = DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  val requestData: DeleteOtherReliefsRequestData = Def1_DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockDeleteOtherReliefsConnector {
 

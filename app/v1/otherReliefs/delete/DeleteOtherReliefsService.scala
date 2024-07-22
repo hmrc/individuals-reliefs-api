@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v1.DeleteOtherReliefs
+package v1.otherReliefs.delete
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import v1.DeleteOtherReliefs.model.request.DeleteOtherReliefsRequestData
+import v1.otherReliefs.delete.model.request.DeleteOtherReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

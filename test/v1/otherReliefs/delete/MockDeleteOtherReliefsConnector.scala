@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v1.DeleteOtherReliefs
+package v1.otherReliefs.delete
 
 import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.DeleteOtherReliefs.model.request.DeleteOtherReliefsRequestData
+import v1.otherReliefs.delete.model.request.DeleteOtherReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 

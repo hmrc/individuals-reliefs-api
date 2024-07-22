@@ -14,35 +14,25 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.amend
+package v1.otherReliefs.delete
 
-import api.models.utils.JsonErrorValidators
-import play.api.libs.json.{JsValue, Json}
+import api.controllers.validators.Validator
 import support.UnitSpec
-import v1.otherReliefs.amend.def1.Def1_AmendOtherReliefsValidator
+import v1.otherReliefs.delete.def1.Def1_DeleteOtherReliefsValidator
+import v1.otherReliefs.delete.model.request.DeleteOtherReliefsRequestData
 
-class AmendOtherReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
+class DeleteOtherReliefsValidatorFactorySpec extends UnitSpec {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
 
-  def requestBodyJson(): JsValue = Json.parse(
-    s"""
-       |{
-       |
-       |}
-     """.stripMargin
-  )
+  private val validatorFactory = new DeleteOtherReliefsValidatorFactory
 
-  private val validRequestBody = requestBodyJson()
-
-  private val validatorFactory = new AmendOtherReliefsValidatorFactory
-
-  "running a validation" should {
-    "return the parsed domain object" when {
+  "validator" should {
+    "return the Def1 validator" when {
       "given a valid request" in {
-        val result = validatorFactory.validator(validNino, validTaxYear, validRequestBody)
-        result shouldBe a[Def1_AmendOtherReliefsValidator]
+        val result: Validator[DeleteOtherReliefsRequestData] = validatorFactory.validator(validNino, validTaxYear)
+        result shouldBe a[Def1_DeleteOtherReliefsValidator]
 
       }
     }

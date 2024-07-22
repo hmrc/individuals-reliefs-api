@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package v1.DeleteOtherReliefs
+package v1.otherReliefs.delete.def1
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import support.UnitSpec
-import v1.DeleteOtherReliefs.model.request.DeleteOtherReliefsRequestData
+import v1.otherReliefs.delete.DeleteOtherReliefsValidatorFactory
+import v1.otherReliefs.delete.def1.model.request.Def1_DeleteOtherReliefsRequestData
+import v1.otherReliefs.delete.model.request.DeleteOtherReliefsRequestData
 
-class DeleteOtherReliefsValidatorFactorySpec extends UnitSpec {
+class Def1_DeleteOtherReliefsValidatorSpec extends UnitSpec {
   private implicit val correlationId: String = "1234"
   private val validNino                      = "AA123456A"
   private val validTaxYear                   = "2021-22"
@@ -37,7 +39,7 @@ class DeleteOtherReliefsValidatorFactorySpec extends UnitSpec {
     "return no errors" when {
       "a valid request is supplied" in {
         val result: Either[ErrorWrapper, DeleteOtherReliefsRequestData] = validator(validNino, validTaxYear).validateAndWrapResult()
-        result shouldBe Right(DeleteOtherReliefsRequestData(parsedNino, parsedTaxYear))
+        result shouldBe Right(Def1_DeleteOtherReliefsRequestData(parsedNino, parsedTaxYear))
       }
     }
 

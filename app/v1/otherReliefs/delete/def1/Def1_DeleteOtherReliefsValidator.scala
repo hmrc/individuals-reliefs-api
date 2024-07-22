@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.DeleteOtherReliefs
+package v1.otherReliefs.delete.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYear}
@@ -22,22 +22,18 @@ import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
-import v1.DeleteOtherReliefs.model.request.DeleteOtherReliefsRequestData
+import v1.otherReliefs.delete.def1.model.request.Def1_DeleteOtherReliefsRequestData
+import v1.otherReliefs.delete.model.request.DeleteOtherReliefsRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DeleteOtherReliefsValidatorFactory {
+class Def1_DeleteOtherReliefsValidator @Inject() (nino: String, taxYear: String) extends Validator[DeleteOtherReliefsRequestData] {
 
-  def validator(nino: String, taxYear: String): Validator[DeleteOtherReliefsRequestData] =
-    new Validator[DeleteOtherReliefsRequestData] {
-
-      def validate: Validated[Seq[MtdError], DeleteOtherReliefsRequestData] =
-        (
-          ResolveNino(nino),
-          ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
-        ).mapN(DeleteOtherReliefsRequestData)
-
-    }
+  def validate: Validated[Seq[MtdError], DeleteOtherReliefsRequestData] =
+    (
+      ResolveNino(nino),
+      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
+    ).mapN(Def1_DeleteOtherReliefsRequestData)
 
 }

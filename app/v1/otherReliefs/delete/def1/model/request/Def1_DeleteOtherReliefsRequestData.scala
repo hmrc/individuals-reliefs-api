@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package v1.DeleteOtherReliefs.model.request
+package v1.otherReliefs.delete.def1.model.request
 
 import api.models.domain.{Nino, TaxYear}
+import v1.otherReliefs.delete.DeleteOtherReliefsSchema
+import v1.otherReliefs.delete.model.request.DeleteOtherReliefsRequestData
 
-case class DeleteOtherReliefsRequestData(nino: Nino, taxYear: TaxYear)
+case class Def1_DeleteOtherReliefsRequestData(nino: Nino, taxYear: TaxYear) extends DeleteOtherReliefsRequestData {
+  val schema: DeleteOtherReliefsSchema = DeleteOtherReliefsSchema.Def1
+}
