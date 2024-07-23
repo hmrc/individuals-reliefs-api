@@ -20,10 +20,10 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def1_GiftAidPayments(nonUkCharities: Option[Def1_NonUkCharities],
-                           totalAmount: Option[BigDecimal],
-                           oneOffAmount: Option[BigDecimal],
-                           amountTreatedAsPreviousTaxYear: Option[BigDecimal],
-                           amountTreatedAsSpecifiedTaxYear: Option[BigDecimal])
+                                totalAmount: Option[BigDecimal],
+                                oneOffAmount: Option[BigDecimal],
+                                amountTreatedAsPreviousTaxYear: Option[BigDecimal],
+                                amountTreatedAsSpecifiedTaxYear: Option[BigDecimal])
 
 object Def1_GiftAidPayments {
 

@@ -19,10 +19,10 @@ package v1.CreateAndAmendCharitableGivingReliefs.def1.model.request
 import play.api.libs.json.{JsObject, Json, Reads, Writes}
 
 case class Def1_GiftAidPayments(nonUkCharities: Option[Def1_NonUkCharities],
-                           totalAmount: Option[BigDecimal],
-                           oneOffAmount: Option[BigDecimal],
-                           amountTreatedAsPreviousTaxYear: Option[BigDecimal],
-                           amountTreatedAsSpecifiedTaxYear: Option[BigDecimal])
+                                totalAmount: Option[BigDecimal],
+                                oneOffAmount: Option[BigDecimal],
+                                amountTreatedAsPreviousTaxYear: Option[BigDecimal],
+                                amountTreatedAsSpecifiedTaxYear: Option[BigDecimal])
 
 object Def1_GiftAidPayments {
 

@@ -22,7 +22,7 @@ import api.models.utils.JsonErrorValidators
 import play.api.libs.json._
 import support.UnitSpec
 import v1.CreateAndAmendForeignReliefs.CreateAndAmendForeignReliefsValidatorFactory
-import v1.CreateAndAmendForeignReliefs.def1.model.request.{Def1_CreateAndAmendForeignReliefsBody, Def1_CreateAndAmendForeignReliefsRequestData, Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
+import v1.CreateAndAmendForeignReliefs.def1.model.request._
 import v1.CreateAndAmendForeignReliefs.model.request.CreateAndAmendForeignReliefsRequestData
 
 class CreateAndAmendForeignReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {

@@ -32,6 +32,7 @@ trait MockRetrieveOtherReliefsValidatorFactory extends MockFactory {
 
     def validator(): CallHandler[Validator[RetrieveOtherReliefsRequestData]] =
       (mockRetrieveOtherReliefsValidatorFactory.validator(_: String, _: String)).expects(*, *)
+
   }
 
   def willUseValidator(use: Validator[RetrieveOtherReliefsRequestData]): CallHandler[Validator[RetrieveOtherReliefsRequestData]] = {

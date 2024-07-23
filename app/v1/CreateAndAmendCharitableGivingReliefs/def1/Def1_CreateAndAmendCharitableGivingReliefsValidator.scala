@@ -24,10 +24,7 @@ import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
 import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsBody
-import v1.CreateAndAmendCharitableGivingReliefs.model.request.{
-  CreateAndAmendCharitableGivingTaxReliefsRequestData,
-  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
-}
+import v1.CreateAndAmendCharitableGivingReliefs.model.request.{CreateAndAmendCharitableGivingTaxReliefsRequestData, Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData}
 
 import scala.annotation.nowarn
 

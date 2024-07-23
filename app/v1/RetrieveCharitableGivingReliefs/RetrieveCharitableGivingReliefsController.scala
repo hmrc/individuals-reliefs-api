@@ -22,18 +22,19 @@ import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 import v1.RetrieveCharitableGivingReliefs.model.response.RetrieveCharitableGivingReliefsHateoasData
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveCharitableGivingReliefsController @Inject()(val authService: EnrolmentsAuthService,
-                                                         val lookupService: MtdIdLookupService,
-                                                         validatorFactory: RetrieveCharitableGivingReliefsValidatorFactory,
-                                                         service: RetrieveCharitableGivingReliefsService,
-                                                         hateoasFactory: HateoasFactory,
-                                                         cc: ControllerComponents,
-                                                         val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) {
+class RetrieveCharitableGivingReliefsController @Inject() (val authService: EnrolmentsAuthService,
+                                                           val lookupService: MtdIdLookupService,
+                                                           validatorFactory: RetrieveCharitableGivingReliefsValidatorFactory,
+                                                           service: RetrieveCharitableGivingReliefsService,
+                                                           hateoasFactory: HateoasFactory,
+                                                           cc: ControllerComponents,
+                                                           val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveCharitableGivingReliefController", endpointName = "retrieveCharitableGivingTaxRelief")

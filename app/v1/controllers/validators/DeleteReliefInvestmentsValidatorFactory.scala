@@ -28,6 +28,7 @@ import javax.inject.Singleton
 
 @Singleton
 class DeleteReliefInvestmentsValidatorFactory {
+
   def validator(nino: String, taxYear: String): Validator[DeleteReliefInvestmentsRequestData] =
     new Validator[DeleteReliefInvestmentsRequestData] {
 
@@ -35,6 +36,8 @@ class DeleteReliefInvestmentsValidatorFactory {
         (
           ResolveNino(nino),
           ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
-          ).mapN(DeleteReliefInvestmentsRequestData)
+        ).mapN(DeleteReliefInvestmentsRequestData)
+
     }
+
 }

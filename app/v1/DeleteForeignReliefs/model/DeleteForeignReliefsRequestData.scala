@@ -20,5 +20,4 @@ import api.models.domain.{Nino, TaxYear}
 
 sealed trait DeleteForeignReliefsRequestData
 
-
 case class Def1_DeleteForeignReliefsRequestData(nino: Nino, taxYear: TaxYear) extends DeleteForeignReliefsRequestData

@@ -21,14 +21,14 @@ import api.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolvePa
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.toFoldableOps
-import v1.CreateAndAmendForeignReliefs.def1.model.request.{Def1_CreateAndAmendForeignReliefsRequestData, Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief,
-  Def1_ForeignTaxForFtcrNotClaimed}
+import v1.CreateAndAmendForeignReliefs.def1.model.request.{Def1_CreateAndAmendForeignReliefsRequestData, Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
 
 object Def1_CreateAndAmendForeignReliefsRulesValidator extends RulesValidator[Def1_CreateAndAmendForeignReliefsRequestData] {
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
-  def validateBusinessRules(parsed: Def1_CreateAndAmendForeignReliefsRequestData): Validated[Seq[MtdError], Def1_CreateAndAmendForeignReliefsRequestData] = {
+  def validateBusinessRules(
+      parsed: Def1_CreateAndAmendForeignReliefsRequestData): Validated[Seq[MtdError], Def1_CreateAndAmendForeignReliefsRequestData] = {
     import parsed.body._
 
     combine(

@@ -17,33 +17,13 @@
 package v1.CreateAndAmendCharitableGivingReliefs.def1
 
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{
-  BadRequestError,
-  ErrorWrapper,
-  NinoFormatError,
-  RuleGiftAidNonUkAmountWithoutNamesError,
-  RuleGiftsNonUkAmountWithoutNamesError,
-  RuleIncorrectOrEmptyBodyError,
-  RuleTaxYearNotSupportedError,
-  RuleTaxYearRangeInvalidError,
-  StringFormatError,
-  TaxYearFormatError,
-  ValueFormatError
-}
+import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import play.api.libs.json.{JsArray, JsNumber, JsObject, JsString, JsValue, Json}
+import play.api.libs.json._
 import support.UnitSpec
 import v1.CreateAndAmendCharitableGivingReliefs.CreateAndAmendCharitableGivingReliefsValidatorFactory
-import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request.{
-  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
-  Def1_GiftAidPayments,
-  Def1_Gifts,
-  Def1_NonUkCharities
-}
-import v1.CreateAndAmendCharitableGivingReliefs.model.request.{
-  CreateAndAmendCharitableGivingTaxReliefsRequestData,
-  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
-}
+import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request.{Def1_CreateAndAmendCharitableGivingTaxReliefsBody, Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
+import v1.CreateAndAmendCharitableGivingReliefs.model.request.{CreateAndAmendCharitableGivingTaxReliefsRequestData, Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData}
 
 class CreateAndAmendCharitableGivingTaxReliefsValidatorSpec extends UnitSpec with JsonErrorValidators {
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"

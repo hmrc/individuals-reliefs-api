@@ -21,11 +21,7 @@ import api.hateoas.Method._
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.RetrieveCharitableGivingReliefs.model.response.{
-  Def1_RetrieveCharitableGivingReliefsResponse,
-  RetrieveCharitableGivingReliefsHateoasData,
-  RetrieveCharitableGivingReliefsResponse
-}
+import v1.RetrieveCharitableGivingReliefs.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsHateoasData, RetrieveCharitableGivingReliefsResponse}
 
 class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockAppConfig with RetrieveCharitableGivingReliefsFixture {
 

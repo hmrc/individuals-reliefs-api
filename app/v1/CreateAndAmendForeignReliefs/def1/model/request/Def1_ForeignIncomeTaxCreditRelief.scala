@@ -19,9 +19,9 @@ package v1.CreateAndAmendForeignReliefs.def1.model.request
 import play.api.libs.json.{Json, OFormat}
 
 case class Def1_ForeignIncomeTaxCreditRelief(countryCode: String,
-                                        foreignTaxPaid: Option[BigDecimal],
-                                        taxableAmount: BigDecimal,
-                                        employmentLumpSum: Boolean)
+                                             foreignTaxPaid: Option[BigDecimal],
+                                             taxableAmount: BigDecimal,
+                                             employmentLumpSum: Boolean)
 
 object Def1_ForeignIncomeTaxCreditRelief {
   implicit val format: OFormat[Def1_ForeignIncomeTaxCreditRelief] = Json.format[Def1_ForeignIncomeTaxCreditRelief]

@@ -22,10 +22,7 @@ import api.models.utils.JsonErrorValidators
 import play.api.libs.json._
 import support.UnitSpec
 import v1.CreateAndAmendCharitableGivingReliefs.def1.model.request._
-import v1.CreateAndAmendCharitableGivingReliefs.model.request.{
-  CreateAndAmendCharitableGivingTaxReliefsRequestData,
-  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
-}
+import v1.CreateAndAmendCharitableGivingReliefs.model.request.{CreateAndAmendCharitableGivingTaxReliefsRequestData, Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData}
 
 class CreateAndAmendCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
 

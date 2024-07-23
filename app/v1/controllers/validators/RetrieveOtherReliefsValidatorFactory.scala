@@ -28,13 +28,16 @@ import javax.inject.Singleton
 
 @Singleton
 class RetrieveOtherReliefsValidatorFactory {
+
   def validator(nino: String, taxYear: String): Validator[RetrieveOtherReliefsRequestData] = new Validator[RetrieveOtherReliefsRequestData] {
+
     override def validate: Validated[Seq[MtdError], RetrieveOtherReliefsRequestData] = {
       (
         ResolveNino(nino),
         ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
-        ).mapN(RetrieveOtherReliefsRequestData)
+      ).mapN(RetrieveOtherReliefsRequestData)
     }
+
   }
 
 }

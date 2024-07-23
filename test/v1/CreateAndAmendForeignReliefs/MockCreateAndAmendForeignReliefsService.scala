@@ -25,14 +25,14 @@ import v1.CreateAndAmendForeignReliefs.def1.model.request.Def1_CreateAndAmendFor
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
 trait MockCreateAndAmendForeignReliefsService extends MockFactory {
 
   val mockService: CreateAndAmendForeignReliefsService = mock[CreateAndAmendForeignReliefsService]
 
   object MockCreateAndAmendForeignReliefsService {
 
-    def createAndAmend(requestData: Def1_CreateAndAmendForeignReliefsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def createAndAmend(
+        requestData: Def1_CreateAndAmendForeignReliefsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockService
         .createAndAmend(_: Def1_CreateAndAmendForeignReliefsRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)

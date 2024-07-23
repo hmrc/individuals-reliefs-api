@@ -19,8 +19,6 @@ package v1.CreateAndAmendCharitableGivingReliefs.def1.model.request
 import play.api.libs.json.{Json, OFormat}
 import v1.CreateAndAmendCharitableGivingReliefs.model.request.CreateAndAmendCharitableGivingTaxReliefsBody
 
-
-
 case class Def1_CreateAndAmendCharitableGivingTaxReliefsBody(giftAidPayments: Option[Def1_GiftAidPayments], gifts: Option[Def1_Gifts])
     extends CreateAndAmendCharitableGivingTaxReliefsBody
 
