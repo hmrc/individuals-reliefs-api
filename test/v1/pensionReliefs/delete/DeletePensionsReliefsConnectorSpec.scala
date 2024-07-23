@@ -19,6 +19,7 @@ package v1.pensionReliefs.delete
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import v1.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
 import v1.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
 import scala.concurrent.Future
@@ -37,7 +38,7 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
       )
 
     protected val request: DeletePensionsReliefsRequestData =
-      DeletePensionsReliefsRequestData(nino = nino, taxYear = taxYear)
+      Def1_DeletePensionsReliefsRequestData(nino = nino, taxYear = taxYear)
 
   }
 

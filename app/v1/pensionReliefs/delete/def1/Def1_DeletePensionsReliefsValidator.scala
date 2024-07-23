@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.delete
+package v1.pensionReliefs.delete.def1
 
 import api.controllers.validators.Validator
-import v1.pensionReliefs.delete.DeletePensionsReliefsSchema.Def1
-import v1.pensionReliefs.delete.def1.Def1_DeletePensionsReliefsValidator
+import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYear}
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.catsSyntaxTuple2Semigroupal
+import v1.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
 import v1.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
-class DeletePensionsReliefsValidatorFactory {
+class Def1_DeletePensionsReliefsValidator(nino: String, taxYear: String) extends Validator[DeletePensionsReliefsRequestData] {
 
-  def validator(nino: String, taxYear: String): Validator[DeletePensionsReliefsRequestData] = {
-
-    val schema = DeletePensionsReliefsSchema.schema
-
-    schema match {
-      case Def1 => new Def1_DeletePensionsReliefsValidator(nino, taxYear)
-    }
+  def validate: Validated[Seq[MtdError], DeletePensionsReliefsRequestData] = {
+    (
+      ResolveNino(nino),
+      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
+    ).mapN(Def1_DeletePensionsReliefsRequestData)
   }
 
 }

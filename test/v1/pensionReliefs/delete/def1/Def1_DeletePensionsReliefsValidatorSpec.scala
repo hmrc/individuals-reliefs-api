@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.delete
+package v1.pensionReliefs.delete.def1
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import support.UnitSpec
+import v1.pensionReliefs.delete.DeletePensionsReliefsValidatorFactory
+import v1.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
 import v1.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
-class DeletePensionsReliefsValidatorFactorySpec extends UnitSpec {
+class Def1_DeletePensionsReliefsValidatorSpec extends UnitSpec {
 
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
   private val validNino              = "AA123456A"
@@ -40,7 +42,7 @@ class DeletePensionsReliefsValidatorFactorySpec extends UnitSpec {
         val result: Either[ErrorWrapper, DeletePensionsReliefsRequestData] =
           validator(validNino, validTaxYear).validateAndWrapResult()
 
-        result shouldBe Right(DeletePensionsReliefsRequestData(parsedNino, parsedTaxYear))
+        result shouldBe Right(Def1_DeletePensionsReliefsRequestData(parsedNino, parsedTaxYear))
       }
     }
     "return NinoFormatError" when {

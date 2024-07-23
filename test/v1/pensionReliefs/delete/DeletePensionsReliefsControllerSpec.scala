@@ -24,6 +24,7 @@ import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import v1.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
 import v1.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -102,7 +103,7 @@ class DeletePensionsReliefsControllerSpec
         )
       )
 
-    protected val requestData: DeletePensionsReliefsRequestData = DeletePensionsReliefsRequestData(Nino(nino), taxYear)
+    protected val requestData: DeletePensionsReliefsRequestData = Def1_DeletePensionsReliefsRequestData(Nino(nino), taxYear)
 
   }
 

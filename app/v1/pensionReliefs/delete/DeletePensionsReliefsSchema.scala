@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.delete.model.request
+package v1.pensionReliefs.delete
 
-import api.models.domain.{Nino, TaxYear}
+sealed trait DeletePensionsReliefsSchema
 
-trait DeletePensionsReliefsRequestData {
-  val nino: Nino
-  val taxYear: TaxYear
+object DeletePensionsReliefsSchema {
+
+  case object Def1 extends DeletePensionsReliefsSchema
+
+  val schema: DeletePensionsReliefsSchema = Def1
+
 }
