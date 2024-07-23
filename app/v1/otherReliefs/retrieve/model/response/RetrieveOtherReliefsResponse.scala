@@ -30,8 +30,7 @@ object RetrieveOtherReliefsResponse extends HateoasLinks {
     implicitly[OWrites[Def1_RetrieveOtherReliefsResponse]].writes(def1)
   }
 
-  implicit object Def1_RetrieveOtherReliefsLinksFactory
-    extends HateoasLinksFactory[Def1_RetrieveOtherReliefsResponse, RetrieveOtherReliefsHateoasData] {
+  implicit object LinksFactory extends HateoasLinksFactory[RetrieveOtherReliefsResponse, RetrieveOtherReliefsHateoasData] {
 
     override def links(appConfig: AppConfig, data: RetrieveOtherReliefsHateoasData): Seq[Link] = {
       import data._
@@ -41,16 +40,6 @@ object RetrieveOtherReliefsResponse extends HateoasLinks {
         amendOtherReliefs(appConfig, nino, taxYear),
         deleteOtherReliefs(appConfig, nino, taxYear)
       )
-    }
-
-  }
-
-  implicit object LinksFactory extends HateoasLinksFactory[RetrieveOtherReliefsResponse, RetrieveOtherReliefsHateoasData] {
-
-    override def links(appConfig: AppConfig, data: RetrieveOtherReliefsHateoasData): Seq[Link] = {
-      data.taxYear match {
-        case _ => Def1_RetrieveOtherReliefsLinksFactory.links(appConfig, data)
-      }
     }
 
   }
