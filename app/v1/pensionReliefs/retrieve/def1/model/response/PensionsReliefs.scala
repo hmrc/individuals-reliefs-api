@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.retrieve.model.request
+package v1.pensionReliefs.retrieve.def1.model.response
 
-import api.models.domain.{Nino, TaxYear}
-import v1.pensionReliefs.retrieve.RetrievePensionsReliefsSchema
+import play.api.libs.json.{Json, OFormat}
 
-trait RetrievePensionsReliefsRequestData {
-  def nino: Nino
-  def taxYear: TaxYear
+case class PensionsReliefs(regularPensionContributions: Option[BigDecimal],
+                           oneOffPensionContributionsPaid: Option[BigDecimal],
+                           retirementAnnuityPayments: Option[BigDecimal],
+                           paymentToEmployersSchemeNoTaxRelief: Option[BigDecimal],
+                           overseasPensionSchemeContributions: Option[BigDecimal])
 
-  val schema: RetrievePensionsReliefsSchema
+object PensionsReliefs {
+  implicit val format: OFormat[PensionsReliefs] = Json.format[PensionsReliefs]
 }

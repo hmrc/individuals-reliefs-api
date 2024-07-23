@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.retrieve
+package v1.pensionReliefs.retrieve.def1
 
 import api.controllers.validators.Validator
-import v1.pensionReliefs.retrieve.RetrievePensionsReliefsSchema.Def1
-import v1.pensionReliefs.retrieve.def1.Def1_RetrievePensionsReliefsValidator
+import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYear}
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.catsSyntaxTuple2Semigroupal
+import v1.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class RetrievePensionsReliefsValidatorFactory @Inject() {
+class Def1_RetrievePensionsReliefsValidator(nino: String, taxYear: String) extends Validator[RetrievePensionsReliefsRequestData] {
 
-  def validator(nino: String, taxYear: String): Validator[RetrievePensionsReliefsRequestData] = {
-
-    val schema = RetrievePensionsReliefsSchema.schema
-
-    schema match {
-      case Def1 => new Def1_RetrievePensionsReliefsValidator(nino, taxYear)
-    }
-
+  def validate: Validated[Seq[MtdError], RetrievePensionsReliefsRequestData] = {
+    (
+      ResolveNino(nino),
+      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
+    ).mapN(Def1_RetrievePensionsReliefsRequestData)
   }
 
 }

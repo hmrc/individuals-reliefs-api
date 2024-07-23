@@ -16,9 +16,12 @@
 
 package v1.pensionReliefs.createAmend.model.response
 
+import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
+import config.AppConfig
 import play.api.libs.json.OWrites
 import shared.utils.JsonWritesUtil
 import v1.pensionReliefs.createAmend.def1.model.response.Def1_CreateAmendPensionsReliefsResponse
+import v1.pensionReliefs.createAmend.def1.model.response.Def1_CreateAmendPensionsReliefsResponse.{amendPensionsReliefs, deletePensionsReliefs, retrievePensionsReliefs}
 
 trait CreateAmendPensionsReliefsResponse
 
@@ -28,4 +31,19 @@ object CreateAmendPensionsReliefsResponse extends JsonWritesUtil {
     implicitly[OWrites[Def1_CreateAmendPensionsReliefsResponse]].writes(def1)
   }
 
+  implicit object LinksFactory extends HateoasLinksFactory[Unit, CreateAmendPensionsReliefsHateoasData] {
+
+    override def links(appConfig: AppConfig, data: CreateAmendPensionsReliefsHateoasData): Seq[Link] = {
+      import data._
+      Seq(
+        retrievePensionsReliefs(appConfig, nino, taxYear),
+        amendPensionsReliefs(appConfig, nino, taxYear),
+        deletePensionsReliefs(appConfig, nino, taxYear)
+      )
+    }
+
+  }
+
 }
+
+case class CreateAmendPensionsReliefsHateoasData(nino: String, taxYear: String) extends HateoasData

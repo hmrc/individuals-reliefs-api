@@ -24,8 +24,8 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version1}
 import utils.IdGenerator
-import v1.pensionReliefs.createAmend.def1.model.response.CreateAmendPensionsReliefsHateoasData
-import v1.pensionReliefs.createAmend.def1.model.response.Def1_CreateAmendPensionsReliefsResponse.LinksFactory
+import v1.pensionReliefs.createAmend.model.response.CreateAmendPensionsReliefsHateoasData
+import v1.pensionReliefs.createAmend.model.response.CreateAmendPensionsReliefsResponse.LinksFactory
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext

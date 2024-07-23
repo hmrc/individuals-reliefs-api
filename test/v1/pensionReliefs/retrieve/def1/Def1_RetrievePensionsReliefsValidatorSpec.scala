@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.retrieve
+package v1.pensionReliefs.retrieve.def1
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import support.UnitSpec
+import v1.pensionReliefs.retrieve.RetrievePensionsReliefsValidatorFactory
+import v1.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
 
-class RetrievePensionsReliefsValidatorFactorySpec extends UnitSpec {
+class Def1_RetrievePensionsReliefsValidatorSpec extends UnitSpec {
 
   private implicit val correlationId: String = "1234"
 
@@ -39,7 +41,7 @@ class RetrievePensionsReliefsValidatorFactorySpec extends UnitSpec {
     "return no errors" when {
       "a valid request is supplied" in {
         val result: Either[ErrorWrapper, RetrievePensionsReliefsRequestData] = validator(validNino, validTaxYear).validateAndWrapResult()
-        result shouldBe Right(RetrievePensionsReliefsRequestData(parsedNino, parsedTaxYear))
+        result shouldBe Right(Def1_RetrievePensionsReliefsRequestData(parsedNino, parsedTaxYear))
       }
     }
     "return NinoFormatError" when {

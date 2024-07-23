@@ -24,8 +24,9 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
-import v1.pensionReliefs.retrieve.model.response.{PensionsReliefs, RetrievePensionsReliefsHateoasData, RetrievePensionsReliefsResponse}
+import v1.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
+import v1.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
+import v1.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,11 +39,11 @@ class RetrievePensionsReliefsControllerSpec
     with MockHateoasFactory {
 
   private val taxYear     = "2019-20"
-  private val requestData = RetrievePensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = Def1_RetrievePensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")
 
-  private val responseBody = RetrievePensionsReliefsResponse(
+  private val responseBody = Def1_RetrievePensionsReliefsResponse(
     Timestamp("2019-04-04T01:01:01.000Z"),
     PensionsReliefs(
       Some(1999.99),

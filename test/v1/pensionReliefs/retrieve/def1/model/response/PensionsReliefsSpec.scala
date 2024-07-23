@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.retrieve.model.response
+package v1.pensionReliefs.retrieve.def1.model.response
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json

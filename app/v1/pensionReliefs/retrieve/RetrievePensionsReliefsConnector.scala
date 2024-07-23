@@ -18,7 +18,7 @@ package v1.pensionReliefs.retrieve
 
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
@@ -36,15 +36,17 @@ class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appC
       correlationId: String): Future[DownstreamOutcome[RetrievePensionsReliefsResponse]] = {
 
     import request._
+    import schema._
 
-    val downstreamUri =
-      if (taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
-      } else {
+    val downstreamUri: DownstreamUri[DownstreamResp] = taxYear match {
+      case ty if ty.useTaxYearSpecificApi =>
+        TaxYearSpecificIfsUri(s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
+      case _ =>
         val downstreamTaxYearParam = taxYear.asMtd // Supposed to be MTD format for this downstream endpoint
-        DesUri[RetrievePensionsReliefsResponse](s"income-tax/reliefs/pensions/$nino/$downstreamTaxYearParam")
-      }
+        DesUri(s"income-tax/reliefs/pensions/$nino/$downstreamTaxYearParam")
+    }
     get(downstreamUri)
+
   }
 
 }

@@ -20,6 +20,7 @@ import api.hateoas.Link
 import api.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
+import v1.pensionReliefs.createAmend.model.response.{CreateAmendPensionsReliefsHateoasData, CreateAmendPensionsReliefsResponse}
 
 class Def1_CreateAmendPensionsReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
@@ -29,7 +30,7 @@ class Def1_CreateAmendPensionsReliefsResponseSpec extends UnitSpec with MockAppC
       val taxYear = "mytaxyear"
 
       MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      Def1_CreateAmendPensionsReliefsResponse.LinksFactory.links(mockAppConfig, CreateAmendPensionsReliefsHateoasData(nino, taxYear)) shouldBe
+      CreateAmendPensionsReliefsResponse.LinksFactory.links(mockAppConfig, CreateAmendPensionsReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/pensions/$nino/$taxYear", GET, "self"),
           api.hateoas.Link(s"/my/context/pensions/$nino/$taxYear", PUT, "create-and-amend-reliefs-pensions"),

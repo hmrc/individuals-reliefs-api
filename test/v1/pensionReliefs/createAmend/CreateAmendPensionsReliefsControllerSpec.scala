@@ -28,7 +28,7 @@ import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
-import v1.pensionReliefs.createAmend.def1.model.response.CreateAmendPensionsReliefsHateoasData
+import v1.pensionReliefs.createAmend.model.response.CreateAmendPensionsReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

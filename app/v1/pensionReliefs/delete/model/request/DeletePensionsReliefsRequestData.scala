@@ -17,8 +17,11 @@
 package v1.pensionReliefs.delete.model.request
 
 import api.models.domain.{Nino, TaxYear}
+import v1.pensionReliefs.delete.DeletePensionsReliefsSchema
 
 trait DeletePensionsReliefsRequestData {
-  val nino: Nino
-  val taxYear: TaxYear
+  def nino: Nino
+  def taxYear: TaxYear
+
+  def schema: DeletePensionsReliefsSchema
 }

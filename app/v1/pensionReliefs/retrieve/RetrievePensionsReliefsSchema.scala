@@ -16,24 +16,20 @@
 
 package v1.pensionReliefs.retrieve
 
-import api.controllers.validators.Validator
-import v1.pensionReliefs.retrieve.RetrievePensionsReliefsSchema.Def1
-import v1.pensionReliefs.retrieve.def1.Def1_RetrievePensionsReliefsValidator
-import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
+import api.schema.DownstreamReadable
+import play.api.libs.json.Reads
+import v1.pensionReliefs.retrieve.def1.model.response.Def1_RetrievePensionsReliefsResponse
+import v1.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
 
-import javax.inject.{Inject, Singleton}
+sealed trait RetrievePensionsReliefsSchema extends DownstreamReadable[RetrievePensionsReliefsResponse]
 
-@Singleton
-class RetrievePensionsReliefsValidatorFactory @Inject() {
+object RetrievePensionsReliefsSchema {
 
-  def validator(nino: String, taxYear: String): Validator[RetrievePensionsReliefsRequestData] = {
-
-    val schema = RetrievePensionsReliefsSchema.schema
-
-    schema match {
-      case Def1 => new Def1_RetrievePensionsReliefsValidator(nino, taxYear)
-    }
-
+  case object Def1 extends RetrievePensionsReliefsSchema {
+    type DownstreamResp = Def1_RetrievePensionsReliefsResponse
+    val connectorReads: Reads[DownstreamResp] = Def1_RetrievePensionsReliefsResponse.reads
   }
+
+  val schema: RetrievePensionsReliefsSchema = Def1
 
 }

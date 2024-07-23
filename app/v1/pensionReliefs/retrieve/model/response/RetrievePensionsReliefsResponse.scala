@@ -17,14 +17,18 @@
 package v1.pensionReliefs.retrieve.model.response
 
 import api.hateoas.{HateoasData, HateoasLinks, HateoasLinksFactory, Link}
-import api.models.domain.Timestamp
 import config.AppConfig
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.OWrites
+import shared.utils.JsonWritesUtil.writesFrom
+import v1.pensionReliefs.retrieve.def1.model.response.Def1_RetrievePensionsReliefsResponse
 
-case class RetrievePensionsReliefsResponse(submittedOn: Timestamp, pensionReliefs: PensionsReliefs)
+trait RetrievePensionsReliefsResponse
 
 object RetrievePensionsReliefsResponse extends HateoasLinks {
-  implicit val format: OFormat[RetrievePensionsReliefsResponse] = Json.format[RetrievePensionsReliefsResponse]
+
+  implicit val writes: OWrites[RetrievePensionsReliefsResponse] = writesFrom { case def1: Def1_RetrievePensionsReliefsResponse =>
+    implicitly[OWrites[Def1_RetrievePensionsReliefsResponse]].writes(def1)
+  }
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrievePensionsReliefsResponse, RetrievePensionsReliefsHateoasData] {
 

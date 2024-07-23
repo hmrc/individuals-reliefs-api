@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.retrieve.model.request
+package api.schema
 
-import api.models.domain.{Nino, TaxYear}
-import v1.pensionReliefs.retrieve.RetrievePensionsReliefsSchema
+import play.api.libs.json.Reads
 
-trait RetrievePensionsReliefsRequestData {
-  def nino: Nino
-  def taxYear: TaxYear
+trait DownstreamReadable[Base] {
 
-  val schema: RetrievePensionsReliefsSchema
+  /** This is the type of response returned by the connector.
+    *
+    * It is not necessarily the same as the response type returned by the service to the controller.
+    */
+  type DownstreamResp <: Base
+
+  implicit def connectorReads: Reads[DownstreamResp]
 }
