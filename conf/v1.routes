@@ -4,14 +4,14 @@ PUT        /investment/:nino/:taxYear                       v1.controllers.Creat
 DELETE     /investment/:nino/:taxYear                       v1.controllers.DeleteReliefInvestmentsController.handleRequest(nino: String, taxYear: String)
 
 # Other Reliefs endpoints
-GET        /other/:nino/:taxYear                            v1.controllers.RetrieveOtherReliefsController.handleRequest(nino: String, taxYear: String)
-PUT        /other/:nino/:taxYear                            v1.controllers.AmendOtherReliefsController.handleRequest(nino: String, taxYear: String)
-DELETE     /other/:nino/:taxYear                            v1.controllers.DeleteOtherReliefsController.handleRequest(nino: String, taxYear: String)
+GET        /other/:nino/:taxYear                            v1.otherReliefs.retrieve.RetrieveOtherReliefsController.handleRequest(nino: String, taxYear: String)
+PUT        /other/:nino/:taxYear                            v1.otherReliefs.amend.AmendOtherReliefsController.handleRequest(nino: String, taxYear: String)
+DELETE     /other/:nino/:taxYear                            v1.otherReliefs.delete.DeleteOtherReliefsController.handleRequest(nino: String, taxYear: String)
 
 # Foreign Reliefs endpoints
-GET        /foreign/:nino/:taxYear                          v1.RetrieveForeignReliefs.RetrieveForeignReliefsController.handleRequest(nino: String, taxYear: String)
-PUT        /foreign/:nino/:taxYear                          v1.CreateAndAmendForeignReliefs.CreateAndAmendForeignReliefsController.handleRequest(nino: String, taxYear: String)
-DELETE     /foreign/:nino/:taxYear                          v1.DeleteForeignReliefs.DeleteForeignReliefsController.handleRequest(nino: String, taxYear: String)
+GET        /foreign/:nino/:taxYear                          v1.retrieveForeignReliefs.RetrieveForeignReliefsController.handleRequest(nino: String, taxYear: String)
+PUT        /foreign/:nino/:taxYear                          v1.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsController.handleRequest(nino: String, taxYear: String)
+DELETE     /foreign/:nino/:taxYear                          v1.deleteForeignReliefs.DeleteForeignReliefsController.handleRequest(nino: String, taxYear: String)
 
 # Pensions Reliefs endpoints
 GET        /pensions/:nino/:taxYear                         v1.controllers.RetrievePensionsReliefsController.handleRequest(nino: String, taxYear: String)
@@ -19,6 +19,6 @@ PUT        /pensions/:nino/:taxYear                         v1.controllers.Creat
 DELETE     /pensions/:nino/:taxYear                         v1.controllers.DeletePensionsReliefsController.handleRequest(nino: String, taxYear: String)
 
 # Charitable Giving Tax Relief endpoints
-GET        /charitable-giving/:nino/:taxYear                v1.RetrieveCharitableGivingReliefs.RetrieveCharitableGivingReliefsController.handleRequest(nino: String, taxYear: String)
-PUT        /charitable-giving/:nino/:taxYear                v1.CreateAndAmendCharitableGivingReliefs.CreateAndAmendCharitableGivingReliefsController.handleRequest(nino: String, taxYear: String)
-DELETE     /charitable-giving/:nino/:taxYear                v1.DeleteCharitableGivingReliefs.DeleteCharitableGivingReliefsController.handleRequest(nino: String, taxYear: String)
+GET        /charitable-giving/:nino/:taxYear                v1.retrieveCharitableGivingReliefs.RetrieveCharitableGivingReliefsController.handleRequest(nino: String, taxYear: String)
+PUT        /charitable-giving/:nino/:taxYear                v1.createAndAmendCharitableGivingReliefs.CreateAndAmendCharitableGivingReliefsController.handleRequest(nino: String, taxYear: String)
+DELETE     /charitable-giving/:nino/:taxYear                v1.deleteCharitableGivingReliefs.DeleteCharitableGivingReliefsController.handleRequest(nino: String, taxYear: String)

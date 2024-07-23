@@ -22,8 +22,8 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.RetrieveCharitableGivingReliefs.RetrieveCharitableGivingReliefsValidatorFactory
-import v1.RetrieveCharitableGivingReliefs.model.request.RetrieveCharitableGivingReliefsRequestData
+import v1.retrieveCharitableGivingReliefs.RetrieveCharitableGivingReliefsValidatorFactory
+import v1.retrieveCharitableGivingReliefs.model.request.RetrieveCharitableGivingReliefsRequestData
 
 trait MockRetrieveCharitableGivingReliefsValidatorFactory extends MockFactory {
 
