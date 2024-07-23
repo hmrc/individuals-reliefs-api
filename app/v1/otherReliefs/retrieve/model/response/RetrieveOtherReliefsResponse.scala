@@ -21,7 +21,6 @@ import config.AppConfig
 import play.api.libs.json.OWrites
 import shared.utils.JsonWritesUtil.writesFrom
 import v1.otherReliefs.retrieve.def1.model.response.Def1_RetrieveOtherReliefsResponse
-import v1.otherReliefs.retrieve.def1.model.response.Def1_RetrieveOtherReliefsResponse.Def1_RetrieveOtherReliefsLinksFactory
 
 trait RetrieveOtherReliefsResponse
 
@@ -29,6 +28,21 @@ object RetrieveOtherReliefsResponse extends HateoasLinks {
 
   implicit val writes: OWrites[RetrieveOtherReliefsResponse] = writesFrom { case def1: Def1_RetrieveOtherReliefsResponse =>
     implicitly[OWrites[Def1_RetrieveOtherReliefsResponse]].writes(def1)
+  }
+
+  implicit object Def1_RetrieveOtherReliefsLinksFactory
+    extends HateoasLinksFactory[Def1_RetrieveOtherReliefsResponse, RetrieveOtherReliefsHateoasData] {
+
+    override def links(appConfig: AppConfig, data: RetrieveOtherReliefsHateoasData): Seq[Link] = {
+      import data._
+
+      Seq(
+        retrieveOtherReliefs(appConfig, nino, taxYear),
+        amendOtherReliefs(appConfig, nino, taxYear),
+        deleteOtherReliefs(appConfig, nino, taxYear)
+      )
+    }
+
   }
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrieveOtherReliefsResponse, RetrieveOtherReliefsHateoasData] {

@@ -19,10 +19,10 @@ package v1.otherReliefs.delete
 import api.controllers.validators.resolvers.ResolveTaxYear
 import api.models.domain.TaxYear
 
-class DeleteOtherReliefsSchema
+sealed trait DeleteOtherReliefsSchema
 
 object DeleteOtherReliefsSchema {
-  private case object Def1 extends DeleteOtherReliefsSchema
+  case object Def1 extends DeleteOtherReliefsSchema
 
   private val defaultSchema = Def1
 

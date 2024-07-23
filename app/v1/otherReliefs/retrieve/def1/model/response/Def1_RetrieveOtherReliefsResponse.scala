@@ -16,11 +16,10 @@
 
 package v1.otherReliefs.retrieve.def1.model.response
 
-import api.hateoas.{HateoasLinks, HateoasLinksFactory, Link}
+import api.hateoas.HateoasLinks
 import api.models.domain.Timestamp
-import config.AppConfig
 import play.api.libs.json.{Json, OWrites, Reads}
-import v1.otherReliefs.retrieve.model.response.{RetrieveOtherReliefsHateoasData, RetrieveOtherReliefsResponse}
+import v1.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 
 case class Def1_RetrieveOtherReliefsResponse(
     submittedOn: Timestamp,
@@ -37,20 +36,5 @@ object Def1_RetrieveOtherReliefsResponse extends HateoasLinks {
 
   implicit val reads: Reads[Def1_RetrieveOtherReliefsResponse]    = Json.reads[Def1_RetrieveOtherReliefsResponse]
   implicit val writes: OWrites[Def1_RetrieveOtherReliefsResponse] = Json.writes[Def1_RetrieveOtherReliefsResponse]
-
-  implicit object Def1_RetrieveOtherReliefsLinksFactory
-      extends HateoasLinksFactory[Def1_RetrieveOtherReliefsResponse, RetrieveOtherReliefsHateoasData] {
-
-    override def links(appConfig: AppConfig, data: RetrieveOtherReliefsHateoasData): Seq[Link] = {
-      import data._
-
-      Seq(
-        retrieveOtherReliefs(appConfig, nino, taxYear),
-        amendOtherReliefs(appConfig, nino, taxYear),
-        deleteOtherReliefs(appConfig, nino, taxYear)
-      )
-    }
-
-  }
 
 }

@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.amend.request
+package v1.otherReliefs.retrieve.def1.model.response
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.otherReliefs.amend.def1.model.request.AnnualPaymentsMade
 
-class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
-  val annualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)
+class NonDeductibleLoanInterestSpec extends UnitSpec with JsonErrorValidators {
 
-  val noRefAnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
+  val nonDeductibleLoanInterest: NonDeductibleLoanInterest = NonDeductibleLoanInterest(
+    Some("myref"),
+    763.00
+  )
+
+  val noRefNoneDeductibleLoanInterest: NonDeductibleLoanInterest = NonDeductibleLoanInterest(
+    None,
+    763.00
+  )
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myRef",
+      |        "customerReference": "myref",
       |        "reliefClaimed": 763.00
       |      }""".stripMargin
   )
@@ -42,15 +48,15 @@ class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        annualPaymentsMade shouldBe json.as[AnnualPaymentsMade]
+        nonDeductibleLoanInterest shouldBe json.as[NonDeductibleLoanInterest]
       }
     }
   }
 
   "reads from a JSON with no reference" when {
-    "passed a JSON with no customer reference" should {
-      "return a model with no customer reference " in {
-        noRefAnnualPaymentsMade shouldBe noRefJson.as[AnnualPaymentsMade]
+    "passed a JSON with no reference" should {
+      "return a model with no reference" in {
+        noRefNoneDeductibleLoanInterest shouldBe noRefJson.as[NonDeductibleLoanInterest]
       }
     }
   }
@@ -58,7 +64,7 @@ class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(annualPaymentsMade) shouldBe json
+        Json.toJson(nonDeductibleLoanInterest) shouldBe json
       }
     }
   }
@@ -66,7 +72,7 @@ class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
   "writes from a model with no reference" when {
     "passed a model with no customer reference" should {
       "return a JSON with no customer reference" in {
-        Json.toJson(noRefAnnualPaymentsMade) shouldBe noRefJson
+        Json.toJson(noRefNoneDeductibleLoanInterest) shouldBe noRefJson
       }
     }
   }

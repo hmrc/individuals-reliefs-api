@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.amend.model.request
+package v1.otherReliefs.amend.def1.model.request
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.otherReliefs.amend.def1.model.request._
 
-class AmendOtherReliefsBodySpec extends UnitSpec with JsonErrorValidators {
+class Def1_AmendOtherReliefsRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
   private val amendOtherReliefsBody = Def1_AmendOtherReliefsRequestBody(
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),

@@ -25,9 +25,9 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import routing.{Version, Version1}
 import utils.IdGenerator
-import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
-import v1.models.response.amendOtherReliefs.AmendOtherReliefsResponse.LinksFactory
 import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
+import v1.otherReliefs.amend.model.response.AmendOtherReliefsHateoasData
+import v1.otherReliefs.amend.model.response.AmendOtherReliefsResponse.LinksFactory
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext

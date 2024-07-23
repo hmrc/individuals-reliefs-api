@@ -20,7 +20,6 @@ import api.hateoas.Link
 import api.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
-import v1.models.response.amendOtherReliefs.{AmendOtherReliefsHateoasData, AmendOtherReliefsResponse}
 
 class AmendOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
 

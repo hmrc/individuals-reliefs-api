@@ -14,42 +14,41 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.amend.request
+package v1.otherReliefs.amend.def1.model.request
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.otherReliefs.amend.def1.model.request.PayrollGiving
 
-class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
+class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec with JsonErrorValidators {
 
-  val payrollGiving = PayrollGiving(
-    Some("myRef"),
-    154.00
+  val qualifyingDistributionRedemptionOfSharesAndSecurities = QualifyingDistributionRedemptionOfSharesAndSecurities(
+    Some("myref"),
+    222.22
   )
 
-  val noRefPayrollGiving = PayrollGiving(
+  val noRefQualifyingDistributionRedemptionOfSharesAndSecurities = QualifyingDistributionRedemptionOfSharesAndSecurities(
     None,
-    154.00
+    222.22
   )
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myRef",
-      |        "reliefClaimed": 154.00
+      |        "customerReference": "myref",
+      |        "amount": 222.22
       |      }""".stripMargin
   )
 
   val noRefJson = Json.parse(
     """{
-      |        "reliefClaimed": 154.00
+      |        "amount": 222.22
       |      }""".stripMargin
   )
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        payrollGiving shouldBe json.as[PayrollGiving]
+        qualifyingDistributionRedemptionOfSharesAndSecurities shouldBe json.as[QualifyingDistributionRedemptionOfSharesAndSecurities]
       }
     }
   }
@@ -57,7 +56,7 @@ class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
   "reads from a JSON with no reference" when {
     "passed a JSON with no customer reference" should {
       "return a model with no customer reference " in {
-        noRefPayrollGiving shouldBe noRefJson.as[PayrollGiving]
+        noRefQualifyingDistributionRedemptionOfSharesAndSecurities shouldBe noRefJson.as[QualifyingDistributionRedemptionOfSharesAndSecurities]
       }
     }
   }
@@ -65,7 +64,7 @@ class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(payrollGiving) shouldBe json
+        Json.toJson(qualifyingDistributionRedemptionOfSharesAndSecurities) shouldBe json
       }
     }
   }
@@ -73,7 +72,7 @@ class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
   "writes from a model with no reference" when {
     "passed a model with no customer reference" should {
       "return a JSON with no customer reference" in {
-        Json.toJson(noRefPayrollGiving) shouldBe noRefJson
+        Json.toJson(noRefQualifyingDistributionRedemptionOfSharesAndSecurities) shouldBe noRefJson
       }
     }
   }

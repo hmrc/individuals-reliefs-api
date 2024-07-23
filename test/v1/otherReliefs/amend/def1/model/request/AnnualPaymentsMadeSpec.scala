@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.retrieve.response
+package v1.otherReliefs.amend.def1.model.request
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.otherReliefs.retrieve.def1.model.response.AnnualPaymentsMade
 
 class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
-  val annualPaymentsMade: AnnualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)
+  val annualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)
 
-  val noRefAnnualPaymentsMade: AnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
+  val noRefAnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
 
   val json = Json.parse(
     """{

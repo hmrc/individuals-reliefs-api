@@ -38,7 +38,7 @@ class RetrieveOtherReliefsConnector @Inject() (val http: HttpClient, val appConf
     import request._
     import schema._
 
-    val url: DownstreamUri[DownstreamResp] with Serializable =
+    val url: DownstreamUri[DownstreamResp] =
       if (taxYear.useTaxYearSpecificApi) {
         TaxYearSpecificIfsUri[DownstreamResp](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/$nino")
       } else {

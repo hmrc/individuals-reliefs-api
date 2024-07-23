@@ -27,8 +27,8 @@ import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.models.response.amendOtherReliefs.AmendOtherReliefsHateoasData
 import v1.otherReliefs.amend.def1.model.request._
+import v1.otherReliefs.amend.model.response.AmendOtherReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

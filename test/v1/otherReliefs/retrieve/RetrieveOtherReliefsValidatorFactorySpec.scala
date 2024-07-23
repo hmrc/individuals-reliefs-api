@@ -16,64 +16,29 @@
 
 package v1.otherReliefs.retrieve
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
 import support.UnitSpec
-import v1.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
-import v1.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
+import v1.otherReliefs.retrieve.def1.model.Def1_RetrieveOtherReliefsValidator
 
 class RetrieveOtherReliefsValidatorFactorySpec extends UnitSpec {
 
-  private implicit val correlationId: String = "1234"
-
-  private val validNino = "AA123456A"
-  private val validTaxYear = "2021-22"
-
-  private val parsedNino = Nino(validNino)
-  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
+  private val validNino      = "AA123456A"
+  private val validTaxYear   = "2021-22"
+  private val invalidTaxYear = "2123-23"
 
   private val validatorFactory = new RetrieveOtherReliefsValidatorFactory
 
-  private def validator(nino: String, taxYear: String) = validatorFactory.validator(nino, taxYear)
+  "validator" should {
+    "return the Def1 validator" when {
+      "given any valid request" in {
+        val result = validatorFactory.validator(validNino, validTaxYear)
+        result shouldBe a[Def1_RetrieveOtherReliefsValidator]
+      }
 
-  "running a validation" should {
-    "return no errors" when {
-      "a valid request is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveOtherReliefsRequestData] = validator(validNino, validTaxYear).validateAndWrapResult()
-        result shouldBe Right(Def1_RetrieveOtherReliefsRequestData(parsedNino, parsedTaxYear))
-      }
-    }
-    "return NinoFormatError" when {
-      "an invalid nino is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveOtherReliefsRequestData] = validator("A12344A", validTaxYear).validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
-      }
-    }
-    "return TaxYearFormatError" when {
-      "an invalid tax year is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveOtherReliefsRequestData] = validator(validNino, "201831").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
-      }
-    }
-    "return RuleTaxYearRangeInvalidError" when {
-      "the tax year range exceeds 1" in {
-        val result: Either[ErrorWrapper, RetrieveOtherReliefsRequestData] = validator(validNino, "2019-21").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
-      }
-    }
-    "return RULE_TAX_YEAR_NOT_SUPPORTED error" when {
-      "a tax year before the earliest allowed date is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveOtherReliefsRequestData] = validator(validNino, "2016-17").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
-      }
-    }
-    "return multiple errors" when {
-      "request supplied has multiple errors" in {
-        val result: Either[ErrorWrapper, RetrieveOtherReliefsRequestData] = validator("A12344A", "20178").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
+      "given any invalid tax year" in {
+        val result = validatorFactory.validator(validNino, invalidTaxYear)
+        result shouldBe a[Def1_RetrieveOtherReliefsValidator]
       }
     }
   }
 
 }
-

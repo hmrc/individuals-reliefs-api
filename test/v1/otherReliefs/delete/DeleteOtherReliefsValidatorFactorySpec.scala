@@ -17,22 +17,33 @@
 package v1.otherReliefs.delete
 
 import api.controllers.validators.Validator
-import v1.otherReliefs.delete.DeleteOtherReliefsSchema.Def1
+import support.UnitSpec
 import v1.otherReliefs.delete.def1.Def1_DeleteOtherReliefsValidator
 import v1.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
-import javax.inject.Singleton
+class DeleteOtherReliefsValidatorFactorySpec extends UnitSpec {
 
-@Singleton
-class DeleteOtherReliefsValidatorFactory {
+  private val validNino      = "AA123456A"
+  private val validTaxYear   = "2022-23"
+  private val invalidTaxYear = "2023"
 
-  def validator(nino: String, taxYear: String): Validator[DeleteOtherReliefsRequestData] = {
+  private val validatorFactory = new DeleteOtherReliefsValidatorFactory
 
-    val schema = DeleteOtherReliefsSchema.schemaFor(Some(taxYear))
+  "validator" should {
+    "return the Def1 validator" when {
+      "given a valid request" in {
+        val result: Validator[DeleteOtherReliefsRequestData] = validatorFactory.validator(validNino, validTaxYear)
+        result shouldBe a[Def1_DeleteOtherReliefsValidator]
 
-    schema match {
-      case Def1 => new Def1_DeleteOtherReliefsValidator(nino, taxYear)
+      }
+
+      "given an invalid taxYear" in {
+        val result: Validator[DeleteOtherReliefsRequestData] = validatorFactory.validator(validNino, invalidTaxYear)
+        result shouldBe a[Def1_DeleteOtherReliefsValidator]
+
+      }
     }
+
   }
 
 }

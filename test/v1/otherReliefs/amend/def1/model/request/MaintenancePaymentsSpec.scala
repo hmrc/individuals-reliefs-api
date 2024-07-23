@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.amend.request
+package v1.otherReliefs.amend.def1.model.request
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.otherReliefs.amend.def1.model.request.MaintenancePayments
 
 class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
 

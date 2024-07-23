@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.amend.request
+package v1.otherReliefs.retrieve.def1.model.response
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.otherReliefs.amend.def1.model.request.QualifyingLoanInterestPayments
 
 class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidators {
 
-  val qualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
+  val qualifyingLoanInterestPayments: QualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
     Some("myRef"),
     Some("Maurice"),
     763.00
   )
 
-  val noOptionsQualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
+  val noOptionsQualifyingLoanInterestPayments: QualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
     None,
     None,
     763.00
@@ -43,7 +42,7 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
       |}""".stripMargin
   )
 
-  val noOptionsQualifyingLoanInterestPaymentsJson = Json.parse(
+  val noOptionsJson = Json.parse(
     """{
       |  "reliefClaimed": 763.00
       |}""".stripMargin
@@ -60,7 +59,7 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
   "reads from a JSON with no lender name" when {
     "passed a JSON with no customer lender name" should {
       "return a model with no customer lender name" in {
-        noOptionsQualifyingLoanInterestPayments shouldBe noOptionsQualifyingLoanInterestPaymentsJson.as[QualifyingLoanInterestPayments]
+        noOptionsQualifyingLoanInterestPayments shouldBe noOptionsJson.as[QualifyingLoanInterestPayments]
       }
     }
   }
@@ -76,7 +75,7 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
   "writes from a model with no lender name" when {
     "passed a model with no customer lender name" should {
       "return a JSON with no customer lender name" in {
-        Json.toJson(noOptionsQualifyingLoanInterestPayments) shouldBe noOptionsQualifyingLoanInterestPaymentsJson
+        Json.toJson(noOptionsQualifyingLoanInterestPayments) shouldBe noOptionsJson
       }
     }
   }

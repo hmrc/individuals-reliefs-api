@@ -22,7 +22,7 @@ import api.models.domain.TaxYear
 sealed trait AmendOtherReliefsSchema
 
 object AmendOtherReliefsSchema {
-  private case object Def1 extends AmendOtherReliefsSchema
+  case object Def1 extends AmendOtherReliefsSchema
 
   private val defaultSchema = Def1
 

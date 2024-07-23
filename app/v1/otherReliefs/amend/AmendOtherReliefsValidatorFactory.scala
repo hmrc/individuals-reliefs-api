@@ -18,6 +18,7 @@ package v1.otherReliefs.amend
 
 import api.controllers.validators.Validator
 import play.api.libs.json.JsValue
+import v1.otherReliefs.amend.AmendOtherReliefsSchema.Def1
 import v1.otherReliefs.amend.def1.Def1_AmendOtherReliefsValidator
 import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
@@ -31,7 +32,7 @@ class AmendOtherReliefsValidatorFactory {
     val schema = AmendOtherReliefsSchema.schemaFor(Some(taxYear))
 
     schema match {
-      case _ => new Def1_AmendOtherReliefsValidator(nino, taxYear, body)
+      case Def1 => new Def1_AmendOtherReliefsValidator(nino, taxYear, body)
     }
   }
 

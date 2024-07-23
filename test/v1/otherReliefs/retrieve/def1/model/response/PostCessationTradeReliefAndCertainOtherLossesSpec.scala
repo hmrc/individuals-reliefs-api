@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.retrieve.response
+package v1.otherReliefs.retrieve.def1.model.response
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.otherReliefs.retrieve.def1.model.response.PostCessationTradeReliefAndCertainOtherLosses
 
 class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with JsonErrorValidators {
 

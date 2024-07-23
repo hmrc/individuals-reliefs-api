@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.retrieve.response
+package v1.otherReliefs.retrieve.def1.model.response
 
 import api.hateoas.Link
 import api.hateoas.Method._
@@ -22,10 +22,9 @@ import api.models.domain.Timestamp
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.otherReliefs.retrieve.def1.model.response._
 import v1.otherReliefs.retrieve.model.response.{RetrieveOtherReliefsHateoasData, RetrieveOtherReliefsResponse}
 
-class RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
+class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
   val retrieveOtherReliefsBody: RetrieveOtherReliefsResponse = Def1_RetrieveOtherReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),

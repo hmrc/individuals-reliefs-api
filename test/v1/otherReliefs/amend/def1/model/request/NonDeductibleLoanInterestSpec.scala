@@ -14,50 +14,49 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.retrieve.response
+package v1.otherReliefs.amend.def1.model.request
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.otherReliefs.retrieve.def1.model.response.PayrollGiving
 
-class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
+class NonDeductibleLoanInterestSpec extends UnitSpec with JsonErrorValidators {
 
-  val payrollGiving: PayrollGiving = PayrollGiving(
-    Some("myRef"),
-    154.00
+  val nonDeductibleLoanInterest = NonDeductibleLoanInterest(
+    Some("myref"),
+    763.00
   )
 
-  val noRefPayrollGiving: PayrollGiving = PayrollGiving(
+  val noRefNoneDeductibleLoanInterest = NonDeductibleLoanInterest(
     None,
-    154.00
+    763.00
   )
 
   val json = Json.parse(
     """{
-      |        "customerReference": "myRef",
-      |        "reliefClaimed": 154.00
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
       |      }""".stripMargin
   )
 
   val noRefJson = Json.parse(
     """{
-      |        "reliefClaimed": 154.00
+      |        "reliefClaimed": 763.00
       |      }""".stripMargin
   )
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        payrollGiving shouldBe json.as[PayrollGiving]
+        nonDeductibleLoanInterest shouldBe json.as[NonDeductibleLoanInterest]
       }
     }
   }
 
   "reads from a JSON with no reference" when {
-    "passed a JSON with no customer reference" should {
-      "return a model with no customer reference " in {
-        noRefPayrollGiving shouldBe noRefJson.as[PayrollGiving]
+    "passed a JSON with no reference" should {
+      "return a model with no reference" in {
+        noRefNoneDeductibleLoanInterest shouldBe noRefJson.as[NonDeductibleLoanInterest]
       }
     }
   }
@@ -65,7 +64,7 @@ class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(payrollGiving) shouldBe json
+        Json.toJson(nonDeductibleLoanInterest) shouldBe json
       }
     }
   }
@@ -73,7 +72,7 @@ class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
   "writes from a model with no reference" when {
     "passed a model with no customer reference" should {
       "return a JSON with no customer reference" in {
-        Json.toJson(noRefPayrollGiving) shouldBe noRefJson
+        Json.toJson(noRefNoneDeductibleLoanInterest) shouldBe noRefJson
       }
     }
   }

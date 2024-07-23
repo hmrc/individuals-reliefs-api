@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package v1.otherReliefs.retrieve.response
+package v1.otherReliefs.retrieve.def1.model.response
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.otherReliefs.retrieve.def1.model.response.MaintenancePayments
 
 class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
   val maintenancePayments: MaintenancePayments = MaintenancePayments(Some("myRef"), Some("Hilda"), Some("2000-01-01"), 222.22)
