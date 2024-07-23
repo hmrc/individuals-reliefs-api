@@ -14,17 +14,39 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.createAmend
+package v1.pensionReliefs.createAmend.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.ResolveParsedNumber
+import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber, ResolveTaxYear}
+import api.controllers.validators.{RulesValidator, Validator}
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
-import cats.implicits.toFoldableOps
-import v1.pensionReliefs.createAmend.model.request.{CreateAmendPensionsReliefsRequestData, PensionReliefs}
+import cats.implicits.{catsSyntaxTuple3Semigroupal, toFoldableOps}
+import play.api.libs.json.JsValue
+import v1.pensionReliefs.createAmend.def1.Def1_CreateAmendPensionReliefsValidator.validateBusinessRules
+import v1.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
+import v1.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
-object CreateAmendPensionsReliefsRulesValidator extends RulesValidator[CreateAmendPensionsReliefsRequestData] {
+import javax.inject.Singleton
+import scala.annotation.nowarn
 
+@Singleton
+class Def1_CreateAmendPensionsReliefsValidator(nino: String, taxYear: String, body: JsValue)
+    extends Validator[CreateAmendPensionsReliefsRequestData] {
+
+  @nowarn("cat=lint-byname-implicit")
+  private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendPensionsReliefsBody]()
+
+  def validate: Validated[Seq[MtdError], CreateAmendPensionsReliefsRequestData] =
+    (
+      ResolveNino(nino),
+      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
+      resolveJson(body)
+    ).mapN(Def1_CreateAmendPensionsReliefsRequestData) andThen validateBusinessRules
+
+}
+
+object Def1_CreateAmendPensionReliefsValidator extends RulesValidator[CreateAmendPensionsReliefsRequestData] {
   private val resolveParsedNumber = ResolveParsedNumber()
 
   def validateBusinessRules(parsed: CreateAmendPensionsReliefsRequestData): Validated[Seq[MtdError], CreateAmendPensionsReliefsRequestData] =

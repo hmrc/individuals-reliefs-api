@@ -27,8 +27,8 @@ import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.pensionReliefs.createAmend.model.request.{CreateAmendPensionsReliefsBody, CreateAmendPensionsReliefsRequestData, PensionReliefs}
-import v1.pensionReliefs.createAmend.model.response.CreateAmendPensionsReliefsHateoasData
+import v1.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
+import v1.pensionReliefs.createAmend.def1.model.response.CreateAmendPensionsReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -72,7 +72,7 @@ class CreateAmendPensionsReliefsControllerSpec
     )
   )
 
-  private val requestData = CreateAmendPensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = Def1_CreateAmendPensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   private val hateoasResponse = Json.parse("""
       |{

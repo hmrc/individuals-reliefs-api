@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.createAmend.model.response
+package v1.pensionReliefs.createAmend
 
-import play.api.libs.json.OWrites
-import shared.utils.JsonWritesUtil
-import v1.pensionReliefs.createAmend.def1.model.response.Def1_CreateAmendPensionsReliefsResponse
+sealed trait CreateAmendPensionsReliefsSchema
 
-trait CreateAmendPensionsReliefsResponse
+object CreateAmendPensionsReliefsSchema {
 
-object CreateAmendPensionsReliefsResponse extends JsonWritesUtil {
+  case object Def1 extends CreateAmendPensionsReliefsSchema
 
-  implicit val writes: OWrites[CreateAmendPensionsReliefsResponse] = writesFrom { case def1: Def1_CreateAmendPensionsReliefsResponse =>
-    implicitly[OWrites[Def1_CreateAmendPensionsReliefsResponse]].writes(def1)
-  }
+  val schema: CreateAmendPensionsReliefsSchema = Def1
 
 }

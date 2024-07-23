@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.createAmend
+package v1.pensionReliefs.createAmend.def1.model.request
 
-import api.controllers.validators.Validator
-import play.api.libs.json.JsValue
-import v1.pensionReliefs.createAmend.CreateAmendPensionsReliefsSchema.Def1
-import v1.pensionReliefs.createAmend.def1.Def1_CreateAmendPensionsReliefsValidator
+import api.models.domain.{Nino, TaxYear}
+import v1.pensionReliefs.createAmend.CreateAmendPensionsReliefsSchema
 import v1.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
-import javax.inject.{Inject, Singleton}
-
-@Singleton
-class CreateAmendPensionsReliefsValidatorFactory @Inject() {
-
-  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendPensionsReliefsRequestData] = {
-    val schema = CreateAmendPensionsReliefsSchema.schema
-    schema match {
-      case Def1 => new Def1_CreateAmendPensionsReliefsValidator(nino, taxYear, body)
-    }
-  }
-
+case class Def1_CreateAmendPensionsReliefsRequestData(nino: Nino, taxYear: TaxYear, body: CreateAmendPensionsReliefsBody)
+    extends CreateAmendPensionsReliefsRequestData {
+  val schema: CreateAmendPensionsReliefsSchema = CreateAmendPensionsReliefsSchema.Def1
 }

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v1.pensionReliefs.createAmend.model.response
+package v1.pensionReliefs.createAmend.def1.model.response
 
 import api.hateoas.Link
 import api.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
 
-class CreateAmendPensionsReliefsResponseSpec extends UnitSpec with MockAppConfig {
+class Def1_CreateAmendPensionsReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
   "LinksFactory" should {
     "return the correct links" in {
@@ -29,7 +29,7 @@ class CreateAmendPensionsReliefsResponseSpec extends UnitSpec with MockAppConfig
       val taxYear = "mytaxyear"
 
       MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      CreateAmendPensionsReliefsResponse.LinksFactory.links(mockAppConfig, CreateAmendPensionsReliefsHateoasData(nino, taxYear)) shouldBe
+      Def1_CreateAmendPensionsReliefsResponse.LinksFactory.links(mockAppConfig, CreateAmendPensionsReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/pensions/$nino/$taxYear", GET, "self"),
           api.hateoas.Link(s"/my/context/pensions/$nino/$taxYear", PUT, "create-and-amend-reliefs-pensions"),

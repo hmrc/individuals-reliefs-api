@@ -17,5 +17,11 @@
 package v1.pensionReliefs.createAmend.model.request
 
 import api.models.domain.{Nino, TaxYear}
+import v1.pensionReliefs.createAmend.def1.model.request.CreateAmendPensionsReliefsBody
 
-case class CreateAmendPensionsReliefsRequestData(nino: Nino, taxYear: TaxYear, body: CreateAmendPensionsReliefsBody)
+trait CreateAmendPensionsReliefsRequestData {
+  def nino: Nino
+  def taxYear: TaxYear
+  def body: CreateAmendPensionsReliefsBody
+
+}

@@ -20,7 +20,8 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
-import v1.pensionReliefs.createAmend.model.request.{CreateAmendPensionsReliefsBody, CreateAmendPensionsReliefsRequestData, PensionReliefs}
+import v1.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
+import v1.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -91,7 +92,7 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    protected val request: CreateAmendPensionsReliefsRequestData = CreateAmendPensionsReliefsRequestData(
+    protected val request: CreateAmendPensionsReliefsRequestData = Def1_CreateAmendPensionsReliefsRequestData(
       nino = Nino(nino),
       taxYear = taxYear,
       body = body
