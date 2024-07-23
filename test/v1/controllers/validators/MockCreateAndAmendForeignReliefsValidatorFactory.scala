@@ -23,8 +23,8 @@ import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.JsValue
-import v1.CreateAndAmendForeignReliefs.CreateAndAmendForeignReliefsValidatorFactory
-import v1.CreateAndAmendForeignReliefs.model.request.CreateAndAmendForeignReliefsRequestData
+import v1.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsValidatorFactory
+import v1.createAndAmendForeignReliefs.model.request.CreateAndAmendForeignReliefsRequestData
 
 trait MockCreateAndAmendForeignReliefsValidatorFactory extends MockFactory {
 

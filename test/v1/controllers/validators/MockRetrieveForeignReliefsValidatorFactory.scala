@@ -22,8 +22,8 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.RetrieveForeignReliefs.RetrieveForeignReliefsValidatorFactory
-import v1.RetrieveForeignReliefs.model.request.RetrieveForeignReliefsRequestData
+import v1.retrieveForeignReliefs.RetrieveForeignReliefsValidatorFactory
+import v1.retrieveForeignReliefs.model.request.RetrieveForeignReliefsRequestData
 
 trait MockRetrieveForeignReliefsValidatorFactory extends MockFactory {
 

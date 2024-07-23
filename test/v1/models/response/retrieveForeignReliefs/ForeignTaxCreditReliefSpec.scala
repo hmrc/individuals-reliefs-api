@@ -19,7 +19,7 @@ package v1.models.response.retrieveForeignReliefs
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.RetrieveForeignReliefs.def1.model.response.Def1_ForeignTaxCreditRelief
+import v1.retrieveForeignReliefs.def1.model.response.Def1_ForeignTaxCreditRelief
 
 class ForeignTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
 
