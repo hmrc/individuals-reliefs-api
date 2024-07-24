@@ -31,8 +31,8 @@ trait MockRetrieveCharitableGivingReliefsConnector extends MockFactory {
 
   object MockRetrieveCharitableGivingReliefsConnector {
 
-    def retrieve(
-        requestData: Def1_RetrieveCharitableGivingReliefsRequestData): CallHandler[Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]]] = {
+    def retrieve(requestData: Def1_RetrieveCharitableGivingReliefsRequestData)
+        : CallHandler[Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]]] = {
       (mockConnector
         .retrieve(_: Def1_RetrieveCharitableGivingReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

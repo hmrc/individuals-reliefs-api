@@ -23,10 +23,10 @@ import v1.models.request.deleteReliefInvestments.DeleteReliefInvestmentsRequestD
 
 class DeleteReliefInvestmentsValidatorFactorySpec extends UnitSpec {
   private implicit val correlationId: String = "1234"
-  private val validNino = "AA123456A"
-  private val validTaxYear = "2021-22"
+  private val validNino                      = "AA123456A"
+  private val validTaxYear                   = "2021-22"
 
-  private val parsedNino = Nino(validNino)
+  private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
   private val validatorFactory = new DeleteReliefInvestmentsValidatorFactory
@@ -76,4 +76,5 @@ class DeleteReliefInvestmentsValidatorFactorySpec extends UnitSpec {
       }
     }
   }
+
 }

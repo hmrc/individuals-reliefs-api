@@ -14,9 +14,9 @@ PUT        /foreign/:nino/:taxYear                          v1.createAndAmendFor
 DELETE     /foreign/:nino/:taxYear                          v1.deleteForeignReliefs.DeleteForeignReliefsController.handleRequest(nino: String, taxYear: String)
 
 # Pensions Reliefs endpoints
-GET        /pensions/:nino/:taxYear                         v1.controllers.RetrievePensionsReliefsController.handleRequest(nino: String, taxYear: String)
-PUT        /pensions/:nino/:taxYear                         v1.controllers.CreateAmendPensionsReliefsController.handleRequest(nino: String, taxYear: String)
-DELETE     /pensions/:nino/:taxYear                         v1.controllers.DeletePensionsReliefsController.handleRequest(nino: String, taxYear: String)
+GET        /pensions/:nino/:taxYear                         v1.pensionReliefs.retrieve.RetrievePensionsReliefsController.handleRequest(nino: String, taxYear: String)
+PUT        /pensions/:nino/:taxYear                         v1.pensionReliefs.createAmend.CreateAmendPensionsReliefsController.handleRequest(nino: String, taxYear: String)
+DELETE     /pensions/:nino/:taxYear                         v1.pensionReliefs.delete.DeletePensionsReliefsController.handleRequest(nino: String, taxYear: String)
 
 # Charitable Giving Tax Relief endpoints
 GET        /charitable-giving/:nino/:taxYear                v1.retrieveCharitableGivingReliefs.RetrieveCharitableGivingReliefsController.handleRequest(nino: String, taxYear: String)

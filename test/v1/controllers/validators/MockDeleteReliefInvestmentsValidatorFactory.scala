@@ -31,6 +31,7 @@ trait MockDeleteReliefInvestmentsValidatorFactory extends MockFactory {
 
     def validator(): CallHandler[Validator[DeleteReliefInvestmentsRequestData]] =
       (mockDeleteReliefInvestmentsValidatorFactory.validator(_: String, _: String)).expects(*, *)
+
   }
 
   def willUseValidator(use: Validator[DeleteReliefInvestmentsRequestData]): CallHandler[Validator[DeleteReliefInvestmentsRequestData]] = {
@@ -51,4 +52,5 @@ trait MockDeleteReliefInvestmentsValidatorFactory extends MockFactory {
     new Validator[DeleteReliefInvestmentsRequestData] {
       def validate: Validated[Seq[MtdError], DeleteReliefInvestmentsRequestData] = Invalid(result)
     }
+
 }

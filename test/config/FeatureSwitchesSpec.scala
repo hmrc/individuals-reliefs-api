@@ -24,14 +24,14 @@ class FeatureSwitchesSpec extends UnitSpec {
   "a feature switch" should {
     "be true" when {
       "absent from the config" in {
-        val configuration = Configuration.empty
+        val configuration   = Configuration.empty
         val featureSwitches = FeatureSwitches(configuration)
         featureSwitches.isDesIf_MigrationEnabled shouldBe true
 
       }
 
       "enabled" in {
-        val configuration = Configuration("desIf_Migration.enabled" -> true)
+        val configuration   = Configuration("desIf_Migration.enabled" -> true)
         val featureSwitches = FeatureSwitches(configuration)
         featureSwitches.isDesIf_MigrationEnabled shouldBe true
       }
@@ -39,7 +39,7 @@ class FeatureSwitchesSpec extends UnitSpec {
 
     "be false" when {
       "disabled" in {
-        val configuration = Configuration("desIf_Migration.enabled" -> false)
+        val configuration   = Configuration("desIf_Migration.enabled" -> false)
         val featureSwitches = FeatureSwitches(configuration)
         featureSwitches.isDesIf_MigrationEnabled shouldBe false
       }

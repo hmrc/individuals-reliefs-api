@@ -35,5 +35,4 @@ object Def1_Gifts {
 
   implicit val writes: Writes[Def1_Gifts] = Json.writes
 
-
 }

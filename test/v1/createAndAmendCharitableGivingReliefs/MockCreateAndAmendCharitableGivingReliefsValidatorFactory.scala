@@ -39,7 +39,7 @@ trait MockCreateAndAmendCharitableGivingReliefsValidatorFactory extends MockFact
 
   def willUseValidator(use: Validator[CreateAndAmendCharitableGivingTaxReliefsRequestData])
       : CallHandler[Validator[CreateAndAmendCharitableGivingTaxReliefsRequestData]] = {
-  MockedCreateAndAmendCharitableGivingReliefsValidatorFactory
+    MockedCreateAndAmendCharitableGivingReliefsValidatorFactory
       .validator()
       .anyNumberOfTimes()
       .returns(use)

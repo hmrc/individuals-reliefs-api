@@ -28,14 +28,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class DeleteReliefInvestmentsController @Inject()(val authService: EnrolmentsAuthService,
-                                                  val lookupService: MtdIdLookupService,
-                                                  validatorFactory: DeleteReliefInvestmentsValidatorFactory,
-                                                  service: DeleteReliefInvestmentsService,
-                                                  auditService: AuditService,
-                                                  cc: ControllerComponents,
-                                                  val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) {
+class DeleteReliefInvestmentsController @Inject() (val authService: EnrolmentsAuthService,
+                                                   val lookupService: MtdIdLookupService,
+                                                   validatorFactory: DeleteReliefInvestmentsValidatorFactory,
+                                                   service: DeleteReliefInvestmentsService,
+                                                   auditService: AuditService,
+                                                   cc: ControllerComponents,
+                                                   val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "DeleteReliefInvestmentsController", endpointName = "deleteReliefInvestments")

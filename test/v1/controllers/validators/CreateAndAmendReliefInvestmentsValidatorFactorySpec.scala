@@ -17,21 +17,9 @@
 package v1.controllers.validators
 
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{
-  BadRequestError,
-  DateOfInvestmentFormatError,
-  ErrorWrapper,
-  NameFormatError,
-  NinoFormatError,
-  RuleIncorrectOrEmptyBodyError,
-  RuleTaxYearNotSupportedError,
-  RuleTaxYearRangeInvalidError,
-  TaxYearFormatError,
-  UniqueInvestmentRefFormatError,
-  ValueFormatError
-}
+import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import play.api.libs.json.{JsArray, JsNumber, JsObject, JsString, JsValue, Json}
+import play.api.libs.json._
 import support.UnitSpec
 import v1.models.request.createAndAmendReliefInvestments._
 
@@ -277,10 +265,10 @@ class CreateAndAmendReliefInvestmentsValidatorFactorySpec extends UnitSpec with 
       }
 
       "passed a body with out of range formatted date of investments" in {
-        val invalidVctSubscriptionsItem = validVctSubscriptionsItem.update("/dateOfInvestment", JsString("1879-09-23"))
-        val invalidEisSubscriptionsItem = validEisSubscriptionsItem.update("/dateOfInvestment", JsString("2109-01-30"))
-        val invalidCommunityInvestmentItem = validCommunityInvestmentItem.update("/dateOfInvestment", JsString("1150-09-23"))
-        val invalidSeedEnterpriseInvestmentItem = validSeedEnterpriseInvestmentItem.update("/dateOfInvestment", JsString("2100-01-01"))
+        val invalidVctSubscriptionsItem           = validVctSubscriptionsItem.update("/dateOfInvestment", JsString("1879-09-23"))
+        val invalidEisSubscriptionsItem           = validEisSubscriptionsItem.update("/dateOfInvestment", JsString("2109-01-30"))
+        val invalidCommunityInvestmentItem        = validCommunityInvestmentItem.update("/dateOfInvestment", JsString("1150-09-23"))
+        val invalidSeedEnterpriseInvestmentItem   = validSeedEnterpriseInvestmentItem.update("/dateOfInvestment", JsString("2100-01-01"))
         val invalidSocialEnterpriseInvestmentItem = validSocialEnterpriseInvestmentItem.update("/dateOfInvestment", JsString("1899-12-31"))
 
         val invalidBody = bodyWith(
@@ -305,7 +293,6 @@ class CreateAndAmendReliefInvestmentsValidatorFactorySpec extends UnitSpec with 
             ))
           ))
       }
-
 
       "passed a body with invalidly formatted unique investment references" in {
         val invalidVctSubscriptionsItem           = validVctSubscriptionsItem.update("/uniqueInvestmentRef", JsString("ABC/123"))

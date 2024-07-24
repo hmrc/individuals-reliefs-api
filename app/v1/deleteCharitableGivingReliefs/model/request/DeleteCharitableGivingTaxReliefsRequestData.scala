@@ -20,6 +20,4 @@ import api.models.domain.{Nino, TaxYear}
 
 sealed trait DeleteCharitableGivingTaxReliefsRequestData
 
-
 case class Def1_DeleteCharitableGivingTaxReliefsRequestData(nino: Nino, taxYear: TaxYear) extends DeleteCharitableGivingTaxReliefsRequestData
-

@@ -31,13 +31,13 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class CreateAndAmendCharitableGivingReliefsController @Inject() (val authService: EnrolmentsAuthService,
-                                                          val lookupService: MtdIdLookupService,
-                                                          validatorFactory: CreateAndAmendCharitableGivingReliefsValidatorFactory,
-                                                          service: CreateAndAmendCharitableGivingTaxReliefsService,
-                                                          auditService: AuditService,
-                                                          hateoasFactory: HateoasFactory,
-                                                          cc: ControllerComponents,
-                                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                                 val lookupService: MtdIdLookupService,
+                                                                 validatorFactory: CreateAndAmendCharitableGivingReliefsValidatorFactory,
+                                                                 service: CreateAndAmendCharitableGivingTaxReliefsService,
+                                                                 auditService: AuditService,
+                                                                 hateoasFactory: HateoasFactory,
+                                                                 cc: ControllerComponents,
+                                                                 val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

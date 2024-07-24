@@ -18,6 +18,5 @@ package v1.retrieveForeignReliefs.model.request
 
 import api.models.domain.{Nino, TaxYear}
 
-
 sealed trait RetrieveForeignReliefsRequestData
 case class Def1_RetrieveForeignReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveForeignReliefsRequestData

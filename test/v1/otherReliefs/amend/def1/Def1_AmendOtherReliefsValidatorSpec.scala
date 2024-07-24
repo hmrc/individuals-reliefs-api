@@ -390,10 +390,10 @@ class Def1_AmendOtherReliefsValidatorSpec extends UnitSpec with JsonErrorValidat
 
       "the dates are out of range" in {
         val dateBeforeRange = JsString("1891-01-23")
-        val dateAfterRange = JsString("2100-01-01")
+        val dateAfterRange  = JsString("2100-01-01")
 
         val invalidMaintenancePaymentsEntry = validMaintenancePaymentsEntry.update("/exSpouseDateOfBirth", dateBeforeRange)
-        val invalidPostCessationEntry = validPostCessationEntry.update("/dateBusinessCeased", dateAfterRange)
+        val invalidPostCessationEntry       = validPostCessationEntry.update("/dateBusinessCeased", dateAfterRange)
 
         val invalidBody =
           bodyWith(invalidMaintenancePaymentsEntry)(invalidPostCessationEntry)(validQualifyingEntry)

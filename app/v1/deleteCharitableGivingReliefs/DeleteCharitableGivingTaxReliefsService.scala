@@ -26,14 +26,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingTaxReliefsService @Inject()(connector: DeleteCharitableGivingReliefConnector) extends BaseService {
+class DeleteCharitableGivingTaxReliefsService @Inject() (connector: DeleteCharitableGivingReliefConnector) extends BaseService {
 
   def delete(
-              request: DeleteCharitableGivingTaxReliefsRequestData
-            )(implicit
-              ctx: RequestContext,
-              ec: ExecutionContext
-            ): Future[ServiceOutcome[Unit]] = {
+      request: DeleteCharitableGivingTaxReliefsRequestData
+  )(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext
+  ): Future[ServiceOutcome[Unit]] = {
     connector.delete(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 

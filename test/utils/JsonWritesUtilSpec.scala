@@ -17,7 +17,6 @@
 package shared.utils
 
 import play.api.libs.json.{Json, OWrites}
-
 import support.UnitSpec
 
 object JsonWritesUtilSpec {
@@ -51,4 +50,3 @@ class JsonWritesUtilSpec extends UnitSpec with JsonWritesUtil {
   }
 
 }
-

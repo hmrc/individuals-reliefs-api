@@ -19,11 +19,11 @@ package v1.retrieveForeignReliefs.def1.model.response
 import play.api.libs.json.{Json, Reads, Writes}
 
 case class Def1_ForeignIncomeTaxCreditRelief(countryCode: String,
-                                        foreignTaxPaid: Option[BigDecimal],
-                                        taxableAmount: BigDecimal,
-                                        employmentLumpSum: Boolean)
+                                             foreignTaxPaid: Option[BigDecimal],
+                                             taxableAmount: BigDecimal,
+                                             employmentLumpSum: Boolean)
 
 object Def1_ForeignIncomeTaxCreditRelief {
-  implicit val reads: Reads[Def1_ForeignIncomeTaxCreditRelief] = Json.reads[Def1_ForeignIncomeTaxCreditRelief]
+  implicit val reads: Reads[Def1_ForeignIncomeTaxCreditRelief]   = Json.reads[Def1_ForeignIncomeTaxCreditRelief]
   implicit val writes: Writes[Def1_ForeignIncomeTaxCreditRelief] = Json.writes[Def1_ForeignIncomeTaxCreditRelief]
 }

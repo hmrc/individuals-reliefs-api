@@ -32,6 +32,7 @@ trait MockRetrieveReliefInvestmentsValidatorFactory extends MockFactory {
 
     def validator(): CallHandler[Validator[RetrieveReliefInvestmentsRequestData]] =
       (mockRetrieveReliefInvestmentsValidatorFactory.validator(_: String, _: String)).expects(*, *)
+
   }
 
   def willUseValidator(use: Validator[RetrieveReliefInvestmentsRequestData]): CallHandler[Validator[RetrieveReliefInvestmentsRequestData]] = {

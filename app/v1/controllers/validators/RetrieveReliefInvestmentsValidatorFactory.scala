@@ -28,13 +28,17 @@ import javax.inject.Singleton
 
 @Singleton
 class RetrieveReliefInvestmentsValidatorFactory {
-  def validator(nino: String, taxYear: String): Validator[RetrieveReliefInvestmentsRequestData] = new Validator[RetrieveReliefInvestmentsRequestData] {
-    override def validate: Validated[Seq[MtdError], RetrieveReliefInvestmentsRequestData] = {
-      (
-        ResolveNino(nino),
-        ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
+
+  def validator(nino: String, taxYear: String): Validator[RetrieveReliefInvestmentsRequestData] =
+    new Validator[RetrieveReliefInvestmentsRequestData] {
+
+      override def validate: Validated[Seq[MtdError], RetrieveReliefInvestmentsRequestData] = {
+        (
+          ResolveNino(nino),
+          ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
         ).mapN(RetrieveReliefInvestmentsRequestData)
+      }
+
     }
-  }
 
 }

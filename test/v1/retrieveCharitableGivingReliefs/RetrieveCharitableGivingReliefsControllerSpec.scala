@@ -57,10 +57,9 @@ class RetrieveCharitableGivingReliefsControllerSpec
 
         willUseValidator(returningSuccess(requestData))
 
-      MockRetrieveCharitableGivingReliefsService
+        MockRetrieveCharitableGivingReliefsService
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseModel))))
-
 
         MockHateoasFactory
           .wrap(responseModel, RetrieveCharitableGivingReliefsHateoasData(nino, taxYear))
@@ -76,8 +75,8 @@ class RetrieveCharitableGivingReliefsControllerSpec
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
         willUseValidator(returning(NinoFormatError))
-          runErrorTest(NinoFormatError)
-        }
+        runErrorTest(NinoFormatError)
+      }
 
       "the service returns an error" in new Test {
 

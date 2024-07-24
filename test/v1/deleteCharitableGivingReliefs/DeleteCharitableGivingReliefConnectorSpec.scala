@@ -37,7 +37,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
           MockedAppConfig.featureSwitches returns Configuration(
             "passDeleteIntentHeader.enabled" -> true,
-            "desIf_Migration.enabled" -> false
+            "desIf_Migration.enabled"        -> false
           )
 
           willPost(
@@ -57,7 +57,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
           MockedAppConfig.featureSwitches returns Configuration(
             "passDeleteIntentHeader.enabled" -> false,
-            "desIf_Migration.enabled" -> false
+            "desIf_Migration.enabled"        -> false
           )
 
           willPost(

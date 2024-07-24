@@ -25,8 +25,7 @@ sealed trait CreateAndAmendCharitableGivingTaxReliefsRequestData {
   val body: CreateAndAmendCharitableGivingTaxReliefsBody
 }
 
-
 case class Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData(nino: Nino,
                                                                     taxYear: TaxYear,
                                                                     body: Def1_CreateAndAmendCharitableGivingTaxReliefsBody)
-  extends CreateAndAmendCharitableGivingTaxReliefsRequestData
+    extends CreateAndAmendCharitableGivingTaxReliefsRequestData

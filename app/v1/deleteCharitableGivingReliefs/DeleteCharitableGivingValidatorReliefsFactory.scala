@@ -29,4 +29,5 @@ class DeleteCharitableGivingValidatorReliefsFactory {
     taxYear match {
       case _ => new Def1_DeleteCharitableGivingReliefsValidator(nino, taxYear)
     }
+
 }
