@@ -92,8 +92,9 @@ trait RetrieveCharitableGivingReliefsFixture {
 
   val charitableGivingReliefsResponseDownstreamJson: JsValue = Json.parse("""
                                                                            |{
-                                                                           |   "giftAidPayments": {
-                                                                           |      "nonUkCharitiesCharityNames":["charity 1", "charity 2"],
+                                                                           |  "charitableGivingAnnual": {
+                                                                           |    "giftAidPayments": {
+                                                                           |      "nonUkCharitiesCharityNames": ["charity 1", "charity 2"],
                                                                            |      "nonUkCharities": 1.12,
                                                                            |      "currentYear": 2.12,
                                                                            |      "oneOffCurrentYear": 3.12,
@@ -106,6 +107,7 @@ trait RetrieveCharitableGivingReliefsFixture {
                                                                            |      "landAndBuildings": 7.12,
                                                                            |      "sharesOrSecurities": 8.12
                                                                            |   }
+                                                                           |  }
                                                                            |}
                                                                            |""".stripMargin)
 

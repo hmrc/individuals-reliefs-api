@@ -84,11 +84,20 @@ object TaxYear {
   private val taxYearMonthStart = 4
   private val taxYearDayStart   = 6
 
+  def starting(year: Int): TaxYear = TaxYear.ending(year + 1)
+  def ending(year: Int): TaxYear   = new TaxYear(year.toString)
+
   /** @param taxYear
     *   tax year in MTD format (e.g. 2017-18)
     */
   def fromMtd(taxYear: String): TaxYear =
     TaxYear(taxYear.take(2) + taxYear.drop(5))
+
+  def maybeFromMtd(taxYear: String): Option[TaxYear] = {
+    mtdTaxYearFormat.findFirstIn(taxYear).map(TaxYear.fromMtd)
+  }
+
+  private val mtdTaxYearFormat = "20[1-9][0-9]-[1-9][0-9]".r
 
   def now(): TaxYear = TaxYear.fromIso(LocalDate.now().toString)
 
@@ -99,6 +108,14 @@ object TaxYear {
     val date1 = LocalDate.parse(date)
     val year = (
       if (isPreviousTaxYear(date1)) date1.getYear else date1.getYear + 1
+    ).toString
+
+    new TaxYear(year)
+  }
+
+  def containing(date: LocalDate): TaxYear = {
+    val year = (
+      if (isPreviousTaxYear(date)) date.getYear else date.getYear + 1
     ).toString
 
     new TaxYear(year)
@@ -129,7 +146,8 @@ object TaxYear {
     new TaxYear(taxYear.toString)
   }
 
-  def today(): LocalDate = LocalDate.now(ZoneOffset.UTC)
+  def today(): LocalDate                   = LocalDate.now(ZoneOffset.UTC)
+  implicit val ordering: Ordering[TaxYear] = Ordering.by(_.year)
 
   implicit val writes: Writes[TaxYear] = implicitly[Writes[String]].contramap(_.asMtd)
 }

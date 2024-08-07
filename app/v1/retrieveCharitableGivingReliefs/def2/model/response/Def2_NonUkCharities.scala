@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package v1.retrieveCharitableGivingReliefs.model.request
+package v1.retrieveCharitableGivingReliefs.def2.model.response
 
-import api.models.domain.{Nino, TaxYear}
+import play.api.libs.json.{Format, Json}
 
-sealed trait RetrieveCharitableGivingReliefsRequestData {
-  val nino: Nino
-  val taxYear: TaxYear
+case class Def2_NonUkCharities(charityNames: Option[Seq[String]], totalAmount: BigDecimal)
+
+object Def2_NonUkCharities {
+
+  implicit val format: Format[Def2_NonUkCharities] = Json.format[Def2_NonUkCharities]
+
+  /*private[response]*/
+  def from(charityNames: Option[Seq[String]], totalAmount: Option[BigDecimal]): Option[Def2_NonUkCharities] =
+    totalAmount.map(Def2_NonUkCharities(charityNames, _))
+
 }
-
-case class Def1_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData
-case class Def2_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData
