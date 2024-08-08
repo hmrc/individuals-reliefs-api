@@ -30,8 +30,12 @@ import v1.retrieveCharitableGivingReliefs.model.response.{
 class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockAppConfig with RetrieveCharitableGivingReliefsFixture {
 
   "RetrieveCharitableGivingReliefResponse reads" must {
-    "read from downstream JSON" in {
-      charitableGivingReliefsResponseDownstreamJson.as[Def1_RetrieveCharitableGivingReliefsResponse] shouldBe charitableGivingReliefsResponse
+    "read from downstream (DES) JSON" in {
+      charitableGivingReliefsDesResponseDownstreamJson.as[Def1_RetrieveCharitableGivingReliefsResponse] shouldBe charitableGivingReliefsResponse
+    }
+
+    "read from downstream (IFS) JSON" in {
+      charitableGivingReliefsIfsResponseDownstreamJson.as[Def1_RetrieveCharitableGivingReliefsResponse] shouldBe charitableGivingReliefsResponse
     }
   }
 
