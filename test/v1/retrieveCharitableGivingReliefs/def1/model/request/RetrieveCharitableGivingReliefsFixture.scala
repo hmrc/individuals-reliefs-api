@@ -90,21 +90,42 @@ trait RetrieveCharitableGivingReliefsFixture {
         ))
     )
 
-  val charitableGivingReliefsResponseDownstreamJson: JsValue = Json.parse("""
+  val charitableGivingReliefsDesResponseDownstreamJson: JsValue = Json.parse("""
+                                                                          |{
+                                                                          |   "giftAidPayments": {
+                                                                          |      "nonUkCharitiesCharityNames":["charity 1", "charity 2"],
+                                                                          |      "nonUkCharities": 1.12,
+                                                                          |      "currentYear": 2.12,
+                                                                          |      "oneOffCurrentYear": 3.12,
+                                                                          |      "currentYearTreatedAsPreviousYear": 4.12,
+                                                                          |      "nextYearTreatedAsCurrentYear": 5.12
+                                                                          |   },
+                                                                          |   "gifts": {
+                                                                          |      "investmentsNonUkCharitiesCharityNames": ["charity 3", "charity 4"],
+                                                                          |      "investmentsNonUkCharities": 6.12,
+                                                                          |      "landAndBuildings": 7.12,
+                                                                          |      "sharesOrSecurities": 8.12
+                                                                          |   }
+                                                                          |}
+                                                                          |""".stripMargin)
+
+  val charitableGivingReliefsIfsResponseDownstreamJson: JsValue = Json.parse("""
                                                                            |{
-                                                                           |   "giftAidPayments": {
-                                                                           |      "nonUkCharitiesCharityNames":["charity 1", "charity 2"],
-                                                                           |      "nonUkCharities": 1.12,
-                                                                           |      "currentYear": 2.12,
-                                                                           |      "oneOffCurrentYear": 3.12,
-                                                                           |      "currentYearTreatedAsPreviousYear": 4.12,
-                                                                           |      "nextYearTreatedAsCurrentYear": 5.12
-                                                                           |   },
-                                                                           |   "gifts": {
-                                                                           |      "investmentsNonUkCharitiesCharityNames": ["charity 3", "charity 4"],
-                                                                           |      "investmentsNonUkCharities": 6.12,
-                                                                           |      "landAndBuildings": 7.12,
-                                                                           |      "sharesOrSecurities": 8.12
+                                                                           |   "charitableGivingAnnual" : {
+                                                                           |     "giftAidPayments": {
+                                                                           |        "nonUkCharitiesCharityNames":["charity 1", "charity 2"],
+                                                                           |        "nonUkCharities": 1.12,
+                                                                           |        "currentYear": 2.12,
+                                                                           |        "oneOffCurrentYear": 3.12,
+                                                                           |        "currentYearTreatedAsPreviousYear": 4.12,
+                                                                           |        "nextYearTreatedAsCurrentYear": 5.12
+                                                                           |     },
+                                                                           |     "gifts": {
+                                                                           |        "investmentsNonUkCharitiesCharityNames": ["charity 3", "charity 4"],
+                                                                           |        "investmentsNonUkCharities": 6.12,
+                                                                           |        "landAndBuildings": 7.12,
+                                                                           |        "sharesOrSecurities": 8.12
+                                                                           |     }
                                                                            |   }
                                                                            |}
                                                                            |""".stripMargin)

@@ -35,8 +35,9 @@ class RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec
     def taxYear: String
     def downstreamTaxYear: String
 
-    val downstreamResponse: JsValue = charitableGivingReliefsResponseDownstreamJson
-    val mtdResponse: JsValue        = charitableGivingReliefsResponseMtdJsonWithHateoas(nino, taxYear)
+    val desResponse: JsValue = charitableGivingReliefsDesResponseDownstreamJson
+    val ifsResponse: JsValue = charitableGivingReliefsIfsResponseDownstreamJson
+    val mtdResponse: JsValue = charitableGivingReliefsResponseMtdJsonWithHateoas(nino, taxYear)
 
     def uri: String = s"/charitable-giving/$nino/$taxYear"
     def downstreamUri: String
@@ -75,7 +76,7 @@ class RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponse)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, desResponse)
         }
 
         val response: WSResponse = await(request().get())
@@ -91,7 +92,7 @@ class RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponse)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, ifsResponse)
         }
 
         val response: WSResponse = await(request().get())

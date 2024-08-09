@@ -18,7 +18,7 @@ package v1.retrieveCharitableGivingReliefs.model.response
 
 import api.hateoas.{HateoasData, HateoasLinks, HateoasLinksFactory, Link}
 import config.AppConfig
-import play.api.libs.json.{Json, OFormat, OWrites, Reads}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v1.retrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts}
 import v1.retrieveCharitableGivingReliefs.model.response.Def1_RetrieveCharitableGivingReliefsResponse.Def1_RetrieveCharitableGivingReliefsLinksFactory
 
@@ -48,12 +48,21 @@ case class RetrieveCharitableGivingReliefsHateoasData(nino: String, taxYear: Str
 
 case class Def1_RetrieveCharitableGivingReliefsResponse(giftAidPayments: Option[Def1_GiftAidPayments], gifts: Option[Def1_Gifts])
     extends RetrieveCharitableGivingReliefsResponse {
+
   implicit val reads: Reads[Def1_RetrieveCharitableGivingReliefsResponse]                  = Json.reads[Def1_RetrieveCharitableGivingReliefsResponse]
   def retrieveCharitableGivingReliefResponse: Def1_RetrieveCharitableGivingReliefsResponse = this
 }
 
 object Def1_RetrieveCharitableGivingReliefsResponse extends HateoasLinks {
-  implicit val formats: OFormat[Def1_RetrieveCharitableGivingReliefsResponse] = Json.format[Def1_RetrieveCharitableGivingReliefsResponse]
+  implicit val writes: OWrites[Def1_RetrieveCharitableGivingReliefsResponse] = Json.writes
+
+  implicit val reads: Reads[Def1_RetrieveCharitableGivingReliefsResponse] = {
+    val defaultReads: Reads[Def1_RetrieveCharitableGivingReliefsResponse] = Json.reads
+
+    val ifsReads = (JsPath \ "charitableGivingAnnual").read(defaultReads)
+
+    ifsReads orElse defaultReads
+  }
 
   implicit object Def1_RetrieveCharitableGivingReliefsLinksFactory
       extends HateoasLinksFactory[Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsHateoasData] {
