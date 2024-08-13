@@ -26,7 +26,6 @@ import play.api.mvc.Result
 import v1.retrieveCharitableGivingReliefs.def1.model.request.RetrieveCharitableGivingReliefsFixture
 import v1.retrieveCharitableGivingReliefs.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import v1.retrieveCharitableGivingReliefs.model.response.RetrieveCharitableGivingReliefsHateoasData
-import v1.controllers.validators.MockRetrieveCharitableGivingReliefsValidatorFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

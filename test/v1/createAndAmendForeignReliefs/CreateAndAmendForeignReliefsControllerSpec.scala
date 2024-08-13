@@ -30,7 +30,7 @@ import play.api.mvc.Result
 import v1.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel, responseWithHateoasLinks}
 import v1.createAndAmendForeignReliefs.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
 import v1.createAndAmendForeignReliefs.model.response.CreateAndAmendForeignReliefsHateoasData
-import v1.controllers.validators.MockCreateAndAmendForeignReliefsValidatorFactory
+import v1.reliefInvestments.createAmend.MockCreateAndAmendForeignReliefsValidatorFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
