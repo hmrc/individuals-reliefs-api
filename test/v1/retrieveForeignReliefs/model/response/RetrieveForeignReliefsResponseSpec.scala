@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveForeignReliefs
+package v1.retrieveForeignReliefs.model.response
 
 import api.hateoas.Link
 import api.hateoas.Method._
@@ -22,8 +22,11 @@ import api.models.domain.Timestamp
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.retrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
-import v1.retrieveForeignReliefs.model.response.{Def1_RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData, RetrieveForeignReliefsResponse}
+import v1.retrieveForeignReliefs.def1.model.response.{
+  Def1_ForeignIncomeTaxCreditRelief,
+  Def1_ForeignTaxCreditRelief,
+  Def1_ForeignTaxForFtcrNotClaimed
+}
 
 class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
 

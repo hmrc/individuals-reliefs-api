@@ -14,30 +14,26 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveForeignReliefs
+package v1.retrieveForeignReliefs.def1.model.response
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.retrieveForeignReliefs.def1.model.response.Def1_ForeignIncomeTaxCreditRelief
 
-class ForeignIncomeTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
+class Def1_ForeignTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
 
-  val foreignIncomeTaxCreditRelief: Def1_ForeignIncomeTaxCreditRelief = Def1_ForeignIncomeTaxCreditRelief("FRA", Some(640.32), 204.78, false)
+  val foreignTaxCreditRelief: Def1_ForeignTaxCreditRelief = Def1_ForeignTaxCreditRelief(2314.32)
 
   val json = Json.parse(
     """{
-      |  "countryCode": "FRA",
-      |  "foreignTaxPaid": 640.32,
-      |  "taxableAmount": 204.78,
-      |  "employmentLumpSum": false
+      |  "amount": 2314.32
       |}""".stripMargin
   )
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        foreignIncomeTaxCreditRelief shouldBe json.as[Def1_ForeignIncomeTaxCreditRelief]
+        foreignTaxCreditRelief shouldBe json.as[Def1_ForeignTaxCreditRelief]
       }
     }
   }
@@ -45,7 +41,7 @@ class ForeignIncomeTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(foreignIncomeTaxCreditRelief) shouldBe json
+        Json.toJson(foreignTaxCreditRelief) shouldBe json
       }
     }
   }

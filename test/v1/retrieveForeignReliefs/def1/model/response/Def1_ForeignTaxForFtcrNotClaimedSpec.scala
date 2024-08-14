@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveForeignReliefs
+package v1.retrieveForeignReliefs.def1.model.response
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.retrieveForeignReliefs.def1.model.response.Def1_ForeignTaxForFtcrNotClaimed
 
-class ForeignTaxForFtcrNotClaimedSpec extends UnitSpec with JsonErrorValidators {
+class Def1_ForeignTaxForFtcrNotClaimedSpec extends UnitSpec with JsonErrorValidators {
 
   val foreignTaxForFtcrNotClaimed: Def1_ForeignTaxForFtcrNotClaimed = Def1_ForeignTaxForFtcrNotClaimed(1429.99)
 
