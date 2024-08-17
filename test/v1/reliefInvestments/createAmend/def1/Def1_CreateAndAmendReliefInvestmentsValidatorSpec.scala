@@ -24,7 +24,7 @@ import support.UnitSpec
 import v1.reliefInvestments.createAmend.def1.model.request._
 import v1.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 
-class Def1_CreateAndAmendReliefInvestmentsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
+class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with JsonErrorValidators {
 
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 

@@ -22,8 +22,7 @@ import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.{responseJson, responseModel}
-import v1.reliefInvestments.retrieve.def1.model.response.Def1_RetrieveReliefInvestmentsResponse
-import v1.reliefInvestments.retrieve.model.response.{RetrieveReliefInvestmentsHateoasData, RetrieveReliefInvestmentsResponse}
+import v1.reliefInvestments.retrieve.model.response._
 
 class Def1_RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig {
 

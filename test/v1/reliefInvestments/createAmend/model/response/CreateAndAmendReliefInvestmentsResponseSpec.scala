@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package v1.reliefInvestments.createAmend.def1.model.response
+package v1.reliefInvestments.createAmend.model.response
 
 import api.hateoas.Link
 import api.hateoas.Method._
 import mocks.MockAppConfig
 import support.UnitSpec
-import v1.reliefInvestments.createAmend.model.response.{CreateAndAmendReliefInvestmentsHateoasData, CreateAndAmendReliefInvestmentsResponse}
 
 class CreateAndAmendReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig {
 

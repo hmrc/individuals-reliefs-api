@@ -20,7 +20,6 @@ import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.{socialEnterpriseInvestmentItemJson, socialEnterpriseInvestmentItemModel}
-import v1.reliefInvestments.retrieve.def1.model.response.SocialEnterpriseInvestmentItem
 
 class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 

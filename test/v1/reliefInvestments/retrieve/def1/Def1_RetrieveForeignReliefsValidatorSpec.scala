@@ -23,7 +23,7 @@ import v1.reliefInvestments.retrieve.RetrieveReliefInvestmentsValidatorFactory
 import v1.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
 import v1.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 
-class Def1_RetrieveForeignReliefsValidatorFactorySpec extends UnitSpec {
+class Def1_RetrieveForeignReliefsValidatorSpec extends UnitSpec {
 
   private implicit val correlationId: String = "1234"
 

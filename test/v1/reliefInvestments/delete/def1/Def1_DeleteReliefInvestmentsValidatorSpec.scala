@@ -21,7 +21,7 @@ import api.models.errors._
 import support.UnitSpec
 import v1.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
 
-class Def1_DeleteReliefInvestmentsValidatorFactorySpec extends UnitSpec {
+class Def1_DeleteReliefInvestmentsValidatorSpec extends UnitSpec {
   private implicit val correlationId: String = "1234"
   private val validNino                      = "AA123456A"
   private val validTaxYear                   = "2021-22"
