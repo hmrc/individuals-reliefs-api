@@ -17,7 +17,7 @@
 package v1.fixtures
 
 import play.api.libs.json.{JsValue, Json}
-import v1.models.request.createAndAmendReliefInvestments._
+import v1.reliefInvestments.createAmend.def1.model.request._
 
 object CreateAndAmendReliefInvestmentsFixtures {
 
@@ -123,7 +123,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  val requestBodyModel: CreateAndAmendReliefInvestmentsBody = CreateAndAmendReliefInvestmentsBody(
+  val requestBodyModel: Def1_CreateAndAmendReliefInvestmentsRequestBody = Def1_CreateAndAmendReliefInvestmentsRequestBody(
     vctSubscription = Some(Seq(vctSubscriptionsItemModel)),
     eisSubscription = Some(Seq(eisSubscriptionsItemModel)),
     communityInvestment = Some(Seq(communityInvestmentItemModel)),

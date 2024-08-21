@@ -18,7 +18,7 @@ package v1.fixtures
 
 import api.models.domain.Timestamp
 import play.api.libs.json.{JsObject, JsValue, Json}
-import v1.models.response.retrieveReliefInvestments._
+import v1.reliefInvestments.retrieve.def1.model.response.{CommunityInvestmentItem, EisSubscriptionsItem, Def1_RetrieveReliefInvestmentsResponse, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
 
 object RetrieveReliefInvestmentsFixtures {
 
@@ -124,7 +124,7 @@ object RetrieveReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  val responseModel: RetrieveReliefInvestmentsResponse = RetrieveReliefInvestmentsResponse(
+  val responseModel: Def1_RetrieveReliefInvestmentsResponse = Def1_RetrieveReliefInvestmentsResponse(
     submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
     vctSubscription = Some(Seq(vctSubscriptionsItemModel)),
     eisSubscription = Some(Seq(eisSubscriptionsItemModel)),

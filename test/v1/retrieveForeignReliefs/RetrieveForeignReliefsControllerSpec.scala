@@ -28,7 +28,6 @@ import play.api.mvc.Result
 import v1.retrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
 import v1.retrieveForeignReliefs.model.request.Def1_RetrieveForeignReliefsRequestData
 import v1.retrieveForeignReliefs.model.response.{Def1_RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData}
-import v1.controllers.validators.MockRetrieveForeignReliefsValidatorFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

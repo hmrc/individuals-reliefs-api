@@ -20,11 +20,7 @@ import api.hateoas.{HateoasData, HateoasLinks, HateoasLinksFactory, Link}
 import api.models.domain.Timestamp
 import config.AppConfig
 import play.api.libs.json.{Json, OWrites, Reads}
-import v1.retrieveForeignReliefs.def1.model.response.{
-  Def1_ForeignIncomeTaxCreditRelief,
-  Def1_ForeignTaxCreditRelief,
-  Def1_ForeignTaxForFtcrNotClaimed
-}
+import v1.retrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
 import v1.retrieveForeignReliefs.model.response.Def1_RetrieveForeignReliefsResponse.Def1_RetrieveForeignReliefsLinksFactory
 
 sealed trait RetrieveForeignReliefsResponse

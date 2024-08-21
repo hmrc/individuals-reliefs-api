@@ -26,7 +26,7 @@ import v1.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 class Def1_DeleteOtherReliefsValidator(nino: String, taxYear: String) extends Validator[DeleteOtherReliefsRequestData] {
 
-  def validate: Validated[Seq[MtdError], Def1_DeleteOtherReliefsRequestData] =
+  override def validate: Validated[Seq[MtdError], Def1_DeleteOtherReliefsRequestData] =
     (
       ResolveNino(nino),
       ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)

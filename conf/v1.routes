@@ -1,7 +1,7 @@
 # Relief Investments endpoints
-GET        /investment/:nino/:taxYear                       v1.controllers.RetrieveReliefInvestmentsController.handleRequest(nino: String, taxYear:String)
-PUT        /investment/:nino/:taxYear                       v1.controllers.CreateAndAmendReliefInvestmentsController.handleRequest(nino: String, taxYear: String)
-DELETE     /investment/:nino/:taxYear                       v1.controllers.DeleteReliefInvestmentsController.handleRequest(nino: String, taxYear: String)
+GET        /investment/:nino/:taxYear                       v1.reliefInvestments.retrieve.RetrieveReliefInvestmentsController.handleRequest(nino: String, taxYear:String)
+PUT        /investment/:nino/:taxYear                       v1.reliefInvestments.createAmend.CreateAndAmendReliefInvestmentsController.handleRequest(nino: String, taxYear: String)
+DELETE     /investment/:nino/:taxYear                       v1.reliefInvestments.delete.DeleteReliefInvestmentsController.handleRequest(nino: String, taxYear: String)
 
 # Other Reliefs endpoints
 GET        /other/:nino/:taxYear                            v1.otherReliefs.retrieve.RetrieveOtherReliefsController.handleRequest(nino: String, taxYear: String)
