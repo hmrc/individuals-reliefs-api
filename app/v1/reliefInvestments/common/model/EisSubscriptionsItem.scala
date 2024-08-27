@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package v1.reliefInvestments.retrieve.def1.model.response
+package v1.reliefInvestments.common.model
 
 import play.api.libs.json.{Json, OFormat}
+import v1.reliefInvestments.createAmend.def1.model.request.ReliefsInvestmentItem
 
 case class EisSubscriptionsItem(uniqueInvestmentRef: String,
                                 name: Option[String],
-                                knowledgeIntensive: Boolean,
                                 dateOfInvestment: Option[String],
                                 amountInvested: Option[BigDecimal],
-                                reliefClaimed: BigDecimal)
+                                reliefClaimed: BigDecimal,
+                                knowledgeIntensive: Option[Boolean])
+    extends ReliefsInvestmentItem
 
 object EisSubscriptionsItem {
   implicit val format: OFormat[EisSubscriptionsItem] = Json.format[EisSubscriptionsItem]

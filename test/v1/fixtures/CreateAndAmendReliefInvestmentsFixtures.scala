@@ -17,7 +17,7 @@
 package v1.fixtures
 
 import play.api.libs.json.{JsValue, Json}
-import v1.reliefInvestments.common.model.CommunityInvestmentItem
+import v1.reliefInvestments.common.model.{CommunityInvestmentItem, EisSubscriptionsItem}
 import v1.reliefInvestments.createAmend.def1.model.request._
 
 object CreateAndAmendReliefInvestmentsFixtures {

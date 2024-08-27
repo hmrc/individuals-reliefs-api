@@ -18,9 +18,8 @@ package v1.fixtures
 
 import api.models.domain.Timestamp
 import play.api.libs.json.{JsObject, JsValue, Json}
-import v1.reliefInvestments.common.model.CommunityInvestmentItem
+import v1.reliefInvestments.common.model.{CommunityInvestmentItem, EisSubscriptionsItem}
 import v1.reliefInvestments.retrieve.def1.model.response.{
-  EisSubscriptionsItem,
   Def1_RetrieveReliefInvestmentsResponse,
   SeedEnterpriseInvestmentItem,
   SocialEnterpriseInvestmentItem,
