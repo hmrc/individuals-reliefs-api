@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package v1.reliefInvestments.retrieve.def1.model.response
+package v1.reliefInvestments.common.model
 
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.{vctSubscriptionsItemJson, vctSubscriptionsItemModel}
-import v1.reliefInvestments.retrieve.def1.model.response.VctSubscriptionsItem
 
 class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
 

@@ -22,6 +22,7 @@ import api.models.errors.{DateOfInvestmentFormatError, MtdError, NameFormatError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
+import v1.reliefInvestments.common.model.ReliefsInvestmentItem
 import v1.reliefInvestments.createAmend.def1.model.request._
 
 import java.time.LocalDate

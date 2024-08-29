@@ -21,7 +21,7 @@ import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json._
 import support.UnitSpec
-import v1.reliefInvestments.common.model.{CommunityInvestmentItem, EisSubscriptionsItem}
+import v1.reliefInvestments.common.model.{CommunityInvestmentItem, EisSubscriptionsItem, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
 import v1.reliefInvestments.createAmend.def1.model.request._
 import v1.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 

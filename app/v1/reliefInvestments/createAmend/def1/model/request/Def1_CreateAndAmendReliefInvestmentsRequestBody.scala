@@ -17,7 +17,7 @@
 package v1.reliefInvestments.createAmend.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
-import v1.reliefInvestments.common.model.{CommunityInvestmentItem, EisSubscriptionsItem}
+import v1.reliefInvestments.common.model.{CommunityInvestmentItem, EisSubscriptionsItem, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
 import v1.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsBody
 
 case class Def1_CreateAndAmendReliefInvestmentsRequestBody(vctSubscription: Option[Seq[VctSubscriptionsItem]],

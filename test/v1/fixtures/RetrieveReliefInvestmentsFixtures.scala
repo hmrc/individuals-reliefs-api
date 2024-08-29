@@ -18,13 +18,14 @@ package v1.fixtures
 
 import api.models.domain.Timestamp
 import play.api.libs.json.{JsObject, JsValue, Json}
-import v1.reliefInvestments.common.model.{CommunityInvestmentItem, EisSubscriptionsItem}
-import v1.reliefInvestments.retrieve.def1.model.response.{
-  Def1_RetrieveReliefInvestmentsResponse,
+import v1.reliefInvestments.common.model.{
+  CommunityInvestmentItem,
+  EisSubscriptionsItem,
   SeedEnterpriseInvestmentItem,
   SocialEnterpriseInvestmentItem,
   VctSubscriptionsItem
 }
+import v1.reliefInvestments.retrieve.def1.model.response.Def1_RetrieveReliefInvestmentsResponse
 
 object RetrieveReliefInvestmentsFixtures {
 
@@ -51,7 +52,7 @@ object RetrieveReliefInvestmentsFixtures {
   val eisSubscriptionsItemModel: EisSubscriptionsItem = EisSubscriptionsItem(
     uniqueInvestmentRef = "XTAL",
     name = Some("EIS Fund X"),
-    knowledgeIntensive = true,
+    knowledgeIntensive = Some(true),
     dateOfInvestment = Some("2020-12-12"),
     amountInvested = Some(BigDecimal(23312.00)),
     reliefClaimed = BigDecimal(43432.00)

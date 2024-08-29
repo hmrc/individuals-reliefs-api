@@ -19,7 +19,7 @@ package v1.reliefInvestments.retrieve.def1.model.response
 import api.hateoas.HateoasLinks
 import api.models.domain.Timestamp
 import play.api.libs.json.{Json, OWrites, Reads}
-import v1.reliefInvestments.common.model.{CommunityInvestmentItem, EisSubscriptionsItem}
+import v1.reliefInvestments.common.model.{CommunityInvestmentItem, EisSubscriptionsItem, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
 import v1.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsResponse
 
 case class Def1_RetrieveReliefInvestmentsResponse(

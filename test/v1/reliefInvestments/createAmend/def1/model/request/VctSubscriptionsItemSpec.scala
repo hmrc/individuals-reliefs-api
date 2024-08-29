@@ -20,6 +20,7 @@ import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
+import v1.reliefInvestments.common.model.VctSubscriptionsItem
 
 class VctSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
 

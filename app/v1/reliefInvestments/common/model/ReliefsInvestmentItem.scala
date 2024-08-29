@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package v1.reliefInvestments.createAmend.def1.model.request
+package v1.reliefInvestments.common.model
 
-import play.api.libs.json.{Json, OFormat}
-
-case class VctSubscriptionsItem(uniqueInvestmentRef: String,
-                                name: Option[String],
-                                dateOfInvestment: Option[String],
-                                amountInvested: Option[BigDecimal],
-                                reliefClaimed: BigDecimal)
-    extends ReliefsInvestmentItem
-
-object VctSubscriptionsItem {
-  implicit val format: OFormat[VctSubscriptionsItem] = Json.format[VctSubscriptionsItem]
+trait ReliefsInvestmentItem {
+  val uniqueInvestmentRef: String
+  val name: Option[String]
+  val dateOfInvestment: Option[String]
+  val amountInvested: Option[BigDecimal]
+  val reliefClaimed: BigDecimal
 }
