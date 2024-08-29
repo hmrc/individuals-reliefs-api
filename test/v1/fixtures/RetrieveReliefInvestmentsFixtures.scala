@@ -18,7 +18,14 @@ package v1.fixtures
 
 import api.models.domain.Timestamp
 import play.api.libs.json.{JsObject, JsValue, Json}
-import v1.reliefInvestments.retrieve.def1.model.response.{CommunityInvestmentItem, EisSubscriptionsItem, Def1_RetrieveReliefInvestmentsResponse, SeedEnterpriseInvestmentItem, SocialEnterpriseInvestmentItem, VctSubscriptionsItem}
+import v1.reliefInvestments.retrieve.def1.model.response.{
+  CommunityInvestmentItem,
+  EisSubscriptionsItem,
+  Def1_RetrieveReliefInvestmentsResponse,
+  SeedEnterpriseInvestmentItem,
+  SocialEnterpriseInvestmentItem,
+  VctSubscriptionsItem
+}
 
 object RetrieveReliefInvestmentsFixtures {
 
@@ -42,21 +49,21 @@ object RetrieveReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  val eisSubscriptionsItemModel: EisSubscriptionsItem = EisSubscriptionsItem(
+  def eisSubscriptionsItemModel(knowledgeIntensive: Option[Boolean] = Some(true)): EisSubscriptionsItem = EisSubscriptionsItem(
     uniqueInvestmentRef = "XTAL",
     name = Some("EIS Fund X"),
-    knowledgeIntensive = true,
+    knowledgeIntensive = knowledgeIntensive,
     dateOfInvestment = Some("2020-12-12"),
     amountInvested = Some(BigDecimal(23312.00)),
     reliefClaimed = BigDecimal(43432.00)
   )
 
-  val eisSubscriptionsItemJson: JsValue = Json.parse(
-    """
+  def eisSubscriptionsItemJson(knowledgeIntensive: String = " | \"knowledgeIntensive\": true,"): JsValue = Json.parse(
+    s"""
       |{
       |  "uniqueInvestmentRef": "XTAL",
       |  "name": "EIS Fund X",
-      |  "knowledgeIntensive": true,
+      $knowledgeIntensive
       |  "dateOfInvestment": "2020-12-12",
       |  "amountInvested": 23312.00,
       |  "reliefClaimed": 43432.00
@@ -127,7 +134,7 @@ object RetrieveReliefInvestmentsFixtures {
   val responseModel: Def1_RetrieveReliefInvestmentsResponse = Def1_RetrieveReliefInvestmentsResponse(
     submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
     vctSubscription = Some(Seq(vctSubscriptionsItemModel)),
-    eisSubscription = Some(Seq(eisSubscriptionsItemModel)),
+    eisSubscription = Some(Seq(eisSubscriptionsItemModel())),
     communityInvestment = Some(Seq(communityInvestmentItemModel)),
     seedEnterpriseInvestment = Some(Seq(seedEnterpriseInvestmentItemModel)),
     socialEnterpriseInvestment = Some(Seq(socialEnterpriseInvestmentItemModel))
@@ -138,7 +145,7 @@ object RetrieveReliefInvestmentsFixtures {
       |{
       |  "submittedOn": "2020-06-17T10:53:38.000Z",
       |  "vctSubscription":[$vctSubscriptionsItemJson],
-      |  "eisSubscription":[$eisSubscriptionsItemJson],
+      |  "eisSubscription":[${eisSubscriptionsItemJson()}],
       |  "communityInvestment": [$communityInvestmentItemJson],
       |  "seedEnterpriseInvestment": [$seedEnterpriseInvestmentItemJson],
       |  "socialEnterpriseInvestment": [$socialEnterpriseInvestmentItemJson]
