@@ -20,7 +20,7 @@ import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
-import config.AppConfig
+import config.{AppConfig, FeatureSwitches}
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.deleteCharitableGivingReliefs.model.request.{Def1_DeleteCharitableGivingTaxReliefsRequestData, DeleteCharitableGivingTaxReliefsRequestData}
@@ -32,11 +32,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   private def completeRequest(nino: Nino, taxYear: TaxYear)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+                                                            hc: HeaderCarrier,
+                                                            ec: ExecutionContext,
+                                                            correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    val intent     = if (featureSwitches.isPassDeleteIntentEnabled) Some("DELETE") else None
+    val intent     = if (FeatureSwitches(appConfig.featureSwitches).isEnabled("passDeleteIntentHeader")) Some("DELETE") else None
     def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
 
     if (taxYear.useTaxYearSpecificApi) {
@@ -49,7 +49,7 @@ class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val
     } else {
 
       val downstreamUri =
-        if (featureSwitches.isDesIf_MigrationEnabled)
+        if (FeatureSwitches(appConfig.featureSwitches).isEnabled("desIf_Migration"))
           IfsUri[Unit](preTysPath)
         else
           DesUri[Unit](preTysPath)
@@ -59,9 +59,9 @@ class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val
   }
 
   def delete(request: DeleteCharitableGivingTaxReliefsRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+                                                                   hc: HeaderCarrier,
+                                                                   ec: ExecutionContext,
+                                                                   correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     request match {
       case def1: Def1_DeleteCharitableGivingTaxReliefsRequestData =>

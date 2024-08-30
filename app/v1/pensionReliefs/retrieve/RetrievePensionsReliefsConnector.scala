@@ -16,10 +16,10 @@
 
 package v1.pensionReliefs.retrieve
 
-import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{DesUri, HipUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import config.AppConfig
+import config.{AppConfig, FeatureSwitches}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
 import v1.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
@@ -43,7 +43,11 @@ class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appC
         TaxYearSpecificIfsUri(s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
       case _ =>
         val downstreamTaxYearParam = taxYear.asMtd // Supposed to be MTD format for this downstream endpoint
-        DesUri(s"income-tax/reliefs/pensions/$nino/$downstreamTaxYearParam")
+        if (FeatureSwitches(appConfig.featureSwitches).isEnabled("des_hip_migration_1656")) {
+          HipUri(s"income-tax/reliefs/pensions/$nino/$downstreamTaxYearParam")
+        } else {
+          DesUri(s"income-tax/reliefs/pensions/$nino/$downstreamTaxYearParam")
+        }
     }
     get(downstreamUri)
 

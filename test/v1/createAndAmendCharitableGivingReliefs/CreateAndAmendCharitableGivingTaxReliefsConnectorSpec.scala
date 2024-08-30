@@ -64,7 +64,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
       "return 200 for a success scenario with desIf_Migration disabled" in new DesTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
-        MockedAppConfig.featureSwitches returns Configuration("desIf_Migration.enabled" -> false)
+        MockedAppConfig.featureSwitchConfig returns Configuration("desIf_Migration.enabled" -> false)
 
         willPost(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}", body = requestBody)
           .returns(Future.successful(outcome))
@@ -76,7 +76,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
       "return 200 for a success scenario with desIf_Migration enabled" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
-        MockedAppConfig.featureSwitches returns Configuration("desIf_Migration.enabled" -> true)
+        MockedAppConfig.featureSwitchConfig returns Configuration("desIf_Migration.enabled" -> true)
 
         willPost(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}", body = requestBody)
           .returns(Future.successful(outcome))

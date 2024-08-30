@@ -43,7 +43,7 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
     "createOrAmendPensionsRelief called" must {
       "return a 204 status for a success scenario with desIf_Migration disabled" in new DesTest with Test {
 
-        MockedAppConfig.featureSwitches returns Configuration(
+        MockedAppConfig.featureSwitchConfig returns Configuration(
           "desIf_Migration.enabled" -> false
         )
 
@@ -57,7 +57,7 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
       }
       "return a 204 status for a success scenario with desIf_Migration enabled" in new IfsTest with Test {
 
-        MockedAppConfig.featureSwitches returns Configuration(
+        MockedAppConfig.featureSwitchConfig returns Configuration(
           "desIf_Migration.enabled" -> true
         )
 

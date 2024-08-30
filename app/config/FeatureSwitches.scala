@@ -34,6 +34,8 @@ trait FeatureSwitches {
   def isEnabled(feature: String): Boolean = isConfigTrue(feature + ".enabled")
 
   private def isConfigTrue(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
+
+  def supportingAgentsAccessControlEnabled: Boolean = isEnabled("supporting-agents-access-control")
 }
 
 @Singleton
@@ -62,8 +64,11 @@ class FeatureSwitchesImpl(protected val featureSwitchConfig: Configuration) exte
   val isPassDeleteIntentEnabled: Boolean = isEnabled("passDeleteIntentHeader")
   val isDesIf_MigrationEnabled: Boolean = isEnabled("desIf_Migration")
 
+
 }
 
 object FeatureSwitches {
   def apply(configuration: Configuration): FeatureSwitches = new FeatureSwitchesImpl(configuration)
 }
+
+
