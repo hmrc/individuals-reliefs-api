@@ -62,13 +62,10 @@ class FeatureSwitchesImpl(protected val featureSwitchConfig: Configuration) exte
   }
 
   val isPassDeleteIntentEnabled: Boolean = isEnabled("passDeleteIntentHeader")
-  val isDesIf_MigrationEnabled: Boolean = isEnabled("desIf_Migration")
-
+  val isDesIf_MigrationEnabled: Boolean  = isEnabled("desIf_Migration")
 
 }
 
 object FeatureSwitches {
   def apply(configuration: Configuration): FeatureSwitches = new FeatureSwitchesImpl(configuration)
 }
-
-

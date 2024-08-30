@@ -35,10 +35,13 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
         "isPassDeleteIntentEnabled feature switch is on" in new DesTest with Test {
           override lazy val intent: Option[String] = Some("DELETE")
 
-          MockedAppConfig.featureSwitchConfig.returns(Configuration(
-            "passDeleteIntentHeader.enabled" -> true,
-            "desIf_Migration.enabled"        -> false
-          )).anyNumberOfTimes()
+          MockedAppConfig.featureSwitchConfig
+            .returns(
+              Configuration(
+                "passDeleteIntentHeader.enabled" -> true,
+                "desIf_Migration.enabled"        -> false
+              ))
+            .anyNumberOfTimes()
 
           willPost(
             url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/2020",
@@ -54,10 +57,13 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
         "isPassDeleteIntentEnabled feature switch is off" in new DesTest with Test {
 
-          MockedAppConfig.featureSwitchConfig.returns (Configuration(
-            "passDeleteIntentHeader.enabled" -> false,
-            "desIf_Migration.enabled"        -> false
-          )).anyNumberOfTimes()
+          MockedAppConfig.featureSwitchConfig
+            .returns(
+              Configuration(
+                "passDeleteIntentHeader.enabled" -> false,
+                "desIf_Migration.enabled"        -> false
+              ))
+            .anyNumberOfTimes()
 
           willPost(
             url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/2020",

@@ -32,9 +32,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   private def completeRequest(nino: Nino, taxYear: TaxYear)(implicit
-                                                            hc: HeaderCarrier,
-                                                            ec: ExecutionContext,
-                                                            correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val intent     = if (FeatureSwitches(appConfig.featureSwitches).isEnabled("passDeleteIntentHeader")) Some("DELETE") else None
     def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
@@ -59,9 +59,9 @@ class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val
   }
 
   def delete(request: DeleteCharitableGivingTaxReliefsRequestData)(implicit
-                                                                   hc: HeaderCarrier,
-                                                                   ec: ExecutionContext,
-                                                                   correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     request match {
       case def1: Def1_DeleteCharitableGivingTaxReliefsRequestData =>
