@@ -25,46 +25,16 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import javax.inject.{Inject, Singleton}
 
 trait AppConfig {
+  // API name
+  def appName: String
 
   // MTD ID LookupConfig
   def mtdIdBaseUrl: String
 
-  // DES config
-  def desBaseUrl: String
-
-  def desEnv: String
-
-  def desToken: String
-
-  def desEnvironmentHeaders: Option[Seq[String]]
-
-  lazy val desDownstreamConfig: DownstreamConfig =
-    DownstreamConfig(baseUrl = desBaseUrl, env = desEnv, token = desToken, environmentHeaders = desEnvironmentHeaders)
-
-  // ifs Config
-  def ifsBaseUrl: String
-
-  def ifsEnv: String
-
-  def ifsToken: String
-
-  def ifsEnvironmentHeaders: Option[Seq[String]]
-
-  lazy val ifsDownstreamConfig: DownstreamConfig =
-    DownstreamConfig(baseUrl = ifsBaseUrl, env = ifsEnv, token = ifsToken, environmentHeaders = ifsEnvironmentHeaders)
-
-  // Tax Year Specific (TYS) IFS Config
-  def tysIfsBaseUrl: String
-
-  def tysIfsEnv: String
-
-  def tysIfsToken: String
-
-  def tysIfsEnvironmentHeaders: Option[Seq[String]]
-
-  lazy val taxYearSpecificIfsDownstreamConfig: DownstreamConfig =
-    DownstreamConfig(baseUrl = tysIfsBaseUrl, env = tysIfsEnv, token = tysIfsToken, environmentHeaders = tysIfsEnvironmentHeaders)
-
+  def desDownstreamConfig: DownstreamConfig
+  def ifsDownstreamConfig: DownstreamConfig
+  def tysIfsDownstreamConfig: DownstreamConfig
+  def hipDownstreamConfig: BasicAuthDownstreamConfig
   // API Config
   def apiGatewayContext: String
 
@@ -80,28 +50,43 @@ trait AppConfig {
 
 @Singleton
 class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configuration) extends AppConfig {
+  // API name
+  def appName: String = config.getString("appName")
 
   // MTD ID Lookup Config
   val mtdIdBaseUrl: String = config.baseUrl("mtd-id-lookup")
 
-  // DES Config
-  val desBaseUrl: String                         = config.baseUrl("des")
-  val desEnv: String                             = config.getString("microservice.services.des.env")
-  val desToken: String                           = config.getString("microservice.services.des.token")
-  val desEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.des.environmentHeaders")
+  private def serviceKeyFor(serviceName: String) = s"microservice.services.$serviceName"
 
-  // IFS Config
-  val ifsBaseUrl: String                         = config.baseUrl("ifs")
-  val ifsEnv: String                             = config.getString("microservice.services.ifs.env")
-  val ifsToken: String                           = config.getString("microservice.services.ifs.token")
-  val ifsEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.ifs.environmentHeaders")
+  protected def downstreamConfig(serviceName: String): DownstreamConfig = {
+    val baseUrl = config.baseUrl(serviceName)
 
-  // Tax Year Specific (TYS) IFS Config
-  val tysIfsBaseUrl: String                         = config.baseUrl("tys-ifs")
-  val tysIfsEnv: String                             = config.getString("microservice.services.tys-ifs.env")
-  val tysIfsToken: String                           = config.getString("microservice.services.tys-ifs.token")
-  val tysIfsEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.tys-ifs.environmentHeaders")
+    val serviceKey = serviceKeyFor(serviceName)
 
+    val env                = config.getString(s"$serviceKey.env")
+    val token              = config.getString(s"$serviceKey.token")
+    val environmentHeaders = configuration.getOptional[Seq[String]](s"$serviceKey.environmentHeaders")
+
+    DownstreamConfig(baseUrl, env, token, environmentHeaders)
+  }
+
+  protected def basicAuthDownstreamConfig(serviceName: String): BasicAuthDownstreamConfig = {
+    val baseUrl = config.baseUrl(serviceName)
+
+    val serviceKey = serviceKeyFor(serviceName)
+
+    val env                = config.getString(s"$serviceKey.env")
+    val clientId           = config.getString(s"$serviceKey.clientId")
+    val clientSecret       = config.getString(s"$serviceKey.clientSecret")
+    val environmentHeaders = configuration.getOptional[Seq[String]](s"$serviceKey.environmentHeaders")
+
+    BasicAuthDownstreamConfig(baseUrl, env, clientId, clientSecret, environmentHeaders)
+  }
+
+  def desDownstreamConfig: DownstreamConfig          = downstreamConfig("des")
+  def ifsDownstreamConfig: DownstreamConfig          = downstreamConfig("ifs")
+  def tysIfsDownstreamConfig: DownstreamConfig       = downstreamConfig("tys-ifs")
+  def hipDownstreamConfig: BasicAuthDownstreamConfig = basicAuthDownstreamConfig("hip")
   // API Config
   val apiGatewayContext: String = config.getString("api.gateway.context")
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,13 @@
 
 package config
 
-case class DownstreamConfig(
-    baseUrl: String,
-    env: String,
-    token: String,
-    environmentHeaders: Option[Seq[String]]
-)
+import java.time.LocalDateTime
 
-case class BasicAuthDownstreamConfig(
-    baseUrl: String,
-    env: String,
-    clientId: String,
-    clientSecret: String,
-    environmentHeaders: Option[Seq[String]]
-)
+sealed trait Deprecation
+
+object Deprecation {
+  case object NotDeprecated extends Deprecation
+
+  case class Deprecated(deprecatedOn: LocalDateTime, sunsetDate: Option[LocalDateTime]) extends Deprecation
+
+}

@@ -33,12 +33,15 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
     "return a success response" when {
       "given a non-TYS request" when {
         "isPassDeleteIntentEnabled feature switch is on" in new DesTest with Test {
-          override lazy val requiredHeaders: Seq[(String, String)] = requiredDesHeaders :+ ("intent" -> "DELETE")
+          override lazy val intent: Option[String] = Some("DELETE")
 
-          MockedAppConfig.featureSwitches returns Configuration(
-            "passDeleteIntentHeader.enabled" -> true,
-            "desIf_Migration.enabled"        -> false
-          )
+          MockedAppConfig.featureSwitchConfig
+            .returns(
+              Configuration(
+                "passDeleteIntentHeader.enabled" -> true,
+                "desIf_Migration.enabled"        -> false
+              ))
+            .anyNumberOfTimes()
 
           willPost(
             url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/2020",
@@ -53,12 +56,14 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
         }
 
         "isPassDeleteIntentEnabled feature switch is off" in new DesTest with Test {
-          override lazy val excludedHeaders: Seq[(String, String)] = super.excludedHeaders :+ ("intent" -> "DELETE")
 
-          MockedAppConfig.featureSwitches returns Configuration(
-            "passDeleteIntentHeader.enabled" -> false,
-            "desIf_Migration.enabled"        -> false
-          )
+          MockedAppConfig.featureSwitchConfig
+            .returns(
+              Configuration(
+                "passDeleteIntentHeader.enabled" -> false,
+                "desIf_Migration.enabled"        -> false
+              ))
+            .anyNumberOfTimes()
 
           willPost(
             url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/2020",
@@ -75,9 +80,9 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
       "given a TYS request" when {
         "isPassDeleteIntentEnabled feature switch is on" in new TysIfsTest with Test {
-          override lazy val requiredHeaders: Seq[(String, String)] = requiredTysIfsHeaders :+ ("intent" -> "DELETE")
+          override lazy val intent: Option[String] = Some("DELETE")
 
-          MockedAppConfig.featureSwitches returns Configuration(
+          MockedAppConfig.featureSwitchConfig returns Configuration(
             "passDeleteIntentHeader.enabled" -> true
           )
 
@@ -93,9 +98,8 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
         }
 
         "isPassDeleteIntentEnabled feature switch is off" in new TysIfsTest with Test {
-          override lazy val excludedHeaders: Seq[(String, String)] = super.excludedHeaders :+ ("intent" -> "DELETE")
 
-          MockedAppConfig.featureSwitches returns Configuration(
+          MockedAppConfig.featureSwitchConfig returns Configuration(
             "passDeleteIntentHeader.enabled" -> false
           )
 

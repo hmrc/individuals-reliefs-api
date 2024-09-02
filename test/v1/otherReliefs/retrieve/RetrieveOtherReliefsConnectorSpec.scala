@@ -40,7 +40,9 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
     val request: RetrieveOtherReliefsRequestData = Def1_RetrieveOtherReliefsRequestData(Nino(nino), taxYear)
 
-    val response: Def1_RetrieveOtherReliefsResponse = Def1_RetrieveOtherReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None, None, None, None, None)
+    val response: Def1_RetrieveOtherReliefsResponse =
+      Def1_RetrieveOtherReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None, None, None, None, None)
+
   }
 
   "RetrieveOtherReliefsConnector" should {

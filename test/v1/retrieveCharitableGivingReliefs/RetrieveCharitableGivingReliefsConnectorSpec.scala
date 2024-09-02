@@ -57,7 +57,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
   "RetrieveCharitableGivingReliefConnector" when {
     "retrieve" must {
       "return a 200 status for a success scenario with desIf_Migration disabled" in new DesTest with Test {
-        MockedAppConfig.featureSwitches returns Configuration("desIf_Migration.enabled" -> false)
+        MockedAppConfig.featureSwitchConfig returns Configuration("desIf_Migration.enabled" -> false)
 
         val outcome = Right(ResponseWrapper(correlationId, response))
         def taxYear = TaxYear.fromMtd("2018-19")
@@ -70,7 +70,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
       }
 
       "return a 200 status for a success scenario with desIf_Migration enabled" in new IfsTest with Test {
-        MockedAppConfig.featureSwitches returns Configuration("desIf_Migration.enabled" -> true)
+        MockedAppConfig.featureSwitchConfig returns Configuration("desIf_Migration.enabled" -> true)
 
         val outcome = Right(ResponseWrapper(correlationId, response))
 
