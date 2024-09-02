@@ -58,18 +58,18 @@ object RetrieveReliefInvestmentsFixtures {
     reliefClaimed = BigDecimal(43432.00)
   )
 
-  def eisSubscriptionsItemJson(knowledgeIntensive: String = " | \"knowledgeIntensive\": true,"): JsValue = Json.parse(
-    s"""
-      |{
-      |  "uniqueInvestmentRef": "XTAL",
-      |  "name": "EIS Fund X",
-      $knowledgeIntensive
-      |  "dateOfInvestment": "2020-12-12",
-      |  "amountInvested": 23312.00,
-      |  "reliefClaimed": 43432.00
-      |}
-        """.stripMargin
-  )
+  def eisSubscriptionsItemJson(knowledgeIntensive: Option[Boolean] = Some(true)): JsValue =
+    Json
+      .parse(s"""
+           |{
+           |  "uniqueInvestmentRef": "XTAL",
+           |  "name": "EIS Fund X",
+           |  "dateOfInvestment": "2020-12-12",
+           |  "amountInvested": 23312.00,
+           |  "reliefClaimed": 43432.00
+           |}""".stripMargin)
+      .as[JsObject] ++
+      knowledgeIntensive.map(x => Json.obj("knowledgeIntensive" -> x)).getOrElse(JsObject.empty)
 
   val communityInvestmentItemModel: CommunityInvestmentItem = CommunityInvestmentItem(
     uniqueInvestmentRef = "VCTREF",

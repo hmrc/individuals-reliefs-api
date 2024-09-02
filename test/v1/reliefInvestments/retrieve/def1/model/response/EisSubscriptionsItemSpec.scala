@@ -30,7 +30,7 @@ class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
       }
 
       "return valid model when the optional knowledgeIntensive is omitted" in {
-        eisSubscriptionsItemJson(knowledgeIntensive = "") shouldBe Json.toJson(eisSubscriptionsItemModel(knowledgeIntensive = None))
+        eisSubscriptionsItemJson(knowledgeIntensive = None) shouldBe Json.toJson(eisSubscriptionsItemModel(knowledgeIntensive = None))
       }
     }
   }
@@ -42,7 +42,7 @@ class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
       }
 
       "return valid json when the optional knowledgeIntensive is omitted" in {
-        Json.toJson(eisSubscriptionsItemModel(knowledgeIntensive = None)) shouldBe eisSubscriptionsItemJson(knowledgeIntensive = "")
+        Json.toJson(eisSubscriptionsItemModel(knowledgeIntensive = None)) shouldBe eisSubscriptionsItemJson(knowledgeIntensive = None)
       }
     }
   }
