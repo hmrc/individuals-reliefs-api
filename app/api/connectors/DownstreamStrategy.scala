@@ -82,12 +82,4 @@ object DownstreamStrategy {
 
     override def environmentHeaders: Seq[String] = downstreamConfig.environmentHeaders.getOrElse(Nil)
   }
-
-  /** Creates a strategy based on a choice of two strategies and the value of a feature switch.
-    * @param onStrategy
-    *   the strategy to use when the switch is enabled
-    * @param offStrategy
-    *   the strategy to use when the switch is disabled
-    */
-
 }
