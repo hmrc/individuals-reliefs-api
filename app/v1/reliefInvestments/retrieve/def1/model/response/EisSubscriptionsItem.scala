@@ -20,7 +20,7 @@ import play.api.libs.json.{Json, OFormat}
 
 case class EisSubscriptionsItem(uniqueInvestmentRef: String,
                                 name: Option[String],
-                                knowledgeIntensive: Boolean,
+                                knowledgeIntensive: Option[Boolean],
                                 dateOfInvestment: Option[String],
                                 amountInvested: Option[BigDecimal],
                                 reliefClaimed: BigDecimal)
