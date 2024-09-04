@@ -19,6 +19,7 @@ package v1.otherReliefs.retrieve
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 import v1.otherReliefs.retrieve.model.response.RetrieveOtherReliefsHateoasData
@@ -33,8 +34,10 @@ class RetrieveOtherReliefsController @Inject() (val authService: EnrolmentsAuthS
                                                 service: RetrieveOtherReliefsService,
                                                 hateoasFactory: HateoasFactory,
                                                 cc: ControllerComponents,
-                                                val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
+
+  val endpointName = "retrieve-other-reliefs"
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveOtherReliefsController", endpointName = "retrieveOtherReliefs")

@@ -37,10 +37,11 @@ class CreateAndAmendForeignReliefsController @Inject() (val authService: Enrolme
                                                         service: CreateAndAmendForeignReliefsService,
                                                         auditService: AuditService,
                                                         hateoasFactory: HateoasFactory,
-                                                        appConfig: AppConfig,
                                                         cc: ControllerComponents,
-                                                        val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                        val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
+
+  val endpointName = "create-amend-foreign-reliefs"
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "CreateAndAmendForeignReliefsController", endpointName = "createAndAmendForeignReliefs")

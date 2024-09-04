@@ -24,7 +24,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import mocks.MockIdGenerator
+import mocks.{MockAppConfig, MockIdGenerator}
+import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.createAndAmendCharitableGivingReliefs.def1.model.request._
@@ -40,7 +41,8 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
     with MockCreateAndAmendCharitableGivingReliefsService
     with MockCreateAndAmendCharitableGivingReliefsValidatorFactory
     with MockHateoasFactory
-    with MockIdGenerator {
+    with MockIdGenerator
+    with MockAppConfig {
 
   private val taxYear = "2019-20"
   private val amount  = 1234.56
@@ -145,6 +147,12 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
 

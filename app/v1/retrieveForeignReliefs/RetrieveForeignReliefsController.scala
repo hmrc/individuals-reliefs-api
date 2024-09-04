@@ -19,21 +19,25 @@ package v1.retrieveForeignReliefs
 import api.controllers._
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 import v1.retrieveForeignReliefs.model.response.RetrieveForeignReliefsHateoasData
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveForeignReliefsController @Inject()(val authService: EnrolmentsAuthService,
-                                                 val lookupService: MtdIdLookupService,
-                                                 validatorFactory: RetrieveForeignReliefsValidatorFactory,
-                                                 service: RetrieveForeignReliefsService,
-                                                 hateoasFactory: HateoasFactory,
-                                                 cc: ControllerComponents,
-                                                 val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) {
+class RetrieveForeignReliefsController @Inject() (val authService: EnrolmentsAuthService,
+                                                  val lookupService: MtdIdLookupService,
+                                                  validatorFactory: RetrieveForeignReliefsValidatorFactory,
+                                                  service: RetrieveForeignReliefsService,
+                                                  hateoasFactory: HateoasFactory,
+                                                  cc: ControllerComponents,
+                                                  val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
+    extends AuthorisedController(cc) {
+
+  val endpointName = "retrieve-foreign-reliefs"
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveForeignReliefsController", endpointName = "retrieveForeignReliefs")

@@ -22,6 +22,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import mocks.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.deleteForeignReliefs.model.Def1_DeleteForeignReliefsRequestData
@@ -34,7 +36,8 @@ class DeleteForeignReliefsControllerSpec
     with ControllerTestRunner
     with MockDeleteForeignReliefsService
     with MockDeleteForeignReliefsValidatorFactory
-    with MockAuditService {
+    with MockAuditService
+    with MockAppConfig {
 
   private val taxYear = TaxYear.fromMtd("2019-20")
 
@@ -75,7 +78,7 @@ class DeleteForeignReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    private val controller = new DeleteForeignReliefsController(
+    val controller = new DeleteForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteForeignReliefsValidatorFactory,
@@ -84,6 +87,12 @@ class DeleteForeignReliefsControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear.asMtd)(fakeDeleteRequest)
 

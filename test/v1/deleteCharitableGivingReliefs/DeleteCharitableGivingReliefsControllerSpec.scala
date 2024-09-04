@@ -22,6 +22,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import mocks.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.deleteCharitableGivingReliefs.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
@@ -34,7 +36,8 @@ class DeleteCharitableGivingReliefsControllerSpec
     with ControllerTestRunner
     with MockDeleteCharitableGivingReliefService
     with MockAuditService
-    with MockDeleteCharitableGivingValidatorReliefsFactory {
+    with MockDeleteCharitableGivingValidatorReliefsFactory
+    with MockAppConfig {
 
   private val taxYear     = "2019-20"
   private val requestData = Def1_DeleteCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
@@ -82,6 +85,12 @@ class DeleteCharitableGivingReliefsControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 

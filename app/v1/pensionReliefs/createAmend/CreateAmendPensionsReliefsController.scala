@@ -36,11 +36,12 @@ class CreateAmendPensionsReliefsController @Inject() (val authService: Enrolment
                                                       validatorFactory: CreateAmendPensionsReliefsValidatorFactory,
                                                       service: CreateAmendPensionsReliefsService,
                                                       auditService: AuditService,
-                                                      appConfig: AppConfig,
                                                       hateoasFactory: HateoasFactory,
                                                       cc: ControllerComponents,
-                                                      idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                      idGenerator: IdGenerator)(implicit appConfig: AppConfig,ec: ExecutionContext)
     extends AuthorisedController(cc) {
+
+  val endpointName = "create-amend-pensions-reliefs"
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "AmendPensionsReliefsController", endpointName = "amendPensionsReliefs")
