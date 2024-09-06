@@ -22,6 +22,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import mocks.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
@@ -35,7 +37,8 @@ class DeletePensionsReliefsControllerSpec
     with ControllerTestRunner
     with MockDeletePensionsReliefsService
     with MockDeletePensionsReliefsValidatorFactory
-    with MockAuditService {
+    with MockAuditService
+    with MockAppConfig {
 
   private val taxYear = TaxYear.fromMtd("2019-20")
 
@@ -86,6 +89,12 @@ class DeletePensionsReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear.asMtd)(fakeRequest)
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =

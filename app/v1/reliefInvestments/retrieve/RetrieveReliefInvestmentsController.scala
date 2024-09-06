@@ -19,6 +19,7 @@ package v1.reliefInvestments.retrieve
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 import v1.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsHateoasData
@@ -33,8 +34,10 @@ class RetrieveReliefInvestmentsController @Inject() (val authService: Enrolments
                                                      service: RetrieveReliefInvestmentsService,
                                                      hateoasFactory: HateoasFactory,
                                                      cc: ControllerComponents,
-                                                     val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                     val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
+
+  val endpointName = "retrieve-relief-investments"
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveReliefInvestmentsController", endpointName = "retrieveReliefInvestments")

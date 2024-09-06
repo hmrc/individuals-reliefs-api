@@ -39,17 +39,16 @@ trait AppConfig {
   def apiGatewayContext: String
 
   def apiStatus(version: Version): String
-
   def featureSwitches: Configuration
-
   def endpointsEnabled(version: Version): Boolean
-
   def confidenceLevelConfig: ConfidenceLevelConfig
+  def safeEndpointsEnabled(version: String): Boolean
+  def endpointAllowsSupportingAgents(endpointName: String): Boolean
 
 }
 
 @Singleton
-class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configuration) extends AppConfig {
+class AppConfigImpl @Inject() (config: ServicesConfig, protected[config] val configuration: Configuration) extends AppConfig {
   // API name
   def appName: String = config.getString("appName")
 
@@ -96,7 +95,20 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
 
   def endpointsEnabled(version: Version): Boolean = config.getBoolean(s"api.${version.name}.endpoints.enabled")
 
+  def safeEndpointsEnabled(version: String): Boolean =
+    configuration
+      .getOptional[Boolean](s"api.$version.endpoints.enabled")
+      .getOrElse(false)
+
   val confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
+
+  def endpointAllowsSupportingAgents(endpointName: String): Boolean =
+    supportingAgentEndpoints.getOrElse(endpointName, false)
+
+  private val supportingAgentEndpoints: Map[String, Boolean] =
+    configuration
+      .getOptional[Map[String, Boolean]]("api.supporting-agent-endpoints")
+      .getOrElse(Map.empty)
 
 }
 

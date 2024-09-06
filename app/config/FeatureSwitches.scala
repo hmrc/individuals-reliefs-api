@@ -35,7 +35,7 @@ trait FeatureSwitches {
 
   private def isConfigTrue(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
 
-  def supportingAgentsAccessControlEnabled: Boolean = isEnabled("supporting-agents-access-control")
+  def supportingAgentsAccessControlEnabled: Boolean
 }
 
 @Singleton
@@ -63,9 +63,12 @@ class FeatureSwitchesImpl(protected val featureSwitchConfig: Configuration) exte
 
   val isPassDeleteIntentEnabled: Boolean = isEnabled("passDeleteIntentHeader")
   val isDesIf_MigrationEnabled: Boolean  = isEnabled("desIf_Migration")
+  val supportingAgentsAccessControlEnabled: Boolean = isEnabled("supporting-agents-access-control")
 
 }
 
 object FeatureSwitches {
   def apply(configuration: Configuration): FeatureSwitches = new FeatureSwitchesImpl(configuration)
+  
+  def apply(appConfig: AppConfig): FeatureSwitches = new FeatureSwitchesImpl(appConfig)
 }

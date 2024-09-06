@@ -18,6 +18,7 @@ package v1.deleteCharitableGivingReliefs
 
 import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import routing.{Version, Version1}
 import utils.IdGenerator
@@ -32,8 +33,10 @@ class DeleteCharitableGivingReliefsController @Inject() (val authService: Enrolm
                                                          service: DeleteCharitableGivingTaxReliefsService,
                                                          auditService: AuditService,
                                                          cc: ControllerComponents,
-                                                         val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                         val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
+
+  val endpointName = "delete-charitable-giving-reliefs"
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "DeleteCharitableGivingController", endpointName = "deleteCharitableGiving")

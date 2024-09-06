@@ -25,6 +25,8 @@ import api.models.errors
 import api.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import mocks.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures.{hateoasResponse, requestBodyJson, requestBodyModel}
@@ -40,7 +42,8 @@ class CreateAndAmendReliefInvestmentsControllerSpec
     with MockCreateAndAmendReliefInvestmentsService
     with MockCreateAndAmendReliefInvestmentsValidatorFactory
     with MockHateoasFactory
-    with MockAuditService {
+    with MockAuditService
+    with MockAppConfig {
 
   private val taxYear = "2019-20"
 
@@ -106,6 +109,12 @@ class CreateAndAmendReliefInvestmentsControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 

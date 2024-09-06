@@ -23,6 +23,8 @@ import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors
 import api.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
+import mocks.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v1.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
@@ -37,7 +39,8 @@ class RetrieveOtherReliefsControllerSpec
     with ControllerTestRunner
     with MockRetrieveOtherReliefsService
     with MockRetrieveOtherReliefsValidatorFactory
-    with MockHateoasFactory {
+    with MockHateoasFactory
+    with MockAppConfig {
 
   private val taxYear     = "2019-20"
   private val requestData = Def1_RetrieveOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
@@ -168,6 +171,12 @@ class RetrieveOtherReliefsControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeGetRequest)
   }

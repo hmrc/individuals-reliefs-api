@@ -23,6 +23,8 @@ import api.models.errors
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
+import mocks.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v1.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
@@ -35,7 +37,8 @@ class DeleteOtherReliefsControllerSpec
     with ControllerTestRunner
     with MockDeleteOtherReliefsService
     with MockDeleteOtherReliefsValidatorFactory
-    with MockAuditService {
+    with MockAuditService
+    with MockAppConfig {
 
   private val taxYear     = "2019-20"
   private val requestData = Def1_DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
@@ -83,6 +86,12 @@ class DeleteOtherReliefsControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
