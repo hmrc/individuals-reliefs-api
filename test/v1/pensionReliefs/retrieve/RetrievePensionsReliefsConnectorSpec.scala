@@ -81,7 +81,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
           val outcome = Right(ResponseWrapper(correlationId, response))
 
           willGet(
-            url = s"$baseUrl/income-tax/reliefs/pensions/$nino/2018-19"
+            url = s"$baseUrl/income-tax/v1/reliefs/pensions/$nino/2018-19"
           )
             .returns(Future.successful(outcome))
 

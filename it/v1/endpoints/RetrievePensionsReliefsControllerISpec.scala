@@ -208,7 +208,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
 
     def downstreamTaxYear: String = "2020-21" // Supposed to be YYYY-YY not YYYY
 
-    def downstreamUri: String = s"/income-tax/reliefs/pensions/$taxableEntityId/$downstreamTaxYear"
+    def downstreamUri: String = s"/income-tax/v1/reliefs/pensions/$taxableEntityId/$downstreamTaxYear"
 
   }
 
