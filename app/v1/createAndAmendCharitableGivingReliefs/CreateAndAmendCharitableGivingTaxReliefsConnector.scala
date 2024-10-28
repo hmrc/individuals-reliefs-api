@@ -16,10 +16,10 @@
 
 package v1.createAndAmendCharitableGivingReliefs
 
-import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.{AppConfig, FeatureSwitches}
+import config.AppConfig
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.createAndAmendCharitableGivingReliefs.model.request.{CreateAndAmendCharitableGivingTaxReliefsRequestData, Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData}
@@ -43,10 +43,8 @@ class CreateAndAmendCharitableGivingTaxReliefsConnector @Inject() (val http: Htt
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
       TaxYearSpecificIfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
-    } else if (FeatureSwitches(appConfig.featureSwitches).isEnabled("desIf_Migration")) {
-      IfsUri[Unit](preTysPath)
     } else {
-      DesUri[Unit](preTysPath)
+      IfsUri[Unit](preTysPath)
     }
 
     request match {
@@ -58,5 +56,4 @@ class CreateAndAmendCharitableGivingTaxReliefsConnector @Inject() (val http: Htt
         )
     }
   }
-
 }
