@@ -14,46 +14,49 @@
  * limitations under the License.
  */
 
-package v1.createAndAmendCharitableGivingReliefs
+package v1.deleteCharitableGivingReliefs
 
 import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
-import play.api.http.Status.OK
+import api.models.domain.{Nino, TaxYear}
+import config.{AppConfig, FeatureSwitches}
+import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.createAndAmendCharitableGivingReliefs.model.request.{CreateAndAmendCharitableGivingTaxReliefsRequestData, Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData}
+import v1.deleteCharitableGivingReliefs.model.request.{Def1_DeleteCharitableGivingTaxReliefsRequestData, DeleteCharitableGivingTaxReliefsRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAndAmendCharitableGivingTaxReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def createAmend(request: CreateAndAmendCharitableGivingTaxReliefsRequestData)(implicit
+  private def completeRequest(nino: Nino, taxYear: TaxYear)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    implicit val successCode: SuccessCode = SuccessCode(OK)
+    val intent = if (FeatureSwitches(appConfig.featureSwitches).isEnabled("passDeleteIntentHeader")) Some("DELETE") else None
 
-    import request._
-
-    def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
-
-    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
+    if (taxYear.useTaxYearSpecificApi) {
+      val downstreamUri = TaxYearSpecificIfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
+      delete(downstreamUri, intent)
     } else {
-      IfsUri[Unit](preTysPath)
-    }
-
-    request match {
-      case def1: Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData =>
-        import def1._
-        post(
-          body = body,
-          uri = downstreamUri
-        )
+      val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
+      post(JsObject.empty, downstreamUri, intent)
     }
   }
+
+  def delete(request: DeleteCharitableGivingTaxReliefsRequestData)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+
+    request match {
+      case def1: Def1_DeleteCharitableGivingTaxReliefsRequestData =>
+        import def1._
+        completeRequest(nino, taxYear)
+    }
+  }
+
 }
