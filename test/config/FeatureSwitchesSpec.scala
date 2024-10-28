@@ -26,22 +26,22 @@ class FeatureSwitchesSpec extends UnitSpec {
       "absent from the config" in {
         val configuration   = Configuration.empty
         val featureSwitches = FeatureSwitches(configuration)
-        featureSwitches.isDesIf_MigrationEnabled shouldBe true
+        featureSwitches.supportingAgentsAccessControlEnabled shouldBe true
 
       }
 
       "enabled" in {
-        val configuration   = Configuration("desIf_Migration.enabled" -> true)
+        val configuration   = Configuration("supporting-agents-access-control.enabled" -> true)
         val featureSwitches = FeatureSwitches(configuration)
-        featureSwitches.isDesIf_MigrationEnabled shouldBe true
+        featureSwitches.supportingAgentsAccessControlEnabled shouldBe true
       }
     }
 
     "be false" when {
       "disabled" in {
-        val configuration   = Configuration("desIf_Migration.enabled" -> false)
+        val configuration   = Configuration("supporting-agents-access-control.enabled" -> false)
         val featureSwitches = FeatureSwitches(configuration)
-        featureSwitches.isDesIf_MigrationEnabled shouldBe false
+        featureSwitches.supportingAgentsAccessControlEnabled shouldBe false
       }
     }
   }

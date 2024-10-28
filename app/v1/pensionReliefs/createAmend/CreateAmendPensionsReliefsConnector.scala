@@ -16,10 +16,10 @@
 
 package v1.pensionReliefs.createAmend
 
-import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.{AppConfig, FeatureSwitches}
+import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
@@ -41,10 +41,8 @@ class CreateAmendPensionsReliefsConnector @Inject() (val http: HttpClient, val a
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
         TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
-      } else if (FeatureSwitches(appConfig.featureSwitches).isEnabled("desIf_Migration")) {
-        IfsUri[Unit](preTysPath)
       } else {
-        DesUri[Unit](preTysPath)
+        IfsUri[Unit](preTysPath)
       }
 
     put(body, downstreamUri)

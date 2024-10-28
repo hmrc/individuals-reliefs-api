@@ -16,10 +16,10 @@
 
 package v1.retrieveCharitableGivingReliefs
 
-import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.{AppConfig, FeatureSwitches}
+import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.retrieveCharitableGivingReliefs.model.request.{Def1_RetrieveCharitableGivingReliefsRequestData, RetrieveCharitableGivingReliefsRequestData}
 import v1.retrieveCharitableGivingReliefs.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
@@ -41,10 +41,8 @@ class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClient, 
       if (taxYear.useTaxYearSpecificApi) {
         TaxYearSpecificIfsUri[Def1_RetrieveCharitableGivingReliefsResponse](
           s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
-      } else if (FeatureSwitches(appConfig.featureSwitches).isEnabled("desIf_Migration")) {
-        IfsUri[Def1_RetrieveCharitableGivingReliefsResponse](preTysPath)
       } else {
-        DesUri[Def1_RetrieveCharitableGivingReliefsResponse](preTysPath)
+        IfsUri[Def1_RetrieveCharitableGivingReliefsResponse](preTysPath)
       }
 
     val result = get(downstreamUri)

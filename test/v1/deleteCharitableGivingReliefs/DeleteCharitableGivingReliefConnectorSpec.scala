@@ -32,14 +32,13 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
   "delete()" should {
     "return a success response" when {
       "given a non-TYS request" when {
-        "isPassDeleteIntentEnabled feature switch is on" in new DesTest with Test {
-          override lazy val intent: Option[String] = Some("DELETE")
+        "isPassDeleteIntentEnabled feature switch is on" in new IfsTest with Test {
+          override val intent: Option[String] = Some("DELETE")
 
           MockedAppConfig.featureSwitchConfig
             .returns(
               Configuration(
-                "passDeleteIntentHeader.enabled" -> true,
-                "desIf_Migration.enabled"        -> false
+                "passDeleteIntentHeader.enabled" -> true
               ))
             .anyNumberOfTimes()
 
@@ -49,19 +48,17 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
           )
             .returns(Future.successful(expectedOutcome))
 
-          private val request = Def1_DeleteCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd("2019-20"))
-          private val result  = await(connector.delete(request))
+          val request = Def1_DeleteCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd("2019-20"))
+          val result  = await(connector.delete(request))
 
           result shouldBe expectedOutcome
         }
 
-        "isPassDeleteIntentEnabled feature switch is off" in new DesTest with Test {
-
+        "isPassDeleteIntentEnabled feature switch is off" in new IfsTest with Test {
           MockedAppConfig.featureSwitchConfig
             .returns(
               Configuration(
-                "passDeleteIntentHeader.enabled" -> false,
-                "desIf_Migration.enabled"        -> false
+                "passDeleteIntentHeader.enabled" -> false
               ))
             .anyNumberOfTimes()
 
@@ -71,8 +68,8 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
           )
             .returns(Future.successful(expectedOutcome))
 
-          private val request = Def1_DeleteCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd("2019-20"))
-          private val result  = await(connector.delete(request))
+          val request = Def1_DeleteCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd("2019-20"))
+          val result  = await(connector.delete(request))
 
           result shouldBe expectedOutcome
         }
@@ -80,7 +77,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
       "given a TYS request" when {
         "isPassDeleteIntentEnabled feature switch is on" in new TysIfsTest with Test {
-          override lazy val intent: Option[String] = Some("DELETE")
+          override val intent: Option[String] = Some("DELETE")
 
           MockedAppConfig.featureSwitchConfig returns Configuration(
             "passDeleteIntentHeader.enabled" -> true
@@ -91,8 +88,8 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
           )
             .returns(Future.successful(expectedOutcome))
 
-          private val request = Def1_DeleteCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"))
-          private val result  = await(connector.delete(request))
+          val request = Def1_DeleteCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"))
+          val result  = await(connector.delete(request))
 
           result shouldBe expectedOutcome
         }
@@ -106,8 +103,8 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
           willDelete(url = s"$baseUrl/income-tax/23-24/$nino/income-source/charity/annual")
             .returns(Future.successful(expectedOutcome))
 
-          private val request = Def1_DeleteCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"))
-          private val result  = await(connector.delete(request))
+          val request = Def1_DeleteCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"))
+          val result  = await(connector.delete(request))
 
           result shouldBe expectedOutcome
         }
