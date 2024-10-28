@@ -16,89 +16,28 @@
 
 package v1.retrieveCharitableGivingReliefs
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
-import v1.retrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
+import api.connectors.DownstreamOutcome
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
+import uk.gov.hmrc.http.HeaderCarrier
 import v1.retrieveCharitableGivingReliefs.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
-import v1.retrieveCharitableGivingReliefs.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
+import v1.retrieveCharitableGivingReliefs.model.response.RetrieveCharitableGivingReliefsResponse
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
+trait MockRetrieveCharitableGivingReliefsConnector extends MockFactory {
 
-  private val nino = "AA123456A"
+  val mockConnector: RetrieveCharitableGivingReliefsConnector = mock[RetrieveCharitableGivingReliefsConnector]
 
-  private val nonUkCharitiesModel = Def1_NonUkCharities(
-    charityNames = Some(Seq("non-UK charity 1", "non-UK charity 2")),
-    totalAmount = 1000.10
-  )
+  object MockRetrieveCharitableGivingReliefsConnector {
 
-  private val giftAidPaymentsModel = Def1_GiftAidPayments(
-    nonUkCharities = Some(nonUkCharitiesModel),
-    totalAmount = Some(1000.11),
-    oneOffAmount = Some(1000.12),
-    amountTreatedAsPreviousTaxYear = Some(1000.13),
-    amountTreatedAsSpecifiedTaxYear = Some(1000.14)
-  )
-
-  private val giftsModel = Def1_Gifts(
-    nonUkCharities = Some(nonUkCharitiesModel),
-    landAndBuildings = Some(1000.15),
-    sharesOrSecurities = Some(1000.16)
-  )
-
-  private val response = Def1_RetrieveCharitableGivingReliefsResponse(
-    giftAidPayments = Some(giftAidPaymentsModel),
-    gifts = Some(giftsModel)
-  )
-
-  "RetrieveCharitableGivingReliefConnector" when {
-    "retrieve" must {
-      "return a 200 status for a success scenario" in new IfsTest with Test {
-        val outcome = Right(ResponseWrapper(correlationId, response))
-
-        def taxYear = TaxYear.fromMtd("2018-19")
-
-        willGet(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
-          .returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[RetrieveCharitableGivingReliefsResponse] = await(connector.retrieve(request))
-        result shouldBe outcome
-      }
+    def retrieve(requestData: Def1_RetrieveCharitableGivingReliefsRequestData)
+        : CallHandler[Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]]] = {
+      (mockConnector
+        .retrieve(_: Def1_RetrieveCharitableGivingReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
     }
 
-    "retrieveCharitableGivingRelief is called for a TaxYearSpecific tax year" must {
-      "return a 200 for success scenario" in {
-        new TysIfsTest with Test {
-          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-          val outcome = Right(ResponseWrapper(correlationId, response))
-
-          willGet(s"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
-            .returns(Future.successful(outcome))
-
-          await(connector.retrieve(request)) shouldBe outcome
-        }
-      }
-    }
   }
 
-  trait Test {
-    _: ConnectorTest =>
-
-    protected def taxYear: TaxYear
-
-    val connector: RetrieveCharitableGivingReliefsConnector =
-      new RetrieveCharitableGivingReliefsConnector(
-        http = mockHttpClient,
-        appConfig = mockAppConfig
-      )
-
-    protected val request: Def1_RetrieveCharitableGivingReliefsRequestData =
-      Def1_RetrieveCharitableGivingReliefsRequestData(
-        nino = Nino(nino),
-        taxYear = taxYear
-      )
-  }
 }
