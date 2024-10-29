@@ -29,6 +29,9 @@ trait MockRetrieveCharitableGivingReliefsConnector extends MockFactory {
 
   val mockConnector: RetrieveCharitableGivingReliefsConnector = mock[RetrieveCharitableGivingReliefsConnector]
 
+
+  //TEST
+
   object MockRetrieveCharitableGivingReliefsConnector {
 
     def retrieve(requestData: Def1_RetrieveCharitableGivingReliefsRequestData)
