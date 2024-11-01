@@ -19,7 +19,6 @@ package v1.createAndAmendCharitableGivingReliefs
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import play.api.Configuration
 import v1.createAndAmendCharitableGivingReliefs.def1.model.request._
 import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
@@ -61,22 +60,8 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
 
   "CreateAndAmendCharitableGivingTaxReliefConnector" when {
     "createOrAmendCharitableGivingTaxRelief is called" must {
-      "return 200 for a success scenario with desIf_Migration disabled" in new DesTest with Test {
+      "return 200 for a success scenario" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
-
-        MockedAppConfig.featureSwitchConfig returns Configuration("desIf_Migration.enabled" -> false)
-
-        willPost(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}", body = requestBody)
-          .returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Unit] = await(connector.createAmend(request))
-        result shouldBe outcome
-      }
-
-      "return 200 for a success scenario with desIf_Migration enabled" in new IfsTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
-
-        MockedAppConfig.featureSwitchConfig returns Configuration("desIf_Migration.enabled" -> true)
 
         willPost(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}", body = requestBody)
           .returns(Future.successful(outcome))
@@ -112,5 +97,4 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
     protected val outcome = Right(ResponseWrapper(correlationId, ()))
 
   }
-
 }

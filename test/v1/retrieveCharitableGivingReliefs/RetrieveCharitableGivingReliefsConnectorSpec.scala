@@ -19,7 +19,6 @@ package v1.retrieveCharitableGivingReliefs
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import play.api.Configuration
 import v1.retrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
 import v1.retrieveCharitableGivingReliefs.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import v1.retrieveCharitableGivingReliefs.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
@@ -56,22 +55,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
 
   "RetrieveCharitableGivingReliefConnector" when {
     "retrieve" must {
-      "return a 200 status for a success scenario with desIf_Migration disabled" in new DesTest with Test {
-        MockedAppConfig.featureSwitchConfig returns Configuration("desIf_Migration.enabled" -> false)
-
-        val outcome = Right(ResponseWrapper(correlationId, response))
-        def taxYear = TaxYear.fromMtd("2018-19")
-
-        willGet(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
-          .returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[RetrieveCharitableGivingReliefsResponse] = await(connector.retrieve(request))
-        result shouldBe outcome
-      }
-
-      "return a 200 status for a success scenario with desIf_Migration enabled" in new IfsTest with Test {
-        MockedAppConfig.featureSwitchConfig returns Configuration("desIf_Migration.enabled" -> true)
-
+      "return a 200 status for a success scenario" in new IfsTest with Test {
         val outcome = Right(ResponseWrapper(correlationId, response))
 
         def taxYear = TaxYear.fromMtd("2018-19")

@@ -19,7 +19,6 @@ package v1.pensionReliefs.createAmend
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import play.api.Configuration
 import v1.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
 import v1.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
@@ -41,26 +40,7 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
 
   "AmendPensionsReliefsConnector" when {
     "createOrAmendPensionsRelief called" must {
-      "return a 204 status for a success scenario with desIf_Migration disabled" in new DesTest with Test {
-
-        MockedAppConfig.featureSwitchConfig returns Configuration(
-          "desIf_Migration.enabled" -> false
-        )
-
-        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
-        val outcome          = Right(ResponseWrapper(correlationId, ()))
-        willPut(url = s"$baseUrl/income-tax/reliefs/pensions/$nino/${taxYear.asMtd}", body = body)
-          .returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Unit] = await(connector.createOrAmendPensionsRelief(request))
-        result shouldBe outcome
-      }
-      "return a 204 status for a success scenario with desIf_Migration enabled" in new IfsTest with Test {
-
-        MockedAppConfig.featureSwitchConfig returns Configuration(
-          "desIf_Migration.enabled" -> true
-        )
-
+      "return a 204 status for a success scenario enabled" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
@@ -99,5 +79,4 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
     )
 
   }
-
 }

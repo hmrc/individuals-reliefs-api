@@ -16,7 +16,7 @@
 
 package v1.deleteCharitableGivingReliefs
 
-import api.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
@@ -36,24 +36,13 @@ class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    val intent     = if (FeatureSwitches(appConfig.featureSwitches).isEnabled("passDeleteIntentHeader")) Some("DELETE") else None
-    def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
+    val intent = if (FeatureSwitches(appConfig.featureSwitches).isEnabled("passDeleteIntentHeader")) Some("DELETE") else None
 
     if (taxYear.useTaxYearSpecificApi) {
-      val downstreamUri =
-        TaxYearSpecificIfsUri[Unit](
-          s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual"
-        )
+      val downstreamUri = TaxYearSpecificIfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
       delete(downstreamUri, intent)
-
     } else {
-
-      val downstreamUri =
-        if (FeatureSwitches(appConfig.featureSwitches).isEnabled("desIf_Migration"))
-          IfsUri[Unit](preTysPath)
-        else
-          DesUri[Unit](preTysPath)
-
+      val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
       post(JsObject.empty, downstreamUri, intent)
     }
   }
