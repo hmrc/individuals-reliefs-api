@@ -4,6 +4,13 @@ info:
   version: "1.0"
   title: Individuals Reliefs (MTD)
   description: |
+    The following groups of endpoints are stateful in the Sandbox:
+    * [Relief Investments](#tag/Relief-Investments)
+    * [Other Reliefs](#tag/Other-Reliefs)
+    * [Foreign Reliefs](#tag/Foreign-Reliefs)
+    * [Pensions Reliefs](#tag/Pensions-Reliefs)
+    * [Charitable Givings](#tag/Charitable-Givings)
+    
     # Send fraud prevention data
     HMRC monitors transactions to help protect your customers' confidential data from criminals and fraudsters. 
     <div class="govuk-warning-text warning-icon-fix">
