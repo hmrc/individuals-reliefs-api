@@ -5,7 +5,7 @@ info:
   title: Individuals Reliefs (MTD)
   description: |
     The following groups of endpoints are stateful in the Sandbox:
-    * [Relief Investments Income](#tag/Relief-Investments)
+    * [Relief Investments](#tag/Relief-Investments)
     * [Other Reliefs](#tag/Other-Reliefs)
     * [Foreign Reliefs](#tag/Foreign-Reliefs)
     * [Pensions Reliefs](#tag/Pensions-Reliefs)
