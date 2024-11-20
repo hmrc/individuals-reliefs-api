@@ -1,11 +1,7 @@
 description: |
   This endpoint enables you to delete relief investments from:
-  * VCT subscriptions
-  * EIS subscriptions
-  * Community Investments
-  * Seed Enterprise Investments
-  * Social Enterprise Investments
-  
+  VCT subscriptions, EIS subscriptions, Community Investments,
+  Seed Enterprise Investments and Social Enterprise Investments.
   A National Insurance number and tax year must be provided.
 
   ### Test data

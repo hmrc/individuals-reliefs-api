@@ -1,14 +1,9 @@
 description: |
-  This endpoint enables you to create and amend reliefs other than investments. This includes: 
-  * loan interest
-  * payroll giving
-  * shares and securities redemptions
-  * maintenance payments
-  * post cessation reliefs
-  * annual payments
-  * qualifying loan interest payments
-  
-  A National Insurance number and tax year must be provided.
+  This endpoint enables you to create and amend reliefs other than investments.
+  This includes: 
+  loan interest, payroll giving, shares and securities redemptions, 
+  maintenance payments, post cessation reliefs, annual payments and 
+  qualifying loan interest payments. A National Insurance number and tax year must be provided.
 
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.

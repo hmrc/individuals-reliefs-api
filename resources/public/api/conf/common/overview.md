@@ -1,5 +1,9 @@
 Use the Individuals Reliefs API to submit, edit and retrieve information about a customer’s individual tax reliefs.
 
+This API is related to the following customer journey:
+
+* Submit individual reliefs
+
 Some parameters in this API map to box numbers in one or more Self Assessment tax return forms. 
 To learn more and to download this mapping information as a CSV file, go to 
 [income-tax-mtd-changelog/mapping-csv-files.md](https://github.com/hmrc/income-tax-mtd-changelog/blob/main/mapping/mapping-csv-files.md) on GitHub. 
