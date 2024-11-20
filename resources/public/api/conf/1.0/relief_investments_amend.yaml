@@ -1,7 +1,12 @@
 description: |
-  This endpoint enables you to create and amend relief investments from: VCT subscriptions, EIS subscriptions, 
-  Community Investments, Seed Enterprise Investments and Social Enterprise Investments. A National Insurance number and 
-  tax year must be provided.
+  This endpoint enables you to create and amend relief investments from: 
+  * VCT subscriptions
+  * EIS subscriptions
+  * Community Investments
+  * Seed Enterprise Investments
+  * Social Enterprise Investments
+  
+  A National Insurance number and tax year must be provided.
 
   > <span style="color:red"> **Warning:**
   > Social Enterprise Investments must not be created for tax years 2023-24 onwards.</span>
