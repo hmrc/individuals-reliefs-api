@@ -1,5 +1,3 @@
-Overview:
-
 Use the Individuals Reliefs API to submit, edit and retrieve information about a customer’s individual tax reliefs.
 
 This API is related to the following customer journey:
