@@ -16,7 +16,7 @@
 
 package v1.createAndAmendForeignReliefs
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
@@ -38,7 +38,7 @@ class CreateAndAmendForeignReliefsConnector @Inject() (val http: HttpClient, val
     import request._
 
     val url = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/foreign/${taxYear.asTysDownstream}/$nino")
+      IfsUri[Unit](s"income-tax/reliefs/foreign/${taxYear.asTysDownstream}/$nino")
     } else {
       IfsUri[Unit](s"income-tax/reliefs/foreign/$nino/${taxYear.asMtd}")
     }

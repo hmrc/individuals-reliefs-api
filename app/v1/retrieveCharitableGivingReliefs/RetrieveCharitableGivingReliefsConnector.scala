@@ -16,7 +16,7 @@
 
 package v1.retrieveCharitableGivingReliefs
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
@@ -39,7 +39,7 @@ class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClient, 
     def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[Def1_RetrieveCharitableGivingReliefsResponse](
+        IfsUri[Def1_RetrieveCharitableGivingReliefsResponse](
           s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
       } else {
         IfsUri[Def1_RetrieveCharitableGivingReliefsResponse](preTysPath)

@@ -16,7 +16,7 @@
 
 package v1.reliefInvestments.retrieve
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import config.AppConfig
@@ -39,7 +39,7 @@ class RetrieveReliefInvestmentsConnector @Inject() (val http: HttpClient, val ap
     import schema._
 
     val url: DownstreamUri[DownstreamResp] = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[DownstreamResp](s"income-tax/reliefs/investment/${taxYear.asTysDownstream}/$nino")
+      IfsUri[DownstreamResp](s"income-tax/reliefs/investment/${taxYear.asTysDownstream}/$nino")
     } else {
       IfsUri[DownstreamResp](s"income-tax/reliefs/investment/$nino/${taxYear.asMtd}")
     }

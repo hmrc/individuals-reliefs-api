@@ -16,7 +16,7 @@
 
 package v1.otherReliefs.delete
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
@@ -37,7 +37,7 @@ class DeleteOtherReliefsConnector @Inject() (val http: HttpClient, val appConfig
     import request._
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/$nino")
+      IfsUri[Unit](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/$nino")
     } else {
       IfsUri[Unit](s"income-tax/reliefs/other/$nino/${taxYear.asMtd}")
     }

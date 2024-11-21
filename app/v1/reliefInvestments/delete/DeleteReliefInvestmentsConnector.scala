@@ -16,7 +16,7 @@
 
 package v1.reliefInvestments.delete
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
@@ -37,7 +37,7 @@ class DeleteReliefInvestmentsConnector @Inject() (val http: HttpClient, val appC
     import request._
 
     val uri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/investment/${taxYear.asTysDownstream}/$nino")
+      IfsUri[Unit](s"income-tax/reliefs/investment/${taxYear.asTysDownstream}/$nino")
     } else {
       // Note: endpoint uses mtd tax year format
       IfsUri[Unit](s"income-tax/reliefs/investment/$nino/${taxYear.asMtd}")
