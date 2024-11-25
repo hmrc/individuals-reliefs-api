@@ -33,7 +33,6 @@ trait AppConfig {
 
   def desDownstreamConfig: DownstreamConfig
   def ifsDownstreamConfig: DownstreamConfig
-  def tysIfsDownstreamConfig: DownstreamConfig
   def hipDownstreamConfig: BasicAuthDownstreamConfig
   // API Config
   def apiGatewayContext: String
@@ -84,7 +83,6 @@ class AppConfigImpl @Inject() (config: ServicesConfig, protected[config] val con
 
   def desDownstreamConfig: DownstreamConfig          = downstreamConfig("des")
   def ifsDownstreamConfig: DownstreamConfig          = downstreamConfig("ifs")
-  def tysIfsDownstreamConfig: DownstreamConfig       = downstreamConfig("tys-ifs")
   def hipDownstreamConfig: BasicAuthDownstreamConfig = basicAuthDownstreamConfig("hip")
   // API Config
   val apiGatewayContext: String = config.getString("api.gateway.context")
