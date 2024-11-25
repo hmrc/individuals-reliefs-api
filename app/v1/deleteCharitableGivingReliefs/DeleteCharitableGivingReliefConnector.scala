@@ -16,7 +16,7 @@
 
 package v1.deleteCharitableGivingReliefs
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
@@ -39,7 +39,7 @@ class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val
     val intent = if (FeatureSwitches(appConfig.featureSwitches).isEnabled("passDeleteIntentHeader")) Some("DELETE") else None
 
     if (taxYear.useTaxYearSpecificApi) {
-      val downstreamUri = TaxYearSpecificIfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
+      val downstreamUri = IfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
       delete(downstreamUri, intent)
     } else {
       val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")

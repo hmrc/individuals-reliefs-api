@@ -16,7 +16,7 @@
 
 package v1.retrieveForeignReliefs
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
@@ -38,7 +38,7 @@ class RetrieveForeignReliefsConnector @Inject() (val http: HttpClient, val appCo
     import request._
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Def1_RetrieveForeignReliefsResponse](s"income-tax/reliefs/foreign/${taxYear.asTysDownstream}/$nino")
+      IfsUri[Def1_RetrieveForeignReliefsResponse](s"income-tax/reliefs/foreign/${taxYear.asTysDownstream}/$nino")
     } else {
       IfsUri[Def1_RetrieveForeignReliefsResponse](s"income-tax/reliefs/foreign/$nino/${taxYear.asMtd}")
     }

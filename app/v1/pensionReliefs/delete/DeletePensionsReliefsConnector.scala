@@ -16,7 +16,7 @@
 
 package v1.pensionReliefs.delete
 
-import api.connectors.DownstreamUri.{TaxYearSpecificIfsUri, DesUri}
+import api.connectors.DownstreamUri.{IfsUri, DesUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
@@ -38,7 +38,7 @@ class DeletePensionsReliefsConnector @Inject() (val http: HttpClient, val appCon
 
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
+        IfsUri[Unit](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
       } else {
         DesUri[Unit](s"income-tax/reliefs/pensions/$nino/${taxYear.asMtd}")
       }

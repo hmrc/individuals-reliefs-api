@@ -16,7 +16,7 @@
 
 package v1.otherReliefs.retrieve
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import config.AppConfig
@@ -40,7 +40,7 @@ class RetrieveOtherReliefsConnector @Inject() (val http: HttpClient, val appConf
 
     val url: DownstreamUri[DownstreamResp] =
       if (taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[DownstreamResp](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/$nino")
+        IfsUri[DownstreamResp](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/$nino")
       } else {
         // Note: endpoint uses mtd tax year format
         IfsUri[DownstreamResp](s"income-tax/reliefs/other/$nino/${taxYear.asMtd}")

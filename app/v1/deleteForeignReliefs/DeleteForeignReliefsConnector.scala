@@ -16,7 +16,7 @@
 
 package v1.deleteForeignReliefs
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
@@ -36,7 +36,7 @@ class DeleteForeignReliefsConnector @Inject() (val http: HttpClient, val appConf
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/foreign/${taxYear.asTysDownstream}/$nino")
+      IfsUri[Unit](s"income-tax/reliefs/foreign/${taxYear.asTysDownstream}/$nino")
     } else {
       IfsUri[Unit](s"income-tax/reliefs/foreign/$nino/${taxYear.asMtd}")
     }

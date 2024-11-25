@@ -16,7 +16,7 @@
 
 package v1.pensionReliefs.retrieve
 
-import api.connectors.DownstreamUri.{DesUri, HipUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{DesUri, HipUri, IfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import config.{AppConfig, FeatureSwitches}
@@ -40,7 +40,7 @@ class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appC
 
     val downstreamUri: DownstreamUri[DownstreamResp] = taxYear match {
       case ty if ty.useTaxYearSpecificApi =>
-        TaxYearSpecificIfsUri(s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
+        IfsUri(s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
       case _ =>
         val downstreamTaxYearParam = taxYear.asMtd // Supposed to be MTD format for this downstream endpoint
         if (FeatureSwitches(appConfig.featureSwitches).isEnabled("des_hip_migration_1656")) {

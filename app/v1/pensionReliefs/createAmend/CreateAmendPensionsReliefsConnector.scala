@@ -16,7 +16,7 @@
 
 package v1.pensionReliefs.createAmend
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
@@ -40,7 +40,7 @@ class CreateAmendPensionsReliefsConnector @Inject() (val http: HttpClient, val a
 
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[Unit](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
+        IfsUri[Unit](s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
       } else {
         IfsUri[Unit](preTysPath)
       }
