@@ -44,7 +44,7 @@ class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appC
       case _ =>
         val downstreamTaxYearParam = taxYear.asMtd // Supposed to be MTD format for this downstream endpoint
         if (FeatureSwitches(appConfig.featureSwitches).isEnabled("des_hip_migration_1656")) {
-          HipUri(s"income-tax/v1/reliefs/pensions/$nino/$downstreamTaxYearParam")
+          HipUri(s"itsa/income-tax/v1/reliefs/pensions/$nino/$downstreamTaxYearParam")
         } else {
           DesUri(s"income-tax/reliefs/pensions/$nino/$downstreamTaxYearParam")
         }
