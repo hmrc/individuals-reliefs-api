@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,10 @@ import v1.otherReliefs.amend.def1.model.request.{Def1_AmendOtherReliefsRequestBo
 import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 import javax.inject.Singleton
-import scala.annotation.nowarn
 
 @Singleton
 class Def1_AmendOtherReliefsValidator(nino: String, taxYear: String, body: JsValue) extends Validator[AmendOtherReliefsRequestData] {
 
-  @nowarn("cat=lint-byname-implicit")
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_AmendOtherReliefsRequestBody]()
 
   private val rulesValidator = Def1_AmendOtherReliefsRulesValidator

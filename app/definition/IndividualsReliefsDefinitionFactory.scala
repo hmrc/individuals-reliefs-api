@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package definition
 
-import config.AppConfig
-import routing.{Version, Version1}
-import utils.Logging
+import shared.config.SharedAppConfig
+import shared.definition._
+import shared.routing.Version1
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
+class IndividualsReliefsDefinitionFactory @Inject() (protected val appConfig: SharedAppConfig) extends ApiDefinitionFactory {
 
   lazy val definition: Definition =
     Definition(
@@ -42,14 +42,5 @@ class ApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
         requiresTrust = None
       )
     )
-
-  private[definition] def buildAPIStatus(version: Version): APIStatus = {
-    APIStatus.parser
-      .lift(appConfig.apiStatus(version))
-      .getOrElse {
-        logger.error(s"[ApiDefinition][buildApiStatus] no API Status found in config.  Reverting to Alpha")
-        APIStatus.ALPHA
-      }
-  }
 
 }
