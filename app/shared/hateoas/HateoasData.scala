@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.hateoas
 
-import play.api.libs.json.Reads
-
-trait DownstreamReadable[Base] {
-
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
-
-  implicit def connectorReads: Reads[DownstreamResp]
-}
+/** Marker trait that represents data to be used as parameters to the links that are to be returned for a particular endpoint. This data may be
+  * identifiers (e.g. nino and/or other resource id) to embed in links, or data from the response that determines whether or not a particular link
+  * should be returned in certain scenarios.
+  */
+trait HateoasData

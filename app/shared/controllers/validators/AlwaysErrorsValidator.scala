@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.controllers.validators
 
-import play.api.libs.json.Reads
+import cats.data.Validated
+import cats.data.Validated.Invalid
+import shared.models.errors.MtdError
 
-trait DownstreamReadable[Base] {
-
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
-
-  implicit def connectorReads: Reads[DownstreamResp]
+case class AlwaysErrorsValidator(errors: Seq[MtdError]) extends Validator[Nothing] {
+  override def validate: Validated[Seq[MtdError], Nothing] = Invalid(errors)
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.utils
 
-import play.api.libs.json.Reads
+import org.scalamock.scalatest.MockFactory
+import org.scalatest.EitherValues
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 
-trait DownstreamReadable[Base] {
-
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
-
-  implicit def connectorReads: Reads[DownstreamResp]
-}
+trait UnitSpec extends AnyWordSpecLike with MockFactory with EitherValues with Matchers with FutureAwaits with DefaultAwaitTimeout

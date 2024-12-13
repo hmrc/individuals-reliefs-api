@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.controllers
 
-import play.api.libs.json.Reads
+import shared.models.errors.ErrorWrapper
+import play.api.libs.json.Json
+import play.api.mvc.Result
+import play.api.mvc.Results.Status
 
-trait DownstreamReadable[Base] {
+case class ErrorHandling(errorHandler: PartialFunction[ErrorWrapper, Result])
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+object ErrorHandling {
 
-  implicit def connectorReads: Reads[DownstreamResp]
+  val Default: ErrorHandling = ErrorHandling { case errorWrapper: ErrorWrapper =>
+    Status(errorWrapper.error.httpStatus)(Json.toJson(errorWrapper))
+  }
+
 }

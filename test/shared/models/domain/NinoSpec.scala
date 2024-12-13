@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.models.domain
 
-import play.api.libs.json.Reads
+import shared.utils.UnitSpec
 
-trait DownstreamReadable[Base] {
+class NinoSpec extends UnitSpec {
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+  "Formatting a Nino" should {
+    "produce a formatted nino" in {
+      val result = Nino("CS100700A").formatted
+      result shouldBe "CS 10 07 00 A"
+    }
+  }
 
-  implicit def connectorReads: Reads[DownstreamResp]
+  "Removing a suffix" should {
+    "produce a nino without a suffix" in {
+      val result = Nino("AA111111A").withoutSuffix
+      result shouldBe "AA111111"
+    }
+  }
+
 }

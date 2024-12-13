@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.utils
 
-import play.api.libs.json.Reads
+import java.time.LocalDateTime
 
-trait DownstreamReadable[Base] {
+class DateUtilsSpec extends UnitSpec {
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+  "longDateTimestampGmt" should {
+    "return Date/time in format [EEE, dd MMM yyyy HH:mm:ss z]" when {
+      "given a LocalDateTime" in {
+        val result = DateUtils.longDateTimestampGmt(
+          LocalDateTime.of(2023, 1, 17, 12, 0)
+        )
+        result shouldBe "Tue, 17 Jan 2023 12:00:00 GMT"
+      }
+    }
+  }
 
-  implicit def connectorReads: Reads[DownstreamResp]
 }

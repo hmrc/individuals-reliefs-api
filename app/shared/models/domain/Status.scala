@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.models.domain
 
-import play.api.libs.json.Reads
+import play.api.libs.json.Format
+import shared.utils.enums.Enums
 
-trait DownstreamReadable[Base] {
+sealed trait Status {}
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+//noinspection ScalaStyle
+object Status {
 
-  implicit def connectorReads: Reads[DownstreamResp]
+  case object valid extends Status
+
+  case object invalid extends Status
+
+  case object superseded extends Status
+
+  implicit val format: Format[Status] = Enums.format[Status]
 }

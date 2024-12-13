@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.models.domain
 
-import play.api.libs.json.Reads
+import java.time.{Clock, ZoneOffset}
 
-trait DownstreamReadable[Base] {
+trait TaxYearTestSupport {
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+  def clockAtTimeInTaxYear(taxYear: TaxYear): Clock =
+    Clock.fixed(taxYear.endDate.atStartOfDay().toInstant(ZoneOffset.UTC), ZoneOffset.UTC)
 
-  implicit def connectorReads: Reads[DownstreamResp]
 }

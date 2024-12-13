@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.models.domain
 
-import play.api.libs.json.Reads
+import shared.utils.UnitSpec
 
-trait DownstreamReadable[Base] {
+import java.time.LocalDate
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+class DateRangeSpec extends UnitSpec {
 
-  implicit def connectorReads: Reads[DownstreamResp]
+  private val startDate = LocalDate.parse("2023-06-01")
+  private val endDate   = LocalDate.parse("2024-05-07")
+
+  "apply(LocalDate,LocalDate)" should {
+    "return a DateRange" in {
+      DateRange(startDate -> endDate) shouldBe DateRange(startDate, endDate)
+    }
+  }
+
 }

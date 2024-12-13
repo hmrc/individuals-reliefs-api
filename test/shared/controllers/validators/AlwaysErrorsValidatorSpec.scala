@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.controllers.validators
 
-import play.api.libs.json.Reads
+import cats.data.Validated.Invalid
+import play.api.http.Status
+import shared.models.errors.MtdError
+import shared.utils.UnitSpec
 
-trait DownstreamReadable[Base] {
+class AlwaysErrorsValidatorSpec extends UnitSpec {
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+  "AlwaysErrorsValidator" must {
+    "always return the errors that it is constructed with" in {
+      val errors = Seq(MtdError("E1", "", Status.BAD_REQUEST), MtdError("E2", "", Status.BAD_REQUEST))
 
-  implicit def connectorReads: Reads[DownstreamResp]
+      AlwaysErrorsValidator(errors).validate shouldBe Invalid(errors)
+    }
+  }
+
 }

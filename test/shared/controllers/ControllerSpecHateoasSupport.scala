@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.controllers
 
-import play.api.libs.json.Reads
+import shared.hateoas.Link
+import shared.hateoas.Method.GET
+import play.api.libs.json.{JsObject, Json}
 
-trait DownstreamReadable[Base] {
+trait ControllerSpecHateoasSupport {
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+  val hateoaslinks: Seq[Link] = List(Link(href = "/foo/bar", method = GET, rel = "test-relationship"))
 
-  implicit def connectorReads: Reads[DownstreamResp]
+  val hateoaslinksJson: JsObject = Json
+    .parse("""
+        |{
+        |  "links": [{
+        |    "href": "/foo/bar",
+        |    "method": "GET",
+        |    "rel": "test-relationship"
+        |  }]
+        |}""".stripMargin)
+    .as[JsObject]
+
 }

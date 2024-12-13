@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.utils
 
-import play.api.libs.json.Reads
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDateTime, ZoneId}
+import java.util.Locale
 
-trait DownstreamReadable[Base] {
+object DateUtils {
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+  private val longDateTimeFormatGmt: DateTimeFormatter = DateTimeFormatter
+    .ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
+    .withZone(ZoneId.of("GMT"))
 
-  implicit def connectorReads: Reads[DownstreamResp]
+  def longDateTimestampGmt(dateTime: LocalDateTime): String = longDateTimeFormatGmt.format(dateTime)
 }

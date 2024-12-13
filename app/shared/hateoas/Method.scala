@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.hateoas
 
-import play.api.libs.json.Reads
+import play.api.libs.json.Format
+import shared.utils.enums.Enums
 
-trait DownstreamReadable[Base] {
+sealed trait Method
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+object Method {
+  case object GET    extends Method
+  case object POST   extends Method
+  case object DELETE extends Method
+  case object PUT    extends Method
 
-  implicit def connectorReads: Reads[DownstreamResp]
+  implicit val formats: Format[Method] = Enums.format[Method]
 }

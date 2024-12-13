@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.controllers.validators.resolvers
 
-import play.api.libs.json.Reads
+import cats.data.Validated
+import shared.models.domain.TransactionId
+import shared.models.errors.{MtdError, TransactionIdFormatError}
 
-trait DownstreamReadable[Base] {
+object ResolveTransactionId extends ResolverSupport {
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+  private val transactionIdRegex = "^[0-9A-Za-z]{1,12}$".r
 
-  implicit def connectorReads: Reads[DownstreamResp]
+  val resolver: Resolver[String, TransactionId] =
+    ResolveStringPattern(transactionIdRegex, TransactionIdFormatError).resolver.map(TransactionId)
+
+  def apply(value: String): Validated[Seq[MtdError], TransactionId] = resolver(value)
 }

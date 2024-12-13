@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package shared.schema
+package shared.config
 
-import play.api.libs.json.Reads
+import java.time.LocalDateTime
 
-trait DownstreamReadable[Base] {
+sealed trait Deprecation
 
-  /** This is the type of response returned by the connector.
-    *
-    * It is not necessarily the same as the response type returned by the service to the controller.
-    */
-  type DownstreamResp <: Base
+object Deprecation {
+  case object NotDeprecated extends Deprecation
 
-  implicit def connectorReads: Reads[DownstreamResp]
+  case class Deprecated(deprecatedOn: LocalDateTime, sunsetDate: Option[LocalDateTime]) extends Deprecation
+
 }
