@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package utils
 import support.UnitSpec
 import utils.EmptinessChecker._
 import utils.EmptyPathsResult._
-
-import scala.annotation.nowarn
 
 class EmptinessCheckerSpec extends UnitSpec {
 
@@ -45,7 +43,6 @@ class EmptinessCheckerSpec extends UnitSpec {
   "EmptinessChecker" when {
     "empty object" must {
       "return root path as empty" in {
-        @nowarn("cat=lint-byname-implicit")
         val result = EmptinessChecker.findEmptyPaths(Foo())
 
         result shouldBe CompletelyEmpty
@@ -55,7 +52,7 @@ class EmptinessCheckerSpec extends UnitSpec {
     "all arrays and objects are non empty" must {
       "return empty" in {
         val barFull = Bar(baz = Some(Baz(Some(1))))
-        @nowarn("cat=lint-byname-implicit")
+
         val result = EmptinessChecker.findEmptyPaths(Foo(bar = Some(barFull), arr1 = Some(List(barFull))))
 
         result shouldBe NoEmptyPaths
@@ -64,7 +61,6 @@ class EmptinessCheckerSpec extends UnitSpec {
 
     "has an empty object" must {
       "return an path" in {
-        @nowarn("cat=lint-byname-implicit")
         val result = EmptinessChecker.findEmptyPaths(Foo(bar = Some(Bar())))
 
         result shouldBe EmptyPaths(List("/bar"))
@@ -73,7 +69,6 @@ class EmptinessCheckerSpec extends UnitSpec {
 
     "has empty object nested" must {
       "return the path" in {
-        @nowarn("cat=lint-byname-implicit")
         val result = EmptinessChecker.findEmptyPaths(Foo(bar = Some(Bar(Some(Baz())))))
 
         result shouldBe EmptyPaths(List("/bar/baz"))
@@ -82,7 +77,6 @@ class EmptinessCheckerSpec extends UnitSpec {
 
     "has empty list" must {
       "return the path of the list" in {
-        @nowarn("cat=lint-byname-implicit")
         val result = EmptinessChecker.findEmptyPaths(Foo(arr1 = Some(List())))
 
         result shouldBe EmptyPaths(List("/arr1"))
@@ -91,7 +85,6 @@ class EmptinessCheckerSpec extends UnitSpec {
 
     "has empty list nested" must {
       "return the path of the list" in {
-        @nowarn("cat=lint-byname-implicit")
         val result = EmptinessChecker.findEmptyPaths(Foo(bar = Some(Bar(arr = Some(List())))))
 
         result shouldBe EmptyPaths(List("/bar/arr"))
@@ -100,7 +93,6 @@ class EmptinessCheckerSpec extends UnitSpec {
 
     "has empty objects inside list" must {
       "return the paths" in {
-        @nowarn("cat=lint-byname-implicit")
         val result = EmptinessChecker.findEmptyPaths(Foo(arr2 = Some(List(Bar(Some(Baz())), Bar(Some(Baz()))))))
 
         result shouldBe EmptyPaths(List("/arr2/0/baz", "/arr2/1/baz"))
@@ -109,7 +101,6 @@ class EmptinessCheckerSpec extends UnitSpec {
 
     "has multiple empty objects" must {
       "return an error with the paths for all of them" in {
-        @nowarn("cat=lint-byname-implicit")
         val result = EmptinessChecker.findEmptyPaths(
           Foo(bar = Some(Bar(Some(Baz()))), arr1 = Some(Nil), arr2 = Some(List(Bar())), arr3 = Some(List(Bar(Some(Baz())))), bar2 = Some(Bar())))
 

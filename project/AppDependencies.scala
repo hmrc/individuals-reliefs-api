@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@ private object AppDependencies {
     "org.typelevel"                %% "cats-core"                 % "2.9.0",
     "com.chuusai"                  %% "shapeless"                 % "2.4.0-M1",
     "com.fasterxml.jackson.module" %% "jackson-module-scala"      % "2.15.2",
-    "com.neovisionaries"            % "nv-i18n"                   % "1.29"
+    "com.neovisionaries"            % "nv-i18n"                   % "1.29",
+    "com.github.jknack"             % "handlebars"                % "4.3.1"
   )
 
   def test(scope: String = "test, it"): Seq[sbt.ModuleID] = Seq(

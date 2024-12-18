@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,17 +23,18 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import play.api.libs.json.JsValue
-import v1.reliefInvestments.createAmend.def1.model.request.{Def1_CreateAndAmendReliefInvestmentsRequestBody, Def1_CreateAndAmendReliefInvestmentsRequestData}
+import v1.reliefInvestments.createAmend.def1.model.request.{
+  Def1_CreateAndAmendReliefInvestmentsRequestBody,
+  Def1_CreateAndAmendReliefInvestmentsRequestData
+}
 import v1.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 
 import javax.inject.Singleton
-import scala.annotation.nowarn
 
 @Singleton
 class Def1_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAndAmendReliefInvestmentsRequestData] {
 
-  @nowarn("cat=lint-byname-implicit")
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
 
   private val rulesValidator = Def1_CreateAndAmendReliefInvestmentsRulesValidator

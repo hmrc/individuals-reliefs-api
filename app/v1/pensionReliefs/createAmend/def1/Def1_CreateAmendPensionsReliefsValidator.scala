@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,11 @@ import v1.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReli
 import v1.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
 import javax.inject.Singleton
-import scala.annotation.nowarn
 
 @Singleton
 class Def1_CreateAmendPensionsReliefsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendPensionsReliefsRequestData] {
 
-  @nowarn("cat=lint-byname-implicit")
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendPensionsReliefsBody]()
 
   def validate: Validated[Seq[MtdError], CreateAmendPensionsReliefsRequestData] =

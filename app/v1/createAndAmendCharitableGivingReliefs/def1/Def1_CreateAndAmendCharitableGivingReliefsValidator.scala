@@ -29,12 +29,9 @@ import v1.createAndAmendCharitableGivingReliefs.model.request.{
   Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 }
 
-import scala.annotation.nowarn
-
 class Def1_CreateAndAmendCharitableGivingReliefsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAndAmendCharitableGivingTaxReliefsRequestData] {
 
-  @nowarn("cat=lint-byname-implicit")
   private val resolveJson: ResolveNonEmptyJsonObject[Def1_CreateAndAmendCharitableGivingTaxReliefsBody] =
     new ResolveNonEmptyJsonObject[Def1_CreateAndAmendCharitableGivingTaxReliefsBody]()
 

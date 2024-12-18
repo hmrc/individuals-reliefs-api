@@ -27,12 +27,9 @@ import v1.createAndAmendForeignReliefs.def1.Def1_CreateAndAmendForeignReliefsRul
 import v1.createAndAmendForeignReliefs.def1.model.request.{Def1_CreateAndAmendForeignReliefsBody, Def1_CreateAndAmendForeignReliefsRequestData}
 import v1.createAndAmendForeignReliefs.model.request.CreateAndAmendForeignReliefsRequestData
 
-import scala.annotation.nowarn
-
 class Def1_CreateAndAmendForeignReliefsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAndAmendForeignReliefsRequestData] {
 
-  @nowarn("cat=lint-byname-implicit")
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendForeignReliefsBody]()
 
   def validate: Validated[Seq[MtdError], Def1_CreateAndAmendForeignReliefsRequestData] =

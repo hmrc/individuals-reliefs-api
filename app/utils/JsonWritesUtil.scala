@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package shared.utils
+package utils
 
 import play.api.libs.json._
 

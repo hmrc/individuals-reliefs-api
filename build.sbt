@@ -1,5 +1,5 @@
 /*
- * copyright 2022 HM Revenue & Customs
+ * copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ lazy val microservice = Project(appName, file("."))
     retrieveManaged                 := true,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(warnScalaVersionEviction = false),
     scalaVersion                    := "2.13.12",
-    scalacOptions ++= Seq("-Xfatal-warnings", "-Wconf:src=routes/.*:silent", "-feature", "-language:higherKinds")
+    scalacOptions ++= Seq("-Xfatal-warnings", "-Xlint:-byname-implicit", "-Wconf:src=routes/.*:silent", "-feature", "-language:higherKinds")
   )
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
