@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v1.reliefInvestments.retrieve.def1.model.response
 
-import api.hateoas.HateoasLinks
-import api.models.domain.Timestamp
+import hateoas.HateoasLinks
 import play.api.libs.json.{Json, OWrites, Reads}
+import shared.models.domain.Timestamp
 import v1.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsResponse
 
 case class Def1_RetrieveReliefInvestmentsResponse(

@@ -16,13 +16,13 @@
 
 package v1.createAndAmendForeignReliefs
 
-import api.controllers.validators.Validator
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.models.errors.MtdError
 import v1.createAndAmendForeignReliefs.model.request.CreateAndAmendForeignReliefsRequestData
 
 trait MockCreateAndAmendForeignReliefsValidatorFactory extends MockFactory {

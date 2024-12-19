@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v1.pensionReliefs.delete
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
 import v1.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
@@ -34,7 +34,7 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
     val connector: DeletePensionsReliefsConnector =
       new DeletePensionsReliefsConnector(
         http = mockHttpClient,
-        appConfig = mockAppConfig
+        appConfig = mockSharedAppConfig
       )
 
     protected val request: DeletePensionsReliefsRequestData =
@@ -62,7 +62,7 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
 
     "deletePensionsRelief called for a Tax Year Specific tax year" must {
       "return a 204 status for a success scenario" in
-        new TysIfsTest with Test {
+        new IfsTest with Test {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
           val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))

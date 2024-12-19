@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package v1.retrieveCharitableGivingReliefs.model.response
 
-import api.hateoas.{HateoasData, HateoasLinks, HateoasLinksFactory, Link}
-import config.AppConfig
+import hateoas.HateoasLinks
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import v1.retrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts}
 import v1.retrieveCharitableGivingReliefs.model.response.Def1_RetrieveCharitableGivingReliefsResponse.Def1_RetrieveCharitableGivingReliefsLinksFactory
 
@@ -34,7 +35,7 @@ object RetrieveCharitableGivingReliefsResponse extends HateoasLinks {
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsHateoasData] {
 
-    override def links(appConfig: AppConfig, data: RetrieveCharitableGivingReliefsHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: RetrieveCharitableGivingReliefsHateoasData): Seq[Link] = {
       data.taxYear match {
         case _ => Def1_RetrieveCharitableGivingReliefsLinksFactory.links(appConfig, data)
       }
@@ -67,7 +68,7 @@ object Def1_RetrieveCharitableGivingReliefsResponse extends HateoasLinks {
   implicit object Def1_RetrieveCharitableGivingReliefsLinksFactory
       extends HateoasLinksFactory[Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsHateoasData] {
 
-    override def links(appConfig: AppConfig, data: RetrieveCharitableGivingReliefsHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: RetrieveCharitableGivingReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
         createAndAmendCharitableGivingTaxRelief(appConfig, nino, taxYear),

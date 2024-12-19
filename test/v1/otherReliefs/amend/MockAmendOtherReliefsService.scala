@@ -16,11 +16,11 @@
 
 package v1.otherReliefs.amend
 
-import api.controllers.RequestContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import shared.controllers.RequestContext
+import shared.models.errors.ErrorWrapper
+import shared.models.outcomes.ResponseWrapper
 import v1.otherReliefs.amend.def1.model.request.Def1_AmendOtherReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}

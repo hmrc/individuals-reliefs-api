@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 
 package v1.deleteForeignReliefs
 
-import api.controllers._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import routing.{Version, Version1}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.controllers.validators.Validator
+import shared.routing.Version1
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
+import v1.deleteForeignReliefs.model.DeleteForeignReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -33,7 +35,7 @@ class DeleteForeignReliefsController @Inject() (val authService: EnrolmentsAuthS
                                                 service: DeleteForeignReliefsService,
                                                 auditService: AuditService,
                                                 cc: ControllerComponents,
-                                                val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
+                                                val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "delete-foreign-reliefs"
@@ -45,7 +47,7 @@ class DeleteForeignReliefsController @Inject() (val authService: EnrolmentsAuthS
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val validator = validatorFactory.validator(nino, taxYear)
+      val validator: Validator[DeleteForeignReliefsRequestData] = validatorFactory.validator(nino, taxYear)
 
       val requestHandler = RequestHandler
         .withValidator(validator)
@@ -54,7 +56,7 @@ class DeleteForeignReliefsController @Inject() (val authService: EnrolmentsAuthS
           auditService = auditService,
           auditType = "DeleteForeignReliefs",
           transactionName = "delete-foreign-reliefs",
-          apiVersion = Version.from(request, orElse = Version1),
+          apiVersion = Version1,
           params = Map("nino" -> nino, "taxYear" -> taxYear)
         ))
 

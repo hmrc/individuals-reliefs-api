@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v1.deleteForeignReliefs
 
-import api.connectors.DownstreamUri.IfsUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.IfsUri
+import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.deleteForeignReliefs.model.{Def1_DeleteForeignReliefsRequestData, DeleteForeignReliefsRequestData}
 
@@ -28,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteForeignReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteForeignReliefsConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   private def completeRequest(nino: Nino, taxYear: TaxYear)(implicit
       hc: HeaderCarrier,

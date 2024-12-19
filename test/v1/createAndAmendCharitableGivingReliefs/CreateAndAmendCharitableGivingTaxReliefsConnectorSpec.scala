@@ -16,9 +16,9 @@
 
 package v1.createAndAmendCharitableGivingReliefs
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.createAndAmendCharitableGivingReliefs.def1.model.request._
 import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
@@ -28,7 +28,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
 
   val taxYearMtd: String        = "2017-18"
   val taxYearDownstream: String = "2018"
-  val nino: String              = "AA123456A"
+  val nino: String              = "ZG903729C"
 
   val nonUkCharitiesModel: Def1_NonUkCharities =
     Def1_NonUkCharities(
@@ -72,7 +72,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
     }
 
     "createOrAmendCharitableGivingTaxRelief is called for a TYS tax year" must {
-      "return 200 for a success scenario" in new TysIfsTest with Test {
+      "return 200 for a success scenario" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
         willPost(url = s"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual", body = requestBody)
@@ -89,7 +89,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
     def taxYear: TaxYear
 
     protected val connector: CreateAndAmendCharitableGivingTaxReliefsConnector =
-      new CreateAndAmendCharitableGivingTaxReliefsConnector(http = mockHttpClient, appConfig = mockAppConfig)
+      new CreateAndAmendCharitableGivingTaxReliefsConnector(http = mockHttpClient, appConfig = mockSharedAppConfig)
 
     protected val request: Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData =
       Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData(Nino(nino), taxYear, requestBody)

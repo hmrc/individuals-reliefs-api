@@ -16,13 +16,17 @@
 
 package v1.retrieveForeignReliefs
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear, Timestamp}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import support.UnitSpec
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear, Timestamp}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.retrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
+import v1.retrieveForeignReliefs.def1.model.response.{
+  Def1_ForeignIncomeTaxCreditRelief,
+  Def1_ForeignTaxCreditRelief,
+  Def1_ForeignTaxForFtcrNotClaimed
+}
 import v1.retrieveForeignReliefs.model.request.Def1_RetrieveForeignReliefsRequestData
 import v1.retrieveForeignReliefs.model.response.Def1_RetrieveForeignReliefsResponse
 
@@ -31,7 +35,7 @@ import scala.concurrent.Future
 
 class RetrieveForeignReliefsServiceSpec extends UnitSpec {
 
-  private val nino: String           = "AA123456A"
+  private val nino: String           = "ZG903729C"
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 

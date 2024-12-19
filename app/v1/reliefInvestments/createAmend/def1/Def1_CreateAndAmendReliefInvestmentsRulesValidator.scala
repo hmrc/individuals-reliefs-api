@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package v1.reliefInvestments.createAmend.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
-import api.models.errors.{DateOfInvestmentFormatError, MtdError, NameFormatError, UniqueInvestmentRefFormatError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
+import common.{DateOfInvestmentFormatError, NameFormatError, UniqueInvestmentRefFormatError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.models.errors.MtdError
 import v1.reliefInvestments.createAmend.def1.model.request._
 
 import java.time.LocalDate
@@ -82,7 +83,7 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
 
   private def validateDate(maybeDate: Option[String], itemType: String, index: Int): Validated[Seq[MtdError], Unit] = {
     val path = s"/$itemType/$index/dateOfInvestment"
-    maybeDate.traverse_(ResolveIsoDate(_, Some(DateOfInvestmentFormatError), Some(path)).andThen(isDateInRange(_, path)))
+    maybeDate.traverse_(ResolveIsoDate(_, DateOfInvestmentFormatError.withPath(path)).andThen(isDateInRange(_, path)))
   }
 
   private def isDateInRange(date: LocalDate, path: String): Validated[Seq[MtdError], Unit] = {
@@ -96,7 +97,7 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
     List(
       (amountInvested, s"/$itemType/$index/amountInvested"),
       (Some(reliefClaimed), s"/$itemType/$index/reliefClaimed")
-    ).traverse_ { case (value, path) => resolveParsedNumber(value, path = Some(path)) }
+    ).traverse_ { case (value, path) => resolveParsedNumber(value, path) }
   }
 
 }

@@ -16,10 +16,10 @@
 
 package v1.retrieveCharitableGivingReliefs
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
-import support.UnitSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v1.retrieveCharitableGivingReliefs.model.request.{Def1_RetrieveCharitableGivingReliefsRequestData, RetrieveCharitableGivingReliefsRequestData}
 
 class RetrieveCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {

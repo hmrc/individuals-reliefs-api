@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,9 @@
 
 package v1.fixtures
 
-import api.models.domain.Timestamp
 import play.api.libs.json.{JsObject, JsValue, Json}
-import v1.reliefInvestments.retrieve.def1.model.response.{
-  CommunityInvestmentItem,
-  EisSubscriptionsItem,
-  Def1_RetrieveReliefInvestmentsResponse,
-  SeedEnterpriseInvestmentItem,
-  SocialEnterpriseInvestmentItem,
-  VctSubscriptionsItem
-}
+import shared.models.domain.Timestamp
+import v1.reliefInvestments.retrieve.def1.model.response._
 
 object RetrieveReliefInvestmentsFixtures {
 

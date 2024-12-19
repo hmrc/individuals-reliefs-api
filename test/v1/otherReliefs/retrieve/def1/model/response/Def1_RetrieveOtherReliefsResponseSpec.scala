@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package v1.otherReliefs.retrieve.def1.model.response
 
-import api.hateoas.Link
-import api.hateoas.Method._
-import api.models.domain.Timestamp
-import mocks.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method._
+import shared.models.domain.Timestamp
+import shared.utils.UnitSpec
 import v1.otherReliefs.retrieve.model.response.{RetrieveOtherReliefsHateoasData, RetrieveOtherReliefsResponse}
 
-class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
+class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   val retrieveOtherReliefsBody: RetrieveOtherReliefsResponse = Def1_RetrieveOtherReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),
@@ -115,12 +115,12 @@ class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig 
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      RetrieveOtherReliefsResponse.LinksFactory.links(mockAppConfig, RetrieveOtherReliefsHateoasData(nino, taxYear)) shouldBe
+      MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      RetrieveOtherReliefsResponse.LinksFactory.links(mockSharedAppConfig, RetrieveOtherReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
-          api.hateoas.Link(s"/my/context/other/$nino/$taxYear", PUT, "create-and-amend-reliefs-other"),
-          api.hateoas.Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
+          Link(s"/my/context/other/$nino/$taxYear", PUT, "create-and-amend-reliefs-other"),
+          Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
         )
     }
   }

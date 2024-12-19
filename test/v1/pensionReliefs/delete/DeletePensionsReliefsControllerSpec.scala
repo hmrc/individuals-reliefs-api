@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package v1.pensionReliefs.delete
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
-import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.TaxYear
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import v1.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
 import v1.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
@@ -38,7 +38,7 @@ class DeletePensionsReliefsControllerSpec
     with MockDeletePensionsReliefsService
     with MockDeletePensionsReliefsValidatorFactory
     with MockAuditService
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   private val taxYear = TaxYear.fromMtd("2019-20")
 
@@ -89,13 +89,13 @@ class DeletePensionsReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
     
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear.asMtd)(fakeRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear.asMtd)(fakeRequest)
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -105,14 +105,14 @@ class DeletePensionsReliefsControllerSpec
           versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear.asMtd),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear.asMtd),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
         )
       )
 
-    protected val requestData: DeletePensionsReliefsRequestData = Def1_DeletePensionsReliefsRequestData(Nino(nino), taxYear)
+    protected val requestData: DeletePensionsReliefsRequestData = Def1_DeletePensionsReliefsRequestData(parsedNino, taxYear)
 
   }
 

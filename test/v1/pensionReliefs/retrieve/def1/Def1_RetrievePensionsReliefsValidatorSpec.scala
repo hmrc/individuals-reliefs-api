@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v1.pensionReliefs.retrieve.def1
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import support.UnitSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.utils.UnitSpec
 import v1.pensionReliefs.retrieve.RetrievePensionsReliefsValidatorFactory
 import v1.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 
 package v1.deleteCharitableGivingReliefs
 
-import api.controllers._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import routing.{Version, Version1}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.controllers.validators.Validator
+import shared.routing.Version1
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
+import v1.deleteCharitableGivingReliefs.model.request.DeleteCharitableGivingTaxReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -33,7 +35,7 @@ class DeleteCharitableGivingReliefsController @Inject() (val authService: Enrolm
                                                          service: DeleteCharitableGivingTaxReliefsService,
                                                          auditService: AuditService,
                                                          cc: ControllerComponents,
-                                                         val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
+                                                         val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "delete-charitable-giving-reliefs"
@@ -45,7 +47,7 @@ class DeleteCharitableGivingReliefsController @Inject() (val authService: Enrolm
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val validator = validatorFactory.validator(nino, taxYear)
+      val validator: Validator[DeleteCharitableGivingTaxReliefsRequestData] = validatorFactory.validator(nino, taxYear)
 
       val requestHandler = RequestHandler
         .withValidator(validator)
@@ -55,7 +57,7 @@ class DeleteCharitableGivingReliefsController @Inject() (val authService: Enrolm
             auditService = auditService,
             auditType = "DeleteCharitableGivingTaxRelief",
             transactionName = "delete-charitable-giving-tax-relief",
-            apiVersion = Version.from(request, orElse = Version1),
+            apiVersion = Version1,
             params = Map("nino" -> nino, "taxYear" -> taxYear)
           )
         )

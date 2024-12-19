@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package v1.reliefInvestments.createAmend
 
-import api.controllers._
-import api.hateoas.HateoasFactory
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version1}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.hateoas.HateoasFactory
+import shared.routing.Version1
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v1.reliefInvestments.createAmend.model.response.CreateAndAmendReliefInvestmentsHateoasData
 import v1.reliefInvestments.createAmend.model.response.CreateAndAmendReliefInvestmentsResponse.LinksFactory
 
@@ -38,7 +38,7 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
                                                            auditService: AuditService,
                                                            hateoasFactory: HateoasFactory,
                                                            cc: ControllerComponents,
-                                                           val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
+                                                           val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "create-amend-relief-investments"
@@ -59,7 +59,7 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
           auditService,
           "CreateAmendReliefsInvestment",
           "create-amend-reliefs-investment",
-          Version.from(request, orElse = Version1),
+          Version1,
           Map("nino" -> nino, "taxYear" -> taxYear),
           Some(request.body),
           includeResponse = true

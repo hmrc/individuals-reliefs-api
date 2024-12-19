@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package v1.otherReliefs.delete
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
-import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.TaxYear
+import shared.models.errors
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import v1.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -38,10 +38,10 @@ class DeleteOtherReliefsControllerSpec
     with MockDeleteOtherReliefsService
     with MockDeleteOtherReliefsValidatorFactory
     with MockAuditService
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   private val taxYear     = "2019-20"
-  private val requestData = Def1_DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = Def1_DeleteOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {
@@ -87,13 +87,13 @@ class DeleteOtherReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakeRequest)
 
     def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -103,7 +103,7 @@ class DeleteOtherReliefsControllerSpec
           versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = None,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

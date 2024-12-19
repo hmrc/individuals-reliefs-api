@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package v1.otherReliefs.amend.def1
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common._
 import play.api.libs.json._
-import support.UnitSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v1.otherReliefs.amend.def1.model.request._
 import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
@@ -458,7 +459,6 @@ class Def1_AmendOtherReliefsValidatorSpec extends UnitSpec with JsonErrorValidat
             BadRequestError,
             Some(
               List(
-                LenderNameFormatError.withPath("/qualifyingLoanInterestPayments/0/lenderName"),
                 CustomerReferenceFormatError.withPaths(List(
                   "/nonDeductibleLoanInterest/customerReference",
                   "/payrollGiving/customerReference",
@@ -468,8 +468,15 @@ class Def1_AmendOtherReliefsValidatorSpec extends UnitSpec with JsonErrorValidat
                   "/annualPaymentsMade/customerReference",
                   "/qualifyingLoanInterestPayments/0/customerReference"
                 )),
+                DateFormatError.withPaths(
+                  List(
+                    "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased",
+                    "/maintenancePayments/0/exSpouseDateOfBirth"
+                  )),
                 IncomeSourceFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/incomeSource"),
+                LenderNameFormatError.withPath("/qualifyingLoanInterestPayments/0/lenderName"),
                 BusinessNameFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/businessName"),
+                ExSpouseNameFormatError.withPath("/maintenancePayments/0/exSpouseName"),
                 NatureOfTradeFormatError.withPath("/postCessationTradeReliefAndCertainOtherLosses/0/natureOfTrade"),
                 ValueFormatError.withPaths(List(
                   "/nonDeductibleLoanInterest/reliefClaimed",
@@ -479,13 +486,7 @@ class Def1_AmendOtherReliefsValidatorSpec extends UnitSpec with JsonErrorValidat
                   "/maintenancePayments/0/amount",
                   "/annualPaymentsMade/reliefClaimed",
                   "/qualifyingLoanInterestPayments/0/reliefClaimed"
-                )),
-                DateFormatError.withPaths(
-                  List(
-                    "/postCessationTradeReliefAndCertainOtherLosses/0/dateBusinessCeased",
-                    "/maintenancePayments/0/exSpouseDateOfBirth"
-                  )),
-                ExSpouseNameFormatError.withPath("/maintenancePayments/0/exSpouseName")
+                ))
               )
             )
           ))

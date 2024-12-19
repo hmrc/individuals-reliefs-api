@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package v1.pensionReliefs.retrieve
 
-import api.schema.DownstreamReadable
 import play.api.libs.json.Reads
+import shared.schema.DownstreamReadable
 import v1.pensionReliefs.retrieve.def1.model.response.Def1_RetrievePensionsReliefsResponse
 import v1.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
 

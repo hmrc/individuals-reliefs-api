@@ -16,9 +16,9 @@
 
 package v1.retrieveCharitableGivingReliefs
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.retrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
 import v1.retrieveCharitableGivingReliefs.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import v1.retrieveCharitableGivingReliefs.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
@@ -27,7 +27,7 @@ import scala.concurrent.Future
 
 class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
 
-  private val nino = "AA123456A"
+  private val nino = "ZG903729C"
 
   private val nonUkCharitiesModel = Def1_NonUkCharities(
     charityNames = Some(Seq("non-UK charity 1", "non-UK charity 2")),
@@ -70,7 +70,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
 
     "retrieveCharitableGivingRelief is called for a TaxYearSpecific tax year" must {
       "return a 200 for success scenario" in {
-        new TysIfsTest with Test {
+        new IfsTest with Test {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
           val outcome = Right(ResponseWrapper(correlationId, response))
@@ -92,7 +92,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
     val connector: RetrieveCharitableGivingReliefsConnector =
       new RetrieveCharitableGivingReliefsConnector(
         http = mockHttpClient,
-        appConfig = mockAppConfig
+        appConfig = mockSharedAppConfig
       )
 
     protected val request: Def1_RetrieveCharitableGivingReliefsRequestData =

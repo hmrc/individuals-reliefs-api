@@ -16,18 +16,19 @@
 
 package v1.createAndAmendCharitableGivingReliefs
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method._
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import mocks.{MockAppConfig, MockIdGenerator}
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method.{DELETE, GET, PUT}
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.TaxYear
+import shared.models.errors
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.utils.MockIdGenerator
 import v1.createAndAmendCharitableGivingReliefs.def1.model.request._
 import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 import v1.createAndAmendCharitableGivingReliefs.model.response.CreateAndAmendCharitableGivingTaxReliefsHateoasData
@@ -42,7 +43,7 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
     with MockCreateAndAmendCharitableGivingReliefsValidatorFactory
     with MockHateoasFactory
     with MockIdGenerator
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   private val taxYear = "2019-20"
   private val amount  = 1234.56
@@ -53,9 +54,9 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
     Def1_GiftAidPayments(Some(nonUkCharities), Some(amount), Some(amount), Some(amount), Some(amount))
 
   private val testHateoasLinks = List(
-    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = PUT, rel = "create-and-amend-charitable-giving-tax-relief"),
-    Link(href = s"/individuals/reliefs/charitable-giving/$nino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
+    Link(href = s"/individuals/reliefs/charitable-giving/$validNino/$taxYear", method = GET, rel = "self"),
+    Link(href = s"/individuals/reliefs/charitable-giving/$validNino/$taxYear", method = PUT, rel = "create-and-amend-charitable-giving-tax-relief"),
+    Link(href = s"/individuals/reliefs/charitable-giving/$validNino/$taxYear", method = DELETE, rel = "delete-charitable-giving-tax-relief")
   )
 
   private val requestJson = Json.parse(
@@ -73,17 +74,17 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
        |{
        |  "links": [
        |    {
-       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+       |      "href": "/individuals/reliefs/charitable-giving/$validNino/$taxYear",
        |      "method": "GET",
        |      "rel": "self"
        |    },
        |    {
-       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+       |      "href": "/individuals/reliefs/charitable-giving/$validNino/$taxYear",
        |      "method": "PUT",
        |      "rel": "create-and-amend-charitable-giving-tax-relief"
        |    },
        |    {
-       |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+       |      "href": "/individuals/reliefs/charitable-giving/$validNino/$taxYear",
        |      "method": "DELETE",
        |      "rel": "delete-charitable-giving-tax-relief"
        |    }
@@ -91,7 +92,7 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
        |}
        |""".stripMargin)
 
-  private val requestData = Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBody)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
@@ -103,7 +104,7 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), CreateAndAmendCharitableGivingTaxReliefsHateoasData(nino, taxYear))
+          .wrap((), CreateAndAmendCharitableGivingTaxReliefsHateoasData(validNino, taxYear))
           .returns(HateoasWrapper((), testHateoasLinks))
 
         runOkTestWithAudit(
@@ -148,13 +149,13 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePostRequest(requestJson))
 
     def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -164,7 +165,7 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
           versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

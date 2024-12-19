@@ -16,15 +16,15 @@
 
 package v1.reliefInvestments.retrieve.def1.model.response
 
-import api.hateoas.Link
-import api.hateoas.Method._
-import mocks.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method._
+import shared.utils.UnitSpec
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.{responseJson, responseModel}
 import v1.reliefInvestments.retrieve.model.response._
 
-class Def1_RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig {
+class Def1_RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   "reads" when {
     "passed valid JSON" should {
@@ -47,12 +47,12 @@ class Def1_RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppCo
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      RetrieveReliefInvestmentsResponse.LinksFactory.links(mockAppConfig, RetrieveReliefInvestmentsHateoasData(nino, taxYear)) shouldBe
+      MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      RetrieveReliefInvestmentsResponse.LinksFactory.links(mockSharedAppConfig, RetrieveReliefInvestmentsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/investment/$nino/$taxYear", GET, "self"),
-          api.hateoas.Link(s"/my/context/investment/$nino/$taxYear", PUT, "create-and-amend-reliefs-investments"),
-          api.hateoas.Link(s"/my/context/investment/$nino/$taxYear", DELETE, "delete-reliefs-investments")
+          Link(s"/my/context/investment/$nino/$taxYear", PUT, "create-and-amend-reliefs-investments"),
+          Link(s"/my/context/investment/$nino/$taxYear", DELETE, "delete-reliefs-investments")
         )
     }
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package v1.reliefInvestments.delete.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYear}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v1.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
 
 import javax.inject.Singleton
@@ -29,10 +29,12 @@ import javax.inject.Singleton
 @Singleton
 class Def1_DeleteReliefInvestmentsValidator(nino: String, taxYear: String) extends Validator[DeleteReliefInvestmentsRequestData] {
 
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
+
   override def validate: Validated[Seq[MtdError], Def1_DeleteReliefInvestmentsRequestData] =
     (
       ResolveNino(nino),
-      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
+      resolveTaxYear(taxYear)
     ).mapN(Def1_DeleteReliefInvestmentsRequestData)
 
 }

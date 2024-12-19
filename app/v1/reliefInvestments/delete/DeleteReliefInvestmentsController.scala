@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package v1.reliefInvestments.delete
 
-import api.controllers._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import routing.{Version, Version1}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.routing.Version1
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -33,7 +33,7 @@ class DeleteReliefInvestmentsController @Inject() (val authService: EnrolmentsAu
                                                    service: DeleteReliefInvestmentsService,
                                                    auditService: AuditService,
                                                    cc: ControllerComponents,
-                                                   val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
+                                                   val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "delete-relief-investments"
@@ -54,7 +54,7 @@ class DeleteReliefInvestmentsController @Inject() (val authService: EnrolmentsAu
           auditService = auditService,
           auditType = "DeleteReliefsInvestment",
           transactionName = "delete-reliefs-investment",
-          apiVersion = Version.from(request, orElse = Version1),
+          apiVersion = Version1,
           params = Map("nino" -> nino, "taxYear" -> taxYear)
         ))
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,16 @@
 
 package v1.pensionReliefs.createAmend.model.response
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
 import play.api.libs.json.OWrites
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import shared.utils.JsonWritesUtil
 import v1.pensionReliefs.createAmend.def1.model.response.Def1_CreateAmendPensionsReliefsResponse
-import v1.pensionReliefs.createAmend.def1.model.response.Def1_CreateAmendPensionsReliefsResponse.{amendPensionsReliefs, deletePensionsReliefs, retrievePensionsReliefs}
+import v1.pensionReliefs.createAmend.def1.model.response.Def1_CreateAmendPensionsReliefsResponse.{
+  amendPensionsReliefs,
+  deletePensionsReliefs,
+  retrievePensionsReliefs
+}
 
 trait CreateAmendPensionsReliefsResponse
 
@@ -33,7 +37,7 @@ object CreateAmendPensionsReliefsResponse extends JsonWritesUtil {
 
   implicit object LinksFactory extends HateoasLinksFactory[Unit, CreateAmendPensionsReliefsHateoasData] {
 
-    override def links(appConfig: AppConfig, data: CreateAmendPensionsReliefsHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: CreateAmendPensionsReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
         retrievePensionsReliefs(appConfig, nino, taxYear),

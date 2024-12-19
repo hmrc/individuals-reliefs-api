@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,22 @@
 
 package v1.deleteCharitableGivingReliefs.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYear}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v1.deleteCharitableGivingReliefs.model.request.{Def1_DeleteCharitableGivingTaxReliefsRequestData, DeleteCharitableGivingTaxReliefsRequestData}
 
 class Def1_DeleteCharitableGivingReliefsValidator(nino: String, taxYear: String) extends Validator[DeleteCharitableGivingTaxReliefsRequestData] {
 
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2017-18"))
+
   def validate: Validated[Seq[MtdError], Def1_DeleteCharitableGivingTaxReliefsRequestData] =
     (
       ResolveNino(nino),
-      ResolveTaxYear(TaxYear.charitableGivingMinimumTaxYear.year, taxYear, None, None)
+      resolveTaxYear(taxYear)
     ).mapN(Def1_DeleteCharitableGivingTaxReliefsRequestData)
 
 }

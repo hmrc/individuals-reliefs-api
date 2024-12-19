@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v1.otherReliefs.retrieve
 
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v1.otherReliefs.retrieve.def1.model.Def1_RetrieveOtherReliefsValidator
 
 class RetrieveOtherReliefsValidatorFactorySpec extends UnitSpec {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,15 @@
 
 package v1.otherReliefs.amend.model.response
 
-import api.hateoas.{HateoasData, HateoasLinks, HateoasLinksFactory, Link}
-import config.AppConfig
+import hateoas.HateoasLinks
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 
 object AmendOtherReliefsResponse extends HateoasLinks {
 
   implicit object LinksFactory extends HateoasLinksFactory[Unit, AmendOtherReliefsHateoasData] {
 
-    override def links(appConfig: AppConfig, data: AmendOtherReliefsHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: AmendOtherReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
         amendOtherReliefs(appConfig, nino, taxYear),

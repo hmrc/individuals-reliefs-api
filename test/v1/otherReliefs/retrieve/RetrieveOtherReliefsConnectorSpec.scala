@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v1.otherReliefs.retrieve
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear, Timestamp}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear, Timestamp}
+import shared.models.outcomes.ResponseWrapper
 import v1.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
 import v1.otherReliefs.retrieve.def1.model.response.Def1_RetrieveOtherReliefsResponse
 import v1.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
@@ -27,13 +27,13 @@ import scala.concurrent.Future
 
 class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String = "ZG903729C"
 
   trait Test { _: ConnectorTest =>
 
     val connector: RetrieveOtherReliefsConnector = new RetrieveOtherReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     val taxYear: TaxYear
@@ -62,7 +62,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
     }
 
     "return the expected response for a TYS request" when {
-      "a valid request is made" in new TysIfsTest with Test {
+      "a valid request is made" in new IfsTest with Test {
         lazy val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
         val outcome = Right(ResponseWrapper(correlationId, response))

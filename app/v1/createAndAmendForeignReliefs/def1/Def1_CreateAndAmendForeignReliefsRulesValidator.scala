@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,17 @@
 
 package v1.createAndAmendForeignReliefs.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.toFoldableOps
-import v1.createAndAmendForeignReliefs.def1.model.request.{Def1_CreateAndAmendForeignReliefsRequestData, Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief,
-  Def1_ForeignTaxForFtcrNotClaimed}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.models.errors.MtdError
+import v1.createAndAmendForeignReliefs.def1.model.request.{
+  Def1_CreateAndAmendForeignReliefsRequestData,
+  Def1_ForeignIncomeTaxCreditRelief,
+  Def1_ForeignTaxCreditRelief,
+  Def1_ForeignTaxForFtcrNotClaimed
+}
 
 object Def1_CreateAndAmendForeignReliefsRulesValidator extends RulesValidator[Def1_CreateAndAmendForeignReliefsRequestData] {
 
@@ -42,7 +46,7 @@ object Def1_CreateAndAmendForeignReliefsRulesValidator extends RulesValidator[De
     fields.zipWithIndex.traverse_(validate.tupled)
 
   private def validate(foreignTaxCreditRelief: Def1_ForeignTaxCreditRelief): Validated[Seq[MtdError], Unit] =
-    resolveParsedNumber(foreignTaxCreditRelief.amount, None, Some("/foreignTaxCreditRelief/amount")).andThen(_ => valid)
+    resolveParsedNumber(foreignTaxCreditRelief.amount, "/foreignTaxCreditRelief/amount").andThen(_ => valid)
 
   private def validate(foreignIncomeTaxCreditReliefs: Seq[Def1_ForeignIncomeTaxCreditRelief]): Validated[Seq[MtdError], Unit] =
     zipAndValidate(foreignIncomeTaxCreditReliefs, validate)
@@ -51,12 +55,12 @@ object Def1_CreateAndAmendForeignReliefsRulesValidator extends RulesValidator[De
     import entry._
     combine(
       ResolveParsedCountryCode(countryCode, s"/foreignIncomeTaxCreditRelief/$index/countryCode"),
-      foreignTaxPaid.traverse_(resolveParsedNumber(_, None, Some(s"/foreignIncomeTaxCreditRelief/$index/foreignTaxPaid"))),
-      resolveParsedNumber(taxableAmount, None, Some(s"/foreignIncomeTaxCreditRelief/$index/taxableAmount"))
+      foreignTaxPaid.traverse_(resolveParsedNumber(_, s"/foreignIncomeTaxCreditRelief/$index/foreignTaxPaid")),
+      resolveParsedNumber(taxableAmount, s"/foreignIncomeTaxCreditRelief/$index/taxableAmount")
     )
   }
 
   private def validate(foreignTaxForFtcrNotClaimed: Def1_ForeignTaxForFtcrNotClaimed): Validated[Seq[MtdError], Unit] =
-    resolveParsedNumber(foreignTaxForFtcrNotClaimed.amount, None, Some("/foreignTaxForFtcrNotClaimed/amount")).andThen(_ => valid)
+    resolveParsedNumber(foreignTaxForFtcrNotClaimed.amount, "/foreignTaxForFtcrNotClaimed/amount").andThen(_ => valid)
 
 }

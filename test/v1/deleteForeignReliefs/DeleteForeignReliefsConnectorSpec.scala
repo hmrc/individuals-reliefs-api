@@ -16,16 +16,16 @@
 
 package v1.deleteForeignReliefs
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.deleteForeignReliefs.model.Def1_DeleteForeignReliefsRequestData
 
 import scala.concurrent.Future
 
 class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
+  private val nino = Nino("ZG903729C")
 
   "DeleteForeignReliefsConnector" should {
 
@@ -44,7 +44,7 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
     }
 
     "return the expected response for a TYS request" when {
-      "a valid request is made" in new TysIfsTest with Test {
+      "a valid request is made" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
         private val outcome  = Right(ResponseWrapper(correlationId, ()))
 
@@ -64,7 +64,7 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
 
     val connector: DeleteForeignReliefsConnector = new DeleteForeignReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
   }

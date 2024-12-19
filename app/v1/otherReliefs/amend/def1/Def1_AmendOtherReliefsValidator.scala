@@ -16,13 +16,13 @@
 
 package v1.otherReliefs.amend.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v1.otherReliefs.amend.def1.model.request.{Def1_AmendOtherReliefsRequestBody, Def1_AmendOtherReliefsRequestData}
 import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
@@ -31,14 +31,15 @@ import javax.inject.Singleton
 @Singleton
 class Def1_AmendOtherReliefsValidator(nino: String, taxYear: String, body: JsValue) extends Validator[AmendOtherReliefsRequestData] {
 
-  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_AmendOtherReliefsRequestBody]()
+  private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_AmendOtherReliefsRequestBody]()
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
 
   private val rulesValidator = Def1_AmendOtherReliefsRulesValidator
 
   override def validate: Validated[Seq[MtdError], AmendOtherReliefsRequestData] =
     (
       ResolveNino(nino),
-      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
+      resolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_AmendOtherReliefsRequestData) andThen rulesValidator.validateBusinessRules
 

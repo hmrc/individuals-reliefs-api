@@ -16,18 +16,18 @@
 
 package v1.retrieveForeignReliefs
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method._
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.domain.{Nino, TaxYear, Timestamp}
-import api.models.errors
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.retrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method._
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.{TaxYear, Timestamp}
+import shared.models.errors
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import v1.retrieveForeignReliefs.def1.model.response._
 import v1.retrieveForeignReliefs.model.request.Def1_RetrieveForeignReliefsRequestData
 import v1.retrieveForeignReliefs.model.response.{Def1_RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData}
 
@@ -40,11 +40,11 @@ class RetrieveForeignReliefsControllerSpec
     with MockRetrieveForeignReliefsService
     with MockRetrieveForeignReliefsValidatorFactory
     with MockHateoasFactory
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   private val taxYear         = "2019-20"
-  private val requestData     = Def1_RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
-  private val testHateoasLink = Link(href = s"individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self")
+  private val requestData     = Def1_RetrieveForeignReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
+  private val testHateoasLink = Link(href = s"individuals/reliefs/foreign/$validNino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = Def1_RetrieveForeignReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),
@@ -100,7 +100,7 @@ class RetrieveForeignReliefsControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
         MockHateoasFactory
-          .wrap(responseBody, RetrieveForeignReliefsHateoasData(nino, taxYear))
+          .wrap(responseBody, RetrieveForeignReliefsHateoasData(validNino, taxYear))
           .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseJson))
@@ -138,13 +138,13 @@ class RetrieveForeignReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakeGetRequest)
   }
 
 }

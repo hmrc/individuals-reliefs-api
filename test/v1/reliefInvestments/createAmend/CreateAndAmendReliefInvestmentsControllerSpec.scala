@@ -16,19 +16,19 @@
 
 package v1.reliefInvestments.createAmend
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method._
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors
-import api.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
-import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method._
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.TaxYear
+import shared.models.errors
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures.{hateoasResponse, requestBodyJson, requestBodyModel}
 import v1.reliefInvestments.createAmend.def1.model.request.Def1_CreateAndAmendReliefInvestmentsRequestData
 import v1.reliefInvestments.createAmend.model.response.CreateAndAmendReliefInvestmentsHateoasData
@@ -43,17 +43,17 @@ class CreateAndAmendReliefInvestmentsControllerSpec
     with MockCreateAndAmendReliefInvestmentsValidatorFactory
     with MockHateoasFactory
     with MockAuditService
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   private val taxYear = "2019-20"
 
   private val testHateoasLinks = List(
-    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-investments"),
-    Link(href = s"/individuals/reliefs/investment/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
+    Link(href = s"/individuals/reliefs/investment/$validNino/$taxYear", method = GET, rel = "self"),
+    Link(href = s"/individuals/reliefs/investment/$validNino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-investments"),
+    Link(href = s"/individuals/reliefs/investment/$validNino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
   )
 
-  private val requestData = Def1_CreateAndAmendReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = Def1_CreateAndAmendReliefInvestmentsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
@@ -65,7 +65,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), CreateAndAmendReliefInvestmentsHateoasData(nino, taxYear))
+          .wrap((), CreateAndAmendReliefInvestmentsHateoasData(validNino, taxYear))
           .returns(HateoasWrapper((), testHateoasLinks))
 
         runOkTestWithAudit(
@@ -110,13 +110,13 @@ class CreateAndAmendReliefInvestmentsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePostRequest(requestBodyJson))
 
     def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -126,7 +126,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
           versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

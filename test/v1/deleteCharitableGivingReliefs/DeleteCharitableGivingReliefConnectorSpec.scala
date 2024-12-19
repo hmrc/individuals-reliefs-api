@@ -16,18 +16,18 @@
 
 package v1.deleteCharitableGivingReliefs
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.libs.json.JsObject
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.deleteCharitableGivingReliefs.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.Future
 
 class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
-  private val nino = "AA123456A"
+  private val nino = "ZG903729C"
 
   "delete()" should {
     "return a success response" when {
@@ -35,7 +35,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
         "isPassDeleteIntentEnabled feature switch is on" in new IfsTest with Test {
           override val intent: Option[String] = Some("DELETE")
 
-          MockedAppConfig.featureSwitchConfig
+          MockedSharedAppConfig.featureSwitchConfig
             .returns(
               Configuration(
                 "passDeleteIntentHeader.enabled" -> true
@@ -55,7 +55,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
         }
 
         "isPassDeleteIntentEnabled feature switch is off" in new IfsTest with Test {
-          MockedAppConfig.featureSwitchConfig
+          MockedSharedAppConfig.featureSwitchConfig
             .returns(
               Configuration(
                 "passDeleteIntentHeader.enabled" -> false
@@ -76,10 +76,10 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
       }
 
       "given a TYS request" when {
-        "isPassDeleteIntentEnabled feature switch is on" in new TysIfsTest with Test {
+        "isPassDeleteIntentEnabled feature switch is on" in new IfsTest with Test {
           override val intent: Option[String] = Some("DELETE")
 
-          MockedAppConfig.featureSwitchConfig returns Configuration(
+          MockedSharedAppConfig.featureSwitchConfig returns Configuration(
             "passDeleteIntentHeader.enabled" -> true
           )
 
@@ -94,9 +94,9 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
           result shouldBe expectedOutcome
         }
 
-        "isPassDeleteIntentEnabled feature switch is off" in new TysIfsTest with Test {
+        "isPassDeleteIntentEnabled feature switch is off" in new IfsTest with Test {
 
-          MockedAppConfig.featureSwitchConfig returns Configuration(
+          MockedSharedAppConfig.featureSwitchConfig returns Configuration(
             "passDeleteIntentHeader.enabled" -> false
           )
 
@@ -120,7 +120,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
     protected val connector: DeleteCharitableGivingReliefConnector = new DeleteCharitableGivingReliefConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
   }

@@ -16,16 +16,16 @@
 
 package v1.reliefInvestments.delete
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
-import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.TaxYear
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import v1.reliefInvestments.delete.def1.Def1_DeleteReliefInvestmentsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -37,10 +37,10 @@ class DeleteReliefInvestmentsControllerSpec
     with MockDeleteReliefInvestmentsService
     with MockDeleteReliefInvestmentsValidatorFactory
     with MockAuditService
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   private val taxYear     = "2019-20"
-  private val requestData = Def1_DeleteReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = Def1_DeleteReliefInvestmentsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {
@@ -86,12 +86,12 @@ class DeleteReliefInvestmentsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakeRequest)
 
     def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -101,7 +101,7 @@ class DeleteReliefInvestmentsControllerSpec
           versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = None,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

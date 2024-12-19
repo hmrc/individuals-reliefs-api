@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v1.otherReliefs.amend.def1.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 case class Def1_AmendOtherReliefsRequestData(nino: Nino, taxYear: TaxYear, body: Def1_AmendOtherReliefsRequestBody)

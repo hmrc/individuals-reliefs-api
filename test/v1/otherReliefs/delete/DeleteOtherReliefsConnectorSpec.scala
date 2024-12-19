@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package v1.otherReliefs.delete
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
 
 import scala.concurrent.Future
 
 class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String = "ZG903729C"
 
   trait Test { _: ConnectorTest =>
 
@@ -33,7 +33,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
 
     val connector: DeleteOtherReliefsConnector = new DeleteOtherReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     lazy val request: Def1_DeleteOtherReliefsRequestData = Def1_DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
@@ -53,7 +53,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
       }
 
       "return the expected response for a TYS request" when {
-        "a valid request is made" in new TysIfsTest with Test {
+        "a valid request is made" in new IfsTest with Test {
 
           def taxYear: String = "2023-24"
           val outcome         = Right(ResponseWrapper(correlationId, ()))

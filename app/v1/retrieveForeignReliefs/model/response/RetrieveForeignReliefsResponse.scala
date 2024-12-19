@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,16 @@
 
 package v1.retrieveForeignReliefs.model.response
 
-import api.hateoas.{HateoasData, HateoasLinks, HateoasLinksFactory, Link}
-import api.models.domain.Timestamp
-import config.AppConfig
+import hateoas.HateoasLinks
 import play.api.libs.json.{Json, OWrites, Reads}
-import v1.retrieveForeignReliefs.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
+import shared.models.domain.Timestamp
+import v1.retrieveForeignReliefs.def1.model.response.{
+  Def1_ForeignIncomeTaxCreditRelief,
+  Def1_ForeignTaxCreditRelief,
+  Def1_ForeignTaxForFtcrNotClaimed
+}
 import v1.retrieveForeignReliefs.model.response.Def1_RetrieveForeignReliefsResponse.Def1_RetrieveForeignReliefsLinksFactory
 
 sealed trait RetrieveForeignReliefsResponse
@@ -33,7 +38,7 @@ object RetrieveForeignReliefsResponse extends HateoasLinks {
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData] {
 
-    override def links(appConfig: AppConfig, data: RetrieveForeignReliefsHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: RetrieveForeignReliefsHateoasData): Seq[Link] = {
       data.taxYear match {
         case _ => Def1_RetrieveForeignReliefsLinksFactory.links(appConfig, data)
       }
@@ -62,7 +67,7 @@ object Def1_RetrieveForeignReliefsResponse extends HateoasLinks {
   implicit object Def1_RetrieveForeignReliefsLinksFactory
       extends HateoasLinksFactory[Def1_RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData] {
 
-    override def links(appConfig: AppConfig, data: RetrieveForeignReliefsHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: RetrieveForeignReliefsHateoasData): Seq[Link] = {
       import data._
 
       Seq(

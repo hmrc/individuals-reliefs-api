@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v1.pensionReliefs.delete
 
-import api.controllers.validators.Validator
+import shared.controllers.validators.Validator
 import v1.pensionReliefs.delete.DeletePensionsReliefsSchema.Def1
 import v1.pensionReliefs.delete.def1.Def1_DeletePensionsReliefsValidator
 import v1.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData

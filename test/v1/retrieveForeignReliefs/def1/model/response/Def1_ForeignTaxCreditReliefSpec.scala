@@ -16,9 +16,9 @@
 
 package v1.retrieveForeignReliefs.def1.model.response
 
-import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 
 class Def1_ForeignTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
 

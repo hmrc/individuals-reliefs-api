@@ -16,9 +16,9 @@
 
 package v1.reliefInvestments.createAmend.def1.model.request
 
-import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 
 class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
