@@ -16,9 +16,9 @@
 
 package v1.retrieveForeignReliefs
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear, Timestamp}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear, Timestamp}
+import shared.models.outcomes.ResponseWrapper
 import v1.retrieveForeignReliefs.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
 import v1.retrieveForeignReliefs.model.response.Def1_RetrieveForeignReliefsResponse
 
@@ -26,7 +26,7 @@ import scala.concurrent.Future
 
 class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String = "ZG903729C"
 
   trait Test {
     _: ConnectorTest =>
@@ -34,7 +34,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
 
     val connector: RetrieveForeignReliefsConnector = new RetrieveForeignReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     lazy val request: RetrieveForeignReliefsRequestData = new Def1_RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
@@ -54,7 +54,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
         await(connector.retrieve(request)) shouldBe outcome
       }
 
-      "the downstream call is successful for a TYS tax year" in new TysIfsTest with Test {
+      "the downstream call is successful for a TYS tax year" in new IfsTest with Test {
         def taxYear: String = "2023-24"
         val outcome         = Right(ResponseWrapper(correlationId, response))
 

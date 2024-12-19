@@ -16,26 +16,26 @@
 
 package v1.createAndAmendCharitableGivingReliefs.model.response
 
-import api.hateoas.Link
-import api.hateoas.Method._
-import mocks.MockAppConfig
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method._
+import shared.utils.UnitSpec
 
-class CreateAndAmendCharitableGivingTaxReliefsResponseSpec extends UnitSpec with MockAppConfig {
+class CreateAndAmendCharitableGivingTaxReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   "LinksFactory" should {
     "return the correct links" in {
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockedAppConfig.apiGatewayContext.returns("individuals/reliefs").anyNumberOfTimes()
+      MockedSharedAppConfig.apiGatewayContext.returns("individuals/reliefs").anyNumberOfTimes()
       CreateAndAmendCharitableGivingTaxReliefsResponse.LinksFactory.links(
-        mockAppConfig,
+        mockSharedAppConfig,
         CreateAndAmendCharitableGivingTaxReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", GET, "self"),
-          api.hateoas.Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
-          api.hateoas.Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
+          Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
+          Link(s"/individuals/reliefs/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
         )
     }
   }

@@ -16,13 +16,13 @@
 
 package v1.reliefInvestments.createAmend.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v1.reliefInvestments.createAmend.def1.model.request.{
   Def1_CreateAndAmendReliefInvestmentsRequestBody,
   Def1_CreateAndAmendReliefInvestmentsRequestData
@@ -36,13 +36,14 @@ class Def1_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: Strin
     extends Validator[CreateAndAmendReliefInvestmentsRequestData] {
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
 
   private val rulesValidator = Def1_CreateAndAmendReliefInvestmentsRulesValidator
 
   override def validate: Validated[Seq[MtdError], CreateAndAmendReliefInvestmentsRequestData] =
     (
       ResolveNino(nino),
-      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
+      resolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_CreateAndAmendReliefInvestmentsRequestData) andThen rulesValidator.validateBusinessRules
 

@@ -1,5 +1,5 @@
 /*
- * copyright 2022 HM Revenue & Customs
+ * copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,17 @@
 
 package v1.endpoints
 
-import api.models
-import api.models.errors._
+import common.{DateOfInvestmentFormatError, NameFormatError, UniqueInvestmentRefFormatError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.IntegrationBaseSpec
+import shared.models
+import shared.models.errors._
+import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import shared.support.IntegrationBaseSpec
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
-import api.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 
 class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
@@ -120,17 +121,6 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
         )
 
         val allInvalidValueRequestError: List[MtdError] = List(
-          UniqueInvestmentRefFormatError.copy(
-            paths = Some(
-              List(
-                "/vctSubscription/0/uniqueInvestmentRef",
-                "/vctSubscription/1/uniqueInvestmentRef",
-                "/eisSubscription/0/uniqueInvestmentRef",
-                "/communityInvestment/0/uniqueInvestmentRef",
-                "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
-                "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
-              ))
-          ),
           DateOfInvestmentFormatError.copy(
             paths = Some(
               List(
@@ -153,6 +143,17 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
                 "/socialEnterpriseInvestment/0/socialEnterpriseName"
               ))
           ),
+          UniqueInvestmentRefFormatError.copy(
+            paths = Some(
+              List(
+                "/vctSubscription/0/uniqueInvestmentRef",
+                "/vctSubscription/1/uniqueInvestmentRef",
+                "/eisSubscription/0/uniqueInvestmentRef",
+                "/communityInvestment/0/uniqueInvestmentRef",
+                "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
+                "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
+              ))
+          ),
           ValueFormatError.copy(
             paths = Some(
               List(
@@ -169,7 +170,7 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
                 "/socialEnterpriseInvestment/0/amountInvested",
                 "/socialEnterpriseInvestment/0/reliefClaimed"
               ))
-          )
+          ),
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(

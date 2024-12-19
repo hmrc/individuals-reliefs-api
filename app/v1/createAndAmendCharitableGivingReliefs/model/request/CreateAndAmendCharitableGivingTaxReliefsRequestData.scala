@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v1.createAndAmendCharitableGivingReliefs.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 import v1.createAndAmendCharitableGivingReliefs.def1.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsBody
 
 sealed trait CreateAndAmendCharitableGivingTaxReliefsRequestData {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package v1.otherReliefs.amend
 
-import api.controllers._
-import api.controllers.validators.Validator
-import api.hateoas.HateoasFactory
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version1}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.controllers.validators.Validator
+import shared.hateoas.HateoasFactory
+import shared.routing.Version1
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 import v1.otherReliefs.amend.model.response.AmendOtherReliefsHateoasData
 import v1.otherReliefs.amend.model.response.AmendOtherReliefsResponse.LinksFactory
@@ -40,7 +40,7 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
                                              auditService: AuditService,
                                              hateoasFactory: HateoasFactory,
                                              cc: ControllerComponents,
-                                             val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
+                                             val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "amend-other-reliefs"
@@ -61,7 +61,7 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
           auditService,
           "CreateAmendOtherReliefs",
           "create-amend-other-reliefs",
-          Version.from(request, orElse = Version1),
+          Version1,
           Map("nino" -> nino, "taxYear" -> taxYear),
           Some(request.body),
           includeResponse = true

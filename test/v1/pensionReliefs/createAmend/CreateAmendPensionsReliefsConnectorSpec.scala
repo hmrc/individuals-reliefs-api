@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v1.pensionReliefs.createAmend
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
 import v1.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
@@ -26,7 +26,7 @@ import scala.concurrent.Future
 
 class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String = "ZG903729C"
 
   val body: CreateAmendPensionsReliefsBody = CreateAmendPensionsReliefsBody(
     PensionReliefs(
@@ -52,7 +52,7 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
       }
     }
     "createOrAmendPensionsRelief called for a Tax Year Specific tax year" must {
-      "return a 204 status for a success scenario" in new TysIfsTest with Test {
+      "return a 204 status for a success scenario" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
         val outcome          = Right(ResponseWrapper(correlationId, ()))
         willPut(url = s"$baseUrl/income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino", body = body)
@@ -69,7 +69,7 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
 
     protected val connector: CreateAmendPensionsReliefsConnector = new CreateAmendPensionsReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val request: CreateAmendPensionsReliefsRequestData = Def1_CreateAmendPensionsReliefsRequestData(

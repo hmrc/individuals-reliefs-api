@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package v1.pensionReliefs.createAmend
 
-import api.models.utils.JsonErrorValidators
-import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v1.pensionReliefs.createAmend.def1.Def1_CreateAmendPensionsReliefsValidator
 
-class CreateAmendPensionsReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+class CreateAmendPensionsReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockSharedAppConfig {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"

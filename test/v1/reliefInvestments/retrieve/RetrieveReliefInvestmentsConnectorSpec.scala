@@ -16,9 +16,9 @@
 
 package v1.reliefInvestments.retrieve
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v1.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
 import v1.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
@@ -33,7 +33,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
     val connector: RetrieveReliefInvestmentsConnector = new RetrieveReliefInvestmentsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     lazy val request: RetrieveReliefInvestmentsRequestData = Def1_RetrieveReliefInvestmentsRequestData(Nino("AA123456A"), TaxYear.fromMtd(taxYear))
@@ -52,7 +52,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
         await(connector.retrieve(request)) shouldBe outcome
       }
 
-      "return a valid response for a Tax Year Specific (TYS) tax year" in new TysIfsTest with Test {
+      "return a valid response for a Tax Year Specific (TYS) tax year" in new IfsTest with Test {
         val taxYear: String = "2023-24"
         val outcome         = Right(ResponseWrapper(correlationId, responseModel))
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v1.pensionReliefs.retrieve
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear, Timestamp}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import support.UnitSpec
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear, Timestamp}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v1.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 class RetrievePensionsReliefsServiceSpec extends UnitSpec {
 
-  private val nino: String           = "AA123456A"
+  private val nino: String           = "ZG903729C"
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 

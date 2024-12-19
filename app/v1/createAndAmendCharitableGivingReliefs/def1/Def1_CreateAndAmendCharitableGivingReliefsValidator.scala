@@ -16,13 +16,13 @@
 
 package v1.createAndAmendCharitableGivingReliefs.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v1.createAndAmendCharitableGivingReliefs.def1.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsBody
 import v1.createAndAmendCharitableGivingReliefs.model.request.{
   CreateAndAmendCharitableGivingTaxReliefsRequestData,
@@ -34,6 +34,7 @@ class Def1_CreateAndAmendCharitableGivingReliefsValidator(nino: String, taxYear:
 
   private val resolveJson: ResolveNonEmptyJsonObject[Def1_CreateAndAmendCharitableGivingTaxReliefsBody] =
     new ResolveNonEmptyJsonObject[Def1_CreateAndAmendCharitableGivingTaxReliefsBody]()
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2017-18"))
 
   private val rulesValidator =
     new Def1_CreateAndAmendCharitableGivingReliefsRulesValidator()
@@ -41,7 +42,7 @@ class Def1_CreateAndAmendCharitableGivingReliefsValidator(nino: String, taxYear:
   def validate: Validated[Seq[MtdError], CreateAndAmendCharitableGivingTaxReliefsRequestData] =
     (
       ResolveNino(nino),
-      ResolveTaxYear(TaxYear.charitableGivingMinimumTaxYear.year, taxYear, None, None),
+      resolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData) andThen rulesValidator.validateBusinessRules
 

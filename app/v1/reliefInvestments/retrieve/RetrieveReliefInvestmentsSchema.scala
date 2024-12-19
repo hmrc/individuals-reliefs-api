@@ -16,9 +16,9 @@
 
 package v1.reliefInvestments.retrieve
 
-import api.controllers.validators.resolvers.ResolveTaxYear
-import api.models.domain.TaxYear
 import play.api.libs.json.Reads
+import shared.controllers.validators.resolvers.ResolveTaxYear
+import shared.models.domain.TaxYear
 import shared.schema.DownstreamReadable
 import v1.reliefInvestments.retrieve.def1.model.response.Def1_RetrieveReliefInvestmentsResponse
 import v1.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsResponse

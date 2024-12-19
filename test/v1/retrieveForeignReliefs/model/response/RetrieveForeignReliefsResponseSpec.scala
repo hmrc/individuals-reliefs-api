@@ -16,19 +16,19 @@
 
 package v1.retrieveForeignReliefs.model.response
 
-import api.hateoas.Link
-import api.hateoas.Method._
-import api.models.domain.Timestamp
-import mocks.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method._
+import shared.models.domain.Timestamp
+import shared.utils.UnitSpec
 import v1.retrieveForeignReliefs.def1.model.response.{
   Def1_ForeignIncomeTaxCreditRelief,
   Def1_ForeignTaxCreditRelief,
   Def1_ForeignTaxForFtcrNotClaimed
 }
 
-class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
+class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   val retrieveForeignReliefsBody: RetrieveForeignReliefsResponse = Def1_RetrieveForeignReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),
@@ -87,12 +87,12 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      RetrieveForeignReliefsResponse.LinksFactory.links(mockAppConfig, RetrieveForeignReliefsHateoasData(nino, taxYear)) shouldBe
+      MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      RetrieveForeignReliefsResponse.LinksFactory.links(mockSharedAppConfig, RetrieveForeignReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/foreign/$nino/$taxYear", GET, "self"),
-          api.hateoas.Link(s"/my/context/foreign/$nino/$taxYear", PUT, "create-and-amend-reliefs-foreign"),
-          api.hateoas.Link(s"/my/context/foreign/$nino/$taxYear", DELETE, "delete-reliefs-foreign")
+          Link(s"/my/context/foreign/$nino/$taxYear", PUT, "create-and-amend-reliefs-foreign"),
+          Link(s"/my/context/foreign/$nino/$taxYear", DELETE, "delete-reliefs-foreign")
         )
     }
   }

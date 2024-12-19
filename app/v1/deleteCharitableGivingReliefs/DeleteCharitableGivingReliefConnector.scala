@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package v1.deleteCharitableGivingReliefs
 
-import api.connectors.DownstreamUri.IfsUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
-import config.{AppConfig, FeatureSwitches}
+import config.ReliefsFeatureSwitches
 import play.api.libs.json.JsObject
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.IfsUri
+import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.deleteCharitableGivingReliefs.model.request.{Def1_DeleteCharitableGivingTaxReliefsRequestData, DeleteCharitableGivingTaxReliefsRequestData}
 
@@ -29,18 +30,19 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   private def completeRequest(nino: Nino, taxYear: TaxYear)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    val intent = if (FeatureSwitches(appConfig.featureSwitches).isEnabled("passDeleteIntentHeader")) Some("DELETE") else None
+    val intent = if (ReliefsFeatureSwitches().isPassDeleteIntentEnabled) Some("DELETE") else None
 
     if (taxYear.useTaxYearSpecificApi) {
       val downstreamUri = IfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
-      delete(downstreamUri, intent)
+      delete(downstreamUri, maybeIntent = intent)
     } else {
       val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
       post(JsObject.empty, downstreamUri, intent)

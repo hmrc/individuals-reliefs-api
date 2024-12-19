@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v1.pensionReliefs.retrieve
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear, Timestamp}
-import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear, Timestamp}
+import shared.models.outcomes.ResponseWrapper
 import v1.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v1.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
 import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
@@ -28,8 +28,8 @@ import scala.concurrent.Future
 
 class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
-  val nino: String            = "AA123456A"
-  val taxableEntityId: String = "AA123456A"
+  val nino: String            = "ZG903729C"
+  val taxableEntityId: String = "ZG903729C"
 
   trait Test {
     _: ConnectorTest =>
@@ -38,7 +38,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
     val connector: RetrievePensionsReliefsConnector = new RetrievePensionsReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val request: RetrievePensionsReliefsRequestData =
@@ -56,7 +56,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
     "given a non-TYS request" when {
       "DES is not migrated to HIP" must {
         "return a success response " in new DesTest with Test {
-          MockedAppConfig.featureSwitchConfig returns Configuration("des_hip_migration_1656.enabled" -> false)
+          MockedSharedAppConfig.featureSwitchConfig returns Configuration("des_hip_migration_1656.enabled" -> false)
 
           def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
 
@@ -74,7 +74,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
       "DES is migrated to HIP" must {
         "return a success response" in new HipTest with Test {
-          MockedAppConfig.featureSwitchConfig returns Configuration("des_hip_migration_1656.enabled" -> true)
+          MockedSharedAppConfig.featureSwitchConfig returns Configuration("des_hip_migration_1656.enabled" -> true)
 
           def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
 
@@ -93,7 +93,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
     "retrievePensionsRelief called for a Tax Year Specific tax year" must {
       "return a 200 status for a success scenario" in
-        new TysIfsTest with Test {
+        new IfsTest with Test {
 
           val outcome = Right(ResponseWrapper(correlationId, response))
 

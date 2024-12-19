@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package v1.otherReliefs.amend.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
-import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
+import common._
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.models.errors._
 import v1.otherReliefs.amend.def1.model.request._
 
 import java.time.LocalDate
@@ -66,7 +67,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
 
     combine(
       customerReference.traverse_(validateCustomerRef(_, "/nonDeductibleLoanInterest/customerReference")),
-      resolveParsedNumber(reliefClaimed, None, Some("/nonDeductibleLoanInterest/reliefClaimed"))
+      resolveParsedNumber(reliefClaimed, "/nonDeductibleLoanInterest/reliefClaimed")
     )
   }
 
@@ -75,7 +76,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
 
     combine(
       customerReference.traverse_(validateCustomerRef(_, "/payrollGiving/customerReference")),
-      resolveParsedNumber(reliefClaimed, path = Some("/payrollGiving/reliefClaimed"))
+      resolveParsedNumber(reliefClaimed, "/payrollGiving/reliefClaimed")
     )
   }
 
@@ -86,7 +87,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
 
     combine(
       customerReference.traverse_(validateCustomerRef(_, "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference")),
-      resolveParsedNumber(amount, path = Some("/qualifyingDistributionRedemptionOfSharesAndSecurities/amount"))
+      resolveParsedNumber(amount, "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount")
     )
   }
 
@@ -99,12 +100,12 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
       customerReference.traverse_(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference")),
       businessName.traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName", BusinessNameFormatError)),
       dateBusinessCeased.traverse_(
-        ResolveIsoDate(_, Some(DateFormatError), Some(dateBusinessCeasedPath))
-          .andThen(isDateInRange(_, dateBusinessCeasedPath))),
+        ResolveIsoDate(_, DateFormatError.withPath(dateBusinessCeasedPath)).andThen(isDateInRange(_, dateBusinessCeasedPath))
+      ),
       natureOfTrade.traverse_(
         validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade", NatureOfTradeFormatError)),
       incomeSource.traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource", IncomeSourceFormatError)),
-      resolveParsedNumber(amount, None, Some(s"/postCessationTradeReliefAndCertainOtherLosses/$index/amount"))
+      resolveParsedNumber(amount, s"/postCessationTradeReliefAndCertainOtherLosses/$index/amount")
     )
   }
 
@@ -116,8 +117,9 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
       customerReference.traverse_(validateCustomerRef(_, s"/maintenancePayments/$index/customerReference")),
       exSpouseName.traverse_(validateFieldLength(_, s"/maintenancePayments/$index/exSpouseName", ExSpouseNameFormatError)),
       exSpouseDateOfBirth.traverse_(
-        ResolveIsoDate(_, Some(DateFormatError), Some(exSpouseDateOfBirthPath)).andThen(isDateInRange(_, exSpouseDateOfBirthPath))),
-      resolveParsedNumber(amount, path = Some(s"/maintenancePayments/$index/amount"))
+        ResolveIsoDate(_, DateFormatError.withPath(exSpouseDateOfBirthPath)).andThen(isDateInRange(_, exSpouseDateOfBirthPath))
+      ),
+      resolveParsedNumber(amount, s"/maintenancePayments/$index/amount")
     )
   }
 
@@ -126,7 +128,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
 
     combine(
       customerReference.traverse_(validateCustomerRef(_, "/annualPaymentsMade/customerReference")),
-      resolveParsedNumber(reliefClaimed, path = Some("/annualPaymentsMade/reliefClaimed"))
+      resolveParsedNumber(reliefClaimed, "/annualPaymentsMade/reliefClaimed")
     )
   }
 
@@ -137,7 +139,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     combine(
       customerReference.traverse_(validateCustomerRef(_, s"/qualifyingLoanInterestPayments/$index/customerReference")),
       lenderName.traverse_(validateFieldLength(_, s"/qualifyingLoanInterestPayments/$index/lenderName", LenderNameFormatError)),
-      resolveParsedNumber(reliefClaimed, path = Some(s"/qualifyingLoanInterestPayments/$index/reliefClaimed"))
+      resolveParsedNumber(reliefClaimed, s"/qualifyingLoanInterestPayments/$index/reliefClaimed")
     )
   }
 

@@ -16,13 +16,13 @@
 
 package v1.createAndAmendForeignReliefs.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v1.createAndAmendForeignReliefs.def1.Def1_CreateAndAmendForeignReliefsRulesValidator.validateBusinessRules
 import v1.createAndAmendForeignReliefs.def1.model.request.{Def1_CreateAndAmendForeignReliefsBody, Def1_CreateAndAmendForeignReliefsRequestData}
 import v1.createAndAmendForeignReliefs.model.request.CreateAndAmendForeignReliefsRequestData
@@ -31,11 +31,12 @@ class Def1_CreateAndAmendForeignReliefsValidator(nino: String, taxYear: String, 
     extends Validator[CreateAndAmendForeignReliefsRequestData] {
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendForeignReliefsBody]()
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
 
   def validate: Validated[Seq[MtdError], Def1_CreateAndAmendForeignReliefsRequestData] =
     (
       ResolveNino(nino),
-      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
+      resolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_CreateAndAmendForeignReliefsRequestData) andThen validateBusinessRules
 

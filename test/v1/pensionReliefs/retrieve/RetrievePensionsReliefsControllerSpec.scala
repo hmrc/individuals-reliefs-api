@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package v1.pensionReliefs.retrieve
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method._
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.domain.{Nino, TaxYear, Timestamp}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method._
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.{TaxYear, Timestamp}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
 import v1.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v1.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
 import v1.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsHateoasData
@@ -39,12 +39,12 @@ class RetrievePensionsReliefsControllerSpec
     with MockRetrievePensionsReliefsService
     with MockRetrievePensionsReliefsValidatorFactory
     with MockHateoasFactory
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   private val taxYear     = "2019-20"
-  private val requestData = Def1_RetrievePensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = Def1_RetrievePensionsReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
 
-  private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$nino/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$validNino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = Def1_RetrievePensionsReliefsResponse(
     Timestamp("2019-04-04T01:01:01.000Z"),
@@ -71,7 +71,7 @@ class RetrievePensionsReliefsControllerSpec
          |   },
          |   "links":[
          |      {
-         |         "href":"individuals/reliefs/pensions/AA123456A/2019-20",
+         |         "href":"individuals/reliefs/pensions/$validNino/2019-20",
          |         "method":"GET",
          |         "rel":"self"
          |      }
@@ -90,7 +90,7 @@ class RetrievePensionsReliefsControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
         MockHateoasFactory
-          .wrap(responseBody, RetrievePensionsReliefsHateoasData(nino, taxYear))
+          .wrap(responseBody, RetrievePensionsReliefsHateoasData(validNino, taxYear))
           .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseJson))
@@ -127,13 +127,13 @@ class RetrievePensionsReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakeGetRequest)
   }
 
 }

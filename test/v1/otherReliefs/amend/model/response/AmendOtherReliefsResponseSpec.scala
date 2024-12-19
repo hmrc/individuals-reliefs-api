@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,24 @@
 
 package v1.otherReliefs.amend.model.response
 
-import api.hateoas.Link
-import api.hateoas.Method._
-import mocks.MockAppConfig
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method._
+import shared.utils.UnitSpec
 
-class AmendOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
+class AmendOtherReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   "LinksFactory" should {
     "return the correct links" in {
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      AmendOtherReliefsResponse.LinksFactory.links(mockAppConfig, AmendOtherReliefsHateoasData(nino, taxYear)) shouldBe
+      MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      AmendOtherReliefsResponse.LinksFactory.links(mockSharedAppConfig, AmendOtherReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/other/$nino/$taxYear", PUT, "create-and-amend-reliefs-other"),
-          api.hateoas.Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
-          api.hateoas.Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
+          Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
+          Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
         )
     }
   }

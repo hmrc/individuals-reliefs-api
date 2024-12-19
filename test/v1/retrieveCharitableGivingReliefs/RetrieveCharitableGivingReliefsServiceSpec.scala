@@ -16,11 +16,11 @@
 
 package v1.retrieveCharitableGivingReliefs
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import v1.retrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
 import v1.retrieveCharitableGivingReliefs.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import v1.retrieveCharitableGivingReliefs.model.response.Def1_RetrieveCharitableGivingReliefsResponse
@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 class RetrieveCharitableGivingReliefsServiceSpec extends ServiceSpec {
 
-  private val nino    = "AA123456A"
+  private val nino    = "ZG903729C"
   private val taxYear = "2017-18"
 
   private val request = Def1_RetrieveCharitableGivingReliefsRequestData(

@@ -16,9 +16,9 @@
 
 package v1.retrieveForeignReliefs
 
-import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
+import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.retrieveForeignReliefs.model.request.RetrieveForeignReliefsRequestData
 import v1.retrieveForeignReliefs.model.response.RetrieveForeignReliefsResponse

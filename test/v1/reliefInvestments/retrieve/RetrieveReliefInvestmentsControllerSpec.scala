@@ -16,16 +16,16 @@
 
 package v1.reliefInvestments.retrieve
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method._
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method._
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.TaxYear
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v1.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
 import v1.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsHateoasData
@@ -39,11 +39,11 @@ class RetrieveReliefInvestmentsControllerSpec
     with MockRetrieveReliefInvestmentsService
     with MockRetrieveReliefInvestmentsValidatorFactory
     with MockHateoasFactory
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   private val taxYear         = "2019-20"
-  private val requestData     = Def1_RetrieveReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
-  private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$nino/$taxYear", method = GET, rel = "self")
+  private val requestData     = Def1_RetrieveReliefInvestmentsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
+  private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$validNino/$taxYear", method = GET, rel = "self")
 
   val mtdResponseJson: JsValue = Json
     .parse(
@@ -117,7 +117,7 @@ class RetrieveReliefInvestmentsControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseModel))))
 
         MockHateoasFactory
-          .wrap(responseModel, RetrieveReliefInvestmentsHateoasData(nino, taxYear))
+          .wrap(responseModel, RetrieveReliefInvestmentsHateoasData(validNino, taxYear))
           .returns(HateoasWrapper(responseModel, Seq(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseJson))
@@ -154,13 +154,13 @@ class RetrieveReliefInvestmentsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakeGetRequest)
   }
 
 }
