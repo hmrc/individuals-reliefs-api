@@ -18,7 +18,7 @@ components:
       description: One or more values have been added with the incorrect format.
       value:
         code: FORMAT_VALUE
-        message: The field should be between 0 and 99999999999.99
+        message: The value must be between 0 and 99999999999.99
 
     formatCustomerRef:
       description: The format of customer reference is not valid.
@@ -30,91 +30,91 @@ components:
       description: The format of name is invalid.
       value:
         code: FORMAT_NAME
-        message: The format of name is invalid.
+        message: The format of name is invalid
 
     formatCountryCode:
       description: The format of the supplied country code is not valid.
       value:
         code: FORMAT_COUNTRY_CODE
-        message: The format of the supplied country code is not valid.
+        message: The format of the supplied country code is not valid
 
     ruleCountryCode:
       description: Not a valid ISO 3166-1 alpha-3 country code.
       value:
         code: RULE_COUNTRY_CODE
-        message: Not a valid ISO 3166-1 alpha-3 country code.
+        message: Not a valid ISO 3166-1 alpha-3 country code
 
     formatString:
       description: One or more strings have been added with the incorrect format.
       value:
         code: FORMAT_STRING
-        message: One or more strings have been added with the incorrect format.
+        message: One or more strings have been added with the incorrect format
 
     formatNameExSpouse:
       description: The format of exSpouseName is not valid.
       value:
         code: FORMAT_NAME_EX_SPOUSE
-        message: The format of exSpouseName is not valid.
+        message: The format of exSpouseName is not valid
 
     formatNameBusiness:
       description: The format of businessName is not valid.
       value:
         code: FORMAT_NAME_BUSINESS
-        message: The format of businessName is not valid.
+        message: The format of businessName is not valid
 
     formatNatureOfTrade:
       description: The format of natureOfTrade is not valid.
       value:
         code: FORMAT_NATURE_OF_TRADE
-        message: The format of natureOfTrade is not valid.
+        message: The format of natureOfTrade is not valid
 
     formatIncomeSource:
       description: The format of incomeSource is not valid.
       value:
         code: FORMAT_INCOME_SOURCE
-        message: The format of incomeSource is not valid.
+        message: The format of incomeSource is not valid
 
     formatUniqueInvestmentRef:
       description: The format of unique investment reference is invalid.
       value:
         code: FORMAT_UNIQUE_INVESTMENT_REFERENCE
-        message: The format of unique investment reference is invalid.
+        message: The format of unique investment reference is invalid
 
     formatLenderName:
       description: The format of lenderName is not valid.
       value:
         code: FORMAT_LENDER_NAME
-        message: The format of lenderName is not valid.
+        message: The format of lenderName is not valid
 
     formatDateOfInvestment:
       description: The format of the investment date is invalid.
       value:
         code: FORMAT_DATE_OF_INVESTMENT
-        message: The format of the investment date is invalid.
+        message: The format of the investment date is invalid
 
     formatDate:
       description: The supplied date format is invalid.
       value:
         code: FORMAT_DATE
-        message: The supplied date format is invalid.
+        message: The supplied date format is invalid
 
     ruleGiftAidNonUkAmountWithoutNames:
       description: Non-UK charity Gift Aid amount supplied without the non-UK Gift Aid charity names.
       value:
         code: RULE_GIFT_AID_NON_UK_AMOUNT_WITHOUT_NAMES
-        message: Non-UK charity Gift Aid amount supplied without the non-UK Gift Aid charity names.
+        message: Non-UK charity Gift Aid amount supplied without the non-UK Gift Aid charity names
 
     ruleNonUkGiftsAmountWithoutNames:
       description: Non-UK gifts amount supplied without non-UK gifts charity names.
       value:
         code: RULE_GIFTS_NON_UK_AMOUNT_WITHOUT_NAMES
-        message: Non-UK gifts amount supplied without non-UK gifts charity names.
+        message: Non-UK gifts amount supplied without non-UK gifts charity names
 
     ruleSubmissionFailed:
       description: The submission cannot be completed due to validation failures.
       value:
         code: RULE_SUBMISSION_FAILED
-        message: The submission cannot be completed due to validation failures.
+        message: The submission cannot be completed due to validation failures
 
     ruleIncorrectOrEmptyBody:
       description: An empty or non-matching body was submitted.

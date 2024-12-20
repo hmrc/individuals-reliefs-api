@@ -89,9 +89,6 @@ object RuleSubmissionFailedError
     httpStatus = BAD_REQUEST
   )
 
-object RuleTaxYearRangeInvalid
-  extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required", BAD_REQUEST)
-
 object RuleGiftAidNonUkAmountWithoutNamesError
   extends MtdError(
     code = "RULE_GIFT_AID_NON_UK_AMOUNT_WITHOUT_NAMES",
