@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 package v1.pensionReliefs.retrieve
 
-import api.connectors.DownstreamUri.{DesUri, HipUri, IfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import config.{AppConfig, FeatureSwitches}
+import config.ReliefsFeatureSwitches
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{DesUri, HipUri, IfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
 import v1.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
@@ -28,7 +29,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieve(request: RetrievePensionsReliefsRequestData)(implicit
       hc: HeaderCarrier,
@@ -43,7 +44,7 @@ class RetrievePensionsReliefsConnector @Inject() (val http: HttpClient, val appC
         IfsUri(s"income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino")
       case _ =>
         val downstreamTaxYearParam = taxYear.asMtd // Supposed to be MTD format for this downstream endpoint
-        if (FeatureSwitches(appConfig.featureSwitches).isEnabled("des_hip_migration_1656")) {
+        if (ReliefsFeatureSwitches().isDesHipMigration1656Enabled) {
           HipUri(s"itsa/income-tax/v1/reliefs/pensions/$nino/$downstreamTaxYearParam")
         } else {
           DesUri(s"income-tax/reliefs/pensions/$nino/$downstreamTaxYearParam")

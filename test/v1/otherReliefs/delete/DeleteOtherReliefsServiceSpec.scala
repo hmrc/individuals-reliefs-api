@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v1.otherReliefs.delete
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import support.UnitSpec
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
 
@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 class DeleteOtherReliefsServiceSpec extends UnitSpec {
 
-  val nino: String    = "AA123456A"
+  val nino: String    = "ZG903729C"
   val taxYear: String = "2019-20"
 
   implicit val correlationId: String = "X-123"

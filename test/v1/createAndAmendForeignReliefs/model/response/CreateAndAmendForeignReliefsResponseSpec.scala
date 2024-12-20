@@ -16,24 +16,24 @@
 
 package v1.createAndAmendForeignReliefs.model.response
 
-import api.hateoas.Link
-import api.hateoas.Method._
-import mocks.MockAppConfig
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method._
+import shared.utils.UnitSpec
 
-class CreateAndAmendForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
+class CreateAndAmendForeignReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   "LinksFactory" should {
     "return the correct links" in {
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      CreateAndAmendForeignReliefsResponse.LinksFactory.links(mockAppConfig, CreateAndAmendForeignReliefsHateoasData(nino, taxYear)) shouldBe
+      MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      CreateAndAmendForeignReliefsResponse.LinksFactory.links(mockSharedAppConfig, CreateAndAmendForeignReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/foreign/$nino/$taxYear", GET, "self"),
-          api.hateoas.Link(s"/my/context/foreign/$nino/$taxYear", PUT, "create-and-amend-reliefs-foreign"),
-          api.hateoas.Link(s"/my/context/foreign/$nino/$taxYear", DELETE, "delete-reliefs-foreign")
+          Link(s"/my/context/foreign/$nino/$taxYear", PUT, "create-and-amend-reliefs-foreign"),
+          Link(s"/my/context/foreign/$nino/$taxYear", DELETE, "delete-reliefs-foreign")
         )
     }
   }

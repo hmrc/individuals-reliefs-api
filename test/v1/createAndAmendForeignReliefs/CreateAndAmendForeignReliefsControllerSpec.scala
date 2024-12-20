@@ -16,18 +16,18 @@
 
 package v1.createAndAmendForeignReliefs
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method._
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
-import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method._
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.TaxYear
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import v1.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel, responseWithHateoasLinks}
 import v1.createAndAmendForeignReliefs.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
 import v1.createAndAmendForeignReliefs.model.response.CreateAndAmendForeignReliefsHateoasData
@@ -41,18 +41,18 @@ class CreateAndAmendForeignReliefsControllerSpec
     with MockCreateAndAmendForeignReliefsService
     with MockCreateAndAmendForeignReliefsValidatorFactory
     with MockHateoasFactory
-    with MockAppConfig
+    with MockSharedAppConfig
     with MockAuditService {
 
   private val taxYear = "2019-20"
 
   private val testHateoasLinks = List(
-    Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-foreign"),
-    Link(href = s"/individuals/reliefs/foreign/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-foreign")
+    Link(href = s"/individuals/reliefs/foreign/$validNino/$taxYear", method = GET, rel = "self"),
+    Link(href = s"/individuals/reliefs/foreign/$validNino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-foreign"),
+    Link(href = s"/individuals/reliefs/foreign/$validNino/$taxYear", method = DELETE, rel = "delete-reliefs-foreign")
   )
 
-  private val requestData = Def1_CreateAndAmendForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = Def1_CreateAndAmendForeignReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
@@ -64,7 +64,7 @@ class CreateAndAmendForeignReliefsControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), CreateAndAmendForeignReliefsHateoasData(nino, taxYear))
+          .wrap((), CreateAndAmendForeignReliefsHateoasData(validNino, taxYear))
           .returns(HateoasWrapper((), testHateoasLinks))
 
         runOkTestWithAudit(
@@ -108,13 +108,13 @@ class CreateAndAmendForeignReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePostRequest(requestBodyJson))
 
     def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -124,7 +124,7 @@ class CreateAndAmendForeignReliefsControllerSpec
           userType = "Individual",
           agentReferenceNumber = None,
           versionNumber = "1.0",
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

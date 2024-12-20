@@ -16,9 +16,9 @@
 
 package v1.reliefInvestments.delete
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.reliefInvestments.delete.def1.Def1_DeleteReliefInvestmentsRequestData
 import v1.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
 
@@ -26,13 +26,13 @@ import scala.concurrent.Future
 
 class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
-  val nino: String = "AA123456A"
+  val nino: String = "ZG903729C"
 
   trait Test { _: ConnectorTest =>
 
     val connector: DeleteReliefInvestmentsConnector = new DeleteReliefInvestmentsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     val taxYear: TaxYear
@@ -56,7 +56,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
     }
 
     "return a result" when {
-      "the downstream call is successful for TYS tax years" in new TysIfsTest with Test {
+      "the downstream call is successful for TYS tax years" in new IfsTest with Test {
         lazy val taxYear = TaxYear.fromMtd("2023-24")
         val outcome      = Right(ResponseWrapper(correlationId, ()))
 

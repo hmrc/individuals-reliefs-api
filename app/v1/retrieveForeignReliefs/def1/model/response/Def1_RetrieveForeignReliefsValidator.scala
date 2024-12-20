@@ -16,20 +16,22 @@
 
 package v1.retrieveForeignReliefs.def1.model.response
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYear}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v1.retrieveForeignReliefs.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
 
 class Def1_RetrieveForeignReliefsValidator(nino: String, taxYear: String) extends Validator[RetrieveForeignReliefsRequestData] {
 
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
+
   def validate: Validated[Seq[MtdError], Def1_RetrieveForeignReliefsRequestData] =
     (
       ResolveNino(nino),
-      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
+      resolveTaxYear(taxYear)
     ).mapN(Def1_RetrieveForeignReliefsRequestData)
 
 }

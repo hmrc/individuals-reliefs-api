@@ -16,9 +16,9 @@
 
 package v1.reliefInvestments.createAmend
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 import v1.reliefInvestments.createAmend.def1.model.request.Def1_CreateAndAmendReliefInvestmentsRequestData
 import v1.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
@@ -27,17 +27,19 @@ import scala.concurrent.Future
 
 class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
+  val nino = "ZG903729C"
+
   trait Test { _: ConnectorTest =>
 
     val taxYear: String
 
     val connector: CreateAndAmendReliefInvestmentsConnector = new CreateAndAmendReliefInvestmentsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     lazy val request: CreateAndAmendReliefInvestmentsRequestData =
-      Def1_CreateAndAmendReliefInvestmentsRequestData(Nino("AA123456A"), TaxYear.fromMtd(taxYear), requestBodyModel)
+      Def1_CreateAndAmendReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   }
 
@@ -48,7 +50,7 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
       val outcome         = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
-        url = s"$baseUrl/income-tax/reliefs/investment/AA123456A/2019-20",
+        url = s"$baseUrl/income-tax/reliefs/investment/$nino/2019-20",
         body = requestBodyModel
       )
         .returns(Future.successful(outcome))
@@ -56,12 +58,12 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
       await(connector.amend(request)) shouldBe outcome
     }
 
-    "put a body and return 204 no body for a Tax Year Specific (TYS) tax year" in new TysIfsTest with Test {
+    "put a body and return 204 no body for a Tax Year Specific (TYS) tax year" in new IfsTest with Test {
       val taxYear: String = "2023-24"
       val outcome         = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
-        url = s"$baseUrl/income-tax/reliefs/investment/23-24/AA123456A",
+        url = s"$baseUrl/income-tax/reliefs/investment/23-24/$nino",
         body = requestBodyModel
       )
         .returns(Future.successful(outcome))

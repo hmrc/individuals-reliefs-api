@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package v1.pensionReliefs.retrieve.model.response
 
-import api.hateoas.{HateoasData, HateoasLinks, HateoasLinksFactory, Link}
-import config.AppConfig
+import hateoas.HateoasLinks
 import play.api.libs.json.OWrites
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import shared.utils.JsonWritesUtil.writesFrom
 import v1.pensionReliefs.retrieve.def1.model.response.Def1_RetrievePensionsReliefsResponse
 
@@ -32,7 +33,7 @@ object RetrievePensionsReliefsResponse extends HateoasLinks {
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrievePensionsReliefsResponse, RetrievePensionsReliefsHateoasData] {
 
-    override def links(appConfig: AppConfig, data: RetrievePensionsReliefsHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: RetrievePensionsReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
         amendPensionsReliefs(appConfig, nino, taxYear),

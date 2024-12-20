@@ -16,8 +16,8 @@
 
 package v1.reliefInvestments.delete
 
-import api.controllers.validators.Validator
-import support.UnitSpec
+import shared.controllers.validators.Validator
+import shared.utils.UnitSpec
 import v1.reliefInvestments.delete.def1.Def1_DeleteReliefInvestmentsValidator
 import v1.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
 

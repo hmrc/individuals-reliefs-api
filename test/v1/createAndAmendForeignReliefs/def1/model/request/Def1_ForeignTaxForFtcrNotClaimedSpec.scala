@@ -16,9 +16,9 @@
 
 package v1.createAndAmendForeignReliefs.def1.model.request
 
-import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v1.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsFixtures.{foreignTaxForFtcrNotClaimedJson, foreignTaxForFtcrNotClaimedModel}
 
 class Def1_ForeignTaxForFtcrNotClaimedSpec extends UnitSpec with JsonErrorValidators {

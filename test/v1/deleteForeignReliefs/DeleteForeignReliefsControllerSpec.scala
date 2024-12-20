@@ -16,16 +16,16 @@
 
 package v1.deleteForeignReliefs
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
-import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.TaxYear
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import v1.deleteForeignReliefs.model.Def1_DeleteForeignReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -37,7 +37,7 @@ class DeleteForeignReliefsControllerSpec
     with MockDeleteForeignReliefsService
     with MockDeleteForeignReliefsValidatorFactory
     with MockAuditService
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   private val taxYear = TaxYear.fromMtd("2019-20")
 
@@ -88,13 +88,13 @@ class DeleteForeignReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear.asMtd)(fakeDeleteRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear.asMtd)(fakeRequest)
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -104,14 +104,14 @@ class DeleteForeignReliefsControllerSpec
           versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear.asMtd),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear.asMtd),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
         )
       )
 
-    protected val requestData: Def1_DeleteForeignReliefsRequestData = Def1_DeleteForeignReliefsRequestData(Nino(nino), taxYear)
+    protected val requestData: Def1_DeleteForeignReliefsRequestData = Def1_DeleteForeignReliefsRequestData(parsedNino, taxYear)
 
   }
 

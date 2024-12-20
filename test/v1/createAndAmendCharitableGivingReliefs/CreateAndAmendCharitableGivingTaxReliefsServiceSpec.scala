@@ -16,18 +16,19 @@
 
 package v1.createAndAmendCharitableGivingReliefs
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError}
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import v1.createAndAmendCharitableGivingReliefs.def1.model.request._
 import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingTaxReliefsServiceSpec extends ServiceSpec {
-  private val nino: String    = "AA123456A"
+  private val nino: String    = "ZG903729C"
   private val taxYear: String = "2017-18"
 
   val nonUkCharitiesModel: Def1_NonUkCharities =

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,19 @@
 
 package v1.otherReliefs.amend
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method._
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
-import mocks.MockAppConfig
+import common.RuleSubmissionFailedError
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method._
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.TaxYear
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import v1.otherReliefs.amend.def1.model.request._
 import v1.otherReliefs.amend.model.response.AmendOtherReliefsHateoasData
 
@@ -40,15 +41,15 @@ class AmendOtherReliefsControllerSpec
     with MockAmendOtherReliefsService
     with MockAmendOtherReliefsValidatorFactory
     with MockHateoasFactory
-    with MockAppConfig
+    with MockSharedAppConfig
     with MockAuditService {
 
   private val taxYear = "2019-20"
 
   private val testHateoasLinks = List(
-    Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = PUT, rel = "amend-reliefs-other"),
-    Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/other/$nino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
+    Link(href = s"/individuals/reliefs/other/$validNino/$taxYear", method = PUT, rel = "amend-reliefs-other"),
+    Link(href = s"/individuals/reliefs/other/$validNino/$taxYear", method = GET, rel = "self"),
+    Link(href = s"/individuals/reliefs/other/$validNino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
   )
 
   private val requestJson = Json.parse("""
@@ -114,7 +115,7 @@ class AmendOtherReliefsControllerSpec
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val requestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = Def1_AmendOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBody)
 
   val hateoasResponse: JsValue = Json.parse("""
                                               |{
@@ -149,7 +150,7 @@ class AmendOtherReliefsControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), AmendOtherReliefsHateoasData(nino, taxYear))
+          .wrap((), AmendOtherReliefsHateoasData(validNino, taxYear))
           .returns(HateoasWrapper((), testHateoasLinks))
 
         runOkTestWithAudit(
@@ -196,13 +197,13 @@ class AmendOtherReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePostRequest(requestJson))
 
     def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -212,7 +213,7 @@ class AmendOtherReliefsControllerSpec
           versionNumber = "1.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

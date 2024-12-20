@@ -16,8 +16,8 @@
 
 package v1.reliefInvestments.createAmend.def1.model.request
 
-import api.models.utils.JsonErrorValidators
-import support.UnitSpec
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 
 class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with JsonErrorValidators {

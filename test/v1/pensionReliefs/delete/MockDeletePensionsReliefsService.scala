@@ -16,11 +16,11 @@
 
 package v1.pensionReliefs.delete
 
-import api.controllers.RequestContext
-import api.models.errors.ErrorWrapper
-import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import shared.controllers.RequestContext
+import shared.models.errors.ErrorWrapper
+import shared.models.outcomes.ResponseWrapper
 import v1.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}

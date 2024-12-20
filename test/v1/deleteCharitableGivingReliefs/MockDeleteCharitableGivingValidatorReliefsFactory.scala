@@ -16,12 +16,12 @@
 
 package v1.deleteCharitableGivingReliefs
 
-import api.controllers.validators.Validator
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import shared.controllers.validators.Validator
+import shared.models.errors.MtdError
 import v1.deleteCharitableGivingReliefs.model.request.DeleteCharitableGivingTaxReliefsRequestData
 
 trait MockDeleteCharitableGivingValidatorReliefsFactory extends MockFactory {

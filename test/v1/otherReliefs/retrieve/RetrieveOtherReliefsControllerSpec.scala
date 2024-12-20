@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package v1.otherReliefs.retrieve
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method._
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.domain.{Nino, TaxYear, Timestamp}
-import api.models.errors
-import api.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.outcomes.ResponseWrapper
-import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method._
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.{TaxYear, Timestamp}
+import shared.models.errors
+import shared.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
 import v1.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
 import v1.otherReliefs.retrieve.def1.model.response._
 import v1.otherReliefs.retrieve.model.response.RetrieveOtherReliefsHateoasData
@@ -40,12 +40,12 @@ class RetrieveOtherReliefsControllerSpec
     with MockRetrieveOtherReliefsService
     with MockRetrieveOtherReliefsValidatorFactory
     with MockHateoasFactory
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   private val taxYear     = "2019-20"
-  private val requestData = Def1_RetrieveOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = Def1_RetrieveOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
 
-  private val testHateoasLink = Link(href = s"individuals/reliefs/other/$nino/$taxYear", method = GET, rel = "self")
+  private val testHateoasLink = Link(href = s"individuals/reliefs/other/$validNino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = Def1_RetrieveOtherReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),
@@ -114,7 +114,7 @@ class RetrieveOtherReliefsControllerSpec
          |   ],
          |   "links":[
          |      {
-         |         "href":"individuals/reliefs/other/AA123456A/2019-20",
+         |         "href":"individuals/reliefs/other/$validNino/2019-20",
          |         "method":"GET",
          |         "rel":"self"
          |      }
@@ -134,7 +134,7 @@ class RetrieveOtherReliefsControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
         MockHateoasFactory
-          .wrap(responseBody, RetrieveOtherReliefsHateoasData(nino, taxYear))
+          .wrap(responseBody, RetrieveOtherReliefsHateoasData(validNino, taxYear))
           .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseJson))
@@ -172,13 +172,13 @@ class RetrieveOtherReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakeGetRequest)
   }
 
 }

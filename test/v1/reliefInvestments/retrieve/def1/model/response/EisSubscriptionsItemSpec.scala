@@ -16,9 +16,9 @@
 
 package v1.reliefInvestments.retrieve.def1.model.response
 
-import api.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.{eisSubscriptionsItemJson, eisSubscriptionsItemModel}
 
 class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {

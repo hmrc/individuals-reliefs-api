@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package v1.retrieveCharitableGivingReliefs
 
-import api.controllers._
-import api.hateoas.HateoasFactory
-import api.services.{EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.hateoas.HateoasFactory
+import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v1.retrieveCharitableGivingReliefs.model.response.RetrieveCharitableGivingReliefsHateoasData
 
 import javax.inject.{Inject, Singleton}
@@ -34,7 +34,7 @@ class RetrieveCharitableGivingReliefsController @Inject() (val authService: Enro
                                                            service: RetrieveCharitableGivingReliefsService,
                                                            hateoasFactory: HateoasFactory,
                                                            cc: ControllerComponents,
-                                                           val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
+                                                           val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "retrieve-charitable-giving-reliefs"

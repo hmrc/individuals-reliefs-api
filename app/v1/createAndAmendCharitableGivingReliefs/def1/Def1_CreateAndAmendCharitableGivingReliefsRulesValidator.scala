@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package v1.createAndAmendCharitableGivingReliefs.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.ResolveParsedNumber
-import api.models.errors.{MtdError, RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError, StringFormatError}
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.{toFoldableOps, toTraverseOps}
+import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.ResolveParsedNumber
+import shared.models.errors.{MtdError, StringFormatError}
 import v1.createAndAmendCharitableGivingReliefs.def1.model.request.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
 import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
@@ -48,7 +49,7 @@ class Def1_CreateAndAmendCharitableGivingReliefsRulesValidator extends RulesVali
       (amountTreatedAsPreviousTaxYear, "/giftAidPayments/amountTreatedAsPreviousTaxYear"),
       (amountTreatedAsSpecifiedTaxYear, "/giftAidPayments/amountTreatedAsSpecifiedTaxYear")
     ).traverse_ { case (value, path) =>
-      resolveParsedNumber(value, path = Some(path))
+      resolveParsedNumber(value, path)
     }
 
     val validatedCharityNames =
@@ -64,7 +65,7 @@ class Def1_CreateAndAmendCharitableGivingReliefsRulesValidator extends RulesVali
       (nonUkCharities.map(_.totalAmount), "/gifts/nonUkCharities/totalAmount"),
       (landAndBuildings, "/gifts/landAndBuildings"),
       (sharesOrSecurities, "/gifts/sharesOrSecurities")
-    ).traverse_ { case (value, path) => resolveParsedNumber(value, path = Some(path)) }
+    ).traverse_ { case (value, path) => resolveParsedNumber(value, path) }
 
     val validatedCharityNames = nonUkCharities.traverse_(validate(_, "/gifts", RuleGiftsNonUkAmountWithoutNamesError))
 
@@ -81,8 +82,9 @@ class Def1_CreateAndAmendCharitableGivingReliefsRulesValidator extends RulesVali
     }
 
     val validateCharityNamesFormat = (name: String, index: Int) =>
-      if (charityNamesRegex.matches(name)) valid
-      else Invalid(List(StringFormatError.withPath(s"$path/nonUkCharities/charityNames/$index")))
+      if (charityNamesRegex.matches(name)) {
+        valid
+      } else { Invalid(List(StringFormatError.withPath(s"$path/nonUkCharities/charityNames/$index"))) }
 
     val validatedCharityNamesFormat = charityNames.traverse_(_.zipWithIndex.traverse(validateCharityNamesFormat.tupled))
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v1.retrieveForeignReliefs
 
-import api.controllers.validators.Validator
+import shared.controllers.validators.Validator
 import v1.retrieveForeignReliefs.def1.model.response.Def1_RetrieveForeignReliefsValidator
 import v1.retrieveForeignReliefs.model.request.RetrieveForeignReliefsRequestData
 

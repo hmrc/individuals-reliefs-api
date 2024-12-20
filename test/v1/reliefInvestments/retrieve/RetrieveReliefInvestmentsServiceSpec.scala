@@ -16,11 +16,11 @@
 
 package v1.reliefInvestments.retrieve
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import support.UnitSpec
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v1.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
 
-  private val nino: String           = "AA123456A"
+  private val nino: String           = "ZG903729C"
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 

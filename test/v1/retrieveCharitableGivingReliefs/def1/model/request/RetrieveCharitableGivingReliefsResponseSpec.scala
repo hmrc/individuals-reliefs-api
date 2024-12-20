@@ -16,18 +16,18 @@
 
 package v1.retrieveCharitableGivingReliefs.def1.model.request
 
-import api.hateoas.Link
-import api.hateoas.Method._
-import mocks.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method._
+import shared.utils.UnitSpec
 import v1.retrieveCharitableGivingReliefs.model.response.{
   Def1_RetrieveCharitableGivingReliefsResponse,
   RetrieveCharitableGivingReliefsHateoasData,
   RetrieveCharitableGivingReliefsResponse
 }
 
-class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockAppConfig with RetrieveCharitableGivingReliefsFixture {
+class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockSharedAppConfig with RetrieveCharitableGivingReliefsFixture {
 
   "RetrieveCharitableGivingReliefResponse reads" must {
     "read from downstream (DES) JSON" in {
@@ -51,12 +51,12 @@ class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockAppC
       val taxYear = "mytaxyear"
       val context = "individuals/reliefs"
 
-      MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
-      RetrieveCharitableGivingReliefsResponse.LinksFactory.links(mockAppConfig, RetrieveCharitableGivingReliefsHateoasData(nino, taxYear)) shouldBe
+      MockedSharedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+      RetrieveCharitableGivingReliefsResponse.LinksFactory.links(mockSharedAppConfig, RetrieveCharitableGivingReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/$context/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
-          api.hateoas.Link(s"/$context/charitable-giving/$nino/$taxYear", GET, "self"),
-          api.hateoas.Link(s"/$context/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
+          Link(s"/$context/charitable-giving/$nino/$taxYear", GET, "self"),
+          Link(s"/$context/charitable-giving/$nino/$taxYear", DELETE, "delete-charitable-giving-tax-relief")
         )
     }
   }

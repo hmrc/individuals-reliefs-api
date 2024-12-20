@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v1.otherReliefs.retrieve
 
-import api.controllers.validators.Validator
+import shared.controllers.validators.Validator
+import v1.otherReliefs.retrieve.RetrieveOtherReliefsSchema.Def1
 import v1.otherReliefs.retrieve.def1.model.Def1_RetrieveOtherReliefsValidator
 import v1.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
-import RetrieveOtherReliefsSchema.Def1
 
 import javax.inject.Singleton
 

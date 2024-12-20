@@ -16,13 +16,13 @@
 
 package v1.pensionReliefs.createAmend.def1
 
-import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber, ResolveTaxYear}
-import api.controllers.validators.{RulesValidator, Validator}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.{catsSyntaxTuple3Semigroupal, toFoldableOps}
 import play.api.libs.json.JsValue
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber, ResolveTaxYearMinimum}
+import shared.controllers.validators.{RulesValidator, Validator}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v1.pensionReliefs.createAmend.def1.Def1_CreateAmendPensionReliefsValidator.validateBusinessRules
 import v1.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
 import v1.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
@@ -33,12 +33,13 @@ import javax.inject.Singleton
 class Def1_CreateAmendPensionsReliefsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendPensionsReliefsRequestData] {
 
-  private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendPensionsReliefsBody]()
+  private val resolveJson    = new ResolveNonEmptyJsonObject[CreateAmendPensionsReliefsBody]()
+  val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
 
   def validate: Validated[Seq[MtdError], CreateAmendPensionsReliefsRequestData] =
     (
       ResolveNino(nino),
-      ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
+      resolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_CreateAmendPensionsReliefsRequestData) andThen validateBusinessRules
 
@@ -60,7 +61,7 @@ object Def1_CreateAmendPensionReliefsValidator extends RulesValidator[CreateAmen
       (paymentToEmployersSchemeNoTaxRelief, "/pensionReliefs/paymentToEmployersSchemeNoTaxRelief"),
       (overseasPensionSchemeContributions, "/pensionReliefs/overseasPensionSchemeContributions")
     ).traverse_ { case (value, path) =>
-      resolveParsedNumber(value, path = Some(path))
+      resolveParsedNumber(value, path)
     }
 
   }

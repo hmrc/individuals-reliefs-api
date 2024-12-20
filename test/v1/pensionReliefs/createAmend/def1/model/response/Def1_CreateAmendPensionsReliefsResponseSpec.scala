@@ -16,25 +16,25 @@
 
 package v1.pensionReliefs.createAmend.def1.model.response
 
-import api.hateoas.Link
-import api.hateoas.Method._
-import mocks.MockAppConfig
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method._
+import shared.utils.UnitSpec
 import v1.pensionReliefs.createAmend.model.response.{CreateAmendPensionsReliefsHateoasData, CreateAmendPensionsReliefsResponse}
 
-class Def1_CreateAmendPensionsReliefsResponseSpec extends UnitSpec with MockAppConfig {
+class Def1_CreateAmendPensionsReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   "LinksFactory" should {
     "return the correct links" in {
       val nino    = "mynino"
       val taxYear = "mytaxyear"
 
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      CreateAmendPensionsReliefsResponse.LinksFactory.links(mockAppConfig, CreateAmendPensionsReliefsHateoasData(nino, taxYear)) shouldBe
+      MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      CreateAmendPensionsReliefsResponse.LinksFactory.links(mockSharedAppConfig, CreateAmendPensionsReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/my/context/pensions/$nino/$taxYear", GET, "self"),
-          api.hateoas.Link(s"/my/context/pensions/$nino/$taxYear", PUT, "create-and-amend-reliefs-pensions"),
-          api.hateoas.Link(s"/my/context/pensions/$nino/$taxYear", DELETE, "delete-reliefs-pensions")
+          Link(s"/my/context/pensions/$nino/$taxYear", PUT, "create-and-amend-reliefs-pensions"),
+          Link(s"/my/context/pensions/$nino/$taxYear", DELETE, "delete-reliefs-pensions")
         )
     }
   }

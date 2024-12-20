@@ -16,9 +16,9 @@
 
 package v1.createAndAmendForeignReliefs
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsFixtures.requestBodyModel
 import v1.createAndAmendForeignReliefs.def1.model
 import v1.createAndAmendForeignReliefs.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
@@ -26,6 +26,8 @@ import v1.createAndAmendForeignReliefs.def1.model.request.Def1_CreateAndAmendFor
 import scala.concurrent.Future
 
 class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
+
+  val nino = "ZG903729C"
 
   "CreateAndAmendForeignReliefsConnector" must {
 
@@ -35,7 +37,7 @@ class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/reliefs/foreign/AA123456A/2021-22",
+          url = s"$baseUrl/income-tax/reliefs/foreign/$nino/2021-22",
           body = requestBodyModel
         )
           .returns(Future.successful(outcome))
@@ -45,12 +47,12 @@ class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
     }
 
     "return the expected response for a TYS request" when {
-      "a valid request is made" in new TysIfsTest with Test {
+      "a valid request is made" in new IfsTest with Test {
         val taxYear = "2023-24"
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/reliefs/foreign/23-24/AA123456A",
+          url = s"$baseUrl/income-tax/reliefs/foreign/23-24/$nino",
           body = requestBodyModel
         )
           .returns(Future.successful(outcome))
@@ -66,11 +68,11 @@ class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
 
     val connector: CreateAndAmendForeignReliefsConnector = new CreateAndAmendForeignReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     lazy val request: Def1_CreateAndAmendForeignReliefsRequestData =
-      model.request.Def1_CreateAndAmendForeignReliefsRequestData(Nino("AA123456A"), TaxYear.fromMtd(taxYear), requestBodyModel)
+      model.request.Def1_CreateAndAmendForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   }
 
