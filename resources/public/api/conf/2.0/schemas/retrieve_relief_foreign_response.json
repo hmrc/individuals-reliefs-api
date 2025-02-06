@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Retrieve Foreign Reliefs",
+  "description": "Allows the retrieval of foreign reliefs",
+  "type": "object",
+  "properties": {
+    "submittedOn": {
+      "description": "The date the foreign reliefs were added. It must be provided in the format YYYY-MM-DDThh:mm:ssZ",
+      "type": "string",
+      "example": "2019-04-04T01:01:01.000Z"
+    },
+    "foreignTaxCreditRelief": {
+      "description": "Relief on foreign tax paid to another country on overseas income.",
+      "type": "object",
+      "properties": {
+        "amount": {
+          "description": "The amount of Foreign Tax Credit Relief (FTCR). The value must be greater than 0 and up to 99999999999.99.",
+          "type": "number",
+          "example": "2000.99"
+        }
+      },
+      "required": [
+        "amount"
+      ],
+      "additionalProperties": false
+    },
+    "foreignIncomeTaxCreditRelief": {
+      "description": "Financial details about foreign income tax credit relief.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "countryCode": {
+            "description": "A three-letter code that represents a country name.  The value must be ISO 3166-1 alpha-3",
+            "type": "string",
+            "example": "FRA"
+          },
+          "foreignTaxPaid": {
+            "description": "The amount of foreign Tax Paid on foreign income tax credit relief. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+            "type": "number",
+            "example": "4526.94"
+          },
+          "taxableAmount": {
+            "description": "The amount of foreign Tax Paid on foreign income tax credit relief. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+            "type": "number",
+            "example": "2963.95"
+          },
+          "employmentLumpSum": {
+            "description": "A boolean indicating whether employment lump sum for foreign tax credit relief has been claimed.",
+            "type": "boolean",
+            "example": "false"
+          }
+        },
+        "required": [
+          "countryCode",
+          "employmentLumpSum",
+          "taxableAmount"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "foreignTaxForFtcrNotClaimed": {
+      "description": "Object that holds the key value for foreign tax for FTCR not claimed",
+      "type": "object",
+      "properties": {
+        "amount": {
+          "description": "The amount paid on foreign tax not claimed (FTRC). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "type": "number",
+          "example": "2000.99"
+        }
+      },
+      "required": [
+        "amount"
+      ],
+      "additionalProperties": false
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "/individuals/reliefs/foreign/TC663795B/2019-20"
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint",
+            "type": "string",
+            "enum": [
+              "GET",
+              "PUT",
+              "DELETE"
+            ]
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "type": "string",
+            "enum": [
+              "self",
+              "create-and-amend-reliefs-foreign",
+              "delete-reliefs-foreign"
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "submittedOn"
+  ],
+  "additionalProperties": false
+}

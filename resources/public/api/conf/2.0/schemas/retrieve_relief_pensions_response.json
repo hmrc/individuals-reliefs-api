@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Retrieve Pensions Reliefs",
+  "description": "Allows the amendments of pensions reliefs",
+  "type": "object",
+  "properties": {
+    "submittedOn": {
+      "type": "string",
+      "description": "An ISO-8601 compliant date-time representing when pensions reliefs was submitted on.",
+      "example": "2019-04-04T01:01:01.000Z"
+    },
+    "pensionReliefs": {
+      "type": "object",
+      "description": "Object that holds the key value for tax relief on pension contributions.",
+      "properties": {
+        "regularPensionContributions": {
+          "type": "number",
+          "description": "The amount of regular pension contributions.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "example": "1999.99"
+        },
+        "oneOffPensionContributionsPaid": {
+          "type": "number",
+          "description": "The amount of the one off pensions contribution.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "example": "1999.99"
+        },
+        "retirementAnnuityPayments": {
+          "type": "number",
+          "description": "The amount of retirement annuity received.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "example": "1999.99"
+        },
+        "paymentToEmployersSchemeNoTaxRelief": {
+          "type": "number",
+          "description": "The amount of payments to employers scheme.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "example": "1999.99"
+        },
+        "overseasPensionSchemeContributions": {
+          "type": "number",
+          "description": "The amount of overseas pension scheme contributions.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "example": "1999.99"
+        }
+      },
+      "additionalProperties": false
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "/individuals/reliefs/pensions/{nino}/{taxYear}"
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint.",
+            "type": "string",
+            "enum": [
+              "GET",
+              "PUT",
+              "DELETE"
+            ]
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
+            "type": "string",
+            "enum": [
+              "self",
+              "create-and-amend-reliefs-pensions",
+              "delete-reliefs-pensions"
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "submittedOn",
+    "pensionReliefs"
+  ],
+  "additionalProperties": false
+}
