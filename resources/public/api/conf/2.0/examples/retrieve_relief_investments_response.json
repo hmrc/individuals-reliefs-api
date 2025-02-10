@@ -1,0 +1,66 @@
+{
+  "submittedOn": "2019-04-04T01:01:01.000Z",
+  "vctSubscription":[
+    {
+      "uniqueInvestmentRef": "VCTREF",
+      "name": "VCT Fund X",
+      "dateOfInvestment": "2018-04-16",
+      "amountInvested": 23312.00,
+      "reliefClaimed": 1334.00
+    }
+  ],
+  "eisSubscription":[
+    {
+      "uniqueInvestmentRef": "XTAL",
+      "name": "EIS Fund X",
+      "knowledgeIntensive": true,
+      "dateOfInvestment": "2020-12-12",
+      "amountInvested": 23312.00,
+      "reliefClaimed": 43432.00
+    }
+  ],
+  "communityInvestment": [
+    {
+      "uniqueInvestmentRef": "CIREF",
+      "name": "CI X",
+      "dateOfInvestment": "2020-12-12",
+      "amountInvested": 6442.00,
+      "reliefClaimed": 2344.00
+    }
+  ],
+  "seedEnterpriseInvestment": [
+    {
+      "uniqueInvestmentRef": "1234121A",
+      "companyName": "Company Inc",
+      "dateOfInvestment": "2020-12-12",
+      "amountInvested": 123123.22,
+      "reliefClaimed": 3432.00
+    }
+  ],
+  "socialEnterpriseInvestment": [
+    {
+      "uniqueInvestmentRef": "1234121A",
+      "socialEnterpriseName": "SE Inc",
+      "dateOfInvestment": "2020-12-12",
+      "amountInvested": 123123.22,
+      "reliefClaimed": 3432.00
+    }
+  ],
+  "links":[
+    {
+      "href":"/individuals/reliefs/investment/TC663795B/2019-20",
+      "method":"GET",
+      "rel":"self"
+    },
+    {
+      "href":"/individuals/reliefs/investment/TC663795B/2019-20",
+      "method":"PUT",
+      "rel":"create-and-amend-reliefs-investments"
+    },
+    {
+      "href":"/individuals/reliefs/investment/TC663795B/2019-20",
+      "method":"DELETE",
+      "rel":"delete-reliefs-investments"
+    }
+  ]
+}
