@@ -20,7 +20,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
 import shared.controllers.validators.Validator
-import shared.routing.Version1
+import shared.routing.Version2
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
 import v2.deleteForeignReliefs.model.DeleteForeignReliefsRequestData
@@ -56,7 +56,7 @@ class DeleteForeignReliefsController @Inject() (val authService: EnrolmentsAuthS
           auditService = auditService,
           auditType = "DeleteForeignReliefs",
           transactionName = "delete-foreign-reliefs",
-          apiVersion = Version1,
+          apiVersion = Version2,
           params = Map("nino" -> nino, "taxYear" -> taxYear)
         ))
 

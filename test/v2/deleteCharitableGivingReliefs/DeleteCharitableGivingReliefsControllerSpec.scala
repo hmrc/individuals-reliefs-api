@@ -99,7 +99,7 @@ class DeleteCharitableGivingReliefsControllerSpec
         auditType = "DeleteCharitableGivingTaxRelief",
         transactionName = "delete-charitable-giving-tax-relief",
         detail = GenericAuditDetail(
-          versionNumber = "1.0",
+          versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),

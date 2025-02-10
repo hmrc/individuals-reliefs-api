@@ -210,7 +210,7 @@ class AmendOtherReliefsControllerSpec
         auditType = "CreateAmendOtherReliefs",
         transactionName = "create-amend-other-reliefs",
         detail = GenericAuditDetail(
-          versionNumber = "1.0",
+          versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),

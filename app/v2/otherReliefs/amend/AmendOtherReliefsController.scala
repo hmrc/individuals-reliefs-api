@@ -22,7 +22,7 @@ import shared.config.SharedAppConfig
 import shared.controllers._
 import shared.controllers.validators.Validator
 import shared.hateoas.HateoasFactory
-import shared.routing.Version1
+import shared.routing.Version2
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
 import v2.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
@@ -61,7 +61,7 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
           auditService,
           "CreateAmendOtherReliefs",
           "create-amend-other-reliefs",
-          Version1,
+          Version2,
           Map("nino" -> nino, "taxYear" -> taxYear),
           Some(request.body),
           includeResponse = true

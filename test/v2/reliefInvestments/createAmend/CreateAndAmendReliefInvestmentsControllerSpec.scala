@@ -123,7 +123,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
         auditType = "CreateAmendReliefsInvestment",
         transactionName = "create-amend-reliefs-investment",
         detail = GenericAuditDetail(
-          versionNumber = "1.0",
+          versionNumber = "2.0",
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),

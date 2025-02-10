@@ -21,7 +21,7 @@ import play.api.mvc.{Action, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
 import shared.hateoas.HateoasFactory
-import shared.routing.Version1
+import shared.routing.Version2
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
 import v2.pensionReliefs.createAmend.model.response.CreateAmendPensionsReliefsHateoasData
@@ -60,7 +60,7 @@ class CreateAmendPensionsReliefsController @Inject() (val authService: Enrolment
             auditService,
             "CreateAmendReliefPension",
             "create-amend-reliefs-pensions",
-            Version1,
+            Version2,
             Map("nino" -> nino, "taxYear" -> taxYear),
             Some(request.body),
             includeResponse = true
