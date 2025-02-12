@@ -17,7 +17,7 @@
 package v2.otherReliefs.amend
 
 import cats.implicits._
-import common.RuleSubmissionFailedError
+import common.{RuleOutsideAmendmentWindowError, RuleSubmissionFailedError}
 import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
@@ -38,6 +38,7 @@ class AmendOtherReliefsService @Inject()(connector: AmendOtherReliefsConnector) 
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID"        -> NinoFormatError,
       "INVALID_TAX_YEAR"                 -> TaxYearFormatError,
+      "OUTSIDE_AMENDMENT_WINDOW"         -> RuleOutsideAmendmentWindowError,
       "INVALID_CORRELATIONID"            -> InternalError,
       "BUSINESS_VALIDATION_RULE_FAILURE" -> RuleSubmissionFailedError,
       "SERVER_ERROR"                     -> InternalError,

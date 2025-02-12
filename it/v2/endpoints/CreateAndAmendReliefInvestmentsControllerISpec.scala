@@ -16,7 +16,7 @@
 
 package v2.endpoints
 
-import common.{DateOfInvestmentFormatError, NameFormatError, UniqueInvestmentRefFormatError}
+import common.{DateOfInvestmentFormatError, NameFormatError, RuleOutsideAmendmentWindowError, UniqueInvestmentRefFormatError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
@@ -529,6 +529,7 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, models.errors.InternalError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, models.errors.InternalError),
           (UNPROCESSABLE_ENTITY, "UNPROCESSABLE_ENTITY", INTERNAL_SERVER_ERROR, models.errors.InternalError),
+          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, models.errors.InternalError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, models.errors.InternalError)
         )

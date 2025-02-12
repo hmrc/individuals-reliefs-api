@@ -10,6 +10,7 @@ description: |
   |----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
   | DELETE                           | Simulates success response.                                                                                                                                 |
   | NOT_FOUND                        | Simulates the scenario where no data is found.                                                                                                              |
+  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.                                                             |
   | STATEFUL_DELETE                  | Performs a stateful delete. <br></br>This Gov-Test-Scenario is no longer available in this version. It has been replaced by the STATEFUL Gov-Test-Scenario. |
   | STATEFUL                         | Performs a stateful delete.                                                                                                                                 |
 
@@ -51,6 +52,8 @@ responses:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearNotSupported"
           RULE_TAX_YEAR_RANGE_INVALID:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid"
+          RULE_OUTSIDE_AMENDMENT_WINDOW:
+            $ref: "/common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow"
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 

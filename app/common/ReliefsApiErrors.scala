@@ -102,3 +102,10 @@ object RuleGiftsNonUkAmountWithoutNamesError
     message = "Non-UK gifts amount supplied without non-UK gifts charity names",
     httpStatus = BAD_REQUEST
   )
+
+object RuleOutsideAmendmentWindowError
+  extends MtdError(
+    code = "RULE_OUTSIDE_AMENDMENT_WINDOW",
+    message = "You are outside the amendment window",
+    httpStatus = BAD_REQUEST
+  )

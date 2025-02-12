@@ -16,6 +16,7 @@
 
 package v2.deleteCharitableGivingReliefs
 
+import common.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
@@ -56,6 +57,7 @@ class DeleteCharitableGivingTaxReliefsServiceSpec extends UnitSpec {
         ("INVALID_NINO", NinoFormatError),
         ("INVALID_TYPE", InternalError),
         ("INVALID_TAXYEAR", TaxYearFormatError),
+        ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError),
         ("INVALID_PAYLOAD", InternalError),
         ("NOT_FOUND_INCOME_SOURCE", NotFoundError),
         ("MISSING_CHARITIES_NAME_GIFT_AID", InternalError),
