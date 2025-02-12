@@ -51,7 +51,7 @@ responses:
           RULE_TAX_YEAR_RANGE_INVALID:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid"
           RULE_OUTSIDE_AMENDMENT_WINDOW:
-            $ref: "/common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow"
+            $ref: "./common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow"
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 

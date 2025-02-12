@@ -84,7 +84,7 @@ responses:
           FORMAT_NAME:
             $ref: "./common/errors.yaml#/components/examples/formatName"
           RULE_OUTSIDE_AMENDMENT_WINDOW:
-            $ref: "/common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow"
+            $ref: "./common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow"
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 

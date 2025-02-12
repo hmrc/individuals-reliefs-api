@@ -50,7 +50,7 @@ responses:
           RULE_TAX_YEAR_NOT_SUPPORTED:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearNotSupported"
           RULE_OUTSIDE_AMENDMENT_WINDOW:
-            $ref: "/common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow"
+            $ref: "./common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow"
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 

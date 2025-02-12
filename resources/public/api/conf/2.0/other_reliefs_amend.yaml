@@ -94,7 +94,7 @@ responses:
           RULE_SUBMISSION_FAILED:
             $ref: "./common/errors.yaml#/components/examples/ruleSubmissionFailed"
           RULE_OUTSIDE_AMENDMENT_WINDOW:
-            $ref: "/common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow"
+            $ref: "./common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow"
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 
