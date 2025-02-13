@@ -17,6 +17,7 @@
 package v2.deleteForeignReliefs
 
 import cats.implicits._
+import common.RuleOutsideAmendmentWindowError
 import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
@@ -36,6 +37,7 @@ class DeleteForeignReliefsService @Inject() (connector: DeleteForeignReliefsConn
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,
       "NO_DATA_FOUND"             -> NotFoundError,
       "INVALID_CORRELATIONID"     -> InternalError,
       "SERVER_ERROR"              -> InternalError,

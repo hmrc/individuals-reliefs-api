@@ -16,6 +16,7 @@
 
 package v2.pensionReliefs.createAmend
 
+import common.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
@@ -83,6 +84,7 @@ class CreateAmendPensionsReliefsServiceSpec extends UnitSpec {
       val errors = Seq(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,
         "INVALID_PAYLOAD"           -> InternalError,
         "SERVER_ERROR"              -> InternalError,
         "SERVICE_UNAVAILABLE"       -> InternalError

@@ -17,6 +17,7 @@
 package v2.reliefInvestments.delete
 
 import cats.implicits._
+import common.RuleOutsideAmendmentWindowError
 import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
@@ -37,6 +38,7 @@ class DeleteReliefInvestmentsService @Inject() (connector: DeleteReliefInvestmen
     val errors: Map[String, MtdError] = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "FORMAT_TAX_YEAR"           -> TaxYearFormatError,
+      "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,
       "NO_DATA_FOUND"             -> NotFoundError,
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError

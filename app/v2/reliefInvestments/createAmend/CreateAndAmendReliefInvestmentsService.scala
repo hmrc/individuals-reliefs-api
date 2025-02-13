@@ -17,6 +17,7 @@
 package v2.reliefInvestments.createAmend
 
 import cats.implicits._
+import common.RuleOutsideAmendmentWindowError
 import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
@@ -37,6 +38,7 @@ class CreateAndAmendReliefInvestmentsService @Inject()(connector: CreateAndAmend
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,
       "INVALID_PAYLOAD"           -> InternalError,
       "INVALID_CORRELATIONID"     -> InternalError,
       "UNPROCESSABLE_ENTITY"      -> InternalError,

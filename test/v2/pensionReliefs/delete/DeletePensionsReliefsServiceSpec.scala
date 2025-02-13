@@ -16,6 +16,7 @@
 
 package v2.pensionReliefs.delete
 
+import common.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
@@ -70,6 +71,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
       val errors = Seq(
         ("NOT_FOUND", NotFoundError),
         ("INVALID_TAX_YEAR", TaxYearFormatError),
+        ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError),
         ("SERVER_ERROR", InternalError),
         ("SERVICE_UNAVAILABLE", InternalError),
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)

@@ -17,6 +17,7 @@
 package v2.deleteCharitableGivingReliefs
 
 import cats.implicits._
+import common.RuleOutsideAmendmentWindowError
 import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
@@ -42,6 +43,7 @@ class DeleteCharitableGivingTaxReliefsService @Inject() (connector: DeleteCharit
       "INVALID_NINO"                      -> NinoFormatError,
       "INVALID_TYPE"                      -> InternalError,
       "INVALID_TAXYEAR"                   -> TaxYearFormatError,
+      "OUTSIDE_AMENDMENT_WINDOW"          -> RuleOutsideAmendmentWindowError,
       "INVALID_PAYLOAD"                   -> InternalError,
       "NOT_FOUND_INCOME_SOURCE"           -> NotFoundError,
       "MISSING_CHARITIES_NAME_GIFT_AID"   -> InternalError,
