@@ -16,6 +16,7 @@
 
 package v2.createAndAmendForeignReliefs
 
+import common.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
@@ -74,6 +75,7 @@ class CreateAndAmendForeignReliefsServiceSpec extends UnitSpec {
       val errors = List(
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,
         "INVALID_PAYLOAD"           -> InternalError,
         "INVALID_CORRELATIONID"     -> InternalError,
         "UNPROCESSABLE_ENTITY"      -> InternalError,

@@ -4,10 +4,11 @@ description: |
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Header Value (Gov-Test-Scenario) | Scenario                              |
-  |----------------------------------|---------------------------------------|
-  | N/A - DEFAULT                    | Simulate a success response.          |
-  | STATEFUL                         | Performs a stateful create or update. |
+  | Header Value (Gov-Test-Scenario) | Scenario                                                                                        |
+  |----------------------------------|-------------------------------------------------------------------------------------------------|
+  | N/A - DEFAULT                    | Simulate a success response.                                                                    |
+  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
+  | STATEFUL                         | Performs a stateful create or update.                                                           |
 
 tags:
   - Pensions Reliefs
@@ -70,6 +71,8 @@ responses:
             $ref: "./common/errors.yaml#/components/examples/ruleTaxYearNotSupported"
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
             $ref: "./common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody"
+          RULE_OUTSIDE_AMENDMENT_WINDOW:
+            $ref: "./common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow"
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.reliefInvestments.delete
+package v2.deleteForeignReliefs
 
 import common.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
@@ -23,34 +23,36 @@ import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.reliefInvestments.delete.def1.Def1_DeleteReliefInvestmentsRequestData
-import v2.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
+import v2.deleteForeignReliefs.model.Def1_DeleteForeignReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
+class DeleteForeignReliefsServiceSpec extends UnitSpec {
 
-  val validNino: String              = "AA123456A"
-  val validTaxYear: String           = "2019-20"
+  val nino: String    = "ZG903729C"
+  val taxYear: String = "2019-20"
+
   implicit val correlationId: String = "X-123"
 
-  val requestData: DeleteReliefInvestmentsRequestData = Def1_DeleteReliefInvestmentsRequestData(Nino(validNino), TaxYear.fromMtd(validTaxYear))
+  val requestData: Def1_DeleteForeignReliefsRequestData = Def1_DeleteForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test extends MockDeleteReliefInvestmentsConnector {
+  trait Test extends MockDeleteForeignReliefsConnector {
+
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new DeleteReliefInvestmentsService(
-      connector = mockConnector
-    )
+    val service = new DeleteForeignReliefsService(connector = mockDeleteForeignReliefsConnector)
 
   }
 
   "service" when {
+
     "a service call is successful" should {
+
       "return a mapped result" in new Test {
-        MockDeleteReliefInvestmentsConnector
+
+        MockDeleteForeignReliefsConnector
           .delete(requestData)
           .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
 
@@ -59,10 +61,11 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
     }
 
     "a service call is unsuccessful" should {
+
       def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
         s"return ${error.code} error when $downstreamErrorCode error is returned from the connector" in new Test {
 
-          MockDeleteReliefInvestmentsConnector
+          MockDeleteForeignReliefsConnector
             .delete(requestData)
             .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
@@ -70,17 +73,19 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
         }
 
       val errors = Seq(
-        ("NO_DATA_FOUND", NotFoundError),
-        ("FORMAT_TAX_YEAR", TaxYearFormatError),
-        ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError),
-        ("SERVER_ERROR", InternalError),
-        ("SERVICE_UNAVAILABLE", InternalError),
-        ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError)
+        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+        "NO_DATA_FOUND"             -> NotFoundError,
+        "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,
+        "SERVER_ERROR"              -> InternalError,
+        "SERVICE_UNAVAILABLE"       -> InternalError
+
+
       )
 
       val extraTysErrors = Seq(
-        ("INVALID_CORRELATION_ID", InternalError),
-        ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
+        "INVALID_CORRELATION_ID" -> InternalError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
