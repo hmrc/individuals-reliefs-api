@@ -146,30 +146,4 @@ object RetrieveReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  private def hateoasLinks(taxYear: String) = Json.parse(
-    s"""
-       |{
-       |  "links": [
-       |    {
-       |      "href": "/individuals/reliefs/investment/AA123456A/$taxYear",
-       |      "method": "GET",
-       |      "rel": "self"
-       |    },
-       |    {
-       |      "href": "/individuals/reliefs/investment/AA123456A/$taxYear",
-       |      "method": "PUT",
-       |      "rel": "create-and-amend-reliefs-investments"
-       |    },
-       |    {
-       |      "href": "/individuals/reliefs/investment/AA123456A/$taxYear",
-       |      "method": "DELETE",
-       |      "rel": "delete-reliefs-investments"
-       |    }
-       |  ]
-       |}
-       |""".stripMargin
-  )
-
-  def responseJsonWithHateoasLinks(taxYear: String): JsValue = responseJson.as[JsObject] ++ hateoasLinks(taxYear).as[JsObject]
-
 }

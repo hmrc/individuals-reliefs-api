@@ -21,13 +21,10 @@ import play.api.mvc.{Action, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
 import shared.controllers.validators.Validator
-import shared.hateoas.HateoasFactory
 import shared.routing.Version2
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
 import v2.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
-import v2.otherReliefs.amend.model.response.AmendOtherReliefsHateoasData
-import v2.otherReliefs.amend.model.response.AmendOtherReliefsResponse.LinksFactory
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -38,7 +35,6 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
                                              validatorFactory: AmendOtherReliefsValidatorFactory,
                                              service: AmendOtherReliefsService,
                                              auditService: AuditService,
-                                             hateoasFactory: HateoasFactory,
                                              cc: ControllerComponents,
                                              val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -66,7 +62,6 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
           Some(request.body),
           includeResponse = true
         ))
-        .withHateoasResult(hateoasFactory)(AmendOtherReliefsHateoasData(nino, taxYear))
 
       requestHandler.handleRequest()
     }

@@ -31,7 +31,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
 
   "Calling the amend endpoint" should {
 
-    "return a 200 status code" when {
+    "return a 204 status code" when {
 
       "any valid request is made" in new NonTysTest {
 
@@ -43,8 +43,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
         }
 
         val response: WSResponse = await(request().put(requestJson))
-        response.status shouldBe OK
-        response.json shouldBe responseBody
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
 
@@ -58,8 +57,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
         }
 
         val response: WSResponse = await(request().put(requestJson))
-        response.status shouldBe OK
-        response.json shouldBe responseBody
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
 
@@ -223,27 +221,6 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
                                               |}
                                               |""".stripMargin)
 
-    val responseBody: JsValue = Json.parse(s"""
-                                              |{
-                                              |  "links": [
-                                              |    {
-                                              |      "href": "/individuals/reliefs/charitable-giving/$nino/$mtdTaxYear",
-                                              |      "method": "GET",
-                                              |      "rel": "self"
-                                              |    },
-                                              |    {
-                                              |      "href": "/individuals/reliefs/charitable-giving/$nino/$mtdTaxYear",
-                                              |      "method": "PUT",
-                                              |      "rel": "create-and-amend-charitable-giving-tax-relief"
-                                              |    },
-                                              |    {
-                                              |      "href": "/individuals/reliefs/charitable-giving/$nino/$mtdTaxYear",
-                                              |      "method": "DELETE",
-                                              |      "rel": "delete-charitable-giving-tax-relief"
-                                              |    }
-                                              |  ]
-                                              |}
-                                              |""".stripMargin)
 
     def uri: String = s"/charitable-giving/$nino/$mtdTaxYear"
 

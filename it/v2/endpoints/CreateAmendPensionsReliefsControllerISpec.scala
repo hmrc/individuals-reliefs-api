@@ -64,28 +64,6 @@ class CreateAmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
          |""".stripMargin
     )
 
-    val responseBody = Json.parse(s"""
-         |{
-         |  "links": [
-         |    {
-         |      "href": "/individuals/reliefs/pensions/$nino/$mtdTaxYear",
-         |      "method": "GET",
-         |      "rel": "self"
-         |    },
-         |    {
-         |      "href": "/individuals/reliefs/pensions/$nino/$mtdTaxYear",
-         |      "method": "PUT",
-         |      "rel": "create-and-amend-reliefs-pensions"
-         |    },
-         |    {
-         |      "href": "/individuals/reliefs/pensions/$nino/$mtdTaxYear",
-         |      "method": "DELETE",
-         |      "rel": "delete-reliefs-pensions"
-         |    }
-         |  ]
-         |}
-         |""".stripMargin)
-
     def uri: String = s"/pensions/$nino/$mtdTaxYear"
 
     def request(): WSRequest = {
@@ -109,7 +87,7 @@ class CreateAmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
   "Calling the amend endpoint" should {
 
-    "return a 200 status code" when {
+    "return a 204 status code" when {
 
       "any valid request is made" in new NonTysTest {
 
@@ -121,8 +99,7 @@ class CreateAmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe OK
-        response.json shouldBe responseBody
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
 
@@ -136,8 +113,7 @@ class CreateAmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe OK
-        response.json shouldBe responseBody
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
     }

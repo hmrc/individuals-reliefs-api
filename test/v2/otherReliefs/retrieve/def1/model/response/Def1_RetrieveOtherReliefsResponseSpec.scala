@@ -18,11 +18,9 @@ package v2.otherReliefs.retrieve.def1.model.response
 
 import play.api.libs.json.Json
 import shared.config.MockSharedAppConfig
-import shared.hateoas.Link
-import shared.hateoas.Method._
 import shared.models.domain.Timestamp
 import shared.utils.UnitSpec
-import v2.otherReliefs.retrieve.model.response.{RetrieveOtherReliefsHateoasData, RetrieveOtherReliefsResponse}
+import v2.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 
 class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
@@ -107,21 +105,6 @@ class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockSharedAppC
       "return valid JSON" in {
         Json.toJson(retrieveOtherReliefsBody) shouldBe json
       }
-    }
-  }
-
-  "LinksFactory" should {
-    "return the correct links" in {
-      val nino    = "mynino"
-      val taxYear = "mytaxyear"
-
-      MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      RetrieveOtherReliefsResponse.LinksFactory.links(mockSharedAppConfig, RetrieveOtherReliefsHateoasData(nino, taxYear)) shouldBe
-        Seq(
-          Link(s"/my/context/other/$nino/$taxYear", GET, "self"),
-          Link(s"/my/context/other/$nino/$taxYear", PUT, "create-and-amend-reliefs-other"),
-          Link(s"/my/context/other/$nino/$taxYear", DELETE, "delete-reliefs-other")
-        )
     }
   }
 

@@ -33,7 +33,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
   "Calling the amend endpoint" should {
 
-    "return a 200 status code" when {
+    "return a 204 status code" when {
 
       "any valid request is made" in new NonTysTest {
 
@@ -42,8 +42,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe OK
-        response.json shouldBe responseBody
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
 
@@ -53,8 +52,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe OK
-        response.json shouldBe responseBody
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
     }
@@ -192,29 +190,6 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |        "reason": "message"
          |      }
     """.stripMargin
-
-    protected val responseBody: JsValue = Json.parse(s"""
-         |{
-         |   "links":[
-         |      {
-         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-         |         "method":"PUT",
-         |         "rel":"create-and-amend-reliefs-other"
-         |      },
-         |      {
-         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      },
-         |      {
-         |         "href":"/individuals/reliefs/other/$nino/$taxYear",
-         |         "method":"DELETE",
-         |         "rel":"delete-reliefs-other"
-         |
-         |      }
-         |   ]
-         |}""".stripMargin)
-
   }
 
   private trait NonTysTest extends Test {

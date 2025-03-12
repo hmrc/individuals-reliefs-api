@@ -25,13 +25,13 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v2.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, responseWithHateoasLinks}
+import v2.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.requestBodyJson
 
 class CreateAndAmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
 
   "Calling the create and amend endpoint" should {
 
-    "return a 200 status code" when {
+    "return a 204 status code" when {
 
       "any valid request is made" in new NonTysTest {
 
@@ -40,8 +40,7 @@ class CreateAndAmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe OK
-        response.json shouldBe responseWithHateoasLinks(mtdTaxYear)
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
 
@@ -52,8 +51,7 @@ class CreateAndAmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe OK
-        response.json shouldBe responseWithHateoasLinks(mtdTaxYear)
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
     }

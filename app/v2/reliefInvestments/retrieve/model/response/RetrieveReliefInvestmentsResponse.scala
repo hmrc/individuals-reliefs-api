@@ -16,35 +16,16 @@
 
 package v2.reliefInvestments.retrieve.model.response
 
-import hateoas.HateoasLinks
 import play.api.libs.json.OWrites
-import shared.config.SharedAppConfig
-import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import shared.utils.JsonWritesUtil.writesFrom
 import v2.reliefInvestments.retrieve.def1.model.response.Def1_RetrieveReliefInvestmentsResponse
 
 trait RetrieveReliefInvestmentsResponse
-
-object RetrieveReliefInvestmentsResponse extends HateoasLinks {
+object RetrieveReliefInvestmentsResponse {
 
   implicit val writes: OWrites[RetrieveReliefInvestmentsResponse] = writesFrom { case def1: Def1_RetrieveReliefInvestmentsResponse =>
     implicitly[OWrites[Def1_RetrieveReliefInvestmentsResponse]].writes(def1)
   }
-
-  implicit object LinksFactory extends HateoasLinksFactory[RetrieveReliefInvestmentsResponse, RetrieveReliefInvestmentsHateoasData] {
-
-    override def links(appConfig: SharedAppConfig, data: RetrieveReliefInvestmentsHateoasData): Seq[Link] = {
-      import data._
-      Seq(
-        retrieveReliefInvestments(appConfig, nino, taxYear),
-        createAndAmendReliefInvestments(appConfig, nino, taxYear),
-        deleteReliefInvestments(appConfig, nino, taxYear)
-      )
-    }
-
-  }
-
 }
 
-case class RetrieveReliefInvestmentsHateoasData(nino: String, taxYear: String) extends HateoasData
 

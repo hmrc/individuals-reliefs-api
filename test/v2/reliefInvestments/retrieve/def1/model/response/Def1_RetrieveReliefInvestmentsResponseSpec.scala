@@ -18,11 +18,8 @@ package v2.reliefInvestments.retrieve.def1.model.response
 
 import play.api.libs.json.Json
 import shared.config.MockSharedAppConfig
-import shared.hateoas.Link
-import shared.hateoas.Method._
 import shared.utils.UnitSpec
 import v2.fixtures.RetrieveReliefInvestmentsFixtures.{responseJson, responseModel}
-import v2.reliefInvestments.retrieve.model.response._
 
 class Def1_RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
@@ -39,21 +36,6 @@ class Def1_RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockShare
       "return valid json" in {
         Json.toJson(responseModel) shouldBe responseJson
       }
-    }
-  }
-
-  "LinksFactory" should {
-    "return the correct links" in {
-      val nino    = "mynino"
-      val taxYear = "mytaxyear"
-
-      MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      RetrieveReliefInvestmentsResponse.LinksFactory.links(mockSharedAppConfig, RetrieveReliefInvestmentsHateoasData(nino, taxYear)) shouldBe
-        Seq(
-          Link(s"/my/context/investment/$nino/$taxYear", GET, "self"),
-          Link(s"/my/context/investment/$nino/$taxYear", PUT, "create-and-amend-reliefs-investments"),
-          Link(s"/my/context/investment/$nino/$taxYear", DELETE, "delete-reliefs-investments")
-        )
     }
   }
 

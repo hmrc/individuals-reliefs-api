@@ -25,7 +25,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v2.retrieveCharitableGivingReliefs.def1.model.request.RetrieveCharitableGivingReliefsFixture
+import v2.charitableGiving.retrieve.def1.model.request.RetrieveCharitableGivingReliefsFixture
 
 class RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec with RetrieveCharitableGivingReliefsFixture {
 
@@ -37,7 +37,7 @@ class RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec
 
     val desResponse: JsValue = charitableGivingReliefsDesResponseDownstreamJson
     val ifsResponse: JsValue = charitableGivingReliefsIfsResponseDownstreamJson
-    val mtdResponse: JsValue = charitableGivingReliefsResponseMtdJsonWithHateoas(nino, taxYear)
+    val mtdResponse: JsValue = charitableGivingReliefsResponseMtdJson
 
     def uri: String = s"/charitable-giving/$nino/$taxYear"
     def downstreamUri: String

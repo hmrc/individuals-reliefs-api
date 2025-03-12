@@ -18,11 +18,9 @@ package v2.otherReliefs.retrieve
 
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.SharedAppConfig
-import shared.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import shared.hateoas.HateoasFactory
+import shared.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler, ResultCreator}
 import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
-import v2.otherReliefs.retrieve.model.response.RetrieveOtherReliefsHateoasData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -32,7 +30,6 @@ class RetrieveOtherReliefsController @Inject() (val authService: EnrolmentsAuthS
                                                 val lookupService: MtdIdLookupService,
                                                 validatorFactory: RetrieveOtherReliefsValidatorFactory,
                                                 service: RetrieveOtherReliefsService,
-                                                hateoasFactory: HateoasFactory,
                                                 cc: ControllerComponents,
                                                 val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -51,7 +48,7 @@ class RetrieveOtherReliefsController @Inject() (val authService: EnrolmentsAuthS
       val requestHandler = RequestHandler
         .withValidator(validator)
         .withService(service.retrieve)
-        .withHateoasResult(hateoasFactory)(RetrieveOtherReliefsHateoasData(nino, taxYear))
+        .withResultCreator(ResultCreator.plainJson())
 
       requestHandler.handleRequest()
 

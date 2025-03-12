@@ -16,34 +16,16 @@
 
 package v2.pensionReliefs.retrieve.model.response
 
-import hateoas.HateoasLinks
 import play.api.libs.json.OWrites
-import shared.config.SharedAppConfig
-import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import shared.utils.JsonWritesUtil.writesFrom
 import v2.pensionReliefs.retrieve.def1.model.response.Def1_RetrievePensionsReliefsResponse
 
 trait RetrievePensionsReliefsResponse
 
-object RetrievePensionsReliefsResponse extends HateoasLinks {
+object RetrievePensionsReliefsResponse {
 
-  implicit val writes: OWrites[RetrievePensionsReliefsResponse] = writesFrom { case def1: Def1_RetrievePensionsReliefsResponse =>
-    implicitly[OWrites[Def1_RetrievePensionsReliefsResponse]].writes(def1)
-  }
-
-  implicit object LinksFactory extends HateoasLinksFactory[RetrievePensionsReliefsResponse, RetrievePensionsReliefsHateoasData] {
-
-    override def links(appConfig: SharedAppConfig, data: RetrievePensionsReliefsHateoasData): Seq[Link] = {
-      import data._
-      Seq(
-        amendPensionsReliefs(appConfig, nino, taxYear),
-        retrievePensionsReliefs(appConfig, nino, taxYear),
-        deletePensionsReliefs(appConfig, nino, taxYear)
-      )
-    }
-
+  implicit val writes: OWrites[RetrievePensionsReliefsResponse] = writesFrom {
+    case def1: Def1_RetrievePensionsReliefsResponse => implicitly[OWrites[Def1_RetrievePensionsReliefsResponse]].writes(def1)
   }
 
 }
-
-case class RetrievePensionsReliefsHateoasData(nino: String, taxYear: String) extends HateoasData

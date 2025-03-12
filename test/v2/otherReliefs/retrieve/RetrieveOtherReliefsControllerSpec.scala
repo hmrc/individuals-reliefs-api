@@ -21,15 +21,12 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.hateoas.Method._
-import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.domain.{TaxYear, Timestamp}
 import shared.models.errors
 import shared.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
 import shared.models.outcomes.ResponseWrapper
 import v2.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
 import v2.otherReliefs.retrieve.def1.model.response._
-import v2.otherReliefs.retrieve.model.response.RetrieveOtherReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,13 +36,10 @@ class RetrieveOtherReliefsControllerSpec
     with ControllerTestRunner
     with MockRetrieveOtherReliefsService
     with MockRetrieveOtherReliefsValidatorFactory
-    with MockHateoasFactory
     with MockSharedAppConfig {
 
   private val taxYear     = "2019-20"
   private val requestData = Def1_RetrieveOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
-
-  private val testHateoasLink = Link(href = s"individuals/reliefs/other/$validNino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = Def1_RetrieveOtherReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),
@@ -111,13 +105,6 @@ class RetrieveOtherReliefsControllerSpec
          |         "lenderName":"Maurice",
          |         "reliefClaimed":763
          |      }
-         |   ],
-         |   "links":[
-         |      {
-         |         "href":"individuals/reliefs/other/$validNino/2019-20",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      }
          |   ]
          |}
         """.stripMargin
@@ -132,10 +119,6 @@ class RetrieveOtherReliefsControllerSpec
         MockRetrieveReliefService
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
-
-        MockHateoasFactory
-          .wrap(responseBody, RetrieveOtherReliefsHateoasData(validNino, taxYear))
-          .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseJson))
       }
@@ -167,7 +150,6 @@ class RetrieveOtherReliefsControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveOtherReliefsValidatorFactory,
       service = mockService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )

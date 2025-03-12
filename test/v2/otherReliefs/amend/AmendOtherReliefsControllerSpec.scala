@@ -22,15 +22,12 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.hateoas.Method._
-import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.TaxYear
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
 import v2.otherReliefs.amend.def1.model.request._
-import v2.otherReliefs.amend.model.response.AmendOtherReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,17 +37,10 @@ class AmendOtherReliefsControllerSpec
     with ControllerTestRunner
     with MockAmendOtherReliefsService
     with MockAmendOtherReliefsValidatorFactory
-    with MockHateoasFactory
     with MockSharedAppConfig
     with MockAuditService {
 
   private val taxYear = "2019-20"
-
-  private val testHateoasLinks = List(
-    Link(href = s"/individuals/reliefs/other/$validNino/$taxYear", method = PUT, rel = "amend-reliefs-other"),
-    Link(href = s"/individuals/reliefs/other/$validNino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/other/$validNino/$taxYear", method = DELETE, rel = "delete-reliefs-other")
-  )
 
   private val requestJson = Json.parse("""
                                          |{
@@ -117,30 +107,8 @@ class AmendOtherReliefsControllerSpec
 
   private val requestData = Def1_AmendOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBody)
 
-  val hateoasResponse: JsValue = Json.parse("""
-                                              |{
-                                              |   "links":[
-                                              |      {
-                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-                                              |         "method":"PUT",
-                                              |         "rel":"amend-reliefs-other"
-                                              |      },
-                                              |      {
-                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-                                              |         "method":"GET",
-                                              |         "rel":"self"
-                                              |      },
-                                              |      {
-                                              |         "href":"/individuals/reliefs/other/AA123456A/2019-20",
-                                              |         "method":"DELETE",
-                                              |         "rel":"delete-reliefs-other"
-                                              |      }
-                                              |   ]
-                                              |}
-                                              |""".stripMargin)
-
   "handleRequest" should {
-    "return a successful response with status 200 (OK)" when {
+    "return a successful response with status 204 (No Content)" when {
       "the request received is valid" in new Test {
 
         willUseValidator(returningSuccess(requestData))
@@ -149,15 +117,11 @@ class AmendOtherReliefsControllerSpec
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), AmendOtherReliefsHateoasData(validNino, taxYear))
-          .returns(HateoasWrapper((), testHateoasLinks))
-
         runOkTestWithAudit(
-          expectedStatus = OK,
+          expectedStatus = NO_CONTENT,
           maybeAuditRequestBody = Some(requestJson),
-          maybeExpectedResponseBody = Some(hateoasResponse),
-          maybeAuditResponseBody = Some(hateoasResponse)
+          maybeExpectedResponseBody = None,
+          maybeAuditResponseBody = None
         )
       }
     }
@@ -191,7 +155,6 @@ class AmendOtherReliefsControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockAmendOtherReliefsValidatorFactory,
       service = mockService,
-      hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator

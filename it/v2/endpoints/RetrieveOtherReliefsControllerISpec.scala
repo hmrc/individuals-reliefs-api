@@ -76,23 +76,6 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |            "lenderName": "Peters",
          |            "reliefClaimed": 2000.99
          |        }
-         |    ],
-         |    "links":[
-         |        {
-         |            "href":"/individuals/reliefs/other/$nino/$taxYear",
-         |            "method":"GET",
-         |            "rel":"self"
-         |        },
-         |        {
-         |            "href":"/individuals/reliefs/other/$nino/$taxYear",
-         |            "method":"PUT",
-         |            "rel":"create-and-amend-reliefs-other"
-         |        },
-         |        {
-         |            "href":"/individuals/reliefs/other/$nino/$taxYear",
-         |            "method":"DELETE",
-         |            "rel":"delete-reliefs-other"
-         |        }
          |    ]
          |}
          |""".stripMargin

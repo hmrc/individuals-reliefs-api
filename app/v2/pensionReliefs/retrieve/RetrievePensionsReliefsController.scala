@@ -19,10 +19,8 @@ package v2.pensionReliefs.retrieve
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
-import shared.hateoas.HateoasFactory
 import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
-import v2.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsHateoasData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -32,7 +30,6 @@ class RetrievePensionsReliefsController @Inject() (val authService: EnrolmentsAu
                                                    val lookupService: MtdIdLookupService,
                                                    validatorFactory: RetrievePensionsReliefsValidatorFactory,
                                                    service: RetrievePensionsReliefsService,
-                                                   hateoasFactory: HateoasFactory,
                                                    cc: ControllerComponents,
                                                    val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -51,7 +48,7 @@ class RetrievePensionsReliefsController @Inject() (val authService: EnrolmentsAu
       val requestHandler = RequestHandler
         .withValidator(validator)
         .withService(service.retrieve)
-        .withHateoasResult(hateoasFactory)(RetrievePensionsReliefsHateoasData(nino, taxYear))
+        .withResultCreator(ResultCreator.plainJson())
 
       requestHandler.handleRequest()
     }

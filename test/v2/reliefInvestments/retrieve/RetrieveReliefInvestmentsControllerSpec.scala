@@ -21,14 +21,11 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.hateoas.Method._
-import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.domain.TaxYear
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import v2.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v2.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
-import v2.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,12 +35,10 @@ class RetrieveReliefInvestmentsControllerSpec
     with ControllerTestRunner
     with MockRetrieveReliefInvestmentsService
     with MockRetrieveReliefInvestmentsValidatorFactory
-    with MockHateoasFactory
     with MockSharedAppConfig {
 
   private val taxYear         = "2019-20"
   private val requestData     = Def1_RetrieveReliefInvestmentsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
-  private val testHateoasLink = Link(href = s"individuals/reliefs/investment/$validNino/$taxYear", method = GET, rel = "self")
 
   val mtdResponseJson: JsValue = Json
     .parse(
@@ -95,13 +90,6 @@ class RetrieveReliefInvestmentsControllerSpec
          |         "amountInvested":123123.22,
          |         "reliefClaimed":3432
          |      }
-         |   ],
-         |   "links":[
-         |      {
-         |         "href":"individuals/reliefs/investment/AA123456A/2019-20",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      }
          |   ]
          |}
         """.stripMargin
@@ -115,10 +103,6 @@ class RetrieveReliefInvestmentsControllerSpec
         MockRetrieveReliefService
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseModel))))
-
-        MockHateoasFactory
-          .wrap(responseModel, RetrieveReliefInvestmentsHateoasData(validNino, taxYear))
-          .returns(HateoasWrapper(responseModel, Seq(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseJson))
       }
@@ -149,7 +133,6 @@ class RetrieveReliefInvestmentsControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveReliefInvestmentsValidatorFactory,
       service = mockService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )

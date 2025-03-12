@@ -168,24 +168,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
          |      "retirementAnnuityPayments":1999.99,
          |      "paymentToEmployersSchemeNoTaxRelief":1999.99,
          |      "overseasPensionSchemeContributions":1999.99
-         |   },
-         |  "links":[
-         |      {
-         |         "href":"/individuals/reliefs/pensions/AA123456A/$taxYear",
-         |         "method":"PUT",
-         |         "rel":"create-and-amend-reliefs-pensions"
-         |      },
-         |      {
-         |         "href":"/individuals/reliefs/pensions/AA123456A/$taxYear",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      },
-         |      {
-         |         "href":"/individuals/reliefs/pensions/AA123456A/$taxYear",
-         |         "method":"DELETE",
-         |         "rel":"delete-reliefs-pensions"
-         |      }
-         |   ]
+         |   }
          |}
          |""".stripMargin)
 
