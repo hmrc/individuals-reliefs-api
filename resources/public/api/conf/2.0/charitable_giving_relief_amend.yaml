@@ -40,20 +40,11 @@ requestBody:
             $ref: "./examples/amend_charitable_giving_request.json"
 
 responses:
-  "200":
-    description: Success
+  "204":
+    description: Success(No Content)
     headers:
       X-CorrelationId:
         $ref: "./common/headers.yaml#/components/parameters/correlationId"
-    content:
-      application/json:
-        schema:
-          $ref: "./schemas/amend_charitable_giving_response.json"
-        examples:
-          example-response:
-            description: Example Response
-            value:
-              $ref: "./examples/amend_charitable_giving_response.json"
 
   "400":
     description: Bad request

@@ -40,22 +40,5 @@
       "lenderName": "Maurice",
       "reliefClaimed": 763.00
     }
-  ],
-  "links":[
-    {
-      "href":"/individuals/reliefs/other/TC663795B/2017-18",
-      "method":"PUT",
-      "rel":"create-and-amend-reliefs-other"
-    },
-    {
-      "href":"/individuals/reliefs/other/TC663795B/2017-18",
-      "method":"GET",
-      "rel":"self"
-    },
-    {
-      "href":"/individuals/reliefs/other/TC663795B/2017-18",
-      "method":"DELETE",
-      "rel":"delete-reliefs-other"
-    }
   ]
 }

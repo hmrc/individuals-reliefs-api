@@ -32,15 +32,6 @@ responses:
     headers:
       X-CorrelationId:
         $ref: "./common/headers.yaml#/components/parameters/correlationId"
-    content:
-      application/json:
-        schema:
-          $ref: "./schemas/retrieve_charitable_giving_response.json"
-        examples:
-          example-response:
-            description: Example response
-            value:
-              $ref: "./examples/retrieve_charitable_giving_response.json"
 
   "400":
     description: Bad request
