@@ -21,17 +21,14 @@ import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.hateoas.Method._
-import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.TaxYear
 import shared.models.errors
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
-import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures.{hateoasResponse, requestBodyJson, requestBodyModel}
+import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures.{requestBodyJson, requestBodyModel}
 import v2.reliefInvestments.createAmend.def1.model.request.Def1_CreateAndAmendReliefInvestmentsRequestData
-import v2.reliefInvestments.createAmend.model.response.CreateAndAmendReliefInvestmentsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,22 +38,15 @@ class CreateAndAmendReliefInvestmentsControllerSpec
     with ControllerTestRunner
     with MockCreateAndAmendReliefInvestmentsService
     with MockCreateAndAmendReliefInvestmentsValidatorFactory
-    with MockHateoasFactory
     with MockAuditService
     with MockSharedAppConfig {
 
   private val taxYear = "2019-20"
 
-  private val testHateoasLinks = List(
-    Link(href = s"/individuals/reliefs/investment/$validNino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/investment/$validNino/$taxYear", method = PUT, rel = "create-and-amend-reliefs-investments"),
-    Link(href = s"/individuals/reliefs/investment/$validNino/$taxYear", method = DELETE, rel = "delete-reliefs-investments")
-  )
-
   private val requestData = Def1_CreateAndAmendReliefInvestmentsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
-    "return a successful response with status 200 (OK)" when {
+    "return a successful response with status 204 (No Content)" when {
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestData))
 
@@ -64,15 +54,11 @@ class CreateAndAmendReliefInvestmentsControllerSpec
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), CreateAndAmendReliefInvestmentsHateoasData(validNino, taxYear))
-          .returns(HateoasWrapper((), testHateoasLinks))
-
         runOkTestWithAudit(
-          expectedStatus = OK,
+          expectedStatus = NO_CONTENT,
           maybeAuditRequestBody = Some(requestBodyJson),
-          maybeExpectedResponseBody = Some(hateoasResponse()),
-          maybeAuditResponseBody = Some(hateoasResponse())
+          maybeExpectedResponseBody = None,
+          maybeAuditResponseBody = None
         )
       }
     }
@@ -105,7 +91,6 @@ class CreateAndAmendReliefInvestmentsControllerSpec
       validatorFactory = mockCreateAndAmendReliefInvestmentsValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )

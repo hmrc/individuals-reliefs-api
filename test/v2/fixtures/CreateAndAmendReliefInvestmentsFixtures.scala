@@ -143,28 +143,4 @@ object CreateAndAmendReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  def hateoasResponse(taxYear: String = "2019-20"): JsValue = Json.parse(
-    s"""
-      |{
-      |  "links": [
-      |    {
-      |      "href": "/individuals/reliefs/investment/AA123456A/$taxYear",
-      |      "method": "GET",
-      |      "rel": "self"
-      |    },
-      |    {
-      |      "href": "/individuals/reliefs/investment/AA123456A/$taxYear",
-      |      "method": "PUT",
-      |      "rel": "create-and-amend-reliefs-investments"
-      |    },
-      |    {
-      |      "href": "/individuals/reliefs/investment/AA123456A/$taxYear",
-      |      "method": "DELETE",
-      |      "rel": "delete-reliefs-investments"
-      |    }
-      |  ]
-      |}
-      |""".stripMargin
-  )
-
 }

@@ -24,7 +24,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v2.fixtures.RetrieveReliefInvestmentsFixtures.{responseJson, responseJsonWithHateoasLinks}
+import v2.fixtures.RetrieveReliefInvestmentsFixtures.responseJson
 
 class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
@@ -38,7 +38,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().get())
         response.status shouldBe OK
-        response.json shouldBe responseJsonWithHateoasLinks(mtdTaxYear)
+        response.json shouldBe responseJson
         response.header("X-CorrelationId") should not be empty
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -51,7 +51,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().get())
         response.status shouldBe OK
-        response.json shouldBe responseJsonWithHateoasLinks(mtdTaxYear)
+        response.json shouldBe responseJson
         response.header("X-CorrelationId") should not be empty
         response.header("Content-Type") shouldBe Some("application/json")
       }

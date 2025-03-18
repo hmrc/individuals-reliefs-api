@@ -31,7 +31,7 @@ import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
   "Calling the amend endpoint" should {
-    "return a 200 status code" when {
+    "return a 204 status code" when {
       "any valid request is made" in new NonTysTest {
 
         override def setupStubs(): Unit = {
@@ -39,8 +39,7 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe OK
-        response.json shouldBe hateoasResponse(mtdTaxYear)
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
 
@@ -51,8 +50,7 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe OK
-        response.json shouldBe hateoasResponse(mtdTaxYear)
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
     }

@@ -21,14 +21,11 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.hateoas.Method._
-import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.domain.{TaxYear, Timestamp}
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import v2.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v2.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
-import v2.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,13 +35,10 @@ class RetrievePensionsReliefsControllerSpec
     with ControllerTestRunner
     with MockRetrievePensionsReliefsService
     with MockRetrievePensionsReliefsValidatorFactory
-    with MockHateoasFactory
     with MockSharedAppConfig {
 
   private val taxYear     = "2019-20"
   private val requestData = Def1_RetrievePensionsReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
-
-  private val testHateoasLink = Link(href = s"individuals/reliefs/pensions/$validNino/$taxYear", method = GET, rel = "self")
 
   private val responseBody = Def1_RetrievePensionsReliefsResponse(
     Timestamp("2019-04-04T01:01:01.000Z"),
@@ -68,14 +62,7 @@ class RetrievePensionsReliefsControllerSpec
          |      "retirementAnnuityPayments":1999.99,
          |      "paymentToEmployersSchemeNoTaxRelief":1999.99,
          |      "overseasPensionSchemeContributions":1999.99
-         |   },
-         |   "links":[
-         |      {
-         |         "href":"individuals/reliefs/pensions/$validNino/2019-20",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      }
-         |   ]
+         |   }
          |}
         """.stripMargin
     )
@@ -88,10 +75,6 @@ class RetrievePensionsReliefsControllerSpec
         MockRetrievePensionsReliefsService
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
-
-        MockHateoasFactory
-          .wrap(responseBody, RetrievePensionsReliefsHateoasData(validNino, taxYear))
-          .returns(HateoasWrapper(responseBody, Seq(testHateoasLink)))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(mtdResponseJson))
       }
@@ -122,7 +105,6 @@ class RetrievePensionsReliefsControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrievePensionsReliefsValidatorFactory,
       service = mockService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )

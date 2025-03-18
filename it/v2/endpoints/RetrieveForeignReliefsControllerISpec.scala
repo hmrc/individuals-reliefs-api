@@ -49,24 +49,7 @@ class RetrieveForeignReliefsControllerISpec extends IntegrationBaseSpec {
          |  ],
          |  "foreignTaxForFtcrNotClaimed": {
          |      "amount": 1749.98
-         |  },
-         |  "links":[
-         |      {
-         |         "href":"/individuals/reliefs/foreign/$nino/$taxYear",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      },
-         |      {
-         |         "href":"/individuals/reliefs/foreign/$nino/$taxYear",
-         |         "method":"PUT",
-         |         "rel":"create-and-amend-reliefs-foreign"
-         |      },
-         |      {
-         |         "href":"/individuals/reliefs/foreign/$nino/$taxYear",
-         |         "method":"DELETE",
-         |         "rel":"delete-reliefs-foreign"
-         |      }
-         |   ]
+         |  }
          |}
          |""".stripMargin
     )

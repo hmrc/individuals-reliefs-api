@@ -16,7 +16,6 @@
 
 package v2.reliefInvestments.retrieve.def1.model.response
 
-import hateoas.HateoasLinks
 import play.api.libs.json.{Json, OWrites, Reads}
 import shared.models.domain.Timestamp
 import v2.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsResponse
@@ -30,7 +29,7 @@ case class Def1_RetrieveReliefInvestmentsResponse(
     socialEnterpriseInvestment: Option[Seq[SocialEnterpriseInvestmentItem]]
 ) extends RetrieveReliefInvestmentsResponse
 
-object Def1_RetrieveReliefInvestmentsResponse extends HateoasLinks {
+object Def1_RetrieveReliefInvestmentsResponse {
 
   implicit val reads: Reads[Def1_RetrieveReliefInvestmentsResponse]    = Json.reads[Def1_RetrieveReliefInvestmentsResponse]
   implicit val writes: OWrites[Def1_RetrieveReliefInvestmentsResponse] = Json.writes[Def1_RetrieveReliefInvestmentsResponse]

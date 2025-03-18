@@ -21,15 +21,12 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.hateoas.Method._
-import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.TaxYear
 import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
 import v2.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
-import v2.pensionReliefs.createAmend.model.response.CreateAmendPensionsReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,17 +36,10 @@ class CreateAmendPensionsReliefsControllerSpec
     with ControllerTestRunner
     with MockCreateAmendPensionsReliefsService
     with MockCreateAmendPensionsReliefsValidatorFactory
-    with MockHateoasFactory
     with MockSharedAppConfig
     with MockAuditService {
 
   private val taxYear = "2019-20"
-
-  private val testHateoasLinks = List(
-    Link(href = s"/individuals/reliefs/pensions/$validNino/$taxYear", method = PUT, rel = "amend-reliefs-pensions"),
-    Link(href = s"/individuals/reliefs/pensions/$validNino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/reliefs/pensions/$validNino/$taxYear", method = DELETE, rel = "delete-reliefs-pensions")
-  )
 
   private val requestJson = Json.parse(
     """|{
@@ -75,30 +65,10 @@ class CreateAmendPensionsReliefsControllerSpec
 
   private val requestData = Def1_CreateAmendPensionsReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBody)
 
-  private val hateoasResponse = Json.parse("""
-      |{
-      |        "links": [
-      |          {
-      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
-      |            "rel": "amend-reliefs-pensions",
-      |            "method": "PUT"
-      |          },
-      |          {
-      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
-      |            "rel": "self",
-      |            "method": "GET"
-      |          },
-      |          {
-      |            "href": "/individuals/reliefs/pensions/AA123456A/2019-20",
-      |            "rel": "delete-reliefs-pensions",
-      |            "method": "DELETE"
-      |          }
-      |        ]
-      |      }
-      |""".stripMargin)
+
 
   "handleRequest" should {
-    "return a successful response with status 200 (OK)" when {
+    "return a successful response with status 204 (No Content)" when {
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestData))
 
@@ -106,15 +76,11 @@ class CreateAmendPensionsReliefsControllerSpec
           .amend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), CreateAmendPensionsReliefsHateoasData(validNino, taxYear))
-          .returns(HateoasWrapper((), testHateoasLinks))
-
         runOkTestWithAudit(
-          expectedStatus = OK,
+          expectedStatus = NO_CONTENT,
           maybeAuditRequestBody = Some(requestJson),
-          maybeExpectedResponseBody = Some(hateoasResponse),
-          maybeAuditResponseBody = Some(hateoasResponse)
+          maybeExpectedResponseBody = None,
+          maybeAuditResponseBody = None
         )
       }
     }
@@ -146,7 +112,6 @@ class CreateAmendPensionsReliefsControllerSpec
       validatorFactory = mockAmendPensionsReliefsValidatorFactory,
       service = mockService,
       auditService = mockAuditService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )

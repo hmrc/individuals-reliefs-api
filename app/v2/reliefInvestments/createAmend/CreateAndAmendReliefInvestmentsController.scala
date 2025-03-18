@@ -20,12 +20,9 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
-import shared.hateoas.HateoasFactory
 import shared.routing.Version2
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
-import v2.reliefInvestments.createAmend.model.response.CreateAndAmendReliefInvestmentsHateoasData
-import v2.reliefInvestments.createAmend.model.response.CreateAndAmendReliefInvestmentsResponse.LinksFactory
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -36,7 +33,6 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
                                                            validatorFactory: CreateAndAmendReliefInvestmentsValidatorFactory,
                                                            service: CreateAndAmendReliefInvestmentsService,
                                                            auditService: AuditService,
-                                                           hateoasFactory: HateoasFactory,
                                                            cc: ControllerComponents,
                                                            val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -64,7 +60,6 @@ class CreateAndAmendReliefInvestmentsController @Inject() (val authService: Enro
           Some(request.body),
           includeResponse = true
         ))
-        .withHateoasResult(hateoasFactory)(CreateAndAmendReliefInvestmentsHateoasData(nino, taxYear))
 
       requestHandler.handleRequest()
     }
