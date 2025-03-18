@@ -45,22 +45,5 @@
       "amountInvested": 123123.22,
       "reliefClaimed": 3432.00
     }
-  ],
-  "links":[
-    {
-      "href":"/individuals/reliefs/investment/TC663795B/2019-20",
-      "method":"GET",
-      "rel":"self"
-    },
-    {
-      "href":"/individuals/reliefs/investment/TC663795B/2019-20",
-      "method":"PUT",
-      "rel":"create-and-amend-reliefs-investments"
-    },
-    {
-      "href":"/individuals/reliefs/investment/TC663795B/2019-20",
-      "method":"DELETE",
-      "rel":"delete-reliefs-investments"
-    }
   ]
 }

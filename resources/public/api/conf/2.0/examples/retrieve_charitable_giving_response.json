@@ -22,22 +22,5 @@
     },
     "landAndBuildings":1000.12,
     "sharesOrSecurities":1000.12
-  },
-  "links":[
-    {
-      "href":"/individuals/reliefs/charitable-giving/TC663795B/2021-22",
-      "method":"PUT",
-      "rel":"create-and-amend-charitable-giving-tax-relief"
-    },
-    {
-      "href":"/individuals/reliefs/charitable-giving/TC663795B/2021-22",
-      "method":"GET",
-      "rel":"self"
-    },
-    {
-      "href":"/individuals/reliefs/charitable-giving/TC663795B/2021-22",
-      "method":"DELETE",
-      "rel":"delete-charitable-giving-tax-relief"
-    }
-  ]
+  }
 }
