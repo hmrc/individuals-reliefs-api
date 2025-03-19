@@ -21,6 +21,7 @@ import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import v1.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
 import v1.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -44,7 +45,7 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
-        willPut(url = s"$baseUrl/income-tax/reliefs/pensions/$nino/${taxYear.asMtd}", body = body)
+        willPut(url = url"$baseUrl/income-tax/reliefs/pensions/$nino/${taxYear.asMtd}", body = body)
           .returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Unit] = await(connector.createOrAmendPensionsRelief(request))
@@ -55,7 +56,7 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
       "return a 204 status for a success scenario" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
         val outcome          = Right(ResponseWrapper(correlationId, ()))
-        willPut(url = s"$baseUrl/income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino", body = body)
+        willPut(url = url"$baseUrl/income-tax/reliefs/pensions/${taxYear.asTysDownstream}/$nino", body = body)
           .returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Unit] = await(connector.createOrAmendPensionsRelief(request))

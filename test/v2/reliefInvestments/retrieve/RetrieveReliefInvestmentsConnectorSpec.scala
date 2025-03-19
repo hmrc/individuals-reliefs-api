@@ -22,6 +22,7 @@ import shared.models.outcomes.ResponseWrapper
 import v2.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v2.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
 import v2.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -46,7 +47,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
         val taxYear: String = "2017-18"
         val outcome         = Right(ResponseWrapper(correlationId, responseModel))
 
-        willGet(url = s"$baseUrl/income-tax/reliefs/investment/AA123456A/2017-18")
+        willGet(url = url"$baseUrl/income-tax/reliefs/investment/AA123456A/2017-18")
           .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
@@ -56,7 +57,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
         val taxYear: String = "2023-24"
         val outcome         = Right(ResponseWrapper(correlationId, responseModel))
 
-        willGet(url = s"$baseUrl/income-tax/reliefs/investment/23-24/AA123456A")
+        willGet(url = url"$baseUrl/income-tax/reliefs/investment/23-24/AA123456A")
           .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome

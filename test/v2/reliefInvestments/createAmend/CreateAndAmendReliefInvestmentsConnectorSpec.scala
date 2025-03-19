@@ -22,6 +22,7 @@ import shared.models.outcomes.ResponseWrapper
 import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 import v2.reliefInvestments.createAmend.def1.model.request.Def1_CreateAndAmendReliefInvestmentsRequestData
 import v2.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -50,7 +51,7 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
       val outcome         = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
-        url = s"$baseUrl/income-tax/reliefs/investment/$nino/2019-20",
+        url = url"$baseUrl/income-tax/reliefs/investment/$nino/2019-20",
         body = requestBodyModel
       )
         .returns(Future.successful(outcome))
@@ -63,7 +64,7 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
       val outcome         = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
-        url = s"$baseUrl/income-tax/reliefs/investment/23-24/$nino",
+        url = url"$baseUrl/income-tax/reliefs/investment/23-24/$nino",
         body = requestBodyModel
       )
         .returns(Future.successful(outcome))

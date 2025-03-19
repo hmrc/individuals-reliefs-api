@@ -22,6 +22,7 @@ import shared.models.outcomes.ResponseWrapper
 import v2.charitableGiving.retrieve.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
 import v2.charitableGiving.retrieve.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import v2.charitableGiving.retrieve.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -60,7 +61,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
 
         def taxYear = TaxYear.fromMtd("2018-19")
 
-        willGet(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
+        willGet(url = url"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
           .returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[RetrieveCharitableGivingReliefsResponse] = await(connector.retrieve(request))
@@ -75,7 +76,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
 
           val outcome = Right(ResponseWrapper(correlationId, response))
 
-          willGet(s"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
+          willGet(url"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
             .returns(Future.successful(outcome))
 
           await(connector.retrieve(request)) shouldBe outcome

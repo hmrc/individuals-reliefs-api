@@ -21,6 +21,7 @@ import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import v2.reliefInvestments.delete.def1.Def1_DeleteReliefInvestmentsRequestData
 import v2.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -48,7 +49,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
         val outcome      = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
-          url = s"$baseUrl/income-tax/reliefs/investment/$nino/2019-20"
+          url = url"$baseUrl/income-tax/reliefs/investment/$nino/2019-20"
         ) returns Future.successful(outcome)
 
         await(connector.delete(request)) shouldBe outcome
@@ -61,7 +62,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
         val outcome      = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
-          url = s"$baseUrl/income-tax/reliefs/investment/23-24/$nino"
+          url = url"$baseUrl/income-tax/reliefs/investment/23-24/$nino"
         ) returns Future.successful(outcome)
 
         await(connector.delete(request)) shouldBe outcome

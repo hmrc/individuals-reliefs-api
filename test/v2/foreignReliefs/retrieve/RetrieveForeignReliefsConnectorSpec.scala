@@ -21,6 +21,7 @@ import shared.models.domain.{Nino, TaxYear, Timestamp}
 import shared.models.outcomes.ResponseWrapper
 import v2.foreignReliefs.retrieve.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
 import v2.foreignReliefs.retrieve.model.response.Def1_RetrieveForeignReliefsResponse
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -49,7 +50,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
         def taxYear: String = "2021-22"
         val outcome         = Right(ResponseWrapper(correlationId, response))
 
-        willGet(s"$baseUrl/income-tax/reliefs/foreign/$nino/$taxYear").returns(Future.successful(outcome))
+        willGet(url"$baseUrl/income-tax/reliefs/foreign/$nino/$taxYear").returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
       }
@@ -58,7 +59,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
         def taxYear: String = "2023-24"
         val outcome         = Right(ResponseWrapper(correlationId, response))
 
-        willGet(s"$baseUrl/income-tax/reliefs/foreign/23-24/$nino").returns(Future.successful(outcome))
+        willGet(url"$baseUrl/income-tax/reliefs/foreign/23-24/$nino").returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
       }

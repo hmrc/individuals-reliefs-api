@@ -22,6 +22,7 @@ import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import v1.deleteCharitableGivingReliefs.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -43,7 +44,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
             .anyNumberOfTimes()
 
           willPost(
-            url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/2020",
+            url = url"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/2020",
             body = JsObject.empty
           )
             .returns(Future.successful(expectedOutcome))
@@ -63,7 +64,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
             .anyNumberOfTimes()
 
           willPost(
-            url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/2020",
+            url = url"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/2020",
             body = JsObject.empty
           )
             .returns(Future.successful(expectedOutcome))
@@ -84,7 +85,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
           )
 
           willDelete(
-            url = s"$baseUrl/income-tax/23-24/$nino/income-source/charity/annual"
+            url = url"$baseUrl/income-tax/23-24/$nino/income-source/charity/annual"
           )
             .returns(Future.successful(expectedOutcome))
 
@@ -100,7 +101,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
             "passDeleteIntentHeader.enabled" -> false
           )
 
-          willDelete(url = s"$baseUrl/income-tax/23-24/$nino/income-source/charity/annual")
+          willDelete(url = url"$baseUrl/income-tax/23-24/$nino/income-source/charity/annual")
             .returns(Future.successful(expectedOutcome))
 
           val request = Def1_DeleteCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"))
