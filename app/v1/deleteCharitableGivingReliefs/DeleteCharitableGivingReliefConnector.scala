@@ -23,14 +23,15 @@ import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.HeaderCarrier
 import v1.deleteCharitableGivingReliefs.model.request.{Def1_DeleteCharitableGivingTaxReliefsRequestData, DeleteCharitableGivingTaxReliefsRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)
+class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
     extends BaseDownstreamConnector {
 
   private def completeRequest(nino: Nino, taxYear: TaxYear)(implicit

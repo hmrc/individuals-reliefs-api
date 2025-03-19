@@ -21,17 +21,15 @@ import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.createAndAmendCharitableGivingReliefs.model.request.{
-  CreateAndAmendCharitableGivingTaxReliefsRequestData,
-  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
-}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.HeaderCarrier
+import v1.createAndAmendCharitableGivingReliefs.model.request.{CreateAndAmendCharitableGivingTaxReliefsRequestData, Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAndAmendCharitableGivingTaxReliefsConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class CreateAndAmendCharitableGivingTaxReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def createAmend(request: CreateAndAmendCharitableGivingTaxReliefsRequestData)(implicit
       hc: HeaderCarrier,

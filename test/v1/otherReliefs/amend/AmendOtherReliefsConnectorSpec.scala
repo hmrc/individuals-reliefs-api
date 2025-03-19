@@ -20,6 +20,7 @@ import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import v1.otherReliefs.amend.def1.model.request.{Def1_AmendOtherReliefsRequestBody, Def1_AmendOtherReliefsRequestData}
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -31,7 +32,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
       "a valid request is made" in new IfsTest with Test {
         val request: Def1_AmendOtherReliefsRequestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2017-18"), body)
 
-        willPut(url = s"$baseUrl/income-tax/reliefs/other/$nino/2017-18", body = body)
+        willPut(url = url"$baseUrl/income-tax/reliefs/other/$nino/2017-18", body = body)
           .returns(Future.successful(outcome))
 
         await(connector.amend(request)) shouldBe outcome
@@ -42,7 +43,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
       "a valid request is made" in new IfsTest with Test {
         val request: Def1_AmendOtherReliefsRequestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"), body)
 
-        willPut(url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino", body = body)
+        willPut(url = url"$baseUrl/income-tax/reliefs/other/23-24/$nino", body = body)
           .returns(Future.successful(outcome))
 
         await(connector.amend(request)) shouldBe outcome

@@ -21,14 +21,15 @@ import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.HeaderCarrier
 import v1.deleteForeignReliefs.model.{Def1_DeleteForeignReliefsRequestData, DeleteForeignReliefsRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteForeignReliefsConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class DeleteForeignReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   private def completeRequest(nino: Nino, taxYear: TaxYear)(implicit
       hc: HeaderCarrier,

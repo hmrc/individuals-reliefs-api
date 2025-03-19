@@ -22,6 +22,7 @@ import shared.models.outcomes.ResponseWrapper
 import v1.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsFixtures.requestBodyModel
 import v1.createAndAmendForeignReliefs.def1.model
 import v1.createAndAmendForeignReliefs.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -37,7 +38,7 @@ class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/reliefs/foreign/$nino/2021-22",
+          url = url"$baseUrl/income-tax/reliefs/foreign/$nino/2021-22",
           body = requestBodyModel
         )
           .returns(Future.successful(outcome))
@@ -52,7 +53,7 @@ class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/reliefs/foreign/23-24/$nino",
+          url = url"$baseUrl/income-tax/reliefs/foreign/23-24/$nino",
           body = requestBodyModel
         )
           .returns(Future.successful(outcome))

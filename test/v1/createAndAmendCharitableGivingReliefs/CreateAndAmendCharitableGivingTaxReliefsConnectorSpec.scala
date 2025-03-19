@@ -21,6 +21,7 @@ import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import v1.createAndAmendCharitableGivingReliefs.def1.model.request._
 import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -63,7 +64,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
       "return 200 for a success scenario" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
-        willPost(url = s"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}", body = requestBody)
+        willPost(url = url"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}", body = requestBody)
           .returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Unit] = await(connector.createAmend(request))
@@ -75,7 +76,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
       "return 200 for a success scenario" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-        willPost(url = s"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual", body = requestBody)
+        willPost(url = url"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual", body = requestBody)
           .returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Unit] = await(connector.createAmend(request))

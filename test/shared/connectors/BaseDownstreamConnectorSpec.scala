@@ -18,11 +18,14 @@ package shared.connectors
 
 import org.scalatest.Assertion
 import play.api.http.{HeaderNames, MimeTypes, Status}
+import play.api.libs.json.Json
 import shared.config.{MockSharedAppConfig, SharedAppConfig}
 import shared.mocks.MockHttpClient
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,8 +37,8 @@ class BaseDownstreamConnectorSpec extends UnitSpec with MockHttpClient with Mock
 
   private val baseUrl     = "http://test-BaseUrl"
   private val path        = "some/url"
-  private val absoluteUrl = s"$baseUrl/$path"
-  private val body        = "body"
+  private val absoluteUrl = url"$baseUrl/some/url"
+  private val body        = Json.toJson("body")
   private val userAgent   = "this-api"
 
   private implicit val correlationId: String = "someCorrelationId"
@@ -60,8 +63,8 @@ class BaseDownstreamConnectorSpec extends UnitSpec with MockHttpClient with Mock
     HeaderCarrier(otherHeaders = inputHeaders)
 
   val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
-    val http: HttpClient           = mockHttpClient
-    val appConfig: SharedAppConfig = mockSharedAppConfig
+    val http: HttpClientV2               = mockHttpClient
+    val appConfig: SharedAppConfig         = mockSharedAppConfig
   }
 
   private def uri(apiContractHeaders: Seq[(String, String)] = standardContractHeaders, passThroughHeaderNames: Seq[String] = Nil) =
@@ -231,7 +234,7 @@ class BaseDownstreamConnectorSpec extends UnitSpec with MockHttpClient with Mock
           implicit val hc: HeaderCarrier = headerCarrierForInput()
 
           MockedHttpClient.delete(
-            absoluteUrl + "?param1=value1&param2=value2",
+            url"$absoluteUrl?param1=value1&param2=value2",
             headerCarrierConfig,
             requiredHeaders = standardContractHeadersWith(additionalRequiredHeaders),
             excludedHeaders = Seq(contentTypeHeader) ++ additionalExcludedHeaders

@@ -23,6 +23,7 @@ import shared.models.outcomes.ResponseWrapper
 import v1.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v1.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
 import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -63,7 +64,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
           val outcome = Right(ResponseWrapper(correlationId, response))
 
           willGet(
-            url = s"$baseUrl/income-tax/reliefs/pensions/$nino/2018-19"
+            url = url"$baseUrl/income-tax/reliefs/pensions/$nino/2018-19"
           )
             .returns(Future.successful(outcome))
 
@@ -81,7 +82,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
           val outcome = Right(ResponseWrapper(correlationId, response))
 
           willGet(
-            url = s"$baseUrl/itsa/income-tax/v1/reliefs/pensions/$nino/2018-19"
+            url = url"$baseUrl/itsa/income-tax/v1/reliefs/pensions/$nino/2018-19"
           )
             .returns(Future.successful(outcome))
 
@@ -100,7 +101,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
           willGet(
-            url = s"$baseUrl/income-tax/reliefs/pensions/23-24/$taxableEntityId"
+            url = url"$baseUrl/income-tax/reliefs/pensions/23-24/$taxableEntityId"
           )
             .returns(Future.successful(outcome))
 

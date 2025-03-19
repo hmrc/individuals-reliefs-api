@@ -22,6 +22,7 @@ import shared.models.outcomes.ResponseWrapper
 import v1.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
 import v1.otherReliefs.retrieve.def1.model.response.Def1_RetrieveOtherReliefsResponse
 import v1.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -53,7 +54,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, response))
 
         willGet(
-          url = s"$baseUrl/income-tax/reliefs/other/$nino/2017-18"
+          url = url"$baseUrl/income-tax/reliefs/other/$nino/2017-18"
         )
           .returns(Future.successful(outcome))
 
@@ -68,7 +69,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, response))
 
         willGet(
-          url = s"$baseUrl/income-tax/reliefs/other/23-24/$nino"
+          url = url"$baseUrl/income-tax/reliefs/other/23-24/$nino"
         )
           .returns(Future.successful(outcome))
 
