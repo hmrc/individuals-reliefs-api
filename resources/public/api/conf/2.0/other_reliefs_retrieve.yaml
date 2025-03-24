@@ -1,3 +1,4 @@
+summary: Retrieve Other Reliefs
 description: |
   This endpoint enables you to retrieve details of other reliefs that have been previously submitted. 
   A National Insurance number and tax year must be provided.
