@@ -1,3 +1,4 @@
+summary: Create and Amend Foreign Reliefs
 description: |
   This endpoint enables you to create and amend foreign reliefs. A National Insurance number and tax year must be provided.
   
