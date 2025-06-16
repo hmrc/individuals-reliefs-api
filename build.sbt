@@ -16,46 +16,44 @@
 
 import sbt.*
 import uk.gov.hmrc.DefaultBuildSettings
-import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
-ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / scalaVersion := "3.5.2"
 ThisBuild / majorVersion := 0
 
 val appName = "individuals-reliefs-api"
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(PlayScala, SbtDistributablesPlugin)
+  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     retrieveManaged                 := true,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(warnScalaVersionEviction = false),
-    scalafmtOnCompile               := true,
-    scalacOptions ++= List(
-      "-Xfatal-warnings",
+    scalacOptions ++= Seq(
+      "-feature",
       "-Wconf:src=routes/.*:s",
-      "-feature"
-    )
+      "-Werror"
+    ),
+    scalacOptions ++= Seq("-nowarn")
   )
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",
     Compile / unmanagedClasspath += baseDirectory.value / "resources"
   )
-  .settings(CodeCoverageSettings.settings: _*)
+  .settings(CodeCoverageSettings.settings)
   .settings(PlayKeys.playDefaultPort := 7796)
-
 
 lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test")
   .settings(DefaultBuildSettings.itSettings() ++ ScalafmtPlugin.scalafmtConfigSettings)
   .settings(
-    Test / fork                       := true,
-    Test / javaOptions += "-Dlogger.resource=logback-test.xml",
-  )
+    Test / fork := true,
+    Test / javaOptions += "-Dlogger.resource=logback-test.xml")
   .settings(libraryDependencies ++= AppDependencies.itDependencies)
   .settings(
-    scalacOptions ++= Seq("-Xfatal-warnings")
+    scalacOptions ++= Seq("-Werror"),
+    scalacOptions ++= Seq("-nowarn")
   )
 
 dependencyUpdatesFilter -= moduleFilter(name = "bootstrap-backend-play-30")
