@@ -25,7 +25,7 @@ import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v2.foreignReliefs.delete.model.DeleteForeignReliefsRequestData
 
-trait MockDeleteForeignReliefsValidatorFactory extends TestSuite with MockFactory {
+trait MockDeleteForeignReliefsValidatorFactory extends MockFactory { self: TestSuite =>
 
   val mockDeleteForeignReliefsValidatorFactory: DeleteForeignReliefsValidatorFactory =
     mock[DeleteForeignReliefsValidatorFactory]

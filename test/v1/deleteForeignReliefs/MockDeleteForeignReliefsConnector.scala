@@ -25,7 +25,7 @@ import v1.deleteForeignReliefs.model.DeleteForeignReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteForeignReliefsConnector extends TestSuite with MockFactory {
+trait MockDeleteForeignReliefsConnector extends MockFactory { self: TestSuite =>
 
   val mockDeleteForeignReliefsConnector: DeleteForeignReliefsConnector = mock[DeleteForeignReliefsConnector]
 

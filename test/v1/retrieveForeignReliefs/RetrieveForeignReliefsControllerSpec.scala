@@ -21,13 +21,13 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.hateoas.Method._
+import shared.hateoas.Method.*
 import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.domain.{TaxYear, Timestamp}
 import shared.models.errors
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
-import v1.retrieveForeignReliefs.def1.model.response._
+import v1.retrieveForeignReliefs.def1.model.response.*
 import v1.retrieveForeignReliefs.model.request.Def1_RetrieveForeignReliefsRequestData
 import v1.retrieveForeignReliefs.model.response.{Def1_RetrieveForeignReliefsResponse, RetrieveForeignReliefsHateoasData}
 
@@ -128,7 +128,7 @@ class RetrieveForeignReliefsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveForeignReliefsController(
+    val controller: RetrieveForeignReliefsController = new RetrieveForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignReliefsValidatorFactory,

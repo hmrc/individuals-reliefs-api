@@ -23,7 +23,7 @@ import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{TaxYear, Timestamp}
 import shared.models.errors
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import v2.foreignReliefs.retrieve.def1.model.response.{
   Def1_ForeignIncomeTaxCreditRelief,
@@ -117,7 +117,7 @@ class RetrieveForeignReliefsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveForeignReliefsController(
+    val controller: RetrieveForeignReliefsController = new RetrieveForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignReliefsValidatorFactory,

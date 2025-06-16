@@ -16,12 +16,13 @@
 
 package v1.createAndAmendCharitableGivingReliefs
 
+import org.scalatest.TestSuite
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import v1.createAndAmendCharitableGivingReliefs.def1.model.request._
-import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 import uk.gov.hmrc.http.StringContextOps
+import v1.createAndAmendCharitableGivingReliefs.def1.model.request.*
+import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -86,7 +87,8 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
 
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test { self: ConnectorTest =>
+    
     def taxYear: TaxYear
 
     protected val connector: CreateAndAmendCharitableGivingTaxReliefsConnector =

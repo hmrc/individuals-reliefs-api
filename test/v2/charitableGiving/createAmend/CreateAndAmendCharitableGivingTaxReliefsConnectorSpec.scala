@@ -19,6 +19,7 @@ package v2.charitableGiving.createAmend
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.charitableGiving.createAmend.def1.model.request.{
   Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
   Def1_GiftAidPayments,
@@ -26,7 +27,6 @@ import v2.charitableGiving.createAmend.def1.model.request.{
   Def1_NonUkCharities
 }
 import v2.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -91,7 +91,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
 
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test { self: ConnectorTest =>
     def taxYear: TaxYear
 
     protected val connector: CreateAndAmendCharitableGivingTaxReliefsConnector =
@@ -103,5 +103,4 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
     protected val outcome = Right(ResponseWrapper(correlationId, ()))
 
   }
-
 }

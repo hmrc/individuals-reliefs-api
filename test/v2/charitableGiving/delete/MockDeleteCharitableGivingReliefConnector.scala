@@ -25,7 +25,7 @@ import v2.charitableGiving.delete.model.request.DeleteCharitableGivingTaxReliefs
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCharitableGivingReliefConnector extends TestSuite with MockFactory {
+trait MockDeleteCharitableGivingReliefConnector extends MockFactory { self: TestSuite =>
 
   val mockConnector: DeleteCharitableGivingReliefConnector = mock[DeleteCharitableGivingReliefConnector]
 

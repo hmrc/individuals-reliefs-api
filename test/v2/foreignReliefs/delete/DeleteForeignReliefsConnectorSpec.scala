@@ -19,8 +19,8 @@ package v2.foreignReliefs.delete
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import v2.foreignReliefs.delete.model.Def1_DeleteForeignReliefsRequestData
 import uk.gov.hmrc.http.StringContextOps
+import v2.foreignReliefs.delete.model.Def1_DeleteForeignReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -58,8 +58,7 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
-
+  trait Test { self: ConnectorTest =>
     def taxYear: TaxYear
     val request: Def1_DeleteForeignReliefsRequestData = Def1_DeleteForeignReliefsRequestData(nino, taxYear)
 

@@ -18,7 +18,7 @@ package v1.pensionReliefs.createAmend
 
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -27,7 +27,7 @@ import v1.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReli
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateAmendPensionsReliefsServiceSpec extends UnitSpec {
+class CreateAmendPensionsReliefsServiceSpec extends UnitSpec with MockCreateAmendPensionsReliefsConnector {
 
   val taxYear: String                = "2017-18"
   val nino: String                   = "ZG903729C"
@@ -45,7 +45,7 @@ class CreateAmendPensionsReliefsServiceSpec extends UnitSpec {
 
   private val requestData = Def1_CreateAmendPensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), body)
 
-  trait Test extends MockCreateAmendPensionsReliefsConnector {
+  trait Test {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 

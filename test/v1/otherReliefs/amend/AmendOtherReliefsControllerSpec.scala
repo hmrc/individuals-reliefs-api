@@ -22,14 +22,14 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.hateoas.Method._
+import shared.hateoas.Method.*
 import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.TaxYear
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
-import v1.otherReliefs.amend.def1.model.request._
+import v1.otherReliefs.amend.def1.model.request.*
 import v1.otherReliefs.amend.model.response.AmendOtherReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -186,7 +186,7 @@ class AmendOtherReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new AmendOtherReliefsController(
+    val controller: AmendOtherReliefsController = new AmendOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockAmendOtherReliefsValidatorFactory,

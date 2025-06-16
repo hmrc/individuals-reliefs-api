@@ -25,7 +25,7 @@ import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v1.retrieveForeignReliefs.model.request.RetrieveForeignReliefsRequestData
 
-trait MockRetrieveForeignReliefsValidatorFactory extends TestSuite with MockFactory {
+trait MockRetrieveForeignReliefsValidatorFactory extends MockFactory { self: TestSuite =>
 
   val mockRetrieveForeignReliefsValidatorFactory: RetrieveForeignReliefsValidatorFactory = mock[RetrieveForeignReliefsValidatorFactory]
 

@@ -16,9 +16,10 @@
 
 package v1.reliefInvestments.retrieve
 
+import org.scalatest.TestSuite
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -29,14 +30,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
-
   private val nino: String           = "ZG903729C"
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
   private val requestData = Def1_RetrieveReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test extends MockRetrieveReliefInvestmentsConnector {
+  trait Test extends UnitSpec with MockRetrieveReliefInvestmentsConnector { self: TestSuite =>
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 

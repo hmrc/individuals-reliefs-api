@@ -18,7 +18,7 @@ package v2.pensionReliefs.retrieve
 
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,7 +28,7 @@ import v2.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReli
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RetrievePensionsReliefsServiceSpec extends UnitSpec {
+class RetrievePensionsReliefsServiceSpec extends UnitSpec with MockRetrievePensionsReliefsConnector {
 
   private val nino: String           = "ZG903729C"
   private val taxYear: String        = "2017-18"
@@ -47,7 +47,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
 
   private val requestData = Def1_RetrievePensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test extends MockRetrievePensionsReliefsConnector {
+  trait Test {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 

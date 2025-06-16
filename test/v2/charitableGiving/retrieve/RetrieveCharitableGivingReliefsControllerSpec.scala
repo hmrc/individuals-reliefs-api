@@ -21,7 +21,7 @@ import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.TaxYear
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import v2.charitableGiving.retrieve.def1.model.request.RetrieveCharitableGivingReliefsFixture
 import v2.charitableGiving.retrieve.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
@@ -81,7 +81,7 @@ class RetrieveCharitableGivingReliefsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveCharitableGivingReliefsController(
+    val controller: RetrieveCharitableGivingReliefsController = new RetrieveCharitableGivingReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveCharitableGivingReliefValidatorFactory,

@@ -26,7 +26,7 @@ import v1.deleteCharitableGivingReliefs.model.request.Def1_DeleteCharitableGivin
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCharitableGivingReliefService extends TestSuite with MockFactory {
+trait MockDeleteCharitableGivingReliefService extends MockFactory { self: TestSuite =>
 
   val mockDeleteCharitableGivingReliefService: DeleteCharitableGivingTaxReliefsService = mock[DeleteCharitableGivingTaxReliefsService]
 

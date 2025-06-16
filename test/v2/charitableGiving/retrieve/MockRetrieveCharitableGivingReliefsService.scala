@@ -27,7 +27,7 @@ import v2.charitableGiving.retrieve.model.response.RetrieveCharitableGivingRelie
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveCharitableGivingReliefsService extends TestSuite with MockFactory {
+trait MockRetrieveCharitableGivingReliefsService extends MockFactory { self: TestSuite =>
 
   val mockRetrieveCharitableGivingReliefsService: RetrieveCharitableGivingReliefsService = mock[RetrieveCharitableGivingReliefsService]
 

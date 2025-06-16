@@ -25,7 +25,7 @@ import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v1.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 
-trait MockRetrieveReliefInvestmentsValidatorFactory extends TestSuite with MockFactory {
+trait MockRetrieveReliefInvestmentsValidatorFactory extends MockFactory { self: TestSuite =>
 
   val mockRetrieveReliefInvestmentsValidatorFactory: RetrieveReliefInvestmentsValidatorFactory = mock[RetrieveReliefInvestmentsValidatorFactory]
 

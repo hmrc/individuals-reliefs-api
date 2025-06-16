@@ -19,7 +19,7 @@ package v1.otherReliefs.amend
 import common.RuleSubmissionFailedError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,7 +28,7 @@ import v1.otherReliefs.amend.def1.model.request.{Def1_AmendOtherReliefsRequestBo
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AmendOtherReliefsServiceSpec extends UnitSpec {
+class AmendOtherReliefsServiceSpec extends UnitSpec with MockAmendOtherReliefsConnector {
 
   "service" when {
     "service call successful" must {
@@ -75,7 +75,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
     }
   }
 
-  trait Test extends MockAmendOtherReliefsConnector {
+  trait Test {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 

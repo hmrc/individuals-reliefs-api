@@ -25,7 +25,7 @@ import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v2.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 
-trait MockRetrieveCharitableGivingReliefsValidatorFactory extends TestSuite with MockFactory {
+trait MockRetrieveCharitableGivingReliefsValidatorFactory extends MockFactory { self: TestSuite =>
 
   val mockRetrieveCharitableGivingReliefValidatorFactory: RetrieveCharitableGivingReliefsValidatorFactory =
     mock[RetrieveCharitableGivingReliefsValidatorFactory]

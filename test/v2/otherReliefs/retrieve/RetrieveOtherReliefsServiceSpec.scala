@@ -18,17 +18,17 @@ package v2.otherReliefs.retrieve
 
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
-import v2.otherReliefs.retrieve.def1.model.response._
+import v2.otherReliefs.retrieve.def1.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RetrieveOtherReliefsServiceSpec extends UnitSpec {
+class RetrieveOtherReliefsServiceSpec extends UnitSpec with MockRetrieveOtherReliefsConnector {
 
   private val nino: String           = "ZG903729C"
   private val taxYear: String        = "2017-18"
@@ -55,7 +55,7 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
 
   private val requestData = Def1_RetrieveOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test extends MockRetrieveOtherReliefsConnector {
+  trait Test {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 

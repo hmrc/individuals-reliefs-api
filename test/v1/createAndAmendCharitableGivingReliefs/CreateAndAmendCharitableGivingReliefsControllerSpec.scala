@@ -26,10 +26,10 @@ import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.TaxYear
 import shared.models.errors
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.MockIdGenerator
-import v1.createAndAmendCharitableGivingReliefs.def1.model.request._
+import v1.createAndAmendCharitableGivingReliefs.def1.model.request.*
 import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 import v1.createAndAmendCharitableGivingReliefs.model.response.CreateAndAmendCharitableGivingTaxReliefsHateoasData
 
@@ -138,7 +138,7 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new CreateAndAmendCharitableGivingReliefsController(
+    val controller: CreateAndAmendCharitableGivingReliefsController = new CreateAndAmendCharitableGivingReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAndAmendCharitableGivingReliefsValidatorFactory,

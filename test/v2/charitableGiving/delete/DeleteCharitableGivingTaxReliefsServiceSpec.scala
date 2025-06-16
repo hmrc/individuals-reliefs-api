@@ -19,7 +19,7 @@ package v2.charitableGiving.delete
 import common.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,7 +28,7 @@ import v2.charitableGiving.delete.model.request.Def1_DeleteCharitableGivingTaxRe
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteCharitableGivingTaxReliefsServiceSpec extends UnitSpec {
+class DeleteCharitableGivingTaxReliefsServiceSpec extends UnitSpec with MockDeleteCharitableGivingReliefConnector {
 
   "service" when {
 
@@ -85,7 +85,7 @@ class DeleteCharitableGivingTaxReliefsServiceSpec extends UnitSpec {
     }
   }
 
-  trait Test extends MockDeleteCharitableGivingReliefConnector {
+  trait Test {
     implicit protected val hc: HeaderCarrier              = HeaderCarrier()
     implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
     implicit protected val correlationId: String          = "X-123"

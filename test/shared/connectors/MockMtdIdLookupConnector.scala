@@ -23,7 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockMtdIdLookupConnector extends TestSuite with MockFactory {
+trait MockMtdIdLookupConnector extends MockFactory { self: TestSuite =>
 
   val mockMtdIdLookupConnector: MtdIdLookupConnector = mock[MtdIdLookupConnector]
 

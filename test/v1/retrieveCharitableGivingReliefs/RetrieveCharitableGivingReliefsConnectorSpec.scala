@@ -19,10 +19,10 @@ package v1.retrieveCharitableGivingReliefs
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v1.retrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
 import v1.retrieveCharitableGivingReliefs.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import v1.retrieveCharitableGivingReliefs.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -86,8 +86,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
-
+   self: ConnectorTest =>
     protected def taxYear: TaxYear
 
     val connector: RetrieveCharitableGivingReliefsConnector =

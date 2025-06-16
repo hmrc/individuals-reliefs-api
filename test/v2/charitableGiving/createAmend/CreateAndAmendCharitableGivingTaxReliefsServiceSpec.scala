@@ -16,23 +16,18 @@
 
 package v2.charitableGiving.createAmend
 
-import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError, RuleOutsideAmendmentWindowError}
+import common.*
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
-import v2.charitableGiving.createAmend.def1.model.request.{
-  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
-  Def1_GiftAidPayments,
-  Def1_Gifts,
-  Def1_NonUkCharities
-}
+import v2.charitableGiving.createAmend.def1.model.request.*
 import v2.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.Future
 
-class CreateAndAmendCharitableGivingTaxReliefsServiceSpec extends ServiceSpec {
+class CreateAndAmendCharitableGivingTaxReliefsServiceSpec extends ServiceSpec with MockCreateAndAmendCharitableGivingTaxReliefsConnector {
   private val nino: String    = "ZG903729C"
   private val taxYear: String = "2017-18"
 
@@ -67,7 +62,7 @@ class CreateAndAmendCharitableGivingTaxReliefsServiceSpec extends ServiceSpec {
   val requestData: Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData =
     Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
-  trait Test extends MockCreateAndAmendCharitableGivingTaxReliefsConnector {
+  trait Test {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new CreateAndAmendCharitableGivingTaxReliefsService(

@@ -16,17 +16,17 @@
 
 package shared.services
 
-import shared.models.audit.AuditEvent
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import play.api.libs.json.Writes
+import shared.models.audit.AuditEvent
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAuditService extends TestSuite with MockFactory {
+trait MockAuditService extends MockFactory { self: TestSuite =>
 
   val mockAuditService: AuditService = stub[AuditService]
 

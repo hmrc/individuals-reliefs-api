@@ -18,7 +18,7 @@ package v1.retrieveCharitableGivingReliefs
 
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v1.retrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
@@ -27,7 +27,7 @@ import v1.retrieveCharitableGivingReliefs.model.response.Def1_RetrieveCharitable
 
 import scala.concurrent.Future
 
-class RetrieveCharitableGivingReliefsServiceSpec extends ServiceSpec {
+class RetrieveCharitableGivingReliefsServiceSpec extends ServiceSpec with MockRetrieveCharitableGivingReliefsConnector {
 
   private val nino    = "ZG903729C"
   private val taxYear = "2017-18"
@@ -61,7 +61,7 @@ class RetrieveCharitableGivingReliefsServiceSpec extends ServiceSpec {
     gifts = Some(giftsModel)
   )
 
-  trait Test extends MockRetrieveCharitableGivingReliefsConnector {
+  trait Test {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
     val service = new RetrieveCharitableGivingReliefsService(

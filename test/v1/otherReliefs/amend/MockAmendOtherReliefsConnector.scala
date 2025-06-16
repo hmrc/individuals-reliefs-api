@@ -25,7 +25,7 @@ import v1.otherReliefs.amend.def1.model.request.Def1_AmendOtherReliefsRequestDat
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAmendOtherReliefsConnector extends TestSuite with MockFactory {
+trait MockAmendOtherReliefsConnector extends MockFactory { self: TestSuite =>
 
   val mockAmendOtherReliefsConnector: AmendOtherReliefsConnector = mock[AmendOtherReliefsConnector]
 

@@ -18,7 +18,7 @@ package v1.pensionReliefs.delete
 
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,7 +28,7 @@ import v1.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeletePensionsReliefsServiceSpec extends UnitSpec {
+class DeletePensionsReliefsServiceSpec extends UnitSpec with MockDeletePensionsReliefsConnector {
 
   implicit val correlationId: String = "X-123"
   private val validNino              = Nino("AA123456A")
@@ -36,7 +36,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
 
   protected val requestData: DeletePensionsReliefsRequestData = Def1_DeletePensionsReliefsRequestData(validNino, validTaxYear)
 
-  trait Test extends MockDeletePensionsReliefsConnector {
+  trait Test {
     implicit protected val hc: HeaderCarrier              = HeaderCarrier()
     implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 

@@ -19,7 +19,7 @@ package v2.reliefInvestments.createAmend
 import common.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -29,7 +29,7 @@ import v2.reliefInvestments.createAmend.def1.model.request.Def1_CreateAndAmendRe
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreateAndAmendReliefInvestmentsServiceSpec extends UnitSpec {
+class CreateAndAmendReliefInvestmentsServiceSpec extends UnitSpec with MockCreateAndAmendReliefInvestmentsConnector {
 
   private val nino: String           = "ZG903729C"
   private val taxYear: String        = "2017-18"
@@ -37,7 +37,7 @@ class CreateAndAmendReliefInvestmentsServiceSpec extends UnitSpec {
 
   private val requestData = Def1_CreateAndAmendReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
-  trait Test extends MockCreateAndAmendReliefInvestmentsConnector {
+  trait Test {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 

@@ -26,7 +26,7 @@ import v2.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsRes
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveReliefInvestmentsConnector extends TestSuite with MockFactory {
+trait MockRetrieveReliefInvestmentsConnector extends MockFactory { self: TestSuite =>
 
   val mockConnector: RetrieveReliefInvestmentsConnector = mock[RetrieveReliefInvestmentsConnector]
 

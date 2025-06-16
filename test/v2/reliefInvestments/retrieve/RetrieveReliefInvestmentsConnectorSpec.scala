@@ -19,17 +19,16 @@ package v2.reliefInvestments.retrieve
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v2.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
 import v2.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
 class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
-  trait Test { _: ConnectorTest =>
-
+  trait Test { self: ConnectorTest =>
     val taxYear: String
 
     val connector: RetrieveReliefInvestmentsConnector = new RetrieveReliefInvestmentsConnector(

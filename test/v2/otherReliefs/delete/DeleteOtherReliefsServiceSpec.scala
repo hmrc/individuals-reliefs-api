@@ -19,7 +19,7 @@ package v2.otherReliefs.delete
 import common.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,7 +28,7 @@ import v2.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteOtherReliefsServiceSpec extends UnitSpec {
+class DeleteOtherReliefsServiceSpec extends UnitSpec with MockDeleteOtherReliefsConnector {
 
   val nino: String    = "ZG903729C"
   val taxYear: String = "2019-20"
@@ -37,7 +37,7 @@ class DeleteOtherReliefsServiceSpec extends UnitSpec {
 
   val requestData: Def1_DeleteOtherReliefsRequestData = Def1_DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test extends MockDeleteOtherReliefsConnector {
+  trait Test {
 
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")

@@ -23,10 +23,10 @@ import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.TaxYear
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
-import CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel}
+import v2.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel}
 import v2.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -83,7 +83,7 @@ class CreateAndAmendForeignReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new CreateAndAmendForeignReliefsController(
+    val controller: CreateAndAmendForeignReliefsController = new CreateAndAmendForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAndAmendForeignReliefsValidatorFactory,

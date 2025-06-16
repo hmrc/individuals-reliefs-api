@@ -18,7 +18,7 @@ package v2.reliefInvestments.retrieve
 
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,7 +28,7 @@ import v2.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInves
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
+class RetrieveReliefInvestmentsServiceSpec extends UnitSpec with MockRetrieveReliefInvestmentsConnector {
 
   private val nino: String           = "ZG903729C"
   private val taxYear: String        = "2017-18"
@@ -36,7 +36,7 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
 
   private val requestData = Def1_RetrieveReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test extends MockRetrieveReliefInvestmentsConnector {
+  trait Test {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
