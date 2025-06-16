@@ -115,7 +115,7 @@ class RetrieveCharitableGivingReliefsServiceSpec extends ServiceSpec with MockRe
           ("INCOME_DATA_SOURCE_NOT_FOUND", NotFoundError),
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
         )
-        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceError.apply.tupled(args))
       }
     }
   }

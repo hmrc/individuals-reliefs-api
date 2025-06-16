@@ -120,7 +120,7 @@ class CreateAndAmendCharitableGivingTaxReliefsServiceSpec extends ServiceSpec wi
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceError.apply.tupled(args))
       }
     }
   }

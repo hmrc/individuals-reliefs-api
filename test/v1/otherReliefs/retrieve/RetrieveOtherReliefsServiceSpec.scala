@@ -101,7 +101,7 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec with MockRetrieveOtherRel
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => serviceError.apply.tupled(args))
     }
   }
 

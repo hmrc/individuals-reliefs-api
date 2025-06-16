@@ -71,7 +71,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec with MockAmendOtherReliefsCo
         "UNPROCESSABLE_ENTITY"   -> InternalError
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => serviceError.apply.tupled(args))
     }
   }
 
