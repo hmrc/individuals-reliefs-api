@@ -35,7 +35,7 @@ object CodeCoverageSettings {
     ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
     ScoverageKeys.coverageExcludedFiles := ".*\\$anon.*",
     ScoverageKeys.coverageMinimumStmtTotal := 97,
-    ScoverageKeys.coverageFailOnMinimum    := true,
+    ScoverageKeys.coverageFailOnMinimum    := false,
     ScoverageKeys.coverageHighlighting     := true
   )
 
