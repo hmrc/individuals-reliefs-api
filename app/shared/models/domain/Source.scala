@@ -16,13 +16,22 @@
 
 package shared.models.domain
 
-import play.api.libs.json
-import shared.utils.enums.Enums
+import play.api.libs.json.*
 
-sealed trait Source
+enum Source {
+  case `MTD-SA`
+}
 
 object Source {
-  case object `MTD-SA` extends Source
 
-  implicit val format: json.Format[Source] = Enums.format[Source]
+  given Format[Source] = Format(
+    Reads {
+      case JsString(source) => Source.values.find(_.toString == source).map(JsSuccess(_))
+        .getOrElse(JsError(s"Unknown Source: $source"))
+      case _ => JsError("Expected a string for Source")
+    },
+    Writes {
+      (source: Source) => JsString(source.toString)
+    }
+  )
 }
