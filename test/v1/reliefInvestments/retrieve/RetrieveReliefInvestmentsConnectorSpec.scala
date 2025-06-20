@@ -16,20 +16,20 @@
 
 package v1.reliefInvestments.retrieve
 
+import org.scalatest.TestSuite
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v1.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
 import v1.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
 class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
-  trait Test { _: ConnectorTest =>
-
+  trait Test { self: ConnectorTest with TestSuite =>
     val taxYear: String
 
     val connector: RetrieveReliefInvestmentsConnector = new RetrieveReliefInvestmentsConnector(

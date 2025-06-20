@@ -19,8 +19,8 @@ package v2.otherReliefs.amend
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import v2.otherReliefs.amend.def1.model.request.{Def1_AmendOtherReliefsRequestBody, Def1_AmendOtherReliefsRequestData}
 import uk.gov.hmrc.http.StringContextOps
+import v2.otherReliefs.amend.def1.model.request.{Def1_AmendOtherReliefsRequestBody, Def1_AmendOtherReliefsRequestData}
 
 import scala.concurrent.Future
 
@@ -53,8 +53,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
-
+   self: ConnectorTest =>
     val connector: AmendOtherReliefsConnector = new AmendOtherReliefsConnector(
       http = mockHttpClient,
       appConfig = mockSharedAppConfig

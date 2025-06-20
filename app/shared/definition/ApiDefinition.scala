@@ -16,26 +16,30 @@
 
 package shared.definition
 
-import play.api.libs.json.{Format, Json, OFormat}
+import play.api.libs.json.*
 import shared.routing.Version
-import shared.utils.enums.Enums
 
-sealed trait APIStatus
+enum APIStatus {
+  case ALPHA, BETA, STABLE, DEPRECATED, RETIRED
+}
 
 object APIStatus {
-  val parser: PartialFunction[String, APIStatus] = Enums.parser[APIStatus]
+  val parser: PartialFunction[String, APIStatus] = {
+    case status if APIStatus.values.exists(_.toString == status) =>
+    APIStatus.values.find(_.toString == status).get
+  }
 
-  case object ALPHA extends APIStatus
-
-  case object BETA extends APIStatus
-
-  case object STABLE extends APIStatus
-
-  case object DEPRECATED extends APIStatus
-
-  implicit val formatAPIStatus: Format[APIStatus] = Enums.format[APIStatus]
-
-  case object RETIRED extends APIStatus
+  given Format[APIStatus] = Format(
+    Reads {
+        case JsString(status) => APIStatus.values.find(_.toString == status).map(JsSuccess(_))
+          .getOrElse(JsError(s"Unknown APIStatus: $status"))
+        case _ => JsError("Expected a string for APIStatus")
+    },
+    Writes {
+      (status: APIStatus) => JsString(status.toString)
+    }
+  )
+  
 }
 
 case class APIVersion(version: Version, status: APIStatus, endpointsEnabled: Boolean)

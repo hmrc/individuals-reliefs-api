@@ -16,7 +16,7 @@
 
 package v2.pensionReliefs.createAmend.def1.model.request
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import shared.utils.UnitSpec
 
 class CreateAmendPensionsReliefsBodySpec extends UnitSpec {
@@ -52,6 +52,10 @@ class CreateAmendPensionsReliefsBodySpec extends UnitSpec {
     "write a model to JSON" in {
       Json.toJson(model) shouldBe json
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[CreateAmendPensionsReliefsBody] shouldBe a[JsError]
   }
 
   "isIncorrectOrEmptyBody" should {

@@ -17,12 +17,13 @@
 package shared.controllers.validators.resolvers
 
 import play.api.libs.json.{JsArray, JsObject, JsValue}
-import shapeless.labelled.FieldType
-import shapeless.{::, HList, HNil, LabelledGeneric, Lazy, Witness}
+import shared.controllers.validators.resolvers.UnexpectedJsonFieldsValidator.SchemaStructureSource
+import shared.models.domain.TaxYear
 import shared.models.errors.RuleIncorrectOrEmptyBodyError
 import shared.utils.Logging
-import UnexpectedJsonFieldsValidator.SchemaStructureSource
-import shared.models.domain.TaxYear
+
+import scala.compiletime.{constValue, erasedValue, summonInline}
+import scala.deriving.Mirror
 
 class UnexpectedJsonFieldsValidator[A](implicit extraPathChecker: SchemaStructureSource[A]) extends ResolverSupport with Logging {
   import UnexpectedJsonFieldsValidator.SchemaStructure
@@ -120,25 +121,42 @@ object UnexpectedJsonFieldsValidator extends ResolverSupport {
 
     implicit def listInstance[A](implicit aInstance: SchemaStructureSource[A]): SchemaStructureSource[List[A]] =
       instance(list => SchemaStructure.Arr(list.map(aInstance.schemaStructureOf)))
+    
+    // Lazy prevents infinite recursion in generic derivation
+    final class Lazy[+A](val value: () => A) extends AnyVal
+    object Lazy {
+      implicit def make[A](implicit a: => A): Lazy[A] = new Lazy(() => a)
+    }
 
-    implicit val hnilInstance: ObjSchemaStructureSource[HNil] = instanceObj(_ => SchemaStructure.Obj(Nil))
-
-    implicit def hlistInstance[K <: Symbol, H, T <: HList](implicit
-        witness: Witness.Aux[K],
-        hInstance: Lazy[SchemaStructureSource[H]],
-        tInstance: ObjSchemaStructureSource[T]
-    ): ObjSchemaStructureSource[FieldType[K, H] :: T] =
-      instanceObj { case h :: t =>
-        val hField  = witness.value.name -> hInstance.value.schemaStructureOf(h)
-        val tFields = tInstance.schemaStructureOf(t).fields
-        SchemaStructure.Obj(hField :: tFields)
+    inline given derived[A](using m: Mirror.Of[A]): SchemaStructureSource[A] =
+      inline m match {
+        case p: Mirror.ProductOf[A] => productInstance(p)
       }
 
-    implicit def genericInstance[A, R](implicit
-        gen: LabelledGeneric.Aux[A, R],
-        enc: Lazy[SchemaStructureSource[R]]
-    ): SchemaStructureSource[A] =
-      instance(a => enc.value.schemaStructureOf(gen.to(a)))
+    private inline def productInstance[A](p: Mirror.ProductOf[A]): SchemaStructureSource[A] = {
+      val elemLabels = summonLabels[p.MirroredElemLabels]
+      val elemInstances = summonAllInstances[p.MirroredElemTypes]
+      instance { a =>
+        val elems = a.asInstanceOf[Product].productIterator.toList
+        val fields = elemLabels.zip(elems).zip(elemInstances).map {
+          case ((label, value), checker: Lazy[SchemaStructureSource[Any]]) =>
+            label -> checker.value().schemaStructureOf(value)
+        }
+        SchemaStructure.Obj(fields)
+      }
+    }
+
+    private inline def summonLabels[T <: Tuple]: List[String] =
+      inline erasedValue[T] match {
+        case _: (h *: t) => constValue[h].asInstanceOf[String] :: summonLabels[t]
+        case _: EmptyTuple => Nil
+      }
+
+    private inline def summonAllInstances[T <: Tuple]: List[Lazy[SchemaStructureSource[Any]]] =
+      inline erasedValue[T] match {
+        case _: (h *: t) => Lazy.make(summonInline[SchemaStructureSource[h]]).asInstanceOf[Lazy[SchemaStructureSource[Any]]] :: summonAllInstances[t]
+        case _: EmptyTuple => Nil
+      }
 
   }
 

@@ -19,8 +19,9 @@ package shared.hateoas
 import cats.Functor
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 
-trait MockHateoasFactory extends MockFactory {
+trait MockHateoasFactory extends MockFactory { self: TestSuite =>
 
   val mockHateoasFactory: HateoasFactory = mock[HateoasFactory]
 
@@ -32,11 +33,11 @@ trait MockHateoasFactory extends MockFactory {
         .expects(a, data, *)
     }
 
-    def wrapList[A[_]: Functor, I, D <: HateoasData](a: A[I], data: D): CallHandler[HateoasWrapper[A[HateoasWrapper[I]]]] = {
-      (mockHateoasFactory
-        .wrapList(_: A[I], _: D)(_: Functor[A], _: HateoasListLinksFactory[A, I, D]))
-        .expects(a, data, *, *)
-    }
+    // def wrapList[A[_]: Functor, I, D <: HateoasData](a: A[I], data: D): CallHandler[HateoasWrapper[A[HateoasWrapper[I]]]] = {
+    //   (mockHateoasFactory
+    //     .wrapList(_: A[I], _: D)(_: Functor[A], _: HateoasListLinksFactory[A, I, D]))
+    //     .expects(a, data, *, *)
+    // }
 
   }
 

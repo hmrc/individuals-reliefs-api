@@ -16,13 +16,14 @@
 
 package shared.controllers
 
+import org.scalatest.TestSuite
 import play.api.Configuration
 import play.api.libs.json.JsObject
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.*
 import shared.config.MockSharedAppConfig
 import shared.models.auth.UserDetails
-import shared.models.errors._
-import shared.services.{EnrolmentsAuthService, MockEnrolmentsAuthService, MockMtdIdLookupService, MtdIdLookupService}
+import shared.models.errors.*
+import shared.services.*
 import uk.gov.hmrc.auth.core.Enrolment
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.http.HeaderCarrier
@@ -30,7 +31,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AuthorisedControllerSpec extends ControllerBaseSpec with MockSharedAppConfig {
+class AuthorisedControllerSpec extends ControllerBaseSpec with MockSharedAppConfig with MockEnrolmentsAuthService with MockMtdIdLookupService { self: TestSuite =>
 
   private val nino  = "AA123456A"
   private val mtdId = "X123567890"
@@ -161,7 +162,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec with MockSharedAppConf
     }
   }
 
-  trait Test extends MockEnrolmentsAuthService with MockMtdIdLookupService {
+  trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
 
     class TestController extends AuthorisedController(cc) {

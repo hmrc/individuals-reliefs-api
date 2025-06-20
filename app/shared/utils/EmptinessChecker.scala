@@ -16,8 +16,8 @@
 
 package shared.utils
 
-import shapeless.labelled.FieldType
-import shapeless.{::, HList, HNil, LabelledGeneric, Lazy, Witness}
+import scala.compiletime.{constValue, erasedValue, summonInline}
+import scala.deriving.Mirror
 
 sealed trait EmptyPathsResult
 
@@ -30,7 +30,7 @@ object EmptyPathsResult {
 /** Type class to locate paths to empty objects or arrays within an instance of an object.
   */
 trait EmptinessChecker[A] {
-  import EmptinessChecker._
+  import EmptinessChecker.*
 
   final def findEmptyPaths(a: A): EmptyPathsResult = {
 
@@ -69,7 +69,7 @@ trait EmptinessChecker[A] {
 
 // Internal specialization of EmptinessChecker for object instances so we can directly access its fields
 private[utils] trait ObjEmptinessChecker[A] extends EmptinessChecker[A] {
-  import EmptinessChecker._
+  import EmptinessChecker.*
 
   def structureOf(value: A): Structure.Obj
 }
@@ -77,7 +77,7 @@ private[utils] trait ObjEmptinessChecker[A] extends EmptinessChecker[A] {
 object EmptinessChecker {
 
   def findEmptyPaths[A: EmptinessChecker](a: A): EmptyPathsResult =
-    EmptinessChecker[A].findEmptyPaths(a)
+  EmptinessChecker[A].findEmptyPaths(a)
 
   private[utils] sealed abstract class Structure
 
@@ -108,50 +108,54 @@ object EmptinessChecker {
 
   def primitive[A]: EmptinessChecker[A] = EmptinessChecker.instance(_ => Structure.Primitive)
 
-  implicit val stringInstance: EmptinessChecker[String]   = instance(_ => Structure.Primitive)
-  implicit val intInstance: EmptinessChecker[Int]         = instance(_ => Structure.Primitive)
-  implicit val doubleInstance: EmptinessChecker[Double]   = instance(_ => Structure.Primitive)
-  implicit val booleanInstance: EmptinessChecker[Boolean] = instance(_ => Structure.Primitive)
+  given EmptinessChecker[String]   = instance(_ => Structure.Primitive)
+  given EmptinessChecker[Int]      = instance(_ => Structure.Primitive)
+  given EmptinessChecker[Double]   = instance(_ => Structure.Primitive)
+  given EmptinessChecker[Boolean]  = instance(_ => Structure.Primitive)
+  given EmptinessChecker[BigInt]   = instance(_ => Structure.Primitive)
+  given EmptinessChecker[BigDecimal] = instance(_ => Structure.Primitive)
 
-  implicit val bigIntInstance: EmptinessChecker[BigInt]         = instance(_ => Structure.Primitive)
-  implicit val bigDecimalInstance: EmptinessChecker[BigDecimal] = instance(_ => Structure.Primitive)
-
-  implicit def optionInstance[A](implicit aInstance: EmptinessChecker[A]): EmptinessChecker[Option[A]] =
+  given [A](using aInstance: EmptinessChecker[A]): EmptinessChecker[Option[A]] =
     instance(opt => opt.map(aInstance.structureOf).getOrElse(Structure.Null))
 
-  implicit def seqInstance[A, I](implicit aInstance: EmptinessChecker[A]): EmptinessChecker[Seq[A]] =
+  given [A](using aInstance: EmptinessChecker[A]): EmptinessChecker[List[A]] =
     instance(list => Structure.Arr(list.map(aInstance.structureOf)))
+  given [A](using aInstance: EmptinessChecker[A]): EmptinessChecker[Seq[A]] =
+    instance(seq => Structure.Arr(seq.map(aInstance.structureOf)))
 
-  implicit def listInstance[A](implicit aInstance: EmptinessChecker[A]): EmptinessChecker[List[A]] =
-    instance(list => Structure.Arr(list.map(aInstance.structureOf)))
+    // Lazy prevents infinite recursion in generic derivation
+  final class Lazy[+A](val value: () => A) extends AnyVal
+  object Lazy {
+    implicit def make[A](implicit a: => A): Lazy[A] = new Lazy(() => a)
+  }
 
-  implicit val hnilInstance: ObjEmptinessChecker[HNil] = instanceObj(_ => Structure.Obj(Nil))
-
-  implicit def hlistInstance[K <: Symbol, H, T <: HList](implicit
-      witness: Witness.Aux[K],
-      hInstance: Lazy[EmptinessChecker[H]],
-      tInstance: ObjEmptinessChecker[T]
-  ): ObjEmptinessChecker[FieldType[K, H] :: T] =
-    instanceObj { case h :: t =>
-      val hField  = witness.value.name -> hInstance.value.structureOf(h)
-      val tFields = tInstance.structureOf(t).fields
-      Structure.Obj(hField :: tFields)
+  inline given derived[A](using m: Mirror.Of[A]): EmptinessChecker[A] =
+    inline m match {
+      case p: Mirror.ProductOf[A] => productInstance(p)
     }
 
-  implicit def simpleHlistInstance[H, T <: HList](implicit
-      hInstance: Lazy[EmptinessChecker[H]],
-      tInstance: ObjEmptinessChecker[T]
-  ): ObjEmptinessChecker[(String, H) :: T] =
-    instanceObj { case h :: t =>
-      val hField  = h._1 -> hInstance.value.structureOf(h._2)
-      val tFields = tInstance.structureOf(t).fields
-      Structure.Obj(hField :: tFields)
+  private inline def productInstance[A](p: Mirror.ProductOf[A]): EmptinessChecker[A] = {
+    val elemLabels = summonLabels[p.MirroredElemLabels]
+    val elemInstances = summonAllInstances[p.MirroredElemTypes]
+    instance { a =>
+      val elems = a.asInstanceOf[Product].productIterator.toList
+      val fields = elemLabels.zip(elems).zip(elemInstances).map {
+        case ((label, value), checker: Lazy[EmptinessChecker[Any]]) =>
+          label -> checker.value().structureOf(value)
+      }
+      Structure.Obj(fields)
+    }
+  }
+
+  private inline def summonLabels[T <: Tuple]: List[String] =
+    inline erasedValue[T] match {
+      case _: (h *: t) => constValue[h].asInstanceOf[String] :: summonLabels[t]
+      case _: EmptyTuple => Nil
     }
 
-  implicit def genericInstance[A, R](implicit
-      gen: LabelledGeneric.Aux[A, R],
-      enc: Lazy[EmptinessChecker[R]]
-  ): EmptinessChecker[A] =
-    instance(a => enc.value.structureOf(gen.to(a)))
-
+  private inline def summonAllInstances[T <: Tuple]: List[Lazy[EmptinessChecker[Any]]] =
+    inline erasedValue[T] match {
+      case _: (h *: t) => Lazy.make(using summonInline[EmptinessChecker[h]]).asInstanceOf[Lazy[EmptinessChecker[Any]]] :: summonAllInstances[t]
+      case _: EmptyTuple => Nil
+    }
 }

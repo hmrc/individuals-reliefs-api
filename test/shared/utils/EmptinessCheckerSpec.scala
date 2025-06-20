@@ -16,12 +16,13 @@
 
 package shared.utils
 
-import shared.utils.EmptinessChecker._
-import shared.utils.EmptyPathsResult._
+import shared.utils.EmptinessChecker.*
+import shared.utils.EmptyPathsResult.*
 
 class EmptinessCheckerSpec extends UnitSpec {
 
-  sealed trait SomeEnum
+  enum SomeEnum:
+    case E1, E2
 
   case class Baz(a: Option[Int] = None, e: Option[SomeEnum] = None)
 
@@ -34,11 +35,19 @@ class EmptinessCheckerSpec extends UnitSpec {
                  bar2: Option[Bar] = None)
 
   object SomeEnum {
-    case object E1 extends SomeEnum
+    given EmptinessChecker[SomeEnum] = EmptinessChecker.primitive
+  }
 
-    case object E2 extends SomeEnum
+  object Foo {
+    given EmptinessChecker[Foo] = EmptinessChecker.derived
+  }
 
-    implicit val ckr: EmptinessChecker[SomeEnum] = EmptinessChecker.primitive
+  object Bar {
+    given EmptinessChecker[Bar] = EmptinessChecker.derived
+  }
+
+  object Baz {
+    given EmptinessChecker[Baz] = EmptinessChecker.derived
   }
 
   "EmptinessChecker" when {

@@ -16,19 +16,23 @@
 
 package shared.models.domain
 
-import play.api.libs.json.Format
-import shared.utils.enums.Enums
+import play.api.libs.json.*
+import shared.definition.APIStatus
 
-sealed trait Status {}
+enum Status {
+  case valid, invalid, superseded
+}
 
-//noinspection ScalaStyle
 object Status {
-
-  case object valid extends Status
-
-  case object invalid extends Status
-
-  case object superseded extends Status
-
-  implicit val format: Format[Status] = Enums.format[Status]
+  given Format[Status] = Format(
+    Reads {
+      case JsString(status) => Status.values.find(_.toString == status).map(JsSuccess(_))
+        .getOrElse(JsError(s"Unknown Status: $status"))
+      case _ => JsError("Expected a string for Status")
+    },
+    Writes {
+      (status: Status) => JsString(status.toString)
+      }
+    )
+  
 }

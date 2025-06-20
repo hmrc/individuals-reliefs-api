@@ -19,6 +19,7 @@ package shared.mocks
 import izumi.reflect.Tag
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.JsValue
 import play.api.libs.ws.BodyWritable
@@ -29,7 +30,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockHttpClient extends MockFactory {
+trait MockHttpClient extends MockFactory { self: TestSuite =>
 
   val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
   val mockRequestBuilder: RequestBuilder = mock[RequestBuilder]
@@ -54,7 +55,7 @@ trait MockHttpClient extends MockFactory {
               assertHeaders(headersForUrl, requiredHeaders, excludedHeaders)
             }
         }).returns(mockRequestBuilder)
-      (mockRequestBuilder.execute(_: HttpReads[T], _: ExecutionContext)).expects(*,*)
+      (mockRequestBuilder.execute[T](using _: HttpReads[T], _: ExecutionContext)).expects(*,*)
     }
 
     def post[T](url: URL,
@@ -75,11 +76,10 @@ trait MockHttpClient extends MockFactory {
           }
         }).returns(mockRequestBuilder)
 
-      (mockRequestBuilder.withBody(_: JsValue)(_: BodyWritable[JsValue], _: Tag[JsValue], _: ExecutionContext))
+      (mockRequestBuilder.withBody(_: JsValue)(using _: BodyWritable[JsValue], _: Tag[JsValue], _: ExecutionContext))
         .expects(body, *, *, *)
         .returns(mockRequestBuilder)
-      (mockRequestBuilder.execute(_: HttpReads[T], _: ExecutionContext))
-        .expects(*,*)
+      (mockRequestBuilder.execute[T](using _: HttpReads[T], _: ExecutionContext)).expects(*, *)
     }
 
     def put[T](url: URL,
@@ -100,10 +100,10 @@ trait MockHttpClient extends MockFactory {
           }
         }).returns(mockRequestBuilder)
 
-      (mockRequestBuilder.withBody(_: JsValue)(_: BodyWritable[JsValue], _: Tag[JsValue], _: ExecutionContext))
+      (mockRequestBuilder.withBody(_: JsValue)(using _: BodyWritable[JsValue], _: Tag[JsValue], _: ExecutionContext))
         .expects(body, *, *, *)
         .returns(mockRequestBuilder)
-      (mockRequestBuilder.execute(_: HttpReads[T], _: ExecutionContext))
+      (mockRequestBuilder.execute[T](using _: HttpReads[T], _: ExecutionContext))
         .expects(*,*)
     }
 
@@ -123,7 +123,7 @@ trait MockHttpClient extends MockFactory {
             assertHeaders(headersForUrl, requiredHeaders, excludedHeaders)
           }
         }).returns(mockRequestBuilder)
-      (mockRequestBuilder.execute(_: HttpReads[T], _: ExecutionContext)).expects(*,*)
+      (mockRequestBuilder.execute[T](using _: HttpReads[T], _: ExecutionContext)).expects(*, *)
     }
 
     private def assertHeaders[T, I](actualHeaders: Seq[(String, String)],
