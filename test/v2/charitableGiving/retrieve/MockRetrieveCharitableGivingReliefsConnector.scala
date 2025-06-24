@@ -18,6 +18,7 @@ package v2.charitableGiving.retrieve
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.charitableGiving.retrieve.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
@@ -25,7 +26,7 @@ import v2.charitableGiving.retrieve.model.response.RetrieveCharitableGivingRelie
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveCharitableGivingReliefsConnector extends MockFactory {
+trait MockRetrieveCharitableGivingReliefsConnector extends TestSuite with MockFactory {
 
   val mockConnector: RetrieveCharitableGivingReliefsConnector = mock[RetrieveCharitableGivingReliefsConnector]
 

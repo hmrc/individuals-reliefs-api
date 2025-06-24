@@ -23,7 +23,7 @@ import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.TaxYear
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
 import v2.foreignReliefs.delete.model.Def1_DeleteForeignReliefsRequestData
@@ -78,7 +78,7 @@ class DeleteForeignReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new DeleteForeignReliefsController(
+    val controller: DeleteForeignReliefsController = new DeleteForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteForeignReliefsValidatorFactory,

@@ -18,13 +18,14 @@ package v1.createAndAmendForeignReliefs
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.createAndAmendForeignReliefs.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAndAmendForeignReliefsConnector extends MockFactory {
+trait MockCreateAndAmendForeignReliefsConnector extends TestSuite with MockFactory {
 
   val mockCreateAndAmendForeignReliefsConnector: CreateAndAmendForeignReliefsConnector = mock[CreateAndAmendForeignReliefsConnector]
 

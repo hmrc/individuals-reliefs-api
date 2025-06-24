@@ -18,18 +18,22 @@ package v2.foreignReliefs.retrieve
 
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.foreignReliefs.retrieve.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
+import v2.foreignReliefs.retrieve.def1.model.response.{
+  Def1_ForeignIncomeTaxCreditRelief,
+  Def1_ForeignTaxCreditRelief,
+  Def1_ForeignTaxForFtcrNotClaimed
+}
 import v2.foreignReliefs.retrieve.model.request.Def1_RetrieveForeignReliefsRequestData
 import v2.foreignReliefs.retrieve.model.response.Def1_RetrieveForeignReliefsResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RetrieveForeignReliefsServiceSpec extends UnitSpec {
+class RetrieveForeignReliefsServiceSpec extends UnitSpec with MockRetrieveForeignReliefsConnector {
 
   private val nino: String           = "ZG903729C"
   private val taxYear: String        = "2017-18"
@@ -44,7 +48,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
 
   private val requestData = Def1_RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test extends MockRetrieveForeignReliefsConnector {
+  trait Test {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
@@ -89,7 +93,7 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => serviceError.apply.tupled(args))
     }
   }
 

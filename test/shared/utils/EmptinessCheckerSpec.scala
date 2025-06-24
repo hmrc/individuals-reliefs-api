@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 
 package shared.utils
 
-import shared.utils.EmptinessChecker._
-import shared.utils.EmptyPathsResult._
+import shared.utils.EmptinessChecker.*
+import shared.utils.EmptyPathsResult.*
 
 class EmptinessCheckerSpec extends UnitSpec {
 
-  sealed trait SomeEnum
+  enum SomeEnum {
+    case E1, E2
+  }
 
   case class Baz(a: Option[Int] = None, e: Option[SomeEnum] = None)
 
@@ -34,11 +36,7 @@ class EmptinessCheckerSpec extends UnitSpec {
                  bar2: Option[Bar] = None)
 
   object SomeEnum {
-    case object E1 extends SomeEnum
-
-    case object E2 extends SomeEnum
-
-    implicit val ckr: EmptinessChecker[SomeEnum] = EmptinessChecker.primitive
+    given EmptinessChecker[SomeEnum] = EmptinessChecker.primitive
   }
 
   "EmptinessChecker" when {

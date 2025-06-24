@@ -26,7 +26,7 @@ import shared.models.errors
 import shared.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
 import shared.models.outcomes.ResponseWrapper
 import v2.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
-import v2.otherReliefs.retrieve.def1.model.response._
+import v2.otherReliefs.retrieve.def1.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -145,7 +145,7 @@ class RetrieveOtherReliefsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveOtherReliefsController(
+    val controller: RetrieveOtherReliefsController = new RetrieveOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveOtherReliefsValidatorFactory,

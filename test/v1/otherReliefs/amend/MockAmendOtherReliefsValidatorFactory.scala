@@ -20,12 +20,13 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
-trait MockAmendOtherReliefsValidatorFactory extends MockFactory {
+trait MockAmendOtherReliefsValidatorFactory extends TestSuite with MockFactory {
 
   val mockAmendOtherReliefsValidatorFactory: AmendOtherReliefsValidatorFactory =
     mock[AmendOtherReliefsValidatorFactory]

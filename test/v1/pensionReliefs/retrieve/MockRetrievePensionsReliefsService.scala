@@ -18,6 +18,7 @@ package v1.pensionReliefs.retrieve
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.models.errors.ErrorWrapper
 import shared.models.outcomes.ResponseWrapper
@@ -26,7 +27,7 @@ import v1.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrievePensionsReliefsService extends MockFactory {
+trait MockRetrievePensionsReliefsService extends TestSuite with MockFactory {
 
   val mockService: RetrievePensionsReliefsService = mock[RetrievePensionsReliefsService]
 

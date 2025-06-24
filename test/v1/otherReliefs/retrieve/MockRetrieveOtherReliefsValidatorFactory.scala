@@ -20,11 +20,12 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v1.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
 
-trait MockRetrieveOtherReliefsValidatorFactory extends MockFactory {
+trait MockRetrieveOtherReliefsValidatorFactory extends TestSuite with MockFactory {
 
   val mockRetrieveOtherReliefsValidatorFactory: RetrieveOtherReliefsValidatorFactory = mock[RetrieveOtherReliefsValidatorFactory]
 

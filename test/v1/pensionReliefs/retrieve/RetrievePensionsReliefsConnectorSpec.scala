@@ -20,10 +20,10 @@ import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear, Timestamp}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v1.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v1.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
 import v1.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -33,8 +33,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
   val taxableEntityId: String = "ZG903729C"
 
   trait Test {
-    _: ConnectorTest =>
-
+   self: ConnectorTest =>
     def taxYear: TaxYear
 
     val connector: RetrievePensionsReliefsConnector = new RetrievePensionsReliefsConnector(

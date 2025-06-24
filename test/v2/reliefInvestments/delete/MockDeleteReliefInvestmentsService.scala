@@ -18,6 +18,7 @@ package v2.reliefInvestments.delete
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.models.errors.ErrorWrapper
 import shared.models.outcomes.ResponseWrapper
@@ -25,7 +26,7 @@ import v2.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteReliefInvestmentsService extends MockFactory {
+trait MockDeleteReliefInvestmentsService extends TestSuite with MockFactory {
 
   val mockService: DeleteReliefInvestmentsService = mock[DeleteReliefInvestmentsService]
 

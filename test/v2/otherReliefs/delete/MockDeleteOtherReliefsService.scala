@@ -18,6 +18,7 @@ package v2.otherReliefs.delete
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.models.errors.ErrorWrapper
 import shared.models.outcomes.ResponseWrapper
@@ -25,7 +26,7 @@ import v2.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteOtherReliefsService extends MockFactory {
+trait MockDeleteOtherReliefsService extends TestSuite with MockFactory {
 
   val mockDeleteOtherReliefsService: DeleteOtherReliefsService = mock[DeleteOtherReliefsService]
 

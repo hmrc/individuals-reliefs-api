@@ -18,13 +18,14 @@ package v1.createAndAmendCharitableGivingReliefs
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAndAmendCharitableGivingTaxReliefsConnector extends MockFactory {
+trait MockCreateAndAmendCharitableGivingTaxReliefsConnector extends TestSuite with MockFactory {
 
   val mockConnector: CreateAndAmendCharitableGivingTaxReliefsConnector = mock[CreateAndAmendCharitableGivingTaxReliefsConnector]
 

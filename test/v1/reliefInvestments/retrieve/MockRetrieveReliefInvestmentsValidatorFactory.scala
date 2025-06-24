@@ -20,11 +20,12 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v1.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 
-trait MockRetrieveReliefInvestmentsValidatorFactory extends MockFactory {
+trait MockRetrieveReliefInvestmentsValidatorFactory extends TestSuite with MockFactory {
 
   val mockRetrieveReliefInvestmentsValidatorFactory: RetrieveReliefInvestmentsValidatorFactory = mock[RetrieveReliefInvestmentsValidatorFactory]
 

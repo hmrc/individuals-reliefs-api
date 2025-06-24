@@ -19,10 +19,10 @@ package v2.reliefInvestments.createAmend
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures._
+import uk.gov.hmrc.http.StringContextOps
+import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures.*
 import v2.reliefInvestments.createAmend.def1.model.request.Def1_CreateAndAmendReliefInvestmentsRequestData
 import v2.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -30,8 +30,7 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
   val nino = "ZG903729C"
 
-  trait Test { _: ConnectorTest =>
-
+  trait Test { self: ConnectorTest =>
     val taxYear: String
 
     val connector: CreateAndAmendReliefInvestmentsConnector = new CreateAndAmendReliefInvestmentsConnector(

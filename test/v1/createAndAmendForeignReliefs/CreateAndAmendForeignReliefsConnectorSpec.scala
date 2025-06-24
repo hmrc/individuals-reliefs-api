@@ -19,10 +19,10 @@ package v1.createAndAmendForeignReliefs
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v1.createAndAmendForeignReliefs.CreateAndAmendForeignReliefsFixtures.requestBodyModel
 import v1.createAndAmendForeignReliefs.def1.model
 import v1.createAndAmendForeignReliefs.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -63,8 +63,7 @@ class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
-
+  trait Test { self: ConnectorTest =>
     val taxYear: String
 
     val connector: CreateAndAmendForeignReliefsConnector = new CreateAndAmendForeignReliefsConnector(

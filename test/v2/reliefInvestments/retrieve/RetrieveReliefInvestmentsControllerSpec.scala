@@ -22,7 +22,7 @@ import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.TaxYear
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import v2.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v2.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
@@ -128,7 +128,7 @@ class RetrieveReliefInvestmentsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveReliefInvestmentsController(
+    val controller: RetrieveReliefInvestmentsController = new RetrieveReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveReliefInvestmentsValidatorFactory,

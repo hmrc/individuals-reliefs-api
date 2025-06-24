@@ -18,13 +18,14 @@ package v2.foreignReliefs.delete
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.foreignReliefs.delete.model.DeleteForeignReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteForeignReliefsConnector extends MockFactory {
+trait MockDeleteForeignReliefsConnector extends TestSuite with MockFactory {
 
   val mockDeleteForeignReliefsConnector: DeleteForeignReliefsConnector = mock[DeleteForeignReliefsConnector]
 

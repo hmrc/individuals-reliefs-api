@@ -21,14 +21,14 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.hateoas.Method._
+import shared.hateoas.Method.*
 import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.domain.{TaxYear, Timestamp}
 import shared.models.errors
 import shared.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
 import shared.models.outcomes.ResponseWrapper
 import v1.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
-import v1.otherReliefs.retrieve.def1.model.response._
+import v1.otherReliefs.retrieve.def1.model.response.*
 import v1.otherReliefs.retrieve.model.response.RetrieveOtherReliefsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -162,7 +162,7 @@ class RetrieveOtherReliefsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveOtherReliefsController(
+    val controller: RetrieveOtherReliefsController = new RetrieveOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveOtherReliefsValidatorFactory,

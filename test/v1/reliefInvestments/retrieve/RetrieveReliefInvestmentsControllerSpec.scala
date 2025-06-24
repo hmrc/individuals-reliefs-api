@@ -21,10 +21,10 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.hateoas.Method._
+import shared.hateoas.Method.*
 import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
 import shared.models.domain.TaxYear
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import v1.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v1.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
@@ -144,7 +144,7 @@ class RetrieveReliefInvestmentsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveReliefInvestmentsController(
+    val controller: RetrieveReliefInvestmentsController = new RetrieveReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveReliefInvestmentsValidatorFactory,

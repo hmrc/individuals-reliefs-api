@@ -18,6 +18,7 @@ package v2.otherReliefs.retrieve
 
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
@@ -25,7 +26,7 @@ import v2.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveOtherReliefsConnector extends MockFactory {
+trait MockRetrieveOtherReliefsConnector extends TestSuite with MockFactory {
 
   val mockConnector: RetrieveOtherReliefsConnector = mock[RetrieveOtherReliefsConnector]
 

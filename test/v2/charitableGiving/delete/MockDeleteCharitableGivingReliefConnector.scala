@@ -18,13 +18,14 @@ package v2.charitableGiving.delete
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.charitableGiving.delete.model.request.DeleteCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCharitableGivingReliefConnector extends MockFactory {
+trait MockDeleteCharitableGivingReliefConnector extends TestSuite with MockFactory {
 
   val mockConnector: DeleteCharitableGivingReliefConnector = mock[DeleteCharitableGivingReliefConnector]
 
