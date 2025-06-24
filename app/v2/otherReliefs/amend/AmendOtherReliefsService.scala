@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendOtherReliefsService @Inject()(connector: AmendOtherReliefsConnector) extends BaseService {
+class AmendOtherReliefsService @Inject() (connector: AmendOtherReliefsConnector) extends BaseService {
 
   def amend(request: AmendOtherReliefsRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 

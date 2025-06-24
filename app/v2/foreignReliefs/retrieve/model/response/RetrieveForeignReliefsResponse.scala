@@ -18,7 +18,11 @@ package v2.foreignReliefs.retrieve.model.response
 
 import play.api.libs.json.{Json, OWrites, Reads}
 import shared.models.domain.Timestamp
-import v2.foreignReliefs.retrieve.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
+import v2.foreignReliefs.retrieve.def1.model.response.{
+  Def1_ForeignIncomeTaxCreditRelief,
+  Def1_ForeignTaxCreditRelief,
+  Def1_ForeignTaxForFtcrNotClaimed
+}
 
 sealed trait RetrieveForeignReliefsResponse
 

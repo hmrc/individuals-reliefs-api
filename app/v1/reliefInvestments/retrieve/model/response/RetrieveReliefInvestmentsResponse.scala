@@ -47,4 +47,3 @@ object RetrieveReliefInvestmentsResponse extends HateoasLinks {
 }
 
 case class RetrieveReliefInvestmentsHateoasData(nino: String, taxYear: String) extends HateoasData
-

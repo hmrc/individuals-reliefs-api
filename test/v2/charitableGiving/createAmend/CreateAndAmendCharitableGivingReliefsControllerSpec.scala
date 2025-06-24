@@ -27,7 +27,11 @@ import shared.models.errors
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.MockIdGenerator
-import v2.charitableGiving.createAmend.def1.model.request.{Def1_CreateAndAmendCharitableGivingTaxReliefsBody, Def1_GiftAidPayments, Def1_NonUkCharities}
+import v2.charitableGiving.createAmend.def1.model.request.{
+  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
+  Def1_GiftAidPayments,
+  Def1_NonUkCharities
+}
 import v2.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global

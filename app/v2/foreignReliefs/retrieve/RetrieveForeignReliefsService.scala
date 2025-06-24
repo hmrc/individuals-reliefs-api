@@ -30,8 +30,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveForeignReliefsService @Inject() (connector: RetrieveForeignReliefsConnector) extends BaseService {
 
   def retrieve(request: RetrieveForeignReliefsRequestData)(implicit
-                                                           ctx: RequestContext,
-                                                           ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignReliefsResponse]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignReliefsResponse]] = {
 
     connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(errorMap)))
   }

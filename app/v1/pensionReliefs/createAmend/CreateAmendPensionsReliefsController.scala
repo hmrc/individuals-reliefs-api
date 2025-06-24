@@ -38,7 +38,7 @@ class CreateAmendPensionsReliefsController @Inject() (val authService: Enrolment
                                                       auditService: AuditService,
                                                       hateoasFactory: HateoasFactory,
                                                       cc: ControllerComponents,
-                                                      idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig,ec: ExecutionContext)
+                                                      idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "create-amend-pensions-reliefs"

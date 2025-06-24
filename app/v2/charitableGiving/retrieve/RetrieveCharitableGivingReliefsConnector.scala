@@ -40,8 +40,7 @@ class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClientV2
     def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
-        IfsUri[Def1_RetrieveCharitableGivingReliefsResponse](
-          s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
+        IfsUri[Def1_RetrieveCharitableGivingReliefsResponse](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
       } else {
         IfsUri[Def1_RetrieveCharitableGivingReliefsResponse](preTysPath)
       }
@@ -64,4 +63,5 @@ class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClientV2
         completeDef1Request(def1)
     }
   }
+
 }

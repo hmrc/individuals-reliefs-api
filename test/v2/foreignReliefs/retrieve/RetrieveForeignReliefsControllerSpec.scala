@@ -25,7 +25,11 @@ import shared.models.domain.{TaxYear, Timestamp}
 import shared.models.errors
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
-import v2.foreignReliefs.retrieve.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
+import v2.foreignReliefs.retrieve.def1.model.response.{
+  Def1_ForeignIncomeTaxCreditRelief,
+  Def1_ForeignTaxCreditRelief,
+  Def1_ForeignTaxForFtcrNotClaimed
+}
 import v2.foreignReliefs.retrieve.model.request.Def1_RetrieveForeignReliefsRequestData
 import v2.foreignReliefs.retrieve.model.response.Def1_RetrieveForeignReliefsResponse
 
@@ -39,8 +43,8 @@ class RetrieveForeignReliefsControllerSpec
     with MockRetrieveForeignReliefsValidatorFactory
     with MockSharedAppConfig {
 
-  private val taxYear         = "2019-20"
-  private val requestData     = Def1_RetrieveForeignReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
+  private val taxYear     = "2019-20"
+  private val requestData = Def1_RetrieveForeignReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
 
   private val responseBody = Def1_RetrieveForeignReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),

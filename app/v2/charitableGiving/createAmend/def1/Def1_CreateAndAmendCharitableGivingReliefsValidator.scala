@@ -24,13 +24,17 @@ import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJson
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v2.charitableGiving.createAmend.def1.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsBody
-import v2.charitableGiving.createAmend.model.request.{CreateAndAmendCharitableGivingTaxReliefsRequestData, Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData}
+import v2.charitableGiving.createAmend.model.request.{
+  CreateAndAmendCharitableGivingTaxReliefsRequestData,
+  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
+}
 
 class Def1_CreateAndAmendCharitableGivingReliefsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAndAmendCharitableGivingTaxReliefsRequestData] {
 
   private val resolveJson: ResolveNonEmptyJsonObject[Def1_CreateAndAmendCharitableGivingTaxReliefsBody] =
     new ResolveNonEmptyJsonObject[Def1_CreateAndAmendCharitableGivingTaxReliefsBody]()
+
   private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2017-18"))
 
   private val rulesValidator =

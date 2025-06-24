@@ -21,11 +21,11 @@ import shared.utils.JsonWritesUtil.writesFrom
 import v2.reliefInvestments.retrieve.def1.model.response.Def1_RetrieveReliefInvestmentsResponse
 
 trait RetrieveReliefInvestmentsResponse
+
 object RetrieveReliefInvestmentsResponse {
 
   implicit val writes: OWrites[RetrieveReliefInvestmentsResponse] = writesFrom { case def1: Def1_RetrieveReliefInvestmentsResponse =>
     implicitly[OWrites[Def1_RetrieveReliefInvestmentsResponse]].writes(def1)
   }
+
 }
-
-

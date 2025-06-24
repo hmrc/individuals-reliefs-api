@@ -20,13 +20,13 @@ import play.api.libs.json.{Json, OFormat}
 import v2.otherReliefs.amend.model.request.AmendOtherReliefsBody
 
 case class Def1_AmendOtherReliefsRequestBody(
-                                              nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
-                                              payrollGiving: Option[PayrollGiving],
-                                              qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
-                                              maintenancePayments: Option[Seq[MaintenancePayments]],
-                                              postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
-                                              annualPaymentsMade: Option[AnnualPaymentsMade],
-                                              qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]])
+    nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
+    payrollGiving: Option[PayrollGiving],
+    qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
+    maintenancePayments: Option[Seq[MaintenancePayments]],
+    postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
+    annualPaymentsMade: Option[AnnualPaymentsMade],
+    qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]])
     extends AmendOtherReliefsBody {
 
   private def isEmpty: Boolean =

@@ -25,6 +25,7 @@ import javax.inject.Singleton
 
 @Singleton
 class RetrieveOtherReliefsValidatorFactory {
+
   def validator(nino: String, taxYear: String): Validator[RetrieveOtherReliefsRequestData] = {
 
     val schema = RetrieveOtherReliefsSchema.schemaFor(Some(taxYear))

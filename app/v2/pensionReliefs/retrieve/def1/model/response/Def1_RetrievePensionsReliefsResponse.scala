@@ -22,7 +22,7 @@ import v2.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
 
 case class Def1_RetrievePensionsReliefsResponse(submittedOn: Timestamp, pensionReliefs: PensionsReliefs) extends RetrievePensionsReliefsResponse
 
-object Def1_RetrievePensionsReliefsResponse{
+object Def1_RetrievePensionsReliefsResponse {
   implicit val reads: Reads[Def1_RetrievePensionsReliefsResponse] = Json.reads[Def1_RetrievePensionsReliefsResponse]
 
   implicit val writes: OWrites[Def1_RetrievePensionsReliefsResponse] = Json.writes[Def1_RetrievePensionsReliefsResponse]

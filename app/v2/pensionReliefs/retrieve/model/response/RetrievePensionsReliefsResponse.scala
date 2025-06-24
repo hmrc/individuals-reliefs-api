@@ -24,8 +24,8 @@ trait RetrievePensionsReliefsResponse
 
 object RetrievePensionsReliefsResponse {
 
-  implicit val writes: OWrites[RetrievePensionsReliefsResponse] = writesFrom {
-    case def1: Def1_RetrievePensionsReliefsResponse => implicitly[OWrites[Def1_RetrievePensionsReliefsResponse]].writes(def1)
+  implicit val writes: OWrites[RetrievePensionsReliefsResponse] = writesFrom { case def1: Def1_RetrievePensionsReliefsResponse =>
+    implicitly[OWrites[Def1_RetrievePensionsReliefsResponse]].writes(def1)
   }
 
 }

@@ -23,10 +23,10 @@ sealed trait RetrieveCharitableGivingReliefsResponse {
   def retrieveCharitableGivingReliefResponse: RetrieveCharitableGivingReliefsResponse
 }
 
-object RetrieveCharitableGivingReliefsResponse  {
+object RetrieveCharitableGivingReliefsResponse {
 
-  implicit val writes: OWrites[RetrieveCharitableGivingReliefsResponse] = {
-    case def1: Def1_RetrieveCharitableGivingReliefsResponse => Json.toJsObject(def1)
+  implicit val writes: OWrites[RetrieveCharitableGivingReliefsResponse] = { case def1: Def1_RetrieveCharitableGivingReliefsResponse =>
+    Json.toJsObject(def1)
   }
 
 }
@@ -48,6 +48,5 @@ object Def1_RetrieveCharitableGivingReliefsResponse {
 
     ifsReads orElse defaultReads
   }
-
 
 }

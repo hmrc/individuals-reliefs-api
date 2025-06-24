@@ -32,7 +32,6 @@ class ReliefsDefinitionFactorySpec extends UnitSpec {
     MockedSharedAppConfig.apiGatewayContext returns "individuals/reliefs"
   }
 
-
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {

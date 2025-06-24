@@ -19,7 +19,12 @@ package v2.charitableGiving.createAmend
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import v2.charitableGiving.createAmend.def1.model.request.{Def1_CreateAndAmendCharitableGivingTaxReliefsBody, Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
+import v2.charitableGiving.createAmend.def1.model.request.{
+  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
+  Def1_GiftAidPayments,
+  Def1_Gifts,
+  Def1_NonUkCharities
+}
 import v2.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 import uk.gov.hmrc.http.StringContextOps
 
@@ -98,4 +103,5 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
     protected val outcome = Right(ResponseWrapper(correlationId, ()))
 
   }
+
 }
