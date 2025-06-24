@@ -27,7 +27,7 @@ import shared.models.errors.MtdError
 import v2.charitableGiving.createAmend.CreateAndAmendCharitableGivingReliefsValidatorFactory
 import v2.charitableGiving.createAmend.model.request.CreateAndAmendCharitableGivingTaxReliefsRequestData
 
-trait MockCreateAndAmendCharitableGivingReliefsValidatorFactory extends MockFactory { self: TestSuite =>
+trait MockCreateAndAmendCharitableGivingReliefsValidatorFactory extends TestSuite with MockFactory {
 
   val mockCreateAndAmendCharitableGivingReliefsValidatorFactory: CreateAndAmendCharitableGivingReliefsValidatorFactory =
     mock[CreateAndAmendCharitableGivingReliefsValidatorFactory]

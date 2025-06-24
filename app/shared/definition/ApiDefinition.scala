@@ -18,6 +18,7 @@ package shared.definition
 
 import play.api.libs.json.*
 import shared.routing.Version
+import shared.utils.enums.Enums
 
 enum APIStatus {
   case ALPHA, BETA, STABLE, DEPRECATED, RETIRED
@@ -29,23 +30,14 @@ object APIStatus {
     APIStatus.values.find(_.toString == status).get
   }
 
-  given Format[APIStatus] = Format(
-    Reads {
-        case JsString(status) => APIStatus.values.find(_.toString == status).map(JsSuccess(_))
-          .getOrElse(JsError(s"Unknown APIStatus: $status"))
-        case _ => JsError("Expected a string for APIStatus")
-    },
-    Writes {
-      (status: APIStatus) => JsString(status.toString)
-    }
-  )
+  given Format[APIStatus] = Enums.format(values)
   
 }
 
 case class APIVersion(version: Version, status: APIStatus, endpointsEnabled: Boolean)
 
 object APIVersion {
-  implicit val formatAPIVersion: OFormat[APIVersion] = Json.format[APIVersion]
+  given OFormat[APIVersion] = Json.format[APIVersion]
 }
 
 case class APIDefinition(name: String,
@@ -69,5 +61,5 @@ case class APIDefinition(name: String,
 }
 
 object APIDefinition {
-  implicit val formatAPIDefinition: OFormat[APIDefinition] = Json.format[APIDefinition]
+  given OFormat[APIDefinition] = Json.format[APIDefinition]
 }

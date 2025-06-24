@@ -30,7 +30,7 @@ import java.net.URL
 import java.util.Base64
 import scala.concurrent.{ExecutionContext, Future}
 
-trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames { self: TestSuite =>
+trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames {
 
   lazy val baseUrl                   = "http://test-BaseUrl"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
@@ -50,7 +50,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
       Some("this-api")
     )
 
-  protected trait ConnectorTest extends UnitSpec with MockHttpClient with MockSharedAppConfig { self: TestSuite =>
+  protected trait ConnectorTest extends UnitSpec with MockHttpClient with MockSharedAppConfig {
     protected val baseUrl: String = "http://test-BaseUrl"
 
     protected lazy val requiredHeaders: Seq[(String, String)]
@@ -104,7 +104,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
 
   }
 
-  protected trait StandardConnectorTest extends ConnectorTest { self: TestSuite =>
+  protected trait StandardConnectorTest extends ConnectorTest {
     protected def name: String
 
     private val token       = s"$name-token"
@@ -121,25 +121,25 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     protected final val config: DownstreamConfig = DownstreamConfig(this.baseUrl, environment, token, Some(allowedHeaders))
   }
 
-  protected trait DesTest extends StandardConnectorTest { self: TestSuite =>
+  protected trait DesTest extends StandardConnectorTest {
     val name = "des"
 
     MockedSharedAppConfig.desDownstreamConfig.anyNumberOfTimes() returns config
   }
 
-  protected trait IfsTest extends StandardConnectorTest { self: TestSuite =>
+  protected trait IfsTest extends StandardConnectorTest {
     override val name = "ifs"
 
     MockedSharedAppConfig.ifsDownstreamConfig.anyNumberOfTimes() returns config
   }
 
-  protected trait TysIfsTest extends StandardConnectorTest { self: TestSuite =>
+  protected trait TysIfsTest extends StandardConnectorTest {
     override val name = "tys-ifs"
 
     MockedSharedAppConfig.tysIfsDownstreamConfig.anyNumberOfTimes() returns config
   }
 
-  protected trait HipTest extends ConnectorTest { self: TestSuite =>
+  protected trait HipTest extends ConnectorTest {
     private val clientId     = "clientId"
     private val clientSecret = "clientSecret"
 

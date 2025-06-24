@@ -27,7 +27,7 @@ import v2.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveOtherReliefsService extends MockFactory { self: TestSuite =>
+trait MockRetrieveOtherReliefsService extends TestSuite with MockFactory {
 
   val mockService: RetrieveOtherReliefsService = mock[RetrieveOtherReliefsService]
 

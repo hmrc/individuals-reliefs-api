@@ -26,7 +26,7 @@ import v2.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForei
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAndAmendForeignReliefsService extends MockFactory { self: TestSuite =>
+trait MockCreateAndAmendForeignReliefsService extends TestSuite with MockFactory {
 
   val mockService: CreateAndAmendForeignReliefsService = mock[CreateAndAmendForeignReliefsService]
 

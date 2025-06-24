@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,9 @@ import shared.utils.EmptyPathsResult.*
 
 class EmptinessCheckerSpec extends UnitSpec {
 
-  enum SomeEnum:
+  enum SomeEnum {
     case E1, E2
+  }
 
   case class Baz(a: Option[Int] = None, e: Option[SomeEnum] = None)
 
@@ -36,18 +37,6 @@ class EmptinessCheckerSpec extends UnitSpec {
 
   object SomeEnum {
     given EmptinessChecker[SomeEnum] = EmptinessChecker.primitive
-  }
-
-  object Foo {
-    given EmptinessChecker[Foo] = EmptinessChecker.derived
-  }
-
-  object Bar {
-    given EmptinessChecker[Bar] = EmptinessChecker.derived
-  }
-
-  object Baz {
-    given EmptinessChecker[Baz] = EmptinessChecker.derived
   }
 
   "EmptinessChecker" when {

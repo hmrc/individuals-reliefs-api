@@ -26,7 +26,7 @@ import uk.gov.hmrc.play.audit.http.connector.AuditResult
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAuditService extends MockFactory { self: TestSuite =>
+trait MockAuditService extends TestSuite with MockFactory {
 
   val mockAuditService: AuditService = stub[AuditService]
 

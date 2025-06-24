@@ -36,7 +36,7 @@ class RetrieveReliefInvestmentsServiceSpec extends UnitSpec {
 
   private val requestData = Def1_RetrieveReliefInvestmentsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
-  trait Test extends UnitSpec with MockRetrieveReliefInvestmentsConnector { self: TestSuite =>
+  trait Test extends UnitSpec with MockRetrieveReliefInvestmentsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 

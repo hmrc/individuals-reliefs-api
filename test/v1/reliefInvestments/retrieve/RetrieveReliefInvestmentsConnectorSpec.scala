@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
-  trait Test { self: ConnectorTest with TestSuite =>
+  trait Test { self: ConnectorTest =>
     val taxYear: String
 
     val connector: RetrieveReliefInvestmentsConnector = new RetrieveReliefInvestmentsConnector(
