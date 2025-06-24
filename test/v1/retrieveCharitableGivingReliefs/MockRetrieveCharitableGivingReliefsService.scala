@@ -18,6 +18,7 @@ package v1.retrieveCharitableGivingReliefs
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.models.errors.ErrorWrapper
 import shared.models.outcomes.ResponseWrapper
@@ -26,7 +27,7 @@ import v1.retrieveCharitableGivingReliefs.model.response.RetrieveCharitableGivin
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveCharitableGivingReliefsService extends MockFactory {
+trait MockRetrieveCharitableGivingReliefsService extends TestSuite with MockFactory {
 
   val mockRetrieveCharitableGivingReliefsService: RetrieveCharitableGivingReliefsService = mock[RetrieveCharitableGivingReliefsService]
 

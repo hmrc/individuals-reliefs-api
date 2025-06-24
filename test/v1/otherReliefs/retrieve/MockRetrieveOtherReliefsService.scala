@@ -18,6 +18,7 @@ package v1.otherReliefs.retrieve
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.models.errors.ErrorWrapper
 import shared.models.outcomes.ResponseWrapper
@@ -26,7 +27,7 @@ import v1.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveOtherReliefsService extends MockFactory {
+trait MockRetrieveOtherReliefsService extends TestSuite with MockFactory {
 
   val mockService: RetrieveOtherReliefsService = mock[RetrieveOtherReliefsService]
 
