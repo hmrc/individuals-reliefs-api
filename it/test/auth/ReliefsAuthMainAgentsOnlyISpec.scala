@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package test.auth
+package auth
 
 import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}

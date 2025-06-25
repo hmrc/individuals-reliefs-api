@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package test.v1.endpoints
+package v1.endpoints
 
 import common.{DateOfInvestmentFormatError, NameFormatError, UniqueInvestmentRefFormatError}
 import play.api.http.HeaderNames.ACCEPT
