@@ -31,8 +31,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
-    extends BaseDownstreamConnector {
+class DeleteCharitableGivingReliefConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   private def completeRequest(nino: Nino, taxYear: TaxYear)(implicit
       hc: HeaderCarrier,

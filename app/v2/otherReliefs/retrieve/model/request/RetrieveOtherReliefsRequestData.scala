@@ -19,7 +19,7 @@ package v2.otherReliefs.retrieve.model.request
 import shared.models.domain.{Nino, TaxYear}
 import v2.otherReliefs.retrieve.RetrieveOtherReliefsSchema
 
-trait RetrieveOtherReliefsRequestData{
+trait RetrieveOtherReliefsRequestData {
   def nino: Nino
   def taxYear: TaxYear
 

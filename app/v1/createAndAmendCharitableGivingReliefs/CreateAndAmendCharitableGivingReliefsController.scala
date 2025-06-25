@@ -31,14 +31,15 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class CreateAndAmendCharitableGivingReliefsController @Inject() (val authService: EnrolmentsAuthService,
-                                                                 val lookupService: MtdIdLookupService,
-                                                                 validatorFactory: CreateAndAmendCharitableGivingReliefsValidatorFactory,
-                                                                 service: CreateAndAmendCharitableGivingTaxReliefsService,
-                                                                 auditService: AuditService,
-                                                                 hateoasFactory: HateoasFactory,
-                                                                 cc: ControllerComponents,
-                                                                 val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
+class CreateAndAmendCharitableGivingReliefsController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: CreateAndAmendCharitableGivingReliefsValidatorFactory,
+    service: CreateAndAmendCharitableGivingTaxReliefsService,
+    auditService: AuditService,
+    hateoasFactory: HateoasFactory,
+    cc: ControllerComponents,
+    val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "create-amend-charitable-giving-reliefs"

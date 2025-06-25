@@ -18,6 +18,7 @@ package v1.reliefInvestments.createAmend
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.models.errors.ErrorWrapper
 import shared.models.outcomes.ResponseWrapper
@@ -25,7 +26,7 @@ import v1.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAndAmendReliefInvestmentsService extends MockFactory {
+trait MockCreateAndAmendReliefInvestmentsService extends TestSuite with MockFactory {
 
   val mockService: CreateAndAmendReliefInvestmentsService = mock[CreateAndAmendReliefInvestmentsService]
 

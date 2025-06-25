@@ -20,4 +20,4 @@ import shared.models.domain.{Nino, TaxYear}
 import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 case class Def1_AmendOtherReliefsRequestData(nino: Nino, taxYear: TaxYear, body: Def1_AmendOtherReliefsRequestBody)
-  extends AmendOtherReliefsRequestData
+    extends AmendOtherReliefsRequestData

@@ -34,6 +34,7 @@ class Def1_CreateAndAmendCharitableGivingReliefsValidator(nino: String, taxYear:
 
   private val resolveJson: ResolveNonEmptyJsonObject[Def1_CreateAndAmendCharitableGivingTaxReliefsBody] =
     new ResolveNonEmptyJsonObject[Def1_CreateAndAmendCharitableGivingTaxReliefsBody]()
+
   private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2017-18"))
 
   private val rulesValidator =

@@ -18,6 +18,7 @@ package v1.createAndAmendForeignReliefs
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.models.errors.ErrorWrapper
 import shared.models.outcomes.ResponseWrapper
@@ -25,7 +26,7 @@ import v1.createAndAmendForeignReliefs.def1.model.request.Def1_CreateAndAmendFor
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAndAmendForeignReliefsService extends MockFactory {
+trait MockCreateAndAmendForeignReliefsService extends TestSuite with MockFactory {
 
   val mockService: CreateAndAmendForeignReliefsService = mock[CreateAndAmendForeignReliefsService]
 

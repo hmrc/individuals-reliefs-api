@@ -18,7 +18,12 @@ package v2.charitableGiving.createAmend.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
 import shared.utils.UnitSpec
-import v2.charitableGiving.createAmend.def1.model.request.{Def1_CreateAndAmendCharitableGivingTaxReliefsBody, Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
+import v2.charitableGiving.createAmend.def1.model.request.{
+  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
+  Def1_GiftAidPayments,
+  Def1_Gifts,
+  Def1_NonUkCharities
+}
 
 class Def1_CreateAndAmendCharitableGivingTaxReliefsBodySpec extends UnitSpec {
 

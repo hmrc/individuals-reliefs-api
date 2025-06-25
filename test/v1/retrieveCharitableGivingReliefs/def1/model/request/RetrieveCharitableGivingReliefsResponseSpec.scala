@@ -52,7 +52,9 @@ class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockShar
       val context = "individuals/reliefs"
 
       MockedSharedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
-      RetrieveCharitableGivingReliefsResponse.LinksFactory.links(mockSharedAppConfig, RetrieveCharitableGivingReliefsHateoasData(nino, taxYear)) shouldBe
+      RetrieveCharitableGivingReliefsResponse.LinksFactory.links(
+        mockSharedAppConfig,
+        RetrieveCharitableGivingReliefsHateoasData(nino, taxYear)) shouldBe
         Seq(
           Link(s"/$context/charitable-giving/$nino/$taxYear", PUT, "create-and-amend-charitable-giving-tax-relief"),
           Link(s"/$context/charitable-giving/$nino/$taxYear", GET, "self"),

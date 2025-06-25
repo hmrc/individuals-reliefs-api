@@ -98,4 +98,5 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
     protected val outcome = Right(ResponseWrapper(correlationId, ()))
 
   }
+
 }

@@ -42,9 +42,7 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
     "return an MtdId" when {
       "the http client returns a mtd id" in new Test {
         MockedHttpClient
-          .get[MtdIdLookupConnector.Outcome](
-            url = url"$baseUrl/mtd-identifier-lookup/nino/$nino",
-            config = dummyHeaderCarrierConfig)
+          .get[MtdIdLookupConnector.Outcome](url = url"$baseUrl/mtd-identifier-lookup/nino/$nino", config = dummyHeaderCarrierConfig)
           .returns(Future.successful(Right(mtdId)))
 
         val result: Outcome = await(connector.getMtdId(nino))

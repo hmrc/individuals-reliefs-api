@@ -20,4 +20,3 @@ import shared.models.domain.{Nino, TaxYear}
 import v1.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 case class Def1_DeleteOtherReliefsRequestData(nino: Nino, taxYear: TaxYear) extends DeleteOtherReliefsRequestData
-

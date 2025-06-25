@@ -45,7 +45,6 @@ trait RetrieveCharitableGivingReliefsFixture {
                                                                     |}
                                                                     |""".stripMargin)
 
-
   val charitableGivingReliefsResponse: Def1_RetrieveCharitableGivingReliefsResponse =
     Def1_RetrieveCharitableGivingReliefsResponse(
       giftAidPayments = Some(

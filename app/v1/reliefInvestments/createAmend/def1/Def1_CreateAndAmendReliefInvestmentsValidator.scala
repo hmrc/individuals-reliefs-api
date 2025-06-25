@@ -35,7 +35,7 @@ import javax.inject.Singleton
 class Def1_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAndAmendReliefInvestmentsRequestData] {
 
-  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
+  private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
   private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
 
   private val rulesValidator = Def1_CreateAndAmendReliefInvestmentsRulesValidator

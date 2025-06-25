@@ -37,8 +37,8 @@ class RetrieveReliefInvestmentsControllerSpec
     with MockRetrieveReliefInvestmentsValidatorFactory
     with MockSharedAppConfig {
 
-  private val taxYear         = "2019-20"
-  private val requestData     = Def1_RetrieveReliefInvestmentsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
+  private val taxYear     = "2019-20"
+  private val requestData = Def1_RetrieveReliefInvestmentsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
 
   val mtdResponseJson: JsValue = Json
     .parse(

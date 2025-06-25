@@ -24,9 +24,9 @@ import v1.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 class AmendOtherReliefsValidatorFactorySpec extends UnitSpec {
 
-  private val validNino = "AA123456A"
-  private val validTaxYear = "22-2023"
-  private val emptyBody = JsObject.empty
+  private val validNino      = "AA123456A"
+  private val validTaxYear   = "22-2023"
+  private val emptyBody      = JsObject.empty
   private val invalidTaxYear = "78921"
 
   private val validatorFactory = new AmendOtherReliefsValidatorFactory
@@ -47,4 +47,5 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec {
     }
 
   }
+
 }

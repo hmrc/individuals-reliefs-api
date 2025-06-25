@@ -18,6 +18,7 @@ package v2.otherReliefs.amend
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.models.errors.ErrorWrapper
 import shared.models.outcomes.ResponseWrapper
@@ -25,7 +26,7 @@ import v2.otherReliefs.amend.def1.model.request.Def1_AmendOtherReliefsRequestDat
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAmendOtherReliefsService extends MockFactory {
+trait MockAmendOtherReliefsService extends TestSuite with MockFactory {
 
   val mockService: AmendOtherReliefsService = mock[AmendOtherReliefsService]
 

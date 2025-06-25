@@ -23,8 +23,10 @@ import shared.definition.ApiDefinitionFactory
 import shared.routing.VersionRoutingMap
 
 class ReliefsModule extends AbstractModule {
+
   override def configure(): Unit = {
     bind(classOf[ApiDefinitionFactory]).to(classOf[ReliefsDefinitionFactory]).asEagerSingleton()
     bind(classOf[VersionRoutingMap]).to(classOf[ReliefsVersionRoutingMap]).asEagerSingleton()
   }
+
 }

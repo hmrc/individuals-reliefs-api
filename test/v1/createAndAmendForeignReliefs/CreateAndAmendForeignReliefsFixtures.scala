@@ -17,8 +17,12 @@
 package v1.createAndAmendForeignReliefs
 
 import play.api.libs.json.{JsValue, Json}
-import v1.createAndAmendForeignReliefs.def1.model.request.{Def1_CreateAndAmendForeignReliefsBody, Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief,
-  Def1_ForeignTaxForFtcrNotClaimed}
+import v1.createAndAmendForeignReliefs.def1.model.request.{
+  Def1_CreateAndAmendForeignReliefsBody,
+  Def1_ForeignIncomeTaxCreditRelief,
+  Def1_ForeignTaxCreditRelief,
+  Def1_ForeignTaxForFtcrNotClaimed
+}
 
 object CreateAndAmendForeignReliefsFixtures {
 

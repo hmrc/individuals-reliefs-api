@@ -23,8 +23,16 @@ import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v2.charitableGiving.createAmend.CreateAndAmendCharitableGivingReliefsValidatorFactory
-import v2.charitableGiving.createAmend.def1.model.request.{Def1_CreateAndAmendCharitableGivingTaxReliefsBody, Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
-import v2.charitableGiving.createAmend.model.request.{CreateAndAmendCharitableGivingTaxReliefsRequestData, Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData}
+import v2.charitableGiving.createAmend.def1.model.request.{
+  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
+  Def1_GiftAidPayments,
+  Def1_Gifts,
+  Def1_NonUkCharities
+}
+import v2.charitableGiving.createAmend.model.request.{
+  CreateAndAmendCharitableGivingTaxReliefsRequestData,
+  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
+}
 
 class CreateAndAmendCharitableGivingTaxReliefsValidatorSpec extends UnitSpec with JsonErrorValidators {
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"

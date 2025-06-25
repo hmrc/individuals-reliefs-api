@@ -18,6 +18,7 @@ package v2.charitableGiving.delete
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.models.errors.ErrorWrapper
 import shared.models.outcomes.ResponseWrapper
@@ -25,7 +26,7 @@ import v2.charitableGiving.delete.model.request.Def1_DeleteCharitableGivingTaxRe
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCharitableGivingReliefService extends MockFactory {
+trait MockDeleteCharitableGivingReliefService extends TestSuite with MockFactory {
 
   val mockDeleteCharitableGivingReliefService: DeleteCharitableGivingTaxReliefsService = mock[DeleteCharitableGivingTaxReliefsService]
 

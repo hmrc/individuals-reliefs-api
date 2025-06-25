@@ -94,7 +94,7 @@ class DeletePensionsReliefsControllerSpec
     )
 
     MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
-    
+
     protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear.asMtd)(fakeRequest)
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =

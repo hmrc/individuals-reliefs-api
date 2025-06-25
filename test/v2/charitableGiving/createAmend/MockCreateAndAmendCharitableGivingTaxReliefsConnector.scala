@@ -18,6 +18,7 @@ package v2.charitableGiving.createAmend
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.charitableGiving.createAmend.CreateAndAmendCharitableGivingTaxReliefsConnector
@@ -25,7 +26,7 @@ import v2.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitab
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAndAmendCharitableGivingTaxReliefsConnector extends MockFactory {
+trait MockCreateAndAmendCharitableGivingTaxReliefsConnector extends TestSuite with MockFactory {
 
   val mockConnector: CreateAndAmendCharitableGivingTaxReliefsConnector = mock[CreateAndAmendCharitableGivingTaxReliefsConnector]
 

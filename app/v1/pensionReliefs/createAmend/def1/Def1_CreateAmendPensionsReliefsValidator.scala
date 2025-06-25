@@ -33,8 +33,8 @@ import javax.inject.Singleton
 class Def1_CreateAmendPensionsReliefsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendPensionsReliefsRequestData] {
 
-  private val resolveJson    = new ResolveNonEmptyJsonObject[CreateAmendPensionsReliefsBody]()
-  val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
+  private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendPensionsReliefsBody]()
+  val resolveTaxYear      = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
 
   def validate: Validated[Seq[MtdError], CreateAmendPensionsReliefsRequestData] =
     (

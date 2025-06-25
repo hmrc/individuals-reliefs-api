@@ -24,8 +24,8 @@ trait RetrieveOtherReliefsResponse
 
 object RetrieveOtherReliefsResponse {
 
-  implicit val writes: OWrites[RetrieveOtherReliefsResponse] = writesFrom {
-    case def1: Def1_RetrieveOtherReliefsResponse => implicitly[OWrites[Def1_RetrieveOtherReliefsResponse]].writes(def1)
+  implicit val writes: OWrites[RetrieveOtherReliefsResponse] = writesFrom { case def1: Def1_RetrieveOtherReliefsResponse =>
+    implicitly[OWrites[Def1_RetrieveOtherReliefsResponse]].writes(def1)
   }
 
 }

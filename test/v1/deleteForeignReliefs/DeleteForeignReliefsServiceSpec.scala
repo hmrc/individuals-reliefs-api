@@ -77,8 +77,6 @@ class DeleteForeignReliefsServiceSpec extends UnitSpec {
         "NO_DATA_FOUND"             -> NotFoundError,
         "SERVER_ERROR"              -> InternalError,
         "SERVICE_UNAVAILABLE"       -> InternalError
-
-
       )
 
       val extraTysErrors = Seq(

@@ -79,8 +79,6 @@ class DeleteForeignReliefsServiceSpec extends UnitSpec {
         "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,
         "SERVER_ERROR"              -> InternalError,
         "SERVICE_UNAVAILABLE"       -> InternalError
-
-
       )
 
       val extraTysErrors = Seq(

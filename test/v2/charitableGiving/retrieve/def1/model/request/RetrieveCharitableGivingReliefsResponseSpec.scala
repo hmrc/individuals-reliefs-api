@@ -39,5 +39,4 @@ class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockShar
     }
   }
 
-
 }

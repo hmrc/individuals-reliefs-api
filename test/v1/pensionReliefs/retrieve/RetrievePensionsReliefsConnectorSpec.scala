@@ -72,7 +72,6 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
         }
       }
 
-
       "DES is migrated to HIP" must {
         "return a success response" in new HipTest with Test {
           MockedSharedAppConfig.featureSwitchConfig returns Configuration("des_hip_migration_1656.enabled" -> true)
@@ -90,7 +89,6 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
         }
       }
     }
-
 
     "retrievePensionsRelief called for a Tax Year Specific tax year" must {
       "return a 200 status for a success scenario" in

@@ -32,7 +32,8 @@ object Def1_CreateAndAmendForeignReliefsRulesValidator extends RulesValidator[De
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
-  def validateBusinessRules(parsed: Def1_CreateAndAmendForeignReliefsRequestData): Validated[Seq[MtdError], Def1_CreateAndAmendForeignReliefsRequestData] = {
+  def validateBusinessRules(
+      parsed: Def1_CreateAndAmendForeignReliefsRequestData): Validated[Seq[MtdError], Def1_CreateAndAmendForeignReliefsRequestData] = {
     import parsed.body._
 
     combine(

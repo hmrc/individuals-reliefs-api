@@ -20,7 +20,11 @@ import play.api.libs.json.Json
 import shared.config.MockSharedAppConfig
 import shared.models.domain.Timestamp
 import shared.utils.UnitSpec
-import v2.foreignReliefs.retrieve.def1.model.response.{Def1_ForeignIncomeTaxCreditRelief, Def1_ForeignTaxCreditRelief, Def1_ForeignTaxForFtcrNotClaimed}
+import v2.foreignReliefs.retrieve.def1.model.response.{
+  Def1_ForeignIncomeTaxCreditRelief,
+  Def1_ForeignTaxCreditRelief,
+  Def1_ForeignTaxForFtcrNotClaimed
+}
 
 class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
