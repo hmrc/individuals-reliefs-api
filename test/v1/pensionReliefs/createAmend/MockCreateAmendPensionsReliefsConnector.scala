@@ -25,7 +25,7 @@ import v1.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsReq
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendPensionsReliefsConnector extends MockFactory { self: TestSuite =>
+trait MockCreateAmendPensionsReliefsConnector extends TestSuite with MockFactory {
 
   val mockAmendPensionsReliefsConnector: CreateAmendPensionsReliefsConnector = mock[CreateAmendPensionsReliefsConnector]
 

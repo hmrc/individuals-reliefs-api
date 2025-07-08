@@ -70,7 +70,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     }
   }
 
-  trait Test extends UnitSpec with MockHttpClient with MockSharedAppConfig { self: TestSuite =>
+  trait Test extends UnitSpec with MockHttpClient with MockSharedAppConfig {
     MockedSharedAppConfig.apiGatewayContext returns "individuals/self-assessment/adjustable-summary"
 
     val apiDefinitionFactory: ApiDefinitionFactory = new ApiDefinitionFactory {

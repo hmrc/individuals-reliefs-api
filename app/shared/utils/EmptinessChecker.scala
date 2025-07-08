@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ object EmptinessChecker {
     case object Null      extends Structure
   }
 
-  def apply[A](implicit aInstance: EmptinessChecker[A]): EmptinessChecker[A] = aInstance
+  def apply[A](using aInstance: EmptinessChecker[A]): EmptinessChecker[A] = aInstance
 
   def instance[A](func: A => Structure): EmptinessChecker[A] = (value: A) => func(value)
 
@@ -108,11 +108,11 @@ object EmptinessChecker {
 
   def primitive[A]: EmptinessChecker[A] = EmptinessChecker.instance(_ => Structure.Primitive)
 
-  given EmptinessChecker[String]   = instance(_ => Structure.Primitive)
-  given EmptinessChecker[Int]      = instance(_ => Structure.Primitive)
-  given EmptinessChecker[Double]   = instance(_ => Structure.Primitive)
-  given EmptinessChecker[Boolean]  = instance(_ => Structure.Primitive)
-  given EmptinessChecker[BigInt]   = instance(_ => Structure.Primitive)
+  given EmptinessChecker[String]     = instance(_ => Structure.Primitive)
+  given EmptinessChecker[Int]        = instance(_ => Structure.Primitive)
+  given EmptinessChecker[Double]     = instance(_ => Structure.Primitive)
+  given EmptinessChecker[Boolean]    = instance(_ => Structure.Primitive)
+  given EmptinessChecker[BigInt]     = instance(_ => Structure.Primitive)
   given EmptinessChecker[BigDecimal] = instance(_ => Structure.Primitive)
 
   given [A](using aInstance: EmptinessChecker[A]): EmptinessChecker[Option[A]] =
@@ -120,32 +120,26 @@ object EmptinessChecker {
 
   given [A](using aInstance: EmptinessChecker[A]): EmptinessChecker[List[A]] =
     instance(list => Structure.Arr(list.map(aInstance.structureOf)))
+
   given [A](using aInstance: EmptinessChecker[A]): EmptinessChecker[Seq[A]] =
     instance(seq => Structure.Arr(seq.map(aInstance.structureOf)))
 
     // Lazy prevents infinite recursion in generic derivation
   final class Lazy[+A](val value: () => A) extends AnyVal
   object Lazy {
-    implicit def make[A](implicit a: => A): Lazy[A] = new Lazy(() => a)
+    given [A](using a: => A): Lazy[A] = new Lazy(() => a)
   }
 
   inline given derived[A](using m: Mirror.Of[A]): EmptinessChecker[A] =
-    inline m match {
-      case p: Mirror.ProductOf[A] => productInstance(p)
-    }
-
-  private inline def productInstance[A](p: Mirror.ProductOf[A]): EmptinessChecker[A] = {
-    val elemLabels = summonLabels[p.MirroredElemLabels]
-    val elemInstances = summonAllInstances[p.MirroredElemTypes]
     instance { a =>
+      val elemLabels = summonLabels[m.MirroredElemLabels]
+      val elemInstances = summonAllInstances[m.MirroredElemTypes]
       val elems = a.asInstanceOf[Product].productIterator.toList
-      val fields = elemLabels.zip(elems).zip(elemInstances).map {
-        case ((label, value), checker: Lazy[EmptinessChecker[Any]]) =>
-          label -> checker.value().structureOf(value)
+      val fields = elemLabels.lazyZip(elems).lazyZip(elemInstances).map { (label, value, checker) =>
+        label -> checker.value().structureOf(value)
       }
       Structure.Obj(fields)
     }
-  }
 
   private inline def summonLabels[T <: Tuple]: List[String] =
     inline erasedValue[T] match {
@@ -155,7 +149,7 @@ object EmptinessChecker {
 
   private inline def summonAllInstances[T <: Tuple]: List[Lazy[EmptinessChecker[Any]]] =
     inline erasedValue[T] match {
-      case _: (h *: t) => Lazy.make(using summonInline[EmptinessChecker[h]]).asInstanceOf[Lazy[EmptinessChecker[Any]]] :: summonAllInstances[t]
+      case _: (h *: t) => summonInline[Lazy[EmptinessChecker[h]]].asInstanceOf[Lazy[EmptinessChecker[Any]]] :: summonAllInstances[t]
       case _: EmptyTuple => Nil
     }
 }

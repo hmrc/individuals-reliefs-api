@@ -26,7 +26,7 @@ import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v2.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 
-trait MockCreateAndAmendReliefInvestmentsValidatorFactory extends MockFactory { self: TestSuite =>
+trait MockCreateAndAmendReliefInvestmentsValidatorFactory extends TestSuite with MockFactory {
 
   val mockCreateAndAmendReliefInvestmentsValidatorFactory: CreateAndAmendReliefInvestmentsValidatorFactory =
     mock[CreateAndAmendReliefInvestmentsValidatorFactory]

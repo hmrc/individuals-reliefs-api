@@ -25,7 +25,7 @@ import v2.reliefInvestments.createAmend.def1.model.request.Def1_CreateAndAmendRe
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAndAmendReliefInvestmentsConnector extends MockFactory { self: TestSuite =>
+trait MockCreateAndAmendReliefInvestmentsConnector extends TestSuite with MockFactory {
 
   val mockConnector: CreateAndAmendReliefInvestmentsConnector = mock[CreateAndAmendReliefInvestmentsConnector]
 

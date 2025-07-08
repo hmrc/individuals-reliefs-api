@@ -43,7 +43,7 @@ abstract class ControllerBaseSpec
     with ResultExtractors
     with MockAuditService
     with ControllerSpecHateoasSupport
-    with MockSharedAppConfig { self: TestSuite =>
+    with MockSharedAppConfig {
 
   protected val apiVersion: Version = Version9
 

@@ -25,7 +25,7 @@ import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v2.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
-trait MockDeleteOtherReliefsValidatorFactory extends MockFactory { self: TestSuite =>
+trait MockDeleteOtherReliefsValidatorFactory extends TestSuite with MockFactory {
   val mockDeleteOtherReliefsValidatorFactory: DeleteOtherReliefsValidatorFactory = mock[DeleteOtherReliefsValidatorFactory]
 
   object MockedDeleteOtherReliefsValidatorFactory {

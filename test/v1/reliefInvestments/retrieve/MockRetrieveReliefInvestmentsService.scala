@@ -27,7 +27,7 @@ import v1.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsRes
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveReliefInvestmentsService extends MockFactory { self: TestSuite =>
+trait MockRetrieveReliefInvestmentsService extends TestSuite with MockFactory {
 
   val mockService: RetrieveReliefInvestmentsService = mock[RetrieveReliefInvestmentsService]
 

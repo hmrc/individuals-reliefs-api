@@ -25,7 +25,7 @@ import v1.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeletePensionsReliefsConnector extends MockFactory { self: TestSuite =>
+trait MockDeletePensionsReliefsConnector extends TestSuite with MockFactory {
 
   val mockDeletePensionsReliefsConnector: DeletePensionsReliefsConnector = mock[DeletePensionsReliefsConnector]
 

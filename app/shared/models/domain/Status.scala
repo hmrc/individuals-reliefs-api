@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,12 @@
 package shared.models.domain
 
 import play.api.libs.json.*
-import shared.definition.APIStatus
+import shared.utils.enums.Enums
 
 enum Status {
   case valid, invalid, superseded
 }
 
 object Status {
-  given Format[Status] = Format(
-    Reads {
-      case JsString(status) => Status.values.find(_.toString == status).map(JsSuccess(_))
-        .getOrElse(JsError(s"Unknown Status: $status"))
-      case _ => JsError("Expected a string for Status")
-    },
-    Writes {
-      (status: Status) => JsString(status.toString)
-      }
-    )
-  
+  given Format[Status] = Enums.format(values)
 }

@@ -26,7 +26,7 @@ import v2.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitab
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAndAmendCharitableGivingTaxReliefsConnector extends MockFactory { self: TestSuite =>
+trait MockCreateAndAmendCharitableGivingTaxReliefsConnector extends TestSuite with MockFactory {
 
   val mockConnector: CreateAndAmendCharitableGivingTaxReliefsConnector = mock[CreateAndAmendCharitableGivingTaxReliefsConnector]
 
