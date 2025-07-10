@@ -28,25 +28,12 @@ import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 
-class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1924.enabled" -> false) ++ super.servicesConfig
+class CreateAndAmendReliefInvestmentsControllerHipSpec extends IntegrationBaseSpec {
 
   "Calling the amend endpoint" should {
     "return a 200 status code" when {
-      "any valid request is made" in new NonTysTest {
 
-        override def setupStubs(): Unit = {
-          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
-        }
-
-        val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe OK
-        response.json shouldBe hateoasResponse(mtdTaxYear)
-        response.header("X-CorrelationId") should not be empty
-      }
-
-      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysIfsTest {
+      "any valid request is made to HIP for a Tax Year Specific (TYS) tax year" in new TysHipTest {
 
         override def setupStubs(): Unit = {
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
@@ -585,9 +572,9 @@ class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec
     def downstreamUri: String = s"/income-tax/reliefs/investment/$nino/2021-22"
   }
 
-  private trait TysIfsTest extends Test {
+  private trait TysHipTest extends Test {
     def mtdTaxYear: String    = "2023-24"
-    def downstreamUri: String = s"/income-tax/reliefs/investment/23-24/$nino"
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/reliefs/investment/$nino"
   }
 
 }

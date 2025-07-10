@@ -22,6 +22,7 @@ import shared.config.{FeatureSwitches, SharedAppConfig}
 case class ReliefsFeatureSwitches private (protected val featureSwitchConfig: Configuration) extends FeatureSwitches {
 
   val isDesHipMigration1656Enabled: Boolean = isEnabled("des_hip_migration_1656")
+  val isIfsHipMigration1924Enabled: Boolean = isEnabled("ifs_hip_migration_1924")
   val isPassDeleteIntentEnabled: Boolean    = isEnabled("isPassDeleteIntentEnabled")
 
 }
