@@ -21,8 +21,8 @@ import play.api.libs.json.JsObject
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import v2.charitableGiving.delete.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
 import uk.gov.hmrc.http.StringContextOps
+import v2.charitableGiving.delete.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -115,8 +115,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
-
+   self: ConnectorTest =>
     protected val expectedOutcome = Right(ResponseWrapper(correlationId, ()))
 
     protected val connector: DeleteCharitableGivingReliefConnector = new DeleteCharitableGivingReliefConnector(

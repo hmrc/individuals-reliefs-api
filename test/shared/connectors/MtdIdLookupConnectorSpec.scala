@@ -16,6 +16,7 @@
 
 package shared.connectors
 
+import org.scalatest.TestSuite
 import shared.config.MockSharedAppConfig
 import shared.connectors.MtdIdLookupConnector.Outcome
 import shared.mocks.MockHttpClient
@@ -28,7 +29,7 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
   val nino  = "test-nino"
   val mtdId = "test-mtdId"
 
-  class Test extends MockHttpClient with MockSharedAppConfig {
+  trait Test extends ConnectorSpec with MockHttpClient with MockSharedAppConfig {
 
     val connector = new MtdIdLookupConnector(
       http = mockHttpClient,

@@ -19,9 +19,9 @@ package v2.pensionReliefs.createAmend
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
 import v2.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -65,7 +65,8 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test { self: ConnectorTest =>
+    
     def taxYear: TaxYear
 
     protected val connector: CreateAmendPensionsReliefsConnector = new CreateAmendPensionsReliefsConnector(

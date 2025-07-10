@@ -104,7 +104,7 @@ class CreateAmendPensionsReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new CreateAmendPensionsReliefsController(
+    val controller: CreateAmendPensionsReliefsController = new CreateAmendPensionsReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockAmendPensionsReliefsValidatorFactory,

@@ -17,24 +17,23 @@
 package definition
 
 import cats.implicits.catsSyntaxValidatedId
+import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.config.Deprecation.NotDeprecated
 import shared.config.MockSharedAppConfig
+import shared.definition.*
 import shared.definition.APIStatus.BETA
-import shared.definition._
 import shared.mocks.MockHttpClient
 import shared.routing.{Version1, Version2}
 import shared.utils.UnitSpec
 
-class ReliefsDefinitionFactorySpec extends UnitSpec {
-
-  class Test extends MockHttpClient with MockSharedAppConfig {
-    val apiDefinitionFactory = new ReliefsDefinitionFactory(mockSharedAppConfig)
-    MockedSharedAppConfig.apiGatewayContext returns "individuals/reliefs"
-  }
+class ReliefsDefinitionFactorySpec extends UnitSpec with MockHttpClient with MockSharedAppConfig {
 
   "definition" when {
     "called" should {
-      "return a valid Definition case class" in new Test {
+      "return a valid Definition case class" in {
+        MockedSharedAppConfig.apiGatewayContext returns "individuals/reliefs"
+
         MockedSharedAppConfig.apiStatus(Version1) returns "BETA"
         MockedSharedAppConfig.endpointsEnabled(Version1) returns true
         MockedSharedAppConfig.deprecationFor(Version1).returns(NotDeprecated.valid).anyNumberOfTimes()
@@ -42,6 +41,7 @@ class ReliefsDefinitionFactorySpec extends UnitSpec {
         MockedSharedAppConfig.apiStatus(Version2) returns "BETA"
         MockedSharedAppConfig.endpointsEnabled(Version2) returns true
         MockedSharedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
+        val apiDefinitionFactory = new ReliefsDefinitionFactory(mockSharedAppConfig)
 
         apiDefinitionFactory.definition shouldBe
           Definition(

@@ -16,7 +16,7 @@
 
 package v2.pensionReliefs.createAmend.def1.model.request
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import shared.utils.UnitSpec
 
 class PensionReliefsSpec extends UnitSpec {
@@ -69,6 +69,10 @@ class PensionReliefsSpec extends UnitSpec {
         Json.toJson(minModel) shouldBe minJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    Json.parse("""{ "regularPensionContributions": "notANumber" }""").validate[PensionReliefs] shouldBe a[JsError]
   }
 
   "isEmpty" should {

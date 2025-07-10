@@ -18,6 +18,7 @@ package shared.connectors
 
 import com.google.common.base.Charsets
 import org.scalamock.handlers.CallHandler
+import org.scalatest.TestSuite
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import play.api.libs.json.{Json, Writes}
 import shared.config.{BasicAuthDownstreamConfig, DownstreamConfig, MockSharedAppConfig}
@@ -49,10 +50,10 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
       Some("this-api")
     )
 
-  protected trait ConnectorTest extends MockHttpClient with MockSharedAppConfig {
+  protected trait ConnectorTest extends UnitSpec with MockHttpClient with MockSharedAppConfig {
     protected val baseUrl: String = "http://test-BaseUrl"
 
-    protected val requiredHeaders: Seq[(String, String)]
+    protected lazy val requiredHeaders: Seq[(String, String)]
 
     protected val allowedHeaders: Seq[String] = List("Gov-Test-Scenario")
 
@@ -109,7 +110,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     private val token       = s"$name-token"
     private val environment = s"$name-environment"
 
-    protected final lazy val requiredHeaders: Seq[(String, String)] = List(
+    protected lazy val requiredHeaders: Seq[(String, String)] = List(
       "Authorization"        -> s"Bearer $token",
       "Environment"          -> environment,
       "User-Agent"           -> "this-api",
@@ -147,7 +148,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
 
     private val environment = "hip-environment"
 
-    protected final lazy val requiredHeaders: Seq[(String, String)] = List(
+    protected lazy val requiredHeaders: Seq[(String, String)] = List(
       "Authorization"        -> s"Basic $token",
       "Environment"          -> environment,
       "User-Agent"           -> "this-api",
