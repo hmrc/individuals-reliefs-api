@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.endpoints
+package v2.endpoints
 
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
@@ -24,9 +24,12 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v1.fixtures.RetrieveReliefInvestmentsFixtures.{responseJson, responseJsonWithHateoasLinks}
+import v2.fixtures.RetrieveReliefInvestmentsFixtures.responseJson
 
-class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
+class RetrieveReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1925.enabled" -> false) ++ super.servicesConfig
 
   "Calling the retrieve endpoint" should {
     "return a 200 status code" when {
@@ -38,7 +41,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().get())
         response.status shouldBe OK
-        response.json shouldBe responseJsonWithHateoasLinks(mtdTaxYear)
+        response.json shouldBe responseJson
         response.header("X-CorrelationId") should not be empty
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -51,7 +54,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().get())
         response.status shouldBe OK
-        response.json shouldBe responseJsonWithHateoasLinks(mtdTaxYear)
+        response.json shouldBe responseJson
         response.header("X-CorrelationId") should not be empty
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -130,7 +133,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
       setupStubs()
       buildRequest(s"/investment/$nino/$mtdTaxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.1.0+json"),
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }

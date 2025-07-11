@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package v1.reliefInvestments.retrieve
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -39,13 +39,23 @@ class RetrieveReliefInvestmentsConnector @Inject() (val http: HttpClientV2, val 
     import request._
     import schema._
 
-    val url: DownstreamUri[DownstreamResp] = if (taxYear.useTaxYearSpecificApi) {
-      IfsUri[DownstreamResp](s"income-tax/reliefs/investment/${taxYear.asTysDownstream}/$nino")
-    } else {
-      IfsUri[DownstreamResp](s"income-tax/reliefs/investment/$nino/${taxYear.asMtd}")
-    }
+    lazy val downstreamUri1925: DownstreamUri[DownstreamResp] =
+      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1925")) {
+        HipUri(
+          s"itsa/income-tax/v1/${taxYear.asTysDownstream}/reliefs/investment/$nino"
+        )
+      } else {
+        IfsUri(s"income-tax/reliefs/investment/${taxYear.asTysDownstream}/$nino")
+      }
 
-    get(url)
+    lazy val downstreamUri1630: DownstreamUri[DownstreamResp] =
+      IfsUri(s"income-tax/reliefs/investment/$nino/${taxYear.asMtd}")
+
+    val downstreamUri: DownstreamUri[DownstreamResp] =
+      if (taxYear.useTaxYearSpecificApi) downstreamUri1925 else downstreamUri1630
+
+    get(downstreamUri)
+
   }
 
 }
