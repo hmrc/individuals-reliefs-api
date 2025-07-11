@@ -28,9 +28,7 @@ import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 
-class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1924.enabled" -> false) ++ super.servicesConfig
+class CreateAndAmendReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
 
   "Calling the amend endpoint" should {
     "return a 204 status code" when {
@@ -45,7 +43,7 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
         response.header("X-CorrelationId") should not be empty
       }
 
-      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysIfsTest {
+      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysTest {
 
         override def setupStubs(): Unit = {
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
@@ -58,7 +56,7 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
     }
 
     "return a 400 with multiple errors" when {
-      "all field value validations fail on the request body" in new NonTysTest {
+      "all field value validations fail on the request body" in new TysTest {
 
         val allInvalidValueRequestBodyJson: JsValue = Json.parse(
           """
@@ -485,7 +483,7 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
+          s"validation fails with ${expectedBody.code} error" in new TysTest {
 
             override val nino: String       = requestNino
             override val mtdTaxYear: String = requestTaxYear
@@ -511,7 +509,7 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysTest {
 
             override def setupStubs(): Unit = {
               DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
@@ -584,9 +582,9 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
     def downstreamUri: String = s"/income-tax/reliefs/investment/$nino/2021-22"
   }
 
-  private trait TysIfsTest extends Test {
+  private trait TysTest extends Test {
     def mtdTaxYear: String    = "2023-24"
-    def downstreamUri: String = s"/income-tax/reliefs/investment/23-24/$nino"
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/reliefs/investment/$nino"
   }
 
 }
