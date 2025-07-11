@@ -569,13 +569,20 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
         )
     }
 
-    def errorBody(code: String): String =
+    def errorBody(`type`: String): String =
       s"""
-         |      {
-         |        "code": "$code",
-         |        "reason": "message"
-         |      }
-    """.stripMargin
+         |{
+         |    "origin": "HIP",
+         |    "response": {
+         |        "failures": [
+         |            {
+         |                "type": "${`type`}",
+         |                "reason": "downstream message"
+         |            }
+         |        ]
+         |    }
+         |}
+      """.stripMargin
 
   }
 
