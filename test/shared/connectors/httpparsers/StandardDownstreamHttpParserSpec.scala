@@ -154,7 +154,7 @@ class StandardDownstreamHttpParserSpec extends UnitSpec {
   val multipleFailureErrorTypesJson: JsValue = Json.parse(
     s"""
        |{
-       |  "origin": "HoD",
+       |  "origin": "HIP",
        |  "response": {
        |    "failures": [
        |      {
