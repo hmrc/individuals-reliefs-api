@@ -570,7 +570,7 @@ class CreateAndAmendReliefInvestmentsControllerHipISpec extends IntegrationBaseS
     def errorBody(`type`: String): String =
       s"""
          |{
-         |    "origin": "HIP",
+         |    "origin": "HoD",
          |    "response": {
          |        "failures": [
          |            {
