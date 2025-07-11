@@ -16,13 +16,14 @@
 
 package v2.reliefInvestments.createAmend
 
+import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 import v2.reliefInvestments.createAmend.def1.model.request.Def1_CreateAndAmendReliefInvestmentsRequestData
 import v2.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -59,7 +60,22 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
       await(connector.amend(request)) shouldBe outcome
     }
 
+    "put a body and return 204 no body - HIP enabled for TYS" in new HipTest with Test {
+      override val taxYear: String = "2023-24"
+      MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1924.enabled" -> true)
+
+      val outcome = Right(ResponseWrapper(correlationId, ()))
+
+      willPut(
+        url = url"$baseUrl/itsa/income-tax/v1/23-24/reliefs/investment/$nino",
+        body = requestBodyModel
+      ).returns(Future.successful(outcome))
+
+      await(connector.amend(request)) shouldBe outcome
+    }
+
     "put a body and return 204 no body for a Tax Year Specific (TYS) tax year" in new IfsTest with Test {
+      MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1924.enabled" -> false)
       val taxYear: String = "2023-24"
       val outcome         = Right(ResponseWrapper(correlationId, ()))
 
@@ -68,6 +84,20 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
         body = requestBodyModel
       )
         .returns(Future.successful(outcome))
+
+      await(connector.amend(request)) shouldBe outcome
+    }
+
+    "put a body and return 204 no body for a Tax Year Specific (TYS) tax year - IFS enabled" in new IfsTest with Test {
+      override val taxYear: String = "2023-24"
+      MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1924.enabled" -> false)
+
+      val outcome = Right(ResponseWrapper(correlationId, ()))
+
+      willPut(
+        url = url"$baseUrl/income-tax/reliefs/investment/23-24/$nino",
+        body = requestBodyModel
+      ).returns(Future.successful(outcome))
 
       await(connector.amend(request)) shouldBe outcome
     }

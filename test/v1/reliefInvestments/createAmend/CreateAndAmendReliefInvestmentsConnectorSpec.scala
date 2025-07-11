@@ -16,6 +16,7 @@
 
 package v1.reliefInvestments.createAmend
 
+import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
@@ -46,9 +47,9 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
   "doConnector" must {
 
-    "put a body and return 204 no body" in new IfsTest with Test {
-      val taxYear: String = "2019-20"
-      val outcome         = Right(ResponseWrapper(correlationId, ()))
+    "put a body and return 204 no body - IFS enabled" in new IfsTest with Test {
+      val taxYear: String                                = "2019-20"
+      val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
         url = url"$baseUrl/income-tax/reliefs/investment/$nino/2019-20",
@@ -59,12 +60,43 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
       await(connector.amend(request)) shouldBe outcome
     }
 
-    "put a body and return 204 no body for a Tax Year Specific (TYS) tax year" in new IfsTest with Test {
+    "put a body and return 204 no body - HIP enabled for TYS" in new HipTest with Test {
+      val taxYear: String = "2023-24"
+      MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1924.enabled" -> true)
+
+      val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
+
+      willPut(
+        url = url"$baseUrl/itsa/income-tax/v1/23-24/reliefs/investment/$nino",
+        body = requestBodyModel
+      ).returns(Future.successful(outcome))
+
+      await(connector.amend(request)) shouldBe outcome
+    }
+
+    "put a body and return 204 no body for a Tax Year Specific (TYS) tax year - IFS enabled" in new IfsTest with Test {
+      MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1924.enabled" -> false)
+
       val taxYear: String = "2023-24"
       val outcome         = Right(ResponseWrapper(correlationId, ()))
 
       willPut(
         url = url"$baseUrl/income-tax/reliefs/investment/23-24/$nino",
+        body = requestBodyModel
+      )
+        .returns(Future.successful(outcome))
+
+      await(connector.amend(request)) shouldBe outcome
+    }
+
+    "put a body and return 204 no body for a Tax Year Specific (TYS) tax year" in new HipTest with Test {
+      MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1924.enabled" -> true)
+
+      val taxYear: String = "2023-24"
+      val outcome         = Right(ResponseWrapper(correlationId, ()))
+
+      willPut(
+        url = url"$baseUrl/itsa/income-tax/v1/23-24/reliefs/investment/$nino",
         body = requestBodyModel
       )
         .returns(Future.successful(outcome))
