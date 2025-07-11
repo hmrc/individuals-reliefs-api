@@ -16,13 +16,12 @@
 
 package v2.reliefInvestments.createAmend
 
-import config.ReliefsFeatureSwitches
-import shared.config.SharedAppConfig
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.HeaderCarrier
 import v2.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -38,24 +37,23 @@ class CreateAndAmendReliefInvestmentsConnector @Inject() (val http: HttpClientV2
 
     import request._
 
-    lazy val downstreamUri1924: DownstreamUri[Unit] =
-      if (ReliefsFeatureSwitches().isIfsHipMigration1924Enabled) {
-        println("/////////// USING HIP" + ReliefsFeatureSwitches().isIfsHipMigration1924Enabled)
-        HipUri(
-          s"itsa/income-tax/v1/${taxYear.asTysDownstream}/reliefs/investment/$nino"
-        )
-      } else {
-        if (taxYear.useTaxYearSpecificApi) {
-          println("/////////// USING IFS" + ReliefsFeatureSwitches().isIfsHipMigration1924Enabled)
-          IfsUri[Unit](s"income-tax/reliefs/investment/${taxYear.asTysDownstream}/$nino")
-        } else {
-          println("/////////// USING IFS2" + ReliefsFeatureSwitches().isIfsHipMigration1924Enabled)
-          IfsUri[Unit](s"income-tax/reliefs/investment/$nino/${taxYear.asMtd}")
-        }
+    lazy val downstreamUri1629: DownstreamUri[Unit] =
+      IfsUri[Unit](s"income-tax/reliefs/investment/$nino/${taxYear.asMtd}")
 
+    lazy val downstreamUri1924: DownstreamUri[Unit] =
+      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1924")) {
+        HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/reliefs/investment/$nino")
+      } else {
+        IfsUri[Unit](s"income-tax/reliefs/investment/${taxYear.asTysDownstream}/$nino")
       }
 
-    put(body, downstreamUri1924)
+    val downstreamUri: DownstreamUri[Unit] = if (taxYear.useTaxYearSpecificApi) {
+      downstreamUri1924
+    } else {
+      downstreamUri1629
+    }
+
+    put(body, downstreamUri)
   }
 
 }
