@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,24 +26,11 @@ import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 import v2.fixtures.RetrieveReliefInvestmentsFixtures.responseJson
 
-class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
+class RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
 
   "Calling the retrieve endpoint" should {
     "return a 200 status code" when {
-      "any valid request is made" in new NonTysTest {
-
-        override def setupStubs(): Unit = {
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, responseJson)
-        }
-
-        val response: WSResponse = await(request().get())
-        response.status shouldBe OK
-        response.json shouldBe responseJson
-        response.header("X-CorrelationId") should not be empty
-        response.header("Content-Type") shouldBe Some("application/json")
-      }
-
-      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysIfsTest {
+      "a valid request is made" in new Test {
 
         override def setupStubs(): Unit = {
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, responseJson)
@@ -61,7 +48,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
       "validation error" when {
         def validationErrorTest(requestNino: String, taxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
+          s"validation fails with ${expectedBody.code} error" in new Test {
 
             override val nino: String       = requestNino
             override val mtdTaxYear: String = taxYear
@@ -84,7 +71,7 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): Unit = {
               DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamCode))
@@ -117,9 +104,9 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino = "AA123456A"
-    def mtdTaxYear: String
-    def downstreamUri: String
+    val nino                  = "AA123456A"
+    def mtdTaxYear: String    = "2023-24"
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/reliefs/investment/$nino"
 
     def setupStubs(): Unit = {}
 
@@ -135,24 +122,21 @@ class RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
         )
     }
 
-    def errorBody(code: String): String =
+    def errorBody(`type`: String): String =
       s"""
+         |{
+         |  "origin": "HoD",
+         |  "response": {
+         |    "failures": [
          |      {
-         |        "code": "$code",
-         |        "reason": "message"
+         |        "type": "${`type`}",
+         |        "reason": "downstream message"
          |      }
+         |    ]
+         |  }
+         |}
     """.stripMargin
 
-  }
-
-  private trait NonTysTest extends Test {
-    def mtdTaxYear: String    = "2021-22"
-    def downstreamUri: String = s"/income-tax/reliefs/investment/$nino/2021-22"
-  }
-
-  private trait TysIfsTest extends Test {
-    def mtdTaxYear: String    = "2023-24"
-    def downstreamUri: String = s"/income-tax/reliefs/investment/23-24/$nino"
   }
 
 }
