@@ -87,20 +87,6 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
       await(connector.amend(request)) shouldBe outcome
     }
-
-    "put a body and return 204 no body for a Tax Year Specific (TYS) tax year - IFS enabled" in new IfsTest with Test {
-      override val taxYear: String = "2023-24"
-      MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1924.enabled" -> false)
-
-      val outcome = Right(ResponseWrapper(correlationId, ()))
-
-      willPut(
-        url = url"$baseUrl/income-tax/reliefs/investment/23-24/$nino",
-        body = requestBodyModel
-      ).returns(Future.successful(outcome))
-
-      await(connector.amend(request)) shouldBe outcome
-    }
   }
 
 }
