@@ -28,7 +28,9 @@ import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 
-class CreateAndAmendReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
+class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1924.enabled" -> false) ++ super.servicesConfig
 
   "Calling the amend endpoint" should {
     "return a 204 status code" when {
