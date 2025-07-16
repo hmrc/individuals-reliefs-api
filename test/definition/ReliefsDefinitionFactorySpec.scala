@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import shared.config.MockSharedAppConfig
 import shared.definition.APIStatus.BETA
 import shared.definition._
 import shared.mocks.MockHttpClient
-import shared.routing.{Version1, Version2}
+import shared.routing._
 import shared.utils.UnitSpec
 
 class ReliefsDefinitionFactorySpec extends UnitSpec {
@@ -43,6 +43,10 @@ class ReliefsDefinitionFactorySpec extends UnitSpec {
         MockedSharedAppConfig.endpointsEnabled(Version2) returns true
         MockedSharedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
 
+        MockedSharedAppConfig.apiStatus(Version3) returns "BETA"
+        MockedSharedAppConfig.endpointsEnabled(Version3) returns true
+        MockedSharedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
+
         apiDefinitionFactory.definition shouldBe
           Definition(
             api = APIDefinition(
@@ -58,6 +62,11 @@ class ReliefsDefinitionFactorySpec extends UnitSpec {
                 ),
                 APIVersion(
                   version = Version2,
+                  status = BETA,
+                  endpointsEnabled = true
+                ),
+                APIVersion(
+                  version = Version3,
                   status = BETA,
                   endpointsEnabled = true
                 )

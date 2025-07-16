@@ -1,0 +1,17 @@
+{
+  "submittedOn": "2019-04-04T01:01:01.000Z",
+  "foreignTaxCreditRelief": {
+    "amount": 5000.99
+  },
+  "foreignIncomeTaxCreditRelief": [
+    {
+      "countryCode": "FRA",
+      "foreignTaxPaid": 4567.69,
+      "taxableAmount": 2853.13,
+      "employmentLumpSum": false
+    }
+  ],
+  "foreignTaxForFtcrNotClaimed": {
+    "amount": 3456.97
+  }
+}
