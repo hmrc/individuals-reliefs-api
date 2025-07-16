@@ -24,7 +24,7 @@ import shared.services.DownstreamStub
 
 class ReliefsAuthMainAgentsOnlyISpec extends AuthMainAgentsOnlyISpec {
 
-  val callingApiVersion = "1.0"
+  val callingApiVersion = "3.0"
 
   val supportingAgentsNotAllowedEndpoint = "retrieve-relief-investments"
 
