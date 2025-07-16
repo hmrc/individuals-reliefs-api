@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package v3.reliefInvestments.createAmend.def1.model.request
+package v3.reliefInvestments.createAmend.def2.model.request
 
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def2.model.Def2_CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def2.model.request.Def2_CreateAndAmendReliefInvestmentsRequestBody
 
-class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with JsonErrorValidators {
+class Def2_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        Def1_requestBodyJson.as[Def1_CreateAndAmendReliefInvestmentsRequestBody] shouldBe Def1_requestBodyModel
+        Def2_requestBodyJson.as[Def2_CreateAndAmendReliefInvestmentsRequestBody] shouldBe Def2_requestBodyModel
       }
     }
   }
@@ -33,7 +34,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Def1_requestBodyModel.toJson shouldBe Def1_requestBodyJson
+        Def2_requestBodyModel.toJson shouldBe Def2_requestBodyJson
       }
     }
   }
@@ -41,11 +42,11 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
   "isIncorrectOrEmptyBodyError" should {
     "return false" when {
       "all arrays are provided, none are empty, no objects in the arrays are empty" in {
-        Def1_requestBodyModel.isIncorrectOrEmptyBody shouldBe false
+        Def2_requestBodyModel.isIncorrectOrEmptyBody shouldBe false
       }
 
       "only some arrays are provided, none are empty, no objects in the arrays are empty" in {
-        val model = Def1_requestBodyModel.copy(
+        val model = Def2_requestBodyModel.copy(
           vctSubscription = None,
           seedEnterpriseInvestment = None
         )
@@ -55,8 +56,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
 
     "return true" when {
       "no arrays are provided" in {
-        val model = Def1_CreateAndAmendReliefInvestmentsRequestBody(
-          None,
+        val model = Def2_CreateAndAmendReliefInvestmentsRequestBody(
           None,
           None,
           None,
@@ -65,7 +65,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
         model.isIncorrectOrEmptyBody shouldBe true
       }
       "at least one empty array is provided" in {
-        val model = Def1_requestBodyModel.copy(
+        val model = Def2_requestBodyModel.copy(
           vctSubscription = Some(Seq()),
           communityInvestment = Some(Seq())
         )

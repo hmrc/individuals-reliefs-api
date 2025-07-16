@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.reliefInvestments.createAmend.def1
+package v3.reliefInvestments.createAmend.def2
 
 import cats.data.Validated
 import cats.implicits._
@@ -23,29 +23,26 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v3.reliefInvestments.createAmend.def1.model.request.{
-  Def1_CreateAndAmendReliefInvestmentsRequestBody,
-  Def1_CreateAndAmendReliefInvestmentsRequestData
-}
+import v3.reliefInvestments.createAmend.def2.model.request._
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 
 import javax.inject.Singleton
 
 @Singleton
-class Def1_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: String, body: JsValue)
+class Def2_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAndAmendReliefInvestmentsRequestData] {
 
-  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def2_CreateAndAmendReliefInvestmentsRequestBody]()
 
   override def validate: Validated[Seq[MtdError], CreateAndAmendReliefInvestmentsRequestData] =
     (
       ResolveNino(nino),
       resolveJson(body)
     ).mapN((validNino, validBody) =>
-      Def1_CreateAndAmendReliefInvestmentsRequestData(
+      Def2_CreateAndAmendReliefInvestmentsRequestData(
         validNino,
         TaxYear.fromMtd(taxYear),
         validBody
-      )) andThen Def1_CreateAndAmendReliefInvestmentsRulesValidator.validateBusinessRules
+      )) andThen Def2_CreateAndAmendReliefInvestmentsRulesValidator.validateBusinessRules
 
 }

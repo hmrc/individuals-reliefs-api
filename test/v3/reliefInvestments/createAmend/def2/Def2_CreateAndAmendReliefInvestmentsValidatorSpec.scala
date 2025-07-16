@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.reliefInvestments.createAmend.def1
+package v3.reliefInvestments.createAmend.def2
 
 import common.{DateOfInvestmentFormatError, NameFormatError, UniqueInvestmentRefFormatError}
 import play.api.libs.json._
@@ -22,15 +22,16 @@ import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.reliefInvestments.createAmend.def1.model.request._
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
+import v3.reliefInvestments.createAmend.def2.Def2_CreateAndAmendReliefInvestmentsValidator
+import v3.reliefInvestments.createAmend.def2.model.request._
 
-class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with JsonErrorValidators {
+class Def2_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with JsonErrorValidators {
 
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   private val validNino = "AA123456A"
-  private val taxYear   = "2020-21"
+  private val taxYear   = "2025-26"
 
   private val validVctSubscriptionsItem = Json.parse("""
       |{
@@ -73,30 +74,16 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
       |}
         """.stripMargin)
 
-  private val validSocialEnterpriseInvestmentItem = Json.parse(
-    """
-      |{
-      |  "uniqueInvestmentRef": "VCTREF",
-      |  "socialEnterpriseName": "VCT Fund X",
-      |  "dateOfInvestment": "2018-04-16",
-      |  "amountInvested": 23312.00,
-      |  "reliefClaimed": 1334.00
-      |}
-        """.stripMargin
-  )
-
   private def bodyWith(vctSubscriptionItems: Seq[JsValue] = List(validVctSubscriptionsItem),
                        eisSubscriptionsItems: Seq[JsValue] = List(validEisSubscriptionsItem),
                        communityInvestmentItems: Seq[JsValue] = List(validCommunityInvestmentItem),
-                       seedEnterpriseInvestmentItems: Seq[JsValue] = List(validSeedEnterpriseInvestmentItem),
-                       socialEnterpriseInvestmentItems: Seq[JsValue] = List(validSocialEnterpriseInvestmentItem)): JsValue =
+                       seedEnterpriseInvestmentItems: Seq[JsValue] = List(validSeedEnterpriseInvestmentItem)): JsValue =
     Json.parse(s"""
        |{
        |  "vctSubscription":${JsArray(vctSubscriptionItems)},
        |  "eisSubscription":${JsArray(eisSubscriptionsItems)},
        |  "communityInvestment": ${JsArray(communityInvestmentItems)},
-       |  "seedEnterpriseInvestment": ${JsArray(seedEnterpriseInvestmentItems)},
-       |  "socialEnterpriseInvestment": ${JsArray(socialEnterpriseInvestmentItems)}
+       |  "seedEnterpriseInvestment": ${JsArray(seedEnterpriseInvestmentItems)}
        |}
         """.stripMargin)
 
@@ -117,18 +104,14 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
   private val parsedSeedEnterpriseInvestmentItem =
     SeedEnterpriseInvestmentItem("1234121A", Some("Company Inc"), Some("2020-12-12"), Some(BigDecimal(123123.22)), BigDecimal(3432.00))
 
-  private val parsedSocialEnterpriseInvestmentItem =
-    SocialEnterpriseInvestmentItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(BigDecimal(23312.00)), BigDecimal(1334.00))
-
-  private val parsedBody = Def1_CreateAndAmendReliefInvestmentsRequestBody(
+  private val parsedBody = Def2_CreateAndAmendReliefInvestmentsRequestBody(
     Some(List(parsedCctSubscriptionsItem)),
     Some(List(parsedEisSubscriptionsItem)),
     Some(List(parsedCommunityInvestmentItem)),
-    Some(List(parsedSeedEnterpriseInvestmentItem)),
-    Some(List(parsedSocialEnterpriseInvestmentItem))
+    Some(List(parsedSeedEnterpriseInvestmentItem))
   )
 
-  private def validator(nino: String, taxYear: String, body: JsValue) = new Def1_CreateAndAmendReliefInvestmentsValidator(nino, taxYear, body)
+  private def validator(nino: String, taxYear: String, body: JsValue) = new Def2_CreateAndAmendReliefInvestmentsValidator(nino, taxYear, body)
 
   "validator" should {
     "return the parsed domain object" when {
@@ -136,11 +119,11 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, taxYear, validBody).validateAndWrapResult()
 
-        result shouldBe Right(Def1_CreateAndAmendReliefInvestmentsRequestData(parsedNino, parsedTaxYear, parsedBody))
+        result shouldBe Right(Def2_CreateAndAmendReliefInvestmentsRequestData(parsedNino, parsedTaxYear, parsedBody))
       }
     }
 
-    "return a NinoFormatError error" when {
+    "return a single error" when {
       "passed an invalid nino" in {
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator("invalid", taxYear, validBody).validateAndWrapResult()
@@ -205,27 +188,19 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
           testValueFormatError(
             s"/seedEnterpriseInvestment/0$path",
             bodyWith(seedEnterpriseInvestmentItems = List(validSeedEnterpriseInvestmentItem.update(path, JsNumber(-1.00))))))
-
-        numericFields.foreach(path =>
-          testValueFormatError(
-            s"/socialEnterpriseInvestment/0$path",
-            bodyWith(socialEnterpriseInvestmentItems = List(validSocialEnterpriseInvestmentItem.update(path, JsNumber(-1.00))))
-          ))
       }
 
       "passed a body with invalidly formatted date of investments" in {
-        val invalidVctSubscriptionsItem           = validVctSubscriptionsItem.update("/dateOfInvestment", JsString(""))
-        val invalidEisSubscriptionsItem           = validEisSubscriptionsItem.update("/dateOfInvestment", JsString(""))
-        val invalidCommunityInvestmentItem        = validCommunityInvestmentItem.update("/dateOfInvestment", JsString(""))
-        val invalidSeedEnterpriseInvestmentItem   = validSeedEnterpriseInvestmentItem.update("/dateOfInvestment", JsString(""))
-        val invalidSocialEnterpriseInvestmentItem = validSocialEnterpriseInvestmentItem.update("/dateOfInvestment", JsString(""))
+        val invalidVctSubscriptionsItem         = validVctSubscriptionsItem.update("/dateOfInvestment", JsString(""))
+        val invalidEisSubscriptionsItem         = validEisSubscriptionsItem.update("/dateOfInvestment", JsString(""))
+        val invalidCommunityInvestmentItem      = validCommunityInvestmentItem.update("/dateOfInvestment", JsString(""))
+        val invalidSeedEnterpriseInvestmentItem = validSeedEnterpriseInvestmentItem.update("/dateOfInvestment", JsString(""))
 
         val invalidBody = bodyWith(
           List(invalidVctSubscriptionsItem),
           List(invalidEisSubscriptionsItem),
           List(invalidCommunityInvestmentItem),
-          List(invalidSeedEnterpriseInvestmentItem),
-          List(invalidSocialEnterpriseInvestmentItem)
+          List(invalidSeedEnterpriseInvestmentItem)
         )
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, taxYear, invalidBody).validateAndWrapResult()
@@ -237,25 +212,22 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
               "/vctSubscription/0/dateOfInvestment",
               "/eisSubscription/0/dateOfInvestment",
               "/communityInvestment/0/dateOfInvestment",
-              "/seedEnterpriseInvestment/0/dateOfInvestment",
-              "/socialEnterpriseInvestment/0/dateOfInvestment"
+              "/seedEnterpriseInvestment/0/dateOfInvestment"
             ))
           ))
       }
 
       "passed a body with out of range formatted date of investments" in {
-        val invalidVctSubscriptionsItem           = validVctSubscriptionsItem.update("/dateOfInvestment", JsString("1879-09-23"))
-        val invalidEisSubscriptionsItem           = validEisSubscriptionsItem.update("/dateOfInvestment", JsString("2109-01-30"))
-        val invalidCommunityInvestmentItem        = validCommunityInvestmentItem.update("/dateOfInvestment", JsString("1150-09-23"))
-        val invalidSeedEnterpriseInvestmentItem   = validSeedEnterpriseInvestmentItem.update("/dateOfInvestment", JsString("2100-01-01"))
-        val invalidSocialEnterpriseInvestmentItem = validSocialEnterpriseInvestmentItem.update("/dateOfInvestment", JsString("1899-12-31"))
+        val invalidVctSubscriptionsItem         = validVctSubscriptionsItem.update("/dateOfInvestment", JsString("1879-09-23"))
+        val invalidEisSubscriptionsItem         = validEisSubscriptionsItem.update("/dateOfInvestment", JsString("2109-01-30"))
+        val invalidCommunityInvestmentItem      = validCommunityInvestmentItem.update("/dateOfInvestment", JsString("1150-09-23"))
+        val invalidSeedEnterpriseInvestmentItem = validSeedEnterpriseInvestmentItem.update("/dateOfInvestment", JsString("2100-01-01"))
 
         val invalidBody = bodyWith(
           List(invalidVctSubscriptionsItem),
           List(invalidEisSubscriptionsItem),
           List(invalidCommunityInvestmentItem),
-          List(invalidSeedEnterpriseInvestmentItem),
-          List(invalidSocialEnterpriseInvestmentItem)
+          List(invalidSeedEnterpriseInvestmentItem)
         )
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, taxYear, invalidBody).validateAndWrapResult()
@@ -267,25 +239,22 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
               "/vctSubscription/0/dateOfInvestment",
               "/eisSubscription/0/dateOfInvestment",
               "/communityInvestment/0/dateOfInvestment",
-              "/seedEnterpriseInvestment/0/dateOfInvestment",
-              "/socialEnterpriseInvestment/0/dateOfInvestment"
+              "/seedEnterpriseInvestment/0/dateOfInvestment"
             ))
           ))
       }
 
       "passed a body with invalidly formatted unique investment references" in {
-        val invalidVctSubscriptionsItem           = validVctSubscriptionsItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
-        val invalidEisSubscriptionsItem           = validEisSubscriptionsItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
-        val invalidCommunityInvestmentItem        = validCommunityInvestmentItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
-        val invalidSeedEnterpriseInvestmentItem   = validSeedEnterpriseInvestmentItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
-        val invalidSocialEnterpriseInvestmentItem = validSocialEnterpriseInvestmentItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
+        val invalidVctSubscriptionsItem         = validVctSubscriptionsItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
+        val invalidEisSubscriptionsItem         = validEisSubscriptionsItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
+        val invalidCommunityInvestmentItem      = validCommunityInvestmentItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
+        val invalidSeedEnterpriseInvestmentItem = validSeedEnterpriseInvestmentItem.update("/uniqueInvestmentRef", JsString("ABC/123"))
 
         val invalidBody = bodyWith(
           List(invalidVctSubscriptionsItem),
           List(invalidEisSubscriptionsItem),
           List(invalidCommunityInvestmentItem),
-          List(invalidSeedEnterpriseInvestmentItem),
-          List(invalidSocialEnterpriseInvestmentItem)
+          List(invalidSeedEnterpriseInvestmentItem)
         )
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, taxYear, invalidBody).validateAndWrapResult()
@@ -297,25 +266,22 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
               "/vctSubscription/0/uniqueInvestmentRef",
               "/eisSubscription/0/uniqueInvestmentRef",
               "/communityInvestment/0/uniqueInvestmentRef",
-              "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
-              "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
+              "/seedEnterpriseInvestment/0/uniqueInvestmentRef"
             ))
           ))
       }
 
       "passed a body with invalidly formatted names" in {
-        val invalidVctSubscriptionsItem           = validVctSubscriptionsItem.update("/name", JsString(""))
-        val invalidEisSubscriptionsItem           = validEisSubscriptionsItem.update("/name", JsString(""))
-        val invalidCommunityInvestmentItem        = validCommunityInvestmentItem.update("/name", JsString(""))
-        val invalidSeedEnterpriseInvestmentItem   = validSeedEnterpriseInvestmentItem.update("/companyName", JsString(""))
-        val invalidSocialEnterpriseInvestmentItem = validSocialEnterpriseInvestmentItem.update("/socialEnterpriseName", JsString(""))
+        val invalidVctSubscriptionsItem         = validVctSubscriptionsItem.update("/name", JsString(""))
+        val invalidEisSubscriptionsItem         = validEisSubscriptionsItem.update("/name", JsString(""))
+        val invalidCommunityInvestmentItem      = validCommunityInvestmentItem.update("/name", JsString(""))
+        val invalidSeedEnterpriseInvestmentItem = validSeedEnterpriseInvestmentItem.update("/companyName", JsString(""))
 
         val invalidBody = bodyWith(
           List(invalidVctSubscriptionsItem),
           List(invalidEisSubscriptionsItem),
           List(invalidCommunityInvestmentItem),
-          List(invalidSeedEnterpriseInvestmentItem),
-          List(invalidSocialEnterpriseInvestmentItem)
+          List(invalidSeedEnterpriseInvestmentItem)
         )
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, taxYear, invalidBody).validateAndWrapResult()
@@ -323,13 +289,13 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
-            NameFormatError.withPaths(List(
-              "/vctSubscription/0/name",
-              "/eisSubscription/0/name",
-              "/communityInvestment/0/name",
-              "/seedEnterpriseInvestment/0/companyName",
-              "/socialEnterpriseInvestment/0/socialEnterpriseName"
-            ))
+            NameFormatError.withPaths(
+              List(
+                "/vctSubscription/0/name",
+                "/eisSubscription/0/name",
+                "/communityInvestment/0/name",
+                "/seedEnterpriseInvestment/0/companyName"
+              ))
           ))
       }
     }

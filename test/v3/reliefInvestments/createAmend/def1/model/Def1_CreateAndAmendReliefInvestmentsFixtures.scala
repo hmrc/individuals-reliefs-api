@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v3.fixtures
+package v3.reliefInvestments.createAmend.def1.model
 
 import play.api.libs.json.{JsValue, Json}
 import v3.reliefInvestments.createAmend.def1.model.request._
 
-object CreateAndAmendReliefInvestmentsFixtures {
+object Def1_CreateAndAmendReliefInvestmentsFixtures {
 
-  val vctSubscriptionsItemModel: VctSubscriptionsItem = VctSubscriptionsItem(
+  val Def1_vctSubscriptionsItemModel: VctSubscriptionsItem = VctSubscriptionsItem(
     uniqueInvestmentRef = "VCTREF",
     name = Some("VCT Fund X"),
     dateOfInvestment = Some("2018-04-16"),
@@ -29,7 +29,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
     reliefClaimed = BigDecimal(1334.00)
   )
 
-  val vctSubscriptionsItemJson: JsValue = Json.parse(
+  val Def1_vctSubscriptionsItemJson: JsValue = Json.parse(
     """
       |{
       |  "uniqueInvestmentRef": "VCTREF",
@@ -41,7 +41,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  val eisSubscriptionsItemModel: EisSubscriptionsItem = EisSubscriptionsItem(
+  val Def1_eisSubscriptionsItemModel: EisSubscriptionsItem = EisSubscriptionsItem(
     uniqueInvestmentRef = "XTAL",
     name = Some("EIS Fund X"),
     knowledgeIntensive = Some(true),
@@ -50,7 +50,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
     reliefClaimed = BigDecimal(43432.00)
   )
 
-  val eisSubscriptionsItemJson: JsValue = Json.parse(
+  val Def1_eisSubscriptionsItemJson: JsValue = Json.parse(
     """
       |{
       |  "uniqueInvestmentRef": "XTAL",
@@ -63,7 +63,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  val communityInvestmentItemModel: CommunityInvestmentItem = CommunityInvestmentItem(
+  val Def1_communityInvestmentItemModel: CommunityInvestmentItem = CommunityInvestmentItem(
     uniqueInvestmentRef = "VCTREF",
     name = Some("VCT Fund X"),
     dateOfInvestment = Some("2018-04-16"),
@@ -71,7 +71,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
     reliefClaimed = BigDecimal(1334.00)
   )
 
-  val communityInvestmentItemJson: JsValue = Json.parse(
+  val Def1_communityInvestmentItemJson: JsValue = Json.parse(
     """
       |{
       |  "uniqueInvestmentRef": "VCTREF",
@@ -83,7 +83,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  val seedEnterpriseInvestmentItemModel: SeedEnterpriseInvestmentItem = SeedEnterpriseInvestmentItem(
+  val Def1_seedEnterpriseInvestmentItemModel: SeedEnterpriseInvestmentItem = SeedEnterpriseInvestmentItem(
     uniqueInvestmentRef = "1234121A",
     companyName = Some("Company Inc"),
     dateOfInvestment = Some("2020-12-12"),
@@ -91,7 +91,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
     reliefClaimed = BigDecimal(3432.00)
   )
 
-  val seedEnterpriseInvestmentItemJson: JsValue = Json.parse(
+  val Def1_seedEnterpriseInvestmentItemJson: JsValue = Json.parse(
     """
       |{
       |  "uniqueInvestmentRef": "1234121A",
@@ -103,7 +103,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  val socialEnterpriseInvestmentItemModel: SocialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
+  val Def1_socialEnterpriseInvestmentItemModel: SocialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
     uniqueInvestmentRef = "VCTREF",
     socialEnterpriseName = Some("VCT Fund X"),
     dateOfInvestment = Some("2018-04-16"),
@@ -111,7 +111,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
     reliefClaimed = BigDecimal(1334.00)
   )
 
-  val socialEnterpriseInvestmentItemJson: JsValue = Json.parse(
+  val Def1_socialEnterpriseInvestmentItemJson: JsValue = Json.parse(
     """
       |{
       |  "uniqueInvestmentRef": "VCTREF",
@@ -123,22 +123,22 @@ object CreateAndAmendReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  val requestBodyModel: Def1_CreateAndAmendReliefInvestmentsRequestBody = Def1_CreateAndAmendReliefInvestmentsRequestBody(
-    vctSubscription = Some(Seq(vctSubscriptionsItemModel)),
-    eisSubscription = Some(Seq(eisSubscriptionsItemModel)),
-    communityInvestment = Some(Seq(communityInvestmentItemModel)),
-    seedEnterpriseInvestment = Some(Seq(seedEnterpriseInvestmentItemModel)),
-    socialEnterpriseInvestment = Some(Seq(socialEnterpriseInvestmentItemModel))
+  val Def1_requestBodyModel: Def1_CreateAndAmendReliefInvestmentsRequestBody = Def1_CreateAndAmendReliefInvestmentsRequestBody(
+    vctSubscription = Some(Seq(Def1_vctSubscriptionsItemModel)),
+    eisSubscription = Some(Seq(Def1_eisSubscriptionsItemModel)),
+    communityInvestment = Some(Seq(Def1_communityInvestmentItemModel)),
+    seedEnterpriseInvestment = Some(Seq(Def1_seedEnterpriseInvestmentItemModel)),
+    socialEnterpriseInvestment = Some(Seq(Def1_socialEnterpriseInvestmentItemModel))
   )
 
-  val requestBodyJson: JsValue = Json.parse(
+  val Def1_requestBodyJson: JsValue = Json.parse(
     s"""
       |{
-      |  "vctSubscription":[$vctSubscriptionsItemJson],
-      |  "eisSubscription":[$eisSubscriptionsItemJson],
-      |  "communityInvestment": [$communityInvestmentItemJson],
-      |  "seedEnterpriseInvestment": [$seedEnterpriseInvestmentItemJson],
-      |  "socialEnterpriseInvestment": [$socialEnterpriseInvestmentItemJson]
+      |  "vctSubscription":[$Def1_vctSubscriptionsItemJson],
+      |  "eisSubscription":[$Def1_eisSubscriptionsItemJson],
+      |  "communityInvestment": [$Def1_communityInvestmentItemJson],
+      |  "seedEnterpriseInvestment": [$Def1_seedEnterpriseInvestmentItemJson],
+      |  "socialEnterpriseInvestment": [$Def1_socialEnterpriseInvestmentItemJson]
       |}
         """.stripMargin
   )

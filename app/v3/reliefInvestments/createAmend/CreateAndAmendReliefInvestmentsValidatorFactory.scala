@@ -16,10 +16,12 @@
 
 package v3.reliefInvestments.createAmend
 
+import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import v3.reliefInvestments.createAmend.CreateAndAmendReliefInvestmentsSchema.Def1
+import v3.reliefInvestments.createAmend.CreateAndAmendReliefInvestmentsSchema._
 import v3.reliefInvestments.createAmend.def1.Def1_CreateAndAmendReliefInvestmentsValidator
+import v3.reliefInvestments.createAmend.def2.Def2_CreateAndAmendReliefInvestmentsValidator
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 
 import javax.inject.Singleton
@@ -29,10 +31,12 @@ class CreateAndAmendReliefInvestmentsValidatorFactory {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAndAmendReliefInvestmentsRequestData] = {
 
-    val schema = CreateAndAmendReliefInvestmentsSchema.schemaFor(Some(taxYear))
+    val schema = CreateAndAmendReliefInvestmentsSchema.schemaFor(taxYear)
 
     schema match {
-      case Def1 => new Def1_CreateAndAmendReliefInvestmentsValidator(nino, taxYear, body)
+      case Valid(Def1)     => new Def1_CreateAndAmendReliefInvestmentsValidator(nino, taxYear, body)
+      case Valid(Def2)     => new Def2_CreateAndAmendReliefInvestmentsValidator(nino, taxYear, body)
+      case Invalid(errors) => Validator.returningErrors(errors)
     }
   }
 

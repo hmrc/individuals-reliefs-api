@@ -27,7 +27,7 @@ import shared.models.errors
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
-import v3.fixtures.CreateAndAmendReliefInvestmentsFixtures.{requestBodyJson, requestBodyModel}
+import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures._
 import v3.reliefInvestments.createAmend.def1.model.request.Def1_CreateAndAmendReliefInvestmentsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,7 +43,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
 
   private val taxYear = "2019-20"
 
-  private val requestData = Def1_CreateAndAmendReliefInvestmentsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = Def1_CreateAndAmendReliefInvestmentsRequestData(parsedNino, TaxYear.fromMtd(taxYear), Def1_requestBodyModel)
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {
@@ -56,7 +56,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
 
         runOkTestWithAudit(
           expectedStatus = NO_CONTENT,
-          maybeAuditRequestBody = Some(requestBodyJson),
+          maybeAuditRequestBody = Some(Def1_requestBodyJson),
           maybeExpectedResponseBody = None,
           maybeAuditResponseBody = None
         )
@@ -67,7 +67,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
       "the parser validation fails" in new Test {
         willUseValidator(returning(NinoFormatError))
 
-        runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
+        runErrorTestWithAudit(NinoFormatError, Some(Def1_requestBodyJson))
 
       }
 
@@ -78,7 +78,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
           .amend(requestData)
           .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-        runErrorTestWithAudit(RuleTaxYearNotSupportedError, maybeAuditRequestBody = Some(requestBodyJson))
+        runErrorTestWithAudit(RuleTaxYearNotSupportedError, maybeAuditRequestBody = Some(Def1_requestBodyJson))
       }
     }
   }
@@ -101,7 +101,7 @@ class CreateAndAmendReliefInvestmentsControllerSpec
 
     MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePostRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePostRequest(Def1_requestBodyJson))
 
     def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(

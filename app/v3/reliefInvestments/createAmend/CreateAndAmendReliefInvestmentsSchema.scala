@@ -16,27 +16,26 @@
 
 package v3.reliefInvestments.createAmend
 
-import shared.controllers.validators.resolvers.ResolveTaxYear
+import cats.data.Validated
+import cats.data.Validated.Valid
+import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
 import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
+
+import scala.math.Ordered.orderingToOrdered
 
 sealed trait CreateAndAmendReliefInvestmentsSchema
 
 object CreateAndAmendReliefInvestmentsSchema {
   case object Def1 extends CreateAndAmendReliefInvestmentsSchema
+  case object Def2 extends CreateAndAmendReliefInvestmentsSchema
 
-  private val defaultSchema = Def1
-
-  def schemaFor(maybeTaxYear: Option[String]): CreateAndAmendReliefInvestmentsSchema = {
-    maybeTaxYear
-      .map(ResolveTaxYear.apply)
-      .flatMap(_.toOption.map(schemaFor))
-      .getOrElse(defaultSchema)
+  def schemaFor(taxYearString: String): Validated[Seq[MtdError], CreateAndAmendReliefInvestmentsSchema] = {
+    ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))(taxYearString) andThen schemaFor
   }
 
-  def schemaFor(taxYear: TaxYear): CreateAndAmendReliefInvestmentsSchema = {
-    taxYear match {
-      case _ => Def1
-    }
+  def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAndAmendReliefInvestmentsSchema] = {
+    if (taxYear >= TaxYear.fromMtd("2025-26")) Valid(Def2) else Valid(Def1)
 
   }
 

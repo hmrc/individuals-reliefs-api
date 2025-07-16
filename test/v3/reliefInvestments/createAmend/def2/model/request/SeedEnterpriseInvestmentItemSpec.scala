@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package v3.reliefInvestments.createAmend.def1.model.request
+package v3.reliefInvestments.createAmend.def2.model.request
 
 import play.api.libs.json.Json
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def2.model.Def2_CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def2.model.request.SeedEnterpriseInvestmentItem
 
-class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
+class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        Def1_socialEnterpriseInvestmentItemJson.as[SocialEnterpriseInvestmentItem] shouldBe Def1_socialEnterpriseInvestmentItemModel
+        Def2_seedEnterpriseInvestmentItemJson.as[SeedEnterpriseInvestmentItem] shouldBe Def2_seedEnterpriseInvestmentItemModel
       }
     }
   }
@@ -34,7 +35,7 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(Def1_socialEnterpriseInvestmentItemModel) shouldBe Def1_socialEnterpriseInvestmentItemJson
+        Json.toJson(Def2_seedEnterpriseInvestmentItemModel) shouldBe Def2_seedEnterpriseInvestmentItemJson
       }
     }
   }

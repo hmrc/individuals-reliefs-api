@@ -26,7 +26,8 @@ import shared.models
 import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v3.fixtures.CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def2.model.Def2_CreateAndAmendReliefInvestmentsFixtures._
 
 class CreateAndAmendReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
 
@@ -38,25 +39,36 @@ class CreateAndAmendReliefInvestmentsControllerHipISpec extends IntegrationBaseS
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
         }
 
-        val response: WSResponse = await(request().put(requestBodyJson))
+        val response: WSResponse = await(request().put(Def1_requestBodyJson))
         response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
 
-      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysTest {
+      "any valid request is made for a Tax Year Specific (TYS) tax year before 2025-26" in new PreTYStarting2025TysTest {
 
         override def setupStubs(): Unit = {
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
         }
 
-        val response: WSResponse = await(request().put(requestBodyJson))
+        val response: WSResponse = await(request().put(Def1_requestBodyJson))
+        response.status shouldBe NO_CONTENT
+        response.header("X-CorrelationId") should not be empty
+      }
+
+      "any valid request is made for a Tax Year Specific (TYS) tax year from 2025-26 onwards" in new TYStarting2025OnwardsTysTest {
+
+        override def setupStubs(): Unit = {
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT, JsObject.empty)
+        }
+
+        val response: WSResponse = await(request().put(Def2_requestBodyJson))
         response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
     }
 
     "return a 400 with multiple errors" when {
-      "all field value validations fail on the request body" in new TysTest {
+      "all field value validations fail on the request body" in new PreTYStarting2025TysTest {
 
         val allInvalidValueRequestBodyJson: JsValue = Json.parse(
           """
@@ -483,7 +495,7 @@ class CreateAndAmendReliefInvestmentsControllerHipISpec extends IntegrationBaseS
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new TysTest {
+          s"validation fails with ${expectedBody.code} error" in new PreTYStarting2025TysTest {
 
             override val nino: String       = requestNino
             override val mtdTaxYear: String = requestTaxYear
@@ -495,10 +507,10 @@ class CreateAndAmendReliefInvestmentsControllerHipISpec extends IntegrationBaseS
         }
 
         val input = Seq(
-          ("AA1123A", "2021-22", requestBodyJson, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "20177", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2017-19", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2019-20", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA1123A", "2021-22", Def1_requestBodyJson, BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "20177", Def1_requestBodyJson, BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2017-19", Def1_requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2019-20", Def1_requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2021-22", allInvalidValueFormatRequestBodyJson, BAD_REQUEST, allValueFormatError),
           ("AA123456A", "2021-22", allInvalidDateOfInvestmentRequestBodyJson, BAD_REQUEST, allDateOfInvestmentFormatError),
           ("AA123456A", "2021-22", allInvalidUniqueInvestmentReferenceRequestBodyJson, BAD_REQUEST, allUniqueInvestmentReferenceFormatError),
@@ -509,13 +521,13 @@ class CreateAndAmendReliefInvestmentsControllerHipISpec extends IntegrationBaseS
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new PreTYStarting2025TysTest {
 
             override def setupStubs(): Unit = {
               DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
-            val response: WSResponse = await(request().put(requestBodyJson))
+            val response: WSResponse = await(request().put(Def1_requestBodyJson))
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
@@ -562,7 +574,7 @@ class CreateAndAmendReliefInvestmentsControllerHipISpec extends IntegrationBaseS
 
       buildRequest(mtdUri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.3.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
@@ -589,9 +601,14 @@ class CreateAndAmendReliefInvestmentsControllerHipISpec extends IntegrationBaseS
     def downstreamUri: String = s"/income-tax/reliefs/investment/$nino/2021-22"
   }
 
-  private trait TysTest extends Test {
+  private trait PreTYStarting2025TysTest extends Test {
     def mtdTaxYear: String    = "2023-24"
     def downstreamUri: String = s"/itsa/income-tax/v1/23-24/reliefs/investment/$nino"
+  }
+
+  private trait TYStarting2025OnwardsTysTest extends Test {
+    def mtdTaxYear: String    = "2025-26"
+    def downstreamUri: String = s"/itsa/income-tax/v1/25-26/reliefs/investment/$nino"
   }
 
 }
