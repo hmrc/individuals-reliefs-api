@@ -1,0 +1,26 @@
+{
+  "giftAidPayments":{
+    "nonUkCharities":{
+      "charityNames":[
+        "non-UK charity 1",
+        "non-UK charity 2"
+      ],
+      "totalAmount":1000.12
+    },
+    "totalAmount":1000.12,
+    "oneOffAmount":1000.12,
+    "amountTreatedAsPreviousTaxYear":1000.12,
+    "amountTreatedAsSpecifiedTaxYear":1000.12
+  },
+  "gifts":{
+    "nonUkCharities":{
+      "charityNames":[
+        "non-UK charity 1",
+        "non-UK charity 2"
+      ],
+      "totalAmount":1000.12
+    },
+    "landAndBuildings":1000.12,
+    "sharesOrSecurities":1000.12
+  }
+}
