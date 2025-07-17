@@ -1,0 +1,80 @@
+/*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package v3.otherReliefs.amend.def1.model.request
+
+import play.api.libs.json.Json
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
+
+class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
+
+  val payrollGiving = PayrollGiving(
+    Some("myRef"),
+    154.00
+  )
+
+  val noRefPayrollGiving = PayrollGiving(
+    None,
+    154.00
+  )
+
+  val json = Json.parse(
+    """{
+      |        "customerReference": "myRef",
+      |        "reliefClaimed": 154.00
+      |      }""".stripMargin
+  )
+
+  val noRefJson = Json.parse(
+    """{
+      |        "reliefClaimed": 154.00
+      |      }""".stripMargin
+  )
+
+  "reads" when {
+    "passed valid JSON" should {
+      "return a valid model" in {
+        payrollGiving shouldBe json.as[PayrollGiving]
+      }
+    }
+  }
+
+  "reads from a JSON with no reference" when {
+    "passed a JSON with no customer reference" should {
+      "return a model with no customer reference " in {
+        noRefPayrollGiving shouldBe noRefJson.as[PayrollGiving]
+      }
+    }
+  }
+
+  "writes" when {
+    "passed valid model" should {
+      "return valid JSON" in {
+        Json.toJson(payrollGiving) shouldBe json
+      }
+    }
+  }
+
+  "writes from a model with no reference" when {
+    "passed a model with no customer reference" should {
+      "return a JSON with no customer reference" in {
+        Json.toJson(noRefPayrollGiving) shouldBe noRefJson
+      }
+    }
+  }
+
+}
