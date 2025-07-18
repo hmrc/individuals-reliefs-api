@@ -1,11 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Retrieve Relief Investments",
-  "description": "Allows the retrieval of relief investments",
+  "title": "TY 2024-25 or before",
   "type": "object",
   "properties": {
     "submittedOn": {
-      "description": "The date the investment relief was added. It must be provided in the format YYYY-MM-DDThh:mm:ssZ",
+      "description": "The date the investment relief was added. It must be provided in the format YYYY-MM-DDThh:mm:ss.SSSZ",
       "type": "string",
       "example": "2019-04-04T01:01:01.000Z"
     },
