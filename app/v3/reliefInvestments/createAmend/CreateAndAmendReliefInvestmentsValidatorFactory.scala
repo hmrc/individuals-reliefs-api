@@ -18,8 +18,9 @@ package v3.reliefInvestments.createAmend
 
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import v3.reliefInvestments.createAmend.CreateAndAmendReliefInvestmentsSchema.Def1
+import v3.reliefInvestments.createAmend.CreateAndAmendReliefInvestmentsSchema._
 import v3.reliefInvestments.createAmend.def1.Def1_CreateAndAmendReliefInvestmentsValidator
+import v3.reliefInvestments.createAmend.def2.Def2_CreateAndAmendReliefInvestmentsValidator
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 
 import javax.inject.Singleton
@@ -33,6 +34,7 @@ class CreateAndAmendReliefInvestmentsValidatorFactory {
 
     schema match {
       case Def1 => new Def1_CreateAndAmendReliefInvestmentsValidator(nino, taxYear, body)
+      case Def2 => new Def2_CreateAndAmendReliefInvestmentsValidator(nino, taxYear, body)
     }
   }
 

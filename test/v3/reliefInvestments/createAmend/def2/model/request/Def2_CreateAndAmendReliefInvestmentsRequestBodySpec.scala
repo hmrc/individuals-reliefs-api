@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package v3.reliefInvestments.createAmend.def1.model.request
+package v3.reliefInvestments.createAmend.def2.model.request
 
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def2.model.Def2_CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def2.model.request.Def2_CreateAndAmendReliefInvestmentsRequestBody
 
-class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with JsonErrorValidators {
+class Def2_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        requestBodyJson.as[Def1_CreateAndAmendReliefInvestmentsRequestBody] shouldBe requestBodyModel
+        requestBodyJson.as[Def2_CreateAndAmendReliefInvestmentsRequestBody] shouldBe requestBodyModel
       }
     }
   }
@@ -55,8 +56,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
 
     "return true" when {
       "no arrays are provided" in {
-        val model = Def1_CreateAndAmendReliefInvestmentsRequestBody(
-          None,
+        val model = Def2_CreateAndAmendReliefInvestmentsRequestBody(
           None,
           None,
           None,

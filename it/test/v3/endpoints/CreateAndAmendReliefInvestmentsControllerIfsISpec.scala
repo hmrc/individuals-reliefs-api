@@ -26,7 +26,7 @@ import shared.models
 import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v3.fixtures.CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures._
 
 class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
   override def servicesConfig: Map[String, Any] =
@@ -564,7 +564,7 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
 
       buildRequest(mtdUri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.3.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }

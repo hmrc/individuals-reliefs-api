@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v3.fixtures
+package v3.reliefInvestments.createAmend.def2.model
 
 import play.api.libs.json.{JsValue, Json}
-import v3.reliefInvestments.createAmend.def1.model.request._
+import v3.reliefInvestments.createAmend.def2.model.request._
 
-object CreateAndAmendReliefInvestmentsFixtures {
+object Def2_CreateAndAmendReliefInvestmentsFixtures {
 
   val vctSubscriptionsItemModel: VctSubscriptionsItem = VctSubscriptionsItem(
     uniqueInvestmentRef = "VCTREF",
@@ -103,32 +103,11 @@ object CreateAndAmendReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  val socialEnterpriseInvestmentItemModel: SocialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
-    uniqueInvestmentRef = "VCTREF",
-    socialEnterpriseName = Some("VCT Fund X"),
-    dateOfInvestment = Some("2018-04-16"),
-    amountInvested = Some(BigDecimal(23312.00)),
-    reliefClaimed = BigDecimal(1334.00)
-  )
-
-  val socialEnterpriseInvestmentItemJson: JsValue = Json.parse(
-    """
-      |{
-      |  "uniqueInvestmentRef": "VCTREF",
-      |  "socialEnterpriseName": "VCT Fund X",
-      |  "dateOfInvestment": "2018-04-16",
-      |  "amountInvested": 23312.00,
-      |  "reliefClaimed": 1334.00
-      |}
-        """.stripMargin
-  )
-
-  val requestBodyModel: Def1_CreateAndAmendReliefInvestmentsRequestBody = Def1_CreateAndAmendReliefInvestmentsRequestBody(
+  val requestBodyModel: Def2_CreateAndAmendReliefInvestmentsRequestBody = Def2_CreateAndAmendReliefInvestmentsRequestBody(
     vctSubscription = Some(Seq(vctSubscriptionsItemModel)),
     eisSubscription = Some(Seq(eisSubscriptionsItemModel)),
     communityInvestment = Some(Seq(communityInvestmentItemModel)),
-    seedEnterpriseInvestment = Some(Seq(seedEnterpriseInvestmentItemModel)),
-    socialEnterpriseInvestment = Some(Seq(socialEnterpriseInvestmentItemModel))
+    seedEnterpriseInvestment = Some(Seq(seedEnterpriseInvestmentItemModel))
   )
 
   val requestBodyJson: JsValue = Json.parse(
@@ -137,8 +116,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
       |  "vctSubscription":[$vctSubscriptionsItemJson],
       |  "eisSubscription":[$eisSubscriptionsItemJson],
       |  "communityInvestment": [$communityInvestmentItemJson],
-      |  "seedEnterpriseInvestment": [$seedEnterpriseInvestmentItemJson],
-      |  "socialEnterpriseInvestment": [$socialEnterpriseInvestmentItemJson]
+      |  "seedEnterpriseInvestment": [$seedEnterpriseInvestmentItemJson]
       |}
         """.stripMargin
   )

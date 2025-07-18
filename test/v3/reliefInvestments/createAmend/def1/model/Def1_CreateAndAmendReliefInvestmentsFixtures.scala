@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v2.fixtures
+package v3.reliefInvestments.createAmend.def1.model
 
 import play.api.libs.json.{JsValue, Json}
-import v2.reliefInvestments.createAmend.def1.model.request._
+import v3.reliefInvestments.createAmend.def1.model.request._
 
-object CreateAndAmendReliefInvestmentsFixtures {
+object Def1_CreateAndAmendReliefInvestmentsFixtures {
 
   val vctSubscriptionsItemModel: VctSubscriptionsItem = VctSubscriptionsItem(
     uniqueInvestmentRef = "VCTREF",
@@ -140,7 +140,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
       |  "seedEnterpriseInvestment": [$seedEnterpriseInvestmentItemJson],
       |  "socialEnterpriseInvestment": [$socialEnterpriseInvestmentItemJson]
       |}
-       """.stripMargin
+        """.stripMargin
   )
 
 }

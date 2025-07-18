@@ -19,7 +19,7 @@ package v3.reliefInvestments.createAmend.def1.model.request
 import play.api.libs.json.Json
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.fixtures.CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures._
 
 class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 
