@@ -16,9 +16,11 @@
 
 package v3.reliefInvestments.retrieve
 
+import cats.data.Validated.{Invalid, Valid}
 import shared.controllers.validators.Validator
-import v3.reliefInvestments.retrieve.RetrieveReliefInvestmentsSchema.Def1
+import v3.reliefInvestments.retrieve.RetrieveReliefInvestmentsSchema.{Def1, Def2}
 import v3.reliefInvestments.retrieve.def1.model.Def1_RetrieveReliefInvestmentsValidator
+import v3.reliefInvestments.retrieve.def2.model.Def2_RetrieveReliefInvestmentsValidator
 import v3.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 
 import javax.inject.Singleton
@@ -28,10 +30,13 @@ class RetrieveReliefInvestmentsValidatorFactory {
 
   def validator(nino: String, taxYear: String): Validator[RetrieveReliefInvestmentsRequestData] = {
 
-    val schema = RetrieveReliefInvestmentsSchema.schemaFor(Some(taxYear))
+    val schema = RetrieveReliefInvestmentsSchema.schemaFor(taxYear)
 
     schema match {
-      case Def1 => new Def1_RetrieveReliefInvestmentsValidator(nino, taxYear)
+      case Valid(Def1)     => new Def1_RetrieveReliefInvestmentsValidator(nino, taxYear)
+      case Valid(Def2)     => new Def2_RetrieveReliefInvestmentsValidator(nino, taxYear)
+      case Invalid(errors) => Validator.returningErrors(errors)
+
     }
 
   }

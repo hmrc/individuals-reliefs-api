@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v3.reliefInvestments.retrieve.def1.model.response
+package v3.reliefInvestments.retrieve.def2.model.response
 
 import play.api.libs.json.Json
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.fixtures.Def1_RetrieveReliefInvestmentsFixtures.{seedEnterpriseInvestmentItemJson, seedEnterpriseInvestmentItemModel}
+import v3.fixtures.Def2_RetrieveReliefInvestmentsFixtures.{seedEnterpriseInvestmentItemJson, seedEnterpriseInvestmentItemModel}
 
 class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 

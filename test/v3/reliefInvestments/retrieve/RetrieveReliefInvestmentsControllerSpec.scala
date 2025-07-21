@@ -24,7 +24,7 @@ import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.TaxYear
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
-import v3.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
+import v3.fixtures.Def1_RetrieveReliefInvestmentsFixtures.responseModel
 import v3.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global

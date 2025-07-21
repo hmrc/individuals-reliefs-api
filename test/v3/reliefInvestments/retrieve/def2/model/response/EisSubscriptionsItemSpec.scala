@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package v3.reliefInvestments.retrieve.def1.model.response
+package v3.reliefInvestments.retrieve.def2.model.response
 
 import play.api.libs.json.Json
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.fixtures.Def1_RetrieveReliefInvestmentsFixtures.{seedEnterpriseInvestmentItemJson, seedEnterpriseInvestmentItemModel}
+import v3.fixtures.Def2_RetrieveReliefInvestmentsFixtures.{eisSubscriptionsItemJson, eisSubscriptionsItemModel}
 
-class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
+class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        seedEnterpriseInvestmentItemJson.as[SeedEnterpriseInvestmentItem] shouldBe seedEnterpriseInvestmentItemModel
+        eisSubscriptionsItemJson().as[EisSubscriptionsItem] shouldBe eisSubscriptionsItemModel()
+      }
+
+      "return valid model when the optional knowledgeIntensive is omitted" in {
+        eisSubscriptionsItemJson(knowledgeIntensive = None) shouldBe Json.toJson(eisSubscriptionsItemModel(knowledgeIntensive = None))
       }
     }
   }
@@ -34,7 +38,11 @@ class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(seedEnterpriseInvestmentItemModel) shouldBe seedEnterpriseInvestmentItemJson
+        Json.toJson(eisSubscriptionsItemModel()) shouldBe eisSubscriptionsItemJson()
+      }
+
+      "return valid json when the optional knowledgeIntensive is omitted" in {
+        Json.toJson(eisSubscriptionsItemModel(knowledgeIntensive = None)) shouldBe eisSubscriptionsItemJson(knowledgeIntensive = None)
       }
     }
   }

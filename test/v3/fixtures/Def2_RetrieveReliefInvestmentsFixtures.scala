@@ -18,9 +18,9 @@ package v3.fixtures
 
 import play.api.libs.json.{JsObject, JsValue, Json}
 import shared.models.domain.Timestamp
-import v3.reliefInvestments.retrieve.def1.model.response._
+import v3.reliefInvestments.retrieve.def2.model.response._
 
-object RetrieveReliefInvestmentsFixtures {
+object Def2_RetrieveReliefInvestmentsFixtures {
 
   val vctSubscriptionsItemModel: VctSubscriptionsItem = VctSubscriptionsItem(
     uniqueInvestmentRef = "VCTREF",
@@ -104,33 +104,12 @@ object RetrieveReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  val socialEnterpriseInvestmentItemModel: SocialEnterpriseInvestmentItem = SocialEnterpriseInvestmentItem(
-    uniqueInvestmentRef = "123412/1A",
-    socialEnterpriseName = Some("SE Inc"),
-    dateOfInvestment = Some("2020-12-12"),
-    amountInvested = Some(BigDecimal(123123.22)),
-    reliefClaimed = BigDecimal(3432.00)
-  )
-
-  val socialEnterpriseInvestmentItemJson: JsValue = Json.parse(
-    """
-      |{
-      |  "uniqueInvestmentRef": "123412/1A",
-      |  "socialEnterpriseName": "SE Inc",
-      |  "dateOfInvestment": "2020-12-12",
-      |  "amountInvested": 123123.22,
-      |  "reliefClaimed": 3432.00
-      |}
-        """.stripMargin
-  )
-
-  val responseModel: Def1_RetrieveReliefInvestmentsResponse = Def1_RetrieveReliefInvestmentsResponse(
+  val responseModel: Def2_RetrieveReliefInvestmentsResponse = Def2_RetrieveReliefInvestmentsResponse(
     submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
     vctSubscription = Some(Seq(vctSubscriptionsItemModel)),
     eisSubscription = Some(Seq(eisSubscriptionsItemModel())),
     communityInvestment = Some(Seq(communityInvestmentItemModel)),
-    seedEnterpriseInvestment = Some(Seq(seedEnterpriseInvestmentItemModel)),
-    socialEnterpriseInvestment = Some(Seq(socialEnterpriseInvestmentItemModel))
+    seedEnterpriseInvestment = Some(Seq(seedEnterpriseInvestmentItemModel))
   )
 
   val responseJson: JsValue = Json.parse(
@@ -140,8 +119,7 @@ object RetrieveReliefInvestmentsFixtures {
       |  "vctSubscription":[$vctSubscriptionsItemJson],
       |  "eisSubscription":[${eisSubscriptionsItemJson()}],
       |  "communityInvestment": [$communityInvestmentItemJson],
-      |  "seedEnterpriseInvestment": [$seedEnterpriseInvestmentItemJson],
-      |  "socialEnterpriseInvestment": [$socialEnterpriseInvestmentItemJson]
+      |  "seedEnterpriseInvestment": [$seedEnterpriseInvestmentItemJson]
       |}
         """.stripMargin
   )
