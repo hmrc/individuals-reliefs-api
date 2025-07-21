@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package v3.reliefInvestments.retrieve.def1.model.response
+package v3.reliefInvestments.retrieve.def2.model.response
 
 import play.api.libs.json.Json
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.fixtures.Def1_RetrieveReliefInvestmentsFixtures.{seedEnterpriseInvestmentItemJson, seedEnterpriseInvestmentItemModel}
+import v3.fixtures.Def2_RetrieveReliefInvestmentsFixtures.{communityInvestmentItemJson, communityInvestmentItemModel}
 
-class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
+class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        seedEnterpriseInvestmentItemJson.as[SeedEnterpriseInvestmentItem] shouldBe seedEnterpriseInvestmentItemModel
+        communityInvestmentItemJson.as[CommunityInvestmentItem] shouldBe communityInvestmentItemModel
       }
     }
   }
@@ -34,7 +34,7 @@ class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(seedEnterpriseInvestmentItemModel) shouldBe seedEnterpriseInvestmentItemJson
+        Json.toJson(communityInvestmentItemModel) shouldBe communityInvestmentItemJson
       }
     }
   }

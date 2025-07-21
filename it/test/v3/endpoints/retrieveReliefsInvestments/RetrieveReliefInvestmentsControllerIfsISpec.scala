@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.endpoints
+package v3.endpoints.retrieveReliefsInvestments
 
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
@@ -24,7 +24,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v3.fixtures.RetrieveReliefInvestmentsFixtures.responseJson
+import v3.fixtures.Def1_RetrieveReliefInvestmentsFixtures.responseJson
 
 class RetrieveReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
 

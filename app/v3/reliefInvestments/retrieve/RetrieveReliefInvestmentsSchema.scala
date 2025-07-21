@@ -16,12 +16,18 @@
 
 package v3.reliefInvestments.retrieve
 
+import cats.data.Validated
+import cats.data.Validated.Valid
 import play.api.libs.json.Reads
-import shared.controllers.validators.resolvers.ResolveTaxYear
+import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
 import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import shared.schema.DownstreamReadable
 import v3.reliefInvestments.retrieve.def1.model.response.Def1_RetrieveReliefInvestmentsResponse
+import v3.reliefInvestments.retrieve.def2.model.response.Def2_RetrieveReliefInvestmentsResponse
 import v3.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsResponse
+
+import scala.math.Ordering.Implicits.infixOrderingOps
 
 sealed trait RetrieveReliefInvestmentsSchema extends DownstreamReadable[RetrieveReliefInvestmentsResponse]
 
@@ -32,20 +38,16 @@ object RetrieveReliefInvestmentsSchema {
     val connectorReads: Reads[DownstreamResp] = Def1_RetrieveReliefInvestmentsResponse.reads
   }
 
-  private val defaultSchema = Def1
-
-  def schemaFor(maybeTaxYear: Option[String]): RetrieveReliefInvestmentsSchema = {
-    maybeTaxYear
-      .map(ResolveTaxYear.apply)
-      .flatMap(_.toOption.map(schemaFor))
-      .getOrElse(defaultSchema)
+  case object Def2 extends RetrieveReliefInvestmentsSchema {
+    type DownstreamResp = Def2_RetrieveReliefInvestmentsResponse
+    val connectorReads: Reads[DownstreamResp] = Def2_RetrieveReliefInvestmentsResponse.reads
   }
 
-  def schemaFor(taxYear: TaxYear): RetrieveReliefInvestmentsSchema = {
-    taxYear match {
-      case _ => Def1
-    }
+  def schemaFor(taxYearString: String): Validated[Seq[MtdError], RetrieveReliefInvestmentsSchema] =
+    ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))(taxYearString) andThen schemaFor
 
+  def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveReliefInvestmentsSchema] = {
+    if (taxYear >= TaxYear.fromMtd("2025-26")) Valid(Def2) else Valid(Def1)
   }
 
 }

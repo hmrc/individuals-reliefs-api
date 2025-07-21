@@ -19,13 +19,17 @@ package v3.reliefInvestments.retrieve.model.response
 import play.api.libs.json.OWrites
 import shared.utils.JsonWritesUtil.writesFrom
 import v3.reliefInvestments.retrieve.def1.model.response.Def1_RetrieveReliefInvestmentsResponse
+import v3.reliefInvestments.retrieve.def2.model.response.Def2_RetrieveReliefInvestmentsResponse
 
 trait RetrieveReliefInvestmentsResponse
 
 object RetrieveReliefInvestmentsResponse {
 
-  implicit val writes: OWrites[RetrieveReliefInvestmentsResponse] = writesFrom { case def1: Def1_RetrieveReliefInvestmentsResponse =>
-    implicitly[OWrites[Def1_RetrieveReliefInvestmentsResponse]].writes(def1)
+  implicit val writes: OWrites[RetrieveReliefInvestmentsResponse] = writesFrom {
+    case def1: Def1_RetrieveReliefInvestmentsResponse =>
+      implicitly[OWrites[Def1_RetrieveReliefInvestmentsResponse]].writes(def1)
+    case def2: Def2_RetrieveReliefInvestmentsResponse =>
+      implicitly[OWrites[Def2_RetrieveReliefInvestmentsResponse]].writes(def2)
   }
 
 }

@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package v3.reliefInvestments.retrieve.def1.model
+package v3.reliefInvestments.retrieve.def2.model
 
 import cats.data.Validated
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.ResolveNino
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v3.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
+import v3.reliefInvestments.retrieve.def2.model.request.Def2_RetrieveReliefInvestmentsRequestData
 import v3.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 
 import javax.inject.Singleton
 
 @Singleton
-class Def1_RetrieveReliefInvestmentsValidator(nino: String, taxYear: String) extends Validator[RetrieveReliefInvestmentsRequestData] {
+class Def2_RetrieveReliefInvestmentsValidator(nino: String, taxYear: String) extends Validator[RetrieveReliefInvestmentsRequestData] {
 
-  override def validate: Validated[Seq[MtdError], Def1_RetrieveReliefInvestmentsRequestData] =
+  override def validate: Validated[Seq[MtdError], Def2_RetrieveReliefInvestmentsRequestData] =
     ResolveNino(nino).map { validNino =>
-      Def1_RetrieveReliefInvestmentsRequestData(validNino, TaxYear.fromMtd(taxYear))
+      Def2_RetrieveReliefInvestmentsRequestData(validNino, TaxYear.fromMtd(taxYear))
     }
 
 }

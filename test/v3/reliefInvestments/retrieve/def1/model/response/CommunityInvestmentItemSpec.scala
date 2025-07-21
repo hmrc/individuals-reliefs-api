@@ -19,7 +19,7 @@ package v3.reliefInvestments.retrieve.def1.model.response
 import play.api.libs.json.Json
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.fixtures.RetrieveReliefInvestmentsFixtures.{communityInvestmentItemJson, communityInvestmentItemModel}
+import v3.fixtures.Def1_RetrieveReliefInvestmentsFixtures.{communityInvestmentItemJson, communityInvestmentItemModel}
 
 class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 

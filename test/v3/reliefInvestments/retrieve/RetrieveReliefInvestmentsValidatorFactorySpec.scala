@@ -16,61 +16,32 @@
 
 package v3.reliefInvestments.retrieve
 
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.controllers.validators.{AlwaysErrorsValidator, Validator}
 import shared.utils.UnitSpec
-import v3.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
+import v3.reliefInvestments.retrieve.def1.model.Def1_RetrieveReliefInvestmentsValidator
+import v3.reliefInvestments.retrieve.def2.model.Def2_RetrieveReliefInvestmentsValidator
 import v3.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 
 class RetrieveReliefInvestmentsValidatorFactorySpec extends UnitSpec {
 
-  private implicit val correlationId: String = "1234"
+  private def validatorFor(taxYear: String): Validator[RetrieveReliefInvestmentsRequestData] =
+    new RetrieveReliefInvestmentsValidatorFactory().validator(nino = "ignoredNino", taxYear = taxYear)
 
-  private val validNino    = "AA123456A"
-  private val validTaxYear = "2021-22"
-
-  private val parsedNino    = Nino(validNino)
-  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
-
-  private val validatorFactory = new RetrieveReliefInvestmentsValidatorFactory
-
-  private def validator(nino: String, taxYear: String) = validatorFactory.validator(nino, taxYear)
-
-  "running a validation" should {
-    "return no errors" when {
-      "a valid request is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveReliefInvestmentsRequestData] = validator(validNino, validTaxYear).validateAndWrapResult()
-        result shouldBe Right(Def1_RetrieveReliefInvestmentsRequestData(parsedNino, parsedTaxYear))
+  "RetrieveUkPropertyCumulativeSummaryValidatorFactory" when {
+    "given a request corresponding to a Def1 schema" should {
+      "return a Def1 validator" in {
+        validatorFor("2024-25") shouldBe a[Def1_RetrieveReliefInvestmentsValidator]
       }
     }
-    "return NinoFormatError" when {
-      "an invalid nino is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveReliefInvestmentsRequestData] = validator("A12344A", validTaxYear).validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
+    "given a request corresponding to a Def2 schema" should {
+      "return a Def2 validator" in {
+        validatorFor("2025-26") shouldBe a[Def2_RetrieveReliefInvestmentsValidator]
       }
     }
-    "return TaxYearFormatError" when {
-      "an invalid tax year is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveReliefInvestmentsRequestData] = validator(validNino, "201831").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
-      }
-    }
-    "return RuleTaxYearRangeInvalidError" when {
-      "the tax year range exceeds 1" in {
-        val result: Either[ErrorWrapper, RetrieveReliefInvestmentsRequestData] = validator(validNino, "2019-21").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
-      }
-    }
-    "return RULE_TAX_YEAR_NOT_SUPPORTED error" when {
-      "a tax year before the earliest allowed date is supplied" in {
-        val result: Either[ErrorWrapper, RetrieveReliefInvestmentsRequestData] = validator(validNino, "2016-17").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
-      }
-    }
-    "return multiple errors" when {
-      "request supplied has multiple errors" in {
-        val result: Either[ErrorWrapper, RetrieveReliefInvestmentsRequestData] = validator("A12344A", "20178").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
+
+    "given a request where no valid schema could be determined" should {
+      "return a validator returning the errors" in {
+        validatorFor("BAD_TAX_YEAR") shouldBe an[AlwaysErrorsValidator]
       }
     }
   }
