@@ -1,7 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Retrieve Relief Investments",
-  "description": "Allows the retrieval of relief investments",
+  "title": "TY 2025-26 onwards",
   "type": "object",
   "properties": {
     "submittedOn": {
@@ -174,85 +173,6 @@
         "required": [
           "uniqueInvestmentRef",
           "reliefClaimed"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "socialEnterpriseInvestment": {
-      "description": "Financial details about social enterprise investment income.",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "uniqueInvestmentRef": {
-            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
-            "type": "string",
-            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
-            "example": "12345678"
-          },
-          "socialEnterpriseName": {
-            "description": "The name of the investment or fund.",
-            "type": "string",
-            "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
-            "example": "SE Inc"
-          },
-          "dateOfInvestment": {
-            "description": "The date of the investment.\n\nDate in the format YYYY-MM-DD",
-            "type": "string",
-            "example": "2018-04-06"
-          },
-          "amountInvested": {
-            "description": "The total amount invested.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-            "type": "number",
-            "example": "2000.99"
-          },
-          "reliefClaimed": {
-            "description": "The amount of relief being claimed for the tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-            "type": "number",
-            "example": "2000.99"
-          }
-        },
-        "required": [
-          "uniqueInvestmentRef",
-          "reliefClaimed"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "links": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "description": "A list of endpoint links that indicate possible actions related to the current resource",
-        "properties": {
-          "href": {
-            "description": "The relative url of the endpoint",
-            "type": "string",
-            "example": "/individuals/reliefs/investment/TC663795B/2019-20"
-          },
-          "method": {
-            "description": "The HTTP method type for the endpoint",
-            "type": "string",
-            "enum": [
-              "GET",
-              "PUT",
-              "DELETE"
-            ]
-          },
-          "rel": {
-            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
-            "type": "string",
-            "enum": [
-              "self",
-              "create-and-amend-reliefs-investments",
-              "delete-reliefs-investments"
-            ]
-          }
-        },
-        "required": [
-          "href",
-          "rel",
-          "method"
         ],
         "additionalProperties": false
       }

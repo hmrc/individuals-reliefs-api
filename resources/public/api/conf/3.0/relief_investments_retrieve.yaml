@@ -38,12 +38,16 @@ responses:
     content:
       application/json:
         schema:
-          $ref: "./schemas/retrieve_relief_investments_response.json"
+          oneOf:
+            - $ref: "./schemas/relief_investments_retrieve/def1/response.json"
+            - $ref: "./schemas/relief_investments_retrieve/def2/response.json"
         examples:
-          example-response:
-            description: Example response
+          TY 2024-25 or before:
             value:
-              $ref: "./examples/retrieve_relief_investments_response.json"
+              $ref: "./examples/relief_investments_retrieve/def1/response.json"
+          TY 2025-26 onwards:
+            value:
+              $ref: "./examples/relief_investments_retrieve/def2/response.json"
 
   "400":
     description: Bad request
