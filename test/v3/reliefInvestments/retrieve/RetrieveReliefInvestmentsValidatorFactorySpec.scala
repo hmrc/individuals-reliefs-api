@@ -27,7 +27,7 @@ class RetrieveReliefInvestmentsValidatorFactorySpec extends UnitSpec {
   private def validatorFor(taxYear: String): Validator[RetrieveReliefInvestmentsRequestData] =
     new RetrieveReliefInvestmentsValidatorFactory().validator(nino = "ignoredNino", taxYear = taxYear)
 
-  "RetrieveUkPropertyCumulativeSummaryValidatorFactory" when {
+  "RetrieveReliefInvestmentsValidatorFactory" when {
     "given a request corresponding to a Def1 schema" should {
       "return a Def1 validator" in {
         validatorFor("2024-25") shouldBe a[Def1_RetrieveReliefInvestmentsValidator]
