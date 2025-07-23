@@ -29,8 +29,8 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
 
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  private val validNino    = "AA123456A"
-  private val validTaxYear = "2020-21"
+  private val validNino = "AA123456A"
+  private val taxYear   = "2020-21"
 
   private val validVctSubscriptionsItem = Json.parse("""
       |{
@@ -103,7 +103,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
   private val validBody = bodyWith()
 
   private val parsedNino    = Nino(validNino)
-  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
+  private val parsedTaxYear = TaxYear.fromMtd(taxYear)
 
   private val parsedCctSubscriptionsItem =
     VctSubscriptionsItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(BigDecimal(23312.00)), BigDecimal(1334.00))
@@ -134,45 +134,24 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
     "return the parsed domain object" when {
       "passed a valid request" in {
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, validTaxYear, validBody).validateAndWrapResult()
+          validator(validNino, taxYear, validBody).validateAndWrapResult()
 
         result shouldBe Right(Def1_CreateAndAmendReliefInvestmentsRequestData(parsedNino, parsedTaxYear, parsedBody))
       }
     }
 
-    "return a single error" when {
+    "return a NinoFormatError error" when {
       "passed an invalid nino" in {
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator("invalid", validTaxYear, validBody).validateAndWrapResult()
+          validator("invalid", taxYear, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
-      }
-
-      "passed an invalidly formatted tax year" in {
-        val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, "invalid", validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
-      }
-
-      "passed an invalid tax year" in {
-        val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, "2019-20", validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
-      }
-
-      "passed a tax year with an invalid range" in {
-        val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, "2018-20", validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
       "passed an empty body" in {
         val invalidBody = JsObject.empty
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, taxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
@@ -180,7 +159,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
       "passed a body with at least one empty array" in {
         val invalidBody = validBody.update("/vctSubscription", JsArray(List()))
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, taxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/vctSubscription")))
       }
@@ -188,7 +167,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
       "passed a body with at least array containing an empty object" in {
         val invalidBody = validBody.update("/vctSubscription", JsArray(List(JsObject.empty)))
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, taxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(
@@ -200,7 +179,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
       "passed a body with a negative numeric field" when {
         def testValueFormatError(path: String, body: JsValue): Unit = s"for $path" in {
           val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-            validator(validNino, validTaxYear, body).validateAndWrapResult()
+            validator(validNino, taxYear, body).validateAndWrapResult()
 
           result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPath(path)))
         }
@@ -249,7 +228,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
           List(invalidSocialEnterpriseInvestmentItem)
         )
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, taxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(
@@ -279,7 +258,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
           List(invalidSocialEnterpriseInvestmentItem)
         )
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, taxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(
@@ -309,7 +288,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
           List(invalidSocialEnterpriseInvestmentItem)
         )
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, taxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(
@@ -339,7 +318,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
           List(invalidSocialEnterpriseInvestmentItem)
         )
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, taxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(
@@ -357,14 +336,15 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
+        val invalidBody = JsObject.empty
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
-          validator("invalid", "invalid", validBody).validateAndWrapResult()
+          validator("invalid", taxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError))
+            Some(List(NinoFormatError, RuleIncorrectOrEmptyBodyError))
           )
         )
       }

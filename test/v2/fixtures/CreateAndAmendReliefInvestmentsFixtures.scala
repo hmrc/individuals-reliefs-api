@@ -140,7 +140,7 @@ object CreateAndAmendReliefInvestmentsFixtures {
       |  "seedEnterpriseInvestment": [$seedEnterpriseInvestmentItemJson],
       |  "socialEnterpriseInvestment": [$socialEnterpriseInvestmentItemJson]
       |}
-        """.stripMargin
+       """.stripMargin
   )
 
 }

@@ -19,14 +19,14 @@ package v3.reliefInvestments.createAmend.def1.model.request
 import play.api.libs.json.Json
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.fixtures.CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures._
 
 class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        socialEnterpriseInvestmentItemJson.as[SocialEnterpriseInvestmentItem] shouldBe socialEnterpriseInvestmentItemModel
+        Def1_socialEnterpriseInvestmentItemJson.as[SocialEnterpriseInvestmentItem] shouldBe Def1_socialEnterpriseInvestmentItemModel
       }
     }
   }
@@ -34,7 +34,7 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(socialEnterpriseInvestmentItemModel) shouldBe socialEnterpriseInvestmentItemJson
+        Json.toJson(Def1_socialEnterpriseInvestmentItemModel) shouldBe Def1_socialEnterpriseInvestmentItemJson
       }
     }
   }

@@ -18,14 +18,14 @@ package v3.reliefInvestments.createAmend.def1.model.request
 
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.fixtures.CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures._
 
 class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        requestBodyJson.as[Def1_CreateAndAmendReliefInvestmentsRequestBody] shouldBe requestBodyModel
+        Def1_requestBodyJson.as[Def1_CreateAndAmendReliefInvestmentsRequestBody] shouldBe Def1_requestBodyModel
       }
     }
   }
@@ -33,7 +33,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        requestBodyModel.toJson shouldBe requestBodyJson
+        Def1_requestBodyModel.toJson shouldBe Def1_requestBodyJson
       }
     }
   }
@@ -41,11 +41,11 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
   "isIncorrectOrEmptyBodyError" should {
     "return false" when {
       "all arrays are provided, none are empty, no objects in the arrays are empty" in {
-        requestBodyModel.isIncorrectOrEmptyBody shouldBe false
+        Def1_requestBodyModel.isIncorrectOrEmptyBody shouldBe false
       }
 
       "only some arrays are provided, none are empty, no objects in the arrays are empty" in {
-        val model = requestBodyModel.copy(
+        val model = Def1_requestBodyModel.copy(
           vctSubscription = None,
           seedEnterpriseInvestment = None
         )
@@ -65,7 +65,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
         model.isIncorrectOrEmptyBody shouldBe true
       }
       "at least one empty array is provided" in {
-        val model = requestBodyModel.copy(
+        val model = Def1_requestBodyModel.copy(
           vctSubscription = Some(Seq()),
           communityInvestment = Some(Seq())
         )

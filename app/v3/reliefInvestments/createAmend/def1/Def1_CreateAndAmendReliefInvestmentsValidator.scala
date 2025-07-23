@@ -35,16 +35,17 @@ import javax.inject.Singleton
 class Def1_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAndAmendReliefInvestmentsRequestData] {
 
-  private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
-
-  private val rulesValidator = Def1_CreateAndAmendReliefInvestmentsRulesValidator
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
 
   override def validate: Validated[Seq[MtdError], CreateAndAmendReliefInvestmentsRequestData] =
     (
       ResolveNino(nino),
-      resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAndAmendReliefInvestmentsRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN((validNino, validBody) =>
+      Def1_CreateAndAmendReliefInvestmentsRequestData(
+        validNino,
+        TaxYear.fromMtd(taxYear),
+        validBody
+      )) andThen Def1_CreateAndAmendReliefInvestmentsRulesValidator.validateBusinessRules
 
 }
