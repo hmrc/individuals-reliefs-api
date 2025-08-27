@@ -19,9 +19,9 @@ package v3.reliefInvestments.retrieve.def2.model.response
 import play.api.libs.json.{Json, OFormat}
 
 case class EisSubscriptionsItem(uniqueInvestmentRef: String,
-                                name: Option[String],
-                                knowledgeIntensive: Option[Boolean],
-                                dateOfInvestment: Option[String],
+                                name: String,
+                                knowledgeIntensive: Boolean,
+                                dateOfInvestment: String,
                                 amountInvested: Option[BigDecimal],
                                 reliefClaimed: BigDecimal)
 
