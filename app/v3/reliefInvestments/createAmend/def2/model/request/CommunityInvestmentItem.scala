@@ -18,9 +18,9 @@ package v3.reliefInvestments.createAmend.def2.model.request
 
 import play.api.libs.json.{Json, OFormat}
 
-case class CommunityInvestmentItem(uniqueInvestmentRef: String,
-                                   name: Option[String],
-                                   dateOfInvestment: Option[String],
+case class CommunityInvestmentItem(uniqueInvestmentRef: Option[String],
+                                   name: String,
+                                   dateOfInvestment: String,
                                    amountInvested: Option[BigDecimal],
                                    reliefClaimed: BigDecimal)
     extends ReliefsInvestmentItem

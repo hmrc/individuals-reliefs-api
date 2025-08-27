@@ -18,12 +18,12 @@ package v3.reliefInvestments.createAmend.def2.model.request
 
 import play.api.libs.json.{Json, OFormat}
 
-case class EisSubscriptionsItem(uniqueInvestmentRef: String,
-                                name: Option[String],
-                                dateOfInvestment: Option[String],
+case class EisSubscriptionsItem(uniqueInvestmentRef: Option[String],
+                                name: String,
+                                dateOfInvestment: String,
                                 amountInvested: Option[BigDecimal],
                                 reliefClaimed: BigDecimal,
-                                knowledgeIntensive: Option[Boolean])
+                                knowledgeIntensive: Boolean)
     extends ReliefsInvestmentItem
 
 object EisSubscriptionsItem {

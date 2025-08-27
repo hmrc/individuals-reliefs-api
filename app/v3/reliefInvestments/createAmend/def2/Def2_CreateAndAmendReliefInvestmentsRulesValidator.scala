@@ -69,20 +69,21 @@ object Def2_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
     )
   }
 
-  private def validateUniqueInvestmentRef(uniqueInvestmentRef: String, itemType: String, index: Int): Validated[Seq[MtdError], Unit] =
-    if (uniqueInvestmentRefRegex.matches(uniqueInvestmentRef)) {
-      valid
-    } else {
-      Invalid(List(UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")))
-    }
+  private def validateUniqueInvestmentRef(maybeUniqueInvestmentRef: Option[String], itemType: String, index: Int): Validated[Seq[MtdError], Unit] =
+    maybeUniqueInvestmentRef
+      .traverse_(uniqueInvestmentRef =>
+        if (uniqueInvestmentRefRegex.matches(uniqueInvestmentRef)) {
+          valid
+        } else {
+          Invalid(List(UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")))
+        })
 
-  private def validateName(maybeName: Option[String], path: String): Validated[Seq[MtdError], Unit] =
-    maybeName
-      .traverse_(name => if (nameRegex.matches(name)) valid else Invalid(List(NameFormatError.withPath(path))))
+  private def validateName(name: String, path: String): Validated[Seq[MtdError], Unit] =
+    if (nameRegex.matches(name)) valid else Invalid(List(NameFormatError.withPath(path)))
 
-  private def validateDate(maybeDate: Option[String], itemType: String, index: Int): Validated[Seq[MtdError], Unit] = {
+  private def validateDate(maybeDate: String, itemType: String, index: Int): Validated[Seq[MtdError], Unit] = {
     val path = s"/$itemType/$index/dateOfInvestment"
-    maybeDate.traverse_(ResolveIsoDate(_, DateOfInvestmentFormatError.withPath(path)).andThen(isDateInRange(_, path)))
+    ResolveIsoDate(maybeDate, DateOfInvestmentFormatError.withPath(path)).andThen(isDateInRange(_, path))
   }
 
   private def isDateInRange(date: LocalDate, path: String): Validated[Seq[MtdError], Unit] = {
