@@ -18,12 +18,11 @@ package v3.reliefInvestments.createAmend.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
 
-case class SeedEnterpriseInvestmentItem(uniqueInvestmentRef: Option[String],
+case class SeedEnterpriseInvestmentItem(uniqueInvestmentRef: String,
                                         companyName: String,
                                         dateOfInvestment: String,
                                         amountInvested: Option[BigDecimal],
-                                        reliefClaimed: BigDecimal)
-    extends ReliefsInvestmentItem {
+                                        reliefClaimed: BigDecimal) {
 
   @transient val name: String = companyName
 

@@ -18,9 +18,9 @@ package v3.reliefInvestments.createAmend.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
 
-case class CommunityInvestmentItem(uniqueInvestmentRef: Option[String], // Should this be optional
-                                   name: String,                        // Should this be mandatory
-                                   dateOfInvestment: String,            // Should this be mandatory
+case class CommunityInvestmentItem(uniqueInvestmentRef: String,
+                                   name: Option[String],
+                                   dateOfInvestment: Option[String],
                                    amountInvested: Option[BigDecimal],
                                    reliefClaimed: BigDecimal)
     extends ReliefsInvestmentItem

@@ -18,13 +18,12 @@ package v3.reliefInvestments.createAmend.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
 
-case class EisSubscriptionsItem(uniqueInvestmentRef: Option[String], // Should this be optional
+case class EisSubscriptionsItem(uniqueInvestmentRef: String,
                                 name: String,
                                 dateOfInvestment: String,
                                 amountInvested: Option[BigDecimal],
                                 reliefClaimed: BigDecimal,
                                 knowledgeIntensive: Boolean)
-    extends ReliefsInvestmentItem
 
 object EisSubscriptionsItem {
   implicit val format: OFormat[EisSubscriptionsItem] = Json.format[EisSubscriptionsItem]

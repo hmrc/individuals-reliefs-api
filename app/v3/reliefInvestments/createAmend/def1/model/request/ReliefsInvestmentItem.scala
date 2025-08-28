@@ -17,9 +17,9 @@
 package v3.reliefInvestments.createAmend.def1.model.request
 
 trait ReliefsInvestmentItem {
-  val uniqueInvestmentRef: Option[String]
-  val name: String
-  val dateOfInvestment: String
+  val uniqueInvestmentRef: String
+  val name: Option[String]
+  val dateOfInvestment: Option[String]
   val amountInvested: Option[BigDecimal]
   val reliefClaimed: BigDecimal
 

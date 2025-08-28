@@ -23,7 +23,6 @@ case class VctSubscriptionsItem(uniqueInvestmentRef: Option[String],
                                 dateOfInvestment: String,
                                 amountInvested: Option[BigDecimal],
                                 reliefClaimed: BigDecimal)
-    extends ReliefsInvestmentItem
 
 object VctSubscriptionsItem {
   implicit val format: OFormat[VctSubscriptionsItem] = Json.format[VctSubscriptionsItem]
