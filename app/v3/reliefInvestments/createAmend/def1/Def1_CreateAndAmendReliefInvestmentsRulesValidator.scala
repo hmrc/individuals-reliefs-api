@@ -47,10 +47,10 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
     import parsed.body._
 
     combine(
-      vctSubscription.traverse_(validateVct("vctSubscription")),
-      eisSubscription.traverse_(validateEis("eisSubscription")),
+      vctSubscription.traverse_(validateItems("vctSubscription")),
+      eisSubscription.traverse_(validateItems("eisSubscription")),
       communityInvestment.traverse_(validateItems("communityInvestment")),
-      seedEnterpriseInvestment.traverse_(validateSeed("seedEnterpriseInvestment", "companyName")),
+      seedEnterpriseInvestment.traverse_(validateItems("seedEnterpriseInvestment", "companyName")),
       socialEnterpriseInvestment.traverse_(validateItems("socialEnterpriseInvestment", "socialEnterpriseName"))
     ).onSuccess(parsed)
   }
@@ -58,74 +58,17 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
   private def validateItems(itemType: String, nameField: String = "name")(items: Seq[ReliefsInvestmentItem]): Validated[Seq[MtdError], Unit] =
     zipAndValidate(items, validateItem(itemType, nameField))
 
-  private def validateSeed(itemType: String, nameField: String)(items: Seq[SeedEnterpriseInvestmentItem]): Validated[Seq[MtdError], Unit] =
-    zipAndValidate(items, validateSeedItem(itemType, nameField))
-
-  private def validateVct(itemType: String, nameField: String = "name")(items: Seq[VctSubscriptionsItem]): Validated[Seq[MtdError], Unit] =
-    zipAndValidate(items, validateVctItem(itemType, nameField))
-
-  private def validateEis(itemType: String, nameField: String = "name")(items: Seq[EisSubscriptionsItem]): Validated[Seq[MtdError], Unit] =
-    zipAndValidate(items, validateEisItem(itemType, nameField))
-
   private def validateItem(itemType: String, nameField: String)(item: ReliefsInvestmentItem, index: Int): Validated[Seq[MtdError], Unit] = {
 
     import item._
 
     combine(
       validateUniqueInvestmentRef(uniqueInvestmentRef, itemType, index),
-      validateMaybeName(name, s"/$itemType/$index/$nameField"),
-      validateMaybeDate(dateOfInvestment, itemType, index),
-      validateNumericFields(amountInvested, reliefClaimed, itemType, index)
-    )
-  }
-
-  private def validateEisItem(itemType: String, nameField: String)(item: EisSubscriptionsItem, index: Int): Validated[Seq[MtdError], Unit] = {
-
-    import item._
-
-    combine(
-      validateUniqueInvestmentRef(uniqueInvestmentRef, itemType, index),
       validateName(name, s"/$itemType/$index/$nameField"),
       validateDate(dateOfInvestment, itemType, index),
       validateNumericFields(amountInvested, reliefClaimed, itemType, index)
     )
   }
-
-  private def validateSeedItem(itemType: String, nameField: String)(item: SeedEnterpriseInvestmentItem,
-                                                                    index: Int): Validated[Seq[MtdError], Unit] = {
-
-    import item._
-
-    combine(
-      validateUniqueInvestmentRef(uniqueInvestmentRef, itemType, index),
-      validateName(name, s"/$itemType/$index/$nameField"),
-      validateDate(dateOfInvestment, itemType, index),
-      validateNumericFields(amountInvested, reliefClaimed, itemType, index)
-    )
-  }
-
-  private def validateVctItem(itemType: String, nameField: String)(item: VctSubscriptionsItem, index: Int): Validated[Seq[MtdError], Unit] = {
-
-    import item._
-
-    combine(
-      validateMaybeUniqueInvestmentRef(uniqueInvestmentRef, itemType, index),
-      validateName(name, s"/$itemType/$index/$nameField"),
-      validateDate(dateOfInvestment, itemType, index),
-      validateNumericFields(amountInvested, reliefClaimed, itemType, index)
-    )
-  }
-
-  private def validateMaybeUniqueInvestmentRef(maybeUniqueInvestmentRef: Option[String],
-                                               itemType: String,
-                                               index: Int): Validated[Seq[MtdError], Unit] =
-    maybeUniqueInvestmentRef
-      .traverse_(uniqueInvestmentRef =>
-        if (uniqueInvestmentRefRegex.matches(uniqueInvestmentRef)) {
-          valid
-        } else {
-          Invalid(List(UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")))
-        })
 
   private def validateUniqueInvestmentRef(uniqueInvestmentRef: String, itemType: String, index: Int): Validated[Seq[MtdError], Unit] =
     if (uniqueInvestmentRefRegex.matches(uniqueInvestmentRef)) {
@@ -134,21 +77,11 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
       Invalid(List(UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")))
     }
 
-  private def validateMaybeName(maybeName: Option[String], path: String): Validated[Seq[MtdError], Unit] = {
+  private def validateName(maybeName: Option[String], path: String): Validated[Seq[MtdError], Unit] =
     maybeName
       .traverse_(name => if (nameRegex.matches(name)) valid else Invalid(List(NameFormatError.withPath(path))))
-  }
 
-  private def validateName(name: String, path: String): Validated[Seq[MtdError], Unit] = {
-    if (nameRegex.matches(name)) valid else Invalid(List(NameFormatError.withPath(path)))
-  }
-
-  private def validateDate(date: String, itemType: String, index: Int): Validated[Seq[MtdError], Unit] = {
-    val path = s"/$itemType/$index/dateOfInvestment"
-    ResolveIsoDate(date, DateOfInvestmentFormatError.withPath(path)).andThen(isDateInRange(_, path))
-  }
-
-  private def validateMaybeDate(maybeDate: Option[String], itemType: String, index: Int): Validated[Seq[MtdError], Unit] = {
+  private def validateDate(maybeDate: Option[String], itemType: String, index: Int): Validated[Seq[MtdError], Unit] = {
     val path = s"/$itemType/$index/dateOfInvestment"
     maybeDate.traverse_(ResolveIsoDate(_, DateOfInvestmentFormatError.withPath(path)).andThen(isDateInRange(_, path)))
   }

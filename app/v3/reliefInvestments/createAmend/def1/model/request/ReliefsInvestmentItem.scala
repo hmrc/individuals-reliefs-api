@@ -22,5 +22,4 @@ trait ReliefsInvestmentItem {
   val dateOfInvestment: Option[String]
   val amountInvested: Option[BigDecimal]
   val reliefClaimed: BigDecimal
-
 }

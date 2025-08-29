@@ -106,16 +106,16 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
   private val parsedTaxYear = TaxYear.fromMtd(taxYear)
 
   private val parsedCctSubscriptionsItem =
-    VctSubscriptionsItem(Some("VCTREF"), "VCT Fund X", "2018-04-16", Some(BigDecimal(23312.00)), BigDecimal(1334.00))
+    VctSubscriptionsItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(BigDecimal(23312.00)), BigDecimal(1334.00))
 
   private val parsedEisSubscriptionsItem =
-    EisSubscriptionsItem("XTAL", "EIS Fund X", "2018-04-16", Some(BigDecimal(23312.00)), BigDecimal(43432.00), true)
+    EisSubscriptionsItem("XTAL", Some("EIS Fund X"), Some("2018-04-16"), Some(BigDecimal(23312.00)), BigDecimal(43432.00), Some(true))
 
   private val parsedCommunityInvestmentItem =
     CommunityInvestmentItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(BigDecimal(23312.00)), BigDecimal(1334.00))
 
   private val parsedSeedEnterpriseInvestmentItem =
-    SeedEnterpriseInvestmentItem("1234121A", "Company Inc", "2020-12-12", Some(BigDecimal(123123.22)), BigDecimal(3432.00))
+    SeedEnterpriseInvestmentItem("1234121A", Some("Company Inc"), Some("2020-12-12"), Some(BigDecimal(123123.22)), BigDecimal(3432.00))
 
   private val parsedSocialEnterpriseInvestmentItem =
     SocialEnterpriseInvestmentItem("VCTREF", Some("VCT Fund X"), Some("2018-04-16"), Some(BigDecimal(23312.00)), BigDecimal(1334.00))
@@ -173,8 +173,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
           ErrorWrapper(
             correlationId,
             RuleIncorrectOrEmptyBodyError
-              .withPaths(List("/vctSubscription/0/dateOfInvestment", "/vctSubscription/0/name", "/vctSubscription/0/reliefClaimed"))
-          ))
+              .withPaths(List("/vctSubscription/0/reliefClaimed", "/vctSubscription/0/uniqueInvestmentRef"))))
       }
 
       "passed a body with a negative numeric field" when {

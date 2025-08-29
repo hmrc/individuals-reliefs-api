@@ -22,9 +22,9 @@ import v3.reliefInvestments.createAmend.def1.model.request._
 object Def1_CreateAndAmendReliefInvestmentsFixtures {
 
   val Def1_vctSubscriptionsItemModel: VctSubscriptionsItem = VctSubscriptionsItem(
-    uniqueInvestmentRef = Some("VCTREF"),
-    name = "VCT Fund X",
-    dateOfInvestment = "2018-04-16",
+    uniqueInvestmentRef = "VCTREF",
+    name = Some("VCT Fund X"),
+    dateOfInvestment = Some("2018-04-16"),
     amountInvested = Some(BigDecimal(23312.00)),
     reliefClaimed = BigDecimal(1334.00)
   )
@@ -43,9 +43,9 @@ object Def1_CreateAndAmendReliefInvestmentsFixtures {
 
   val Def1_eisSubscriptionsItemModel: EisSubscriptionsItem = EisSubscriptionsItem(
     uniqueInvestmentRef = "XTAL",
-    name = "EIS Fund X",
-    knowledgeIntensive = true,
-    dateOfInvestment = "2018-04-16",
+    name = Some("EIS Fund X"),
+    knowledgeIntensive = Some(true),
+    dateOfInvestment = Some("2018-04-16"),
     amountInvested = Some(BigDecimal(23312.00)),
     reliefClaimed = BigDecimal(43432.00)
   )
@@ -85,8 +85,8 @@ object Def1_CreateAndAmendReliefInvestmentsFixtures {
 
   val Def1_seedEnterpriseInvestmentItemModel: SeedEnterpriseInvestmentItem = SeedEnterpriseInvestmentItem(
     uniqueInvestmentRef = "1234121A",
-    companyName = "Company Inc",
-    dateOfInvestment = "2020-12-12",
+    companyName = Some("Company Inc"),
+    dateOfInvestment = Some("2020-12-12"),
     amountInvested = Some(BigDecimal(123123.22)),
     reliefClaimed = BigDecimal(3432.00)
   )
