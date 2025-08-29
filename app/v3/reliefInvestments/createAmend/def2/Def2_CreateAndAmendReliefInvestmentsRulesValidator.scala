@@ -135,7 +135,7 @@ object Def2_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
 
   private def validateMaybeName(maybeName: Option[String], path: String): Validated[Seq[MtdError], Unit] = {
     maybeName
-      .traverse_(name => if (nameRegex.matches(name)) valid else Invalid(List(NameFormatError.withPath(path))))
+      .traverse_(name => validateName(name, path))
   }
 
   private def validateName(name: String, path: String): Validated[Seq[MtdError], Unit] = {
