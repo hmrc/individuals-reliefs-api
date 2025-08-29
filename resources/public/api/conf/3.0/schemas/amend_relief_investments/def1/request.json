@@ -39,8 +39,7 @@
           }
         },
         "required": [
-          "name",
-          "dateOfInvestment",
+          "uniqueInvestmentRef",
           "reliefClaimed"
         ],
         "additionalProperties": false
@@ -86,9 +85,6 @@
           }
         },
         "required": [
-          "name",
-          "dateOfInvestment",
-          "knowledgeIntensive",
           "uniqueInvestmentRef",
           "reliefClaimed"
         ],
@@ -171,8 +167,6 @@
           }
         },
         "required": [
-          "dateOfInvestment",
-          "companyName",
           "uniqueInvestmentRef",
           "reliefClaimed"
         ],
