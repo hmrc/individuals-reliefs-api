@@ -119,12 +119,7 @@ object Def2_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
                                                itemType: String,
                                                index: Int): Validated[Seq[MtdError], Unit] =
     maybeUniqueInvestmentRef
-      .traverse_(uniqueInvestmentRef =>
-        if (uniqueInvestmentRefRegex.matches(uniqueInvestmentRef)) {
-          valid
-        } else {
-          Invalid(List(UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")))
-        })
+      .traverse_(uniqueInvestmentRef => validateUniqueInvestmentRef(uniqueInvestmentRef: String, itemType: String, index: Int))
 
   private def validateUniqueInvestmentRef(uniqueInvestmentRef: String, itemType: String, index: Int): Validated[Seq[MtdError], Unit] =
     if (uniqueInvestmentRefRegex.matches(uniqueInvestmentRef)) {
@@ -148,8 +143,7 @@ object Def2_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
   }
 
   private def validateMaybeDate(maybeDate: Option[String], itemType: String, index: Int): Validated[Seq[MtdError], Unit] = {
-    val path = s"/$itemType/$index/dateOfInvestment"
-    maybeDate.traverse_(ResolveIsoDate(_, DateOfInvestmentFormatError.withPath(path)).andThen(isDateInRange(_, path)))
+    maybeDate.traverse_(date => validateDate(date, itemType, index))
   }
 
   private def isDateInRange(date: LocalDate, path: String): Validated[Seq[MtdError], Unit] = {
