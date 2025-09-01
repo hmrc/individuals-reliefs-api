@@ -16,16 +16,16 @@
 
 package v3.fixtures
 
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 import shared.models.domain.Timestamp
 import v3.reliefInvestments.retrieve.def2.model.response._
 
 object Def2_RetrieveReliefInvestmentsFixtures {
 
   val vctSubscriptionsItemModel: VctSubscriptionsItem = VctSubscriptionsItem(
-    uniqueInvestmentRef = "VCTREF",
-    name = Some("VCT Fund X"),
-    dateOfInvestment = Some("2018-04-16"),
+    uniqueInvestmentRef = Some("VCTREF"),
+    name = "VCT Fund X",
+    dateOfInvestment = "2018-04-16",
     amountInvested = Some(BigDecimal(23312.00)),
     reliefClaimed = BigDecimal(1334.00)
   )
@@ -42,27 +42,27 @@ object Def2_RetrieveReliefInvestmentsFixtures {
         """.stripMargin
   )
 
-  def eisSubscriptionsItemModel(knowledgeIntensive: Option[Boolean] = Some(true)): EisSubscriptionsItem = EisSubscriptionsItem(
+  val eisSubscriptionsItemModel: EisSubscriptionsItem = EisSubscriptionsItem(
     uniqueInvestmentRef = "XTAL",
-    name = Some("EIS Fund X"),
-    knowledgeIntensive = knowledgeIntensive,
-    dateOfInvestment = Some("2020-12-12"),
+    name = "EIS Fund X",
+    knowledgeIntensive = true,
+    dateOfInvestment = "2020-12-12",
     amountInvested = Some(BigDecimal(23312.00)),
     reliefClaimed = BigDecimal(43432.00)
   )
 
-  def eisSubscriptionsItemJson(knowledgeIntensive: Option[Boolean] = Some(true)): JsValue =
+  val eisSubscriptionsItemJson: JsValue =
     Json
       .parse(s"""
            |{
            |  "uniqueInvestmentRef": "XTAL",
            |  "name": "EIS Fund X",
+           |  "knowledgeIntensive": true,
            |  "dateOfInvestment": "2020-12-12",
            |  "amountInvested": 23312.00,
            |  "reliefClaimed": 43432.00
-           |}""".stripMargin)
-      .as[JsObject] ++
-      knowledgeIntensive.map(x => Json.obj("knowledgeIntensive" -> x)).getOrElse(JsObject.empty)
+           |}
+           |""".stripMargin)
 
   val communityInvestmentItemModel: CommunityInvestmentItem = CommunityInvestmentItem(
     uniqueInvestmentRef = "VCTREF",
@@ -86,8 +86,8 @@ object Def2_RetrieveReliefInvestmentsFixtures {
 
   val seedEnterpriseInvestmentItemModel: SeedEnterpriseInvestmentItem = SeedEnterpriseInvestmentItem(
     uniqueInvestmentRef = "123412/1A",
-    companyName = Some("Company Inc"),
-    dateOfInvestment = Some("2020-12-12"),
+    companyName = "Company Inc",
+    dateOfInvestment = "2020-12-12",
     amountInvested = Some(BigDecimal(123123.22)),
     reliefClaimed = BigDecimal(3432.00)
   )
@@ -107,7 +107,7 @@ object Def2_RetrieveReliefInvestmentsFixtures {
   val responseModel: Def2_RetrieveReliefInvestmentsResponse = Def2_RetrieveReliefInvestmentsResponse(
     submittedOn = Timestamp("2020-06-17T10:53:38.000Z"),
     vctSubscription = Some(Seq(vctSubscriptionsItemModel)),
-    eisSubscription = Some(Seq(eisSubscriptionsItemModel())),
+    eisSubscription = Some(Seq(eisSubscriptionsItemModel)),
     communityInvestment = Some(Seq(communityInvestmentItemModel)),
     seedEnterpriseInvestment = Some(Seq(seedEnterpriseInvestmentItemModel))
   )
@@ -117,7 +117,7 @@ object Def2_RetrieveReliefInvestmentsFixtures {
       |{
       |  "submittedOn": "2020-06-17T10:53:38.000Z",
       |  "vctSubscription":[$vctSubscriptionsItemJson],
-      |  "eisSubscription":[${eisSubscriptionsItemJson()}],
+      |  "eisSubscription":[$eisSubscriptionsItemJson],
       |  "communityInvestment": [$communityInvestmentItemJson],
       |  "seedEnterpriseInvestment": [$seedEnterpriseInvestmentItemJson]
       |}
