@@ -169,6 +169,13 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
+      "passed a tax year after the latest allowed date is supplied" in {
+        val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
+          validator(validNino, "2025-26", validBody).validateAndWrapResult()
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+
+      }
+
       "passed an empty body" in {
         val invalidBody = JsObject.empty
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =

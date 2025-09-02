@@ -36,8 +36,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: Strin
     extends Validator[CreateAndAmendReliefInvestmentsRequestData] {
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
-
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2020-21"), TaxYear.fromMtd("2024-25")))
   private val rulesValidator = Def1_CreateAndAmendReliefInvestmentsRulesValidator
 
   override def validate: Validated[Seq[MtdError], CreateAndAmendReliefInvestmentsRequestData] =
