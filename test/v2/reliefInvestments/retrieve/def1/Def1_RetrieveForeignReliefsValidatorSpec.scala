@@ -68,10 +68,10 @@ class Def1_RetrieveForeignReliefsValidatorSpec extends UnitSpec {
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
     }
-    "return RULE_TAX_YEAR_NOT_SUPPORTED error" when {
+    "return RULE_TAX_YEAR_FOR_VERSION_NOT_SUPPORTED error" when {
       "a tax year after the latest allowed date is supplied" in {
         val result: Either[ErrorWrapper, RetrieveReliefInvestmentsRequestData] = validator(validNino, "2025-26").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearForVersionNotSupportedError))
       }
     }
     "return multiple errors" when {

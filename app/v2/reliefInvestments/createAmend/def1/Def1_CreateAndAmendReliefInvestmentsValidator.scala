@@ -22,7 +22,7 @@ import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
 import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import shared.models.errors.{MtdError, RuleTaxYearForVersionNotSupportedError, RuleTaxYearNotSupportedError}
 import v2.reliefInvestments.createAmend.def1.model.request.{
   Def1_CreateAndAmendReliefInvestmentsRequestBody,
   Def1_CreateAndAmendReliefInvestmentsRequestData
@@ -35,8 +35,13 @@ import javax.inject.Singleton
 class Def1_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAndAmendReliefInvestmentsRequestData] {
 
-  private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2020-21"), TaxYear.fromMtd("2024-25")))
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
+
+  private val resolveTaxYear = ResolveTaxYearMinMax(
+    (TaxYear.fromMtd("2020-21"), TaxYear.fromMtd("2024-25")),
+    RuleTaxYearNotSupportedError,
+    RuleTaxYearForVersionNotSupportedError)
+
   private val rulesValidator = Def1_CreateAndAmendReliefInvestmentsRulesValidator
 
   override def validate: Validated[Seq[MtdError], CreateAndAmendReliefInvestmentsRequestData] =
