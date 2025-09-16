@@ -1,20 +1,17 @@
 get:
   $ref: "./relief_investments_retrieve.yaml"
-  summary: Retrieve Relief Investments
   security:
     - User-Restricted:
         - read:self-assessment
 
 put:
   $ref: "./relief_investments_amend.yaml"
-  summary: Create and Amend Relief Investments
   security:
     - User-Restricted:
         - write:self-assessment
 
 delete:
   $ref: "./relief_investments_delete.yaml"
-  summary: Delete Relief Investments
   security:
     - User-Restricted:
         - write:self-assessment
