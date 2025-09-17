@@ -36,7 +36,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
       appConfig = mockSharedAppConfig
     )
 
-    val taxYear: TaxYear
+    def taxYear: TaxYear
 
     val request: DeleteReliefInvestmentsRequestData = Def1_DeleteReliefInvestmentsRequestData(Nino(nino), taxYear)
   }
@@ -45,7 +45,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
     "return a result" when {
       "the downstream call is successful" in new IfsTest with Test {
-        val taxYear: TaxYear                               = TaxYear.fromMtd("2019-20")
+        def taxYear: TaxYear                               = TaxYear.fromMtd("2019-20")
         val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
@@ -58,7 +58,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
     "return a result" when {
       "the downstream call is successful for TYS tax years" in new IfsTest with Test {
-        val taxYear: TaxYear                               = TaxYear.fromMtd("2023-24")
+        def taxYear: TaxYear                               = TaxYear.fromMtd("2023-24")
         val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(

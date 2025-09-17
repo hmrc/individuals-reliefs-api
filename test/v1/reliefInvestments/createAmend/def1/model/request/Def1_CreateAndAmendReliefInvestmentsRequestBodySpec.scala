@@ -62,14 +62,14 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
           None,
           None
         )
-        model.isIncorrectOrEmptyBody.shouldBe(false)
+        model.isIncorrectOrEmptyBody.shouldBe(true)
       }
       "at least one empty array is provided" in {
         val model = requestBodyModel.copy(
           vctSubscription = Some(Seq()),
           communityInvestment = Some(Seq())
         )
-        model.isIncorrectOrEmptyBody.shouldBe(false)
+        model.isIncorrectOrEmptyBody.shouldBe(true)
       }
     }
   }

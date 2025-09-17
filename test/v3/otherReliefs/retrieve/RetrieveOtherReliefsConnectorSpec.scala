@@ -37,7 +37,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockSharedAppConfig
     )
 
-    val taxYear: TaxYear
+    def taxYear: TaxYear
 
     val request: RetrieveOtherReliefsRequestData = Def1_RetrieveOtherReliefsRequestData(Nino(nino), taxYear)
 
@@ -49,7 +49,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
   "RetrieveOtherReliefsConnector" should {
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new IfsTest with Test {
-        val taxYear: TaxYear = TaxYear.fromMtd("2017-18")
+        def taxYear: TaxYear = TaxYear.fromMtd("2017-18")
 
         val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveOtherReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
 
@@ -64,7 +64,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
     "return the expected response for a TYS request" when {
       "a valid request is made" in new IfsTest with Test {
-        val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
         val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveOtherReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
 

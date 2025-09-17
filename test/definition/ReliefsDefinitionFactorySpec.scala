@@ -30,8 +30,6 @@ class ReliefsDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig wit
   "definition" when {
     "called" should {
       "return a valid Definition case class" in {
-        val apiDefinitionFactory = new ReliefsDefinitionFactory(mockSharedAppConfig)
-
         MockedSharedAppConfig.apiGatewayContext returns "individuals/reliefs"
 
         MockedSharedAppConfig.apiStatus(Version1) returns "BETA"
@@ -45,6 +43,8 @@ class ReliefsDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig wit
         MockedSharedAppConfig.apiStatus(Version3) returns "BETA"
         MockedSharedAppConfig.endpointsEnabled(Version3) returns true
         MockedSharedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
+
+        val apiDefinitionFactory = new ReliefsDefinitionFactory(mockSharedAppConfig)
 
         apiDefinitionFactory.definition shouldBe
           Definition(
