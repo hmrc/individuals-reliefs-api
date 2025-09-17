@@ -114,8 +114,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test {
-    _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     protected val expectedOutcome = Right(ResponseWrapper(correlationId, ()))
 

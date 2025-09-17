@@ -26,7 +26,7 @@ class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        seedEnterpriseInvestmentItemJson.as[SeedEnterpriseInvestmentItem] shouldBe seedEnterpriseInvestmentItemModel
+        seedEnterpriseInvestmentItemJson.as[SeedEnterpriseInvestmentItem].shouldBe(seedEnterpriseInvestmentItemModel)
       }
     }
   }
@@ -34,7 +34,7 @@ class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(seedEnterpriseInvestmentItemModel) shouldBe seedEnterpriseInvestmentItemJson
+        Json.toJson(seedEnterpriseInvestmentItemModel).shouldBe(seedEnterpriseInvestmentItemJson)
       }
     }
   }

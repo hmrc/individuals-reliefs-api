@@ -39,7 +39,7 @@ class CreateAndAmendCharitableGivingReliefsValidatorFactorySpec extends UnitSpec
       |{
       |   "giftAidPayments": {
       |     "nonUkCharities": {
-      |       "charityNames": ${JsArray(charityNames1.map(JsString))},
+      |       "charityNames": ${JsArray(charityNames1.map(JsString.apply))},
       |       "totalAmount": 10.99
       |     },
       |     "totalAmount": 11.99,
@@ -49,7 +49,7 @@ class CreateAndAmendCharitableGivingReliefsValidatorFactorySpec extends UnitSpec
       |   },
       |   "gifts": {
       |     "nonUkCharities": {
-      |       "charityNames": ${JsArray(charityNames2.map(JsString))},
+      |       "charityNames": ${JsArray(charityNames2.map(JsString.apply))},
       |       "totalAmount": 15.99
       |     },
       |     "landAndBuildings": 16.99,

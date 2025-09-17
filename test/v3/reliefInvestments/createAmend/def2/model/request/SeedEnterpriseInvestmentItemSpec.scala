@@ -20,7 +20,6 @@ import play.api.libs.json.Json
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v3.reliefInvestments.createAmend.def2.model.Def2_CreateAndAmendReliefInvestmentsFixtures._
-import v3.reliefInvestments.createAmend.def2.model.request.SeedEnterpriseInvestmentItem
 
 class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 

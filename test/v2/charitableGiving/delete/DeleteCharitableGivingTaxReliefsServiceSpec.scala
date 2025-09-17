@@ -81,7 +81,7 @@ class DeleteCharitableGivingTaxReliefsServiceSpec extends UnitSpec {
         ("INVALID_CORRELATION_ID", InternalError)
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
     }
   }
 

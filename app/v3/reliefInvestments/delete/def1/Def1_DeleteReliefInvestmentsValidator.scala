@@ -35,6 +35,6 @@ class Def1_DeleteReliefInvestmentsValidator(nino: String, taxYear: String) exten
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_DeleteReliefInvestmentsRequestData)
+    ).mapN(Def1_DeleteReliefInvestmentsRequestData.apply)
 
 }

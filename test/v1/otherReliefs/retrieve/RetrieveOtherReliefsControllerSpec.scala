@@ -162,7 +162,7 @@ class RetrieveOtherReliefsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveOtherReliefsController(
+    val controller: RetrieveOtherReliefsController = new RetrieveOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveOtherReliefsValidatorFactory,

@@ -117,7 +117,7 @@ class RetrievePensionsReliefsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrievePensionsReliefsController(
+    val controller: RetrievePensionsReliefsController = new RetrievePensionsReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrievePensionsReliefsValidatorFactory,

@@ -24,7 +24,6 @@ import org.scalatest.TestSuite
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
-import v2.charitableGiving.createAmend.CreateAndAmendCharitableGivingReliefsValidatorFactory
 import v2.charitableGiving.createAmend.model.request.CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 trait MockCreateAndAmendCharitableGivingReliefsValidatorFactory extends TestSuite with MockFactory {

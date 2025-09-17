@@ -26,7 +26,7 @@ class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        communityInvestmentItemJson.as[CommunityInvestmentItem] shouldBe communityInvestmentItemModel
+        communityInvestmentItemJson.as[CommunityInvestmentItem].shouldBe(communityInvestmentItemModel)
       }
     }
   }
@@ -34,7 +34,7 @@ class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(communityInvestmentItemModel) shouldBe communityInvestmentItemJson
+        Json.toJson(communityInvestmentItemModel).shouldBe(communityInvestmentItemJson)
       }
     }
   }

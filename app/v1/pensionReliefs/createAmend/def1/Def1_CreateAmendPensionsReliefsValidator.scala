@@ -41,7 +41,7 @@ class Def1_CreateAmendPensionsReliefsValidator(nino: String, taxYear: String, bo
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendPensionsReliefsRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateAmendPensionsReliefsRequestData.apply) andThen validateBusinessRules
 
 }
 

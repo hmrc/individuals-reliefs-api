@@ -41,6 +41,6 @@ class Def1_AmendOtherReliefsValidator(nino: String, taxYear: String, body: JsVal
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_AmendOtherReliefsRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_AmendOtherReliefsRequestData.apply).andThen(rulesValidator.validateBusinessRules)
 
 }

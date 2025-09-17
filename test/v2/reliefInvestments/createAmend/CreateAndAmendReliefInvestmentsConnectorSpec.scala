@@ -31,7 +31,7 @@ class CreateAndAmendReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
   val nino = "ZG903729C"
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     val taxYear: String
 

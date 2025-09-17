@@ -62,7 +62,7 @@ class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     val taxYear: String
 

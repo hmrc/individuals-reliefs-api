@@ -138,7 +138,7 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new CreateAndAmendCharitableGivingReliefsController(
+    val controller: CreateAndAmendCharitableGivingReliefsController = new CreateAndAmendCharitableGivingReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAndAmendCharitableGivingReliefsValidatorFactory,

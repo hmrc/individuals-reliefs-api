@@ -65,7 +65,7 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
     def taxYear: TaxYear
 
     protected val connector: CreateAmendPensionsReliefsConnector = new CreateAmendPensionsReliefsConnector(

@@ -29,7 +29,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
   val nino: String = "ZG903729C"
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     val connector: DeleteReliefInvestmentsConnector = new DeleteReliefInvestmentsConnector(
       http = mockHttpClient,
@@ -45,27 +45,27 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
     "return a result" when {
       "the downstream call is successful" in new IfsTest with Test {
-        lazy val taxYear = TaxYear.fromMtd("2019-20")
-        val outcome      = Right(ResponseWrapper(correlationId, ()))
+        val taxYear: TaxYear                               = TaxYear.fromMtd("2019-20")
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
           url = url"$baseUrl/income-tax/reliefs/investment/$nino/2019-20"
         ) returns Future.successful(outcome)
 
-        await(connector.delete(request)) shouldBe outcome
+        await(connector.delete(request)).shouldBe(outcome)
       }
     }
 
     "return a result" when {
       "the downstream call is successful for TYS tax years" in new IfsTest with Test {
-        lazy val taxYear = TaxYear.fromMtd("2023-24")
-        val outcome      = Right(ResponseWrapper(correlationId, ()))
+        val taxYear: TaxYear                               = TaxYear.fromMtd("2023-24")
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
           url = url"$baseUrl/income-tax/reliefs/investment/23-24/$nino"
         ) returns Future.successful(outcome)
 
-        await(connector.delete(request)) shouldBe outcome
+        await(connector.delete(request)).shouldBe(outcome)
       }
     }
   }

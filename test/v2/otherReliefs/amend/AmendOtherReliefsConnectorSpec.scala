@@ -52,8 +52,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
   }
 
-  trait Test {
-    _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     val connector: AmendOtherReliefsConnector = new AmendOtherReliefsConnector(
       http = mockHttpClient,

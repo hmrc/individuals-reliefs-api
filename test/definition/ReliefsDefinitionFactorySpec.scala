@@ -25,16 +25,15 @@ import shared.mocks.MockHttpClient
 import shared.routing._
 import shared.utils.UnitSpec
 
-class ReliefsDefinitionFactorySpec extends UnitSpec {
-
-  class Test extends MockHttpClient with MockSharedAppConfig {
-    val apiDefinitionFactory = new ReliefsDefinitionFactory(mockSharedAppConfig)
-    MockedSharedAppConfig.apiGatewayContext returns "individuals/reliefs"
-  }
+class ReliefsDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig with MockHttpClient {
 
   "definition" when {
     "called" should {
-      "return a valid Definition case class" in new Test {
+      "return a valid Definition case class" in {
+        val apiDefinitionFactory = new ReliefsDefinitionFactory(mockSharedAppConfig)
+
+        MockedSharedAppConfig.apiGatewayContext returns "individuals/reliefs"
+
         MockedSharedAppConfig.apiStatus(Version1) returns "BETA"
         MockedSharedAppConfig.endpointsEnabled(Version1) returns true
         MockedSharedAppConfig.deprecationFor(Version1).returns(NotDeprecated.valid).anyNumberOfTimes()

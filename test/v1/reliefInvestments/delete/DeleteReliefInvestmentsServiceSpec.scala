@@ -53,7 +53,7 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
           .delete(requestData)
           .returns(Future.successful(Right(ResponseWrapper("resultId", ()))))
 
-        await(service.delete(requestData)) shouldBe Right(ResponseWrapper("resultId", ()))
+        await(service.delete(requestData)).shouldBe(Right(ResponseWrapper("resultId", ())))
       }
     }
 
@@ -65,7 +65,7 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
             .delete(requestData)
             .returns(Future.successful(Left(ResponseWrapper("resultId", DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-          await(service.delete(requestData)) shouldBe Left(ErrorWrapper("resultId", error))
+          await(service.delete(requestData)).shouldBe(Left(ErrorWrapper("resultId", error)))
         }
 
       val errors = Seq(
@@ -81,7 +81,7 @@ class DeleteReliefInvestmentsServiceSpec extends UnitSpec {
         ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
     }
   }
 

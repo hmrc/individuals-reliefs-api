@@ -23,7 +23,6 @@ import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
-import v3.reliefInvestments.createAmend.def2.Def2_CreateAndAmendReliefInvestmentsValidator
 import v3.reliefInvestments.createAmend.def2.model.request._
 
 class Def2_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with JsonErrorValidators {

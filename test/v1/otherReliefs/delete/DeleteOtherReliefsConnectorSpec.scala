@@ -28,7 +28,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
 
   val nino: String = "ZG903729C"
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     def taxYear: String
 
@@ -50,7 +50,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
         willDelete(url = url"$baseUrl/income-tax/reliefs/other/$nino/2020-21")
           .returns(Future.successful(outcome))
 
-        await(connector.delete(request)) shouldBe outcome
+        await(connector.delete(request)).shouldBe(outcome)
       }
 
       "return the expected response for a TYS request" when {
@@ -62,7 +62,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
           willDelete(url = url"$baseUrl/income-tax/reliefs/other/23-24/$nino")
             .returns(Future.successful(outcome))
 
-          await(connector.delete(request)) shouldBe outcome
+          await(connector.delete(request)).shouldBe(outcome)
         }
       }
     }

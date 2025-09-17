@@ -37,16 +37,16 @@ class ResolveParsedNumberSpec extends UnitSpec with ScalaCheckDrivenPropertyChec
       "return the error with the correct message if and only if the value is outside the inclusive range" when {
         implicit val arbitraryMoney: Arbitrary[BigDecimal] = Arbitrary(Arbitrary.arbitrary[BigInt].map(x => BigDecimal(x) / 100))
 
-        "using validate" in forAll { money: BigDecimal =>
+        "using validate" in forAll { (money: BigDecimal) =>
           val expected = if (min <= money && money <= max) Valid(money) else Invalid(List(error))
           val result   = resolve(money, path)
-          result shouldBe expected
+          result.shouldBe(expected)
         }
 
-        "using validateOptional" in forAll { money: BigDecimal =>
+        "using validateOptional" in forAll { (money: BigDecimal) =>
           val expected = if (min <= money && money <= max) Valid(Some(money)) else Invalid(List(error))
           val result   = resolve(Some(money), path)
-          result shouldBe expected
+          result.shouldBe(expected)
         }
       }
 
@@ -77,23 +77,23 @@ class ResolveParsedNumberSpec extends UnitSpec with ScalaCheckDrivenPropertyChec
 
       "allow 0" in {
         val result = resolve(0, path)
-        result shouldBe Valid(BigDecimal(0))
+        result.shouldBe(Valid(BigDecimal(0)))
       }
 
       "disallow less than 0" in {
         val result = resolve(-0.01, path)
-        result shouldBe Invalid(List(error))
+        result.shouldBe(Invalid(List(error)))
       }
 
       "allow 99999999999.99" in {
         val value  = BigDecimal(99999999999.99)
         val result = resolve(value, path)
-        result shouldBe Valid(value)
+        result.shouldBe(Valid(value))
       }
 
       "disallow more than 99999999999.99" in {
         val result = resolve(100000000000.00, path)
-        result shouldBe Invalid(List(error))
+        result.shouldBe(Invalid(List(error)))
       }
     }
 
@@ -106,33 +106,33 @@ class ResolveParsedNumberSpec extends UnitSpec with ScalaCheckDrivenPropertyChec
         "allow -99999999999.99" in {
           val value  = BigDecimal(-99999999999.99)
           val result = resolve(value, path)
-          result shouldBe Valid(value)
+          result.shouldBe(Valid(value))
         }
 
         "disallow less than -99999999999.99" in {
           val result = resolve(-100000000000.00, path)
-          result shouldBe Invalid(List(error))
+          result.shouldBe(Invalid(List(error)))
         }
 
         "allow 99999999999.99" in {
           val value  = BigDecimal(99999999999.99)
           val result = resolve(value, path)
-          result shouldBe Valid(value)
+          result.shouldBe(Valid(value))
         }
 
         "disallow more than 99999999999.99" in {
           val result = resolve(100000000000.00, path)
-          result shouldBe Invalid(List(error))
+          result.shouldBe(Invalid(List(error)))
         }
 
         "not allow 0" in {
           val result = resolve(0, path)
-          result shouldBe Invalid(List(error))
+          result.shouldBe(Invalid(List(error)))
         }
 
         "allow None" in {
           val result = resolve(None, path)
-          result shouldBe Valid(None)
+          result.shouldBe(Valid(None))
         }
       }
     }

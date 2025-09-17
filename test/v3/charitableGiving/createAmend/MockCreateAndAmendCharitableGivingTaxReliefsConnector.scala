@@ -21,7 +21,6 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.charitableGiving.createAmend.CreateAndAmendCharitableGivingTaxReliefsConnector
 import v3.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -71,7 +71,7 @@ class AmendOtherReliefsServiceSpec extends UnitSpec {
         "UNPROCESSABLE_ENTITY"   -> InternalError
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => serviceError.tupled(args))
     }
   }
 

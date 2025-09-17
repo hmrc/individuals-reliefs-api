@@ -29,14 +29,13 @@ class CreateAndAmendReliefInvestmentsResponseSpec extends UnitSpec with MockShar
       val taxYear = "mytaxyear"
 
       MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
-      CreateAndAmendReliefInvestmentsResponse.LinksFactory.links(
-        mockSharedAppConfig,
-        CreateAndAmendReliefInvestmentsHateoasData(nino, taxYear)) shouldBe
-        Seq(
+      CreateAndAmendReliefInvestmentsResponse.LinksFactory
+        .links(mockSharedAppConfig, CreateAndAmendReliefInvestmentsHateoasData(nino, taxYear))
+        .shouldBe(Seq(
           Link(s"/my/context/investment/$nino/$taxYear", GET, "self"),
           Link(s"/my/context/investment/$nino/$taxYear", PUT, "create-and-amend-reliefs-investments"),
           Link(s"/my/context/investment/$nino/$taxYear", DELETE, "delete-reliefs-investments")
-        )
+        ))
     }
   }
 

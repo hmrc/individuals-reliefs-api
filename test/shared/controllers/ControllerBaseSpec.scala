@@ -58,8 +58,12 @@ abstract class ControllerBaseSpec
   def fakePostRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 }
 
-trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator with RealAppConfig {
-  _: ControllerBaseSpec =>
+trait ControllerTestRunner
+    extends ControllerBaseSpec
+    with MockEnrolmentsAuthService
+    with MockMtdIdLookupService
+    with MockIdGenerator
+    with RealAppConfig {
 
   protected val correlationId    = "X-123"
   protected val validNino        = "AA123456A"
@@ -99,9 +103,9 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
       val result: Future[Result] = callController()
 
       status(result) shouldBe expectedError.httpStatus
-      header("X-CorrelationId", result) shouldBe Some(correlationId)
+      header("X-CorrelationId", result).shouldBe(Some(correlationId))
 
-      contentAsJson(result) shouldBe Json.toJson(expectedError)
+      contentAsJson(result).shouldBe(Json.toJson(expectedError))
     }
 
     protected def runMultipleErrorsTest(expectedErrors: Seq[MtdError]): Unit = {
@@ -110,8 +114,8 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
       val result: Future[Result] = callController()
 
       status(result) shouldBe BAD_REQUEST
-      header("X-CorrelationId", result) shouldBe Some(correlationId)
-      contentAsJson(result) shouldBe Json.toJson(expectedError)
+      header("X-CorrelationId", result).shouldBe(Some(correlationId))
+      contentAsJson(result).shouldBe(Json.toJson(expectedError))
     }
 
     private def checkEmaConfig(): Unit = {
@@ -124,13 +128,12 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
             fail(s"Controller endpoint name \"${controller.endpointName}\" not found in application.conf.")
           )
 
-      realAppConfig.endpointAllowsSupportingAgents(controller.endpointName) shouldBe endpointSupportingAgentsAllowed
+      realAppConfig.endpointAllowsSupportingAgents(controller.endpointName).shouldBe(endpointSupportingAgentsAllowed)
     }
 
   }
 
-  trait AuditEventChecking[DETAIL] {
-    _: ControllerTest =>
+  trait AuditEventChecking[DETAIL] extends ControllerTest {
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[DETAIL]
 

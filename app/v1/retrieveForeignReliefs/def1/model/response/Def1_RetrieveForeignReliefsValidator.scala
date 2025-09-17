@@ -32,6 +32,6 @@ class Def1_RetrieveForeignReliefsValidator(nino: String, taxYear: String) extend
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveForeignReliefsRequestData)
+    ).mapN(Def1_RetrieveForeignReliefsRequestData.apply)
 
 }

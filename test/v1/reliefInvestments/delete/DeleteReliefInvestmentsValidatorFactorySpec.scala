@@ -33,13 +33,13 @@ class DeleteReliefInvestmentsValidatorFactorySpec extends UnitSpec {
     "return the Def1 validator" when {
       "given a valid request" in {
         val result: Validator[DeleteReliefInvestmentsRequestData] = validatorFactory.validator(validNino, validTaxYear)
-        result shouldBe a[Def1_DeleteReliefInvestmentsValidator]
+        result.shouldBe(a[Def1_DeleteReliefInvestmentsValidator])
 
       }
 
       "given an invalid taxYear" in {
         val result: Validator[DeleteReliefInvestmentsRequestData] = validatorFactory.validator(validNino, invalidTaxYear)
-        result shouldBe a[Def1_DeleteReliefInvestmentsValidator]
+        result.shouldBe(a[Def1_DeleteReliefInvestmentsValidator])
 
       }
     }

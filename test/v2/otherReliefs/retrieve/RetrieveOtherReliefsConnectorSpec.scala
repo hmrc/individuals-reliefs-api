@@ -30,7 +30,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
   val nino: String = "ZG903729C"
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     val connector: RetrieveOtherReliefsConnector = new RetrieveOtherReliefsConnector(
       http = mockHttpClient,
@@ -49,9 +49,9 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
   "RetrieveOtherReliefsConnector" should {
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new IfsTest with Test {
-        lazy val taxYear: TaxYear = TaxYear.fromMtd("2017-18")
+        val taxYear: TaxYear = TaxYear.fromMtd("2017-18")
 
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveOtherReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = url"$baseUrl/income-tax/reliefs/other/$nino/2017-18"
@@ -64,9 +64,9 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
     "return the expected response for a TYS request" when {
       "a valid request is made" in new IfsTest with Test {
-        lazy val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+        val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveOtherReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = url"$baseUrl/income-tax/reliefs/other/23-24/$nino"
