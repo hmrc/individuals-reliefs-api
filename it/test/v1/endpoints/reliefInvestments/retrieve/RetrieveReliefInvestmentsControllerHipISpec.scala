@@ -104,7 +104,7 @@ class RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino = "AA123456A"
+    val nino                  = "AA123456A"
     def mtdTaxYear: String    = "2023-24"
     def downstreamUri: String = s"/itsa/income-tax/v1/23-24/reliefs/investment/$nino"
 

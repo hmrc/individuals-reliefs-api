@@ -190,6 +190,7 @@ class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
          |        "reason": "message"
          |      }
     """.stripMargin
+
   }
 
   private trait NonTysTest extends Test {

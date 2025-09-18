@@ -29,6 +29,7 @@ import shared.support.IntegrationBaseSpec
 import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures._
 
 class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
+
   override def servicesConfig: Map[String, Any] =
     Map("feature-switch.ifs_hip_migration_1924.enabled" -> false) ++ super.servicesConfig
 
@@ -170,7 +171,7 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
                 "/socialEnterpriseInvestment/0/amountInvested",
                 "/socialEnterpriseInvestment/0/reliefClaimed"
               ))
-          ),
+          )
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(

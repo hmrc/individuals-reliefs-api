@@ -168,7 +168,7 @@ class Def1_CreateAndAmendReliefInvestmentsControllerHipISpec extends Integration
                 "/socialEnterpriseInvestment/0/amountInvested",
                 "/socialEnterpriseInvestment/0/reliefClaimed"
               ))
-          ),
+          )
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(
@@ -593,4 +593,5 @@ class Def1_CreateAndAmendReliefInvestmentsControllerHipISpec extends Integration
     def mtdTaxYear: String    = "2023-24"
     def downstreamUri: String = s"/itsa/income-tax/v1/23-24/reliefs/investment/$nino"
   }
+
 }

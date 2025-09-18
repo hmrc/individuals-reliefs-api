@@ -26,7 +26,6 @@ import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 
-
 class CreateAmendPensionsReliefsControllerISpec extends IntegrationBaseSpec {
 
   private trait NonTysTest extends Test {

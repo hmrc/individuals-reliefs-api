@@ -21,6 +21,7 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.{FORBIDDEN, INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.{ClientOrAgentNotAuthorisedError, InternalError}
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
@@ -75,7 +76,7 @@ abstract class AuthMainAgentsOnlyISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = sendMtdRequest(request())
-        response.status shouldBe expectedMtdSuccessStatus
+        response.status.shouldBe(expectedMtdSuccessStatus)
       }
     }
 
@@ -92,7 +93,7 @@ abstract class AuthMainAgentsOnlyISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = sendMtdRequest(request())
 
-        response.status shouldBe FORBIDDEN
+        response.status.shouldBe(FORBIDDEN)
         response.body should include(ClientOrAgentNotAuthorisedError.message)
       }
     }
@@ -110,7 +111,7 @@ abstract class AuthMainAgentsOnlyISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = sendMtdRequest(request())
-        response.status shouldBe FORBIDDEN
+        response.status.shouldBe(FORBIDDEN)
       }
     }
 
@@ -124,7 +125,7 @@ abstract class AuthMainAgentsOnlyISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = sendMtdRequest(request())
-        response.status shouldBe FORBIDDEN
+        response.status.shouldBe(FORBIDDEN)
         response.body should include(ClientOrAgentNotAuthorisedError.message)
       }
     }
@@ -138,7 +139,7 @@ abstract class AuthMainAgentsOnlyISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = sendMtdRequest(request())
-        response.status shouldBe INTERNAL_SERVER_ERROR
+        response.status.shouldBe(INTERNAL_SERVER_ERROR)
         response.body should include(InternalError.message)
       }
     }
@@ -152,7 +153,7 @@ abstract class AuthMainAgentsOnlyISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = sendMtdRequest(request())
-        response.status shouldBe FORBIDDEN
+        response.status.shouldBe(FORBIDDEN)
         response.body should include(ClientOrAgentNotAuthorisedError.message)
       }
     }

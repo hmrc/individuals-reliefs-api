@@ -93,4 +93,5 @@ class ReliefsAuthSupportingAgentsAllowedISpec extends AuthSupportingAgentsAllowe
                  |}
     """.stripMargin)
   )
+
 }

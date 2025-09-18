@@ -50,7 +50,7 @@ class Def2_RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSp
         def validationErrorTest(requestNino: String, taxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
+            override val nino: String       = requestNino
             override val mtdTaxYear: String = taxYear
 
             val response: WSResponse = await(request().get())

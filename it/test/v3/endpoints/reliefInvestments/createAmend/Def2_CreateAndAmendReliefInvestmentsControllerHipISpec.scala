@@ -143,7 +143,7 @@ class Def2_CreateAndAmendReliefInvestmentsControllerHipISpec extends Integration
                 "/seedEnterpriseInvestment/0/amountInvested",
                 "/seedEnterpriseInvestment/0/reliefClaimed"
               ))
-          ),
+          )
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(

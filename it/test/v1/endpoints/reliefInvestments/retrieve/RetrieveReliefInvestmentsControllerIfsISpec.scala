@@ -31,7 +31,6 @@ class RetrieveReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
   override def servicesConfig: Map[String, Any] =
     Map("feature-switch.ifs_hip_migration_1925.enabled" -> false) ++ super.servicesConfig
 
-
   "Calling the retrieve endpoint" should {
     "return a 200 status code" when {
       "any valid request is made" in new NonTysTest {
