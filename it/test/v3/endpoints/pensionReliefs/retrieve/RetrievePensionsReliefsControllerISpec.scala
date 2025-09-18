@@ -89,7 +89,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
           ("AA123456A", "2018-20", BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "2019-20", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
@@ -129,7 +129,7 @@ class RetrievePensionsReliefsControllerISpec extends IntegrationBaseSpec with Wi
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

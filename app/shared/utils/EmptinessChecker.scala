@@ -69,7 +69,7 @@ trait EmptinessChecker[A] {
 
 // Internal specialization of EmptinessChecker for object instances so we can directly access its fields
 private[utils] trait ObjEmptinessChecker[A] extends EmptinessChecker[A] {
-  import EmptinessChecker._
+  import EmptinessChecker.*
 
   def structureOf(value: A): Structure.Obj
 }

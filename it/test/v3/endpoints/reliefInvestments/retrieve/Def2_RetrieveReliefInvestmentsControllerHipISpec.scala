@@ -50,7 +50,7 @@ class Def2_RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSp
         def validationErrorTest(requestNino: String, taxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
+            override val nino: String       = requestNino
             override val mtdTaxYear: String = taxYear
 
             val response: WSResponse = await(request().get())
@@ -66,7 +66,7 @@ class Def2_RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSp
           ("AA123456A", "2019-20", BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
@@ -97,7 +97,7 @@ class Def2_RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSp
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

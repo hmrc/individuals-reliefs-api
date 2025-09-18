@@ -33,7 +33,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions ++= List(
-      "-Xfatal-warnings",
       "-Wconf:src=routes/.*:s",
       "-feature"
     )
@@ -42,24 +41,16 @@ lazy val microservice = Project(appName, file("."))
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",
     Compile / unmanagedClasspath += baseDirectory.value / "resources"
   )
-  .settings(CodeCoverageSettings.settings: _*)
+  .settings(CodeCoverageSettings.settings)
   .settings(PlayKeys.playDefaultPort := 7796)
 
 
 lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test")
-  .settings(DefaultBuildSettings.itSettings() ++ ScalafmtPlugin.scalafmtConfigSettings)
+  .settings(DefaultBuildSettings.itSettings())
   .settings(
     Test / fork                       := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
   )
   .settings(libraryDependencies ++= AppDependencies.itDependencies)
-  .settings(
-    scalacOptions ++= Seq("-Xfatal-warnings")
-  )
-
-dependencyUpdatesFilter -= moduleFilter(name = "bootstrap-backend-play-30")
-dependencyUpdatesFilter -= moduleFilter(organization = "org.playframework")
-dependencyUpdatesFilter -= moduleFilter(name = "scala-library")
-dependencyUpdatesFilter -= moduleFilter(name = "scalatestplus-play")

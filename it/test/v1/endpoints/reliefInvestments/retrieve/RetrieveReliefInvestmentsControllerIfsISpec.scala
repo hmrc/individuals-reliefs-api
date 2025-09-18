@@ -31,7 +31,6 @@ class RetrieveReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
   override def servicesConfig: Map[String, Any] =
     Map("feature-switch.ifs_hip_migration_1925.enabled" -> false) ++ super.servicesConfig
 
-
   "Calling the retrieve endpoint" should {
     "return a 200 status code" when {
       "any valid request is made" in new NonTysTest {
@@ -83,7 +82,7 @@ class RetrieveReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
           ("AA123456A", "2019-20", BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
@@ -114,7 +113,7 @@ class RetrieveReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

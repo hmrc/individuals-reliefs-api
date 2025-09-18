@@ -18,11 +18,12 @@ package v3.endpoints.foreignReliefs.createAmend
 
 import common.RuleOutsideAmendmentWindowError
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
+import shared.models.errors.*
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 import v3.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.requestBodyJson
@@ -244,7 +245,7 @@ class CreateAndAmendForeignReliefsControllerISpec extends IntegrationBaseSpec {
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }
