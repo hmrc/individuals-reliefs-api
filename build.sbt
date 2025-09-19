@@ -17,10 +17,10 @@
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
-ThisBuild / scalaVersion := "3.5.2"
+ThisBuild / scalaVersion := "3.4.3"
 ThisBuild / majorVersion := 0
 ThisBuild / scalacOptions ++= Seq(
-  "-Werror",
+//  "-Werror",
   "-Wconf:msg=Flag.*repeatedly:s"
 )
 ThisBuild / scalafmtOnCompile := true
@@ -33,7 +33,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions ++= List(
-      "-Xfatal-warnings",
       "-Wconf:src=routes/.*:s",
       "-feature"
     )

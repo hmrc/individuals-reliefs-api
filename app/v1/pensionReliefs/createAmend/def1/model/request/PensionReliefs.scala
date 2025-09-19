@@ -17,6 +17,7 @@
 package v1.pensionReliefs.createAmend.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
+import shared.utils.EmptinessChecker
 
 case class PensionReliefs(
     regularPensionContributions: Option[BigDecimal],
@@ -24,7 +25,7 @@ case class PensionReliefs(
     retirementAnnuityPayments: Option[BigDecimal],
     paymentToEmployersSchemeNoTaxRelief: Option[BigDecimal],
     overseasPensionSchemeContributions: Option[BigDecimal]
-) {
+) derives EmptinessChecker {
 
   def isEmpty: Boolean = regularPensionContributions.isEmpty &&
     oneOffPensionContributionsPaid.isEmpty &&
