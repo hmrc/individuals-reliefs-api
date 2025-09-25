@@ -16,11 +16,10 @@
 
 package v3.otherReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
+class PayrollGivingSpec extends UnitSpec {
 
   val payrollGiving: PayrollGiving = PayrollGiving(
     Some("myRef"),
@@ -32,14 +31,14 @@ class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
     154.00
   )
 
-  val json = Json.parse(
+  val json: JsValue = Json.parse(
     """{
       |        "customerReference": "myRef",
       |        "reliefClaimed": 154.00
       |      }""".stripMargin
   )
 
-  val noRefJson = Json.parse(
+  val noRefJson: JsValue = Json.parse(
     """{
       |        "reliefClaimed": 154.00
       |      }""".stripMargin
@@ -75,6 +74,10 @@ class PayrollGivingSpec extends UnitSpec with JsonErrorValidators {
         Json.toJson(noRefPayrollGiving) shouldBe noRefJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[PayrollGiving] shouldBe a[JsError]
   }
 
 }

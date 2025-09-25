@@ -38,13 +38,13 @@ class ResolveIntegerSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks {
         "using validate" in forAll { (money: Int) =>
           val expected = if (min <= money && money <= max) Valid(money) else Invalid(List(error))
           val result   = resolve(money, path)
-          result.shouldBe(expected)
+          result shouldBe expected
         }
 
         "using validateOptional" in forAll { (money: Int) =>
           val expected = if (min <= money && money <= max) Valid(Some(money)) else Invalid(List(error))
           val result   = resolve(Some(money), path)
-          result.shouldBe(expected)
+          result shouldBe expected
         }
       }
 

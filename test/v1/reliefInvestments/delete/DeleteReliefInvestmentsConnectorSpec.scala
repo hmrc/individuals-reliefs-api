@@ -52,7 +52,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
           url = url"$baseUrl/income-tax/reliefs/investment/$nino/2019-20"
         ) returns Future.successful(outcome)
 
-        await(connector.delete(request)).shouldBe(outcome)
+        await(connector.delete(request)) shouldBe outcome
       }
     }
 
@@ -65,7 +65,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
           url = url"$baseUrl/income-tax/reliefs/investment/23-24/$nino"
         ) returns Future.successful(outcome)
 
-        await(connector.delete(request)).shouldBe(outcome)
+        await(connector.delete(request)) shouldBe outcome
       }
     }
   }

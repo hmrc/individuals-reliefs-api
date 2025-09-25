@@ -16,7 +16,7 @@
 
 package v3.charitableGiving.retrieve.def1.model.request
 
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 import v3.charitableGiving.retrieve.def1.model.response.{Def1_Gifts, Def1_NonUkCharities}
 
@@ -83,6 +83,13 @@ class GiftsSpec extends UnitSpec {
                                        |      "sharesOrSecurities": 3.12
                                        |   }""".stripMargin)
     }
+  }
+
+  "return error when JSON is invalid" in {
+    val invalidJson = Json.obj(
+      "investmentsNonUkCharities" -> Json.arr(1, 2, 3)
+    )
+    invalidJson.validate[Def1_Gifts] shouldBe a[JsError]
   }
 
 }

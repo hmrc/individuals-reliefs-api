@@ -16,12 +16,11 @@
 
 package v3.reliefInvestments.createAmend.def2.model.request
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
-import v3.reliefInvestments.createAmend.def2.model.Def2_CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def2.model.Def2_CreateAndAmendReliefInvestmentsFixtures.*
 
-class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
+class SeedEnterpriseInvestmentItemSpec extends UnitSpec {
 
   "reads" when {
     "passed valid JSON" should {
@@ -37,6 +36,10 @@ class SeedEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators
         Json.toJson(Def2_seedEnterpriseInvestmentItemModel) shouldBe Def2_seedEnterpriseInvestmentItemJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[SeedEnterpriseInvestmentItem] shouldBe a[JsError]
   }
 
 }

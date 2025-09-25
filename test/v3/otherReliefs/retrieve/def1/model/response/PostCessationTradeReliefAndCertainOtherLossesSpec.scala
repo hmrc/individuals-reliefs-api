@@ -16,11 +16,10 @@
 
 package v3.otherReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with JsonErrorValidators {
+class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec {
 
   val postCessationTradeReliefAndCertainOtherLosses: PostCessationTradeReliefAndCertainOtherLosses = PostCessationTradeReliefAndCertainOtherLosses(
     Some("myRef"),
@@ -41,7 +40,7 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
       222.22
     )
 
-  val json = Json.parse(
+  val json: JsValue = Json.parse(
     """{
       |  "customerReference": "myRef",
       |  "businessName": "ACME Inc",
@@ -52,7 +51,7 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
       |}""".stripMargin
   )
 
-  val noOptionsJson = Json.parse(
+  val noOptionsJson: JsValue = Json.parse(
     """{
       |  "amount": 222.22
       |}""".stripMargin
@@ -88,6 +87,10 @@ class PostCessationTradeReliefAndCertainOtherLossesSpec extends UnitSpec with Js
         Json.toJson(noOptionsPostCessationTradeReliefAndCertainOtherLosses) shouldBe noOptionsJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[PostCessationTradeReliefAndCertainOtherLosses] shouldBe a[JsError]
   }
 
 }

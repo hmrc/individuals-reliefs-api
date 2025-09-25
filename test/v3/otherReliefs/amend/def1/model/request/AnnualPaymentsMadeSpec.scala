@@ -16,23 +16,22 @@
 
 package v3.otherReliefs.amend.def1.model.request
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
+class AnnualPaymentsMadeSpec extends UnitSpec {
   val annualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)
 
   val noRefAnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
 
-  val json = Json.parse(
+  val json: JsValue = Json.parse(
     """{
       |        "customerReference": "myRef",
       |        "reliefClaimed": 763.00
       |      }""".stripMargin
   )
 
-  val noRefJson = Json.parse(
+  val noRefJson: JsValue = Json.parse(
     """{
       |        "reliefClaimed": 763.00
       |      }""".stripMargin
@@ -68,6 +67,10 @@ class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
         Json.toJson(noRefAnnualPaymentsMade) shouldBe noRefJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[AnnualPaymentsMade] shouldBe a[JsError]
   }
 
 }

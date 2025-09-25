@@ -17,7 +17,7 @@
 package v1.reliefInvestments.delete.def1
 
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.utils.UnitSpec
 import v1.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
 
@@ -35,42 +35,42 @@ class Def1_DeleteReliefInvestmentsValidatorSpec extends UnitSpec {
     "return no errors" when {
       "a valid request is supplied" in {
         val result: Either[ErrorWrapper, DeleteReliefInvestmentsRequestData] = validator(validNino, validTaxYear).validateAndWrapResult()
-        result.shouldBe(Right(Def1_DeleteReliefInvestmentsRequestData(parsedNino, parsedTaxYear)))
+        result shouldBe Right(Def1_DeleteReliefInvestmentsRequestData(parsedNino, parsedTaxYear))
       }
     }
 
     "return NinoFormatError" when {
       "an invalid nino is supplied" in {
         val result: Either[ErrorWrapper, DeleteReliefInvestmentsRequestData] = validator("A12344A", validTaxYear).validateAndWrapResult()
-        result.shouldBe(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
     }
 
     "return TaxYearFormatError" when {
       "an invalid tax year is supplied" in {
         val result: Either[ErrorWrapper, DeleteReliefInvestmentsRequestData] = validator(validNino, "201831").validateAndWrapResult()
-        result.shouldBe(Left(ErrorWrapper(correlationId, TaxYearFormatError)))
+        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
     }
 
     "return RuleTaxYearRangeInvalidError" when {
       "an invalid tax year is supplied" in {
         val result: Either[ErrorWrapper, DeleteReliefInvestmentsRequestData] = validator(validNino, "2019-21").validateAndWrapResult()
-        result.shouldBe(Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
     }
 
     "return RuleTaxYearNotSupportedError error" when {
       "a tax year before the earliest allowed date is supplied" in {
         val result: Either[ErrorWrapper, DeleteReliefInvestmentsRequestData] = validator(validNino, "2019-20").validateAndWrapResult()
-        result.shouldBe(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
     }
 
     "return multiple errors" when {
       "request supplied has multiple errors" in {
         val result: Either[ErrorWrapper, DeleteReliefInvestmentsRequestData] = validator("A12344A", "20178").validateAndWrapResult()
-        result.shouldBe(Left(ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError)))))
+        result shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

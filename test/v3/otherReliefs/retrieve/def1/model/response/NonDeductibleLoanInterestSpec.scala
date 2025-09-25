@@ -16,11 +16,10 @@
 
 package v3.otherReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class NonDeductibleLoanInterestSpec extends UnitSpec with JsonErrorValidators {
+class NonDeductibleLoanInterestSpec extends UnitSpec {
 
   val nonDeductibleLoanInterest: NonDeductibleLoanInterest = NonDeductibleLoanInterest(
     Some("myref"),
@@ -32,14 +31,14 @@ class NonDeductibleLoanInterestSpec extends UnitSpec with JsonErrorValidators {
     763.00
   )
 
-  val json = Json.parse(
+  val json: JsValue = Json.parse(
     """{
       |        "customerReference": "myref",
       |        "reliefClaimed": 763.00
       |      }""".stripMargin
   )
 
-  val noRefJson = Json.parse(
+  val noRefJson: JsValue = Json.parse(
     """{
       |        "reliefClaimed": 763.00
       |      }""".stripMargin
@@ -75,6 +74,10 @@ class NonDeductibleLoanInterestSpec extends UnitSpec with JsonErrorValidators {
         Json.toJson(noRefNoneDeductibleLoanInterest) shouldBe noRefJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[NonDeductibleLoanInterest] shouldBe a[JsError]
   }
 
 }

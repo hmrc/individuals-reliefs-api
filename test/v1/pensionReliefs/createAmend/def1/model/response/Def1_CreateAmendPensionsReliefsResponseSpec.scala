@@ -16,13 +16,42 @@
 
 package v1.pensionReliefs.createAmend.def1.model.response
 
+import play.api.libs.json.Json
 import shared.config.MockSharedAppConfig
 import shared.hateoas.Link
-import shared.hateoas.Method._
+import shared.hateoas.Method.*
 import shared.utils.UnitSpec
 import v1.pensionReliefs.createAmend.model.response.{CreateAmendPensionsReliefsHateoasData, CreateAmendPensionsReliefsResponse}
 
 class Def1_CreateAmendPensionsReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
+
+  "writes" when {
+    "passed valid model" should {
+      "return valid JSON" in {
+        val model  = new Def1_CreateAmendPensionsReliefsResponse {}
+        val result = Json.toJson(model)(Def1_CreateAmendPensionsReliefsResponse.writes)
+        result shouldBe Json.obj()
+      }
+    }
+  }
+
+  "CreateAmendPensionsReliefsResponse writes" when {
+    "passed Def1_CreateAmendPensionsReliefsResponse" should {
+      "return valid JSON using parent trait writes" in {
+        val model: CreateAmendPensionsReliefsResponse = new Def1_CreateAmendPensionsReliefsResponse {}
+        val result                                    = Json.toJson(model)(CreateAmendPensionsReliefsResponse.writes)
+        result shouldBe Json.obj()
+      }
+    }
+  }
+
+  "reads" when {
+    "passed valid JSON" should {
+      "return a valid model" in {
+        Json.obj().as[Def1_CreateAmendPensionsReliefsResponse] shouldBe a[Def1_CreateAmendPensionsReliefsResponse]
+      }
+    }
+  }
 
   "LinksFactory" should {
     "return the correct links" in {

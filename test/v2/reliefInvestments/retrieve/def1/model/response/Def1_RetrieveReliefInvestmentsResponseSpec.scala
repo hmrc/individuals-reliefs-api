@@ -16,7 +16,7 @@
 
 package v2.reliefInvestments.retrieve.def1.model.response
 
-import play.api.libs.json.Json
+import play.api.libs.json.*
 import shared.config.MockSharedAppConfig
 import shared.utils.UnitSpec
 import v2.fixtures.RetrieveReliefInvestmentsFixtures.{responseJson, responseModel}
@@ -37,6 +37,10 @@ class Def1_RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockShare
         Json.toJson(responseModel) shouldBe responseJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[Def1_RetrieveReliefInvestmentsResponse] shouldBe a[JsError]
   }
 
 }

@@ -19,14 +19,14 @@ package v1.reliefInvestments.createAmend.def1.model.request
 import play.api.libs.json.Json
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
+import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures.*
 
 class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        eisSubscriptionsItemJson.as[EisSubscriptionsItem].shouldBe(eisSubscriptionsItemModel)
+        eisSubscriptionsItemJson.as[EisSubscriptionsItem] shouldBe eisSubscriptionsItemModel
       }
     }
   }
@@ -34,7 +34,7 @@ class EisSubscriptionsItemSpec extends UnitSpec with JsonErrorValidators {
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Json.toJson(eisSubscriptionsItemModel).shouldBe(eisSubscriptionsItemJson)
+        Json.toJson(eisSubscriptionsItemModel) shouldBe eisSubscriptionsItemJson
       }
     }
   }

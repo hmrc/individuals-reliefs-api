@@ -25,7 +25,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        requestBodyJson.as[Def1_CreateAndAmendReliefInvestmentsRequestBody].shouldBe(requestBodyModel)
+        requestBodyJson.as[Def1_CreateAndAmendReliefInvestmentsRequestBody] shouldBe requestBodyModel
       }
     }
   }
@@ -33,7 +33,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        requestBodyModel.toJson.shouldBe(requestBodyJson)
+        requestBodyModel.toJson shouldBe requestBodyJson
       }
     }
   }
@@ -41,7 +41,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
   "isIncorrectOrEmptyBodyError" should {
     "return false" when {
       "all arrays are provided, none are empty, no objects in the arrays are empty" in {
-        requestBodyModel.isIncorrectOrEmptyBody.shouldBe(false)
+        requestBodyModel.isIncorrectOrEmptyBody shouldBe false
       }
 
       "only some arrays are provided, none are empty, no objects in the arrays are empty" in {
@@ -49,7 +49,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
           vctSubscription = None,
           seedEnterpriseInvestment = None
         )
-        model.isIncorrectOrEmptyBody.shouldBe(false)
+        model.isIncorrectOrEmptyBody shouldBe false
       }
     }
 
@@ -62,14 +62,14 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
           None,
           None
         )
-        model.isIncorrectOrEmptyBody.shouldBe(true)
+        model.isIncorrectOrEmptyBody shouldBe true
       }
       "at least one empty array is provided" in {
         val model = requestBodyModel.copy(
           vctSubscription = Some(Seq()),
           communityInvestment = Some(Seq())
         )
-        model.isIncorrectOrEmptyBody.shouldBe(true)
+        model.isIncorrectOrEmptyBody shouldBe true
       }
     }
   }

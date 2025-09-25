@@ -16,11 +16,10 @@
 
 package v3.pensionReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class PensionsReliefsSpec extends UnitSpec with JsonErrorValidators {
+class PensionsReliefsSpec extends UnitSpec {
 
   val pensionsReliefsItem: PensionsReliefs = PensionsReliefs(
     Some(1999.99),
@@ -30,7 +29,7 @@ class PensionsReliefsSpec extends UnitSpec with JsonErrorValidators {
     Some(1999.99)
   )
 
-  val json = Json.parse(
+  val json: JsValue = Json.parse(
     """
       |{
       |  "regularPensionContributions": 1999.99,
@@ -56,6 +55,13 @@ class PensionsReliefsSpec extends UnitSpec with JsonErrorValidators {
         Json.toJson(pensionsReliefsItem) shouldBe json
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    val invalidJson = Json.obj(
+      "regularPensionContributions" -> Json.arr()
+    )
+    invalidJson.validate[PensionsReliefs] shouldBe a[JsError]
   }
 
 }

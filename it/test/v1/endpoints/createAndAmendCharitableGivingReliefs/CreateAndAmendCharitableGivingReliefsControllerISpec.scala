@@ -20,12 +20,12 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
-import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.json.*
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 
 class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec {
@@ -44,7 +44,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
         }
 
         val response: WSResponse = await(request().put(requestJson))
-        response.status.shouldBe(OK)
+        response.status shouldBe OK
         response.json shouldBe responseBody
         response.header("X-CorrelationId") should not be empty
       }
@@ -59,7 +59,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
         }
 
         val response: WSResponse = await(request().put(requestJson))
-        response.status.shouldBe(OK)
+        response.status shouldBe OK
         response.json shouldBe responseBody
         response.header("X-CorrelationId") should not be empty
       }
@@ -79,7 +79,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           }
 
           val response: WSResponse = await(request().put(requestJson))
-          response.status.shouldBe(BAD_REQUEST)
+          response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(NinoFormatError)
         }
         s"an invalid taxYear is provided" in new NonTysTest {
@@ -92,7 +92,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           }
 
           val response: WSResponse = await(request().put(requestJson))
-          response.status.shouldBe(BAD_REQUEST)
+          response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(TaxYearFormatError)
         }
         s"an invalid /giftAidPayments/totalAmount is provided" in new NonTysTest {
@@ -113,7 +113,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           }
 
           val response: WSResponse = await(request().put(requestJson))
-          response.status.shouldBe(BAD_REQUEST)
+          response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(ValueFormatError.copy(paths = Some(Seq("/giftAidPayments/totalAmount"))))
         }
         s"a taxYear with range of greater than a year is provided" in new NonTysTest {
@@ -126,7 +126,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           }
 
           val response: WSResponse = await(request().put(requestJson))
-          response.status.shouldBe(BAD_REQUEST)
+          response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
         }
 
@@ -141,7 +141,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           }
 
           val response: WSResponse = await(request().put(requestJson))
-          response.status.shouldBe(BAD_REQUEST)
+          response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearNotSupportedError)
         }
 
@@ -155,7 +155,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           }
 
           val response: WSResponse = await(request().put(requestJson))
-          response.status.shouldBe(BAD_REQUEST)
+          response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleIncorrectOrEmptyBodyError)
         }
       }
@@ -172,7 +172,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
             }
 
             val response: WSResponse = await(request().put(requestJson))
-            response.status.shouldBe(expectedStatus)
+            response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
         }

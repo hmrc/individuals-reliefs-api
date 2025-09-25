@@ -37,7 +37,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockSharedAppConfig
     )
 
-    lazy val request: RetrieveForeignReliefsRequestData = new Def1_RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+    lazy val request: RetrieveForeignReliefsRequestData = Def1_RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
     val response = Def1_RetrieveForeignReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None)
 

@@ -89,7 +89,7 @@ class EnumsSpec extends UnitSpec with Inspectors {
     }
 
     "allows external parse by name" in {
-      Enums.parser(values).lift("enum-one").shouldBe(Some(`enum-one`))
+      Enums.parser(values).lift("enum-one") shouldBe Some(`enum-one`)
       Enums.parser(values).lift("unknown") shouldBe None
     }
 

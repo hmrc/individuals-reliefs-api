@@ -17,18 +17,18 @@
 package shared.controllers
 
 import cats.implicits.catsSyntaxValidatedId
-import play.api.http.{HeaderNames, MimeTypes, Status}
+import play.api.http.*
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{AnyContentAsEmpty, ControllerComponents, Result}
+import play.api.mvc.*
 import play.api.test.Helpers.stubControllerComponents
 import play.api.test.{FakeRequest, ResultExtractors}
 import shared.config.Deprecation.NotDeprecated
 import shared.config.{MockSharedAppConfig, RealAppConfig}
-import shared.models.audit.{AuditError, AuditEvent, AuditResponse}
+import shared.models.audit.*
 import shared.models.domain.Nino
-import shared.models.errors.{BadRequestError, ErrorWrapper, MtdError}
+import shared.models.errors.*
 import shared.routing.{Version, Version9}
-import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.services.*
 import shared.utils.{MockIdGenerator, UnitSpec}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -103,9 +103,9 @@ trait ControllerTestRunner
       val result: Future[Result] = callController()
 
       status(result) shouldBe expectedError.httpStatus
-      header("X-CorrelationId", result).shouldBe(Some(correlationId))
+      header("X-CorrelationId", result) shouldBe Some(correlationId)
 
-      contentAsJson(result).shouldBe(Json.toJson(expectedError))
+      contentAsJson(result) shouldBe Json.toJson(expectedError)
     }
 
     protected def runMultipleErrorsTest(expectedErrors: Seq[MtdError]): Unit = {
@@ -115,7 +115,7 @@ trait ControllerTestRunner
 
       status(result) shouldBe BAD_REQUEST
       header("X-CorrelationId", result).shouldBe(Some(correlationId))
-      contentAsJson(result).shouldBe(Json.toJson(expectedError))
+      contentAsJson(result) shouldBe Json.toJson(expectedError)
     }
 
     private def checkEmaConfig(): Unit = {
@@ -128,7 +128,7 @@ trait ControllerTestRunner
             fail(s"Controller endpoint name \"${controller.endpointName}\" not found in application.conf.")
           )
 
-      realAppConfig.endpointAllowsSupportingAgents(controller.endpointName).shouldBe(endpointSupportingAgentsAllowed)
+      realAppConfig.endpointAllowsSupportingAgents(controller.endpointName) shouldBe endpointSupportingAgentsAllowed
     }
 
   }

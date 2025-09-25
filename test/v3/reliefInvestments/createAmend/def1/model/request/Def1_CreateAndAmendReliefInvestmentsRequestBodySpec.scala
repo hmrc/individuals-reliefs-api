@@ -16,11 +16,11 @@
 
 package v3.reliefInvestments.createAmend.def1.model.request
 
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
-import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures._
+import v3.reliefInvestments.createAmend.def1.model.Def1_CreateAndAmendReliefInvestmentsFixtures.*
 
-class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with JsonErrorValidators {
+class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec {
 
   "reads" when {
     "passed valid JSON" should {
@@ -33,7 +33,7 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
   "writes" when {
     "passed valid model" should {
       "return valid json" in {
-        Def1_requestBodyModel.toJson shouldBe Def1_requestBodyJson
+        Json.toJson(Def1_requestBodyModel) shouldBe Def1_requestBodyJson
       }
     }
   }
@@ -72,6 +72,13 @@ class Def1_CreateAndAmendReliefInvestmentsRequestBodySpec extends UnitSpec with 
         model.isIncorrectOrEmptyBody shouldBe true
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    val invalidJson = Json.obj(
+      "vctSubscription" -> "not-an-array"
+    )
+    invalidJson.validate[Def1_CreateAndAmendReliefInvestmentsRequestBody] shouldBe a[JsError]
   }
 
 }

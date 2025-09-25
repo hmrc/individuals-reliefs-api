@@ -16,13 +16,12 @@
 
 package v3.pensionReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.Json
+import play.api.libs.json.*
 import shared.models.domain.Timestamp
-import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v3.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
 
-class Def1_RetrievePensionsReliefsResponseSpec extends UnitSpec with JsonErrorValidators {
+class Def1_RetrievePensionsReliefsResponseSpec extends UnitSpec {
 
   val pensionsReliefsResponseItem: RetrievePensionsReliefsResponse = Def1_RetrievePensionsReliefsResponse(
     Timestamp("2019-04-04T01:01:01.000Z"),
@@ -35,7 +34,7 @@ class Def1_RetrievePensionsReliefsResponseSpec extends UnitSpec with JsonErrorVa
     )
   )
 
-  val json = Json.parse(
+  val json: JsValue = Json.parse(
     """
       |{
       |  "submittedOn": "2019-04-04T01:01:01.000Z",
@@ -64,6 +63,10 @@ class Def1_RetrievePensionsReliefsResponseSpec extends UnitSpec with JsonErrorVa
         Json.toJson(pensionsReliefsResponseItem) shouldBe json
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[Def1_RetrievePensionsReliefsResponse] shouldBe a[JsError]
   }
 
 }

@@ -16,12 +16,11 @@
 
 package v2.reliefInvestments.retrieve.def1.model.response
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 import v2.fixtures.RetrieveReliefInvestmentsFixtures.{socialEnterpriseInvestmentItemJson, socialEnterpriseInvestmentItemModel}
 
-class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
+class SocialEnterpriseInvestmentItemSpec extends UnitSpec {
 
   "reads" when {
     "passed valid JSON" should {
@@ -37,6 +36,10 @@ class SocialEnterpriseInvestmentItemSpec extends UnitSpec with JsonErrorValidato
         Json.toJson(socialEnterpriseInvestmentItemModel) shouldBe socialEnterpriseInvestmentItemJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[SocialEnterpriseInvestmentItem] shouldBe a[JsError]
   }
 
 }

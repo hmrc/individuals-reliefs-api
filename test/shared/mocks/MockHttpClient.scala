@@ -127,9 +127,9 @@ trait MockHttpClient extends TestSuite with MockFactory {
       (mockRequestBuilder.execute[T](using _: HttpReads[T], _: ExecutionContext)).expects(*, *)
     }
 
-    private def assertHeaders[T, I](actualHeaders: Seq[(String, String)],
-                                    requiredHeaders: Seq[(String, String)],
-                                    excludedHeaders: Seq[(String, String)]) = {
+    private def assertHeaders(actualHeaders: Seq[(String, String)],
+                              requiredHeaders: Seq[(String, String)],
+                              excludedHeaders: Seq[(String, String)]) = {
 
       actualHeaders should contain allElementsOf requiredHeaders
       actualHeaders should contain noElementsOf excludedHeaders

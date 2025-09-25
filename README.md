@@ -11,9 +11,9 @@ The Individuals Reliefs API allows a developer to retrieve, create and amend, an
 
 ## Requirements
 
-- Scala 2.13.x
+- Scala 3.5.x
 - Java 11
-- sbt 1.9.x
+- sbt 1.10.x
 - [Service Manager 2](https://github.com/hmrc/sm2)
 
 ## Running the microservice

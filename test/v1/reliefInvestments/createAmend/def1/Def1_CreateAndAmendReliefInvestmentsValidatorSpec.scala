@@ -136,7 +136,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, validBody).validateAndWrapResult()
 
-        result.shouldBe(Right(Def1_CreateAndAmendReliefInvestmentsRequestData(parsedNino, parsedTaxYear, parsedBody)))
+        result shouldBe Right(Def1_CreateAndAmendReliefInvestmentsRequestData(parsedNino, parsedTaxYear, parsedBody))
       }
     }
 
@@ -145,34 +145,34 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator("invalid", validTaxYear, validBody).validateAndWrapResult()
 
-        result.shouldBe(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
       "passed an invalidly formatted tax year" in {
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, "invalid", validBody).validateAndWrapResult()
 
-        result.shouldBe(Left(ErrorWrapper(correlationId, TaxYearFormatError)))
+        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
 
       "passed an invalid tax year" in {
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, "2019-20", validBody).validateAndWrapResult()
 
-        result.shouldBe(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a tax year with an invalid range" in {
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, "2018-20", validBody).validateAndWrapResult()
 
-        result.shouldBe(Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
       "passed a tax year after the latest allowed date is supplied" in {
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, "2025-26", validBody).validateAndWrapResult()
-        result.shouldBe(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
 
       }
 
@@ -181,7 +181,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result.shouldBe(Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError)))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
       "passed a body with at least one empty array" in {
@@ -189,7 +189,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result.shouldBe(Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/vctSubscription"))))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/vctSubscription")))
       }
 
       "passed a body with at least array containing an empty object" in {
@@ -197,12 +197,12 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result.shouldBe(
+        result shouldBe
           Left(
             ErrorWrapper(
               correlationId,
               RuleIncorrectOrEmptyBodyError
-                .withPaths(List("/vctSubscription/0/reliefClaimed", "/vctSubscription/0/uniqueInvestmentRef")))))
+                .withPaths(List("/vctSubscription/0/reliefClaimed", "/vctSubscription/0/uniqueInvestmentRef"))))
       }
 
       "passed a body with a negative numeric field" when {
@@ -210,7 +210,7 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
           val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
             validator(validNino, validTaxYear, body).validateAndWrapResult()
 
-          result.shouldBe(Left(ErrorWrapper(correlationId, ValueFormatError.withPath(path))))
+          result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPath(path)))
         }
 
         val numericFields = List("/amountInvested", "/reliefClaimed")
@@ -259,17 +259,18 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result.shouldBe(
-          Left(ErrorWrapper(
-            correlationId,
-            DateOfInvestmentFormatError.withPaths(List(
-              "/vctSubscription/0/dateOfInvestment",
-              "/eisSubscription/0/dateOfInvestment",
-              "/communityInvestment/0/dateOfInvestment",
-              "/seedEnterpriseInvestment/0/dateOfInvestment",
-              "/socialEnterpriseInvestment/0/dateOfInvestment"
+        result shouldBe
+          Left(
+            ErrorWrapper(
+              correlationId,
+              DateOfInvestmentFormatError.withPaths(List(
+                "/vctSubscription/0/dateOfInvestment",
+                "/eisSubscription/0/dateOfInvestment",
+                "/communityInvestment/0/dateOfInvestment",
+                "/seedEnterpriseInvestment/0/dateOfInvestment",
+                "/socialEnterpriseInvestment/0/dateOfInvestment"
+              ))
             ))
-          )))
       }
 
       "passed a body with out of range formatted date of investments" in {
@@ -289,17 +290,18 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result.shouldBe(
-          Left(ErrorWrapper(
-            correlationId,
-            DateOfInvestmentFormatError.withPaths(List(
-              "/vctSubscription/0/dateOfInvestment",
-              "/eisSubscription/0/dateOfInvestment",
-              "/communityInvestment/0/dateOfInvestment",
-              "/seedEnterpriseInvestment/0/dateOfInvestment",
-              "/socialEnterpriseInvestment/0/dateOfInvestment"
+        result shouldBe
+          Left(
+            ErrorWrapper(
+              correlationId,
+              DateOfInvestmentFormatError.withPaths(List(
+                "/vctSubscription/0/dateOfInvestment",
+                "/eisSubscription/0/dateOfInvestment",
+                "/communityInvestment/0/dateOfInvestment",
+                "/seedEnterpriseInvestment/0/dateOfInvestment",
+                "/socialEnterpriseInvestment/0/dateOfInvestment"
+              ))
             ))
-          )))
       }
 
       "passed a body with invalidly formatted unique investment references" in {
@@ -319,17 +321,18 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result.shouldBe(
-          Left(ErrorWrapper(
-            correlationId,
-            UniqueInvestmentRefFormatError.withPaths(List(
-              "/vctSubscription/0/uniqueInvestmentRef",
-              "/eisSubscription/0/uniqueInvestmentRef",
-              "/communityInvestment/0/uniqueInvestmentRef",
-              "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
-              "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
+        result shouldBe
+          Left(
+            ErrorWrapper(
+              correlationId,
+              UniqueInvestmentRefFormatError.withPaths(List(
+                "/vctSubscription/0/uniqueInvestmentRef",
+                "/eisSubscription/0/uniqueInvestmentRef",
+                "/communityInvestment/0/uniqueInvestmentRef",
+                "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
+                "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
+              ))
             ))
-          )))
       }
 
       "passed a body with invalidly formatted names" in {
@@ -349,17 +352,18 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result.shouldBe(
-          Left(ErrorWrapper(
-            correlationId,
-            NameFormatError.withPaths(List(
-              "/vctSubscription/0/name",
-              "/eisSubscription/0/name",
-              "/communityInvestment/0/name",
-              "/seedEnterpriseInvestment/0/companyName",
-              "/socialEnterpriseInvestment/0/socialEnterpriseName"
+        result shouldBe
+          Left(
+            ErrorWrapper(
+              correlationId,
+              NameFormatError.withPaths(List(
+                "/vctSubscription/0/name",
+                "/eisSubscription/0/name",
+                "/communityInvestment/0/name",
+                "/seedEnterpriseInvestment/0/companyName",
+                "/socialEnterpriseInvestment/0/socialEnterpriseName"
+              ))
             ))
-          )))
       }
     }
 
@@ -368,14 +372,14 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator("invalid", "invalid", validBody).validateAndWrapResult()
 
-        result.shouldBe(
+        result shouldBe
           Left(
             ErrorWrapper(
               correlationId,
               BadRequestError,
               Some(List(NinoFormatError, TaxYearFormatError))
             )
-          ))
+          )
       }
     }
   }

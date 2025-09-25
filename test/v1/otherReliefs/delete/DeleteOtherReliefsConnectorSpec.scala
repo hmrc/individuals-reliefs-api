@@ -19,8 +19,8 @@ package v1.otherReliefs.delete
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import v1.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
 import uk.gov.hmrc.http.StringContextOps
+import v1.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -50,7 +50,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
         willDelete(url = url"$baseUrl/income-tax/reliefs/other/$nino/2020-21")
           .returns(Future.successful(outcome))
 
-        await(connector.delete(request)).shouldBe(outcome)
+        await(connector.delete(request)) shouldBe outcome
       }
 
       "return the expected response for a TYS request" when {
@@ -62,7 +62,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
           willDelete(url = url"$baseUrl/income-tax/reliefs/other/23-24/$nino")
             .returns(Future.successful(outcome))
 
-          await(connector.delete(request)).shouldBe(outcome)
+          await(connector.delete(request)) shouldBe outcome
         }
       }
     }
