@@ -16,15 +16,11 @@
 
 package v2.foreignReliefs.retrieve.model.response
 
-import play.api.libs.json.Json
+import play.api.libs.json.*
 import shared.config.MockSharedAppConfig
 import shared.models.domain.Timestamp
 import shared.utils.UnitSpec
-import v2.foreignReliefs.retrieve.def1.model.response.{
-  Def1_ForeignIncomeTaxCreditRelief,
-  Def1_ForeignTaxCreditRelief,
-  Def1_ForeignTaxForFtcrNotClaimed
-}
+import v2.foreignReliefs.retrieve.def1.model.response.*
 
 class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
@@ -78,6 +74,10 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockSharedAppConf
         Json.toJson(retrieveForeignReliefsBody) shouldBe json
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[Def1_RetrieveForeignReliefsResponse] shouldBe a[JsError]
   }
 
 }

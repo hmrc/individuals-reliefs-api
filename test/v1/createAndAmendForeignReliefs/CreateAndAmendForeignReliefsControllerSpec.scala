@@ -97,7 +97,7 @@ class CreateAndAmendForeignReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new CreateAndAmendForeignReliefsController(
+    val controller: CreateAndAmendForeignReliefsController = new CreateAndAmendForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAndAmendForeignReliefsValidatorFactory,

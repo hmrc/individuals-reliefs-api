@@ -22,9 +22,9 @@ import play.api.http.{DefaultFileMimeTypes, DefaultHttpErrorHandler, FileMimeTyp
 import play.api.mvc.Result
 import play.api.{Configuration, Environment}
 import shared.config.rewriters.DocumentationRewriters.CheckAndRewrite
-import shared.config.rewriters._
+import shared.config.rewriters.*
 import shared.config.{SharedAppConfig, MockSharedAppConfig, RealAppConfig}
-import shared.definition._
+import shared.definition.*
 import shared.routing.{Version, Versions}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -51,8 +51,8 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockSharedAppC
 
   "/file endpoint" should {
     "return a file" in new Test {
-      MockedSharedAppConfig.apiVersionReleasedInProduction(apiVersionName).anyNumberOfTimes() returns true
-      MockedSharedAppConfig.endpointsEnabled(apiVersionName).anyNumberOfTimes() returns true
+      MockedSharedAppConfig.apiVersionReleasedInProduction(apiVersionName).anyNumberOfTimes().returns(true)
+      MockedSharedAppConfig.endpointsEnabled(apiVersionName).anyNumberOfTimes().returns(true)
 
       val response: Future[Result] = requestAsset("application.yaml")
       status(response) shouldBe OK
@@ -61,7 +61,7 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockSharedAppC
 
     "return a 404" when {
       "the requested asset doesn't exist" in new Test {
-        MockedSharedAppConfig.endpointReleasedInProduction(apiVersionName, "does-not-exist").anyNumberOfTimes() returns true
+        MockedSharedAppConfig.endpointReleasedInProduction(apiVersionName, "does-not-exist").anyNumberOfTimes().returns(true)
 
         val response: Future[Result] = requestAsset("does-not-exist.yaml")
         status(response) shouldBe NOT_FOUND
@@ -73,7 +73,7 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockSharedAppC
       }
 
       "the requested asset doesn't form a canonical path" in new Test {
-        MockedSharedAppConfig.endpointReleasedInProduction(apiVersionName, "../does-not-exist").anyNumberOfTimes() returns true
+        MockedSharedAppConfig.endpointReleasedInProduction(apiVersionName, "../does-not-exist").anyNumberOfTimes().returns(true)
 
         val response: Future[Result] = requestAsset("../does-not-exist.yaml")
         status(response) shouldBe NOT_FOUND
@@ -84,8 +84,8 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockSharedAppC
     "return a 400 response" when {
       "the requested asseet's URI encoding is wrong" in new Test {
         val badlyEncodedAssetName = "applica\n\ntion"
-        MockedSharedAppConfig.endpointReleasedInProduction(apiVersionName, badlyEncodedAssetName).anyNumberOfTimes() returns true
-        MockedSharedAppConfig.endpointsEnabled(apiVersionName).anyNumberOfTimes() returns true
+        MockedSharedAppConfig.endpointReleasedInProduction(apiVersionName, badlyEncodedAssetName).anyNumberOfTimes().returns(true)
+        MockedSharedAppConfig.endpointsEnabled(apiVersionName).anyNumberOfTimes().returns(true)
 
         val response: Future[Result] = requestAsset(s"$badlyEncodedAssetName.yaml")
         status(response) shouldBe BAD_REQUEST
@@ -96,8 +96,8 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockSharedAppC
   "rewrite()" when {
     "the API version is enabled" should {
       "return the yaml with the API title unchanged" in new Test {
-        MockedSharedAppConfig.apiVersionReleasedInProduction(apiVersionName).anyNumberOfTimes() returns true
-        MockedSharedAppConfig.endpointsEnabled(apiVersionName).anyNumberOfTimes() returns true
+        MockedSharedAppConfig.apiVersionReleasedInProduction(apiVersionName).anyNumberOfTimes().returns(true)
+        MockedSharedAppConfig.endpointsEnabled(apiVersionName).anyNumberOfTimes().returns(true)
 
         val response: Future[Result] = requestAsset("application.yaml", accept = "text/plain")
         status(response) shouldBe OK
@@ -116,8 +116,8 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockSharedAppC
 
     "the API version is disabled" should {
       "return the yaml with [test only] in the API title" in new Test {
-        MockedSharedAppConfig.apiVersionReleasedInProduction(apiVersionName).anyNumberOfTimes() returns false
-        MockedSharedAppConfig.endpointsEnabled(apiVersionName).anyNumberOfTimes() returns true
+        MockedSharedAppConfig.apiVersionReleasedInProduction(apiVersionName).anyNumberOfTimes().returns(false)
+        MockedSharedAppConfig.endpointsEnabled(apiVersionName).anyNumberOfTimes().returns(true)
 
         val response: Future[Result] = requestAsset("application.yaml")
         status(response) shouldBe OK
@@ -149,8 +149,8 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockSharedAppC
             override lazy val rewriteables: Seq[CheckAndRewrite] = Nil
           }
 
-        MockedSharedAppConfig.apiVersionReleasedInProduction(apiVersionName).anyNumberOfTimes() returns false
-        MockedSharedAppConfig.endpointsEnabled(apiVersionName).anyNumberOfTimes() returns true
+        MockedSharedAppConfig.apiVersionReleasedInProduction(apiVersionName).anyNumberOfTimes().returns(false)
+        MockedSharedAppConfig.endpointsEnabled(apiVersionName).anyNumberOfTimes().returns(true)
 
         actualApplicationYaml should not be empty
 

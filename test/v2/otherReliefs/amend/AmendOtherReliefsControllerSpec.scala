@@ -150,7 +150,7 @@ class AmendOtherReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new AmendOtherReliefsController(
+    val controller: AmendOtherReliefsController = new AmendOtherReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockAmendOtherReliefsValidatorFactory,

@@ -16,7 +16,7 @@
 
 package v3.charitableGiving.retrieve.def1.model.request
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsError, Json}
 import shared.config.MockSharedAppConfig
 import shared.utils.UnitSpec
 import v3.charitableGiving.retrieve.model.response.Def1_RetrieveCharitableGivingReliefsResponse
@@ -37,6 +37,15 @@ class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockShar
     "write to MTD JSON" in {
       Json.toJson(charitableGivingReliefsResponse) shouldBe charitableGivingReliefsResponseMtdJson
     }
+  }
+
+  "return error when JSON is invalid" in {
+    val invalidJson = Json.obj(
+      "giftAidPayments" -> Json.obj(
+        "nonUkCharities" -> Json.arr(1, 2, 3)
+      )
+    )
+    invalidJson.validate[Def1_RetrieveCharitableGivingReliefsResponse] shouldBe a[JsError]
   }
 
 }

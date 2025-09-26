@@ -17,18 +17,18 @@
 package shared.controllers
 
 import cats.implicits.catsSyntaxValidatedId
-import play.api.http.{HeaderNames, MimeTypes, Status}
+import play.api.http.*
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{AnyContentAsEmpty, ControllerComponents, Result}
+import play.api.mvc.*
 import play.api.test.Helpers.stubControllerComponents
 import play.api.test.{FakeRequest, ResultExtractors}
 import shared.config.Deprecation.NotDeprecated
 import shared.config.{MockSharedAppConfig, RealAppConfig}
-import shared.models.audit.{AuditError, AuditEvent, AuditResponse}
+import shared.models.audit.*
 import shared.models.domain.Nino
-import shared.models.errors.{BadRequestError, ErrorWrapper, MtdError}
+import shared.models.errors.*
 import shared.routing.{Version, Version9}
-import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.services.*
 import shared.utils.{MockIdGenerator, UnitSpec}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -58,8 +58,12 @@ abstract class ControllerBaseSpec
   def fakePostRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 }
 
-trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator with RealAppConfig {
-  _: ControllerBaseSpec =>
+trait ControllerTestRunner
+    extends ControllerBaseSpec
+    with MockEnrolmentsAuthService
+    with MockMtdIdLookupService
+    with MockIdGenerator
+    with RealAppConfig {
 
   protected val correlationId    = "X-123"
   protected val validNino        = "AA123456A"
@@ -110,7 +114,7 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
       val result: Future[Result] = callController()
 
       status(result) shouldBe BAD_REQUEST
-      header("X-CorrelationId", result) shouldBe Some(correlationId)
+      header("X-CorrelationId", result).shouldBe(Some(correlationId))
       contentAsJson(result) shouldBe Json.toJson(expectedError)
     }
 
@@ -129,8 +133,7 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
 
   }
 
-  trait AuditEventChecking[DETAIL] {
-    _: ControllerTest =>
+  trait AuditEventChecking[DETAIL] extends ControllerTest {
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[DETAIL]
 

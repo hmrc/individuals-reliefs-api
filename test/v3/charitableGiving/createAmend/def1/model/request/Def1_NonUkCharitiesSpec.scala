@@ -16,9 +16,8 @@
 
 package v3.charitableGiving.createAmend.def1.model.request
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.*
 import shared.utils.UnitSpec
-import v3.charitableGiving.createAmend.def1.model.request.Def1_NonUkCharities
 
 class Def1_NonUkCharitiesSpec extends UnitSpec {
 
@@ -51,6 +50,10 @@ class Def1_NonUkCharitiesSpec extends UnitSpec {
         Json.toJson(model) shouldBe json
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[Def1_NonUkCharities] shouldBe a[JsError]
   }
 
 }

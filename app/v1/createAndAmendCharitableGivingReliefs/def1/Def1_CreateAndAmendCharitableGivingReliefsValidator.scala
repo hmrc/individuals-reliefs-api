@@ -45,6 +45,6 @@ class Def1_CreateAndAmendCharitableGivingReliefsValidator(nino: String, taxYear:
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData.apply).andThen(rulesValidator.validateBusinessRules)
 
 }

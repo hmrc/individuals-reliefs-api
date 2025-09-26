@@ -16,7 +16,7 @@
 
 package v3.charitableGiving.retrieve.def1.model.request
 
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 import v3.charitableGiving.retrieve.def1.model.response.{Def1_GiftAidPayments, Def1_NonUkCharities}
 
@@ -97,6 +97,13 @@ class GiftAidPaymentsSpec extends UnitSpec {
                                  |   "amountTreatedAsSpecifiedTaxYear": 5.12
                                  |}""".stripMargin)
     }
+  }
+
+  "error when JSON is invalid" in {
+    val invalidJson = Json.obj(
+      "nonUkCharities" -> Json.arr(1, 2, 3)
+    )
+    invalidJson.validate[Def1_GiftAidPayments] shouldBe a[JsError]
   }
 
 }

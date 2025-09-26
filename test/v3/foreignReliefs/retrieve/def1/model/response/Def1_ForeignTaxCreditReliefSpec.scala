@@ -16,15 +16,14 @@
 
 package v3.foreignReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class Def1_ForeignTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
+class Def1_ForeignTaxCreditReliefSpec extends UnitSpec {
 
   val foreignTaxCreditRelief: Def1_ForeignTaxCreditRelief = Def1_ForeignTaxCreditRelief(2314.32)
 
-  val json = Json.parse(
+  val json: JsValue = Json.parse(
     """{
       |  "amount": 2314.32
       |}""".stripMargin
@@ -44,6 +43,10 @@ class Def1_ForeignTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators 
         Json.toJson(foreignTaxCreditRelief) shouldBe json
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[Def1_ForeignTaxCreditRelief] shouldBe a[JsError]
   }
 
 }

@@ -34,7 +34,7 @@ class ResolveIsoDateSpec extends UnitSpec {
       "given a valid ISO date string" in {
         val expected = Valid(LocalDate.parse(validDate))
 
-        val result: Validated[Seq[MtdError], LocalDate] = ResolveIsoDate(validDate, StartDateFormatError)
+        val result: Validated[Seq[MtdError], LocalDate] = ResolveIsoDate(StartDateFormatError)(validDate)
         result shouldBe expected
       }
 

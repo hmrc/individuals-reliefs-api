@@ -17,7 +17,7 @@
 package v1.reliefInvestments.delete.def1
 
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.utils.UnitSpec
 import v1.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
 

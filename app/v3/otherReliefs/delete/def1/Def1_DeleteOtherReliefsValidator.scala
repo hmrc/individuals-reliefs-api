@@ -32,6 +32,6 @@ class Def1_DeleteOtherReliefsValidator(nino: String, taxYear: String) extends Va
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_DeleteOtherReliefsRequestData)
+    ).mapN(Def1_DeleteOtherReliefsRequestData.apply)
 
 }

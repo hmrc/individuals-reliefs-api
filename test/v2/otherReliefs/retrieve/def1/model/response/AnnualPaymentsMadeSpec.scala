@@ -16,11 +16,10 @@
 
 package v2.otherReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
+class AnnualPaymentsMadeSpec extends UnitSpec {
   val annualPaymentsMade: AnnualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)
 
   val noRefAnnualPaymentsMade: AnnualPaymentsMade = AnnualPaymentsMade(None, 763.00)
@@ -68,6 +67,10 @@ class AnnualPaymentsMadeSpec extends UnitSpec with JsonErrorValidators {
         Json.toJson(noRefAnnualPaymentsMade) shouldBe noRefJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[AnnualPaymentsMade] shouldBe a[JsError]
   }
 
 }

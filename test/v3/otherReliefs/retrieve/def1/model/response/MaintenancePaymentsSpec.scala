@@ -16,11 +16,10 @@
 
 package v3.otherReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
+class MaintenancePaymentsSpec extends UnitSpec {
   val maintenancePayments: MaintenancePayments = MaintenancePayments(Some("myRef"), Some("Hilda"), Some("2000-01-01"), 222.22)
 
   val noOptionsMaintenancePayments: MaintenancePayments = MaintenancePayments(
@@ -30,7 +29,7 @@ class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
     222.22
   )
 
-  val json = Json.parse("""
+  val json: JsValue = Json.parse("""
       |{
       |  "customerReference": "myRef",
       |  "exSpouseName" : "Hilda",
@@ -39,7 +38,7 @@ class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
       |}
       |""".stripMargin)
 
-  val noOptionsJson = Json.parse("""
+  val noOptionsJson: JsValue = Json.parse("""
       |{
       |  "amount": 222.22
       |}
@@ -75,6 +74,10 @@ class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
         Json.toJson(noOptionsMaintenancePayments) shouldBe noOptionsJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[MaintenancePayments] shouldBe a[JsError]
   }
 
 }

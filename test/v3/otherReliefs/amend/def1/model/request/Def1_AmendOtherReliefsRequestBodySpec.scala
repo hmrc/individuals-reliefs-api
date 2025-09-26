@@ -16,11 +16,10 @@
 
 package v3.otherReliefs.amend.def1.model.request
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class Def1_AmendOtherReliefsRequestBodySpec extends UnitSpec with JsonErrorValidators {
+class Def1_AmendOtherReliefsRequestBodySpec extends UnitSpec {
 
   private val amendOtherReliefsBody = Def1_AmendOtherReliefsRequestBody(
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
@@ -197,6 +196,13 @@ class Def1_AmendOtherReliefsRequestBodySpec extends UnitSpec with JsonErrorValid
         model.isIncorrectOrEmptyBody shouldBe true
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    val invalidJson = Json.obj(
+      "nonDeductibleLoanInterest" -> Json.arr(1, 2, 3)
+    )
+    invalidJson.validate[Def1_AmendOtherReliefsRequestBody] shouldBe a[JsError]
   }
 
 }

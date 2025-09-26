@@ -16,11 +16,10 @@
 
 package v3.otherReliefs.amend.def1.model.request
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidators {
+class QualifyingLoanInterestPaymentsSpec extends UnitSpec {
 
   val qualifyingLoanInterestPayments = QualifyingLoanInterestPayments(
     Some("myRef"),
@@ -78,6 +77,10 @@ class QualifyingLoanInterestPaymentsSpec extends UnitSpec with JsonErrorValidato
         Json.toJson(noOptionsQualifyingLoanInterestPayments) shouldBe noOptionsQualifyingLoanInterestPaymentsJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[QualifyingLoanInterestPayments] shouldBe a[JsError]
   }
 
 }

@@ -34,7 +34,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
     "return a success response" when {
       "given a non-TYS request" when {
         "isPassDeleteIntentEnabled feature switch is on" in new IfsTest with Test {
-          override val intent: Option[String] = Some("DELETE")
+          override def intent: Option[String] = Some("DELETE")
 
           MockedSharedAppConfig.featureSwitchConfig
             .returns(
@@ -78,7 +78,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
       "given a TYS request" when {
         "isPassDeleteIntentEnabled feature switch is on" in new IfsTest with Test {
-          override val intent: Option[String] = Some("DELETE")
+          override def intent: Option[String] = Some("DELETE")
 
           MockedSharedAppConfig.featureSwitchConfig returns Configuration(
             "passDeleteIntentHeader.enabled" -> true
@@ -114,8 +114,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test {
-    _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     protected val expectedOutcome = Right(ResponseWrapper(correlationId, ()))
 

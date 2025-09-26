@@ -16,11 +16,10 @@
 
 package v3.otherReliefs.amend.def1.model.request
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
-class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec with JsonErrorValidators {
+class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec {
 
   val qualifyingDistributionRedemptionOfSharesAndSecurities = QualifyingDistributionRedemptionOfSharesAndSecurities(
     Some("myref"),
@@ -75,6 +74,10 @@ class QualifyingDistributionRedemptionOfSharesAndSecuritiesSpec extends UnitSpec
         Json.toJson(noRefQualifyingDistributionRedemptionOfSharesAndSecurities) shouldBe noRefJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[QualifyingDistributionRedemptionOfSharesAndSecurities] shouldBe a[JsError]
   }
 
 }

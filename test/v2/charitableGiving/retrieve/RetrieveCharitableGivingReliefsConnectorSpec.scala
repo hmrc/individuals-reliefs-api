@@ -85,8 +85,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test {
-    _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     protected def taxYear: TaxYear
 

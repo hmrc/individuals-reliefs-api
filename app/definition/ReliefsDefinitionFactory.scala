@@ -17,15 +17,15 @@
 package definition
 
 import shared.config.SharedAppConfig
-import shared.definition._
-import shared.routing._
+import shared.definition.*
+import shared.routing.*
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class ReliefsDefinitionFactory @Inject() (protected val appConfig: SharedAppConfig) extends ApiDefinitionFactory {
 
-  lazy val definition: Definition =
+  val definition: Definition =
     Definition(
       api = APIDefinition(
         name = "Individuals Reliefs (MTD)",

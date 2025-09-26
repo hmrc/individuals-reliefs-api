@@ -38,6 +38,6 @@ class Def1_CreateAndAmendForeignReliefsValidator(nino: String, taxYear: String, 
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAndAmendForeignReliefsRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateAndAmendForeignReliefsRequestData.apply).andThen(validateBusinessRules)
 
 }

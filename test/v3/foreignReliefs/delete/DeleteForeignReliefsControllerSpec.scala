@@ -78,7 +78,7 @@ class DeleteForeignReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new DeleteForeignReliefsController(
+    val controller: DeleteForeignReliefsController = new DeleteForeignReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteForeignReliefsValidatorFactory,

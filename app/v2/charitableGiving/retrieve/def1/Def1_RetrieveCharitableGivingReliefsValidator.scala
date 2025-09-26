@@ -32,6 +32,6 @@ class Def1_RetrieveCharitableGivingReliefsValidator(nino: String, taxYear: Strin
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveCharitableGivingReliefsRequestData)
+    ).mapN(Def1_RetrieveCharitableGivingReliefsRequestData.apply)
 
 }

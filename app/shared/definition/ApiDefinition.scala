@@ -16,26 +16,18 @@
 
 package shared.definition
 
-import play.api.libs.json.{Format, Json, OFormat}
+import play.api.libs.json.*
 import shared.routing.Version
 import shared.utils.enums.Enums
 
-sealed trait APIStatus
+enum APIStatus {
+  case ALPHA, BETA, STABLE, DEPRECATED, RETIRED
+}
 
 object APIStatus {
-  val parser: PartialFunction[String, APIStatus] = Enums.parser[APIStatus]
+  val parser: PartialFunction[String, APIStatus] = Enums.parser(values)
 
-  case object ALPHA extends APIStatus
-
-  case object BETA extends APIStatus
-
-  case object STABLE extends APIStatus
-
-  case object DEPRECATED extends APIStatus
-
-  implicit val formatAPIStatus: Format[APIStatus] = Enums.format[APIStatus]
-
-  case object RETIRED extends APIStatus
+  given Format[APIStatus] = Enums.format(values)
 }
 
 case class APIVersion(version: Version, status: APIStatus, endpointsEnabled: Boolean)
@@ -66,4 +58,10 @@ case class APIDefinition(name: String,
 
 object APIDefinition {
   implicit val formatAPIDefinition: OFormat[APIDefinition] = Json.format[APIDefinition]
+}
+
+case class Definition(api: APIDefinition)
+
+object Definition {
+  implicit val formatDefinition: OFormat[Definition] = Json.format[Definition]
 }

@@ -30,13 +30,13 @@ object Def1_GiftAidPayments {
   implicit val reads: Reads[Def1_GiftAidPayments] = {
     val nonUkCharitiesOptionReads =
       ((JsPath \ "nonUkCharitiesCharityNames").readNullable[Seq[String]] and
-        (JsPath \ "nonUkCharities").readNullable[BigDecimal])(Def1_NonUkCharities.from _)
+        (JsPath \ "nonUkCharities").readNullable[BigDecimal])(Def1_NonUkCharities.from)
 
     (nonUkCharitiesOptionReads and
       (JsPath \ "currentYear").readNullable[BigDecimal] and
       (JsPath \ "oneOffCurrentYear").readNullable[BigDecimal] and
       (JsPath \ "currentYearTreatedAsPreviousYear").readNullable[BigDecimal] and
-      (JsPath \ "nextYearTreatedAsCurrentYear").readNullable[BigDecimal])(Def1_GiftAidPayments.apply _)
+      (JsPath \ "nextYearTreatedAsCurrentYear").readNullable[BigDecimal])(Def1_GiftAidPayments.apply)
   }
 
   implicit val writes: Writes[Def1_GiftAidPayments] = Json.writes

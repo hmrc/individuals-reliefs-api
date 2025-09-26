@@ -18,17 +18,19 @@ package v1.endpoints.reliefInvestments.createAmend
 
 import common.{DateOfInvestmentFormatError, NameFormatError, UniqueInvestmentRefFormatError}
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.models
-import shared.models.errors._
+import shared.models.errors.*
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures._
+import v1.fixtures.CreateAndAmendReliefInvestmentsFixtures.*
 
 class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseSpec {
+
   override def servicesConfig: Map[String, Any] =
     Map("feature-switch.ifs_hip_migration_1924.enabled" -> false) ++ super.servicesConfig
 
@@ -172,7 +174,7 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
                 "/socialEnterpriseInvestment/0/amountInvested",
                 "/socialEnterpriseInvestment/0/reliefClaimed"
               ))
-          ),
+          )
         )
 
         val wrappedErrors: ErrorWrapper = ErrorWrapper(
@@ -508,7 +510,7 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
           ("AA123456A", "2021-22", allInvalidUniqueInvestmentReferenceRequestBodyJson, BAD_REQUEST, allUniqueInvestmentReferenceFormatError),
           ("AA123456A", "2021-22", allInvalidNameRequestBodyJson, BAD_REQUEST, allNameFormatError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
@@ -540,7 +542,7 @@ class CreateAndAmendReliefInvestmentsControllerIfsISpec extends IntegrationBaseS
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

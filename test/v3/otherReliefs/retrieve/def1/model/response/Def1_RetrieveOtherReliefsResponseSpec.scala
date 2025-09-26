@@ -16,7 +16,7 @@
 
 package v3.otherReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.Json
+import play.api.libs.json.*
 import shared.config.MockSharedAppConfig
 import shared.models.domain.Timestamp
 import shared.utils.UnitSpec
@@ -43,7 +43,7 @@ class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockSharedAppC
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  val json = Json.parse(
+  val json: JsValue = Json.parse(
     """{
       |  "submittedOn": "2020-06-17T10:53:38.000Z",
       |  "nonDeductibleLoanInterest": {
@@ -90,8 +90,6 @@ class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockSharedAppC
       |}""".stripMargin
   )
 
-  val emptyJson = Json.parse("""{}""")
-
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
@@ -106,6 +104,10 @@ class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockSharedAppC
         Json.toJson(retrieveOtherReliefsBody) shouldBe json
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[Def1_RetrieveOtherReliefsResponse] shouldBe a[JsError]
   }
 
 }

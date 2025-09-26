@@ -16,7 +16,7 @@
 
 package v3.pensionReliefs.createAmend.def1.model.request
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 
 class CreateAmendPensionsReliefsBodySpec extends UnitSpec {
@@ -65,6 +65,13 @@ class CreateAmendPensionsReliefsBodySpec extends UnitSpec {
         CreateAmendPensionsReliefsBody(pensionReliefs).isIncorrectOrEmptyBody shouldBe false
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    val invalidJson = Json.obj(
+      "pensionReliefs" -> Json.arr()
+    )
+    invalidJson.validate[CreateAmendPensionsReliefsBody] shouldBe a[JsError]
   }
 
 }

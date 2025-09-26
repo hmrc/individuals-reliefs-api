@@ -58,7 +58,7 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     def taxYear: TaxYear
     val request: Def1_DeleteForeignReliefsRequestData = Def1_DeleteForeignReliefsRequestData(nino, taxYear)

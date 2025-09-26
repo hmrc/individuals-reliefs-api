@@ -76,7 +76,7 @@ class DeleteCharitableGivingReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new DeleteCharitableGivingReliefsController(
+    val controller: DeleteCharitableGivingReliefsController = new DeleteCharitableGivingReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteCharitableGivingValidatorFactory,

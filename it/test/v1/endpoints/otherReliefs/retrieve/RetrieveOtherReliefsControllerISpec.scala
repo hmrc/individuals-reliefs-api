@@ -227,7 +227,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
           ("AA123456A", "2019-20", BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "2018-20", BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
@@ -257,7 +257,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

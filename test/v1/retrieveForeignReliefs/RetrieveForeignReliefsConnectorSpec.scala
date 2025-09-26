@@ -29,8 +29,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
 
   val nino: String = "ZG903729C"
 
-  trait Test {
-    _: ConnectorTest =>
+  trait Test extends ConnectorTest {
     def taxYear: String
 
     val connector: RetrieveForeignReliefsConnector = new RetrieveForeignReliefsConnector(
@@ -38,7 +37,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockSharedAppConfig
     )
 
-    lazy val request: RetrieveForeignReliefsRequestData = new Def1_RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+    lazy val request: RetrieveForeignReliefsRequestData = Def1_RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
     val response = Def1_RetrieveForeignReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None)
 

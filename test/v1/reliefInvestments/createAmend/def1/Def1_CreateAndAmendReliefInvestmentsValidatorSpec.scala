@@ -197,11 +197,12 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            RuleIncorrectOrEmptyBodyError
-              .withPaths(List("/vctSubscription/0/reliefClaimed", "/vctSubscription/0/uniqueInvestmentRef"))))
+        result shouldBe
+          Left(
+            ErrorWrapper(
+              correlationId,
+              RuleIncorrectOrEmptyBodyError
+                .withPaths(List("/vctSubscription/0/reliefClaimed", "/vctSubscription/0/uniqueInvestmentRef"))))
       }
 
       "passed a body with a negative numeric field" when {
@@ -258,17 +259,18 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            DateOfInvestmentFormatError.withPaths(List(
-              "/vctSubscription/0/dateOfInvestment",
-              "/eisSubscription/0/dateOfInvestment",
-              "/communityInvestment/0/dateOfInvestment",
-              "/seedEnterpriseInvestment/0/dateOfInvestment",
-              "/socialEnterpriseInvestment/0/dateOfInvestment"
+        result shouldBe
+          Left(
+            ErrorWrapper(
+              correlationId,
+              DateOfInvestmentFormatError.withPaths(List(
+                "/vctSubscription/0/dateOfInvestment",
+                "/eisSubscription/0/dateOfInvestment",
+                "/communityInvestment/0/dateOfInvestment",
+                "/seedEnterpriseInvestment/0/dateOfInvestment",
+                "/socialEnterpriseInvestment/0/dateOfInvestment"
+              ))
             ))
-          ))
       }
 
       "passed a body with out of range formatted date of investments" in {
@@ -288,17 +290,18 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            DateOfInvestmentFormatError.withPaths(List(
-              "/vctSubscription/0/dateOfInvestment",
-              "/eisSubscription/0/dateOfInvestment",
-              "/communityInvestment/0/dateOfInvestment",
-              "/seedEnterpriseInvestment/0/dateOfInvestment",
-              "/socialEnterpriseInvestment/0/dateOfInvestment"
+        result shouldBe
+          Left(
+            ErrorWrapper(
+              correlationId,
+              DateOfInvestmentFormatError.withPaths(List(
+                "/vctSubscription/0/dateOfInvestment",
+                "/eisSubscription/0/dateOfInvestment",
+                "/communityInvestment/0/dateOfInvestment",
+                "/seedEnterpriseInvestment/0/dateOfInvestment",
+                "/socialEnterpriseInvestment/0/dateOfInvestment"
+              ))
             ))
-          ))
       }
 
       "passed a body with invalidly formatted unique investment references" in {
@@ -318,17 +321,18 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            UniqueInvestmentRefFormatError.withPaths(List(
-              "/vctSubscription/0/uniqueInvestmentRef",
-              "/eisSubscription/0/uniqueInvestmentRef",
-              "/communityInvestment/0/uniqueInvestmentRef",
-              "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
-              "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
+        result shouldBe
+          Left(
+            ErrorWrapper(
+              correlationId,
+              UniqueInvestmentRefFormatError.withPaths(List(
+                "/vctSubscription/0/uniqueInvestmentRef",
+                "/eisSubscription/0/uniqueInvestmentRef",
+                "/communityInvestment/0/uniqueInvestmentRef",
+                "/seedEnterpriseInvestment/0/uniqueInvestmentRef",
+                "/socialEnterpriseInvestment/0/uniqueInvestmentRef"
+              ))
             ))
-          ))
       }
 
       "passed a body with invalidly formatted names" in {
@@ -348,17 +352,18 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator(validNino, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            NameFormatError.withPaths(List(
-              "/vctSubscription/0/name",
-              "/eisSubscription/0/name",
-              "/communityInvestment/0/name",
-              "/seedEnterpriseInvestment/0/companyName",
-              "/socialEnterpriseInvestment/0/socialEnterpriseName"
+        result shouldBe
+          Left(
+            ErrorWrapper(
+              correlationId,
+              NameFormatError.withPaths(List(
+                "/vctSubscription/0/name",
+                "/eisSubscription/0/name",
+                "/communityInvestment/0/name",
+                "/seedEnterpriseInvestment/0/companyName",
+                "/socialEnterpriseInvestment/0/socialEnterpriseName"
+              ))
             ))
-          ))
       }
     }
 
@@ -367,13 +372,14 @@ class Def1_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with Js
         val result: Either[ErrorWrapper, CreateAndAmendReliefInvestmentsRequestData] =
           validator("invalid", "invalid", validBody).validateAndWrapResult()
 
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError))
+        result shouldBe
+          Left(
+            ErrorWrapper(
+              correlationId,
+              BadRequestError,
+              Some(List(NinoFormatError, TaxYearFormatError))
+            )
           )
-        )
       }
     }
   }

@@ -28,7 +28,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
 
   val nino: String = "ZG903729C"
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     def taxYear: String
 

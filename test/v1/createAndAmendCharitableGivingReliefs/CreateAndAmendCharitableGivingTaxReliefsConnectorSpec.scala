@@ -86,7 +86,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
 
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
     def taxYear: TaxYear
 
     protected val connector: CreateAndAmendCharitableGivingTaxReliefsConnector =

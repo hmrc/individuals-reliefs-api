@@ -17,14 +17,15 @@
 package v2.endpoints.charitableGiving.createAmend
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError, RuleOutsideAmendmentWindowError}
+import common.*
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.http.Status.*
+import play.api.libs.json.*
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 
 class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec {
@@ -201,7 +202,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }
@@ -220,7 +221,6 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
                                               |  }
                                               |}
                                               |""".stripMargin)
-
 
     def uri: String = s"/charitable-giving/$nino/$mtdTaxYear"
 

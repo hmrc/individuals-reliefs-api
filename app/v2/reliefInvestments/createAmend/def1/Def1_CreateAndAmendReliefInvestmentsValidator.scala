@@ -49,6 +49,6 @@ class Def1_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: Strin
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAndAmendReliefInvestmentsRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_CreateAndAmendReliefInvestmentsRequestData.apply) andThen rulesValidator.validateBusinessRules
 
 }

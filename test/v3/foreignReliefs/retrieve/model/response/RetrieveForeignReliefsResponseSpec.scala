@@ -16,15 +16,11 @@
 
 package v3.foreignReliefs.retrieve.model.response
 
-import play.api.libs.json.Json
+import play.api.libs.json.*
 import shared.config.MockSharedAppConfig
 import shared.models.domain.Timestamp
 import shared.utils.UnitSpec
-import v3.foreignReliefs.retrieve.def1.model.response.{
-  Def1_ForeignIncomeTaxCreditRelief,
-  Def1_ForeignTaxCreditRelief,
-  Def1_ForeignTaxForFtcrNotClaimed
-}
+import v3.foreignReliefs.retrieve.def1.model.response.*
 
 class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
 
@@ -42,7 +38,7 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockSharedAppConf
     Some(Def1_ForeignTaxForFtcrNotClaimed(549.98))
   )
 
-  val json = Json.parse(
+  val json: JsValue = Json.parse(
     """{
       |  "submittedOn": "2020-06-17T10:53:38.000Z",
       |  "foreignTaxCreditRelief": {
@@ -62,8 +58,6 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockSharedAppConf
       |}""".stripMargin
   )
 
-  val emptyJson = Json.parse("""{}""")
-
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
@@ -78,6 +72,10 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockSharedAppConf
         Json.toJson(retrieveForeignReliefsBody) shouldBe json
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[Def1_RetrieveForeignReliefsResponse] shouldBe a[JsError]
   }
 
 }

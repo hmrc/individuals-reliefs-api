@@ -29,7 +29,7 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
 
   private val nino = Nino("AA123456A")
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
     def taxYear: TaxYear
 
     val connector: DeletePensionsReliefsConnector =

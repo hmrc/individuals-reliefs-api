@@ -144,7 +144,7 @@ class RetrieveReliefInvestmentsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveReliefInvestmentsController(
+    val controller: RetrieveReliefInvestmentsController = new RetrieveReliefInvestmentsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveReliefInvestmentsValidatorFactory,

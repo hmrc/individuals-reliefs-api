@@ -79,7 +79,7 @@ class DeletePensionsReliefsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new DeletePensionsReliefsController(
+    val controller: DeletePensionsReliefsController = new DeletePensionsReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeletePensionsReliefsValidatorFactory,

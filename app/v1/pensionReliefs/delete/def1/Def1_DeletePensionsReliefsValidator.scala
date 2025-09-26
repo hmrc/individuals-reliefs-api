@@ -33,7 +33,7 @@ class Def1_DeletePensionsReliefsValidator(nino: String, taxYear: String) extends
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_DeletePensionsReliefsRequestData)
+    ).mapN(Def1_DeletePensionsReliefsRequestData.apply)
   }
 
 }

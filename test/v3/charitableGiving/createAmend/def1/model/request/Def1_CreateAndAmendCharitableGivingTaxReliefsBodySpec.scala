@@ -16,14 +16,8 @@
 
 package v3.charitableGiving.createAmend.def1.model.request
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.*
 import shared.utils.UnitSpec
-import v3.charitableGiving.createAmend.def1.model.request.{
-  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
-  Def1_GiftAidPayments,
-  Def1_Gifts,
-  Def1_NonUkCharities
-}
 
 class Def1_CreateAndAmendCharitableGivingTaxReliefsBodySpec extends UnitSpec {
 
@@ -123,6 +117,15 @@ class Def1_CreateAndAmendCharitableGivingTaxReliefsBodySpec extends UnitSpec {
         Json.toJson(model) shouldBe desJson
       }
     }
+  }
+
+  "return error when JSON is invalid" in {
+    val invalidJson = Json.obj(
+      "giftAidPayments" -> Json.obj(
+        "nonUkCharities" -> Json.arr(1, 2, 3)
+      )
+    )
+    invalidJson.validate[Def1_CreateAndAmendCharitableGivingTaxReliefsBody] shouldBe a[JsError]
   }
 
 }

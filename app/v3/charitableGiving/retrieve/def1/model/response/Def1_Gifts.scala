@@ -26,11 +26,11 @@ object Def1_Gifts {
   implicit val reads: Reads[Def1_Gifts] = {
     val nonUkCharitiesOptionReads =
       ((JsPath \ "investmentsNonUkCharitiesCharityNames").readNullable[Seq[String]] and
-        (JsPath \ "investmentsNonUkCharities").readNullable[BigDecimal])(Def1_NonUkCharities.from _)
+        (JsPath \ "investmentsNonUkCharities").readNullable[BigDecimal])(Def1_NonUkCharities.from)
 
     (nonUkCharitiesOptionReads and
       (JsPath \ "landAndBuildings").readNullable[BigDecimal] and
-      (JsPath \ "sharesOrSecurities").readNullable[BigDecimal])(Def1_Gifts.apply _)
+      (JsPath \ "sharesOrSecurities").readNullable[BigDecimal])(Def1_Gifts.apply)
   }
 
   implicit val writes: Writes[Def1_Gifts] = Json.writes

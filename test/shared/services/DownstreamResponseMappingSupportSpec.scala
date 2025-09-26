@@ -19,7 +19,7 @@ package shared.services
 import play.api.http.Status.BAD_REQUEST
 import play.api.libs.json.{Format, Json}
 import shared.controllers.EndpointLogContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.{Logging, UnitSpec}
 
@@ -27,17 +27,14 @@ class DownstreamResponseMappingSupportSpec extends UnitSpec {
 
   implicit val logContext: EndpointLogContext = EndpointLogContext("ctrl", "ep")
 
-  val mapping: DownstreamResponseMappingSupport with Logging = new DownstreamResponseMappingSupport with Logging {}
+  val mapping: DownstreamResponseMappingSupport & Logging = new DownstreamResponseMappingSupport with Logging {}
 
   val correlationId = "someCorrelationId"
 
   val errorCodeMap: PartialFunction[String, MtdError] = {
-    case "ERR1"                   => Error1
-    case "ERR2"                   => Error2
-    case "DS"                     => InternalError
-    case "UNMATCHED_STUB_ERROR"   => RuleIncorrectGovTestScenarioError
-    case "INVALID_CORRELATION_ID" => InternalError
-    case "INVALID_CORRELATIONID"  => InternalError
+    case "ERR1" => Error1
+    case "ERR2" => Error2
+    case "DS"   => InternalError
   }
 
   case class TestClass(field: Option[String])

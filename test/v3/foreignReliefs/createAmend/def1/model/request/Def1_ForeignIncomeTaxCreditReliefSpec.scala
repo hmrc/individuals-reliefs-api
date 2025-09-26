@@ -16,12 +16,11 @@
 
 package v3.foreignReliefs.createAmend.def1.model.request
 
-import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
+import play.api.libs.json.*
 import shared.utils.UnitSpec
 import v3.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.{foreignIncomeTaxCreditReliefJson, foreignIncomeTaxCreditReliefModel}
 
-class Def1_ForeignIncomeTaxCreditReliefSpec extends UnitSpec with JsonErrorValidators {
+class Def1_ForeignIncomeTaxCreditReliefSpec extends UnitSpec {
 
   "reads" when {
     "passed valid JSON" should {
@@ -37,6 +36,10 @@ class Def1_ForeignIncomeTaxCreditReliefSpec extends UnitSpec with JsonErrorValid
         Json.toJson(foreignIncomeTaxCreditReliefModel) shouldBe foreignIncomeTaxCreditReliefJson
       }
     }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[Def1_ForeignIncomeTaxCreditRelief] shouldBe a[JsError]
   }
 
 }

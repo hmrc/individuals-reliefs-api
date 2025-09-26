@@ -29,8 +29,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
 
   val nino: String = "ZG903729C"
 
-  trait Test {
-    _: ConnectorTest =>
+  trait Test extends ConnectorTest {
     def taxYear: String
 
     val connector: RetrieveForeignReliefsConnector = new RetrieveForeignReliefsConnector(

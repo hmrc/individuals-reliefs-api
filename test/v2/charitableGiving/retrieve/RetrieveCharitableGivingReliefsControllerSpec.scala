@@ -81,7 +81,7 @@ class RetrieveCharitableGivingReliefsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveCharitableGivingReliefsController(
+    val controller: RetrieveCharitableGivingReliefsController = new RetrieveCharitableGivingReliefsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveCharitableGivingReliefValidatorFactory,

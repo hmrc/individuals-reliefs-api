@@ -33,6 +33,6 @@ class Def1_RetrieveOtherReliefsValidator(nino: String, taxYear: String) extends 
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveOtherReliefsRequestData)
+    ).mapN(Def1_RetrieveOtherReliefsRequestData.apply)
 
 }

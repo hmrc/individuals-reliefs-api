@@ -39,7 +39,7 @@ class Def1_RetrieveReliefInvestmentsValidator(nino: String, taxYear: String) ext
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveReliefInvestmentsRequestData)
+    ).mapN(Def1_RetrieveReliefInvestmentsRequestData.apply)
   }
 
 }

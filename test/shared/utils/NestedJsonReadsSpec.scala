@@ -79,7 +79,16 @@ class NestedJsonReadsSpec extends UnitSpec {
   "Valid Json" should {
 
     "return JsSuccess" in {
-      firstOutput.validate[Test] shouldBe a[JsSuccess[_]]
+      firstOutput.validate[Test] shouldBe a[JsSuccess[?]]
+    }
+  }
+
+  "An empty JsPath" should {
+    "return a JsError with error.path.empty" in {
+      val empty                            = JsPath
+      val result: JsResult[Option[String]] = empty.readNestedNullable[String].reads(Json.obj("a" -> "b"))
+      result shouldBe a[JsError]
+      result.asInstanceOf[JsError].errors.head._2.exists(_.message == "error.path.empty") shouldBe true
     }
   }
 
@@ -102,14 +111,14 @@ class NestedJsonReadsSpec extends UnitSpec {
   }
 
   "Path with an invalid data type" should {
-    "return a None " in {
+    "return a None" in {
       thirdOutput.validate[Test] shouldBe a[JsError]
     }
   }
 
   "Empty path" should {
-    "return a None " in {
-      fourthOutput.validate[Test] shouldBe a[JsSuccess[_]]
+    "return a None" in {
+      fourthOutput.validate[Test] shouldBe a[JsSuccess[?]]
     }
   }
 
@@ -120,7 +129,7 @@ class NestedJsonReadsSpec extends UnitSpec {
     implicit val reads: Reads[Test] = (
       (JsPath \ "a" \ "b" \ "c").read[String] and
         (__ \ "a" \ "c" \ "e").readNestedNullable[String]
-    )(Test.apply _)
+    )(Test.apply)
 
   }
 

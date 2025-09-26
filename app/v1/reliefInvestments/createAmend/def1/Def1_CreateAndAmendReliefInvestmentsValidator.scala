@@ -17,10 +17,10 @@
 package v1.reliefInvestments.createAmend.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.{MtdError, RuleTaxYearForVersionNotSupportedError, RuleTaxYearNotSupportedError}
 import v1.reliefInvestments.createAmend.def1.model.request.{
@@ -49,6 +49,6 @@ class Def1_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: Strin
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAndAmendReliefInvestmentsRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_CreateAndAmendReliefInvestmentsRequestData.apply) andThen rulesValidator.validateBusinessRules
 
 }

@@ -32,6 +32,6 @@ class Def1_DeleteForeignReliefsValidator(nino: String, taxYear: String) extends 
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_DeleteForeignReliefsRequestData)
+    ).mapN(Def1_DeleteForeignReliefsRequestData.apply)
 
 }
