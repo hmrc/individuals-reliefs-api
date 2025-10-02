@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package v2.charitableGiving.createAmend.def1.model.request
 
-import play.api.libs.json.{JsObject, Json, Reads, Writes}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Def1_Gifts(nonUkCharities: Option[Def1_NonUkCharities], landAndBuildings: Option[BigDecimal], sharesOrSecurities: Option[BigDecimal])
 
@@ -24,15 +25,17 @@ object Def1_Gifts {
 
   implicit val reads: Reads[Def1_Gifts] = Json.reads[Def1_Gifts]
 
-  implicit val writes: Writes[Def1_Gifts] = new Writes[Def1_Gifts] {
-
-    def writes(o: Def1_Gifts): JsObject = Json.obj(
-      "investmentsNonUkCharitiesCharityNames" -> o.nonUkCharities.map(_.charityNames),
-      "investmentsNonUkCharities"             -> o.nonUkCharities.map(_.totalAmount),
-      "landAndBuildings"                      -> o.landAndBuildings,
-      "sharesOrSecurities"                    -> o.sharesOrSecurities
-    )
-
-  }
+  implicit val writes: OWrites[Def1_Gifts] = (
+    (JsPath \ "investmentsNonUkCharitiesCharityNames").writeNullable[Seq[String]] and
+      (JsPath \ "investmentsNonUkCharities").writeNullable[BigDecimal] and
+      (JsPath \ "landAndBuildings").writeNullable[BigDecimal] and
+      (JsPath \ "sharesOrSecurities").writeNullable[BigDecimal]
+  )(gifts =>
+    (
+      gifts.nonUkCharities.flatMap(_.charityNames),
+      gifts.nonUkCharities.map(_.totalAmount),
+      gifts.landAndBuildings,
+      gifts.sharesOrSecurities
+    ))
 
 }
