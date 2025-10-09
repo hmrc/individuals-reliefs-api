@@ -22,7 +22,10 @@
         "reliefClaimed": {
           "description": "The amount of relief being claimed for the tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type": "number",
-          "example": "2000.99"
+          "example": "2000.99",
+          "multipleOf": 0.01,
+          "minimum": 0,
+          "maximum": 99999999999.99
         }
       },
       "required": [
@@ -43,7 +46,10 @@
         "reliefClaimed": {
           "description": "The amount of relief being claimed for the tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type": "number",
-          "example": "2000.99"
+          "example": "2000.99",
+          "multipleOf": 0.01,
+          "minimum": 0,
+          "maximum": 99999999999.99
         }
       },
       "required": [
@@ -62,9 +68,12 @@
           "example": "INPOLY123A"
         },
         "amount": {
-          "description": "The amount of relief claimed on qualifying shares and securities.",
+          "description": "The amount of relief claimed on qualifying shares and securities. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type": "number",
-          "example": "2000.99"
+          "example": "2000.99",
+          "multipleOf": 0.01,
+          "minimum": 0,
+          "maximum": 99999999999.99
         }
       },
       "required": [
@@ -95,7 +104,10 @@
           "amount": {
             "description": "The amount paid to a former spouse or civil partner who was born before 6 April 1935. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
             "type": "number",
-            "example": "2000.99"
+            "example": "2000.99",
+            "multipleOf": 0.01,
+            "minimum": 0,
+            "maximum": 99999999999.99
           }
         },
         "required": [
@@ -137,7 +149,10 @@
           "amount": {
             "description": "The amount which can be deducted from chargeable gains. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
             "type": "number",
-            "example": "2000.99"
+            "example": "2000.99",
+            "multipleOf": 0.01,
+            "minimum": 0,
+            "maximum": 99999999999.99
           }
         },
         "required": [
@@ -159,7 +174,10 @@
         "reliefClaimed": {
           "description": "The amount of relief being claimed for the tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type": "number",
-          "example": "2000.99"
+          "example": "2000.99",
+          "multipleOf": 0.01,
+          "minimum": 0,
+          "maximum": 99999999999.99
         }
       },
       "required": [
@@ -186,7 +204,10 @@
           "reliefClaimed": {
             "description": "The amount of relief being claimed for the tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
             "type": "number",
-            "example": "2000.99"
+            "example": "2000.99",
+            "multipleOf": 0.01,
+            "minimum": 0,
+            "maximum": 99999999999.99
           }
         },
         "required": [
