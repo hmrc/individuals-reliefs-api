@@ -35,12 +35,16 @@ responses:
     content:
       application/json:
         schema:
-          $ref: "./schemas/retrieve_charitable_giving_response.json"
+          oneOf:
+            - $ref: "./schemas/retrieve_charitable_giving/def2/retrieve_charitable_giving_response.json"
+            - $ref: "./schemas/retrieve_charitable_giving/def2/retrieve_charitable_giving_response.json"
         examples:
-          example-response:
-            description: Example response
+          TY 2023-24 or before:
             value:
-              $ref: "./examples/retrieve_charitable_giving_response.json"
+              $ref: "./examples/retrieve_charitable_giving/def1/retrieve_charitable_giving_response.json"
+          TY 2024-25 onwards:
+            value:
+              $ref: "./examples/retrieve_charitable_giving/def2/retrieve_charitable_giving_response.json"
 
   "400":
     description: Bad request

@@ -1,6 +1,6 @@
 {
   "$schema":"http://json-schema.org/draft-04/schema#",
-  "title":"Charitable Givings",
+  "title":"TY 2023-24 or before",
   "description":"Charitable Givings",
   "type":"object",
   "properties":{
@@ -25,11 +25,10 @@
             "totalAmount":{
               "description":"The total amount of Gift Aid payments made to non-UK charities for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type":"number",
-              "example":"2000.99",
               "multipleOf": 0.01,
               "minimum":0,
-              "maximum":99999999999.99
-
+              "maximum":99999999999.99,
+              "example":"2000.99"
             }
           },
           "required":[
@@ -92,10 +91,10 @@
             "totalAmount":{
               "description":"The total value of shares, securities or land and buildings gifted to non-UK charities for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type":"number",
-              "example":"2000.99",
               "multipleOf": 0.01,
               "minimum":0,
-              "maximum":99999999999.99
+              "maximum":99999999999.99,
+              "example":"2000.99"
             }
           },
           "required":[
@@ -120,44 +119,6 @@
         }
       },
       "additionalProperties":false
-    },
-    "links": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "description": "A list of endpoint links that indicate possible actions related to the current resource",
-        "properties": {
-          "href": {
-            "description": "The relative url of the endpoint",
-            "type": "string",
-            "example": "/individuals/reliefs/charitable-giving/TC663795B/2021-22"
-          },
-          "method": {
-            "description": "The HTTP method type for the endpoint",
-            "type": "string",
-            "enum": [
-              "GET",
-              "PUT",
-              "DELETE"
-            ]
-          },
-          "rel": {
-            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
-            "type": "string",
-            "enum": [
-              "self",
-              "create-and-amend-charitable-giving-tax-relief",
-              "delete-charitable-giving-tax-relief"
-            ]
-          }
-        },
-        "required": [
-          "href",
-          "rel",
-          "method"
-        ],
-        "additionalProperties": false
-      }
     }
   },
   "additionalProperties":false
