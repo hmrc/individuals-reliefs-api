@@ -36,7 +36,7 @@ responses:
       application/json:
         schema:
           oneOf:
-            - $ref: "./schemas/retrieve_charitable_giving/def2/retrieve_charitable_giving_response.json"
+            - $ref: "./schemas/retrieve_charitable_giving/def1/retrieve_charitable_giving_response.json"
             - $ref: "./schemas/retrieve_charitable_giving/def2/retrieve_charitable_giving_response.json"
         examples:
           TY 2023-24 or before:
