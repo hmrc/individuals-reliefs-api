@@ -25,7 +25,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v3.charitableGiving.retrieve.def1.model.request.RetrieveCharitableGivingReliefsFixture
+import v3.charitableGiving.retrieve.def2.model.request.RetrieveCharitableGivingReliefsFixture
 
 class Def2_RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec with RetrieveCharitableGivingReliefsFixture {
 
@@ -39,7 +39,7 @@ class Def2_RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBas
 
     def downstreamUri: String = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
 
-    val ifsResponse: JsValue = def2_charitableGivingReliefsIfsResponseDownstreamJson
+    val ifsResponse: JsValue = charitableGivingReliefsIfsResponseDownstreamJson
     val mtdResponse: JsValue = def2_charitableGivingReliefsResponseMtdJson
 
     private def uri: String = s"/charitable-giving/$nino/$taxYear"
