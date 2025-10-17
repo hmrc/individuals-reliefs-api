@@ -45,6 +45,21 @@ trait RetrieveCharitableGivingReliefsFixture {
                                                                     |}
                                                                     |""".stripMargin)
 
+  val def2_charitableGivingReliefsResponseMtdJson: JsValue = Json.parse("""
+      |{
+      |   "giftAidPayments": {
+      |     "totalAmount": 2.12,
+      |      "oneOffAmount": 3.12,
+      |      "amountTreatedAsPreviousTaxYear": 4.12,
+      |      "amountTreatedAsSpecifiedTaxYear": 5.12
+      |   },
+      |   "gifts": {
+      |      "landAndBuildings": 7.12,
+      |      "sharesOrSecurities": 8.12
+      |   }
+      |}
+      |""".stripMargin)
+
   val charitableGivingReliefsResponse: Def1_RetrieveCharitableGivingReliefsResponse =
     Def1_RetrieveCharitableGivingReliefsResponse(
       giftAidPayments = Some(
@@ -102,5 +117,22 @@ trait RetrieveCharitableGivingReliefsFixture {
                                                                            |   }
                                                                            |}
                                                                            |""".stripMargin)
+
+  val def2_charitableGivingReliefsIfsResponseDownstreamJson: JsValue = Json.parse("""
+      |{
+      |   "charitableGivingAnnual" : {
+      |     "giftAidPayments": {
+      |        "currentYear": 2.12,
+      |        "oneOffCurrentYear": 3.12,
+      |        "currentYearTreatedAsPreviousYear": 4.12,
+      |        "nextYearTreatedAsCurrentYear": 5.12
+      |     },
+      |     "gifts": {
+      |       "landAndBuildings": 7.12,
+      |        "sharesOrSecurities": 8.12
+      |     }
+      |   }
+      |}
+      |""".stripMargin)
 
 }

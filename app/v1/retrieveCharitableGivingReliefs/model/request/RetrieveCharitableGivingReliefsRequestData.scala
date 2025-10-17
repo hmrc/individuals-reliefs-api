@@ -24,3 +24,4 @@ sealed trait RetrieveCharitableGivingReliefsRequestData {
 }
 
 case class Def1_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData
+case class Def2_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData

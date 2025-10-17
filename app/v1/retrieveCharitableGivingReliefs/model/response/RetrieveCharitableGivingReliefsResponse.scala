@@ -21,6 +21,7 @@ import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shared.config.SharedAppConfig
 import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import v1.retrieveCharitableGivingReliefs.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts}
+import v1.retrieveCharitableGivingReliefs.def2.model.response.{Def2_GiftAidPayments, Def2_Gifts}
 import v1.retrieveCharitableGivingReliefs.model.response.Def1_RetrieveCharitableGivingReliefsResponse.Def1_RetrieveCharitableGivingReliefsLinksFactory
 
 sealed trait RetrieveCharitableGivingReliefsResponse {
@@ -29,8 +30,20 @@ sealed trait RetrieveCharitableGivingReliefsResponse {
 
 object RetrieveCharitableGivingReliefsResponse extends HateoasLinks {
 
-  implicit val writes: OWrites[RetrieveCharitableGivingReliefsResponse] = { case def1: Def1_RetrieveCharitableGivingReliefsResponse =>
-    Json.toJsObject(def1)
+  implicit val reads: Reads[RetrieveCharitableGivingReliefsResponse] = {
+
+    val def2Reads: Reads[RetrieveCharitableGivingReliefsResponse] =
+      Json.reads[Def2_RetrieveCharitableGivingReliefsResponse].map(identity)
+
+    val def1Reads: Reads[RetrieveCharitableGivingReliefsResponse] =
+      Def1_RetrieveCharitableGivingReliefsResponse.reads.map(identity)
+
+    def1Reads orElse def2Reads
+  }
+
+  implicit val writes: OWrites[RetrieveCharitableGivingReliefsResponse] = {
+    case def1: Def1_RetrieveCharitableGivingReliefsResponse => Json.toJsObject(def1)
+    case def2: Def2_RetrieveCharitableGivingReliefsResponse => Json.toJsObject(def2)
   }
 
   implicit object LinksFactory extends HateoasLinksFactory[RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsHateoasData] {
@@ -79,4 +92,16 @@ object Def1_RetrieveCharitableGivingReliefsResponse extends HateoasLinks {
 
   }
 
+}
+
+case class Def2_RetrieveCharitableGivingReliefsResponse(
+    giftAidPayments: Option[Def2_GiftAidPayments],
+    gifts: Option[Def2_Gifts]
+) extends RetrieveCharitableGivingReliefsResponse {
+  def retrieveCharitableGivingReliefResponse: Def2_RetrieveCharitableGivingReliefsResponse = this
+}
+
+object Def2_RetrieveCharitableGivingReliefsResponse {
+  implicit val writes: OWrites[Def2_RetrieveCharitableGivingReliefsResponse] = Json.writes
+  implicit val reads: Reads[Def2_RetrieveCharitableGivingReliefsResponse]    = Json.reads
 }

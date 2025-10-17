@@ -18,12 +18,12 @@ package v3.charitableGiving.retrieve
 
 import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.charitableGiving.retrieve.model.request.{Def1_RetrieveCharitableGivingReliefsRequestData, RetrieveCharitableGivingReliefsRequestData}
-import v3.charitableGiving.retrieve.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
+import v3.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
+import v3.charitableGiving.retrieve.model.response.RetrieveCharitableGivingReliefsResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,37 +31,38 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
-  private def completeDef1Request(request: Def1_RetrieveCharitableGivingReliefsRequestData)(implicit
+  def retrieve(request: RetrieveCharitableGivingReliefsRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Def1_RetrieveCharitableGivingReliefsResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]] = {
 
     import request._
     def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
-        IfsUri[Def1_RetrieveCharitableGivingReliefsResponse](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
+        IfsUri[RetrieveCharitableGivingReliefsResponse](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
       } else {
-        IfsUri[Def1_RetrieveCharitableGivingReliefsResponse](preTysPath)
+        IfsUri[RetrieveCharitableGivingReliefsResponse](preTysPath)
       }
 
-    val result = get(downstreamUri)
-    result
+    get(uri = downstreamUri)
 
   }
 
-  def retrieve(
-      request: RetrieveCharitableGivingReliefsRequestData
-  )(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String
-  ): Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]] = {
-
-    request match {
-      case def1: Def1_RetrieveCharitableGivingReliefsRequestData =>
-        completeDef1Request(def1)
-    }
-  }
+//  def retrieve(
+//      request: RetrieveCharitableGivingReliefsRequestData
+//  )(implicit
+//      hc: HeaderCarrier,
+//      ec: ExecutionContext,
+//      correlationId: String
+//  ): Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]] = {
+//
+//    request match {
+//      case def1: Def1_RetrieveCharitableGivingReliefsRequestData =>
+//        completeDef1Request(def1)
+//      case def2: Def2_RetrieveCharitableGivingReliefsRequestData =>
+//        completeDef1Request(def2)
+//    }
+//  }
 
 }

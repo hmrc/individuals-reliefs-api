@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,33 +14,35 @@
  * limitations under the License.
  */
 
-package v3.endpoints.charitableGiving.retrieve
+package v1.endpoints.retrieveCharitableGivingReliefs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
+import shared.models.errors.*
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v3.charitableGiving.retrieve.def1.model.request.RetrieveCharitableGivingReliefsFixture
+import v1.retrieveCharitableGivingReliefs.def1.model.request.RetrieveCharitableGivingReliefsFixture
 
-class RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec with RetrieveCharitableGivingReliefsFixture {
+class Def2_RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec with RetrieveCharitableGivingReliefsFixture {
 
   private trait Test {
 
     def nino: String = "AA123456A"
-    def taxYear: String
-    def downstreamTaxYear: String
 
-    val desResponse: JsValue = charitableGivingReliefsDesResponseDownstreamJson
-    val ifsResponse: JsValue = charitableGivingReliefsIfsResponseDownstreamJson
-    val mtdResponse: JsValue = charitableGivingReliefsResponseMtdJson
+    def taxYear: String = "2024-25"
 
-    def uri: String = s"/charitable-giving/$nino/$taxYear"
-    def downstreamUri: String
+    private def downstreamTaxYear: String = "24-25"
+
+    def downstreamUri: String = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
+
+    val ifsResponse: JsValue = def2_charitableGivingReliefsIfsResponseDownstreamJson
+    val mtdResponse: JsValue = def2_charitableGivingReliefsResponseMtdJsonWithHateoas(nino, taxYear)
+
+    private def uri: String = s"/charitable-giving/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 
@@ -48,45 +50,45 @@ class RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.3.0+json"),
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
 
   }
 
-  private trait NonTysTest extends Test {
-    def taxYear: String           = "2020-21"
-    def downstreamTaxYear: String = "2021"
-    def downstreamUri: String     = s"/income-tax/nino/$nino/income-source/charity/annual/$downstreamTaxYear"
-
-  }
-
-  private trait TysIfsTest extends Test {
-    def taxYear: String           = "2023-24"
-    def downstreamTaxYear: String = "23-24"
-    def downstreamUri: String     = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
-  }
+//  private trait NonTysTest extends Test {
+//    def taxYear: String           = "2020-21"
+//    def downstreamTaxYear: String = "2021"
+//    def downstreamUri: String     = s"/income-tax/nino/$nino/income-source/charity/annual/$downstreamTaxYear"
+//
+//  }
+//
+//  private trait TysIfsTest extends Test {
+//    def taxYear: String           = "2023-24"
+//    def downstreamTaxYear: String = "23-24"
+//    def downstreamUri: String     = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
+//  }
 
   "Calling the 'Retrieve Charitable Giving Tax Relief' endpoint" should {
     "return a 200 status code" when {
-      "any valid request is made" in new NonTysTest {
+//      "any valid request is made" in new NonTysTest {
+//
+//        override def setupStubs(): StubMapping = {
+//          AuditStub.audit()
+//          AuthStub.authorised()
+//          MtdIdLookupStub.ninoFound(nino)
+//          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, desResponse)
+//        }
+//
+//        val response: WSResponse = await(request().get())
+//        response.status shouldBe OK
+//        response.json shouldBe mtdResponse
+//        response.header("X-CorrelationId") should not be empty
+//        response.header("Content-Type") shouldBe Some("application/json")
+//      }
 
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, desResponse)
-        }
-
-        val response: WSResponse = await(request().get())
-        response.status shouldBe OK
-        response.json shouldBe mtdResponse
-        response.header("X-CorrelationId") should not be empty
-        response.header("Content-Type") shouldBe Some("application/json")
-      }
-
-      "any valid request is made with a Tax Year Specific year" in new TysIfsTest {
+      "any valid request is made with a Tax Year Specific year" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -106,7 +108,7 @@ class RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec
     "return error according to spec" when {
       "validation error" when {
         def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
+          s"validation fails with ${expectedBody.code} error" in new Test {
 
             override def nino: String    = requestNino
             override def taxYear: String = requestTaxYear
@@ -135,7 +137,7 @@ class RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
