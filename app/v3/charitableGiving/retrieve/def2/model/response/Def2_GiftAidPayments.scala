@@ -27,9 +27,6 @@ case class Def2_GiftAidPayments(totalAmount: Option[BigDecimal],
 object Def2_GiftAidPayments {
 
   implicit val reads: Reads[Def2_GiftAidPayments] = {
-//    val nonUkCharitiesOptionReads =
-//      ((JsPath \ "nonUkCharitiesCharityNames").readNullable[Seq[String]] and
-//        (JsPath \ "nonUkCharities").readNullable[BigDecimal])(Def1_NonUkCharities.from)
 
     ((JsPath \ "currentYear").readNullable[BigDecimal] and
       (JsPath \ "oneOffCurrentYear").readNullable[BigDecimal] and

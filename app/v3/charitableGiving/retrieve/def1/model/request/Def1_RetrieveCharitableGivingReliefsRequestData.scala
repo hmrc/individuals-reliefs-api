@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package v3.charitableGiving.retrieve.def2.model.response
+package v3.charitableGiving.retrieve.def1.model.request
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import shared.models.domain.{Nino, TaxYear}
+import v3.charitableGiving.retrieve.RetrieveCharitableGivingReliefsSchema
+import v3.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 
-case class Def2_Gifts(landAndBuildings: Option[BigDecimal], sharesOrSecurities: Option[BigDecimal])
+case class Def1_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData {
 
-object Def2_Gifts {
-
-  implicit val reads: Reads[Def2_Gifts] = {
-
-    ((JsPath \ "landAndBuildings").readNullable[BigDecimal] and
-      (JsPath \ "sharesOrSecurities").readNullable[BigDecimal])(Def2_Gifts.apply)
-  }
-
-  implicit val writes: Writes[Def2_Gifts] = Json.writes
-
+  override val schema: RetrieveCharitableGivingReliefsSchema = RetrieveCharitableGivingReliefsSchema.Def1
 }

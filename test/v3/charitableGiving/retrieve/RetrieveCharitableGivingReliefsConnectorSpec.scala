@@ -20,7 +20,8 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import v3.charitableGiving.retrieve.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
-import v3.charitableGiving.retrieve.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v3.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v3.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 import v3.charitableGiving.retrieve.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
 import uk.gov.hmrc.http.StringContextOps
 
@@ -95,7 +96,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
         appConfig = mockSharedAppConfig
       )
 
-    protected val request: Def1_RetrieveCharitableGivingReliefsRequestData =
+    protected val request: RetrieveCharitableGivingReliefsRequestData =
       Def1_RetrieveCharitableGivingReliefsRequestData(
         nino = Nino(nino),
         taxYear = taxYear

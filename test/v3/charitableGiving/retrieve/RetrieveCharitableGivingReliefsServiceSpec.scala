@@ -22,7 +22,7 @@ import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v3.charitableGiving.retrieve.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
-import v3.charitableGiving.retrieve.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v3.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import v3.charitableGiving.retrieve.model.response.Def1_RetrieveCharitableGivingReliefsResponse
 
 import scala.concurrent.Future

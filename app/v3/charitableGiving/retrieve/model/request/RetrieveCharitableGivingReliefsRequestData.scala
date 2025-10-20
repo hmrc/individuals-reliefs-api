@@ -17,11 +17,14 @@
 package v3.charitableGiving.retrieve.model.request
 
 import shared.models.domain.{Nino, TaxYear}
+import v3.charitableGiving.retrieve.RetrieveCharitableGivingReliefsSchema
 
-sealed trait RetrieveCharitableGivingReliefsRequestData {
+trait RetrieveCharitableGivingReliefsRequestData {
   val nino: Nino
   val taxYear: TaxYear
+
+  val schema: RetrieveCharitableGivingReliefsSchema
 }
 
-case class Def1_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData
-case class Def2_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData
+//case class Def1_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData
+//case class Def2_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData

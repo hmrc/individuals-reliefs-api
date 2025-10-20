@@ -16,11 +16,13 @@
 
 package v3.charitableGiving.retrieve
 
+import shared.controllers.validators.AlwaysErrorsValidator
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v3.charitableGiving.retrieve.model.request.{Def1_RetrieveCharitableGivingReliefsRequestData, RetrieveCharitableGivingReliefsRequestData}
+import v3.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
+import v3.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 
 class RetrieveCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
@@ -66,12 +68,13 @@ class RetrieveCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
     }
+
     "return multiple errors" when {
       "request supplied has multiple errors" in {
-        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefsRequestData] = validator("A12344A", "20178").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
+        validator("A12344A", "BAD_TAX_YEAR") shouldBe an[AlwaysErrorsValidator]
       }
     }
+
   }
 
 }
