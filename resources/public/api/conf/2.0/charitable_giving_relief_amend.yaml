@@ -32,12 +32,16 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: "./schemas/amend_charitable_giving_request.json"
+        oneOf:
+          - $ref: "./schemas/amend_charitable_giving/def1/request.json"
+          - $ref: "./schemas/amend_charitable_giving/def2/request.json"
       examples:
-        example-1:
-          description: Default Example
+        TY 2023-24 or before:
           value:
-            $ref: "./examples/amend_charitable_giving_request.json"
+            $ref: "./examples/amend_charitable_giving/def1/request.json"
+        TY 2024-25 onwards:
+          value:
+            $ref: "./examples/amend_charitable_giving/def2/request.json"
 
 responses:
   "204":
