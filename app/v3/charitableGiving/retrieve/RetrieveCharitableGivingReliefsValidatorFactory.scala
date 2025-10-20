@@ -28,7 +28,7 @@ import javax.inject.Singleton
 
 @Singleton
 class RetrieveCharitableGivingReliefsValidatorFactory {
-  
+
   def validator(nino: String, taxYear: String): Validator[RetrieveCharitableGivingReliefsRequestData] = {
     val schema = RetrieveCharitableGivingReliefsSchema.schemaFor(taxYear)
 

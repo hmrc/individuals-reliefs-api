@@ -17,24 +17,14 @@
 package v3.charitableGiving.retrieve.def2
 
 import cats.data.Validated
-//import cats.implicits.catsSyntaxTuple2Semigroupal
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.ResolveNino
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v3.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
-//import v3.charitableGiving.retrieve.def2.Def2_RetrieveCharitableGivingReliefsValidator
 import v3.charitableGiving.retrieve.def2.model.request.Def2_RetrieveCharitableGivingReliefsRequestData
 
 class Def2_RetrieveCharitableGivingReliefsValidator(nino: String, taxYear: String) extends Validator[RetrieveCharitableGivingReliefsRequestData] {
-
-  // private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2024-25"))
-
-//  def validate: Validated[Seq[MtdError], Def2_RetrieveCharitableGivingReliefsRequestData] =
-//    (
-//      ResolveNino(nino),
-//      resolveTaxYear(taxYear)
-//    ).mapN(Def2_RetrieveCharitableGivingReliefsRequestData.apply)
 
   override def validate: Validated[Seq[MtdError], RetrieveCharitableGivingReliefsRequestData] =
     ResolveNino(nino).map(validNino => Def2_RetrieveCharitableGivingReliefsRequestData(validNino, TaxYear.fromMtd(taxYear)))

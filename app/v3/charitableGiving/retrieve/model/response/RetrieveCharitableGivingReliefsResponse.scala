@@ -35,30 +35,6 @@ object RetrieveCharitableGivingReliefsResponse {
 
 }
 
-//sealed trait RetrieveCharitableGivingReliefsResponse {
-//  def retrieveCharitableGivingReliefResponse: RetrieveCharitableGivingReliefsResponse
-//}
-//
-//object RetrieveCharitableGivingReliefsResponse {
-//
-//  implicit val reads: Reads[RetrieveCharitableGivingReliefsResponse] = {
-//
-//    val def1Reads: Reads[RetrieveCharitableGivingReliefsResponse] =
-//      Def1_RetrieveCharitableGivingReliefsResponse.reads.map(identity)
-//
-//    val def2Reads: Reads[RetrieveCharitableGivingReliefsResponse] =
-//      Json.reads[Def2_RetrieveCharitableGivingReliefsResponse].map(identity)
-//
-//    def2Reads orElse def1Reads
-//  }
-//
-//  implicit val writes: OWrites[RetrieveCharitableGivingReliefsResponse] = {
-//    case def1: Def1_RetrieveCharitableGivingReliefsResponse => Json.toJsObject(def1)
-//    case def2: Def2_RetrieveCharitableGivingReliefsResponse => Json.toJsObject(def2)
-//  }
-//
-//}
-//
 case class Def1_RetrieveCharitableGivingReliefsResponse(giftAidPayments: Option[Def1_GiftAidPayments], gifts: Option[Def1_Gifts])
     extends RetrieveCharitableGivingReliefsResponse {
 
@@ -67,8 +43,6 @@ case class Def1_RetrieveCharitableGivingReliefsResponse(giftAidPayments: Option[
 }
 
 object Def1_RetrieveCharitableGivingReliefsResponse {
-
-  // implicit val format: OFormat[Def1_RetrieveCharitableGivingReliefsResponse] = Json.format[Def1_RetrieveCharitableGivingReliefsResponse]
 
   implicit val writes: OWrites[Def1_RetrieveCharitableGivingReliefsResponse] = Json.writes
 

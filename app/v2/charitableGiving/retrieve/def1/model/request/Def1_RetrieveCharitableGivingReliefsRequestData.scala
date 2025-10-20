@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package v3.charitableGiving.retrieve.model.request
+package v2.charitableGiving.retrieve.def1.model.request
 
 import shared.models.domain.{Nino, TaxYear}
-import v3.charitableGiving.retrieve.RetrieveCharitableGivingReliefsSchema
+import v2.charitableGiving.retrieve.RetrieveCharitableGivingReliefsSchema
+import v2.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 
-trait RetrieveCharitableGivingReliefsRequestData {
-  val nino: Nino
-  val taxYear: TaxYear
+case class Def1_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData {
 
-  val schema: RetrieveCharitableGivingReliefsSchema
+  override val schema: RetrieveCharitableGivingReliefsSchema = RetrieveCharitableGivingReliefsSchema.Def1
 }

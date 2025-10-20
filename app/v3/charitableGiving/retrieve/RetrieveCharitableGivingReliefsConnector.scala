@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
-  
+
   def retrieve(request: RetrieveCharitableGivingReliefsRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
@@ -52,21 +52,5 @@ class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClientV2
     get(uri = downstreamUri)
 
   }
-
-//  def retrieve(
-//      request: RetrieveCharitableGivingReliefsRequestData
-//  )(implicit
-//      hc: HeaderCarrier,
-//      ec: ExecutionContext,
-//      correlationId: String
-//  ): Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]] = {
-//
-//    request match {
-//      case def1: Def1_RetrieveCharitableGivingReliefsRequestData =>
-//        completeDef1Request(def1)
-//      case def2: Def2_RetrieveCharitableGivingReliefsRequestData =>
-//        completeDef1Request(def2)
-//    }
-//  }
 
 }
