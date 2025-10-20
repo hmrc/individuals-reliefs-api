@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.charitableGiving.retrieve
+package v1.retrieveCharitableGivingReliefs
 
 import cats.data.Validated
 import cats.data.Validated.Valid
@@ -23,8 +23,8 @@ import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import shared.schema.DownstreamReadable
-import v2.charitableGiving.retrieve.model.response.*
-import scala.math.Ordered.orderingToOrdered
+import v1.retrieveCharitableGivingReliefs.model.response.*
+import scala.math.Ordering.Implicits.infixOrderingOps
 
 sealed trait RetrieveCharitableGivingReliefsSchema extends DownstreamReadable[RetrieveCharitableGivingReliefsResponse]
 

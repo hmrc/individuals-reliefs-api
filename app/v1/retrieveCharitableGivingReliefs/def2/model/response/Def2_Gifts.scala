@@ -24,10 +24,6 @@ case class Def2_Gifts(landAndBuildings: Option[BigDecimal], sharesOrSecurities: 
 object Def2_Gifts {
 
   implicit val reads: Reads[Def2_Gifts] = {
-//    val nonUkCharitiesOptionReads =
-//      ((JsPath \ "investmentsNonUkCharitiesCharityNames").readNullable[Seq[String]] and
-//        (JsPath \ "investmentsNonUkCharities").readNullable[BigDecimal])(Def1_NonUkCharities.from)
-
     ((JsPath \ "landAndBuildings").readNullable[BigDecimal] and
       (JsPath \ "sharesOrSecurities").readNullable[BigDecimal])(Def2_Gifts.apply)
   }

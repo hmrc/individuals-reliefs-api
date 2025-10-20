@@ -57,37 +57,8 @@ class Def2_RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBas
 
   }
 
-//  private trait NonTysTest extends Test {
-//    def taxYear: String           = "2020-21"
-//    def downstreamTaxYear: String = "2021"
-//    def downstreamUri: String     = s"/income-tax/nino/$nino/income-source/charity/annual/$downstreamTaxYear"
-//
-//  }
-
-//  private trait TysIfsTest extends Test {
-//    def taxYear: String           = "2023-24"
-//    def downstreamTaxYear: String = "23-24"
-//    def downstreamUri: String     = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
-//  }
-
   "Calling the 'Retrieve Charitable Giving Tax Relief' endpoint" should {
     "return a 200 status code" when {
-//      "any valid request is made" in new Test {
-//
-//        override def setupStubs(): StubMapping = {
-//          AuditStub.audit()
-//          AuthStub.authorised()
-//          MtdIdLookupStub.ninoFound(nino)
-//          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, desResponse)
-//        }
-//
-//        val response: WSResponse = await(request().get())
-//        response.status shouldBe OK
-//        response.json shouldBe mtdResponse
-//        response.header("X-CorrelationId") should not be empty
-//        response.header("Content-Type") shouldBe Some("application/json")
-//      }
-
       "any valid request is made with a Tax Year Specific year" in new Test {
 
         override def setupStubs(): StubMapping = {

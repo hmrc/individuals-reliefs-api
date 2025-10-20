@@ -23,6 +23,8 @@ import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v3.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 import v3.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v3.charitableGiving.retrieve.def2.Def2_RetrieveCharitableGivingReliefsValidator
+import v3.charitableGiving.retrieve.def1.Def1_RetrieveCharitableGivingReliefsValidator
 
 class RetrieveCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
@@ -72,6 +74,18 @@ class RetrieveCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with 
     "return multiple errors" when {
       "request supplied has multiple errors" in {
         validator("A12344A", "BAD_TAX_YEAR") shouldBe an[AlwaysErrorsValidator]
+      }
+    }
+
+    "return a Def2 validator" when {
+      "given a request corresponding to a Def2 schema" in {
+        validator(validNino, "2024-25") shouldBe a[Def2_RetrieveCharitableGivingReliefsValidator]
+      }
+    }
+
+    "return a Def1 validator" when {
+      "given a request corresponding to a Def1 schema" in {
+        validator(validNino, "2023-24") shouldBe a[Def1_RetrieveCharitableGivingReliefsValidator]
       }
     }
 

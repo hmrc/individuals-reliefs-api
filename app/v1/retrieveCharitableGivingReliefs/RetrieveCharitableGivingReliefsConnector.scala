@@ -17,7 +17,8 @@
 package v1.retrieveCharitableGivingReliefs
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.connectors.DownstreamUri.*
+import shared.connectors.*
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -37,30 +38,18 @@ class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClientV2
       correlationId: String): Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]] = {
 
     import request._
+    import schema._
+
     def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
-    val downstreamUri =
+    val downstreamUri: DownstreamUri[DownstreamResp] =
       if (taxYear.useTaxYearSpecificApi) {
-        IfsUri[RetrieveCharitableGivingReliefsResponse](s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
+        IfsUri(s"income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
       } else {
-        IfsUri[RetrieveCharitableGivingReliefsResponse](preTysPath)
+        IfsUri(preTysPath)
       }
 
-    get(uri = downstreamUri)
+    get(downstreamUri)
 
   }
-
-//  def retrieve(
-//      request: RetrieveCharitableGivingReliefsRequestData
-//  )(implicit
-//      hc: HeaderCarrier,
-//      ec: ExecutionContext,
-//      correlationId: String
-//  ): Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]] = {
-//
-//    request match {
-//      case def1: Def1_RetrieveCharitableGivingReliefsRequestData =>
-//        completeDef1Request(def1)
-//    }
-//  }
 
 }

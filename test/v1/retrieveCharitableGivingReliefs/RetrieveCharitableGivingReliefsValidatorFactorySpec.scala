@@ -17,10 +17,14 @@
 package v1.retrieveCharitableGivingReliefs
 
 import shared.models.domain.{Nino, TaxYear}
+import shared.controllers.validators.AlwaysErrorsValidator
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v1.retrieveCharitableGivingReliefs.model.request.{Def1_RetrieveCharitableGivingReliefsRequestData, RetrieveCharitableGivingReliefsRequestData}
+import v1.retrieveCharitableGivingReliefs.model.request.RetrieveCharitableGivingReliefsRequestData
+import v1.retrieveCharitableGivingReliefs.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v1.retrieveCharitableGivingReliefs.def2.Def2_RetrieveCharitableGivingReliefsValidator
+import v1.retrieveCharitableGivingReliefs.def1.Def1_RetrieveCharitableGivingReliefsValidator
 
 class RetrieveCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
@@ -68,8 +72,19 @@ class RetrieveCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with 
     }
     "return multiple errors" when {
       "request supplied has multiple errors" in {
-        val result: Either[ErrorWrapper, RetrieveCharitableGivingReliefsRequestData] = validator("A12344A", "20178").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
+        validator("A12344A", "BAD_TAX_YEAR") shouldBe an[AlwaysErrorsValidator]
+      }
+    }
+
+    "return a Def2 validator" when {
+      "given a request corresponding to a Def2 schema" in {
+        validator(validNino, "2024-25") shouldBe a[Def2_RetrieveCharitableGivingReliefsValidator]
+      }
+    }
+
+    "return a Def1 validator" when {
+      "given a request corresponding to a Def1 schema" in {
+        validator(validNino, "2023-24") shouldBe a[Def1_RetrieveCharitableGivingReliefsValidator]
       }
     }
   }

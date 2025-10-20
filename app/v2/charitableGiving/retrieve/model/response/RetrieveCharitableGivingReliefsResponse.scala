@@ -43,6 +43,7 @@ case class Def1_RetrieveCharitableGivingReliefsResponse(giftAidPayments: Option[
 }
 
 object Def1_RetrieveCharitableGivingReliefsResponse {
+
   implicit val writes: OWrites[Def1_RetrieveCharitableGivingReliefsResponse] = Json.writes
 
   implicit val reads: Reads[Def1_RetrieveCharitableGivingReliefsResponse] = {

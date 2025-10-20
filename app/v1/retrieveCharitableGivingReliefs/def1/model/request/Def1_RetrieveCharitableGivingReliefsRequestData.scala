@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package v1.retrieveCharitableGivingReliefs.model.request
+package v1.retrieveCharitableGivingReliefs.def1.model.request
 
 import shared.models.domain.{Nino, TaxYear}
 import v1.retrieveCharitableGivingReliefs.RetrieveCharitableGivingReliefsSchema
+import v1.retrieveCharitableGivingReliefs.model.request.RetrieveCharitableGivingReliefsRequestData
 
-trait RetrieveCharitableGivingReliefsRequestData {
-  val nino: Nino
-  val taxYear: TaxYear
+case class Def1_RetrieveCharitableGivingReliefsRequestData(nino: Nino, taxYear: TaxYear) extends RetrieveCharitableGivingReliefsRequestData {
 
-  val schema: RetrieveCharitableGivingReliefsSchema
+  override val schema: RetrieveCharitableGivingReliefsSchema = RetrieveCharitableGivingReliefsSchema.Def1
 }
