@@ -78,7 +78,7 @@ class RetrieveCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with 
 
     "return a Def2 validator" when {
       "given a request corresponding to a Def2 schema" in {
-        validator(validNino, "2024-25") shouldBe a[Def2_RetrieveCharitableGivingReliefsValidator]
+        validator(validNino, "2025-26") shouldBe a[Def2_RetrieveCharitableGivingReliefsValidator]
       }
     }
 

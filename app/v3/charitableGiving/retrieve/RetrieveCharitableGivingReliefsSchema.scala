@@ -44,7 +44,7 @@ object RetrieveCharitableGivingReliefsSchema {
     ResolveTaxYearMinimum(TaxYear.ending(2018))(taxYearString) andThen schemaFor
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveCharitableGivingReliefsSchema] = {
-    if (taxYear >= TaxYear.fromMtd("2024-25")) Valid(Def2) else Valid(Def1)
+    if (taxYear >= TaxYear.fromMtd("2025-26")) Valid(Def2) else Valid(Def1)
   }
 
 }

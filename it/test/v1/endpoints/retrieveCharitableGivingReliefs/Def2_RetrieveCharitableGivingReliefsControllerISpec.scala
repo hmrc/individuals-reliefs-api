@@ -33,9 +33,9 @@ class Def2_RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBas
 
     def nino: String = "AA123456A"
 
-    def taxYear: String = "2024-25"
+    def taxYear: String = "2025-26"
 
-    private def downstreamTaxYear: String = "24-25"
+    private def downstreamTaxYear: String = "25-26"
 
     def downstreamUri: String = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
 
