@@ -35,10 +35,10 @@ requestBody:
           - $ref: "./schemas/amend_charitable_giving/def1/request.json"
           - $ref: "./schemas/amend_charitable_giving/def2/request.json"
       examples:
-        TY 2023-24 or before:
+        TY 2024-25 or before:
           value:
             $ref: "./examples/amend_charitable_giving/def1/request.json"
-        TY 2024-25 onwards:
+        TY 2025-26 onwards:
           value:
             $ref: "./examples/amend_charitable_giving/def2/request.json"
 
