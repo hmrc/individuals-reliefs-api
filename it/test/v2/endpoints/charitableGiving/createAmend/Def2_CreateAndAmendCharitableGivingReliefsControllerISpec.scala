@@ -27,14 +27,15 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
+import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def2_CreateAndAmendCharitableGivingTaxReliefsFixtures.mtdJson
 
-class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec {
+class Def2_CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec {
 
   "Calling the amend endpoint" should {
 
     "return a 204 status code" when {
 
-      "any valid request is made" in new NonTysTest {
+      "any valid request is made with a TYS tax year" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -43,21 +44,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, OK, JsObject.empty)
         }
 
-        val response: WSResponse = await(request().put(requestJson))
-        response.status shouldBe NO_CONTENT
-        response.header("X-CorrelationId") should not be empty
-      }
-
-      "any valid request is made with a TYS tax year" in new TysIfsTest {
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, OK, JsObject.empty)
-        }
-
-        val response: WSResponse = await(request().put(requestJson))
+        val response: WSResponse = await(request().put(mtdJson))
         response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
@@ -67,7 +54,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
     "return error according to spec" when {
 
       "validation error" when {
-        s"an invalid NINO is provided" in new NonTysTest {
+        s"an invalid NINO is provided" in new Test {
           override val nino: String = "INVALID_NINO"
 
           override def setupStubs(): StubMapping = {
@@ -76,11 +63,11 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
             MtdIdLookupStub.ninoFound(nino)
           }
 
-          val response: WSResponse = await(request().put(requestJson))
+          val response: WSResponse = await(request().put(mtdJson))
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(NinoFormatError)
         }
-        s"an invalid taxYear is provided" in new NonTysTest {
+        s"an invalid taxYear is provided" in new Test {
           override def mtdTaxYear: String = "INVALID_TAXYEAR"
 
           override def setupStubs(): StubMapping = {
@@ -89,12 +76,12 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
             MtdIdLookupStub.ninoFound(nino)
           }
 
-          val response: WSResponse = await(request().put(requestJson))
+          val response: WSResponse = await(request().put(mtdJson))
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(TaxYearFormatError)
         }
-        s"an invalid /giftAidPayments/totalAmount is provided" in new NonTysTest {
-          override val requestJson: JsValue = Json.parse(
+        s"an invalid /giftAidPayments/totalAmount is provided" in new Test {
+          val requestJson: JsValue = Json.parse(
             s"""
                |{
                |  "giftAidPayments": {
@@ -114,7 +101,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(ValueFormatError.copy(paths = Some(Seq("/giftAidPayments/totalAmount"))))
         }
-        s"a taxYear with range of greater than a year is provided" in new NonTysTest {
+        s"a taxYear with range of greater than a year is provided" in new Test {
           override def mtdTaxYear: String = "2019-21"
 
           override def setupStubs(): StubMapping = {
@@ -123,12 +110,12 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
             MtdIdLookupStub.ninoFound(nino)
           }
 
-          val response: WSResponse = await(request().put(requestJson))
+          val response: WSResponse = await(request().put(mtdJson))
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
         }
 
-        s"a taxYear below 2017-18 is provided" in new NonTysTest {
+        s"a taxYear below 2017-18 is provided" in new Test {
           override val mtdTaxYear: String        = "2016-17"
           override val downstreamTaxYear: String = "2018"
 
@@ -138,13 +125,13 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
             MtdIdLookupStub.ninoFound(nino)
           }
 
-          val response: WSResponse = await(request().put(requestJson))
+          val response: WSResponse = await(request().put(mtdJson))
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearNotSupportedError)
         }
 
-        s"an empty body is provided" in new NonTysTest {
-          override val requestJson: JsValue = Json.parse("""{}""")
+        s"an empty body is provided" in new Test {
+          val requestJson: JsValue = Json.parse("""{}""")
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
@@ -160,7 +147,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns $downstreamCode and status $downstreamStatus" in new NonTysTest {
+          s"downstream returns $downstreamCode and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -169,7 +156,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
               DownstreamStub.onError(DownstreamStub.POST, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
-            val response: WSResponse = await(request().put(requestJson))
+            val response: WSResponse = await(request().put(mtdJson))
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
@@ -209,22 +196,13 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
 
   private trait Test {
 
-    val nino: String = "AA123456A"
-    def mtdTaxYear: String
-    def downstreamTaxYear: String
+    val nino: String              = "AA123456A"
+    def mtdTaxYear: String        = "2025-26"
+    def downstreamTaxYear: String = "25-26"
 
-    val amount: BigDecimal = 5000.99
+    private def uri: String = s"/charitable-giving/$nino/$mtdTaxYear"
 
-    val requestJson: JsValue = Json.parse(s"""|{
-                                              |  "giftAidPayments": {
-                                              |    "totalAmount": $amount
-                                              |  }
-                                              |}
-                                              |""".stripMargin)
-
-    def uri: String = s"/charitable-giving/$nino/$mtdTaxYear"
-
-    def downstreamUri: String
+    def downstreamUri: String = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
 
     def setupStubs(): StubMapping
 
@@ -245,19 +223,6 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
          |      }
     """.stripMargin
 
-  }
-
-  private trait NonTysTest extends Test {
-    def mtdTaxYear: String        = "2019-20"
-    def downstreamTaxYear: String = "2020"
-    def downstreamUri: String     = s"/income-tax/nino/$nino/income-source/charity/annual/$downstreamTaxYear"
-
-  }
-
-  private trait TysIfsTest extends Test {
-    def mtdTaxYear: String        = "2023-24"
-    def downstreamTaxYear: String = "23-24"
-    def downstreamUri: String     = s"/income-tax/$downstreamTaxYear/$nino/income-source/charity/annual"
   }
 
 }

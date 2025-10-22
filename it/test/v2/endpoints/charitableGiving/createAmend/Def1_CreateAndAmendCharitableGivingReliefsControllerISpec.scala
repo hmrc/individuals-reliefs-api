@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package v1.endpoints.createAndAmendCharitableGivingReliefs
+package v2.endpoints.charitableGiving.createAmend
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError}
+import common.*
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
 import play.api.libs.json.*
@@ -27,12 +27,13 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
+import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures.mtdJson
 
-class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec {
+class Def1_CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec {
 
   "Calling the amend endpoint" should {
 
-    "return a 200 status code" when {
+    "return a 204 status code" when {
 
       "any valid request is made" in new NonTysTest {
 
@@ -43,9 +44,8 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, OK, JsObject.empty)
         }
 
-        val response: WSResponse = await(request().put(requestJson))
-        response.status shouldBe OK
-        response.json shouldBe responseBody
+        val response: WSResponse = await(request().put(mtdJson))
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
 
@@ -58,9 +58,8 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, OK, JsObject.empty)
         }
 
-        val response: WSResponse = await(request().put(requestJson))
-        response.status shouldBe OK
-        response.json shouldBe responseBody
+        val response: WSResponse = await(request().put(mtdJson))
+        response.status shouldBe NO_CONTENT
         response.header("X-CorrelationId") should not be empty
       }
 
@@ -78,7 +77,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
             MtdIdLookupStub.ninoFound(nino)
           }
 
-          val response: WSResponse = await(request().put(requestJson))
+          val response: WSResponse = await(request().put(mtdJson))
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(NinoFormatError)
         }
@@ -91,12 +90,12 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
             MtdIdLookupStub.ninoFound(nino)
           }
 
-          val response: WSResponse = await(request().put(requestJson))
+          val response: WSResponse = await(request().put(mtdJson))
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(TaxYearFormatError)
         }
         s"an invalid /giftAidPayments/totalAmount is provided" in new NonTysTest {
-          override val requestJson: JsValue = Json.parse(
+          val requestJson: JsValue = Json.parse(
             s"""
                |{
                |  "giftAidPayments": {
@@ -125,7 +124,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
             MtdIdLookupStub.ninoFound(nino)
           }
 
-          val response: WSResponse = await(request().put(requestJson))
+          val response: WSResponse = await(request().put(mtdJson))
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearRangeInvalidError)
         }
@@ -140,13 +139,13 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
             MtdIdLookupStub.ninoFound(nino)
           }
 
-          val response: WSResponse = await(request().put(requestJson))
+          val response: WSResponse = await(request().put(mtdJson))
           response.status shouldBe BAD_REQUEST
           response.json shouldBe Json.toJson(RuleTaxYearNotSupportedError)
         }
 
         s"an empty body is provided" in new NonTysTest {
-          override val requestJson: JsValue = Json.parse("""{}""")
+          val requestJson: JsValue = Json.parse("""{}""")
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
@@ -171,7 +170,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
               DownstreamStub.onError(DownstreamStub.POST, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
-            val response: WSResponse = await(request().put(requestJson))
+            val response: WSResponse = await(request().put(mtdJson))
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
@@ -181,6 +180,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
           (BAD_REQUEST, "INVALID_NINO", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TYPE", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_TAXYEAR", BAD_REQUEST, TaxYearFormatError),
+          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
           (FORBIDDEN, "NOT_FOUND_INCOME_SOURCE", NOT_FOUND, NotFoundError),
           (FORBIDDEN, "MISSING_CHARITIES_NAME_GIFT_AID", BAD_REQUEST, RuleGiftAidNonUkAmountWithoutNamesError),
@@ -214,38 +214,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
     def mtdTaxYear: String
     def downstreamTaxYear: String
 
-    val amount: BigDecimal = 5000.99
-
-    val requestJson: JsValue = Json.parse(s"""|{
-                                              |  "giftAidPayments": {
-                                              |    "totalAmount": $amount
-                                              |  }
-                                              |}
-                                              |""".stripMargin)
-
-    val responseBody: JsValue = Json.parse(s"""
-                                              |{
-                                              |  "links": [
-                                              |    {
-                                              |      "href": "/individuals/reliefs/charitable-giving/$nino/$mtdTaxYear",
-                                              |      "method": "GET",
-                                              |      "rel": "self"
-                                              |    },
-                                              |    {
-                                              |      "href": "/individuals/reliefs/charitable-giving/$nino/$mtdTaxYear",
-                                              |      "method": "PUT",
-                                              |      "rel": "create-and-amend-charitable-giving-tax-relief"
-                                              |    },
-                                              |    {
-                                              |      "href": "/individuals/reliefs/charitable-giving/$nino/$mtdTaxYear",
-                                              |      "method": "DELETE",
-                                              |      "rel": "delete-charitable-giving-tax-relief"
-                                              |    }
-                                              |  ]
-                                              |}
-                                              |""".stripMargin)
-
-    def uri: String = s"/charitable-giving/$nino/$mtdTaxYear"
+    private def uri: String = s"/charitable-giving/$nino/$mtdTaxYear"
 
     def downstreamUri: String
 
@@ -255,7 +224,7 @@ class CreateAndAmendCharitableGivingReliefsControllerISpec extends IntegrationBa
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.1.0+json"),
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }

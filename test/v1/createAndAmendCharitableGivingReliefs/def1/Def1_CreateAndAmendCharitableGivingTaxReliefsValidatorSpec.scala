@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.charitableGiving.createAmend.def1
+package v1.createAndAmendCharitableGivingReliefs.def1
 
 import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError}
 import play.api.libs.json._
@@ -22,19 +22,14 @@ import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v2.charitableGiving.createAmend.CreateAndAmendCharitableGivingReliefsValidatorFactory
-import v2.charitableGiving.createAmend.def1.model.request.{
-  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
-  Def1_GiftAidPayments,
-  Def1_Gifts,
-  Def1_NonUkCharities
-}
-import v2.charitableGiving.createAmend.model.request.{
+import v1.createAndAmendCharitableGivingReliefs.CreateAndAmendCharitableGivingReliefsValidatorFactory
+import v1.createAndAmendCharitableGivingReliefs.def1.model.request._
+import v1.createAndAmendCharitableGivingReliefs.model.request.{
   CreateAndAmendCharitableGivingTaxReliefsRequestData,
   Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 }
 
-class CreateAndAmendCharitableGivingTaxReliefsValidatorSpec extends UnitSpec with JsonErrorValidators {
+class Def1_CreateAndAmendCharitableGivingTaxReliefsValidatorSpec extends UnitSpec with JsonErrorValidators {
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   private val validNino    = "ZG903729C"
@@ -258,21 +253,6 @@ class CreateAndAmendCharitableGivingTaxReliefsValidatorSpec extends UnitSpec wit
                 "/gifts/nonUkCharities/charityNames/1",
                 "/gifts/nonUkCharities/charityNames/2"
               ))))
-      }
-    }
-
-    "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in {
-        val result: Either[ErrorWrapper, CreateAndAmendCharitableGivingTaxReliefsRequestData] =
-          validator("invalid", "invalid", validBody).validateAndWrapResult()
-
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError))
-          )
-        )
       }
     }
   }

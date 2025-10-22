@@ -24,7 +24,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v3.fixtures.Def2_RetrieveReliefInvestmentsFixtures.responseJson
+import v3.fixtures.retrieveReliefInvestments.Def2_RetrieveReliefInvestmentsFixtures.responseJson
 
 class Def2_RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
 

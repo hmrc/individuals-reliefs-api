@@ -20,7 +20,7 @@ import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import v3.fixtures.Def1_RetrieveReliefInvestmentsFixtures.responseModel
+import v3.fixtures.retrieveReliefInvestments.Def1_RetrieveReliefInvestmentsFixtures.responseModel
 import v3.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
 import v3.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 import uk.gov.hmrc.http.StringContextOps

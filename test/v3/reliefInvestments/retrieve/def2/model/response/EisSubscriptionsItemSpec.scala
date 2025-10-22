@@ -18,7 +18,7 @@ package v3.reliefInvestments.retrieve.def2.model.response
 
 import play.api.libs.json.*
 import shared.utils.UnitSpec
-import v3.fixtures.Def2_RetrieveReliefInvestmentsFixtures.{eisSubscriptionsItemJson, eisSubscriptionsItemModel}
+import v3.fixtures.retrieveReliefInvestments.Def2_RetrieveReliefInvestmentsFixtures.{eisSubscriptionsItemJson, eisSubscriptionsItemModel}
 
 class EisSubscriptionsItemSpec extends UnitSpec {
 

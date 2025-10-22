@@ -18,7 +18,10 @@ package v3.reliefInvestments.retrieve.def1.model.response
 
 import play.api.libs.json.*
 import shared.utils.UnitSpec
-import v3.fixtures.Def1_RetrieveReliefInvestmentsFixtures.{socialEnterpriseInvestmentItemJson, socialEnterpriseInvestmentItemModel}
+import v3.fixtures.retrieveReliefInvestments.Def1_RetrieveReliefInvestmentsFixtures.{
+  socialEnterpriseInvestmentItemJson,
+  socialEnterpriseInvestmentItemModel
+}
 
 class SocialEnterpriseInvestmentItemSpec extends UnitSpec {
 

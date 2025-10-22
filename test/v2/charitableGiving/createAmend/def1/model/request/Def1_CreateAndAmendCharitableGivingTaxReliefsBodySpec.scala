@@ -18,90 +18,9 @@ package v2.charitableGiving.createAmend.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
 import shared.utils.UnitSpec
+import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures.{mtdJson, model, desJson}
 
 class Def1_CreateAndAmendCharitableGivingTaxReliefsBodySpec extends UnitSpec {
-
-  val nonUkCharitiesModel: Def1_NonUkCharities =
-    Def1_NonUkCharities(
-      charityNames = Some(Seq("non-UK charity 1", "non-UK charity 2")),
-      totalAmount = 1000.12
-    )
-
-  val giftAidModel: Def1_GiftAidPayments =
-    Def1_GiftAidPayments(
-      nonUkCharities = Some(nonUkCharitiesModel),
-      totalAmount = Some(1000.12),
-      oneOffAmount = Some(1000.12),
-      amountTreatedAsPreviousTaxYear = Some(1000.12),
-      amountTreatedAsSpecifiedTaxYear = Some(1000.12)
-    )
-
-  val giftModel: Def1_Gifts =
-    Def1_Gifts(
-      nonUkCharities = Some(nonUkCharitiesModel),
-      landAndBuildings = Some(1000.12),
-      sharesOrSecurities = Some(1000.12)
-    )
-
-  val model: Def1_CreateAndAmendCharitableGivingTaxReliefsBody =
-    Def1_CreateAndAmendCharitableGivingTaxReliefsBody(
-      giftAidPayments = Some(giftAidModel),
-      gifts = Some(giftModel)
-    )
-
-  val mtdJson: JsValue = Json.parse("""
-      |{
-      |   "giftAidPayments":{
-      |      "nonUkCharities":{
-      |         "charityNames":[
-      |            "non-UK charity 1",
-      |            "non-UK charity 2"
-      |         ],
-      |         "totalAmount":1000.12
-      |      },
-      |      "totalAmount":1000.12,
-      |      "oneOffAmount":1000.12,
-      |      "amountTreatedAsPreviousTaxYear":1000.12,
-      |      "amountTreatedAsSpecifiedTaxYear":1000.12
-      |   },
-      |   "gifts":{
-      |      "nonUkCharities":{
-      |         "charityNames":[
-      |            "non-UK charity 1",
-      |            "non-UK charity 2"
-      |         ],
-      |         "totalAmount":1000.12
-      |      },
-      |      "landAndBuildings":1000.12,
-      |      "sharesOrSecurities":1000.12
-      |   }
-      |}
-      |""".stripMargin)
-
-  val desJson: JsValue = Json.parse("""
-      |{
-      |   "giftAidPayments":{
-      |      "nonUkCharitiesCharityNames":[
-      |         "non-UK charity 1",
-      |         "non-UK charity 2"
-      |      ],
-      |      "nonUkCharities":1000.12,
-      |      "currentYear":1000.12,
-      |      "oneOffCurrentYear":1000.12,
-      |      "currentYearTreatedAsPreviousYear":1000.12,
-      |      "nextYearTreatedAsCurrentYear":1000.12
-      |   },
-      |   "gifts":{
-      |      "investmentsNonUkCharitiesCharityNames":[
-      |         "non-UK charity 1",
-      |         "non-UK charity 2"
-      |      ],
-      |      "investmentsNonUkCharities":1000.12,
-      |      "landAndBuildings":1000.12,
-      |      "sharesOrSecurities":1000.12
-      |   }
-      |}
-      |""".stripMargin)
 
   "reads" when {
     "passed valid JSON" should {

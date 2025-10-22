@@ -22,7 +22,7 @@ import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.fixtures.Def1_RetrieveReliefInvestmentsFixtures.responseModel
+import v3.fixtures.retrieveReliefInvestments.Def1_RetrieveReliefInvestmentsFixtures.responseModel
 import v3.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global

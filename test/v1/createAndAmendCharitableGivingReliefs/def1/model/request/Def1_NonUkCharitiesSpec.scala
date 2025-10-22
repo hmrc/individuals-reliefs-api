@@ -18,28 +18,18 @@ package v1.createAndAmendCharitableGivingReliefs.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
 import shared.utils.UnitSpec
+import v1.fixtures.createAndAmendCharitableGivingTaxReliefs.Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures.{
+  nonUkCharitiesMtdJson,
+  nonUkCharitiesModel,
+  nonUkCharitiesDesJson
+}
 
 class Def1_NonUkCharitiesSpec extends UnitSpec {
-
-  val model: Def1_NonUkCharities =
-    Def1_NonUkCharities(
-      charityNames = Some(Seq("abcdefg")),
-      totalAmount = 10000.89
-    )
-
-  val json: JsValue = Json.parse("""
-      |{
-      |   "charityNames": [
-      |     "abcdefg"
-      |   ],
-      |   "totalAmount": 10000.89
-      |}
-      |""".stripMargin)
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        json.as[Def1_NonUkCharities] shouldBe model
+        nonUkCharitiesMtdJson.as[Def1_NonUkCharities] shouldBe nonUkCharitiesModel
       }
     }
   }
@@ -47,7 +37,7 @@ class Def1_NonUkCharitiesSpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(model) shouldBe json
+        Json.toJson(nonUkCharitiesModel) shouldBe nonUkCharitiesDesJson
       }
     }
   }

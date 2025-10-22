@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package v3.fixtures
+package v3.fixtures.retrieveReliefInvestments
 
 import play.api.libs.json.{JsObject, JsValue, Json}
 import shared.models.domain.Timestamp
-import v3.reliefInvestments.retrieve.def1.model.response._
+import v3.reliefInvestments.retrieve.def1.model.response.*
 
 object Def1_RetrieveReliefInvestmentsFixtures {
 
