@@ -22,7 +22,7 @@ import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.models.errors.ErrorWrapper
 import shared.models.outcomes.ResponseWrapper
-import v1.retrieveCharitableGivingReliefs.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v1.retrieveCharitableGivingReliefs.model.request.RetrieveCharitableGivingReliefsRequestData
 import v1.retrieveCharitableGivingReliefs.model.response.RetrieveCharitableGivingReliefsResponse
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,11 +33,11 @@ trait MockRetrieveCharitableGivingReliefsService extends TestSuite with MockFact
 
   object MockRetrieveCharitableGivingReliefsService {
 
-    def retrieve(request: Def1_RetrieveCharitableGivingReliefsRequestData)
+    def retrieve(request: RetrieveCharitableGivingReliefsRequestData)
         : CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveCharitableGivingReliefsResponse]]]] = {
       (
         mockRetrieveCharitableGivingReliefsService
-          .retrieve(_: Def1_RetrieveCharitableGivingReliefsRequestData)(
+          .retrieve(_: RetrieveCharitableGivingReliefsRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

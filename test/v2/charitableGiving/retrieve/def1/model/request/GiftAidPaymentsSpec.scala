@@ -63,6 +63,18 @@ class GiftAidPaymentsSpec extends UnitSpec {
             amountTreatedAsSpecifiedTaxYear = Some(5.12)
           )
       }
+
+      "omit charityNames when not present" in {
+        Json
+          .parse("""{
+              |  "totalAmount": 1.12
+              |}""".stripMargin)
+          .as[Def1_NonUkCharities] shouldBe
+          Def1_NonUkCharities(
+            charityNames = None,
+            totalAmount = 1.12
+          )
+      }
     }
 
     "treat all fields as optional" in {

@@ -21,8 +21,8 @@ import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
+import v2.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import v2.charitableGiving.retrieve.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
-import v2.charitableGiving.retrieve.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import v2.charitableGiving.retrieve.model.response.Def1_RetrieveCharitableGivingReliefsResponse
 
 import scala.concurrent.Future
@@ -73,7 +73,7 @@ class RetrieveCharitableGivingReliefsServiceSpec extends ServiceSpec {
   "RetrieveCharitableGivingReliefService" when {
     "service call successful" should {
       "return correct result for a success" in new Test {
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveCharitableGivingReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
 
         MockRetrieveCharitableGivingReliefsConnector
           .retrieve(request)

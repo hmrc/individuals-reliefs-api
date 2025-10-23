@@ -20,7 +20,8 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import v2.charitableGiving.retrieve.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
-import v2.charitableGiving.retrieve.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v2.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v2.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 import v2.charitableGiving.retrieve.model.response.{Def1_RetrieveCharitableGivingReliefsResponse, RetrieveCharitableGivingReliefsResponse}
 import uk.gov.hmrc.http.StringContextOps
 
@@ -57,9 +58,9 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
   "RetrieveCharitableGivingReliefConnector" when {
     "retrieve" must {
       "return a 200 status for a success scenario" in new IfsTest with Test {
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveCharitableGivingReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
 
-        def taxYear = TaxYear.fromMtd("2018-19")
+        def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
 
         willGet(url = url"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}")
           .returns(Future.successful(outcome))
@@ -74,7 +75,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
         new IfsTest with Test {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-          val outcome = Right(ResponseWrapper(correlationId, response))
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveCharitableGivingReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
 
           willGet(url"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual")
             .returns(Future.successful(outcome))
@@ -95,7 +96,7 @@ class RetrieveCharitableGivingReliefsConnectorSpec extends ConnectorSpec {
         appConfig = mockSharedAppConfig
       )
 
-    protected val request: Def1_RetrieveCharitableGivingReliefsRequestData =
+    protected val request: RetrieveCharitableGivingReliefsRequestData =
       Def1_RetrieveCharitableGivingReliefsRequestData(
         nino = Nino(nino),
         taxYear = taxYear

@@ -22,6 +22,21 @@ import v1.retrieveCharitableGivingReliefs.model.response.Def1_RetrieveCharitable
 
 trait RetrieveCharitableGivingReliefsFixture {
 
+  val def2_charitableGivingReliefsResponseMtdJson: JsValue = Json.parse("""
+      |{
+      |   "giftAidPayments": {
+      |     "totalAmount": 2.12,
+      |      "oneOffAmount": 3.12,
+      |      "amountTreatedAsPreviousTaxYear": 4.12,
+      |      "amountTreatedAsSpecifiedTaxYear": 5.12
+      |   },
+      |   "gifts": {
+      |      "landAndBuildings": 7.12,
+      |      "sharesOrSecurities": 8.12
+      |   }
+      |}
+      |""".stripMargin)
+
   val charitableGivingReliefsResponseMtdJson: JsValue = Json.parse("""
                                                                     |{
                                                                     |   "giftAidPayments": {
@@ -44,6 +59,33 @@ trait RetrieveCharitableGivingReliefsFixture {
                                                                     |   }
                                                                     |}
                                                                     |""".stripMargin)
+
+  def def2_charitableGivingReliefsResponseMtdJsonWithHateoas(nino: String, taxYear: String): JsValue =
+    def2_charitableGivingReliefsResponseMtdJson.as[JsObject] ++ Json
+      .parse(
+        s"""
+           |{
+           |  "links": [
+           |    {
+           |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+           |      "method": "PUT",
+           |      "rel": "create-and-amend-charitable-giving-tax-relief"
+           |    },
+           |    {
+           |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+           |      "method": "GET",
+           |      "rel": "self"
+           |    },
+           |    {
+           |      "href": "/individuals/reliefs/charitable-giving/$nino/$taxYear",
+           |      "method": "DELETE",
+           |      "rel": "delete-charitable-giving-tax-relief"
+           |    }
+           |  ]
+           |}
+            """.stripMargin
+      )
+      .as[JsObject]
 
   def charitableGivingReliefsResponseMtdJsonWithHateoas(nino: String, taxYear: String): JsValue =
     charitableGivingReliefsResponseMtdJson.as[JsObject] ++ Json
@@ -129,5 +171,22 @@ trait RetrieveCharitableGivingReliefsFixture {
                                                                            |   }
                                                                            |}
                                                                            |""".stripMargin)
+
+  val def2_charitableGivingReliefsIfsResponseDownstreamJson: JsValue = Json.parse("""
+      |{
+      |   "charitableGivingAnnual" : {
+      |     "giftAidPayments": {
+      |        "currentYear": 2.12,
+      |        "oneOffCurrentYear": 3.12,
+      |        "currentYearTreatedAsPreviousYear": 4.12,
+      |        "nextYearTreatedAsCurrentYear": 5.12
+      |     },
+      |     "gifts": {
+      |        "landAndBuildings": 7.12,
+      |        "sharesOrSecurities": 8.12
+      |     }
+      |   }
+      |}
+      |""".stripMargin)
 
 }

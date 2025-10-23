@@ -21,7 +21,7 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.charitableGiving.retrieve.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v2.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 import v2.charitableGiving.retrieve.model.response.RetrieveCharitableGivingReliefsResponse
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,10 +32,10 @@ trait MockRetrieveCharitableGivingReliefsConnector extends TestSuite with MockFa
 
   object MockRetrieveCharitableGivingReliefsConnector {
 
-    def retrieve(requestData: Def1_RetrieveCharitableGivingReliefsRequestData)
-        : CallHandler[Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]]] = {
+    def retrieve(
+        requestData: RetrieveCharitableGivingReliefsRequestData): CallHandler[Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]]] = {
       (mockConnector
-        .retrieve(_: Def1_RetrieveCharitableGivingReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .retrieve(_: RetrieveCharitableGivingReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
 

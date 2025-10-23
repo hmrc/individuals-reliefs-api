@@ -24,8 +24,7 @@ import shared.models.domain.TaxYear
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import v2.charitableGiving.retrieve.def1.model.request.RetrieveCharitableGivingReliefsFixture
-import v2.charitableGiving.retrieve.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
-
+import v2.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

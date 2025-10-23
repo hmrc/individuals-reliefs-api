@@ -27,7 +27,7 @@ import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 import v1.retrieveCharitableGivingReliefs.def1.model.request.RetrieveCharitableGivingReliefsFixture
 
-class RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec with RetrieveCharitableGivingReliefsFixture {
+class Def1_RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec with RetrieveCharitableGivingReliefsFixture {
 
   private trait Test {
 

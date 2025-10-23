@@ -16,8 +16,12 @@
 
 package v1.retrieveCharitableGivingReliefs
 
+import cats.data.Validated.{Invalid, Valid}
 import shared.controllers.validators.Validator
+import shared.models.errors.MtdError
+import v1.retrieveCharitableGivingReliefs.RetrieveCharitableGivingReliefsSchema.{Def1, Def2}
 import v1.retrieveCharitableGivingReliefs.def1.Def1_RetrieveCharitableGivingReliefsValidator
+import v1.retrieveCharitableGivingReliefs.def2.Def2_RetrieveCharitableGivingReliefsValidator
 import v1.retrieveCharitableGivingReliefs.model.request.RetrieveCharitableGivingReliefsRequestData
 
 import javax.inject.Singleton
@@ -25,9 +29,15 @@ import javax.inject.Singleton
 @Singleton
 class RetrieveCharitableGivingReliefsValidatorFactory {
 
-  def validator(nino: String, taxYear: String): Validator[RetrieveCharitableGivingReliefsRequestData] =
-    taxYear match {
-      case _ => new Def1_RetrieveCharitableGivingReliefsValidator(nino, taxYear)
+  def validator(nino: String, taxYear: String): Validator[RetrieveCharitableGivingReliefsRequestData] = {
+    val schema = RetrieveCharitableGivingReliefsSchema.schemaFor(taxYear)
+
+    schema match {
+      case Valid(Def1)     => new Def1_RetrieveCharitableGivingReliefsValidator(nino, taxYear)
+      case Valid(Def2)     => new Def2_RetrieveCharitableGivingReliefsValidator(nino, taxYear)
+      case Invalid(errors) => Validator.returningErrors(errors)
     }
+
+  }
 
 }
