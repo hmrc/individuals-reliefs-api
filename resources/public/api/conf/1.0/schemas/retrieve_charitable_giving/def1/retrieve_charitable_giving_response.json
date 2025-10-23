@@ -1,6 +1,6 @@
 {
   "$schema":"http://json-schema.org/draft-04/schema#",
-  "title":"Charitable Givings",
+  "title":"TY 2024-25 or before",
   "description":"Charitable Givings",
   "type":"object",
   "properties":{
@@ -25,7 +25,7 @@
             "totalAmount":{
               "description":"The total amount of Gift Aid payments made to non-UK charities for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type":"number",
-              "example":"2000.99",
+              "example":2000.99,
               "multipleOf": 0.01,
               "minimum":0,
               "maximum":99999999999.99
@@ -39,7 +39,7 @@
         "totalAmount":{
           "description":"The total amount of Gift Aid payments made for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type":"number",
-          "example":"2000.99",
+          "example":2000.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
@@ -47,7 +47,7 @@
         "oneOffAmount":{
           "description":"The amount of one-off Gift Aid payments made for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type":"number",
-          "example":"2000.99",
+          "example":2000.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
@@ -55,7 +55,7 @@
         "amountTreatedAsPreviousTaxYear":{
           "description":"The amount of Gift Aid payments made within the specified tax year that should be treated as if they were made in the previous tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type":"number",
-          "example":"2000.99",
+          "example":2000.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
@@ -63,7 +63,7 @@
         "amountTreatedAsSpecifiedTaxYear":{
           "description":"The amount of Gift Aid payments brought forward from the following tax year, treated as if made in the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type":"number",
-          "example":"2000.99",
+          "example":2000.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
@@ -92,7 +92,7 @@
             "totalAmount":{
               "description":"The total value of shares, securities or land and buildings gifted to non-UK charities for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "type":"number",
-              "example":"2000.99",
+              "example":2000.99,
               "multipleOf": 0.01,
               "minimum":0,
               "maximum":99999999999.99
@@ -105,7 +105,7 @@
         "landAndBuildings":{
           "description":"The value of land and buildings gifted to charity for the specified tax year. This should include any costs of the gift or sale, such as legal or valuer's fees. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type":"number",
-          "example":"2000.99",
+          "example":2000.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
@@ -113,7 +113,7 @@
         "sharesOrSecurities":{
           "description":"The value of shares or securities gifted to charity for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
           "type":"number",
-          "example":"2000.99",
+          "example":2000.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
