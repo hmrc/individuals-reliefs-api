@@ -25,7 +25,8 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.createAndAmendCharitableGivingReliefs.model.request.{
   CreateAndAmendCharitableGivingTaxReliefsRequestData,
-  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
+  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData,
+  Def2_CreateAndAmendCharitableGivingTaxReliefsRequestData
 }
 
 import javax.inject.{Inject, Singleton}
@@ -55,6 +56,12 @@ class CreateAndAmendCharitableGivingTaxReliefsConnector @Inject() (val http: Htt
     request match {
       case def1: Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData =>
         import def1._
+        post(
+          body = body,
+          uri = downstreamUri
+        )
+      case def2: Def2_CreateAndAmendCharitableGivingTaxReliefsRequestData =>
+        import def2._
         post(
           body = body,
           uri = downstreamUri

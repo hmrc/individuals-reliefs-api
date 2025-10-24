@@ -19,7 +19,7 @@ package v3.reliefInvestments.retrieve.def2.model.response
 import play.api.libs.json.*
 import shared.config.MockSharedAppConfig
 import shared.utils.UnitSpec
-import v3.fixtures.Def2_RetrieveReliefInvestmentsFixtures.{responseJson, responseModel}
+import v3.fixtures.retrieveReliefInvestments.Def2_RetrieveReliefInvestmentsFixtures.{responseJson, responseModel}
 
 class Def2_RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockSharedAppConfig {
 

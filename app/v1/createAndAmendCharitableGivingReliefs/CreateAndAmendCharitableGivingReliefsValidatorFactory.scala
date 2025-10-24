@@ -16,9 +16,12 @@
 
 package v1.createAndAmendCharitableGivingReliefs
 
+import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
+import v1.createAndAmendCharitableGivingReliefs.CreateAndAmendCharitableGivingReliefsSchema.{Def1, Def2}
 import v1.createAndAmendCharitableGivingReliefs.def1.Def1_CreateAndAmendCharitableGivingReliefsValidator
+import v1.createAndAmendCharitableGivingReliefs.def2.Def2_CreateAndAmendCharitableGivingReliefsValidator
 import v1.createAndAmendCharitableGivingReliefs.model.request.CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 import javax.inject.Singleton
@@ -28,9 +31,12 @@ class CreateAndAmendCharitableGivingReliefsValidatorFactory {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAndAmendCharitableGivingTaxReliefsRequestData] = {
 
-    taxYear match {
-      case _ =>
-        new Def1_CreateAndAmendCharitableGivingReliefsValidator(nino, taxYear, body)
+    val schema = CreateAndAmendCharitableGivingReliefsSchema.schemaFor(taxYear)
+
+    schema match {
+      case Valid(Def1)     => new Def1_CreateAndAmendCharitableGivingReliefsValidator(nino, taxYear, body)
+      case Valid(Def2)     => new Def2_CreateAndAmendCharitableGivingReliefsValidator(nino, taxYear, body)
+      case Invalid(errors) => Validator.returningErrors(errors)
     }
   }
 

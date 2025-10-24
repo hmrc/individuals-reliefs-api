@@ -18,50 +18,18 @@ package v2.charitableGiving.createAmend.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
 import shared.utils.UnitSpec
+import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures.{
+  giftMtdJson,
+  giftModel,
+  giftDesJson
+}
 
 class Def1_GiftsSpec extends UnitSpec {
-
-  val nonUkCharitiesModel: Def1_NonUkCharities =
-    Def1_NonUkCharities(
-      charityNames = Some(Seq("abcdefghijklmnopqr")),
-      totalAmount = 492.10
-    )
-
-  val model: Def1_Gifts =
-    Def1_Gifts(
-      nonUkCharities = Some(nonUkCharitiesModel),
-      landAndBuildings = Some(231.29),
-      sharesOrSecurities = Some(10000.89)
-    )
-
-  val mtdJson: JsValue = Json.parse("""
-      |{
-      |   "nonUkCharities": {
-      |      "charityNames":[
-      |         "abcdefghijklmnopqr"
-      |      ],
-      |      "totalAmount": 492.10
-      |   },
-      |   "landAndBuildings":231.29,
-      |   "sharesOrSecurities":10000.89
-      |}
-      |""".stripMargin)
-
-  val desJson: JsValue = Json.parse("""
-      |{
-      |   "investmentsNonUkCharitiesCharityNames":[
-      |      "abcdefghijklmnopqr"
-      |   ],
-      |   "investmentsNonUkCharities":492.10,
-      |   "landAndBuildings":231.29,
-      |   "sharesOrSecurities":10000.89
-      |}
-      |""".stripMargin)
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        mtdJson.as[Def1_Gifts] shouldBe model
+        giftMtdJson.as[Def1_Gifts] shouldBe giftModel
       }
     }
   }
@@ -69,7 +37,7 @@ class Def1_GiftsSpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(model) shouldBe desJson
+        Json.toJson(giftModel) shouldBe giftDesJson
       }
     }
   }

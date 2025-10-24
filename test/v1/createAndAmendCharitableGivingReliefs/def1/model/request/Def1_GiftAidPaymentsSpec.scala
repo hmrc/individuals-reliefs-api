@@ -18,56 +18,18 @@ package v1.createAndAmendCharitableGivingReliefs.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
 import shared.utils.UnitSpec
+import v1.fixtures.createAndAmendCharitableGivingTaxReliefs.Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures.{
+  giftAidMtdJson,
+  giftAidModel,
+  giftAidDesJson
+}
 
 class Def1_GiftAidPaymentsSpec extends UnitSpec {
-
-  val nonUkCharitiesModel: Def1_NonUkCharities =
-    Def1_NonUkCharities(
-      charityNames = Some(Seq("abcdefghijklmnopqr")),
-      totalAmount = 123.89
-    )
-
-  val model: Def1_GiftAidPayments =
-    Def1_GiftAidPayments(
-      nonUkCharities = Some(nonUkCharitiesModel),
-      totalAmount = Some(492.11),
-      oneOffAmount = Some(987.89),
-      amountTreatedAsPreviousTaxYear = Some(4522.20),
-      amountTreatedAsSpecifiedTaxYear = Some(10000.89)
-    )
-
-  val mtdJson: JsValue = Json.parse("""
-      |{
-      |   "nonUkCharities": {
-      |      "charityNames":[
-      |         "abcdefghijklmnopqr"
-      |      ],
-      |      "totalAmount": 123.89
-      |   },
-      |   "totalAmount":492.11,
-      |   "oneOffAmount":987.89,
-      |   "amountTreatedAsPreviousTaxYear":4522.20,
-      |   "amountTreatedAsSpecifiedTaxYear": 10000.89
-      |}
-      |""".stripMargin)
-
-  val desJson: JsValue = Json.parse("""
-      |{
-      |   "nonUkCharitiesCharityNames":[
-      |      "abcdefghijklmnopqr"
-      |   ],
-      |   "nonUkCharities":123.89,
-      |   "currentYear":492.11,
-      |   "oneOffCurrentYear":987.89,
-      |   "currentYearTreatedAsPreviousYear":4522.20,
-      |   "nextYearTreatedAsCurrentYear":10000.89
-      |}
-      |""".stripMargin)
 
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        mtdJson.as[Def1_GiftAidPayments] shouldBe model
+        giftAidMtdJson.as[Def1_GiftAidPayments] shouldBe giftAidModel
       }
     }
   }
@@ -75,7 +37,7 @@ class Def1_GiftAidPaymentsSpec extends UnitSpec {
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(model) shouldBe desJson
+        Json.toJson(giftAidModel) shouldBe giftAidDesJson
       }
     }
   }
