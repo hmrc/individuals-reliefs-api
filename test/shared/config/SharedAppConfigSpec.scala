@@ -90,6 +90,23 @@ class SharedAppConfigSpec extends UnitSpec {
       )
     }
 
+    "return the HIP config" in {
+      val expectedHipEnvHeaders = Some(
+        List(
+          "HIP-Accept",
+          "HIP-Gov-Test-Scenario",
+          "HIP-Location"
+        ))
+
+      simpleAppConfig.hipDownstreamConfig shouldBe BasicAuthDownstreamConfig(
+        "http://127.0.0.1:9772",
+        "Prod",
+        "HIP-ClientId",
+        "HIP-ClientSecret",
+        expectedHipEnvHeaders
+      )
+    }
+
     "return the apiDocumentationUrl" when {
       "it is not specified" in {
         val changedAppConfig = appConfig("", None)
@@ -144,6 +161,25 @@ class SharedAppConfigSpec extends UnitSpec {
             |""".stripMargin
         )
         val result = appConfigWithEnabledVersion.endpointsEnabled("6.0")
+        result shouldBe true
+      }
+    }
+  }
+
+  "allowRequestCannotBeFulfilledHeader" when {
+    "the API version allows request cannot be fulfilled header" should {
+      "return true" in {
+        val appConfigWithAllowRequestCannotBeFulfilledHeader = appConfig(
+          """
+            |    6.0 {
+            |      endpoints {
+            |        allow-request-cannot-be-fulfilled-header = true
+            |      }
+            |    }
+            |""".stripMargin
+        )
+
+        val result = appConfigWithAllowRequestCannotBeFulfilledHeader.allowRequestCannotBeFulfilledHeader(Version6)
         result shouldBe true
       }
     }
@@ -369,6 +405,15 @@ class SharedAppConfigSpec extends UnitSpec {
            |        env = Prod
            |        token = TYS-IFS-ABCD1234
            |        environmentHeaders = ["TYS-IFS-Accept", "TYS-IFS-Gov-Test-Scenario", "TYS-IFS-Content-Type"]
+           |      }
+           |
+           |      hip {
+           |        host = 127.0.0.1
+           |        port = 9772
+           |        env = Prod
+           |        clientId = "HIP-ClientId"
+           |        clientSecret = "HIP-ClientSecret"
+           |        environmentHeaders = ["HIP-Accept", "HIP-Gov-Test-Scenario", "HIP-Location"]
            |      }
            |    }
            |  }
