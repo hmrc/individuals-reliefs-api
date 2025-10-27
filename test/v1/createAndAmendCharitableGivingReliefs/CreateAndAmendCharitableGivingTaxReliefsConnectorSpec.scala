@@ -19,55 +19,29 @@ package v1.createAndAmendCharitableGivingReliefs
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import v1.createAndAmendCharitableGivingReliefs.def1.model.request._
-import v1.createAndAmendCharitableGivingReliefs.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
+import v1.fixtures.createAndAmendCharitableGivingTaxReliefs.Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures.{model => def1_model}
+import v1.fixtures.createAndAmendCharitableGivingTaxReliefs.Def2_CreateAndAmendCharitableGivingTaxReliefsFixtures.{model => def2_model}
+import v1.createAndAmendCharitableGivingReliefs.model.request.{
+  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData,
+  Def2_CreateAndAmendCharitableGivingTaxReliefsRequestData
+}
 import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
 class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpec {
 
-  val taxYearMtd: String        = "2017-18"
-  val taxYearDownstream: String = "2018"
-  val nino: String              = "ZG903729C"
-
-  val nonUkCharitiesModel: Def1_NonUkCharities =
-    Def1_NonUkCharities(
-      charityNames = Some(Seq("non-UK charity 1", "non-UK charity 2")),
-      totalAmount = 1000.12
-    )
-
-  val giftAidModel: Def1_GiftAidPayments =
-    Def1_GiftAidPayments(
-      nonUkCharities = Some(nonUkCharitiesModel),
-      totalAmount = Some(1000.12),
-      oneOffAmount = Some(1000.12),
-      amountTreatedAsPreviousTaxYear = Some(1000.12),
-      amountTreatedAsSpecifiedTaxYear = Some(1000.12)
-    )
-
-  val giftModel: Def1_Gifts =
-    Def1_Gifts(
-      nonUkCharities = Some(nonUkCharitiesModel),
-      landAndBuildings = Some(1000.12),
-      sharesOrSecurities = Some(1000.12)
-    )
-
-  val requestBody: Def1_CreateAndAmendCharitableGivingTaxReliefsBody =
-    Def1_CreateAndAmendCharitableGivingTaxReliefsBody(
-      giftAidPayments = Some(giftAidModel),
-      gifts = Some(giftModel)
-    )
+  val nino: String = "ZG903729C"
 
   "CreateAndAmendCharitableGivingTaxReliefConnector" when {
     "createOrAmendCharitableGivingTaxRelief is called" must {
       "return 200 for a success scenario" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
-        willPost(url = url"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}", body = requestBody)
+        willPost(url = url"$baseUrl/income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}", body = def1_model)
           .returns(Future.successful(outcome))
 
-        val result: DownstreamOutcome[Unit] = await(connector.createAmend(request))
+        val result: DownstreamOutcome[Unit] = await(connector.createAmend(def1_request))
         result shouldBe outcome
       }
     }
@@ -76,10 +50,22 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
       "return 200 for a success scenario" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-        willPost(url = url"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual", body = requestBody)
+        willPost(url = url"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual", body = def1_model)
           .returns(Future.successful(outcome))
 
-        val result: DownstreamOutcome[Unit] = await(connector.createAmend(request))
+        val result: DownstreamOutcome[Unit] = await(connector.createAmend(def1_request))
+        result shouldBe outcome
+      }
+    }
+
+    "createOrAmendCharitableGivingTaxRelief is called for a TY 25-26" must {
+      "return 200 for a success scenario" in new IfsTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+
+        willPost(url = url"$baseUrl/income-tax/${taxYear.asTysDownstream}/$nino/income-source/charity/annual", body = def2_model)
+          .returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.createAmend(def2_request))
         result shouldBe outcome
       }
     }
@@ -92,8 +78,11 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
     protected val connector: CreateAndAmendCharitableGivingTaxReliefsConnector =
       new CreateAndAmendCharitableGivingTaxReliefsConnector(http = mockHttpClient, appConfig = mockSharedAppConfig)
 
-    protected val request: Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData =
-      Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData(Nino(nino), taxYear, requestBody)
+    protected val def1_request: Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData =
+      Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData(Nino(nino), taxYear, def1_model)
+
+    protected val def2_request: Def2_CreateAndAmendCharitableGivingTaxReliefsRequestData =
+      Def2_CreateAndAmendCharitableGivingTaxReliefsRequestData(Nino(nino), taxYear, def2_model)
 
     protected val outcome = Right(ResponseWrapper(correlationId, ()))
 
