@@ -41,7 +41,7 @@
             "maximum": 99999999999.99
           },
           "reliefClaimed": {
-            "description": "The amount of relief being claimed for the tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+            "description": "The amount on which relief is claimed for the tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
             "type": "number",
             "example": "2000.99",
             "multipleOf": 0.01,
@@ -93,7 +93,7 @@
             "maximum": 99999999999.99
           },
           "reliefClaimed": {
-            "description": "The amount of relief being claimed for the tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+            "description": "The amount on which relief is claimed for the tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
             "type": "number",
             "example": "2000.99",
             "multipleOf": 0.01,
@@ -187,7 +187,7 @@
             "maximum": 99999999999.99
           },
           "reliefClaimed": {
-            "description": "The amount of relief being claimed for the tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+            "description": "The amount on which relief is claimed for the tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
             "type": "number",
             "example": "2000.99",
             "multipleOf": 0.01,
@@ -234,7 +234,7 @@
             "maximum": 99999999999.99
           },
           "reliefClaimed": {
-            "description": "The amount of relief being claimed for the tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+            "description": "The amount on which relief is claimed for the tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
             "type": "number",
             "example": "2000.99",
             "multipleOf": 0.01,
