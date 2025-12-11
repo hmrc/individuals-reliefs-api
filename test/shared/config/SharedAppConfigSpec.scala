@@ -261,7 +261,7 @@ class SharedAppConfigSpec extends UnitSpec {
   }
 
   "deprecationFor" when {
-    "the API version is deprecated" should {
+    "the API version is not deprecated" should {
       "return NotDeprecated" in {
         val config: SharedAppConfig = appConfig(
           """
