@@ -34,11 +34,6 @@ class ReliefsDefinitionFactory @Inject() (protected val appConfig: SharedAppConf
         categories = Seq(mtdCategory),
         versions = Seq(
           APIVersion(
-            version = Version1,
-            status = buildAPIStatus(Version1),
-            endpointsEnabled = appConfig.endpointsEnabled(Version1)
-          ),
-          APIVersion(
             version = Version2,
             status = buildAPIStatus(Version2),
             endpointsEnabled = appConfig.endpointsEnabled(Version2)

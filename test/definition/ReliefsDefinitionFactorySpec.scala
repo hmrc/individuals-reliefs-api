@@ -32,10 +32,6 @@ class ReliefsDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig wit
       "return a valid Definition case class" in {
         MockedSharedAppConfig.apiGatewayContext returns "individuals/reliefs"
 
-        MockedSharedAppConfig.apiStatus(Version1) returns "BETA"
-        MockedSharedAppConfig.endpointsEnabled(Version1) returns true
-        MockedSharedAppConfig.deprecationFor(Version1).returns(NotDeprecated.valid).anyNumberOfTimes()
-
         MockedSharedAppConfig.apiStatus(Version2) returns "BETA"
         MockedSharedAppConfig.endpointsEnabled(Version2) returns true
         MockedSharedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
@@ -54,11 +50,6 @@ class ReliefsDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig wit
               context = "individuals/reliefs",
               categories = Seq("INCOME_TAX_MTD"),
               versions = Seq(
-                APIVersion(
-                  version = Version1,
-                  status = BETA,
-                  endpointsEnabled = true
-                ),
                 APIVersion(
                   version = Version2,
                   status = BETA,
