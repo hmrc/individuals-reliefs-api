@@ -8,7 +8,7 @@ description: |
   
   | Header Value (Gov-Test-Scenario) | Scenario                                                                                                                                                    |
   |----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-  | DELETE                           | Simulates success response.                                                                                                                                 |
+  | N/A - DEFAULT                    | Simulates success response.                                                                                                                                 |
   | NOT_FOUND                        | Simulates the scenario where no data is found.                                                                                                              |
   | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.                                                             |
   | STATEFUL_DELETE                  | Performs a stateful delete. <br></br>This Gov-Test-Scenario is no longer available in this version. It has been replaced by the STATEFUL Gov-Test-Scenario. |
