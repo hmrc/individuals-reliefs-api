@@ -14,23 +14,36 @@
  * limitations under the License.
  */
 
-package v2.endpoints.reliefInvestments.retrieve
+package v3.endpoints.reliefInvestments.retrieve
 
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
+import shared.models.errors.*
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v2.fixtures.RetrieveReliefInvestmentsFixtures.responseJson
+import v3.fixtures.retrieveReliefInvestments.Def1_RetrieveReliefInvestmentsFixtures.responseJson
 
-class RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
+class Def1_RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
   "Calling the retrieve endpoint" should {
     "return a 200 status code" when {
-      "a valid request is made" in new Test {
+      "a valid request is made" in new NonTysTest {
+
+        override def setupStubs(): Unit = {
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, responseJson)
+        }
+
+        val response: WSResponse = await(request().get())
+        response.status shouldBe OK
+        response.json shouldBe responseJson
+        response.header("X-CorrelationId") should not be empty
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
+
+      "a valid TYS request is made" in new TysTest {
 
         override def setupStubs(): Unit = {
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, responseJson)
@@ -48,7 +61,7 @@ class RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
 
       "validation error" when {
         def validationErrorTest(requestNino: String, taxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+          s"validation fails with ${expectedBody.code} error" in new TysTest {
 
             override val nino: String       = requestNino
             override val mtdTaxYear: String = taxYear
@@ -71,7 +84,7 @@ class RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysTest {
 
             override def setupStubs(): Unit = {
               DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamCode))
@@ -104,9 +117,9 @@ class RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
-    val nino                  = "AA123456A"
-    def mtdTaxYear: String    = "2023-24"
-    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/reliefs/investment/$nino"
+    val nino = "AA123456A"
+    def mtdTaxYear: String
+    def downstreamUri: String
 
     def setupStubs(): Unit = {}
 
@@ -117,7 +130,7 @@ class RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
       setupStubs()
       buildRequest(s"/investment/$nino/$mtdTaxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.3.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
@@ -137,6 +150,18 @@ class RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
          |}
     """.stripMargin
 
+  }
+
+  private trait NonTysTest extends Test {
+    def mtdTaxYear: String = "2021-22"
+
+    def downstreamUri: String = s"/income-tax/reliefs/investment/$nino/2021-22"
+  }
+
+  private trait TysTest extends Test {
+    def mtdTaxYear: String = "2023-24"
+
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/reliefs/investment/$nino"
   }
 
 }

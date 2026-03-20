@@ -16,12 +16,12 @@
 
 package v3.reliefInvestments.createAmend
 
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
-import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -35,17 +35,13 @@ class CreateAndAmendReliefInvestmentsConnector @Inject() (val http: HttpClientV2
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request._
+    import request.*
 
     lazy val downstreamUri1629: DownstreamUri[Unit] =
       IfsUri[Unit](s"income-tax/reliefs/investment/$nino/${taxYear.asMtd}")
 
     lazy val downstreamUri1924: DownstreamUri[Unit] =
-      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1924")) {
-        HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/reliefs/investment/$nino")
-      } else {
-        IfsUri[Unit](s"income-tax/reliefs/investment/${taxYear.asTysDownstream}/$nino")
-      }
+      HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/reliefs/investment/$nino")
 
     val downstreamUri: DownstreamUri[Unit] = if (taxYear.useTaxYearSpecificApi) {
       downstreamUri1924

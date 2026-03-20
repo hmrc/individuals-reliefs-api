@@ -24,9 +24,9 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
-import v3.fixtures.retrieveReliefInvestments.Def1_RetrieveReliefInvestmentsFixtures.responseJson
+import v3.fixtures.retrieveReliefInvestments.Def2_RetrieveReliefInvestmentsFixtures.responseJson
 
-class Def1_RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSpec {
+class Def2_RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {
 
   "Calling the retrieve endpoint" should {
     "return a 200 status code" when {
@@ -104,9 +104,11 @@ class Def1_RetrieveReliefInvestmentsControllerHipISpec extends IntegrationBaseSp
 
   private trait Test {
 
-    val nino                  = "AA123456A"
-    def mtdTaxYear: String    = "2023-24"
-    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/reliefs/investment/$nino"
+    val nino = "AA123456A"
+
+    def mtdTaxYear: String = "2025-26"
+
+    def downstreamUri: String = s"/itsa/income-tax/v1/25-26/reliefs/investment/$nino"
 
     def setupStubs(): Unit = {}
 
