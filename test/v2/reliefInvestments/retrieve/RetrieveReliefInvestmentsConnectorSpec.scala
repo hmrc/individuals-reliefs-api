@@ -16,15 +16,14 @@
 
 package v2.reliefInvestments.retrieve
 
-import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.fixtures.RetrieveReliefInvestmentsFixtures.responseModel
 import v2.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
-import v2.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
-import uk.gov.hmrc.http.StringContextOps
 import v2.reliefInvestments.retrieve.def1.model.response.Def1_RetrieveReliefInvestmentsResponse
+import v2.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 
 import scala.concurrent.Future
 
@@ -45,8 +44,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
   "RetrieveReliefInvestmentsConnector" when {
     "retrieving relief investments" must {
 
-      "return a valid response when feature switch is disabled (IFS disabled)" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1925.enabled" -> false))
+      "return a valid response for a non-TYS tax year" in new IfsTest with Test {
 
         val taxYear: String                                                                  = "2017-18"
         val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveReliefInvestmentsResponse]] = Right(ResponseWrapper(correlationId, responseModel))
@@ -57,19 +55,7 @@ class RetrieveReliefInvestmentsConnectorSpec extends ConnectorSpec {
         await(connector.retrieve(request)) shouldBe outcome
       }
 
-      "return a valid response for a Tax Year Specific (TYS) tax year" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1925.enabled" -> false))
-        val taxYear: String                                                                  = "2023-24"
-        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveReliefInvestmentsResponse]] = Right(ResponseWrapper(correlationId, responseModel))
-
-        willGet(url = url"$baseUrl/income-tax/reliefs/investment/23-24/AA123456A")
-          .returns(Future.successful(outcome))
-
-        await(connector.retrieve(request)) shouldBe outcome
-      }
-
-      "return a valid response when feature switch is enabled (HIP enabled)" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1925.enabled" -> true))
+      "return a valid response for a Tax Year Specific (TYS) tax year" in new HipTest with Test {
 
         val taxYear: String                                                                  = "2023-24"
         val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveReliefInvestmentsResponse]] = Right(ResponseWrapper(correlationId, responseModel))
