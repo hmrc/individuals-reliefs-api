@@ -6,7 +6,8 @@
   "properties": {
     "submittedOn": {
       "type": "string",
-      "description": "An ISO-8601 compliant date-time representing when pensions reliefs was submitted on.",
+      "description": "An ISO-8601 compliant date-time representing when pensions reliefs was submitted on. It must be provided in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
+      "format": "date-time",
       "example": "2019-04-04T01:01:01.000Z"
     },
     "pensionReliefs": {
@@ -16,7 +17,7 @@
         "regularPensionContributions": {
           "type": "number",
           "description": "The amount of regular pension contributions.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example": "1999.99",
+          "example": 1999.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
@@ -24,7 +25,7 @@
         "oneOffPensionContributionsPaid": {
           "type": "number",
           "description": "The amount of the one off pensions contribution.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example": "1999.99",
+          "example": 1999.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
@@ -32,7 +33,7 @@
         "retirementAnnuityPayments": {
           "type": "number",
           "description": "The amount of retirement annuity received.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example": "1999.99",
+          "example": 1999.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
@@ -40,7 +41,7 @@
         "paymentToEmployersSchemeNoTaxRelief": {
           "type": "number",
           "description": "The amount of payments to employers scheme.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example": "1999.99",
+          "example": 1999.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
@@ -48,7 +49,7 @@
         "overseasPensionSchemeContributions": {
           "type": "number",
           "description": "The amount of overseas pension scheme contributions.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example": "1999.99",
+          "example": 1999.99,
           "multipleOf": 0.01,
           "minimum": 0,
           "maximum": 99999999999.99
