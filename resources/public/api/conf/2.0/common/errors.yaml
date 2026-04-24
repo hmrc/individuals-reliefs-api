@@ -39,10 +39,10 @@ components:
         message: The format of the supplied country code is not valid
 
     ruleCountryCode:
-      description: Not a valid ISO 3166-1 alpha-3 country code.
+      description: Not a permitted ISO 3166-1 alpha-3 country code.
       value:
         code: RULE_COUNTRY_CODE
-        message: Not a valid ISO 3166-1 alpha-3 country code
+        message: Not a permitted ISO 3166-1 alpha-3 country code
 
     formatString:
       description: One or more strings have been added with the incorrect format.
