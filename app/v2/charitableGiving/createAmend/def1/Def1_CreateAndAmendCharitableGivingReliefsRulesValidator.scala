@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ package v2.charitableGiving.createAmend.def1
 
 import cats.data.Validated
 import cats.data.Validated.Invalid
-import cats.implicits.{toFoldableOps, toTraverseOps}
+import cats.implicits.toFoldableOps
 import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError}
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.ResolveParsedNumber
+import shared.controllers.validators.resolvers.{ResolveParsedNumber, ResolveStringPattern}
 import shared.models.errors.{MtdError, StringFormatError}
 import v2.charitableGiving.createAmend.def1.model.request.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
 import v2.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
@@ -81,12 +81,11 @@ class Def1_CreateAndAmendCharitableGivingReliefsRulesValidator extends RulesVali
       case Def1_NonUkCharities(Some(charityNames), _)              => if (charityNames.isEmpty) Invalid(List(missingCharityNamesError)) else valid
     }
 
-    val validateCharityNamesFormat = (name: String, index: Int) =>
-      if (charityNamesRegex.matches(name)) {
-        valid
-      } else { Invalid(List(StringFormatError.withPath(s"$path/nonUkCharities/charityNames/$index"))) }
-
-    val validatedCharityNamesFormat = charityNames.traverse_(_.zipWithIndex.traverse(validateCharityNamesFormat.tupled))
+    val validatedCharityNamesFormat = charityNames.traverse_(
+      _.zipWithIndex.traverse_ { case (name, index) =>
+        ResolveStringPattern(name, charityNamesRegex, StringFormatError.withPath(s"$path/nonUkCharities/charityNames/$index"))
+      }
+    )
 
     combine(validatedCharityNamesFormat, validatedMissingCharityNames)
   }

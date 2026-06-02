@@ -21,7 +21,7 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
 import common._
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
 import shared.models.errors._
 import v2.otherReliefs.amend.def1.model.request._
 
@@ -31,7 +31,8 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
-  private val stringRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
+  private val customerReferenceRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
+  private val commonStringRegex = "^.{1,105}$".r
 
   private val minYear = 1900
   private val maxYear = 2100
@@ -54,19 +55,11 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
                                     validate: (VALUE, Int) => Validated[Seq[MtdError], Unit]): Validated[Seq[MtdError], Unit] =
     maybeFields.traverse_(_.zipWithIndex.traverse_(validate.tupled))
 
-  private def validateCustomerRef(ref: String, path: String, error: MtdError = CustomerReferenceFormatError): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(ref)) valid
-    else Invalid(List(error.withPath(path)))
-
-  private def validateFieldLength(field: String, path: String, error: MtdError): Validated[Seq[MtdError], Unit] =
-    if (field.nonEmpty && field.length <= 105) valid
-    else Invalid(List(error.withPath(path)))
-
   private def validateNonDeductibleLoanInterest(nonDeductibleLoanInterest: NonDeductibleLoanInterest): Validated[Seq[MtdError], Unit] = {
     import nonDeductibleLoanInterest._
 
     combine(
-      customerReference.traverse_(validateCustomerRef(_, "/nonDeductibleLoanInterest/customerReference")),
+      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath("/nonDeductibleLoanInterest/customerReference"))),
       resolveParsedNumber(reliefClaimed, "/nonDeductibleLoanInterest/reliefClaimed")
     )
   }
@@ -75,7 +68,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import payrollGiving._
 
     combine(
-      customerReference.traverse_(validateCustomerRef(_, "/payrollGiving/customerReference")),
+      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath("/payrollGiving/customerReference"))),
       resolveParsedNumber(reliefClaimed, "/payrollGiving/reliefClaimed")
     )
   }
@@ -86,7 +79,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import qualifyingDistributionRedemptionOfSharesAndSecurities._
 
     combine(
-      customerReference.traverse_(validateCustomerRef(_, "/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference")),
+      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath("/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference"))),
       resolveParsedNumber(amount, "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount")
     )
   }
@@ -97,14 +90,14 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import postCessationTradeReliefAndCertainOtherLosses._
     val dateBusinessCeasedPath = s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased"
     combine(
-      customerReference.traverse_(validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference")),
-      businessName.traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName", BusinessNameFormatError)),
+      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference"))),
+      businessName.traverse_(ResolveStringPattern(_, commonStringRegex, BusinessNameFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName"))),
       dateBusinessCeased.traverse_(
         ResolveIsoDate(_, DateFormatError.withPath(dateBusinessCeasedPath)).andThen(isDateInRange(_, dateBusinessCeasedPath))
       ),
       natureOfTrade.traverse_(
-        validateCustomerRef(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade", NatureOfTradeFormatError)),
-      incomeSource.traverse_(validateFieldLength(_, s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource", IncomeSourceFormatError)),
+        ResolveStringPattern(_, customerReferenceRegex, NatureOfTradeFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade"))),
+      incomeSource.traverse_(ResolveStringPattern(_, commonStringRegex, IncomeSourceFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource"))),
       resolveParsedNumber(amount, s"/postCessationTradeReliefAndCertainOtherLosses/$index/amount")
     )
   }
@@ -114,8 +107,8 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
 
     val exSpouseDateOfBirthPath = s"/maintenancePayments/$index/exSpouseDateOfBirth"
     combine(
-      customerReference.traverse_(validateCustomerRef(_, s"/maintenancePayments/$index/customerReference")),
-      exSpouseName.traverse_(validateFieldLength(_, s"/maintenancePayments/$index/exSpouseName", ExSpouseNameFormatError)),
+      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath(s"/maintenancePayments/$index/customerReference"))),
+      exSpouseName.traverse_(ResolveStringPattern(_, commonStringRegex, ExSpouseNameFormatError.withPath(s"/maintenancePayments/$index/exSpouseName"))),
       exSpouseDateOfBirth.traverse_(
         ResolveIsoDate(_, DateFormatError.withPath(exSpouseDateOfBirthPath)).andThen(isDateInRange(_, exSpouseDateOfBirthPath))
       ),
@@ -127,7 +120,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import annualPaymentsMade._
 
     combine(
-      customerReference.traverse_(validateCustomerRef(_, "/annualPaymentsMade/customerReference")),
+      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath("/annualPaymentsMade/customerReference"))),
       resolveParsedNumber(reliefClaimed, "/annualPaymentsMade/reliefClaimed")
     )
   }
@@ -137,8 +130,8 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import qualifyingLoanInterestPayments._
 
     combine(
-      customerReference.traverse_(validateCustomerRef(_, s"/qualifyingLoanInterestPayments/$index/customerReference")),
-      lenderName.traverse_(validateFieldLength(_, s"/qualifyingLoanInterestPayments/$index/lenderName", LenderNameFormatError)),
+      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath(s"/qualifyingLoanInterestPayments/$index/customerReference"))),
+      lenderName.traverse_(ResolveStringPattern(_, commonStringRegex, LenderNameFormatError.withPath(s"/qualifyingLoanInterestPayments/$index/lenderName"))),
       resolveParsedNumber(reliefClaimed, s"/qualifyingLoanInterestPayments/$index/reliefClaimed")
     )
   }

@@ -36,7 +36,7 @@ responses:
     content:
       application/json:
         schema:
-          $ref: "./schemas/retrieve_relief_others_response.json"
+          $ref: "./schemas/retrieve_relief_other_response.json"
         examples:
           example-response:
             description: Example response
