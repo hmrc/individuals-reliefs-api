@@ -11,13 +11,13 @@
         "type": "object",
         "properties": {
           "uniqueInvestmentRef": {
-            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
+            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "name": {
-            "description": "The name of the investment or fund.",
+            "description": "The name of the investment or fund. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
             "example": "VCT fund"
@@ -59,13 +59,13 @@
         "type": "object",
         "properties": {
           "uniqueInvestmentRef": {
-            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
+            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "name": {
-            "description": "The name of the investment or fund",
+            "description": "The name of the investment or fund. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
             "example": "EIS fund"
@@ -112,13 +112,13 @@
         "type": "object",
         "properties": {
           "uniqueInvestmentRef": {
-            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
+            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "name": {
-            "description": "The name of the investment or fund.",
+            "description": "The name of the investment or fund. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
             "example": "CI X"
@@ -160,13 +160,13 @@
         "type": "object",
         "properties": {
           "uniqueInvestmentRef": {
-            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
+            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "companyName": {
-            "description": "The name of the company holding the investment.",
+            "description": "The name of the company holding the investment. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
             "example": "Company Inc"
@@ -208,13 +208,13 @@
         "type": "object",
         "properties": {
           "uniqueInvestmentRef": {
-            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
+            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"
           },
           "socialEnterpriseName": {
-            "description": "The name of the investment or fund.",
+            "description": "The name of the investment or fund. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$",
             "example": "SE Inc"

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
 import common.{DateOfInvestmentFormatError, NameFormatError, UniqueInvestmentRefFormatError}
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
 import shared.models.errors.MtdError
 import v2.reliefInvestments.createAmend.def1.model.request._
 
@@ -32,9 +32,7 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
   private val minYear = 1900
   private val maxYear = 2100
 
-  private val uniqueInvestmentRefRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
-
-  private val nameRegex = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$".r
+  private val stringRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
@@ -63,23 +61,12 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
     import item._
 
     combine(
-      validateUniqueInvestmentRef(uniqueInvestmentRef, itemType, index),
-      validateName(name, s"/$itemType/$index/$nameField"),
+      ResolveStringPattern(uniqueInvestmentRef, stringRegex, UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")),
+      name.traverse_(ResolveStringPattern(_, stringRegex, NameFormatError.withPath(s"/$itemType/$index/$nameField"))),
       validateDate(dateOfInvestment, itemType, index),
       validateNumericFields(amountInvested, reliefClaimed, itemType, index)
     )
   }
-
-  private def validateUniqueInvestmentRef(uniqueInvestmentRef: String, itemType: String, index: Int): Validated[Seq[MtdError], Unit] =
-    if (uniqueInvestmentRefRegex.matches(uniqueInvestmentRef)) {
-      valid
-    } else {
-      Invalid(List(UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")))
-    }
-
-  private def validateName(maybeName: Option[String], path: String): Validated[Seq[MtdError], Unit] =
-    maybeName
-      .traverse_(name => if (nameRegex.matches(name)) valid else Invalid(List(NameFormatError.withPath(path))))
 
   private def validateDate(maybeDate: Option[String], itemType: String, index: Int): Validated[Seq[MtdError], Unit] = {
     val path = s"/$itemType/$index/dateOfInvestment"

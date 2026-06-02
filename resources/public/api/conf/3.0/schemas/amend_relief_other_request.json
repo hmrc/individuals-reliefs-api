@@ -9,7 +9,7 @@
       "type": "object",
       "properties": {
         "customerReference": {
-          "description": "A reference or friendly name used by the customer.",
+          "description": "A reference or friendly name used by the customer. Must not be empty or contain only whitespace.",
           "type": "string",
           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
@@ -33,7 +33,7 @@
       "type": "object",
       "properties": {
         "customerReference": {
-          "description": "A reference or friendly name used by the customer.",
+          "description": "A reference or friendly name used by the customer. Must not be empty or contain only whitespace.",
           "type": "string",
           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
@@ -57,7 +57,7 @@
       "type": "object",
       "properties": {
         "customerReference": {
-          "description": "A reference or friendly name used by the customer.",
+          "description": "A reference or friendly name used by the customer. Must not be empty or contain only whitespace.",
           "type": "string",
           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
@@ -77,7 +77,7 @@
       "additionalProperties": false
     },
     "maintenancePayments": {
-      "description": "Details of maintenance payments made to an ex-spouse.",
+      "description": "Details of maintenance payments made to an ex-spouse. Must not be empty or contain only whitespace.",
       "type": "array",
       "items": {
         "type": "object",
@@ -89,8 +89,9 @@
             "example": "INPOLY123A"
           },
           "exSpouseName": {
-            "description": "The name of the ex-spouse who receives the payment.",
+            "description": "The name of the ex-spouse who receives the payment. Must not be empty or contain only whitespace.",
             "type": "string",
+            "pattern": "^.{1,105}$",
             "example": "Hilda",
             "minLength": 1,
             "maxLength": 105
@@ -123,16 +124,17 @@
         "type": "object",
         "properties": {
           "customerReference": {
-            "description": "A reference or friendly name used by the customer.",
+            "description": "A reference or friendly name used by the customer. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "INPOLY123A"
           },
           "businessName": {
-            "description": "The name of the business that has ceased trading.",
+            "description": "The name of the business that has ceased trading. Must not be empty or contain only whitespace.",
+            "type": "string",
+            "pattern": "^.{1,105}$",
             "minLength": 1,
-            "maxLength": 105,
-            "type": "string"
+            "maxLength": 105
           },
           "dateBusinessCeased": {
             "description": "The date the business ceased trading. Date in the format: `YYYY-MM-DD`",
@@ -141,15 +143,16 @@
             "example": "2018-04-06"
           },
           "natureOfTrade": {
-            "description": "The trading nature of the business.",
+            "description": "The trading nature of the business. Must not be empty or contain only whitespace.",
             "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "type": "string"
           },
           "incomeSource": {
-            "description": "Income source identifier or UTR (Unique Taxpayer Reference).",
+            "description": "Income source identifier or UTR (Unique Taxpayer Reference). Must not be empty or contain only whitespace.",
+            "type": "string",
+            "pattern": "^.{1,105}$",
             "minLength": 1,
-            "maxLength": 105,
-            "type": "string"
+            "maxLength": 105
           },
           "amount": {
             "description": "The amount which can be deducted from chargeable gains. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -171,7 +174,7 @@
       "type": "object",
       "properties": {
         "customerReference": {
-          "description": "A reference or friendly name used by the customer.",
+          "description": "A reference or friendly name used by the customer. Must not be empty or contain only whitespace.",
           "type": "string",
           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
           "example": "INPOLY123A"
@@ -197,16 +200,17 @@
         "type": "object",
         "properties": {
           "customerReference": {
-            "description": "A reference or friendly name used by the customer.",
+            "description": "A reference or friendly name used by the customer. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "INPOLY123A"
           },
           "lenderName": {
-            "description": "The name of the individual, public group, private group, or financial institution that made the funds available.",
+            "description": "The name of the individual, public group, private group, or financial institution that made the funds available. Must not be empty or contain only whitespace.",
+            "type": "string",
+            "pattern": "^.{1,105}$",
             "minLength": 1,
-            "maxLength": 105,
-            "type": "string"
+            "maxLength": 105
           },
           "reliefClaimed": {
             "description": "The amount on which relief is claimed for the tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",

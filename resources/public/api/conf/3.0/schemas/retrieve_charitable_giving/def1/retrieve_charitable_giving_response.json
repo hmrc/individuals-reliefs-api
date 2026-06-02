@@ -13,7 +13,7 @@
           "type":"object",
           "properties":{
             "charityNames":{
-              "description":"List of all the names of all non-UK charities that received Gift Aid payments. This is mandatory if amount is greater than zero.",
+              "description":"List of all the names of all non-UK charities that received Gift Aid payments. This is mandatory if amount is greater than zero. Must not be empty or contain only whitespace.",
               "type":"array",
               "items":{
                 "type":"string",
@@ -79,7 +79,7 @@
           "type":"object",
           "properties":{
             "charityNames":{
-              "description":"List of all the names of all non-UK charities that received gifts. This is mandatory if amount is greater than zero.",
+              "description":"List of all the names of all non-UK charities that received gifts. This is mandatory if amount is greater than zero. Must not be empty or contain only whitespace.",
               "type":"array",
               "items":{
                 "type":"string",
