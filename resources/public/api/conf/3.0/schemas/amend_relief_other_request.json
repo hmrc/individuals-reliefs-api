@@ -83,7 +83,7 @@
         "type": "object",
         "properties": {
           "customerReference": {
-            "description": "A reference or friendly name used by the customer.",
+            "description": "A reference or friendly name used by the customer. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "INPOLY123A"

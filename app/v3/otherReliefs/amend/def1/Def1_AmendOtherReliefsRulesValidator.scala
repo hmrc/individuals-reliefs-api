@@ -59,7 +59,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import nonDeductibleLoanInterest._
 
     combine(
-      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath("/nonDeductibleLoanInterest/customerReference"))),
+      ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath("/nonDeductibleLoanInterest/customerReference")),
       resolveParsedNumber(reliefClaimed, "/nonDeductibleLoanInterest/reliefClaimed")
     )
   }
@@ -68,7 +68,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import payrollGiving._
 
     combine(
-      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath("/payrollGiving/customerReference"))),
+      ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath("/payrollGiving/customerReference")),
       resolveParsedNumber(reliefClaimed, "/payrollGiving/reliefClaimed")
     )
   }
@@ -79,7 +79,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import qualifyingDistributionRedemptionOfSharesAndSecurities._
 
     combine(
-      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath("/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference"))),
+      ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath("/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference")),
       resolveParsedNumber(amount, "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount")
     )
   }
@@ -90,14 +90,13 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import postCessationTradeReliefAndCertainOtherLosses._
     val dateBusinessCeasedPath = s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased"
     combine(
-      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference"))),
-      businessName.traverse_(ResolveStringPattern(_, commonStringRegex, BusinessNameFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName"))),
+      ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference")),
+      ResolveStringPattern(businessName, commonStringRegex, BusinessNameFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName")),
       dateBusinessCeased.traverse_(
         ResolveIsoDate(_, DateFormatError.withPath(dateBusinessCeasedPath)).andThen(isDateInRange(_, dateBusinessCeasedPath))
       ),
-      natureOfTrade.traverse_(
-        ResolveStringPattern(_, customerReferenceRegex, NatureOfTradeFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade"))),
-      incomeSource.traverse_(ResolveStringPattern(_, commonStringRegex, IncomeSourceFormatError.withPath( s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource"))),
+      ResolveStringPattern(natureOfTrade, customerReferenceRegex, NatureOfTradeFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade")),
+      ResolveStringPattern(incomeSource, commonStringRegex, IncomeSourceFormatError.withPath( s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource")),
       resolveParsedNumber(amount, s"/postCessationTradeReliefAndCertainOtherLosses/$index/amount")
     )
   }
@@ -107,8 +106,8 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
 
     val exSpouseDateOfBirthPath = s"/maintenancePayments/$index/exSpouseDateOfBirth"
     combine(
-      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath(s"/maintenancePayments/$index/customerReference"))),
-      exSpouseName.traverse_(ResolveStringPattern(_, commonStringRegex, ExSpouseNameFormatError.withPath(s"/maintenancePayments/$index/exSpouseName"))),
+      ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath(s"/maintenancePayments/$index/customerReference")),
+      ResolveStringPattern(exSpouseName, commonStringRegex, ExSpouseNameFormatError.withPath(s"/maintenancePayments/$index/exSpouseName")),
       exSpouseDateOfBirth.traverse_(
         ResolveIsoDate(_, DateFormatError.withPath(exSpouseDateOfBirthPath)).andThen(isDateInRange(_, exSpouseDateOfBirthPath))
       ),
@@ -120,7 +119,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import annualPaymentsMade._
 
     combine(
-      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath("/annualPaymentsMade/customerReference"))),
+      ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath("/annualPaymentsMade/customerReference")),
       resolveParsedNumber(reliefClaimed, "/annualPaymentsMade/reliefClaimed")
     )
   }
@@ -130,8 +129,8 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     import qualifyingLoanInterestPayments._
 
     combine(
-      customerReference.traverse_(ResolveStringPattern(_, customerReferenceRegex, CustomerReferenceFormatError.withPath(s"/qualifyingLoanInterestPayments/$index/customerReference"))),
-      lenderName.traverse_(ResolveStringPattern(_, commonStringRegex, LenderNameFormatError.withPath(s"/qualifyingLoanInterestPayments/$index/lenderName"))),
+      ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath(s"/qualifyingLoanInterestPayments/$index/customerReference")),
+      ResolveStringPattern(lenderName, commonStringRegex, LenderNameFormatError.withPath(s"/qualifyingLoanInterestPayments/$index/lenderName")),
       resolveParsedNumber(reliefClaimed, s"/qualifyingLoanInterestPayments/$index/reliefClaimed")
     )
   }

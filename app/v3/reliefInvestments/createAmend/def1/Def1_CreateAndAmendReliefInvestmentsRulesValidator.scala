@@ -32,7 +32,8 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
   private val minYear = 1900
   private val maxYear = 2100
 
-  private val stringRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
+  private val uniqueInvestmentRefRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
+  private val nameRegex                = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,105}$".r
 
   private val resolveParsedNumber = ResolveParsedNumber()
 
@@ -61,8 +62,8 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
     import item._
 
     combine(
-      ResolveStringPattern(uniqueInvestmentRef, stringRegex, UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")),
-      name.traverse_(ResolveStringPattern(_, stringRegex, NameFormatError.withPath(s"/$itemType/$index/$nameField"))),
+      ResolveStringPattern(uniqueInvestmentRef, uniqueInvestmentRefRegex, UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")),
+      ResolveStringPattern(name, nameRegex, NameFormatError.withPath(s"/$itemType/$index/$nameField")),
       validateDate(dateOfInvestment, itemType, index),
       validateNumericFields(amountInvested, reliefClaimed, itemType, index)
     )
