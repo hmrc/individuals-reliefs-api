@@ -58,13 +58,13 @@
       }
     },
     "eisSubscription": {
-      "description": "Financial details about EIS subscriptions income. Must not be empty or contain only whitespace.",
+      "description": "Financial details about EIS subscriptions income.",
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
           "uniqueInvestmentRef": {
-            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate.",
+            "description": "The Unique Investment Reference (UIR) or the name of the authorising tax office as shown on the certificate. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "12345678"

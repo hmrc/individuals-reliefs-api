@@ -96,7 +96,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
         ResolveIsoDate(_, DateFormatError.withPath(dateBusinessCeasedPath)).andThen(isDateInRange(_, dateBusinessCeasedPath))
       ),
       ResolveStringPattern(natureOfTrade, customerReferenceRegex, NatureOfTradeFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade")),
-      incomeSource.traverse_(ResolveStringPattern(_, commonStringRegex, IncomeSourceFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource"))),
+      ResolveStringPattern(incomeSource, commonStringRegex, IncomeSourceFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource")),
       resolveParsedNumber(amount, s"/postCessationTradeReliefAndCertainOtherLosses/$index/amount")
     )
   }
