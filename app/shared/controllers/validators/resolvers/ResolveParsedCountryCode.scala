@@ -276,7 +276,7 @@ object ResolveParsedCountryCode {
   def apply(maybeValue: Option[String], path: String): Validated[List[MtdError], Option[String]] = {
     maybeValue match {
       case Some(value) => apply(value, path).map(Option(_))
-      case None => Valid(None)
+      case None        => Valid(None)
     }
   }
 
