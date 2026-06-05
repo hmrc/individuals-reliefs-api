@@ -181,7 +181,6 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
   def anyVersionHeader: (String, String) = ACCEPT -> "application/vnd.hmrc.1.0+json"
 
   private trait Test {
-    val method = "some-method"
 
     val requestHeader: FakeRequest[AnyContent] = FakeRequest().withHeaders(anyVersionHeader)
 
