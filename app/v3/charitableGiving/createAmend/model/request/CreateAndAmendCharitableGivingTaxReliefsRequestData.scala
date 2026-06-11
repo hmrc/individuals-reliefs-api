@@ -16,7 +16,7 @@
 
 package v3.charitableGiving.createAmend.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v3.charitableGiving.createAmend.def1.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsBody
 import v3.charitableGiving.createAmend.def2.model.request.Def2_CreateAndAmendCharitableGivingTaxReliefsBody
 

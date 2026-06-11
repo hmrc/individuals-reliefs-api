@@ -16,8 +16,8 @@
 
 package v2.reliefInvestments.createAmend
 
-import shared.controllers.validators.resolvers.ResolveTaxYear
-import shared.models.domain.TaxYear
+import api.controllers.validators.resolvers.ResolveTaxYear
+import api.models.domain.TaxYear
 
 sealed trait CreateAndAmendReliefInvestmentsSchema
 

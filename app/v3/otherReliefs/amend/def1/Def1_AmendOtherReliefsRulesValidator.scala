@@ -16,13 +16,13 @@
 
 package v3.otherReliefs.amend.def1
 
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.*
+import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
 import common.*
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
-import shared.models.errors.*
 import v3.otherReliefs.amend.def1.model.request.*
 
 import java.time.LocalDate
@@ -38,7 +38,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
   private val maxYear = 2100
 
   def validateBusinessRules(parsed: Def1_AmendOtherReliefsRequestData): Validated[Seq[MtdError], Def1_AmendOtherReliefsRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     combine(
       nonDeductibleLoanInterest.traverse_(validateNonDeductibleLoanInterest),
@@ -56,7 +56,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
     maybeFields.traverse_(_.zipWithIndex.traverse_(validate.tupled))
 
   private def validateNonDeductibleLoanInterest(nonDeductibleLoanInterest: NonDeductibleLoanInterest): Validated[Seq[MtdError], Unit] = {
-    import nonDeductibleLoanInterest._
+    import nonDeductibleLoanInterest.*
 
     combine(
       ResolveStringPattern(
@@ -68,7 +68,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
   }
 
   private def validatePayrollGiving(payrollGiving: PayrollGiving): Validated[Seq[MtdError], Unit] = {
-    import payrollGiving._
+    import payrollGiving.*
 
     combine(
       ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath("/payrollGiving/customerReference")),
@@ -79,7 +79,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
   private def validateQualifyingDistributionRedemptionOfSharesAndSecurities(
       qualifyingDistributionRedemptionOfSharesAndSecurities: QualifyingDistributionRedemptionOfSharesAndSecurities)
       : Validated[Seq[MtdError], Unit] = {
-    import qualifyingDistributionRedemptionOfSharesAndSecurities._
+    import qualifyingDistributionRedemptionOfSharesAndSecurities.*
 
     combine(
       ResolveStringPattern(
@@ -94,7 +94,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
   private def validatePostCessationTradeReliefAndCertainOtherLosses(
       postCessationTradeReliefAndCertainOtherLosses: PostCessationTradeReliefAndCertainOtherLosses,
       index: Int): Validated[Seq[MtdError], Unit] = {
-    import postCessationTradeReliefAndCertainOtherLosses._
+    import postCessationTradeReliefAndCertainOtherLosses.*
     val dateBusinessCeasedPath = s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased"
     combine(
       ResolveStringPattern(
@@ -122,7 +122,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
   }
 
   private def validateMaintenancePayments(maintenancePayments: MaintenancePayments, index: Int): Validated[Seq[MtdError], Unit] = {
-    import maintenancePayments._
+    import maintenancePayments.*
 
     val exSpouseDateOfBirthPath = s"/maintenancePayments/$index/exSpouseDateOfBirth"
     combine(
@@ -139,7 +139,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
   }
 
   private def validateAnnualPaymentsMade(annualPaymentsMade: AnnualPaymentsMade): Validated[Seq[MtdError], Unit] = {
-    import annualPaymentsMade._
+    import annualPaymentsMade.*
 
     combine(
       ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath("/annualPaymentsMade/customerReference")),
@@ -149,7 +149,7 @@ object Def1_AmendOtherReliefsRulesValidator extends RulesValidator[Def1_AmendOth
 
   private def validateQualifyingLoanInterestPayments(qualifyingLoanInterestPayments: QualifyingLoanInterestPayments,
                                                      index: Int): Validated[Seq[MtdError], Unit] = {
-    import qualifyingLoanInterestPayments._
+    import qualifyingLoanInterestPayments.*
 
     combine(
       ResolveStringPattern(

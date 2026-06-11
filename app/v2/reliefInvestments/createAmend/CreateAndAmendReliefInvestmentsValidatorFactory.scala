@@ -16,8 +16,8 @@
 
 package v2.reliefInvestments.createAmend
 
+import api.controllers.validators.Validator
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
 import v2.reliefInvestments.createAmend.CreateAndAmendReliefInvestmentsSchema.Def1
 import v2.reliefInvestments.createAmend.def1.Def1_CreateAndAmendReliefInvestmentsValidator
 import v2.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData

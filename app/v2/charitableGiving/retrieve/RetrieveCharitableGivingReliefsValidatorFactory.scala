@@ -16,9 +16,9 @@
 
 package v2.charitableGiving.retrieve
 
+import api.controllers.validators.Validator
+import api.models.errors.MtdError
 import cats.data.Validated.{Invalid, Valid}
-import shared.controllers.validators.Validator
-import shared.models.errors.MtdError
 import v2.charitableGiving.retrieve.RetrieveCharitableGivingReliefsSchema.{Def1, Def2}
 import v2.charitableGiving.retrieve.def1.Def1_RetrieveCharitableGivingReliefsValidator
 import v2.charitableGiving.retrieve.def2.Def2_RetrieveCharitableGivingReliefsValidator

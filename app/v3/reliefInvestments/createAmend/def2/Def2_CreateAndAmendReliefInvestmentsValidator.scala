@@ -16,14 +16,14 @@
 
 package v3.reliefInvestments.createAmend.def2
 
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.*
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
-import v3.reliefInvestments.createAmend.def2.model.request._
+import v3.reliefInvestments.createAmend.def2.model.request.*
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 
 import javax.inject.Singleton

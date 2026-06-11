@@ -16,19 +16,14 @@
 
 package v3.charitableGiving.createAmend.def1
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError}
-import play.api.libs.json._
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import play.api.libs.json.*
 import v3.charitableGiving.createAmend.CreateAndAmendCharitableGivingReliefsValidatorFactory
-import v3.charitableGiving.createAmend.def1.model.request.{
-  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
-  Def1_GiftAidPayments,
-  Def1_Gifts,
-  Def1_NonUkCharities
-}
+import v3.charitableGiving.createAmend.def1.model.request.*
 import v3.charitableGiving.createAmend.model.request.{
   CreateAndAmendCharitableGivingTaxReliefsRequestData,
   Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData

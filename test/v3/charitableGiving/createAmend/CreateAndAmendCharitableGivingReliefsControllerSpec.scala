@@ -16,22 +16,18 @@
 
 package v3.charitableGiving.createAmend
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.audit.*
+import api.models.domain.TaxYear
+import api.models.errors
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.utils.MockIdGenerator
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import shared.models.domain.TaxYear
-import shared.models.errors
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.utils.MockIdGenerator
-import v3.charitableGiving.createAmend.def1.model.request.{
-  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
-  Def1_GiftAidPayments,
-  Def1_NonUkCharities
-}
+import v3.charitableGiving.createAmend.def1.model.request.*
 import v3.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,7 +39,7 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
     with MockCreateAndAmendCharitableGivingReliefsService
     with MockCreateAndAmendCharitableGivingReliefsValidatorFactory
     with MockIdGenerator
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   private val taxYear = "2019-20"
   private val amount  = 1234.56
@@ -116,11 +112,11 @@ class CreateAndAmendCharitableGivingReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePostRequest(requestJson))
 

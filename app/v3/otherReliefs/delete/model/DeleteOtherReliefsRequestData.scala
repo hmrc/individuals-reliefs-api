@@ -16,7 +16,7 @@
 
 package v3.otherReliefs.delete.model
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 
 trait DeleteOtherReliefsRequestData {
   def nino: Nino

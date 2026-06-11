@@ -16,14 +16,14 @@
 
 package v3.endpoints
 
+import api.services.*
+import api.support.IntegrationBaseSpec
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
-import shared.support.IntegrationBaseSpec
 
 class AuthISpec extends IntegrationBaseSpec {
 

@@ -16,13 +16,13 @@
 
 package v3.reliefInvestments.retrieve.def1.model.response
 
+import api.config.MockAppConfig
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.config.MockSharedAppConfig
-import shared.utils.UnitSpec
 import v3.fixtures.retrieveReliefInvestments.Def1_RetrieveReliefInvestmentsFixtures.{responseJson, responseModel}
 import v3.reliefInvestments.retrieve.def2.model.response.Def2_RetrieveReliefInvestmentsResponse
 
-class Def1_RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockSharedAppConfig {
+class Def1_RetrieveReliefInvestmentsResponseSpec extends UnitSpec with MockAppConfig {
 
   "reads" when {
     "passed valid JSON" should {

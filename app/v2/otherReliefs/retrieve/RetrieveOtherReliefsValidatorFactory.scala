@@ -16,7 +16,7 @@
 
 package v2.otherReliefs.retrieve
 
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v2.otherReliefs.retrieve.RetrieveOtherReliefsSchema.Def1
 import v2.otherReliefs.retrieve.def1.model.Def1_RetrieveOtherReliefsValidator
 import v2.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData

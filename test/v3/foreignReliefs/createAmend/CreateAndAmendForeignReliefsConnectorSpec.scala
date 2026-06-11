@@ -16,12 +16,12 @@
 
 package v3.foreignReliefs.createAmend
 
-import shared.connectors.ConnectorSpec
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
+import api.connectors.ConnectorSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v3.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.requestBodyModel
 import v3.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -68,7 +68,7 @@ class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
 
     val connector: CreateAndAmendForeignReliefsConnector = new CreateAndAmendForeignReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockSharedAppConfig
+      appConfig = mockAppConfig
     )
 
     lazy val request: Def1_CreateAndAmendForeignReliefsRequestData =

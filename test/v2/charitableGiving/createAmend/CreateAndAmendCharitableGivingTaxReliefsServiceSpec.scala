@@ -16,18 +16,13 @@
 
 package v2.charitableGiving.createAmend
 
-import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError, RuleOutsideAmendmentWindowError}
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.ServiceSpec
-import v2.charitableGiving.createAmend.def1.model.request.{
-  Def1_CreateAndAmendCharitableGivingTaxReliefsBody,
-  Def1_GiftAidPayments,
-  Def1_Gifts,
-  Def1_NonUkCharities
-}
+import api.controllers.EndpointLogContext
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.ServiceSpec
+import common.*
+import v2.charitableGiving.createAmend.def1.model.request.*
 import v2.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.Future

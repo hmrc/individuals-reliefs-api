@@ -16,15 +16,15 @@
 
 package v3.pensionReliefs.createAmend.def1
 
+import api.controllers.validators.resolvers.*
+import api.controllers.validators.{RulesValidator, Validator}
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.{catsSyntaxTuple3Semigroupal, toFoldableOps}
 import play.api.libs.json.JsValue
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber, ResolveTaxYearMinimum}
-import shared.controllers.validators.{RulesValidator, Validator}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import v3.pensionReliefs.createAmend.def1.Def1_CreateAmendPensionReliefsValidator.validateBusinessRules
-import v3.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
+import v3.pensionReliefs.createAmend.def1.model.request.*
 import v3.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
 import javax.inject.Singleton
@@ -52,7 +52,7 @@ object Def1_CreateAmendPensionReliefsValidator extends RulesValidator[CreateAmen
     validate(parsed.body.pensionReliefs).onSuccess(parsed)
 
   private def validate(pensionReliefs: PensionReliefs): Validated[Seq[MtdError], Unit] = {
-    import pensionReliefs._
+    import pensionReliefs.*
 
     List(
       (regularPensionContributions, "/pensionReliefs/regularPensionContributions"),

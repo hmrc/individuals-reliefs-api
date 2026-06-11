@@ -16,14 +16,14 @@
 
 package v2.pensionReliefs.retrieve
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{TaxYear, Timestamp}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.{TaxYear, Timestamp}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
 import v2.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v2.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
 
@@ -35,7 +35,7 @@ class RetrievePensionsReliefsControllerSpec
     with ControllerTestRunner
     with MockRetrievePensionsReliefsService
     with MockRetrievePensionsReliefsValidatorFactory
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   private val taxYear     = "2019-20"
   private val requestData = Def1_RetrievePensionsReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
@@ -109,11 +109,11 @@ class RetrievePensionsReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakeGetRequest)
   }

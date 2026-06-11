@@ -16,13 +16,13 @@
 
 package v2.otherReliefs.retrieve.def1.model.response
 
+import api.config.MockAppConfig
+import api.models.domain.Timestamp
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.config.MockSharedAppConfig
-import shared.models.domain.Timestamp
-import shared.utils.UnitSpec
 import v2.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 
-class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
+class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
   val retrieveOtherReliefsBody: RetrieveOtherReliefsResponse = Def1_RetrieveOtherReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),

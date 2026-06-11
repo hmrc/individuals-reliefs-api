@@ -16,17 +16,17 @@
 
 package v2.foreignReliefs.createAmend
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.audit.*
+import api.models.domain.TaxYear
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.MockAuditService
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import shared.models.domain.TaxYear
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.MockAuditService
-import CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel}
+import v2.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel}
 import v2.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -37,7 +37,7 @@ class CreateAndAmendForeignReliefsControllerSpec
     with ControllerTestRunner
     with MockCreateAndAmendForeignReliefsService
     with MockCreateAndAmendForeignReliefsValidatorFactory
-    with MockSharedAppConfig
+    with MockAppConfig
     with MockAuditService {
 
   private val taxYear = "2019-20"
@@ -93,11 +93,11 @@ class CreateAndAmendForeignReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePostRequest(requestBodyJson))
 

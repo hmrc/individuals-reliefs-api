@@ -16,14 +16,14 @@
 
 package v3.endpoints.reliefInvestments.retrieve
 
+import api.models.errors.*
+import api.services.*
+import api.support.IntegrationBaseSpec
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors.*
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
-import shared.support.IntegrationBaseSpec
 import v3.fixtures.retrieveReliefInvestments.Def1_RetrieveReliefInvestmentsFixtures.responseJson
 
 class Def1_RetrieveReliefInvestmentsControllerISpec extends IntegrationBaseSpec {

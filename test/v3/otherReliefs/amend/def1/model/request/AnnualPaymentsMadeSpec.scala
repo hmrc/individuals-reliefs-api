@@ -16,8 +16,8 @@
 
 package v3.otherReliefs.amend.def1.model.request
 
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.utils.UnitSpec
 
 class AnnualPaymentsMadeSpec extends UnitSpec {
   val annualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)

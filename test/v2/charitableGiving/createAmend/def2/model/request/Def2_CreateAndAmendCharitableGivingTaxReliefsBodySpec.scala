@@ -16,9 +16,9 @@
 
 package v2.charitableGiving.createAmend.def2.model.request
 
+import api.utils.UnitSpec
 import play.api.libs.json.{JsValue, Json}
-import shared.utils.UnitSpec
-import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def2_CreateAndAmendCharitableGivingTaxReliefsFixtures.{mtdJson, model, desJson}
+import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def2_CreateAndAmendCharitableGivingTaxReliefsFixtures.*
 
 class Def2_CreateAndAmendCharitableGivingTaxReliefsBodySpec extends UnitSpec {
 

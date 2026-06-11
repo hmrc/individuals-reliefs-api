@@ -16,13 +16,13 @@
 
 package v3.reliefInvestments.retrieve
 
+import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
+import api.schema.DownstreamReadable
 import cats.data.Validated
 import cats.data.Validated.Valid
 import play.api.libs.json.Reads
-import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
-import shared.schema.DownstreamReadable
 import v3.reliefInvestments.retrieve.def1.model.response.Def1_RetrieveReliefInvestmentsResponse
 import v3.reliefInvestments.retrieve.def2.model.response.Def2_RetrieveReliefInvestmentsResponse
 import v3.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsResponse

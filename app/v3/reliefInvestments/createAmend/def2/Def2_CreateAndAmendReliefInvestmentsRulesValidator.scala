@@ -16,13 +16,13 @@
 
 package v3.reliefInvestments.createAmend.def2
 
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.*
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
-import common.{DateOfInvestmentFormatError, NameFormatError, UniqueInvestmentRefFormatError}
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
-import shared.models.errors.MtdError
+import common.*
 import v3.reliefInvestments.createAmend.def2.model.request.*
 
 import java.time.LocalDate
@@ -43,7 +43,7 @@ object Def2_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
   def validateBusinessRules(
       parsed: Def2_CreateAndAmendReliefInvestmentsRequestData): Validated[Seq[MtdError], Def2_CreateAndAmendReliefInvestmentsRequestData] = {
 
-    import parsed.body._
+    import parsed.body.*
 
     combine(
       vctSubscription.traverse_(validateVct("vctSubscription")),
@@ -67,7 +67,7 @@ object Def2_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
 
   private def validateItem(itemType: String, nameField: String)(item: ReliefsInvestmentItem, index: Int): Validated[Seq[MtdError], Unit] = {
 
-    import item._
+    import item.*
 
     combine(
       ResolveStringPattern(
@@ -82,7 +82,7 @@ object Def2_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
 
   private def validateEisItem(itemType: String, nameField: String)(item: EisSubscriptionsItem, index: Int): Validated[Seq[MtdError], Unit] = {
 
-    import item._
+    import item.*
 
     combine(
       ResolveStringPattern(
@@ -98,7 +98,7 @@ object Def2_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
   private def validateSeedItem(itemType: String, nameField: String)(item: SeedEnterpriseInvestmentItem,
                                                                     index: Int): Validated[Seq[MtdError], Unit] = {
 
-    import item._
+    import item.*
 
     combine(
       ResolveStringPattern(
@@ -113,7 +113,7 @@ object Def2_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
 
   private def validateVctItem(itemType: String, nameField: String)(item: VctSubscriptionsItem, index: Int): Validated[Seq[MtdError], Unit] = {
 
-    import item._
+    import item.*
 
     combine(
       ResolveStringPattern(

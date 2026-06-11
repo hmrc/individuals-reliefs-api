@@ -16,14 +16,14 @@
 
 package v3.otherReliefs.amend
 
+import api.config.AppConfig
+import api.controllers.*
+import api.controllers.validators.Validator
+import api.routing.Version3
+import api.services.*
+import api.utils.IdGenerator
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import shared.config.SharedAppConfig
-import shared.controllers._
-import shared.controllers.validators.Validator
-import shared.routing.Version3
-import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import shared.utils.IdGenerator
 import v3.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -36,7 +36,7 @@ class AmendOtherReliefsController @Inject() (val authService: EnrolmentsAuthServ
                                              service: AmendOtherReliefsService,
                                              auditService: AuditService,
                                              cc: ControllerComponents,
-                                             val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
+                                             val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "amend-other-reliefs"

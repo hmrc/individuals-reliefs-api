@@ -16,10 +16,10 @@
 
 package v3.foreignReliefs.retrieve
 
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v3.foreignReliefs.retrieve.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
 
 class RetrieveForeignReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {

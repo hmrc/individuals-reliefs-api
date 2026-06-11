@@ -16,8 +16,8 @@
 
 package v3.pensionReliefs.createAmend
 
+import api.controllers.validators.Validator
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
 import v3.pensionReliefs.createAmend.CreateAmendPensionsReliefsSchema.Def1
 import v3.pensionReliefs.createAmend.def1.Def1_CreateAmendPensionsReliefsValidator
 import v3.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData

@@ -16,12 +16,12 @@
 
 package v2.otherReliefs.retrieve
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser._
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import uk.gov.hmrc.http.client.HttpClientV2
+import api.config.AppConfig
+import api.connectors.DownstreamUri.IfsUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.*
+import api.connectors.*
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import v2.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
 import v2.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 
@@ -29,15 +29,15 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveOtherReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveOtherReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieve(request: RetrieveOtherReliefsRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveOtherReliefsResponse]] = {
 
-    import request._
-    import schema._
+    import request.*
+    import schema.*
 
     val url: DownstreamUri[DownstreamResp] =
       if (taxYear.useTaxYearSpecificApi) {

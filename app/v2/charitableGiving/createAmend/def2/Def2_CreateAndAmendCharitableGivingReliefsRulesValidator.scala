@@ -16,11 +16,11 @@
 
 package v2.charitableGiving.createAmend.def2
 
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.ResolveParsedNumber
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.toFoldableOps
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.ResolveParsedNumber
-import shared.models.errors.MtdError
 import v2.charitableGiving.createAmend.def2.model.request.{Def2_GiftAidPayments, Def2_Gifts}
 import v2.charitableGiving.createAmend.model.request.Def2_CreateAndAmendCharitableGivingTaxReliefsRequestData
 

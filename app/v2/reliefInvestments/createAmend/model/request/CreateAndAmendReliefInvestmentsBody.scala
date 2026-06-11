@@ -16,8 +16,8 @@
 
 package v2.reliefInvestments.createAmend.model.request
 
+import api.utils.JsonWritesUtil
 import play.api.libs.json.OWrites
-import shared.utils.JsonWritesUtil
 import v2.reliefInvestments.createAmend.def1.model.request.Def1_CreateAndAmendReliefInvestmentsRequestBody
 
 trait CreateAndAmendReliefInvestmentsBody

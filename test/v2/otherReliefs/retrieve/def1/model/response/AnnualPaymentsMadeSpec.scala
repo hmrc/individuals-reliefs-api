@@ -16,8 +16,8 @@
 
 package v2.otherReliefs.retrieve.def1.model.response
 
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.utils.UnitSpec
 
 class AnnualPaymentsMadeSpec extends UnitSpec {
   val annualPaymentsMade: AnnualPaymentsMade = AnnualPaymentsMade(Some("myRef"), 763.00)

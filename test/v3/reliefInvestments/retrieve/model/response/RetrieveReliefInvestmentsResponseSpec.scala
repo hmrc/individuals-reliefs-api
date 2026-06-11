@@ -16,8 +16,8 @@
 
 package v3.reliefInvestments.retrieve.model.response
 
+import api.utils.UnitSpec
 import play.api.libs.json.Json
-import shared.utils.UnitSpec
 import v3.fixtures.retrieveReliefInvestments.{Def1_RetrieveReliefInvestmentsFixtures, Def2_RetrieveReliefInvestmentsFixtures}
 
 class RetrieveReliefInvestmentsResponseSpec extends UnitSpec {

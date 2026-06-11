@@ -16,11 +16,11 @@
 
 package v2.otherReliefs.delete
 
-import shared.connectors.ConnectorSpec
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
-import v2.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
+import api.connectors.ConnectorSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
+import v2.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -34,7 +34,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
 
     val connector: DeleteOtherReliefsConnector = new DeleteOtherReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockSharedAppConfig
+      appConfig = mockAppConfig
     )
 
     lazy val request: Def1_DeleteOtherReliefsRequestData = Def1_DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))

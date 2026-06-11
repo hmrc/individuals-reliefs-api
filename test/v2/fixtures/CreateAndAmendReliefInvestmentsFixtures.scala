@@ -17,7 +17,7 @@
 package v2.fixtures
 
 import play.api.libs.json.{JsValue, Json}
-import v2.reliefInvestments.createAmend.def1.model.request._
+import v2.reliefInvestments.createAmend.def1.model.request.*
 
 object CreateAndAmendReliefInvestmentsFixtures {
 

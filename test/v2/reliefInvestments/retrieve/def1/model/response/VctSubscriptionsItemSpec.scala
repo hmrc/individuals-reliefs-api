@@ -16,8 +16,8 @@
 
 package v2.reliefInvestments.retrieve.def1.model.response
 
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.utils.UnitSpec
 import v2.fixtures.RetrieveReliefInvestmentsFixtures.{vctSubscriptionsItemJson, vctSubscriptionsItemModel}
 
 class VctSubscriptionsItemSpec extends UnitSpec {

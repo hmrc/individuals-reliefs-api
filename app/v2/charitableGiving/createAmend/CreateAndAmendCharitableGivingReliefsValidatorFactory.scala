@@ -16,9 +16,9 @@
 
 package v2.charitableGiving.createAmend
 
+import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
 import v2.charitableGiving.createAmend.CreateAndAmendCharitableGivingReliefsSchema.{Def1, Def2}
 import v2.charitableGiving.createAmend.def1.Def1_CreateAndAmendCharitableGivingReliefsValidator
 import v2.charitableGiving.createAmend.def2.Def2_CreateAndAmendCharitableGivingReliefsValidator

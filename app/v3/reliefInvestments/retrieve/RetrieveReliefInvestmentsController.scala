@@ -16,11 +16,11 @@
 
 package v3.reliefInvestments.retrieve
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import shared.config.SharedAppConfig
-import shared.controllers._
-import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
-import shared.utils.IdGenerator
+import api.config.AppConfig
+import api.controllers.*
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import api.utils.IdGenerator
+import play.api.mvc.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -31,7 +31,7 @@ class RetrieveReliefInvestmentsController @Inject() (val authService: Enrolments
                                                      validatorFactory: RetrieveReliefInvestmentsValidatorFactory,
                                                      service: RetrieveReliefInvestmentsService,
                                                      cc: ControllerComponents,
-                                                     val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
+                                                     val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "retrieve-relief-investments"

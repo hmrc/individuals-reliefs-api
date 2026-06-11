@@ -16,7 +16,7 @@
 
 package v2.pensionReliefs.delete
 
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v2.pensionReliefs.delete.DeletePensionsReliefsSchema.Def1
 import v2.pensionReliefs.delete.def1.Def1_DeletePensionsReliefsValidator
 import v2.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData

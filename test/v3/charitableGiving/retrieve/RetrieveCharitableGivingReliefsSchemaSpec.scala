@@ -16,12 +16,12 @@
 
 package v3.charitableGiving.retrieve
 
-import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import shared.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
-import shared.utils.UnitSpec
-import v3.charitableGiving.retrieve.RetrieveCharitableGivingReliefsSchema.*
+import api.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
+import api.models.errors.*
+import api.utils.UnitSpec
 import cats.data.Validated.{Invalid, Valid}
-import shared.models.errors.*
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
+import v3.charitableGiving.retrieve.RetrieveCharitableGivingReliefsSchema.*
 
 class RetrieveCharitableGivingReliefsSchemaSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks with TaxYearPropertyCheckSupport {
 

@@ -16,8 +16,8 @@
 
 package v3.charitableGiving.retrieve.model.response
 
-import play.api.libs.json.{JsPath, Json, OFormat, OWrites, Reads}
-import shared.utils.JsonWritesUtil.writesFrom
+import api.utils.JsonWritesUtil.writesFrom
+import play.api.libs.json.*
 import v3.charitableGiving.retrieve.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts}
 import v3.charitableGiving.retrieve.def2.model.response.{Def2_GiftAidPayments, Def2_Gifts}
 

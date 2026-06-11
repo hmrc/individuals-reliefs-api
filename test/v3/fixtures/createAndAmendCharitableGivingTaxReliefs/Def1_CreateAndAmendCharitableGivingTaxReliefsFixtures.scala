@@ -17,12 +17,7 @@
 package v3.fixtures.createAndAmendCharitableGivingTaxReliefs
 
 import play.api.libs.json.{JsValue, Json}
-import v3.charitableGiving.createAmend.def1.model.request.{
-  Def1_NonUkCharities,
-  Def1_GiftAidPayments,
-  Def1_Gifts,
-  Def1_CreateAndAmendCharitableGivingTaxReliefsBody
-}
+import v3.charitableGiving.createAmend.def1.model.request.*
 
 object Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures {
 

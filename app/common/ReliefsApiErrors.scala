@@ -16,8 +16,8 @@
 
 package common
 
+import api.models.errors.MtdError
 import play.api.http.Status.BAD_REQUEST
-import shared.models.errors.MtdError
 
 object DateOfInvestmentFormatError
     extends MtdError(

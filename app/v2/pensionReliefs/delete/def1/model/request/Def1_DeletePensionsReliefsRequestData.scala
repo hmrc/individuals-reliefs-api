@@ -16,7 +16,7 @@
 
 package v2.pensionReliefs.delete.def1.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v2.pensionReliefs.delete.DeletePensionsReliefsSchema
 import v2.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 

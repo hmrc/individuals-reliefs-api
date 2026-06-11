@@ -16,7 +16,7 @@
 
 package v2.otherReliefs.amend.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 
 trait AmendOtherReliefsRequestData {
   val nino: Nino

@@ -16,13 +16,13 @@
 
 package v3.charitableGiving.retrieve.def1
 
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.ResolveNino
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.ResolveNino
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
-import v3.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 import v3.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v3.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 
 class Def1_RetrieveCharitableGivingReliefsValidator(nino: String, taxYear: String) extends Validator[RetrieveCharitableGivingReliefsRequestData] {
 

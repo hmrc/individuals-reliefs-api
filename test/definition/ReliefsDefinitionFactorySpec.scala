@@ -16,31 +16,31 @@
 
 package definition
 
+import api.config.Deprecation.NotDeprecated
+import api.config.MockAppConfig
+import api.definition.*
+import api.definition.APIStatus.BETA
+import api.mocks.MockHttpClient
+import api.routing.*
+import api.utils.UnitSpec
 import cats.implicits.catsSyntaxValidatedId
-import shared.config.Deprecation.NotDeprecated
-import shared.config.MockSharedAppConfig
-import shared.definition.APIStatus.BETA
-import shared.definition._
-import shared.mocks.MockHttpClient
-import shared.routing._
-import shared.utils.UnitSpec
 
-class ReliefsDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig with MockHttpClient {
+class ReliefsDefinitionFactorySpec extends UnitSpec with MockAppConfig with MockHttpClient {
 
   "definition" when {
     "called" should {
       "return a valid Definition case class" in {
-        MockedSharedAppConfig.apiGatewayContext returns "individuals/reliefs"
+        MockedAppConfig.apiGatewayContext returns "individuals/reliefs"
 
-        MockedSharedAppConfig.apiStatus(Version2) returns "BETA"
-        MockedSharedAppConfig.endpointsEnabled(Version2) returns true
-        MockedSharedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.apiStatus(Version2) returns "BETA"
+        MockedAppConfig.endpointsEnabled(Version2) returns true
+        MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
 
-        MockedSharedAppConfig.apiStatus(Version3) returns "BETA"
-        MockedSharedAppConfig.endpointsEnabled(Version3) returns true
-        MockedSharedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.apiStatus(Version3) returns "BETA"
+        MockedAppConfig.endpointsEnabled(Version3) returns true
+        MockedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
 
-        val apiDefinitionFactory = new ReliefsDefinitionFactory(mockSharedAppConfig)
+        val apiDefinitionFactory = new ReliefsDefinitionFactory(mockAppConfig)
 
         apiDefinitionFactory.definition shouldBe
           Definition(

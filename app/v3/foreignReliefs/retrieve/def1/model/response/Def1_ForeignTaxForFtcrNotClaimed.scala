@@ -16,7 +16,7 @@
 
 package v3.foreignReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.{Json, OWrites, Reads}
+import play.api.libs.json.*
 
 case class Def1_ForeignTaxForFtcrNotClaimed(amount: BigDecimal)
 

@@ -16,15 +16,15 @@
 
 package v3.endpoints.charitableGiving.retrieve
 
+import api.models.errors.*
+import api.services.*
+import api.support.IntegrationBaseSpec
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
-import shared.support.IntegrationBaseSpec
 import v3.charitableGiving.retrieve.def1.model.request.RetrieveCharitableGivingReliefsFixture
 
 class Def1_RetrieveCharitableGivingReliefsControllerISpec extends IntegrationBaseSpec with RetrieveCharitableGivingReliefsFixture {

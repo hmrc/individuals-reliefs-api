@@ -16,9 +16,9 @@
 
 package v3.reliefInvestments.createAmend
 
-import play.api.libs.json.{JsArray, JsValue, Json}
-import shared.controllers.validators.{AlwaysErrorsValidator, Validator}
-import shared.utils.UnitSpec
+import api.controllers.validators.{AlwaysErrorsValidator, Validator}
+import api.utils.UnitSpec
+import play.api.libs.json.*
 import v3.reliefInvestments.createAmend.def1.Def1_CreateAndAmendReliefInvestmentsValidator
 import v3.reliefInvestments.createAmend.def2.Def2_CreateAndAmendReliefInvestmentsValidator
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData

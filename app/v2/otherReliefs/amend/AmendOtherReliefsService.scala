@@ -16,11 +16,11 @@
 
 package v2.otherReliefs.amend
 
-import cats.implicits._
+import api.controllers.RequestContext
+import api.models.errors.*
+import api.services.{BaseService, ServiceOutcome}
+import cats.implicits.*
 import common.{RuleOutsideAmendmentWindowError, RuleSubmissionFailedError}
-import shared.controllers.RequestContext
-import shared.models.errors._
-import shared.services.{BaseService, ServiceOutcome}
 import v2.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 import javax.inject.{Inject, Singleton}

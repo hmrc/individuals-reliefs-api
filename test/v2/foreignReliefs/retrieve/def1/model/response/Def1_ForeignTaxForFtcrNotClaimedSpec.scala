@@ -16,8 +16,8 @@
 
 package v2.foreignReliefs.retrieve.def1.model.response
 
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.utils.UnitSpec
 
 class Def1_ForeignTaxForFtcrNotClaimedSpec extends UnitSpec {
 

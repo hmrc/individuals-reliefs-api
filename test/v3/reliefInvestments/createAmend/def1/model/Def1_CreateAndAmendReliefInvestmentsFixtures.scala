@@ -17,7 +17,7 @@
 package v3.reliefInvestments.createAmend.def1.model
 
 import play.api.libs.json.{JsValue, Json}
-import v3.reliefInvestments.createAmend.def1.model.request._
+import v3.reliefInvestments.createAmend.def1.model.request.*
 
 object Def1_CreateAndAmendReliefInvestmentsFixtures {
 

@@ -16,14 +16,14 @@
 
 package v3.charitableGiving.createAmend.def1
 
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.{ResolveParsedNumber, ResolveStringPattern}
+import api.models.errors.{MtdError, StringFormatError}
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toFoldableOps
 import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError}
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveParsedNumber, ResolveStringPattern}
-import shared.models.errors.{MtdError, StringFormatError}
-import v3.charitableGiving.createAmend.def1.model.request.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
+import v3.charitableGiving.createAmend.def1.model.request.*
 import v3.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 
 class Def1_CreateAndAmendCharitableGivingReliefsRulesValidator extends RulesValidator[Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData] {
@@ -35,12 +35,12 @@ class Def1_CreateAndAmendCharitableGivingReliefsRulesValidator extends RulesVali
   def validateBusinessRules(parsed: Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData)
       : Validated[Seq[MtdError], Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData] = {
 
-    import parsed.body._
+    import parsed.body.*
     combine(giftAidPayments.traverse_(validateGiftAid), gifts.traverse_(validate)).onSuccess(parsed)
   }
 
   def validateGiftAid(giftAidPayments: Def1_GiftAidPayments): Validated[Seq[MtdError], Unit] = {
-    import giftAidPayments._
+    import giftAidPayments.*
 
     val validatedNumericFields = List(
       (nonUkCharities.map(_.totalAmount), "/giftAidPayments/nonUkCharities/totalAmount"),
@@ -59,7 +59,7 @@ class Def1_CreateAndAmendCharitableGivingReliefsRulesValidator extends RulesVali
   }
 
   def validate(gifts: Def1_Gifts): Validated[Seq[MtdError], Unit] = {
-    import gifts._
+    import gifts.*
 
     val validatedNumericFields = List(
       (nonUkCharities.map(_.totalAmount), "/gifts/nonUkCharities/totalAmount"),
@@ -73,7 +73,7 @@ class Def1_CreateAndAmendCharitableGivingReliefsRulesValidator extends RulesVali
   }
 
   def validate(nonUkCharities: Def1_NonUkCharities, path: String, missingCharityNamesError: MtdError): Validated[Seq[MtdError], Unit] = {
-    import nonUkCharities._
+    import nonUkCharities.*
 
     val validatedMissingCharityNames = nonUkCharities match {
       case Def1_NonUkCharities(_, totalAmount) if totalAmount <= 0 => valid

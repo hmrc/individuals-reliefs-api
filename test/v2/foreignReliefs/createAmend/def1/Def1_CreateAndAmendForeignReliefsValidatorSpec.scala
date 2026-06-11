@@ -16,12 +16,12 @@
 
 package v2.foreignReliefs.createAmend.def1
 
-import play.api.libs.json._
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
-import v2.foreignReliefs.createAmend.def1.model.request._
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
+import play.api.libs.json.*
+import v2.foreignReliefs.createAmend.def1.model.request.*
 import v2.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 
 class Def1_CreateAndAmendForeignReliefsValidatorSpec extends UnitSpec with JsonErrorValidators {

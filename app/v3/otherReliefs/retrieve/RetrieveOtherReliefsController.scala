@@ -16,11 +16,11 @@
 
 package v3.otherReliefs.retrieve
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import shared.config.SharedAppConfig
-import shared.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler, ResultCreator}
-import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
-import shared.utils.IdGenerator
+import api.config.AppConfig
+import api.controllers.*
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import api.utils.IdGenerator
+import play.api.mvc.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -31,7 +31,7 @@ class RetrieveOtherReliefsController @Inject() (val authService: EnrolmentsAuthS
                                                 validatorFactory: RetrieveOtherReliefsValidatorFactory,
                                                 service: RetrieveOtherReliefsService,
                                                 cc: ControllerComponents,
-                                                val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
+                                                val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "retrieve-other-reliefs"

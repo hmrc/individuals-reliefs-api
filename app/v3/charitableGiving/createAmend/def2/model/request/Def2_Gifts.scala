@@ -17,7 +17,7 @@
 package v3.charitableGiving.createAmend.def2.model.request
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.*
 
 case class Def2_Gifts(landAndBuildings: Option[BigDecimal], sharesOrSecurities: Option[BigDecimal])
 

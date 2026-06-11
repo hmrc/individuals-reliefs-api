@@ -16,9 +16,9 @@
 
 package v2.foreignReliefs.createAmend
 
+import api.controllers.validators.Validator
+import api.utils.UnitSpec
 import play.api.libs.json.JsObject
-import shared.controllers.validators.Validator
-import shared.utils.UnitSpec
 import v2.foreignReliefs.createAmend.def1.Def1_CreateAndAmendForeignReliefsValidator
 import v2.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 

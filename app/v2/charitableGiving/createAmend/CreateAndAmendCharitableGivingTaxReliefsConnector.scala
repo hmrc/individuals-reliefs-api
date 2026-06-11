@@ -16,25 +16,20 @@
 
 package v2.charitableGiving.createAmend
 
+import api.config.AppConfig
+import api.connectors.DownstreamUri.IfsUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.*
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import play.api.http.Status.OK
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.charitableGiving.createAmend.model.request.{
-  CreateAndAmendCharitableGivingTaxReliefsRequestData,
-  Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData,
-  Def2_CreateAndAmendCharitableGivingTaxReliefsRequestData
-}
+import uk.gov.hmrc.http.client.HttpClientV2
+import v2.charitableGiving.createAmend.model.request.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAndAmendCharitableGivingTaxReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
-    extends BaseDownstreamConnector {
+class CreateAndAmendCharitableGivingTaxReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def createAmend(request: CreateAndAmendCharitableGivingTaxReliefsRequestData)(implicit
       hc: HeaderCarrier,
@@ -43,7 +38,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnector @Inject() (val http: Htt
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
 
-    import request._
+    import request.*
 
     def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
 
@@ -55,13 +50,13 @@ class CreateAndAmendCharitableGivingTaxReliefsConnector @Inject() (val http: Htt
 
     request match {
       case def1: Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData =>
-        import def1._
+        import def1.*
         post(
           body = body,
           uri = downstreamUri
         )
       case def2: Def2_CreateAndAmendCharitableGivingTaxReliefsRequestData =>
-        import def2._
+        import def2.*
         post(
           body = body,
           uri = downstreamUri

@@ -16,7 +16,7 @@
 
 package v2.reliefInvestments.delete.model
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 
 trait DeleteReliefInvestmentsRequestData {
   def nino: Nino

@@ -16,8 +16,8 @@
 
 package v3.otherReliefs.delete
 
-import shared.controllers.validators.Validator
-import shared.utils.UnitSpec
+import api.controllers.validators.Validator
+import api.utils.UnitSpec
 import v3.otherReliefs.delete.def1.Def1_DeleteOtherReliefsValidator
 import v3.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 

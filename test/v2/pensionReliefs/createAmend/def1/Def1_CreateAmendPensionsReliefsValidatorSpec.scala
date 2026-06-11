@@ -16,17 +16,17 @@
 
 package v2.pensionReliefs.createAmend.def1
 
-import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
-import shared.config.MockSharedAppConfig
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.config.MockAppConfig
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
+import play.api.libs.json.*
 import v2.pensionReliefs.createAmend.CreateAmendPensionsReliefsValidatorFactory
-import v2.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
+import v2.pensionReliefs.createAmend.def1.model.request.*
 import v2.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
-class Def1_CreateAmendPensionsReliefsValidatorSpec extends UnitSpec with MockSharedAppConfig with JsonErrorValidators {
+class Def1_CreateAmendPensionsReliefsValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
 
   implicit val correlationId: String = "X-12345"
 

@@ -16,8 +16,8 @@
 
 package v3.otherReliefs.amend.model.request
 
+import api.utils.JsonWritesUtil
 import play.api.libs.json.OWrites
-import shared.utils.JsonWritesUtil
 import v3.otherReliefs.amend.def1.model.request.Def1_AmendOtherReliefsRequestBody
 
 trait AmendOtherReliefsBody

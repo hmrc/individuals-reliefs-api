@@ -16,7 +16,7 @@
 
 package v3.otherReliefs.retrieve.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v3.otherReliefs.retrieve.RetrieveOtherReliefsSchema
 
 trait RetrieveOtherReliefsRequestData {

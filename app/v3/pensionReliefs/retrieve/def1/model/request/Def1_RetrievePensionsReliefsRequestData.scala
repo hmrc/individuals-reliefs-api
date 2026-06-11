@@ -16,7 +16,7 @@
 
 package v3.pensionReliefs.retrieve.def1.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v3.pensionReliefs.retrieve.RetrievePensionsReliefsSchema
 import v3.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
 

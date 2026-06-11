@@ -16,8 +16,8 @@
 
 package v3.otherReliefs.retrieve.model.response
 
+import api.utils.JsonWritesUtil.writesFrom
 import play.api.libs.json.OWrites
-import shared.utils.JsonWritesUtil.writesFrom
 import v3.otherReliefs.retrieve.def1.model.response.Def1_RetrieveOtherReliefsResponse
 
 trait RetrieveOtherReliefsResponse

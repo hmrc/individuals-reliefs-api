@@ -16,8 +16,8 @@
 
 package v2.pensionReliefs.retrieve
 
+import api.schema.DownstreamReadable
 import play.api.libs.json.Reads
-import shared.schema.DownstreamReadable
 import v2.pensionReliefs.retrieve.def1.model.response.Def1_RetrievePensionsReliefsResponse
 import v2.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
 

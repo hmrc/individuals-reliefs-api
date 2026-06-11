@@ -16,12 +16,12 @@
 
 package v2.foreignReliefs.delete
 
+import api.controllers.RequestContext
+import api.models.errors.ErrorWrapper
+import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import shared.controllers.RequestContext
-import shared.models.errors.ErrorWrapper
-import shared.models.outcomes.ResponseWrapper
 import v2.foreignReliefs.delete.model.Def1_DeleteForeignReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}

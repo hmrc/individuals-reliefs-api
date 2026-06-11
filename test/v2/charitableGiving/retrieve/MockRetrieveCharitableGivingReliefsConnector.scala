@@ -16,10 +16,10 @@
 
 package v2.charitableGiving.retrieve
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 import v2.charitableGiving.retrieve.model.response.RetrieveCharitableGivingReliefsResponse

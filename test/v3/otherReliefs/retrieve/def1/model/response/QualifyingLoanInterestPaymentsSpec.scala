@@ -16,8 +16,8 @@
 
 package v3.otherReliefs.retrieve.def1.model.response
 
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.utils.UnitSpec
 
 class QualifyingLoanInterestPaymentsSpec extends UnitSpec {
 

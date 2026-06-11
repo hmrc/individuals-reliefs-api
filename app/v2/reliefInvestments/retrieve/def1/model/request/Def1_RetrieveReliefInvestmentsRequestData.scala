@@ -16,7 +16,7 @@
 
 package v2.reliefInvestments.retrieve.def1.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v2.reliefInvestments.retrieve.RetrieveReliefInvestmentsSchema
 import v2.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 

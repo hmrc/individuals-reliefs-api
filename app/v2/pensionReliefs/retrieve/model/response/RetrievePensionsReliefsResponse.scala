@@ -16,8 +16,8 @@
 
 package v2.pensionReliefs.retrieve.model.response
 
+import api.utils.JsonWritesUtil.writesFrom
 import play.api.libs.json.OWrites
-import shared.utils.JsonWritesUtil.writesFrom
 import v2.pensionReliefs.retrieve.def1.model.response.Def1_RetrievePensionsReliefsResponse
 
 trait RetrievePensionsReliefsResponse

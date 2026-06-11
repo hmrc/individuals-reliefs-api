@@ -16,10 +16,10 @@
 
 package v3.charitableGiving.createAmend
 
+import api.controllers.validators.AlwaysErrorsValidator
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.controllers.validators.AlwaysErrorsValidator
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
 import v3.charitableGiving.createAmend.def1.Def1_CreateAndAmendCharitableGivingReliefsValidator
 import v3.charitableGiving.createAmend.def2.Def2_CreateAndAmendCharitableGivingReliefsValidator
 

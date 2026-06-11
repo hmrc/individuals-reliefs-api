@@ -16,14 +16,14 @@
 
 package v3.reliefInvestments.createAmend.def2
 
-import common.{DateOfInvestmentFormatError, NameFormatError, UniqueInvestmentRefFormatError}
-import play.api.libs.json._
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
+import common.*
+import play.api.libs.json.*
+import v3.reliefInvestments.createAmend.def2.model.request.*
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
-import v3.reliefInvestments.createAmend.def2.model.request._
 
 class Def2_CreateAndAmendReliefInvestmentsValidatorSpec extends UnitSpec with JsonErrorValidators {
 

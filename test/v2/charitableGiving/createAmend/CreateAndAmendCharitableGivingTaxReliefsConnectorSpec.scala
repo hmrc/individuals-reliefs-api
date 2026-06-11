@@ -16,16 +16,16 @@
 
 package v2.charitableGiving.createAmend
 
-import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
-import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures.{model => def1_model}
-import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def2_CreateAndAmendCharitableGivingTaxReliefsFixtures.{model => def2_model}
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.charitableGiving.createAmend.model.request.{
   Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData,
   Def2_CreateAndAmendCharitableGivingTaxReliefsRequestData
 }
-import uk.gov.hmrc.http.StringContextOps
+import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures.model as def1_model
+import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def2_CreateAndAmendCharitableGivingTaxReliefsFixtures.model as def2_model
 
 import scala.concurrent.Future
 
@@ -76,7 +76,7 @@ class CreateAndAmendCharitableGivingTaxReliefsConnectorSpec extends ConnectorSpe
     def taxYear: TaxYear
 
     protected val connector: CreateAndAmendCharitableGivingTaxReliefsConnector =
-      new CreateAndAmendCharitableGivingTaxReliefsConnector(http = mockHttpClient, appConfig = mockSharedAppConfig)
+      new CreateAndAmendCharitableGivingTaxReliefsConnector(http = mockHttpClient, appConfig = mockAppConfig)
 
     protected val def1_request: Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData =
       Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData(Nino(nino), taxYear, def1_model)

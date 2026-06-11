@@ -16,7 +16,7 @@
 
 package v3.pensionReliefs.retrieve
 
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v3.pensionReliefs.retrieve.RetrievePensionsReliefsSchema.Def1
 import v3.pensionReliefs.retrieve.def1.Def1_RetrievePensionsReliefsValidator
 import v3.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData

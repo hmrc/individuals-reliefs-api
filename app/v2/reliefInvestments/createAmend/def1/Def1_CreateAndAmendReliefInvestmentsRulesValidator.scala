@@ -16,14 +16,14 @@
 
 package v2.reliefInvestments.createAmend.def1
 
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.*
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
-import common.{DateOfInvestmentFormatError, NameFormatError, UniqueInvestmentRefFormatError}
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
-import shared.models.errors.MtdError
-import v2.reliefInvestments.createAmend.def1.model.request._
+import common.*
+import v2.reliefInvestments.createAmend.def1.model.request.*
 
 import java.time.LocalDate
 
@@ -42,7 +42,7 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
   def validateBusinessRules(
       parsed: Def1_CreateAndAmendReliefInvestmentsRequestData): Validated[Seq[MtdError], Def1_CreateAndAmendReliefInvestmentsRequestData] = {
 
-    import parsed.body._
+    import parsed.body.*
 
     combine(
       vctSubscription.traverse_(validateItems("vctSubscription")),
@@ -58,7 +58,7 @@ object Def1_CreateAndAmendReliefInvestmentsRulesValidator extends RulesValidator
 
   private def validateItem(itemType: String, nameField: String)(item: ReliefsInvestmentItem, index: Int): Validated[Seq[MtdError], Unit] = {
 
-    import item._
+    import item.*
 
     combine(
       ResolveStringPattern(uniqueInvestmentRef, stringRegex, UniqueInvestmentRefFormatError.withPath(s"/$itemType/$index/uniqueInvestmentRef")),

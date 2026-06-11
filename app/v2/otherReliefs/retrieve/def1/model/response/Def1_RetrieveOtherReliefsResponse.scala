@@ -16,8 +16,8 @@
 
 package v2.otherReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.{Json, OWrites, Reads}
-import shared.models.domain.Timestamp
+import api.models.domain.Timestamp
+import play.api.libs.json.*
 import v2.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 
 case class Def1_RetrieveOtherReliefsResponse(

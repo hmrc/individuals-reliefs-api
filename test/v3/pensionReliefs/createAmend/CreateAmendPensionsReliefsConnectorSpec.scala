@@ -16,12 +16,12 @@
 
 package v3.pensionReliefs.createAmend
 
-import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
-import v3.pensionReliefs.createAmend.def1.model.request.{CreateAmendPensionsReliefsBody, Def1_CreateAmendPensionsReliefsRequestData, PensionReliefs}
-import v3.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
+import v3.pensionReliefs.createAmend.def1.model.request.*
+import v3.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -70,7 +70,7 @@ class CreateAmendPensionsReliefsConnectorSpec extends ConnectorSpec {
 
     protected val connector: CreateAmendPensionsReliefsConnector = new CreateAmendPensionsReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockSharedAppConfig
+      appConfig = mockAppConfig
     )
 
     protected val request: CreateAmendPensionsReliefsRequestData = Def1_CreateAmendPensionsReliefsRequestData(

@@ -16,11 +16,11 @@
 
 package v3.reliefInvestments.retrieve.def2.model
 
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.ResolveNino
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.ResolveNino
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import v3.reliefInvestments.retrieve.def2.model.request.Def2_RetrieveReliefInvestmentsRequestData
 import v3.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 

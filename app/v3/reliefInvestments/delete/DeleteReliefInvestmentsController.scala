@@ -16,12 +16,12 @@
 
 package v3.reliefInvestments.delete
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import shared.config.SharedAppConfig
-import shared.controllers._
-import shared.routing.Version3
-import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import shared.utils.IdGenerator
+import api.config.AppConfig
+import api.controllers.*
+import api.routing.Version3
+import api.services.*
+import api.utils.IdGenerator
+import play.api.mvc.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -33,7 +33,7 @@ class DeleteReliefInvestmentsController @Inject() (val authService: EnrolmentsAu
                                                    service: DeleteReliefInvestmentsService,
                                                    auditService: AuditService,
                                                    cc: ControllerComponents,
-                                                   val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
+                                                   val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "delete-relief-investments"

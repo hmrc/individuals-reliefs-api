@@ -16,13 +16,13 @@
 
 package v3.foreignReliefs.retrieve.model.response
 
+import api.config.MockAppConfig
+import api.models.domain.Timestamp
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.config.MockSharedAppConfig
-import shared.models.domain.Timestamp
-import shared.utils.UnitSpec
 import v3.foreignReliefs.retrieve.def1.model.response.*
 
-class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockSharedAppConfig {
+class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
   val retrieveForeignReliefsBody: RetrieveForeignReliefsResponse = Def1_RetrieveForeignReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),

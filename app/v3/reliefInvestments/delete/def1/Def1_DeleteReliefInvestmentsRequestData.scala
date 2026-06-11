@@ -16,7 +16,7 @@
 
 package v3.reliefInvestments.delete.def1
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v3.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
 
 case class Def1_DeleteReliefInvestmentsRequestData(nino: Nino, taxYear: TaxYear) extends DeleteReliefInvestmentsRequestData

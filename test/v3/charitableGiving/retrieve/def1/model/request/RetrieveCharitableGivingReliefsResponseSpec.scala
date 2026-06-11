@@ -16,12 +16,12 @@
 
 package v3.charitableGiving.retrieve.def1.model.request
 
+import api.config.MockAppConfig
+import api.utils.UnitSpec
 import play.api.libs.json.{JsError, Json}
-import shared.config.MockSharedAppConfig
-import shared.utils.UnitSpec
 import v3.charitableGiving.retrieve.model.response.Def1_RetrieveCharitableGivingReliefsResponse
 
-class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockSharedAppConfig with RetrieveCharitableGivingReliefsFixture {
+class RetrieveCharitableGivingReliefsResponseSpec extends UnitSpec with MockAppConfig with RetrieveCharitableGivingReliefsFixture {
 
   "RetrieveCharitableGivingReliefResponse reads" must {
     "read from downstream (DES) JSON" in {

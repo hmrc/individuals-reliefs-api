@@ -16,12 +16,12 @@
 
 package v3.reliefInvestments.retrieve
 
+import api.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
+import api.models.errors.*
+import api.utils.UnitSpec
 import cats.data.Validated.{Invalid, Valid}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import shared.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
-import shared.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
-import shared.utils.UnitSpec
-import v3.reliefInvestments.retrieve.RetrieveReliefInvestmentsSchema._
+import v3.reliefInvestments.retrieve.RetrieveReliefInvestmentsSchema.*
 
 class RetrieveReliefInvestmentsSchemaSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks with TaxYearPropertyCheckSupport {
 

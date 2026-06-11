@@ -16,15 +16,15 @@
 
 package v2.charitableGiving.retrieve
 
-import shared.controllers.validators.AlwaysErrorsValidator
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
-import v2.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
+import api.controllers.validators.AlwaysErrorsValidator
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
+import v2.charitableGiving.retrieve.def1.Def1_RetrieveCharitableGivingReliefsValidator
 import v2.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
 import v2.charitableGiving.retrieve.def2.Def2_RetrieveCharitableGivingReliefsValidator
-import v2.charitableGiving.retrieve.def1.Def1_RetrieveCharitableGivingReliefsValidator
+import v2.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 
 class RetrieveCharitableGivingReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"

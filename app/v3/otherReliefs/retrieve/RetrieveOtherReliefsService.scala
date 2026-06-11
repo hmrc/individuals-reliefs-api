@@ -16,10 +16,10 @@
 
 package v3.otherReliefs.retrieve
 
-import cats.implicits._
-import shared.controllers.RequestContext
-import shared.models.errors._
-import shared.services.{BaseService, ServiceOutcome}
+import api.controllers.RequestContext
+import api.models.errors.*
+import api.services.{BaseService, ServiceOutcome}
+import cats.implicits.*
 import v3.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
 import v3.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 

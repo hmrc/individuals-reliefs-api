@@ -16,12 +16,11 @@
 
 package v3.charitableGiving.retrieve
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.*
-import shared.connectors.*
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import uk.gov.hmrc.http.client.HttpClientV2
+import api.config.AppConfig
+import api.connectors.*
+import api.connectors.DownstreamUri.*
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import v3.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 import v3.charitableGiving.retrieve.model.response.RetrieveCharitableGivingReliefsResponse
 
@@ -29,9 +28,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
+  import api.connectors.httpparsers.StandardDownstreamHttpParser.*
 
   def retrieve(request: RetrieveCharitableGivingReliefsRequestData)(implicit
       hc: HeaderCarrier,
@@ -39,7 +38,7 @@ class RetrieveCharitableGivingReliefsConnector @Inject() (val http: HttpClientV2
       correlationId: String): Future[DownstreamOutcome[RetrieveCharitableGivingReliefsResponse]] = {
 
     import request.*
-    import schema._
+    import schema.*
 
     def preTysPath = s"income-tax/nino/$nino/income-source/charity/annual/${taxYear.asDownstream}"
     val downstreamUri: DownstreamUri[DownstreamResp] =

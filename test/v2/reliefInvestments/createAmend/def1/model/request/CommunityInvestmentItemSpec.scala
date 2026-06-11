@@ -16,10 +16,10 @@
 
 package v2.reliefInvestments.createAmend.def1.model.request
 
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
-import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures._
+import v2.fixtures.CreateAndAmendReliefInvestmentsFixtures.*
 
 class CommunityInvestmentItemSpec extends UnitSpec with JsonErrorValidators {
 

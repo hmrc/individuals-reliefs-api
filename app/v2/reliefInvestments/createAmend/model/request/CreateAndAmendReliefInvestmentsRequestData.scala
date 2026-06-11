@@ -16,7 +16,7 @@
 
 package v2.reliefInvestments.createAmend.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 
 trait CreateAndAmendReliefInvestmentsRequestData {
   val nino: Nino

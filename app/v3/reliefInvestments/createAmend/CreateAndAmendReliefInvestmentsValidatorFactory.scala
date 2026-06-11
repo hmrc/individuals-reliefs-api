@@ -16,10 +16,10 @@
 
 package v3.reliefInvestments.createAmend
 
+import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
-import v3.reliefInvestments.createAmend.CreateAndAmendReliefInvestmentsSchema._
+import v3.reliefInvestments.createAmend.CreateAndAmendReliefInvestmentsSchema.*
 import v3.reliefInvestments.createAmend.def1.Def1_CreateAndAmendReliefInvestmentsValidator
 import v3.reliefInvestments.createAmend.def2.Def2_CreateAndAmendReliefInvestmentsValidator
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData

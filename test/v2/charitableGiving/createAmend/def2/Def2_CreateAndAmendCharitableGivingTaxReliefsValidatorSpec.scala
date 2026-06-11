@@ -16,17 +16,17 @@
 
 package v2.charitableGiving.createAmend.def2
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
 import v2.charitableGiving.createAmend.CreateAndAmendCharitableGivingReliefsValidatorFactory
 import v2.charitableGiving.createAmend.model.request.{
   CreateAndAmendCharitableGivingTaxReliefsRequestData,
   Def2_CreateAndAmendCharitableGivingTaxReliefsRequestData
 }
-import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def2_CreateAndAmendCharitableGivingTaxReliefsFixtures.{mtdJson, model}
+import v2.fixtures.createAndAmendCharitableGivingTaxReliefs.Def2_CreateAndAmendCharitableGivingTaxReliefsFixtures.{model, mtdJson}
 
 class Def2_CreateAndAmendCharitableGivingTaxReliefsValidatorSpec extends UnitSpec with JsonErrorValidators {
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"

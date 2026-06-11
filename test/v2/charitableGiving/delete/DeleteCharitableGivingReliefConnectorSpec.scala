@@ -16,13 +16,13 @@
 
 package v2.charitableGiving.delete
 
+import api.connectors.ConnectorSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.libs.json.JsObject
-import shared.connectors.ConnectorSpec
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
-import v2.charitableGiving.delete.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
 import uk.gov.hmrc.http.StringContextOps
+import v2.charitableGiving.delete.model.request.Def1_DeleteCharitableGivingTaxReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -36,7 +36,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
         "isPassDeleteIntentEnabled feature switch is on" in new IfsTest with Test {
           override def intent: Option[String] = Some("DELETE")
 
-          MockedSharedAppConfig.featureSwitchConfig
+          MockedAppConfig.featureSwitchConfig
             .returns(
               Configuration(
                 "passDeleteIntentHeader.enabled" -> true
@@ -56,7 +56,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
         }
 
         "isPassDeleteIntentEnabled feature switch is off" in new IfsTest with Test {
-          MockedSharedAppConfig.featureSwitchConfig
+          MockedAppConfig.featureSwitchConfig
             .returns(
               Configuration(
                 "passDeleteIntentHeader.enabled" -> false
@@ -80,7 +80,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
         "isPassDeleteIntentEnabled feature switch is on" in new IfsTest with Test {
           override def intent: Option[String] = Some("DELETE")
 
-          MockedSharedAppConfig.featureSwitchConfig returns Configuration(
+          MockedAppConfig.featureSwitchConfig returns Configuration(
             "passDeleteIntentHeader.enabled" -> true
           )
 
@@ -97,7 +97,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
         "isPassDeleteIntentEnabled feature switch is off" in new IfsTest with Test {
 
-          MockedSharedAppConfig.featureSwitchConfig returns Configuration(
+          MockedAppConfig.featureSwitchConfig returns Configuration(
             "passDeleteIntentHeader.enabled" -> false
           )
 
@@ -120,7 +120,7 @@ class DeleteCharitableGivingReliefConnectorSpec extends ConnectorSpec {
 
     protected val connector: DeleteCharitableGivingReliefConnector = new DeleteCharitableGivingReliefConnector(
       http = mockHttpClient,
-      appConfig = mockSharedAppConfig
+      appConfig = mockAppConfig
     )
 
   }

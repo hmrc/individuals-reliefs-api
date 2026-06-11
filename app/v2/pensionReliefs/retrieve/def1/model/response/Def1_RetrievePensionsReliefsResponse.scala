@@ -16,8 +16,8 @@
 
 package v2.pensionReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.{Json, OWrites, Reads}
-import shared.models.domain.Timestamp
+import api.models.domain.Timestamp
+import play.api.libs.json.*
 import v2.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
 
 case class Def1_RetrievePensionsReliefsResponse(submittedOn: Timestamp, pensionReliefs: PensionsReliefs) extends RetrievePensionsReliefsResponse

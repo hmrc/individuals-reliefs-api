@@ -16,7 +16,7 @@
 
 package v3.otherReliefs.retrieve
 
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 import v3.otherReliefs.retrieve.def1.model.Def1_RetrieveOtherReliefsValidator
 
 class RetrieveOtherReliefsValidatorFactorySpec extends UnitSpec {

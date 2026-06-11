@@ -16,12 +16,12 @@
 
 package v3.pensionReliefs.delete
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import shared.config.SharedAppConfig
-import shared.controllers._
-import shared.routing.Version3
-import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import shared.utils.{IdGenerator, Logging}
+import api.config.AppConfig
+import api.controllers.*
+import api.routing.Version3
+import api.services.*
+import api.utils.{IdGenerator, Logging}
+import play.api.mvc.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -33,7 +33,7 @@ class DeletePensionsReliefsController @Inject() (val authService: EnrolmentsAuth
                                                  service: DeletePensionsReliefsService,
                                                  auditService: AuditService,
                                                  cc: ControllerComponents,
-                                                 val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
+                                                 val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc)
     with Logging {
 

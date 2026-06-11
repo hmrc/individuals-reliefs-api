@@ -16,12 +16,12 @@
 
 package v2.foreignReliefs.retrieve
 
+import api.controllers.RequestContext
+import api.models.errors.ErrorWrapper
+import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import shared.controllers.RequestContext
-import shared.models.errors.ErrorWrapper
-import shared.models.outcomes.ResponseWrapper
 import v2.foreignReliefs.retrieve.model.request.RetrieveForeignReliefsRequestData
 import v2.foreignReliefs.retrieve.model.response.RetrieveForeignReliefsResponse
 

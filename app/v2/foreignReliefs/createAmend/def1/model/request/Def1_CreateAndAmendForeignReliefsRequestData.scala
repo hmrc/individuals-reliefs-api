@@ -16,7 +16,7 @@
 
 package v2.foreignReliefs.createAmend.def1.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v2.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 
 case class Def1_CreateAndAmendForeignReliefsRequestData(nino: Nino, taxYear: TaxYear, body: Def1_CreateAndAmendForeignReliefsBody)

@@ -16,9 +16,9 @@
 
 package v3.foreignReliefs.createAmend.def1.model.request
 
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
 import v3.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel}
 
 class Def1_CreateAndAmendForeignReliefsBodySpec extends UnitSpec with JsonErrorValidators {

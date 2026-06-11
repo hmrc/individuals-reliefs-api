@@ -16,13 +16,9 @@
 
 package v3.charitableGiving.createAmend.def1.model.request
 
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.utils.UnitSpec
-import v3.fixtures.createAndAmendCharitableGivingTaxReliefs.Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures.{
-  giftMtdJson,
-  giftModel,
-  giftDesJson
-}
+import v3.fixtures.createAndAmendCharitableGivingTaxReliefs.Def1_CreateAndAmendCharitableGivingTaxReliefsFixtures.*
 
 class Def1_GiftsSpec extends UnitSpec {
 

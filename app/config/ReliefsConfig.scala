@@ -16,8 +16,8 @@
 
 package config
 
+import api.config.{AppConfigBase, FeatureSwitches}
 import play.api.Configuration
-import shared.config.{AppConfigBase, FeatureSwitches}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class ReliefsConfig(val config: ServicesConfig, val configuration: Configuration) extends AppConfigBase {

@@ -16,7 +16,7 @@
 
 package v3.pensionReliefs.createAmend.def1.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v3.pensionReliefs.createAmend.CreateAmendPensionsReliefsSchema
 import v3.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 

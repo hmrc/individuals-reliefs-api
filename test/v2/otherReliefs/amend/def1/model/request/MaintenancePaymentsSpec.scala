@@ -16,9 +16,9 @@
 
 package v2.otherReliefs.amend.def1.model.request
 
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import play.api.libs.json.Json
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
 
 class MaintenancePaymentsSpec extends UnitSpec with JsonErrorValidators {
 

@@ -16,9 +16,9 @@
 
 package v3.otherReliefs.retrieve.def1.model
 
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.utils.UnitSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.utils.UnitSpec
 import v3.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
 import v3.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
 

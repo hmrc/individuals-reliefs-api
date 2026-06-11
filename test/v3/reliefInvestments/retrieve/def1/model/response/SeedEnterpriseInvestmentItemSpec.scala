@@ -16,8 +16,8 @@
 
 package v3.reliefInvestments.retrieve.def1.model.response
 
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.utils.UnitSpec
 import v3.fixtures.retrieveReliefInvestments.Def1_RetrieveReliefInvestmentsFixtures.{
   seedEnterpriseInvestmentItemJson,
   seedEnterpriseInvestmentItemModel

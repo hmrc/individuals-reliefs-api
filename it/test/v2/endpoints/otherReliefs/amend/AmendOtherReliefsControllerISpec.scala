@@ -16,18 +16,18 @@
 
 package v2.endpoints
 
+import api.models.errors
+import api.models.errors.*
+import api.services.*
+import api.support.IntegrationBaseSpec
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.*
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.*
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors
-import shared.models.errors.*
-import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
-import shared.support.IntegrationBaseSpec
 import v2.endpoints.AmendOtherReliefsControllerISpec.*
 
 class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {

@@ -16,15 +16,15 @@
 
 package v2.charitableGiving.retrieve
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.TaxYear
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.mvc.Result
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.TaxYear
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import v2.charitableGiving.retrieve.def1.model.request.RetrieveCharitableGivingReliefsFixture
-import v2.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v2.charitableGiving.retrieve.def1.model.request.{Def1_RetrieveCharitableGivingReliefsRequestData, RetrieveCharitableGivingReliefsFixture}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -34,7 +34,7 @@ class RetrieveCharitableGivingReliefsControllerSpec
     with MockRetrieveCharitableGivingReliefsService
     with MockRetrieveCharitableGivingReliefsValidatorFactory
     with RetrieveCharitableGivingReliefsFixture
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   private val taxYear     = "2019-20"
   private val requestData = Def1_RetrieveCharitableGivingReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
@@ -89,11 +89,11 @@ class RetrieveCharitableGivingReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakeGetRequest)
   }

@@ -16,7 +16,7 @@
 
 package v2.reliefInvestments.retrieve
 
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v2.reliefInvestments.retrieve.RetrieveReliefInvestmentsSchema.Def1
 import v2.reliefInvestments.retrieve.def1.model.Def1_RetrieveReliefInvestmentsValidator
 import v2.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData

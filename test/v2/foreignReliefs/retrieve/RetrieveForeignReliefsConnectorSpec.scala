@@ -16,12 +16,12 @@
 
 package v2.foreignReliefs.retrieve
 
-import shared.connectors.ConnectorSpec
-import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.outcomes.ResponseWrapper
+import api.connectors.ConnectorSpec
+import api.models.domain.*
+import api.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.foreignReliefs.retrieve.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
 import v2.foreignReliefs.retrieve.model.response.Def1_RetrieveForeignReliefsResponse
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -34,7 +34,7 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
 
     val connector: RetrieveForeignReliefsConnector = new RetrieveForeignReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockSharedAppConfig
+      appConfig = mockAppConfig
     )
 
     lazy val request: RetrieveForeignReliefsRequestData = Def1_RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))

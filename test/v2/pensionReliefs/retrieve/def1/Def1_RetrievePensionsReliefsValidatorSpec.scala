@@ -16,9 +16,9 @@
 
 package v2.pensionReliefs.retrieve.def1
 
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.utils.UnitSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.utils.UnitSpec
 import v2.pensionReliefs.retrieve.RetrievePensionsReliefsValidatorFactory
 import v2.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v2.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData

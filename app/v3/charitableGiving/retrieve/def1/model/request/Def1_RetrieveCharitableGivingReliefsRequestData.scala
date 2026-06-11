@@ -16,7 +16,7 @@
 
 package v3.charitableGiving.retrieve.def1.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v3.charitableGiving.retrieve.RetrieveCharitableGivingReliefsSchema
 import v3.charitableGiving.retrieve.model.request.RetrieveCharitableGivingReliefsRequestData
 

@@ -16,9 +16,9 @@
 
 package v2.pensionReliefs.delete.def1
 
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.utils.UnitSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.utils.UnitSpec
 import v2.pensionReliefs.delete.DeletePensionsReliefsValidatorFactory
 import v2.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
 import v2.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData

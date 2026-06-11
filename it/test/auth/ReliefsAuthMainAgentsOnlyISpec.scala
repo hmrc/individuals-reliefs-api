@@ -16,11 +16,11 @@
 
 package auth
 
+import api.auth.AuthMainAgentsOnlyISpec
+import api.services.DownstreamStub
 import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import shared.auth.AuthMainAgentsOnlyISpec
-import shared.services.DownstreamStub
 
 class ReliefsAuthMainAgentsOnlyISpec extends AuthMainAgentsOnlyISpec {
 

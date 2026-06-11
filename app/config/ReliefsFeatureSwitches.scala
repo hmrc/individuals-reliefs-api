@@ -16,8 +16,8 @@
 
 package config
 
+import api.config.{AppConfig, FeatureSwitches}
 import play.api.Configuration
-import shared.config.{FeatureSwitches, SharedAppConfig}
 
 case class ReliefsFeatureSwitches(protected val featureSwitchConfig: Configuration) extends FeatureSwitches {
 
@@ -26,5 +26,5 @@ case class ReliefsFeatureSwitches(protected val featureSwitchConfig: Configurati
 }
 
 object ReliefsFeatureSwitches {
-  def apply()(implicit appConfig: SharedAppConfig): ReliefsFeatureSwitches = ReliefsFeatureSwitches(appConfig.featureSwitchConfig)
+  def apply()(implicit appConfig: AppConfig): ReliefsFeatureSwitches = ReliefsFeatureSwitches(appConfig.featureSwitchConfig)
 }

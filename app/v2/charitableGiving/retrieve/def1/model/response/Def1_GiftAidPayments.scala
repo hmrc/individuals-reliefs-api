@@ -16,8 +16,8 @@
 
 package v2.charitableGiving.retrieve.def1.model.response
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 case class Def1_GiftAidPayments(nonUkCharities: Option[Def1_NonUkCharities],
                                 totalAmount: Option[BigDecimal],

@@ -16,13 +16,9 @@
 
 package v3.foreignReliefs.retrieve.model.response
 
-import play.api.libs.json.{Json, OWrites, Reads}
-import shared.models.domain.Timestamp
-import v3.foreignReliefs.retrieve.def1.model.response.{
-  Def1_ForeignIncomeTaxCreditRelief,
-  Def1_ForeignTaxCreditRelief,
-  Def1_ForeignTaxForFtcrNotClaimed
-}
+import api.models.domain.Timestamp
+import play.api.libs.json.*
+import v3.foreignReliefs.retrieve.def1.model.response.*
 
 sealed trait RetrieveForeignReliefsResponse
 

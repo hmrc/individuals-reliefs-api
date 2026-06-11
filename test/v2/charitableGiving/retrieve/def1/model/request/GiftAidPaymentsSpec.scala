@@ -16,8 +16,8 @@
 
 package v2.charitableGiving.retrieve.def1.model.request
 
+import api.utils.UnitSpec
 import play.api.libs.json.{JsObject, Json}
-import shared.utils.UnitSpec
 import v2.charitableGiving.retrieve.def1.model.response.{Def1_GiftAidPayments, Def1_NonUkCharities}
 
 class GiftAidPaymentsSpec extends UnitSpec {

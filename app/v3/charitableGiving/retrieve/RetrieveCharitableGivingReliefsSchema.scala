@@ -16,14 +16,15 @@
 
 package v3.charitableGiving.retrieve
 
+import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
+import api.schema.DownstreamReadable
 import cats.data.Validated
 import cats.data.Validated.Valid
 import play.api.libs.json.Reads
-import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
-import shared.schema.DownstreamReadable
 import v3.charitableGiving.retrieve.model.response.*
+
 import scala.math.Ordered.orderingToOrdered
 
 sealed trait RetrieveCharitableGivingReliefsSchema extends DownstreamReadable[RetrieveCharitableGivingReliefsResponse]

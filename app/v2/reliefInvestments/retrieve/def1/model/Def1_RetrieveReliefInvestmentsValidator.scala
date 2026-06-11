@@ -16,13 +16,12 @@
 
 package v2.reliefInvestments.retrieve.def1.model
 
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
+import api.models.domain.TaxYear
+import api.models.errors.*
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
-import shared.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearForVersionNotSupportedError}
 import v2.reliefInvestments.retrieve.def1.model.request.Def1_RetrieveReliefInvestmentsRequestData
 import v2.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData
 

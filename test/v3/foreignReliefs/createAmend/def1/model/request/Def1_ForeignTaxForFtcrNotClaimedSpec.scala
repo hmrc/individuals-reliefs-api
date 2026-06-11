@@ -16,8 +16,8 @@
 
 package v3.foreignReliefs.createAmend.def1.model.request
 
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.utils.UnitSpec
 import v3.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.{foreignTaxForFtcrNotClaimedJson, foreignTaxForFtcrNotClaimedModel}
 
 class Def1_ForeignTaxForFtcrNotClaimedSpec extends UnitSpec {

@@ -16,7 +16,7 @@
 
 package v3.charitableGiving.delete
 
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v3.charitableGiving.delete.def1.Def1_DeleteCharitableGivingReliefsValidator
 import v3.charitableGiving.delete.model.request.DeleteCharitableGivingTaxReliefsRequestData
 

@@ -16,7 +16,7 @@
 
 package v3.otherReliefs.amend.def1.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v3.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 case class Def1_AmendOtherReliefsRequestData(nino: Nino, taxYear: TaxYear, body: Def1_AmendOtherReliefsRequestBody)

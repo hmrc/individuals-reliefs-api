@@ -16,10 +16,10 @@
 
 package v2.pensionReliefs.retrieve
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
 import v2.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse

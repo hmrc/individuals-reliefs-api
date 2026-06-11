@@ -16,12 +16,12 @@
 
 package v2.otherReliefs.delete.def1
 
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import v2.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 class Def1_DeleteOtherReliefsValidator(nino: String, taxYear: String) extends Validator[DeleteOtherReliefsRequestData] {

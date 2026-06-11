@@ -16,17 +16,17 @@
 
 package v2.otherReliefs.retrieve
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{TaxYear, Timestamp}
+import api.models.errors
+import api.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
+import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.{TaxYear, Timestamp}
-import shared.models.errors
-import shared.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError}
-import shared.models.outcomes.ResponseWrapper
 import v2.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
-import v2.otherReliefs.retrieve.def1.model.response._
+import v2.otherReliefs.retrieve.def1.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -36,7 +36,7 @@ class RetrieveOtherReliefsControllerSpec
     with ControllerTestRunner
     with MockRetrieveOtherReliefsService
     with MockRetrieveOtherReliefsValidatorFactory
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   private val taxYear     = "2019-20"
   private val requestData = Def1_RetrieveOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
@@ -154,11 +154,11 @@ class RetrieveOtherReliefsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakeGetRequest)
   }

@@ -16,12 +16,12 @@
 
 package v3.reliefInvestments.createAmend
 
+import api.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
+import api.models.errors.*
+import api.utils.UnitSpec
 import cats.data.Validated.{Invalid, Valid}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import shared.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
-import shared.models.errors._
-import shared.utils.UnitSpec
-import v3.reliefInvestments.createAmend.CreateAndAmendReliefInvestmentsSchema._
+import v3.reliefInvestments.createAmend.CreateAndAmendReliefInvestmentsSchema.*
 
 class CreateAndAmendReliefInvestmentsSchemaSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks with TaxYearPropertyCheckSupport {
 

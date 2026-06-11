@@ -16,8 +16,8 @@
 
 package v3.reliefInvestments.retrieve.def1.model.response
 
-import play.api.libs.json.{Json, OWrites, Reads}
-import shared.models.domain.Timestamp
+import api.models.domain.Timestamp
+import play.api.libs.json.*
 import v3.reliefInvestments.retrieve.model.response.RetrieveReliefInvestmentsResponse
 
 case class Def1_RetrieveReliefInvestmentsResponse(

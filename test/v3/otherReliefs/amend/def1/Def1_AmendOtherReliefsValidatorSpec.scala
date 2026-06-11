@@ -16,13 +16,13 @@
 
 package v3.otherReliefs.amend.def1
 
-import common._
-import play.api.libs.json._
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
-import v3.otherReliefs.amend.def1.model.request._
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
+import common.*
+import play.api.libs.json.*
+import v3.otherReliefs.amend.def1.model.request.*
 import v3.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 class Def1_AmendOtherReliefsValidatorSpec extends UnitSpec with JsonErrorValidators {

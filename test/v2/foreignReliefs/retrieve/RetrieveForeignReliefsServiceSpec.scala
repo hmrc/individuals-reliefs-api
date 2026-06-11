@@ -16,17 +16,13 @@
 
 package v2.foreignReliefs.retrieve
 
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.utils.UnitSpec
+import api.controllers.EndpointLogContext
+import api.models.domain.*
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.foreignReliefs.retrieve.def1.model.response.{
-  Def1_ForeignIncomeTaxCreditRelief,
-  Def1_ForeignTaxCreditRelief,
-  Def1_ForeignTaxForFtcrNotClaimed
-}
+import v2.foreignReliefs.retrieve.def1.model.response.*
 import v2.foreignReliefs.retrieve.model.request.Def1_RetrieveForeignReliefsRequestData
 import v2.foreignReliefs.retrieve.model.response.Def1_RetrieveForeignReliefsResponse
 

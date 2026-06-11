@@ -16,12 +16,12 @@
 
 package v2.reliefInvestments.delete
 
-import shared.connectors.ConnectorSpec
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
+import api.connectors.ConnectorSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.reliefInvestments.delete.def1.Def1_DeleteReliefInvestmentsRequestData
 import v2.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -33,7 +33,7 @@ class DeleteReliefInvestmentsConnectorSpec extends ConnectorSpec {
 
     val connector: DeleteReliefInvestmentsConnector = new DeleteReliefInvestmentsConnector(
       http = mockHttpClient,
-      appConfig = mockSharedAppConfig
+      appConfig = mockAppConfig
     )
 
     def taxYear: TaxYear

@@ -16,13 +16,13 @@
 
 package v3.foreignReliefs.delete
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import shared.config.SharedAppConfig
-import shared.controllers._
-import shared.controllers.validators.Validator
-import shared.routing.Version3
-import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import shared.utils.IdGenerator
+import api.config.AppConfig
+import api.controllers.*
+import api.controllers.validators.Validator
+import api.routing.Version3
+import api.services.*
+import api.utils.IdGenerator
+import play.api.mvc.*
 import v3.foreignReliefs.delete.model.DeleteForeignReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -35,7 +35,7 @@ class DeleteForeignReliefsController @Inject() (val authService: EnrolmentsAuthS
                                                 service: DeleteForeignReliefsService,
                                                 auditService: AuditService,
                                                 cc: ControllerComponents,
-                                                val idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
+                                                val idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "delete-foreign-reliefs"

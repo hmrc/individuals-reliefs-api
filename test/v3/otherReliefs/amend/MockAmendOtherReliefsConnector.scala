@@ -16,10 +16,10 @@
 
 package v3.otherReliefs.amend
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.otherReliefs.amend.def1.model.request.Def1_AmendOtherReliefsRequestData
 

@@ -16,8 +16,8 @@
 
 package v3.reliefInvestments.delete
 
-import shared.controllers.validators.resolvers.ResolveTaxYear
-import shared.models.domain.TaxYear
+import api.controllers.validators.resolvers.ResolveTaxYear
+import api.models.domain.TaxYear
 
 sealed trait DeleteReliefInvestmentsSchema
 

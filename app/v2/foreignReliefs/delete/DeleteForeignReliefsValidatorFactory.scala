@@ -16,7 +16,7 @@
 
 package v2.foreignReliefs.delete
 
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v2.foreignReliefs.delete.def1.Def1_DeleteForeignReliefsValidator
 import v2.foreignReliefs.delete.model.DeleteForeignReliefsRequestData
 

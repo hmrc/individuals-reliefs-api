@@ -16,7 +16,7 @@
 
 package v2.foreignReliefs.retrieve.def1.model.response
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.*
 
 case class Def1_ForeignTaxCreditRelief(amount: BigDecimal)
 

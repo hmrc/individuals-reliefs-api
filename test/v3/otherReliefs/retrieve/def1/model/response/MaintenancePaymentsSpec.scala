@@ -16,8 +16,8 @@
 
 package v3.otherReliefs.retrieve.def1.model.response
 
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.utils.UnitSpec
 
 class MaintenancePaymentsSpec extends UnitSpec {
   val maintenancePayments: MaintenancePayments = MaintenancePayments(Some("myRef"), Some("Hilda"), Some("2000-01-01"), 222.22)

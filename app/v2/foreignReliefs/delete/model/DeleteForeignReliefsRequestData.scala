@@ -16,7 +16,7 @@
 
 package v2.foreignReliefs.delete.model
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 
 sealed trait DeleteForeignReliefsRequestData
 

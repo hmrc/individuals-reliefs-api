@@ -16,13 +16,13 @@
 
 package v3.charitableGiving.retrieve
 
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.ServiceSpec
-import v3.charitableGiving.retrieve.def1.model.response.{Def1_GiftAidPayments, Def1_Gifts, Def1_NonUkCharities}
+import api.controllers.EndpointLogContext
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.ServiceSpec
 import v3.charitableGiving.retrieve.def1.model.request.Def1_RetrieveCharitableGivingReliefsRequestData
+import v3.charitableGiving.retrieve.def1.model.response.*
 import v3.charitableGiving.retrieve.model.response.Def1_RetrieveCharitableGivingReliefsResponse
 
 import scala.concurrent.Future

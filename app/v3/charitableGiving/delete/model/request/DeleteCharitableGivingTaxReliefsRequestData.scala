@@ -16,7 +16,7 @@
 
 package v3.charitableGiving.delete.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 
 sealed trait DeleteCharitableGivingTaxReliefsRequestData
 

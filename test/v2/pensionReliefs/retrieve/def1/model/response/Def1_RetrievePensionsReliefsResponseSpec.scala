@@ -16,10 +16,10 @@
 
 package v2.pensionReliefs.retrieve.def1.model.response
 
+import api.models.domain.Timestamp
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import play.api.libs.json.Json
-import shared.models.domain.Timestamp
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
 import v2.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
 
 class Def1_RetrievePensionsReliefsResponseSpec extends UnitSpec with JsonErrorValidators {

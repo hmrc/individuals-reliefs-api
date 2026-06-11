@@ -16,10 +16,10 @@
 
 package v3.foreignReliefs.retrieve
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.foreignReliefs.retrieve.model.request.RetrieveForeignReliefsRequestData
 import v3.foreignReliefs.retrieve.model.response.RetrieveForeignReliefsResponse

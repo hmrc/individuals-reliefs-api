@@ -16,9 +16,9 @@
 
 package v2.fixtures
 
-import play.api.libs.json.{JsObject, JsValue, Json}
-import shared.models.domain.Timestamp
-import v2.reliefInvestments.retrieve.def1.model.response._
+import api.models.domain.Timestamp
+import play.api.libs.json.*
+import v2.reliefInvestments.retrieve.def1.model.response.*
 
 object RetrieveReliefInvestmentsFixtures {
 

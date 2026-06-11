@@ -16,9 +16,9 @@
 
 package v3.otherReliefs.amend
 
+import api.controllers.validators.Validator
+import api.utils.UnitSpec
 import play.api.libs.json.JsObject
-import shared.controllers.validators.Validator
-import shared.utils.UnitSpec
 import v3.otherReliefs.amend.def1.Def1_AmendOtherReliefsValidator
 import v3.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 

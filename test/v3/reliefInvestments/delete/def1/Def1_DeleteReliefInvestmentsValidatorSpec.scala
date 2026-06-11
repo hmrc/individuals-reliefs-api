@@ -16,9 +16,9 @@
 
 package v3.reliefInvestments.delete.def1
 
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.utils.UnitSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.utils.UnitSpec
 import v3.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
 
 class Def1_DeleteReliefInvestmentsValidatorSpec extends UnitSpec {

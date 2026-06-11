@@ -16,9 +16,9 @@
 
 package v3.pensionReliefs.retrieve
 
-import shared.connectors.ConnectorSpec
-import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.outcomes.ResponseWrapper
+import api.connectors.ConnectorSpec
+import api.models.domain.*
+import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v3.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
 import v3.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
@@ -37,7 +37,7 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
 
     val connector: RetrievePensionsReliefsConnector = new RetrievePensionsReliefsConnector(
       http = mockHttpClient,
-      appConfig = mockSharedAppConfig
+      appConfig = mockAppConfig
     )
 
     protected val request: RetrievePensionsReliefsRequestData =

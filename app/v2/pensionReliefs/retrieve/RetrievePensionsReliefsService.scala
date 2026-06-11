@@ -16,10 +16,10 @@
 
 package v2.pensionReliefs.retrieve
 
-import cats.implicits._
-import shared.controllers.RequestContext
-import shared.models.errors._
-import shared.services.{BaseService, ServiceOutcome}
+import api.controllers.RequestContext
+import api.models.errors.*
+import api.services.{BaseService, ServiceOutcome}
+import cats.implicits.*
 import v2.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
 import v2.pensionReliefs.retrieve.model.response.RetrievePensionsReliefsResponse
 

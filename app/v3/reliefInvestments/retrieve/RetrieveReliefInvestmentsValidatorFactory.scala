@@ -16,8 +16,8 @@
 
 package v3.reliefInvestments.retrieve
 
+import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
-import shared.controllers.validators.Validator
 import v3.reliefInvestments.retrieve.RetrieveReliefInvestmentsSchema.{Def1, Def2}
 import v3.reliefInvestments.retrieve.def1.model.Def1_RetrieveReliefInvestmentsValidator
 import v3.reliefInvestments.retrieve.def2.model.Def2_RetrieveReliefInvestmentsValidator

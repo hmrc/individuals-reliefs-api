@@ -16,7 +16,7 @@
 
 package v2.otherReliefs.delete.def1
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v2.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 case class Def1_DeleteOtherReliefsRequestData(nino: Nino, taxYear: TaxYear) extends DeleteOtherReliefsRequestData

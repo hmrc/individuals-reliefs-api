@@ -16,7 +16,7 @@
 
 package v3.foreignReliefs.retrieve
 
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v3.foreignReliefs.retrieve.def1.model.response.Def1_RetrieveForeignReliefsValidator
 import v3.foreignReliefs.retrieve.model.request.RetrieveForeignReliefsRequestData
 

@@ -16,20 +16,20 @@
 
 package v3.foreignReliefs.delete
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser._
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import shared.models.domain.{Nino, TaxYear}
-import uk.gov.hmrc.http.client.HttpClientV2
+import api.config.AppConfig
+import api.connectors.DownstreamUri.IfsUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.*
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import v3.foreignReliefs.delete.model.{Def1_DeleteForeignReliefsRequestData, DeleteForeignReliefsRequestData}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteForeignReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class DeleteForeignReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   private def completeRequest(nino: Nino, taxYear: TaxYear)(implicit
       hc: HeaderCarrier,
@@ -53,7 +53,7 @@ class DeleteForeignReliefsConnector @Inject() (val http: HttpClientV2, val appCo
       correlationId: String): Future[DownstreamOutcome[Unit]] =
     request match {
       case def1: Def1_DeleteForeignReliefsRequestData =>
-        import def1._
+        import def1.*
         completeRequest(nino, taxYear)
     }
 

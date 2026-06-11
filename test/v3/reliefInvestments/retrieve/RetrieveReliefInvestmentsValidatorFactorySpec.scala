@@ -16,8 +16,8 @@
 
 package v3.reliefInvestments.retrieve
 
-import shared.controllers.validators.{AlwaysErrorsValidator, Validator}
-import shared.utils.UnitSpec
+import api.controllers.validators.{AlwaysErrorsValidator, Validator}
+import api.utils.UnitSpec
 import v3.reliefInvestments.retrieve.def1.model.Def1_RetrieveReliefInvestmentsValidator
 import v3.reliefInvestments.retrieve.def2.model.Def2_RetrieveReliefInvestmentsValidator
 import v3.reliefInvestments.retrieve.model.request.RetrieveReliefInvestmentsRequestData

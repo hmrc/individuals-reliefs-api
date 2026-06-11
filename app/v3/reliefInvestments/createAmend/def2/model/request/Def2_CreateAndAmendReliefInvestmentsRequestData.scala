@@ -16,7 +16,7 @@
 
 package v3.reliefInvestments.createAmend.def2.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v3.reliefInvestments.createAmend.model.request.CreateAndAmendReliefInvestmentsRequestData
 
 case class Def2_CreateAndAmendReliefInvestmentsRequestData(nino: Nino, taxYear: TaxYear, body: Def2_CreateAndAmendReliefInvestmentsRequestBody)
