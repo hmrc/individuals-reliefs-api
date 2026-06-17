@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,7 +129,6 @@ class AppConfigSpec extends UnitSpec {
             |      endpoints {
             |        enabled = false
             |        api-released-in-production = false
-            |        allow-request-cannot-be-fulfilled-header = false
             |      }
             |    }
             |""".stripMargin
@@ -149,7 +148,6 @@ class AppConfigSpec extends UnitSpec {
             |      endpoints {
             |        enabled = true
             |        api-released-in-production = true
-            |        allow-request-cannot-be-fulfilled-header = false
             |
             |        released-in-production {
             |          create-something: true
@@ -166,25 +164,6 @@ class AppConfigSpec extends UnitSpec {
     }
   }
 
-  "allowRequestCannotBeFulfilledHeader" when {
-    "the API version allows request cannot be fulfilled header" should {
-      "return true" in {
-        val appConfigWithAllowRequestCannotBeFulfilledHeader = appConfig(
-          """
-            |    6.0 {
-            |      endpoints {
-            |        allow-request-cannot-be-fulfilled-header = true
-            |      }
-            |    }
-            |""".stripMargin
-        )
-
-        val result = appConfigWithAllowRequestCannotBeFulfilledHeader.allowRequestCannotBeFulfilledHeader(Version6)
-        result shouldBe true
-      }
-    }
-  }
-
   "endpointReleasedInProduction" when {
     "the API version is enabled and the config specifies the endpoint status as true" should {
       "return true" in {
@@ -195,8 +174,7 @@ class AppConfigSpec extends UnitSpec {
             |      endpoints {
             |        enabled = true
             |        api-released-in-production = true
-            |        allow-request-cannot-be-fulfilled-header = false
-            |
+
             |        released-in-production {
             |          create-something: true
             |          amend-something: false
@@ -219,7 +197,6 @@ class AppConfigSpec extends UnitSpec {
             |      endpoints {
             |        enabled = true
             |        api-released-in-production = true
-            |        allow-request-cannot-be-fulfilled-header = false
             |
             |        released-in-production {
             |          create-something: true
@@ -243,7 +220,6 @@ class AppConfigSpec extends UnitSpec {
             |      endpoints {
             |        enabled = true
             |        api-released-in-production = true
-            |        allow-request-cannot-be-fulfilled-header = false
             |
             |        released-in-production {
             |          create-something: true
@@ -270,7 +246,6 @@ class AppConfigSpec extends UnitSpec {
             |      endpoints {
             |        enabled = true
             |        api-released-in-production = true
-            |        allow-request-cannot-be-fulfilled-header = false
             |      }
             |    }
             """.stripMargin
@@ -290,7 +265,6 @@ class AppConfigSpec extends UnitSpec {
               |      endpoints {
               |        enabled = true
               |        api-released-in-production = true
-              |        allow-request-cannot-be-fulfilled-header = false
               |      }
               |    }
                  """.stripMargin
@@ -315,7 +289,6 @@ class AppConfigSpec extends UnitSpec {
                   |      endpoints {
                   |        enabled = true
                   |        api-released-in-production = true
-                  |        allow-request-cannot-be-fulfilled-header = false
                   |      }
                   |    }
                   """.stripMargin
@@ -342,7 +315,6 @@ class AppConfigSpec extends UnitSpec {
                   |      endpoints {
                   |        enabled = true
                   |        api-released-in-production = true
-                  |        allow-request-cannot-be-fulfilled-header = false
                   |      }
                   |    }
                   """.stripMargin
@@ -373,7 +345,6 @@ class AppConfigSpec extends UnitSpec {
                   |      endpoints {
                   |        enabled = true
                   |        api-released-in-production = true
-                  |        allow-request-cannot-be-fulfilled-header = false
                   |      }
                   |    }
                   """.stripMargin
@@ -401,7 +372,6 @@ class AppConfigSpec extends UnitSpec {
                   |      endpoints {
                   |        enabled = true
                   |        api-released-in-production = true
-                  |        allow-request-cannot-be-fulfilled-header = false
                   |      }
                   |    }
                   """.stripMargin
@@ -430,7 +400,6 @@ class AppConfigSpec extends UnitSpec {
                 |      endpoints {
                 |        enabled = true
                 |        api-released-in-production = true
-                |        allow-request-cannot-be-fulfilled-header = false
                 |      }
                 |    }
                 """.stripMargin
@@ -450,7 +419,7 @@ class AppConfigSpec extends UnitSpec {
       s"""
          |  appName = "any-name-api"
          |  appUrl = "http://localhost:9999"
-         |  
+         |
          |  api {
          |""".stripMargin ++
 
@@ -463,7 +432,7 @@ class AppConfigSpec extends UnitSpec {
           }}
            |  }
            |
-           |  
+           |
            |  microservice {
            |    services {
            |      mtd-id-lookup {
