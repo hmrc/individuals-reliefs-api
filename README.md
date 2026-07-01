@@ -12,7 +12,7 @@ The Individuals Reliefs API allows a developer to retrieve, create and amend, an
 ## Requirements
 
 - Scala 3.5.x
-- Java 11
+- Java 21
 - sbt 1.10.x
 - [Service Manager 2](https://github.com/hmrc/sm2)
 
@@ -30,11 +30,26 @@ Run integration tests: `sbt it/test`
 
 ## Viewing Open API Spec (OAS) docs
 
-To view documentation locally ensure the Individuals Reliefs API is running, and run api-documentation-frontend:
-`./run_local_with_dependencies.sh`
 
-Then go to http://localhost:9680/api-documentation/docs/openapi/preview and use this port and version:
-`http://localhost:7796/api/conf/3.0/application.yaml`
+To view the OpenAPI documentation locally, ensure the API is running.
+
+Start the `api-documentation-frontend` and `api-definition` services using the Service Manager profile:
+
+```bash
+sm2 -start DEVHUB_PREVIEW_OPENAPI
+```
+
+Then navigate to the preview page:
+
+```text
+http://localhost:9680/api-documentation/docs/openapi/preview
+```
+
+Enter the specification URL using the appropriate port and API version:
+
+```text
+http://localhost:7796/api/conf/3.0/application.yaml
+```
 
 ## Changelog
 
@@ -46,10 +61,8 @@ You can create a GitHub issue [here](https://github.com/hmrc/income-tax-mtd-chan
 
 ## API Reference / Documentation
 
-Available on
-the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individuals-reliefs-api)
+Available on the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individuals-reliefs-api)
 
 ## License
 
-This code is open source software licensed under
-the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html")
+This code is open source software licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html)
