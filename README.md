@@ -1,5 +1,6 @@
 Individuals Reliefs API
 ========================
+[![Apache-2.0 license](http://img.shields.io/badge/license-Apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 The Individuals Reliefs API allows a developer to retrieve, create and amend, and delete:
 
@@ -14,21 +15,24 @@ The Individuals Reliefs API allows a developer to retrieve, create and amend, an
 - Scala 3.5.x
 - Java 21
 - sbt 1.10.x
-- [Service Manager 2](https://github.com/hmrc/sm2)
+- [Service Manager V2](https://github.com/hmrc/sm2)
 
-## Running the microservice
+## Development Setup
 
-Run from the console using: `sbt run` (starts on port 7796 by default)
+Run the microservice from the console using: `sbt run` (starts on port 7796 by default)
 
-Start the service manager profile: `sm2 --start MTDFB_INDIVIDUALS_RELIEFS`
+Start the service manager profile:
 
-## Running test
+```bash
+sm2 --start MTDFB_INDIVIDUALS_RELIEFS
+```
+## Run test
 
 Run unit tests: `sbt test`
 
 Run integration tests: `sbt it/test`
 
-## Viewing Open API Spec (OAS) docs
+## View OpenAPI Specification (OAS) documentation
 
 
 To view the OpenAPI documentation locally, ensure the API is running.
@@ -36,7 +40,7 @@ To view the OpenAPI documentation locally, ensure the API is running.
 Start the `api-documentation-frontend` and `api-definition` services using the Service Manager profile:
 
 ```bash
-sm2 -start DEVHUB_PREVIEW_OPENAPI
+sm2 --start DEVHUB_PREVIEW_OPENAPI
 ```
 
 Then navigate to the preview page:
