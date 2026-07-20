@@ -34,21 +34,21 @@ class ResolveIsoDateSpec extends UnitSpec {
       "given a valid ISO date string" in {
         val expected = Valid(LocalDate.parse(validDate))
 
-        val result: Validated[Seq[MtdError], LocalDate] = ResolveIsoDate(StartDateFormatError)(validDate)
+        val result: Validated[Seq[MtdError], LocalDate] = ResolveIsoDate(DateFormatError)(validDate)
         result shouldBe expected
       }
 
       "given a valid ISO date string in an Option" in {
         val expected = Valid(Some(LocalDate.parse(validDate)))
 
-        val result = ResolveIsoDate(Option(validDate), StartDateFormatError)
+        val result = ResolveIsoDate(Option(validDate), DateFormatError)
         result shouldBe expected
       }
 
       "given a valid ISO date string in an Option and a pre-supplied MtdError" in {
         val expected = Valid(Some(LocalDate.parse(validDate)))
 
-        val result = ResolveIsoDate(StartDateFormatError)(Option(validDate))
+        val result = ResolveIsoDate(DateFormatError)(Option(validDate))
         result shouldBe expected
       }
 
@@ -72,8 +72,8 @@ class ResolveIsoDateSpec extends UnitSpec {
     "return an error" when {
       "given an invalid/non-ISO date string" in {
         val invalidDate = "not-a-date"
-        val result      = ResolveIsoDate(invalidDate, StartDateFormatError)
-        result shouldBe Invalid(List(StartDateFormatError))
+        val result      = ResolveIsoDate(invalidDate, DateFormatError)
+        result shouldBe Invalid(List(DateFormatError))
       }
 
       "given a date string out of range" in {
