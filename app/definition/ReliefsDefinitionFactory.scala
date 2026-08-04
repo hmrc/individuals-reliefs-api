@@ -18,6 +18,7 @@ package definition
 
 import api.config.AppConfig
 import api.definition.*
+import api.definition.APIAccessType.{CONTROLLED, PUBLIC}
 import api.routing.*
 
 import javax.inject.{Inject, Singleton}
@@ -25,7 +26,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class ReliefsDefinitionFactory @Inject() (protected val appConfig: AppConfig) extends ApiDefinitionFactory {
 
-  val definition: Definition =
+  lazy val definition: Definition =
     Definition(
       api = APIDefinition(
         name = "Individuals Reliefs (MTD)",
@@ -36,11 +37,13 @@ class ReliefsDefinitionFactory @Inject() (protected val appConfig: AppConfig) ex
           APIVersion(
             version = Version2,
             status = buildAPIStatus(Version2),
+            access = if (appConfig.controlledAccessEnabled) CONTROLLED else PUBLIC,
             endpointsEnabled = appConfig.endpointsEnabled(Version2)
           ),
           APIVersion(
             version = Version3,
             status = buildAPIStatus(Version3),
+            access = if (appConfig.controlledAccessEnabled) CONTROLLED else PUBLIC,
             endpointsEnabled = appConfig.endpointsEnabled(Version3)
           )
         ),
