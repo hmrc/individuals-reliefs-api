@@ -34,13 +34,13 @@ class ReliefsDefinitionFactorySpec extends UnitSpec with MockAppConfig with Mock
         s"return a valid Definition case class with the access type set to $accessType" in new Test {
           MockedAppConfig.apiStatus(Version2) returns "BETA"
           MockedAppConfig.endpointsEnabled(Version2) returns true
-          MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
+          MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid)
 
           MockedAppConfig.apiStatus(Version3) returns "BETA"
           MockedAppConfig.endpointsEnabled(Version3) returns true
-          MockedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
+          MockedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid)
 
-          MockedAppConfig.controlledAccessEnabled.returns(controlledAccessEnabled).anyNumberOfTimes()
+          MockedAppConfig.controlledAccessEnabled.returns(controlledAccessEnabled).twice()
 
           apiDefinitionFactory.definition shouldBe
             Definition(
