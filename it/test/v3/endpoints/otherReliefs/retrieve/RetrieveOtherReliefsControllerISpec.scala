@@ -84,7 +84,7 @@ class RetrieveOtherReliefsControllerISpec extends IntegrationBaseSpec {
     val downstreamResponseBody: JsValue = Json.parse(s"""
          |{
          |    "submittedOn": "2020-06-17T10:53:38.000Z",
-         |    "nonDeductibleLoanInterest": {
+         |    "nonDeductableLoanInterest": {
          |        "customerReference": "INPOLY123A",
          |        "reliefClaimed": 2000.99
          |    },

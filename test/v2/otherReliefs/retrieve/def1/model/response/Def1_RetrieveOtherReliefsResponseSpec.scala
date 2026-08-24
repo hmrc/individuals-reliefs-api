@@ -43,7 +43,7 @@ class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig 
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  val json = Json.parse(
+  val mtdJson = Json.parse(
     """{
       |  "submittedOn": "2020-06-17T10:53:38.000Z",
       |  "nonDeductibleLoanInterest": {
@@ -90,10 +90,57 @@ class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig 
       |}""".stripMargin
   )
 
+  val downstreamJson = Json.parse(
+    """{
+      |  "submittedOn": "2020-06-17T10:53:38.000Z",
+      |  "nonDeductableLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin
+  )
+
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        retrieveOtherReliefsBody shouldBe json.as[Def1_RetrieveOtherReliefsResponse]
+        downstreamJson.as[Def1_RetrieveOtherReliefsResponse] shouldBe retrieveOtherReliefsBody
       }
     }
   }
@@ -101,7 +148,7 @@ class Def1_RetrieveOtherReliefsResponseSpec extends UnitSpec with MockAppConfig 
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(retrieveOtherReliefsBody) shouldBe json
+        Json.toJson(retrieveOtherReliefsBody) shouldBe mtdJson
       }
     }
   }

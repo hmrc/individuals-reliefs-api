@@ -50,9 +50,55 @@ class Def1_AmendOtherReliefsRequestBodySpec extends UnitSpec with JsonErrorValid
     None
   )
 
-  private val json = Json.parse(
+  private val mtdJson = Json.parse(
     """{
       |  "nonDeductibleLoanInterest": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "payrollGiving": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 154.00
+      |      },
+      |  "qualifyingDistributionRedemptionOfSharesAndSecurities": {
+      |        "customerReference": "myref",
+      |        "amount": 222.22
+      |      },
+      |  "maintenancePayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "exSpouseName" : "Hilda",
+      |        "exSpouseDateOfBirth": "2000-01-01",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "postCessationTradeReliefAndCertainOtherLosses": [
+      |    {
+      |        "customerReference": "myref",
+      |        "businessName": "ACME Inc",
+      |        "dateBusinessCeased": "2019-08-10",
+      |        "natureOfTrade": "Widgets Manufacturer",
+      |        "incomeSource": "AB12412/A12",
+      |        "amount": 222.22
+      |      }
+      |  ],
+      |  "annualPaymentsMade": {
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      },
+      |  "qualifyingLoanInterestPayments": [
+      |    {
+      |        "customerReference": "myref",
+      |        "lenderName": "Maurice",
+      |        "reliefClaimed": 763.00
+      |      }
+      |  ]
+      |}""".stripMargin
+  )
+
+  private val downstreamJson = Json.parse(
+    """{
+      |  "nonDeductableLoanInterest": {
       |        "customerReference": "myref",
       |        "reliefClaimed": 763.00
       |      },
@@ -101,7 +147,7 @@ class Def1_AmendOtherReliefsRequestBodySpec extends UnitSpec with JsonErrorValid
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        amendOtherReliefsBody shouldBe json.as[Def1_AmendOtherReliefsRequestBody]
+        mtdJson.as[Def1_AmendOtherReliefsRequestBody] shouldBe amendOtherReliefsBody
       }
     }
   }
@@ -115,7 +161,7 @@ class Def1_AmendOtherReliefsRequestBodySpec extends UnitSpec with JsonErrorValid
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(amendOtherReliefsBody) shouldBe json
+        Json.toJson(amendOtherReliefsBody) shouldBe downstreamJson
       }
     }
   }
