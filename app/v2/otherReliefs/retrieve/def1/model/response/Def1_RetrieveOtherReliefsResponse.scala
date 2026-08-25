@@ -18,6 +18,7 @@ package v2.otherReliefs.retrieve.def1.model.response
 
 import api.models.domain.Timestamp
 import play.api.libs.json.*
+import play.api.libs.functional.syntax.*
 import v2.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 
 case class Def1_RetrieveOtherReliefsResponse(
@@ -33,7 +34,17 @@ case class Def1_RetrieveOtherReliefsResponse(
 
 object Def1_RetrieveOtherReliefsResponse {
 
-  implicit val reads: Reads[Def1_RetrieveOtherReliefsResponse]    = Json.reads[Def1_RetrieveOtherReliefsResponse]
+  implicit val reads: Reads[Def1_RetrieveOtherReliefsResponse] = (
+    (JsPath \ "submittedOn").read[Timestamp] and
+      (JsPath \ "nonDeductableLoanInterest").readNullable[NonDeductibleLoanInterest] and
+      (JsPath \ "payrollGiving").readNullable[PayrollGiving] and
+      (JsPath \ "qualifyingDistributionRedemptionOfSharesAndSecurities").readNullable[QualifyingDistributionRedemptionOfSharesAndSecurities] and
+      (JsPath \ "maintenancePayments").readNullable[Seq[MaintenancePayments]] and
+      (JsPath \ "postCessationTradeReliefAndCertainOtherLosses").readNullable[Seq[PostCessationTradeReliefAndCertainOtherLosses]] and
+      (JsPath \ "annualPaymentsMade").readNullable[AnnualPaymentsMade] and
+      (JsPath \ "qualifyingLoanInterestPayments").readNullable[Seq[QualifyingLoanInterestPayments]]
+  )(Def1_RetrieveOtherReliefsResponse.apply)
+
   implicit val writes: OWrites[Def1_RetrieveOtherReliefsResponse] = Json.writes[Def1_RetrieveOtherReliefsResponse]
 
 }

@@ -16,7 +16,8 @@
 
 package v2.otherReliefs.amend.def1.model.request
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 import v2.otherReliefs.amend.model.request.AmendOtherReliefsBody
 
 case class Def1_AmendOtherReliefsRequestBody(
@@ -56,5 +57,16 @@ case class Def1_AmendOtherReliefsRequestBody(
 }
 
 object Def1_AmendOtherReliefsRequestBody {
-  implicit val format: OFormat[Def1_AmendOtherReliefsRequestBody] = Json.format[Def1_AmendOtherReliefsRequestBody]
+  implicit val reads: Reads[Def1_AmendOtherReliefsRequestBody] = Json.reads[Def1_AmendOtherReliefsRequestBody]
+
+  implicit val writes: OWrites[Def1_AmendOtherReliefsRequestBody] = (
+    (JsPath \ "nonDeductableLoanInterest").writeNullable[NonDeductibleLoanInterest] and
+      (JsPath \ "payrollGiving").writeNullable[PayrollGiving] and
+      (JsPath \ "qualifyingDistributionRedemptionOfSharesAndSecurities").writeNullable[QualifyingDistributionRedemptionOfSharesAndSecurities] and
+      (JsPath \ "maintenancePayments").writeNullable[Seq[MaintenancePayments]] and
+      (JsPath \ "postCessationTradeReliefAndCertainOtherLosses").writeNullable[Seq[PostCessationTradeReliefAndCertainOtherLosses]] and
+      (JsPath \ "annualPaymentsMade").writeNullable[AnnualPaymentsMade] and
+      (JsPath \ "qualifyingLoanInterestPayments").writeNullable[Seq[QualifyingLoanInterestPayments]]
+  )(o => Tuple.fromProductTyped(o))
+
 }
