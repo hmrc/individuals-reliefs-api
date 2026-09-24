@@ -32,7 +32,7 @@ requestBody:
   content:
     application/json:
       schema:
-        oneOf:
+        anyOf:
           - $ref: "./schemas/amend_charitable_giving/def1/request.json"
           - $ref: "./schemas/amend_charitable_giving/def2/request.json"
       examples:
