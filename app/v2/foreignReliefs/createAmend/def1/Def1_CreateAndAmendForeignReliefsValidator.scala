@@ -31,7 +31,7 @@ class Def1_CreateAndAmendForeignReliefsValidator(nino: String, taxYear: String, 
     extends Validator[CreateAndAmendForeignReliefsRequestData] {
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendForeignReliefsBody]()
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
+  private val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2020-21"))
 
   def validate: Validated[Seq[MtdError], Def1_CreateAndAmendForeignReliefsRequestData] =
     (

@@ -17,7 +17,7 @@
 package v2.foreignReliefs.retrieve.def1.model.response
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import api.controllers.validators.resolvers.{ResolveDetailedTaxYear, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -26,7 +26,7 @@ import v2.foreignReliefs.retrieve.model.request.{Def1_RetrieveForeignReliefsRequ
 
 class Def1_RetrieveForeignReliefsValidator(nino: String, taxYear: String) extends Validator[RetrieveForeignReliefsRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
+  private val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2020-21"))
 
   def validate: Validated[Seq[MtdError], Def1_RetrieveForeignReliefsRequestData] =
     (

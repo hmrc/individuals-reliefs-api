@@ -16,7 +16,7 @@
 
 package v3.reliefInvestments.createAmend
 
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -31,7 +31,7 @@ object CreateAndAmendReliefInvestmentsSchema {
   case object Def2 extends CreateAndAmendReliefInvestmentsSchema
 
   def schemaFor(taxYearString: String): Validated[Seq[MtdError], CreateAndAmendReliefInvestmentsSchema] = {
-    ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))(taxYearString) andThen schemaFor
+    ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2020-21")).apply(taxYearString) andThen schemaFor
   }
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAndAmendReliefInvestmentsSchema] = {

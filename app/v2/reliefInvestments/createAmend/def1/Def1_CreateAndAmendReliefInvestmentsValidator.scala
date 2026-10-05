@@ -37,10 +37,12 @@ class Def1_CreateAndAmendReliefInvestmentsValidator(nino: String, taxYear: Strin
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAndAmendReliefInvestmentsRequestBody]()
 
-  private val resolveTaxYear = ResolveTaxYearMinMax(
-    (TaxYear.fromMtd("2020-21"), TaxYear.fromMtd("2024-25")),
-    RuleTaxYearNotSupportedError,
-    RuleTaxYearForVersionNotSupportedError)
+  private val resolveTaxYear = ResolveDetailedTaxYear(
+    minimumTaxYear = TaxYear.fromMtd("2020-21"),
+    maximumTaxYear = Some(TaxYear.fromMtd("2024-25")),
+    minError = RuleTaxYearNotSupportedError,
+    maxError = RuleTaxYearForVersionNotSupportedError
+  )
 
   private val rulesValidator = Def1_CreateAndAmendReliefInvestmentsRulesValidator
 

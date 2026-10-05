@@ -16,7 +16,7 @@
 
 package v3.charitableGiving.createAmend
 
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -32,7 +32,7 @@ object CreateAndAmendCharitableGivingReliefsSchema {
   case object Def2 extends CreateAndAmendCharitableGivingReliefsSchema
 
   def schemaFor(taxYearString: String): Validated[Seq[MtdError], CreateAndAmendCharitableGivingReliefsSchema] =
-    ResolveTaxYearMinimum(TaxYear.fromMtd("2017-18"))(taxYearString).andThen(schemaForValidated)
+    ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2017-18")).apply(taxYearString).andThen(schemaForValidated)
 
   private def schemaForValidated(taxYear: TaxYear): Validated[Seq[MtdError], CreateAndAmendCharitableGivingReliefsSchema] =
     Valid(if (taxYear >= TaxYear.fromMtd("2025-26")) Def2 else Def1)

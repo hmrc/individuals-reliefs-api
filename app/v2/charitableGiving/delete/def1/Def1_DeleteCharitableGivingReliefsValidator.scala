@@ -17,7 +17,7 @@
 package v2.charitableGiving.delete.def1
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import api.controllers.validators.resolvers.{ResolveDetailedTaxYear, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -26,7 +26,7 @@ import v2.charitableGiving.delete.model.request.{Def1_DeleteCharitableGivingTaxR
 
 class Def1_DeleteCharitableGivingReliefsValidator(nino: String, taxYear: String) extends Validator[DeleteCharitableGivingTaxReliefsRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2017-18"))
+  private val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2017-18"))
 
   def validate: Validated[Seq[MtdError], Def1_DeleteCharitableGivingTaxReliefsRequestData] =
     (

@@ -17,7 +17,7 @@
 package v2.pensionReliefs.retrieve.def1
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import api.controllers.validators.resolvers.{ResolveDetailedTaxYear, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -30,7 +30,7 @@ import javax.inject.Singleton
 @Singleton
 class Def1_RetrievePensionsReliefsValidator(nino: String, taxYear: String) extends Validator[RetrievePensionsReliefsRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
+  private val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2020-21"))
 
   def validate: Validated[Seq[MtdError], RetrievePensionsReliefsRequestData] = {
     (

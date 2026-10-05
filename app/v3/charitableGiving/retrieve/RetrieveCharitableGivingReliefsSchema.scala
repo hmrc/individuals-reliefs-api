@@ -16,7 +16,7 @@
 
 package v3.charitableGiving.retrieve
 
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import api.schema.DownstreamReadable
@@ -42,7 +42,7 @@ object RetrieveCharitableGivingReliefsSchema {
   }
 
   def schemaFor(taxYearString: String): Validated[Seq[MtdError], RetrieveCharitableGivingReliefsSchema] =
-    ResolveTaxYearMinimum(TaxYear.ending(2018))(taxYearString) andThen schemaFor
+    ResolveDetailedTaxYear(minimumTaxYear = TaxYear.ending(2018)).apply(taxYearString) andThen schemaFor
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveCharitableGivingReliefsSchema] = {
     if (taxYear >= TaxYear.fromMtd("2025-26")) Valid(Def2) else Valid(Def1)
