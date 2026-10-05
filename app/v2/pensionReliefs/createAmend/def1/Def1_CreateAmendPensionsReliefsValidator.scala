@@ -34,7 +34,7 @@ class Def1_CreateAmendPensionsReliefsValidator(nino: String, taxYear: String, bo
     extends Validator[CreateAmendPensionsReliefsRequestData] {
 
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendPensionsReliefsBody]()
-  val resolveTaxYear      = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
+  val resolveTaxYear      = ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2020-21"))
 
   def validate: Validated[Seq[MtdError], CreateAmendPensionsReliefsRequestData] =
     (

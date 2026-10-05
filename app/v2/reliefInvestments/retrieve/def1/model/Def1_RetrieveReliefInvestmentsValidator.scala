@@ -17,7 +17,7 @@
 package v2.reliefInvestments.retrieve.def1.model
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
+import api.controllers.validators.resolvers.{ResolveDetailedTaxYear, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.*
 import cats.data.Validated
@@ -30,10 +30,12 @@ import javax.inject.Singleton
 @Singleton
 class Def1_RetrieveReliefInvestmentsValidator(nino: String, taxYear: String) extends Validator[RetrieveReliefInvestmentsRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax(
-    (TaxYear.fromMtd("2020-21"), TaxYear.fromMtd("2024-25")),
-    RuleTaxYearNotSupportedError,
-    RuleTaxYearForVersionNotSupportedError)
+  private val resolveTaxYear = ResolveDetailedTaxYear(
+    minimumTaxYear = TaxYear.fromMtd("2020-21"),
+    maximumTaxYear = Some(TaxYear.fromMtd("2024-25")),
+    minError = RuleTaxYearNotSupportedError,
+    maxError = RuleTaxYearForVersionNotSupportedError
+  )
 
   override def validate: Validated[Seq[MtdError], Def1_RetrieveReliefInvestmentsRequestData] = {
     (

@@ -17,7 +17,7 @@
 package v2.foreignReliefs.delete.def1
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import api.controllers.validators.resolvers.{ResolveDetailedTaxYear, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -26,7 +26,7 @@ import v2.foreignReliefs.delete.model.{Def1_DeleteForeignReliefsRequestData, Del
 
 class Def1_DeleteForeignReliefsValidator(nino: String, taxYear: String) extends Validator[DeleteForeignReliefsRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
+  private val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2020-21"))
 
   def validate: Validated[Seq[MtdError], Def1_DeleteForeignReliefsRequestData] =
     (

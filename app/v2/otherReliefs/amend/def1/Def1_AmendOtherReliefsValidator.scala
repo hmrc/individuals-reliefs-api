@@ -32,7 +32,7 @@ import javax.inject.Singleton
 class Def1_AmendOtherReliefsValidator(nino: String, taxYear: String, body: JsValue) extends Validator[AmendOtherReliefsRequestData] {
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_AmendOtherReliefsRequestBody]()
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
+  private val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2020-21"))
 
   private val rulesValidator = Def1_AmendOtherReliefsRulesValidator
 

@@ -17,7 +17,7 @@
 package v3.otherReliefs.delete.def1
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import api.controllers.validators.resolvers.{ResolveDetailedTaxYear, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -26,7 +26,7 @@ import v3.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 class Def1_DeleteOtherReliefsValidator(nino: String, taxYear: String) extends Validator[DeleteOtherReliefsRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2020-21"))
+  private val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2020-21"))
 
   override def validate: Validated[Seq[MtdError], Def1_DeleteOtherReliefsRequestData] =
     (
