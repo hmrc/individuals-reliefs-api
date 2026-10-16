@@ -23,7 +23,6 @@ import api.models.domain.TaxYear
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import common.RuleSubmissionFailedError
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result

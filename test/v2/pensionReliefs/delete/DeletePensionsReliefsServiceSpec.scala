@@ -21,7 +21,6 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
-import common.RuleOutsideAmendmentWindowError
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
 import v2.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData

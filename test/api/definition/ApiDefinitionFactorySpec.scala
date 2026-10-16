@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,64 @@
 package api.definition
 
 import api.config.Deprecation.NotDeprecated
-import api.config.{AppConfig, MockAppConfig}
+import api.config.MockAppConfig
+import api.definition.APIAccessType.{CONTROLLED, PUBLIC}
 import api.definition.APIStatus.{ALPHA, BETA}
-import api.mocks.MockHttpClient
 import api.routing.*
 import api.utils.UnitSpec
 import cats.implicits.catsSyntaxValidatedId
 
-import scala.language.reflectiveCalls
-
 class ApiDefinitionFactorySpec extends UnitSpec {
+
+  "calling definition" when {
+    List((PUBLIC, false), (CONTROLLED, true)).foreach { (accessType, controlledAccessEnabled) =>
+      s"the controlled access flag is set to $controlledAccessEnabled" should {
+        s"return a valid Definition case class with the access type set to $accessType" in new Test {
+          MockedAppConfig.apiGatewayContext returns "individuals/reliefs"
+
+          setupMockConfig(Version2)
+          MockedAppConfig.apiStatus(Version2) returns "BETA"
+          MockedAppConfig.endpointsEnabled(Version2) returns true
+
+          setupMockConfig(Version3)
+          MockedAppConfig.apiStatus(Version3) returns "BETA"
+          MockedAppConfig.endpointsEnabled(Version3) returns true
+
+          MockedAppConfig.controlledAccessEnabled.returns(controlledAccessEnabled).twice()
+
+          apiDefinitionFactory.definition shouldBe
+            Definition(
+              api = APIDefinition(
+                name = "Individuals Reliefs (MTD)",
+                description = "An API for providing individual relief data",
+                context = "individuals/reliefs",
+                categories = Seq("INCOME_TAX_MTD"),
+                versions = Seq(
+                  APIVersion(
+                    version = Version2,
+                    status = BETA,
+                    access = accessType,
+                    endpointsEnabled = true
+                  ),
+                  APIVersion(
+                    version = Version3,
+                    status = BETA,
+                    access = accessType,
+                    endpointsEnabled = true
+                  )
+                ),
+                requiresTrust = None
+              )
+            )
+        }
+      }
+    }
+  }
 
   "buildAPIStatus" when {
     "the 'apiStatus' parameter is present and valid" should {
 
-      s"return the expected status" in new Test {
+      "return the expected status" in new Test {
         setupMockConfig(Version9)
         MockedAppConfig.apiStatus(Version9) returns "BETA"
 
@@ -42,7 +85,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     }
 
     "the 'apiStatus' parameter is present but invalid" should {
-      s"default to alpha" in new Test {
+      "default to alpha" in new Test {
         setupMockConfig(Version9)
         MockedAppConfig.apiStatus(Version9) returns "not-a-status"
 
@@ -69,24 +112,8 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     }
   }
 
-  trait Test extends UnitSpec with MockHttpClient with MockAppConfig {
-    MockedAppConfig.apiGatewayContext returns "individuals/self-assessment/adjustable-summary"
-
-    protected val apiDefinitionFactory: ApiDefinitionFactory = new ApiDefinitionFactory {
-      protected val appConfig: AppConfig = mockAppConfig
-
-      lazy val definition: Definition = Definition(
-        APIDefinition(
-          "test API definition",
-          "description",
-          "context",
-          List("category"),
-          List(APIVersion(Version1, APIStatus.BETA, APIAccessType.PUBLIC, endpointsEnabled = true)),
-          None
-        )
-      )
-
-    }
+  class Test extends MockAppConfig {
+    protected val apiDefinitionFactory: ApiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
 
     def checkBuildApiStatus(version: Version): APIStatus = apiDefinitionFactory.buildAPIStatus(version)
 

@@ -20,7 +20,6 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import common.*
 import play.api.libs.json.*
 import v2.otherReliefs.amend.def1.model.request.*
 import v2.otherReliefs.amend.model.request.AmendOtherReliefsRequestData

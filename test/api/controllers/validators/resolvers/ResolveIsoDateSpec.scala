@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,7 @@ import java.time.LocalDate
 
 class ResolveIsoDateSpec extends UnitSpec {
 
-  private val validDate      = "2024-06-21"
-  private val outOfRangeDate = "1800-01-01"
+  private val validDate = "2024-06-21"
 
   "ResolveIsoDate" should {
 
@@ -51,22 +50,6 @@ class ResolveIsoDateSpec extends UnitSpec {
         val result = ResolveIsoDate(DateFormatError)(Option(validDate))
         result shouldBe expected
       }
-
-      "given a date string in range" in {
-        val expected = Valid(LocalDate.parse(validDate))
-
-        val result: Validated[Seq[MtdError], LocalDate] =
-          ResolveIsoDate.withMinMaxCheck(validDate, DateFormatError, RuleDateRangeInvalidError)
-        result shouldBe expected
-      }
-
-      "given an Option date string in range" in {
-        val expected = Valid(Some(LocalDate.parse(validDate)))
-
-        val result: Validated[Seq[MtdError], Option[LocalDate]] =
-          ResolveIsoDate.withMinMaxCheck(Some(validDate), DateFormatError, RuleDateRangeInvalidError)
-        result shouldBe expected
-      }
     }
 
     "return an error" when {
@@ -75,30 +58,13 @@ class ResolveIsoDateSpec extends UnitSpec {
         val result      = ResolveIsoDate(invalidDate, DateFormatError)
         result shouldBe Invalid(List(DateFormatError))
       }
-
-      "given a date string out of range" in {
-        val expected = Invalid(Seq(RuleDateRangeInvalidError))
-
-        val result: Validated[Seq[MtdError], LocalDate] =
-          ResolveIsoDate.withMinMaxCheck(outOfRangeDate, DateFormatError, RuleDateRangeInvalidError)
-        result shouldBe expected
-      }
-
-      "given a Option date string out of range" in {
-        val expected = Invalid(Seq(RuleDateRangeInvalidError))
-
-        val result: Validated[Seq[MtdError], Option[LocalDate]] =
-          ResolveIsoDate.withMinMaxCheck(Some(outOfRangeDate), DateFormatError, RuleDateRangeInvalidError)
-        result shouldBe expected
-      }
     }
 
     "return None" when {
       "given None as input" in {
         val expected = Valid(None)
 
-        val result: Validated[Seq[MtdError], Option[LocalDate]] =
-          ResolveIsoDate.withMinMaxCheck(None, DateFormatError, RuleDateRangeInvalidError)
+        val result: Validated[Seq[MtdError], Option[LocalDate]] = ResolveIsoDate(None, DateFormatError)
         result shouldBe expected
       }
     }

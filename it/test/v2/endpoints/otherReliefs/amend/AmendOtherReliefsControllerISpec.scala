@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package v2.endpoints
+package v2.endpoints.otherReliefs.amend
 
 import api.models.errors
 import api.models.errors.*
 import api.services.*
 import api.support.IntegrationBaseSpec
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.*
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
 import play.api.libs.json.*
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import v2.endpoints.AmendOtherReliefsControllerISpec.*
+import v2.endpoints.otherReliefs.amend.AmendOtherReliefsControllerISpec.*
 
 class AmendOtherReliefsControllerISpec extends IntegrationBaseSpec {
 
