@@ -21,7 +21,6 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
-import common.RuleOutsideAmendmentWindowError
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.requestBodyModel
 import v3.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData

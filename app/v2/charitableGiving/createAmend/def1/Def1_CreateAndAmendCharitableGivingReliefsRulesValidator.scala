@@ -18,11 +18,10 @@ package v2.charitableGiving.createAmend.def1
 
 import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.{ResolveParsedNumber, ResolveStringPattern}
-import api.models.errors.{MtdError, StringFormatError}
+import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toFoldableOps
-import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError}
 import v2.charitableGiving.createAmend.def1.model.request.*
 import v2.charitableGiving.createAmend.model.request.Def1_CreateAndAmendCharitableGivingTaxReliefsRequestData
 

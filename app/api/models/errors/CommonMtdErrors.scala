@@ -18,8 +18,6 @@ package api.models.errors
 
 import play.api.http.Status.*
 
-// MtdError types that are common across MTD APIs.
-
 // Format Errors
 object NinoFormatError extends MtdError("FORMAT_NINO", "The NINO format is invalid", BAD_REQUEST)
 
@@ -38,6 +36,25 @@ object ValueFormatError extends MtdError("FORMAT_VALUE", "The value must be betw
 
 object StringFormatError extends MtdError(code = "FORMAT_STRING", message = "The supplied string format is not valid", BAD_REQUEST)
 
+object DateOfInvestmentFormatError extends MtdError("FORMAT_DATE_OF_INVESTMENT", "The format of the investment date is invalid", BAD_REQUEST)
+
+object NameFormatError extends MtdError("FORMAT_NAME", "The format of the name is invalid", BAD_REQUEST)
+
+object UniqueInvestmentRefFormatError
+    extends MtdError("FORMAT_UNIQUE_INVESTMENT_REFERENCE", "The format of unique investment reference is invalid", BAD_REQUEST)
+
+object CustomerReferenceFormatError extends MtdError("FORMAT_CUSTOMER_REF", "The provided customer reference is not valid", BAD_REQUEST)
+
+object ExSpouseNameFormatError extends MtdError("FORMAT_NAME_EX_SPOUSE", "The provided ex spouse name is not valid", BAD_REQUEST)
+
+object BusinessNameFormatError extends MtdError("FORMAT_NAME_BUSINESS", "The provided business name is not valid", BAD_REQUEST)
+
+object NatureOfTradeFormatError extends MtdError("FORMAT_NATURE_OF_TRADE", "The provided nature of trade is not valid", BAD_REQUEST)
+
+object IncomeSourceFormatError extends MtdError("FORMAT_INCOME_SOURCE", "The provided income source is not valid", BAD_REQUEST)
+
+object LenderNameFormatError extends MtdError("FORMAT_LENDER_NAME", "The provided lender name is not valid", BAD_REQUEST)
+
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found", NOT_FOUND)
 
@@ -52,9 +69,6 @@ object BVRError extends MtdError("BUSINESS_ERROR", "Business validation error", 
 object InvalidHttpMethodError extends MtdError("INVALID_HTTP_METHOD", "Invalid HTTP method", METHOD_NOT_ALLOWED)
 
 object InvalidBodyTypeError extends MtdError("INVALID_BODY_TYPE", "Expecting text/json or application/json body", UNSUPPORTED_MEDIA_TYPE)
-
-object InvalidTaxYearParameterError
-    extends MtdError(code = "INVALID_TAX_YEAR_PARAMETER", message = "A tax year before 2023-24 was supplied", BAD_REQUEST)
 
 //Authentication/Authorisation errors
 
@@ -71,7 +85,7 @@ object InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The a
 
 object UnsupportedVersionError extends MtdError("NOT_FOUND", "The requested resource could not be found", NOT_FOUND)
 
-// Common rule errors
+// Rule errors
 object RuleTaxYearNotSupportedError
     extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The tax year specified does not lie within the supported range", BAD_REQUEST)
 
@@ -88,9 +102,21 @@ object RuleTaxYearRangeInvalidError extends MtdError("RULE_TAX_YEAR_RANGE_INVALI
 
 object RuleTaxYearNotEndedError extends MtdError("RULE_TAX_YEAR_NOT_ENDED", "The specified tax year has not yet ended", BAD_REQUEST)
 
-object RuleDateRangeInvalidError extends MtdError(code = "RULE_DATE_RANGE_INVALID", message = "The specified date range is invalid", BAD_REQUEST)
-
 object RuleCountryCodeError extends MtdError("RULE_COUNTRY_CODE", "The country code is not a permitted ISO 3166-1 alpha-3 country code", BAD_REQUEST)
+
+object RuleSubmissionFailedError
+    extends MtdError("RULE_SUBMISSION_FAILED", "The submission cannot be completed due to validation failures", BAD_REQUEST)
+
+object RuleGiftAidNonUkAmountWithoutNamesError
+    extends MtdError(
+      "RULE_GIFT_AID_NON_UK_AMOUNT_WITHOUT_NAMES",
+      "Non-UK charity Gift Aid amount supplied without the non-UK Gift Aid charity names",
+      BAD_REQUEST)
+
+object RuleGiftsNonUkAmountWithoutNamesError
+    extends MtdError("RULE_GIFTS_NON_UK_AMOUNT_WITHOUT_NAMES", "Non-UK gifts amount supplied without non-UK gifts charity names", BAD_REQUEST)
+
+object RuleOutsideAmendmentWindowError extends MtdError("RULE_OUTSIDE_AMENDMENT_WINDOW", "You are outside the amendment window", BAD_REQUEST)
 
 //Stub Errors
 object RuleIncorrectGovTestScenarioError

@@ -20,7 +20,6 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import common.{RuleGiftAidNonUkAmountWithoutNamesError, RuleGiftsNonUkAmountWithoutNamesError}
 import play.api.libs.json.*
 import v3.charitableGiving.createAmend.CreateAndAmendCharitableGivingReliefsValidatorFactory
 import v3.charitableGiving.createAmend.def1.model.request.*

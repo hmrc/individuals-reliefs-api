@@ -20,7 +20,6 @@ import api.controllers.RequestContext
 import api.models.errors.*
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.*
-import common.RuleOutsideAmendmentWindowError
 import v3.reliefInvestments.delete.model.DeleteReliefInvestmentsRequestData
 
 import javax.inject.{Inject, Singleton}
