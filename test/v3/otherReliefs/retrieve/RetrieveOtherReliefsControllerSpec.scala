@@ -25,8 +25,8 @@ import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v3.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
-import v3.otherReliefs.retrieve.def1.model.response.*
+import v3.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
+import v3.otherReliefs.retrieve.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,9 +39,9 @@ class RetrieveOtherReliefsControllerSpec
     with MockAppConfig {
 
   private val taxYear     = "2019-20"
-  private val requestData = Def1_RetrieveOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
+  private val requestData = RetrieveOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
 
-  private val responseBody = Def1_RetrieveOtherReliefsResponse(
+  private val responseBody = RetrieveOtherReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
     Some(PayrollGiving(Some("myref"), 154.00)),

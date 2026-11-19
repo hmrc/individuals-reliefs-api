@@ -26,7 +26,7 @@ import api.services.MockAuditService
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v3.pensionReliefs.createAmend.def1.model.request.*
+import v3.pensionReliefs.createAmend.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -63,7 +63,7 @@ class CreateAmendPensionsReliefsControllerSpec
     )
   )
 
-  private val requestData = Def1_CreateAmendPensionsReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = CreateAmendPensionsReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBody)
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {

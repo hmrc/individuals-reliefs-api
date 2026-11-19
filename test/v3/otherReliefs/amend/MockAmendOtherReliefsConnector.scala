@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.otherReliefs.amend.def1.model.request.Def1_AmendOtherReliefsRequestData
+import v3.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,9 +31,9 @@ trait MockAmendOtherReliefsConnector extends TestSuite with MockFactory {
 
   object MockAmendOtherReliefsConnector {
 
-    def amend(requestData: Def1_AmendOtherReliefsRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+    def amend(requestData: AmendOtherReliefsRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockAmendOtherReliefsConnector
-        .amend(_: Def1_AmendOtherReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .amend(_: AmendOtherReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
 

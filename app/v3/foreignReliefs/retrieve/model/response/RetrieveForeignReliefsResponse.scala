@@ -18,30 +18,19 @@ package v3.foreignReliefs.retrieve.model.response
 
 import api.models.domain.Timestamp
 import play.api.libs.json.*
-import v3.foreignReliefs.retrieve.def1.model.response.*
 
-sealed trait RetrieveForeignReliefsResponse
+case class RetrieveForeignReliefsResponse(
+    submittedOn: Timestamp,
+    foreignTaxCreditRelief: Option[ForeignTaxCreditRelief],
+    foreignIncomeTaxCreditRelief: Option[Seq[ForeignIncomeTaxCreditRelief]],
+    foreignTaxForFtcrNotClaimed: Option[ForeignTaxForFtcrNotClaimed]
+) {
+  implicit val reads: Reads[RetrieveForeignReliefsResponse] = Json.reads[RetrieveForeignReliefsResponse]
+}
 
 object RetrieveForeignReliefsResponse {
 
-  implicit val writes: OWrites[RetrieveForeignReliefsResponse] = OWrites[RetrieveForeignReliefsResponse] {
-    case def1: Def1_RetrieveForeignReliefsResponse => Json.toJsObject(def1)
-  }
-
-}
-
-case class Def1_RetrieveForeignReliefsResponse(
-    submittedOn: Timestamp,
-    foreignTaxCreditRelief: Option[Def1_ForeignTaxCreditRelief],
-    foreignIncomeTaxCreditRelief: Option[Seq[Def1_ForeignIncomeTaxCreditRelief]],
-    foreignTaxForFtcrNotClaimed: Option[Def1_ForeignTaxForFtcrNotClaimed]
-) extends RetrieveForeignReliefsResponse {
-  implicit val reads: Reads[Def1_RetrieveForeignReliefsResponse] = Json.reads[Def1_RetrieveForeignReliefsResponse]
-}
-
-object Def1_RetrieveForeignReliefsResponse {
-
-  implicit val reads: Reads[Def1_RetrieveForeignReliefsResponse]    = Json.reads[Def1_RetrieveForeignReliefsResponse]
-  implicit val writes: OWrites[Def1_RetrieveForeignReliefsResponse] = Json.writes[Def1_RetrieveForeignReliefsResponse]
+  implicit val reads: Reads[RetrieveForeignReliefsResponse]    = Json.reads[RetrieveForeignReliefsResponse]
+  implicit val writes: OWrites[RetrieveForeignReliefsResponse] = Json.writes[RetrieveForeignReliefsResponse]
 
 }

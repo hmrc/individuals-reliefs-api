@@ -26,7 +26,7 @@ import api.services.MockAuditService
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v3.foreignReliefs.delete.model.Def1_DeleteForeignReliefsRequestData
+import v3.foreignReliefs.delete.model.DeleteForeignReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -111,7 +111,7 @@ class DeleteForeignReliefsControllerSpec
         )
       )
 
-    protected val requestData: Def1_DeleteForeignReliefsRequestData = Def1_DeleteForeignReliefsRequestData(parsedNino, taxYear)
+    protected val requestData: DeleteForeignReliefsRequestData = DeleteForeignReliefsRequestData(parsedNino, taxYear)
 
   }
 

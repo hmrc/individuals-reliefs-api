@@ -19,7 +19,6 @@ package v3.otherReliefs.amend
 import api.controllers.validators.Validator
 import api.utils.UnitSpec
 import play.api.libs.json.JsObject
-import v3.otherReliefs.amend.def1.Def1_AmendOtherReliefsValidator
 import v3.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 class AmendOtherReliefsValidatorFactorySpec extends UnitSpec {
@@ -32,16 +31,16 @@ class AmendOtherReliefsValidatorFactorySpec extends UnitSpec {
   private val validatorFactory = new AmendOtherReliefsValidatorFactory
 
   "validator" should {
-    "return the Def1 validator" when {
+    "return the validator" when {
       "given a valid request" in {
         val result: Validator[AmendOtherReliefsRequestData] = validatorFactory.validator(validNino, validTaxYear, emptyBody)
-        result shouldBe a[Def1_AmendOtherReliefsValidator]
+        result shouldBe a[AmendOtherReliefsValidator]
 
       }
 
       "given a valid taxYear" in {
         val result: Validator[AmendOtherReliefsRequestData] = validatorFactory.validator(validNino, invalidTaxYear, emptyBody)
-        result shouldBe a[Def1_AmendOtherReliefsValidator]
+        result shouldBe a[AmendOtherReliefsValidator]
 
       }
     }

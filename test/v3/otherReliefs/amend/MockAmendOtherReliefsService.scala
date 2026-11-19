@@ -22,7 +22,7 @@ import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import v3.otherReliefs.amend.def1.model.request.Def1_AmendOtherReliefsRequestData
+import v3.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,9 +32,9 @@ trait MockAmendOtherReliefsService extends TestSuite with MockFactory {
 
   object MockAmendOtherReliefsService {
 
-    def amend(requestData: Def1_AmendOtherReliefsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def amend(requestData: AmendOtherReliefsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockService
-        .amend(_: Def1_AmendOtherReliefsRequestData)(_: RequestContext, _: ExecutionContext))
+        .amend(_: AmendOtherReliefsRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
     }
 

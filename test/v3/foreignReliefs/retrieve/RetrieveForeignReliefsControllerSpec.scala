@@ -25,9 +25,8 @@ import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v3.foreignReliefs.retrieve.def1.model.response.*
-import v3.foreignReliefs.retrieve.model.request.Def1_RetrieveForeignReliefsRequestData
-import v3.foreignReliefs.retrieve.model.response.Def1_RetrieveForeignReliefsResponse
+import v3.foreignReliefs.retrieve.model.request.RetrieveForeignReliefsRequestData
+import v3.foreignReliefs.retrieve.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,20 +39,20 @@ class RetrieveForeignReliefsControllerSpec
     with MockAppConfig {
 
   private val taxYear     = "2019-20"
-  private val requestData = Def1_RetrieveForeignReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
+  private val requestData = RetrieveForeignReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
 
-  private val responseBody = Def1_RetrieveForeignReliefsResponse(
+  private val responseBody = RetrieveForeignReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),
-    Some(Def1_ForeignTaxCreditRelief(2309.95)),
+    Some(ForeignTaxCreditRelief(2309.95)),
     Some(
       Seq(
-        Def1_ForeignIncomeTaxCreditRelief(
+        ForeignIncomeTaxCreditRelief(
           "FRA",
           Some(1640.32),
           1204.78,
           employmentLumpSum = false
         ))),
-    Some(Def1_ForeignTaxForFtcrNotClaimed(1749.98))
+    Some(ForeignTaxForFtcrNotClaimed(1749.98))
   )
 
   val mtdResponseJson: JsValue = Json

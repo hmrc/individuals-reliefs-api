@@ -17,11 +17,5 @@
 package v3.pensionReliefs.retrieve.model.request
 
 import api.models.domain.{Nino, TaxYear}
-import v3.pensionReliefs.retrieve.RetrievePensionsReliefsSchema
 
-trait RetrievePensionsReliefsRequestData {
-  def nino: Nino
-  def taxYear: TaxYear
-
-  val schema: RetrievePensionsReliefsSchema
-}
+case class RetrievePensionsReliefsRequestData(nino: Nino, taxYear: TaxYear)

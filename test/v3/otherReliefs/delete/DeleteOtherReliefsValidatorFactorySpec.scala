@@ -18,7 +18,6 @@ package v3.otherReliefs.delete
 
 import api.controllers.validators.Validator
 import api.utils.UnitSpec
-import v3.otherReliefs.delete.def1.Def1_DeleteOtherReliefsValidator
 import v3.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 class DeleteOtherReliefsValidatorFactorySpec extends UnitSpec {
@@ -30,16 +29,16 @@ class DeleteOtherReliefsValidatorFactorySpec extends UnitSpec {
   private val validatorFactory = new DeleteOtherReliefsValidatorFactory
 
   "validator" should {
-    "return the Def1 validator" when {
+    "return the validator" when {
       "given a valid request" in {
         val result: Validator[DeleteOtherReliefsRequestData] = validatorFactory.validator(validNino, validTaxYear)
-        result shouldBe a[Def1_DeleteOtherReliefsValidator]
+        result shouldBe a[DeleteOtherReliefsValidator]
 
       }
 
       "given an invalid taxYear" in {
         val result: Validator[DeleteOtherReliefsRequestData] = validatorFactory.validator(validNino, invalidTaxYear)
-        result shouldBe a[Def1_DeleteOtherReliefsValidator]
+        result shouldBe a[DeleteOtherReliefsValidator]
 
       }
     }

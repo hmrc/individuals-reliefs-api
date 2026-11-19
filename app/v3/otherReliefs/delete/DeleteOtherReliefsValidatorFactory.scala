@@ -17,8 +17,6 @@
 package v3.otherReliefs.delete
 
 import api.controllers.validators.Validator
-import v3.otherReliefs.delete.DeleteOtherReliefsSchema.Def1
-import v3.otherReliefs.delete.def1.Def1_DeleteOtherReliefsValidator
 import v3.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 import javax.inject.Singleton
@@ -26,13 +24,7 @@ import javax.inject.Singleton
 @Singleton
 class DeleteOtherReliefsValidatorFactory {
 
-  def validator(nino: String, taxYear: String): Validator[DeleteOtherReliefsRequestData] = {
-
-    val schema = DeleteOtherReliefsSchema.schemaFor(Some(taxYear))
-
-    schema match {
-      case Def1 => new Def1_DeleteOtherReliefsValidator(nino, taxYear)
-    }
-  }
+  def validator(nino: String, taxYear: String): Validator[DeleteOtherReliefsRequestData] =
+    new DeleteOtherReliefsValidator(nino, taxYear)
 
 }

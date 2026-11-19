@@ -16,16 +16,13 @@
 
 package v3.pensionReliefs.retrieve.model.response
 
-import api.utils.JsonWritesUtil.writesFrom
-import play.api.libs.json.OWrites
-import v3.pensionReliefs.retrieve.def1.model.response.Def1_RetrievePensionsReliefsResponse
+import api.models.domain.Timestamp
+import play.api.libs.json.*
 
-trait RetrievePensionsReliefsResponse
+case class RetrievePensionsReliefsResponse(submittedOn: Timestamp, pensionReliefs: PensionsReliefs)
 
 object RetrievePensionsReliefsResponse {
+  implicit val reads: Reads[RetrievePensionsReliefsResponse] = Json.reads[RetrievePensionsReliefsResponse]
 
-  implicit val writes: OWrites[RetrievePensionsReliefsResponse] = writesFrom { case def1: Def1_RetrievePensionsReliefsResponse =>
-    implicitly[OWrites[Def1_RetrievePensionsReliefsResponse]].writes(def1)
-  }
-
+  implicit val writes: OWrites[RetrievePensionsReliefsResponse] = Json.writes[RetrievePensionsReliefsResponse]
 }

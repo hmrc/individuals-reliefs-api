@@ -18,7 +18,6 @@ package v3.foreignReliefs.createAmend
 
 import api.controllers.validators.Validator
 import play.api.libs.json.JsValue
-import v3.foreignReliefs.createAmend.def1.Def1_CreateAndAmendForeignReliefsValidator
 import v3.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 
 import javax.inject.Singleton
@@ -26,11 +25,7 @@ import javax.inject.Singleton
 @Singleton
 class CreateAndAmendForeignReliefsValidatorFactory {
 
-  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAndAmendForeignReliefsRequestData] = {
-    taxYear match {
-      case _ => new Def1_CreateAndAmendForeignReliefsValidator(nino, taxYear, body)
-    }
-
-  }
+  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAndAmendForeignReliefsRequestData] =
+    new CreateAndAmendForeignReliefsValidator(nino, taxYear, body)
 
 }

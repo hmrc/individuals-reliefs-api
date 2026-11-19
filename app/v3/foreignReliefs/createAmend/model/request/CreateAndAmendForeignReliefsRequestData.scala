@@ -18,8 +18,4 @@ package v3.foreignReliefs.createAmend.model.request
 
 import api.models.domain.{Nino, TaxYear}
 
-trait CreateAndAmendForeignReliefsRequestData {
-  val nino: Nino
-  val taxYear: TaxYear
-  val body: CreateAndAmendForeignReliefsBody
-}
+case class CreateAndAmendForeignReliefsRequestData(nino: Nino, taxYear: TaxYear, body: CreateAndAmendForeignReliefsBody)

@@ -17,11 +17,5 @@
 package v3.otherReliefs.retrieve.model.request
 
 import api.models.domain.{Nino, TaxYear}
-import v3.otherReliefs.retrieve.RetrieveOtherReliefsSchema
 
-trait RetrieveOtherReliefsRequestData {
-  def nino: Nino
-  def taxYear: TaxYear
-
-  val schema: RetrieveOtherReliefsSchema
-}
+case class RetrieveOtherReliefsRequestData(nino: Nino, taxYear: TaxYear)

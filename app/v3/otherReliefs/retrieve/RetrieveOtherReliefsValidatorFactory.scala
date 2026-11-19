@@ -17,8 +17,6 @@
 package v3.otherReliefs.retrieve
 
 import api.controllers.validators.Validator
-import v3.otherReliefs.retrieve.RetrieveOtherReliefsSchema.Def1
-import v3.otherReliefs.retrieve.def1.model.Def1_RetrieveOtherReliefsValidator
 import v3.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
 
 import javax.inject.Singleton
@@ -26,14 +24,7 @@ import javax.inject.Singleton
 @Singleton
 class RetrieveOtherReliefsValidatorFactory {
 
-  def validator(nino: String, taxYear: String): Validator[RetrieveOtherReliefsRequestData] = {
-
-    val schema = RetrieveOtherReliefsSchema.schemaFor(Some(taxYear))
-
-    schema match {
-      case Def1 => new Def1_RetrieveOtherReliefsValidator(nino, taxYear)
-    }
-
-  }
+  def validator(nino: String, taxYear: String): Validator[RetrieveOtherReliefsRequestData] =
+    new RetrieveOtherReliefsValidator(nino, taxYear)
 
 }

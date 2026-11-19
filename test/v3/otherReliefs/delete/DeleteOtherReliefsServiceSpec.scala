@@ -22,7 +22,7 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
+import v3.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -34,7 +34,7 @@ class DeleteOtherReliefsServiceSpec extends UnitSpec {
 
   implicit val correlationId: String = "X-123"
 
-  val requestData: Def1_DeleteOtherReliefsRequestData = Def1_DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  val requestData: DeleteOtherReliefsRequestData = DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockDeleteOtherReliefsConnector {
 

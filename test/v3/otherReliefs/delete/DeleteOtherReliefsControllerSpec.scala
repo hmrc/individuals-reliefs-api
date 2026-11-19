@@ -27,7 +27,7 @@ import api.services.MockAuditService
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v3.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
+import v3.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +41,7 @@ class DeleteOtherReliefsControllerSpec
     with MockAppConfig {
 
   private val taxYear     = "2019-20"
-  private val requestData = Def1_DeleteOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
+  private val requestData = DeleteOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {

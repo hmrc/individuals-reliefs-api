@@ -18,8 +18,6 @@ package v3.otherReliefs.amend
 
 import api.controllers.validators.Validator
 import play.api.libs.json.JsValue
-import v3.otherReliefs.amend.AmendOtherReliefsSchema.Def1
-import v3.otherReliefs.amend.def1.Def1_AmendOtherReliefsValidator
 import v3.otherReliefs.amend.model.request.AmendOtherReliefsRequestData
 
 import javax.inject.Singleton
@@ -27,13 +25,7 @@ import javax.inject.Singleton
 @Singleton
 class AmendOtherReliefsValidatorFactory {
 
-  def validator(nino: String, taxYear: String, body: JsValue): Validator[AmendOtherReliefsRequestData] = {
-
-    val schema = AmendOtherReliefsSchema.schemaFor(Some(taxYear))
-
-    schema match {
-      case Def1 => new Def1_AmendOtherReliefsValidator(nino, taxYear, body)
-    }
-  }
+  def validator(nino: String, taxYear: String, body: JsValue): Validator[AmendOtherReliefsRequestData] =
+    new AmendOtherReliefsValidator(nino, taxYear, body)
 
 }

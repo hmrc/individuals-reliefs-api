@@ -20,9 +20,8 @@ import api.connectors.ConnectorSpec
 import api.models.domain.*
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v3.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
-import v3.otherReliefs.retrieve.def1.model.response.Def1_RetrieveOtherReliefsResponse
 import v3.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
+import v3.otherReliefs.retrieve.model.response.RetrieveOtherReliefsResponse
 
 import scala.concurrent.Future
 
@@ -39,10 +38,10 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
 
     def taxYear: TaxYear
 
-    val request: RetrieveOtherReliefsRequestData = Def1_RetrieveOtherReliefsRequestData(Nino(nino), taxYear)
+    val request: RetrieveOtherReliefsRequestData = RetrieveOtherReliefsRequestData(Nino(nino), taxYear)
 
-    val response: Def1_RetrieveOtherReliefsResponse =
-      Def1_RetrieveOtherReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None, None, None, None, None)
+    val response: RetrieveOtherReliefsResponse =
+      RetrieveOtherReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None, None, None, None, None)
 
   }
 
@@ -51,7 +50,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
       "a valid request is made" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2017-18")
 
-        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveOtherReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveOtherReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = url"$baseUrl/income-tax/reliefs/other/$nino/2017-18"
@@ -66,7 +65,7 @@ class RetrieveOtherReliefsConnectorSpec extends ConnectorSpec {
       "a valid request is made" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveOtherReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveOtherReliefsResponse]] = Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = url"$baseUrl/income-tax/reliefs/other/23-24/$nino"

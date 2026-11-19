@@ -20,22 +20,21 @@ import api.config.MockAppConfig
 import api.models.domain.Timestamp
 import api.utils.UnitSpec
 import play.api.libs.json.*
-import v3.foreignReliefs.retrieve.def1.model.response.*
 
 class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
 
-  val retrieveForeignReliefsBody: RetrieveForeignReliefsResponse = Def1_RetrieveForeignReliefsResponse(
+  val retrieveForeignReliefsBody: RetrieveForeignReliefsResponse = RetrieveForeignReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),
-    Some(Def1_ForeignTaxCreditRelief(763.00)),
+    Some(ForeignTaxCreditRelief(763.00)),
     Some(
       Seq(
-        Def1_ForeignIncomeTaxCreditRelief(
+        ForeignIncomeTaxCreditRelief(
           "FRA",
           Some(540.32),
           204.78,
           false
         ))),
-    Some(Def1_ForeignTaxForFtcrNotClaimed(549.98))
+    Some(ForeignTaxForFtcrNotClaimed(549.98))
   )
 
   val json: JsValue = Json.parse(
@@ -61,7 +60,7 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        retrieveForeignReliefsBody shouldBe json.as[Def1_RetrieveForeignReliefsResponse]
+        retrieveForeignReliefsBody shouldBe json.as[RetrieveForeignReliefsResponse]
       }
     }
   }
@@ -75,7 +74,7 @@ class RetrieveForeignReliefsResponseSpec extends UnitSpec with MockAppConfig {
   }
 
   "error when JSON is invalid" in {
-    JsObject.empty.validate[Def1_RetrieveForeignReliefsResponse] shouldBe a[JsError]
+    JsObject.empty.validate[RetrieveForeignReliefsResponse] shouldBe a[JsError]
   }
 
 }

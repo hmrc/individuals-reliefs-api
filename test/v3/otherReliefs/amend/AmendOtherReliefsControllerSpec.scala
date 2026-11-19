@@ -26,7 +26,7 @@ import api.services.MockAuditService
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v3.otherReliefs.amend.def1.model.request.*
+import v3.otherReliefs.amend.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -86,7 +86,7 @@ class AmendOtherReliefsControllerSpec
                                          |  ]
                                          |}""".stripMargin)
 
-  private val requestBody = Def1_AmendOtherReliefsRequestBody(
+  private val requestBody = AmendOtherReliefsRequestBody(
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
     Some(PayrollGiving(Some("myref"), 154.00)),
     Some(QualifyingDistributionRedemptionOfSharesAndSecurities(Some("myref"), 222.22)),
@@ -104,7 +104,7 @@ class AmendOtherReliefsControllerSpec
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val requestData = Def1_AmendOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = AmendOtherReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBody)
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {
