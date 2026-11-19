@@ -17,7 +17,6 @@
 package v3.foreignReliefs.retrieve
 
 import api.controllers.validators.Validator
-import v3.foreignReliefs.retrieve.def1.model.response.Def1_RetrieveForeignReliefsValidator
 import v3.foreignReliefs.retrieve.model.request.RetrieveForeignReliefsRequestData
 
 import javax.inject.Singleton
@@ -25,12 +24,7 @@ import javax.inject.Singleton
 @Singleton
 class RetrieveForeignReliefsValidatorFactory {
 
-  def validator(nino: String, taxYear: String): Validator[RetrieveForeignReliefsRequestData] = {
-    taxYear match {
-      case _ => new Def1_RetrieveForeignReliefsValidator(nino, taxYear)
-
-    }
-
-  }
+  def validator(nino: String, taxYear: String): Validator[RetrieveForeignReliefsRequestData] =
+    new RetrieveForeignReliefsValidator(nino, taxYear)
 
 }

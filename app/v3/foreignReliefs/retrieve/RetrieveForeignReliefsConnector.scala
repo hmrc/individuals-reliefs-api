@@ -22,8 +22,8 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser.*
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v3.foreignReliefs.retrieve.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
-import v3.foreignReliefs.retrieve.model.response.{Def1_RetrieveForeignReliefsResponse, RetrieveForeignReliefsResponse}
+import v3.foreignReliefs.retrieve.model.request.RetrieveForeignReliefsRequestData
+import v3.foreignReliefs.retrieve.model.response.RetrieveForeignReliefsResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,31 +31,21 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveForeignReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  private def completeDef1Request(request: Def1_RetrieveForeignReliefsRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Def1_RetrieveForeignReliefsResponse]] = {
-
-    import request.*
-
-    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      IfsUri[Def1_RetrieveForeignReliefsResponse](s"income-tax/reliefs/foreign/${taxYear.asTysDownstream}/$nino")
-    } else {
-      IfsUri[Def1_RetrieveForeignReliefsResponse](s"income-tax/reliefs/foreign/$nino/${taxYear.asMtd}")
-    }
-
-    get(downstreamUri)
-
-  }
-
   def retrieve(request: RetrieveForeignReliefsRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveForeignReliefsResponse]] = {
 
-    request match {
-      case def1: Def1_RetrieveForeignReliefsRequestData => completeDef1Request(def1)
+    import request.*
+
+    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
+      IfsUri[RetrieveForeignReliefsResponse](s"income-tax/reliefs/foreign/${taxYear.asTysDownstream}/$nino")
+    } else {
+      IfsUri[RetrieveForeignReliefsResponse](s"income-tax/reliefs/foreign/$nino/${taxYear.asMtd}")
     }
+
+    get(downstreamUri)
+
   }
 
 }

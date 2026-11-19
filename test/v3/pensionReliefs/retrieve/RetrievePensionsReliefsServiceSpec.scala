@@ -22,8 +22,8 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
-import v3.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
+import v3.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
+import v3.pensionReliefs.retrieve.model.response.{PensionsReliefs, RetrievePensionsReliefsResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -34,7 +34,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
-  private val fullResponseModel = Def1_RetrievePensionsReliefsResponse(
+  private val fullResponseModel = RetrievePensionsReliefsResponse(
     Timestamp("2019-04-04T01:01:01.000Z"),
     PensionsReliefs(
       Some(1999.99),
@@ -45,7 +45,7 @@ class RetrievePensionsReliefsServiceSpec extends UnitSpec {
     )
   )
 
-  private val requestData = Def1_RetrievePensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = RetrievePensionsReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrievePensionsReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

@@ -18,7 +18,4 @@ package v3.otherReliefs.delete.model
 
 import api.models.domain.{Nino, TaxYear}
 
-trait DeleteOtherReliefsRequestData {
-  def nino: Nino
-  def taxYear: TaxYear
-}
+case class DeleteOtherReliefsRequestData(nino: Nino, taxYear: TaxYear)

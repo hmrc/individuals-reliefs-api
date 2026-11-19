@@ -22,9 +22,8 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.foreignReliefs.retrieve.def1.model.response.*
-import v3.foreignReliefs.retrieve.model.request.Def1_RetrieveForeignReliefsRequestData
-import v3.foreignReliefs.retrieve.model.response.Def1_RetrieveForeignReliefsResponse
+import v3.foreignReliefs.retrieve.model.request.RetrieveForeignReliefsRequestData
+import v3.foreignReliefs.retrieve.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -35,14 +34,14 @@ class RetrieveForeignReliefsServiceSpec extends UnitSpec {
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
-  private val responseModel = Def1_RetrieveForeignReliefsResponse(
+  private val responseModel = RetrieveForeignReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),
-    Some(Def1_ForeignTaxCreditRelief(234567.89)),
-    Some(Seq(Def1_ForeignIncomeTaxCreditRelief("FRA", Some(540.32), 204.78, false))),
-    Some(Def1_ForeignTaxForFtcrNotClaimed(549.98))
+    Some(ForeignTaxCreditRelief(234567.89)),
+    Some(Seq(ForeignIncomeTaxCreditRelief("FRA", Some(540.32), 204.78, false))),
+    Some(ForeignTaxForFtcrNotClaimed(549.98))
   )
 
-  private val requestData = Def1_RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

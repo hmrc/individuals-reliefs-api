@@ -37,14 +37,13 @@ class RetrieveOtherReliefsConnector @Inject() (val http: HttpClientV2, val appCo
       correlationId: String): Future[DownstreamOutcome[RetrieveOtherReliefsResponse]] = {
 
     import request.*
-    import schema.*
 
-    val url: DownstreamUri[DownstreamResp] =
+    val url: DownstreamUri[RetrieveOtherReliefsResponse] =
       if (taxYear.useTaxYearSpecificApi) {
-        IfsUri[DownstreamResp](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/$nino")
+        IfsUri[RetrieveOtherReliefsResponse](s"income-tax/reliefs/other/${taxYear.asTysDownstream}/$nino")
       } else {
         // Note: endpoint uses mtd tax year format
-        IfsUri[DownstreamResp](s"income-tax/reliefs/other/$nino/${taxYear.asMtd}")
+        IfsUri[RetrieveOtherReliefsResponse](s"income-tax/reliefs/other/$nino/${taxYear.asMtd}")
       }
 
     get(url)

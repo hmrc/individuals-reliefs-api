@@ -20,7 +20,7 @@ import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v3.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
+import v3.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -37,7 +37,7 @@ class DeleteOtherReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    lazy val request: Def1_DeleteOtherReliefsRequestData = Def1_DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+    lazy val request: DeleteOtherReliefsRequestData = DeleteOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
   }
 
   "DeleteOtherReliefsConnector" should {

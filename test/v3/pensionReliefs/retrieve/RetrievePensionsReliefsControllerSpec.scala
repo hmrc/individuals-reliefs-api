@@ -24,8 +24,8 @@ import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v3.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
-import v3.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
+import v3.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
+import v3.pensionReliefs.retrieve.model.response.{PensionsReliefs, RetrievePensionsReliefsResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,9 +38,9 @@ class RetrievePensionsReliefsControllerSpec
     with MockAppConfig {
 
   private val taxYear     = "2019-20"
-  private val requestData = Def1_RetrievePensionsReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
+  private val requestData = RetrievePensionsReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear))
 
-  private val responseBody = Def1_RetrievePensionsReliefsResponse(
+  private val responseBody = RetrievePensionsReliefsResponse(
     Timestamp("2019-04-04T01:01:01.000Z"),
     PensionsReliefs(
       Some(1999.99),

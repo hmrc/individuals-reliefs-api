@@ -27,7 +27,7 @@ import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v3.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.{requestBodyJson, requestBodyModel}
-import v3.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
+import v3.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,7 +42,7 @@ class CreateAndAmendForeignReliefsControllerSpec
 
   private val taxYear = "2019-20"
 
-  private val requestData = Def1_CreateAndAmendForeignReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = CreateAndAmendForeignReliefsRequestData(parsedNino, TaxYear.fromMtd(taxYear), requestBodyModel)
 
   "handleRequest" should {
     "return a successful response with status 204 (No Content)" when {

@@ -1,0 +1,83 @@
+/*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package v3.otherReliefs.retrieve.model.response
+
+import api.utils.UnitSpec
+import play.api.libs.json.*
+
+class NonDeductibleLoanInterestSpec extends UnitSpec {
+
+  val nonDeductibleLoanInterest: NonDeductibleLoanInterest = NonDeductibleLoanInterest(
+    Some("myref"),
+    763.00
+  )
+
+  val noRefNoneDeductibleLoanInterest: NonDeductibleLoanInterest = NonDeductibleLoanInterest(
+    None,
+    763.00
+  )
+
+  val json: JsValue = Json.parse(
+    """{
+      |        "customerReference": "myref",
+      |        "reliefClaimed": 763.00
+      |      }""".stripMargin
+  )
+
+  val noRefJson: JsValue = Json.parse(
+    """{
+      |        "reliefClaimed": 763.00
+      |      }""".stripMargin
+  )
+
+  "reads" when {
+    "passed valid JSON" should {
+      "return a valid model" in {
+        nonDeductibleLoanInterest shouldBe json.as[NonDeductibleLoanInterest]
+      }
+    }
+  }
+
+  "reads from a JSON with no reference" when {
+    "passed a JSON with no reference" should {
+      "return a model with no reference" in {
+        noRefNoneDeductibleLoanInterest shouldBe noRefJson.as[NonDeductibleLoanInterest]
+      }
+    }
+  }
+
+  "writes" when {
+    "passed valid model" should {
+      "return valid JSON" in {
+        Json.toJson(nonDeductibleLoanInterest) shouldBe json
+      }
+    }
+  }
+
+  "writes from a model with no reference" when {
+    "passed a model with no customer reference" should {
+      "return a JSON with no customer reference" in {
+        Json.toJson(noRefNoneDeductibleLoanInterest) shouldBe noRefJson
+      }
+    }
+  }
+
+  "error when JSON is invalid" in {
+    JsObject.empty.validate[NonDeductibleLoanInterest] shouldBe a[JsError]
+  }
+
+}

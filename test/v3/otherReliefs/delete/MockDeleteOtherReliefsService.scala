@@ -22,7 +22,7 @@ import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import v3.otherReliefs.delete.def1.Def1_DeleteOtherReliefsRequestData
+import v3.otherReliefs.delete.model.DeleteOtherReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,9 +32,9 @@ trait MockDeleteOtherReliefsService extends TestSuite with MockFactory {
 
   object MockDeleteService {
 
-    def delete(requestData: Def1_DeleteOtherReliefsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def delete(requestData: DeleteOtherReliefsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockDeleteOtherReliefsService
-        .delete(_: Def1_DeleteOtherReliefsRequestData)(_: RequestContext, _: ExecutionContext))
+        .delete(_: DeleteOtherReliefsRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
     }
 

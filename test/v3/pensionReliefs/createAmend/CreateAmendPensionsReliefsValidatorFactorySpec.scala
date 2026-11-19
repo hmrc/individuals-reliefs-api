@@ -20,7 +20,6 @@ import api.config.MockAppConfig
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
 import play.api.libs.json.{JsValue, Json}
-import v3.pensionReliefs.createAmend.def1.Def1_CreateAmendPensionsReliefsValidator
 
 class CreateAmendPensionsReliefsValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
@@ -43,7 +42,7 @@ class CreateAmendPensionsReliefsValidatorFactorySpec extends UnitSpec with JsonE
     "return the parsed domain object" when {
       "given a valid request" in {
         val result = validatorFactory.validator(validNino, validTaxYear, validRequestBody)
-        result shouldBe a[Def1_CreateAmendPensionsReliefsValidator]
+        result shouldBe a[CreateAmendPensionsReliefsValidator]
 
       }
     }
