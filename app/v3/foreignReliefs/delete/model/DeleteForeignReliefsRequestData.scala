@@ -18,6 +18,4 @@ package v3.foreignReliefs.delete.model
 
 import api.models.domain.{Nino, TaxYear}
 
-sealed trait DeleteForeignReliefsRequestData
-
-case class Def1_DeleteForeignReliefsRequestData(nino: Nino, taxYear: TaxYear) extends DeleteForeignReliefsRequestData
+case class DeleteForeignReliefsRequestData(nino: Nino, taxYear: TaxYear)

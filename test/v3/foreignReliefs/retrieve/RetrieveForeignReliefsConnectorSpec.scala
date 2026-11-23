@@ -20,8 +20,8 @@ import api.connectors.ConnectorSpec
 import api.models.domain.*
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v3.foreignReliefs.retrieve.model.request.{Def1_RetrieveForeignReliefsRequestData, RetrieveForeignReliefsRequestData}
-import v3.foreignReliefs.retrieve.model.response.Def1_RetrieveForeignReliefsResponse
+import v3.foreignReliefs.retrieve.model.request.RetrieveForeignReliefsRequestData
+import v3.foreignReliefs.retrieve.model.response.RetrieveForeignReliefsResponse
 
 import scala.concurrent.Future
 
@@ -37,9 +37,9 @@ class RetrieveForeignReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    lazy val request: RetrieveForeignReliefsRequestData = new Def1_RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+    lazy val request: RetrieveForeignReliefsRequestData = new RetrieveForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
-    val response = Def1_RetrieveForeignReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None)
+    val response = RetrieveForeignReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), None, None, None)
 
   }
 

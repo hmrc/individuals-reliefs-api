@@ -20,7 +20,7 @@ import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v3.foreignReliefs.delete.model.Def1_DeleteForeignReliefsRequestData
+import v3.foreignReliefs.delete.model.DeleteForeignReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -61,7 +61,7 @@ class DeleteForeignReliefsConnectorSpec extends ConnectorSpec {
   trait Test extends ConnectorTest {
 
     def taxYear: TaxYear
-    val request: Def1_DeleteForeignReliefsRequestData = Def1_DeleteForeignReliefsRequestData(nino, taxYear)
+    val request: DeleteForeignReliefsRequestData = DeleteForeignReliefsRequestData(nino, taxYear)
 
     val connector: DeleteForeignReliefsConnector = new DeleteForeignReliefsConnector(
       http = mockHttpClient,

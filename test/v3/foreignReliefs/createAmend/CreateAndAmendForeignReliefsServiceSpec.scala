@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.requestBodyModel
-import v3.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
+import v3.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -34,7 +34,7 @@ class CreateAndAmendForeignReliefsServiceSpec extends UnitSpec {
   private val nino                           = Nino("AA123456A")
   private implicit val correlationId: String = "X-123"
 
-  private val requestData = Def1_CreateAndAmendForeignReliefsRequestData(nino, TaxYear.fromMtd(taxYear), requestBodyModel)
+  private val requestData = CreateAndAmendForeignReliefsRequestData(nino, TaxYear.fromMtd(taxYear), requestBodyModel)
 
   trait Test extends MockCreateAndAmendForeignReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

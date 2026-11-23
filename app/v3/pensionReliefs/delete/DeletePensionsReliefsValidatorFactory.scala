@@ -17,19 +17,11 @@
 package v3.pensionReliefs.delete
 
 import api.controllers.validators.Validator
-import v3.pensionReliefs.delete.DeletePensionsReliefsSchema.Def1
-import v3.pensionReliefs.delete.def1.Def1_DeletePensionsReliefsValidator
 import v3.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
 class DeletePensionsReliefsValidatorFactory {
 
-  def validator(nino: String, taxYear: String): Validator[DeletePensionsReliefsRequestData] = {
-
-    val schema = DeletePensionsReliefsSchema.schema
-
-    schema match {
-      case Def1 => new Def1_DeletePensionsReliefsValidator(nino, taxYear)
-    }
-  }
+  def validator(nino: String, taxYear: String): Validator[DeletePensionsReliefsRequestData] =
+    DeletePensionsReliefsValidator(nino, taxYear)
 
 }

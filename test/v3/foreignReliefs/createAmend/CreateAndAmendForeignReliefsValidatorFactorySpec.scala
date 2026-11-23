@@ -19,7 +19,6 @@ package v3.foreignReliefs.createAmend
 import api.controllers.validators.Validator
 import api.utils.UnitSpec
 import play.api.libs.json.JsObject
-import v3.foreignReliefs.createAmend.def1.Def1_CreateAndAmendForeignReliefsValidator
 import v3.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 
 class CreateAndAmendForeignReliefsValidatorFactorySpec extends UnitSpec {
@@ -32,16 +31,16 @@ class CreateAndAmendForeignReliefsValidatorFactorySpec extends UnitSpec {
   private val validatorFactory = new CreateAndAmendForeignReliefsValidatorFactory
 
   "validator" should {
-    "return the Def1 validator" when {
+    "return the validator" when {
       "given a valid request" in {
         val result: Validator[CreateAndAmendForeignReliefsRequestData] = validatorFactory.validator(validNino, validTaxYear, emptyBody)
-        result shouldBe a[Def1_CreateAndAmendForeignReliefsValidator]
+        result shouldBe a[CreateAndAmendForeignReliefsValidator]
 
       }
 
       "given a valid taxYear" in {
         val result: Validator[CreateAndAmendForeignReliefsRequestData] = validatorFactory.validator(validNino, invalidTaxYear, emptyBody)
-        result shouldBe a[Def1_CreateAndAmendForeignReliefsValidator]
+        result shouldBe a[CreateAndAmendForeignReliefsValidator]
 
       }
     }

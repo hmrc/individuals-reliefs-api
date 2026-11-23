@@ -22,7 +22,7 @@ import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import v3.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
+import v3.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,10 +32,9 @@ trait MockCreateAndAmendForeignReliefsService extends TestSuite with MockFactory
 
   object MockCreateAndAmendForeignReliefsService {
 
-    def createAndAmend(
-        requestData: Def1_CreateAndAmendForeignReliefsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+    def createAndAmend(requestData: CreateAndAmendForeignReliefsRequestData): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockService
-        .createAndAmend(_: Def1_CreateAndAmendForeignReliefsRequestData)(_: RequestContext, _: ExecutionContext))
+        .createAndAmend(_: CreateAndAmendForeignReliefsRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
     }
 

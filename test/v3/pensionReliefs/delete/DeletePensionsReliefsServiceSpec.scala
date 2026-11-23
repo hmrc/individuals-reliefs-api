@@ -22,7 +22,6 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
 import v3.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,7 +33,7 @@ class DeletePensionsReliefsServiceSpec extends UnitSpec {
   private val validNino              = Nino("AA123456A")
   private val validTaxYear           = TaxYear.fromMtd("2019-20")
 
-  protected val requestData: DeletePensionsReliefsRequestData = Def1_DeletePensionsReliefsRequestData(validNino, validTaxYear)
+  protected val requestData: DeletePensionsReliefsRequestData = DeletePensionsReliefsRequestData(validNino, validTaxYear)
 
   trait Test extends MockDeletePensionsReliefsConnector {
     implicit protected val hc: HeaderCarrier              = HeaderCarrier()

@@ -22,7 +22,6 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser.*
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v3.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
 import v3.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -44,12 +43,7 @@ class CreateAndAmendForeignReliefsConnector @Inject() (val http: HttpClientV2, v
       IfsUri[Unit](s"income-tax/reliefs/foreign/$nino/${taxYear.asMtd}")
     }
 
-    request.asInstanceOf[Def1_CreateAndAmendForeignReliefsRequestData] match {
-      case def1: Def1_CreateAndAmendForeignReliefsRequestData =>
-        import def1.*
-
-        put(body, url)
-    }
+    put(body, url)
 
   }
 

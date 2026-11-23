@@ -18,8 +18,4 @@ package v3.otherReliefs.amend.model.request
 
 import api.models.domain.{Nino, TaxYear}
 
-trait AmendOtherReliefsRequestData {
-  val nino: Nino
-  val taxYear: TaxYear
-  val body: AmendOtherReliefsBody
-}
+case class AmendOtherReliefsRequestData(nino: Nino, taxYear: TaxYear, body: AmendOtherReliefsRequestBody)

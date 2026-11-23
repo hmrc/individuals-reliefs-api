@@ -20,7 +20,7 @@ import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v3.otherReliefs.amend.def1.model.request.{Def1_AmendOtherReliefsRequestBody, Def1_AmendOtherReliefsRequestData}
+import v3.otherReliefs.amend.model.request.{AmendOtherReliefsRequestBody, AmendOtherReliefsRequestData}
 
 import scala.concurrent.Future
 
@@ -30,7 +30,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new IfsTest with Test {
-        val request: Def1_AmendOtherReliefsRequestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2017-18"), body)
+        val request: AmendOtherReliefsRequestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2017-18"), body)
 
         willPut(url = url"$baseUrl/income-tax/reliefs/other/$nino/2017-18", body = body)
           .returns(Future.successful(outcome))
@@ -41,7 +41,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
     "return the expected response for a TYS request" when {
       "a valid request is made" in new IfsTest with Test {
-        val request: Def1_AmendOtherReliefsRequestData = Def1_AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"), body)
+        val request: AmendOtherReliefsRequestData = AmendOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd("2023-24"), body)
 
         willPut(url = url"$baseUrl/income-tax/reliefs/other/23-24/$nino", body = body)
           .returns(Future.successful(outcome))
@@ -61,7 +61,7 @@ class AmendOtherReliefsConnectorSpec extends ConnectorSpec {
 
     val nino: String = "ZG903729C"
 
-    val body: Def1_AmendOtherReliefsRequestBody = Def1_AmendOtherReliefsRequestBody(None, None, None, None, None, None, None)
+    val body: AmendOtherReliefsRequestBody = AmendOtherReliefsRequestBody(None, None, None, None, None, None, None)
 
     protected val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 

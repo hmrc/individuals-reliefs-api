@@ -21,7 +21,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v3.foreignReliefs.createAmend.CreateAndAmendForeignReliefsFixtures.requestBodyModel
-import v3.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
+import v3.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 
 import scala.concurrent.Future
 
@@ -71,8 +71,8 @@ class CreateAndAmendForeignReliefsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    lazy val request: Def1_CreateAndAmendForeignReliefsRequestData =
-      def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
+    lazy val request: CreateAndAmendForeignReliefsRequestData =
+      CreateAndAmendForeignReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBodyModel)
 
   }
 

@@ -17,8 +17,6 @@
 package v3.pensionReliefs.retrieve
 
 import api.controllers.validators.Validator
-import v3.pensionReliefs.retrieve.RetrievePensionsReliefsSchema.Def1
-import v3.pensionReliefs.retrieve.def1.Def1_RetrievePensionsReliefsValidator
 import v3.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -26,14 +24,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrievePensionsReliefsValidatorFactory @Inject() {
 
-  def validator(nino: String, taxYear: String): Validator[RetrievePensionsReliefsRequestData] = {
-
-    val schema = RetrievePensionsReliefsSchema.schema
-
-    schema match {
-      case Def1 => new Def1_RetrievePensionsReliefsValidator(nino, taxYear)
-    }
-
-  }
+  def validator(nino: String, taxYear: String): Validator[RetrievePensionsReliefsRequestData] =
+    RetrievePensionsReliefsValidator(nino, taxYear)
 
 }

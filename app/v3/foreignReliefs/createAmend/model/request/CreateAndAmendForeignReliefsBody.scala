@@ -16,4 +16,12 @@
 
 package v3.foreignReliefs.createAmend.model.request
 
-trait CreateAndAmendForeignReliefsBody
+import play.api.libs.json.{Json, OFormat}
+
+case class CreateAndAmendForeignReliefsBody(foreignTaxCreditRelief: Option[ForeignTaxCreditRelief],
+                                            foreignIncomeTaxCreditRelief: Option[Seq[ForeignIncomeTaxCreditRelief]],
+                                            foreignTaxForFtcrNotClaimed: Option[ForeignTaxForFtcrNotClaimed])
+
+object CreateAndAmendForeignReliefsBody {
+  implicit val format: OFormat[CreateAndAmendForeignReliefsBody] = Json.format[CreateAndAmendForeignReliefsBody]
+}

@@ -16,16 +16,34 @@
 
 package v3.otherReliefs.retrieve.model.response
 
-import api.utils.JsonWritesUtil.writesFrom
-import play.api.libs.json.OWrites
-import v3.otherReliefs.retrieve.def1.model.response.Def1_RetrieveOtherReliefsResponse
+import api.models.domain.Timestamp
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
-trait RetrieveOtherReliefsResponse
+case class RetrieveOtherReliefsResponse(
+    submittedOn: Timestamp,
+    nonDeductibleLoanInterest: Option[NonDeductibleLoanInterest],
+    payrollGiving: Option[PayrollGiving],
+    qualifyingDistributionRedemptionOfSharesAndSecurities: Option[QualifyingDistributionRedemptionOfSharesAndSecurities],
+    maintenancePayments: Option[Seq[MaintenancePayments]],
+    postCessationTradeReliefAndCertainOtherLosses: Option[Seq[PostCessationTradeReliefAndCertainOtherLosses]],
+    annualPaymentsMade: Option[AnnualPaymentsMade],
+    qualifyingLoanInterestPayments: Option[Seq[QualifyingLoanInterestPayments]]
+)
 
 object RetrieveOtherReliefsResponse {
 
-  implicit val writes: OWrites[RetrieveOtherReliefsResponse] = writesFrom { case def1: Def1_RetrieveOtherReliefsResponse =>
-    implicitly[OWrites[Def1_RetrieveOtherReliefsResponse]].writes(def1)
-  }
+  implicit val reads: Reads[RetrieveOtherReliefsResponse] = (
+    (JsPath \ "submittedOn").read[Timestamp] and
+      (JsPath \ "nonDeductableLoanInterest").readNullable[NonDeductibleLoanInterest] and
+      (JsPath \ "payrollGiving").readNullable[PayrollGiving] and
+      (JsPath \ "qualifyingDistributionRedemptionOfSharesAndSecurities").readNullable[QualifyingDistributionRedemptionOfSharesAndSecurities] and
+      (JsPath \ "maintenancePayments").readNullable[Seq[MaintenancePayments]] and
+      (JsPath \ "postCessationTradeReliefAndCertainOtherLosses").readNullable[Seq[PostCessationTradeReliefAndCertainOtherLosses]] and
+      (JsPath \ "annualPaymentsMade").readNullable[AnnualPaymentsMade] and
+      (JsPath \ "qualifyingLoanInterestPayments").readNullable[Seq[QualifyingLoanInterestPayments]]
+  )(RetrieveOtherReliefsResponse.apply)
+
+  implicit val writes: OWrites[RetrieveOtherReliefsResponse] = Json.writes[RetrieveOtherReliefsResponse]
 
 }

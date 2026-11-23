@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.foreignReliefs.createAmend.def1.model.request.Def1_CreateAndAmendForeignReliefsRequestData
+import v3.foreignReliefs.createAmend.model.request.CreateAndAmendForeignReliefsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,9 +31,9 @@ trait MockCreateAndAmendForeignReliefsConnector extends TestSuite with MockFacto
 
   object MockCreateAndAmendForeignReliefsConnector {
 
-    def createAndAmend(requestData: Def1_CreateAndAmendForeignReliefsRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+    def createAndAmend(requestData: CreateAndAmendForeignReliefsRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockCreateAndAmendForeignReliefsConnector
-        .createAndAmend(_: Def1_CreateAndAmendForeignReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .createAndAmend(_: CreateAndAmendForeignReliefsRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
 

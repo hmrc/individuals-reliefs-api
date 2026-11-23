@@ -20,10 +20,9 @@ import api.config.AppConfig
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.*
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v3.foreignReliefs.delete.model.{Def1_DeleteForeignReliefsRequestData, DeleteForeignReliefsRequestData}
+import v3.foreignReliefs.delete.model.DeleteForeignReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,10 +30,12 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeleteForeignReliefsConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  private def completeRequest(nino: Nino, taxYear: TaxYear)(implicit
+  def delete(request: DeleteForeignReliefsRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      correlationId: String): Future[DownstreamOutcome[Unit]] =
+
+    import request.*
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
       IfsUri[Unit](s"income-tax/reliefs/foreign/${taxYear.asTysDownstream}/$nino")
@@ -45,16 +46,5 @@ class DeleteForeignReliefsConnector @Inject() (val http: HttpClientV2, val appCo
     delete(
       downstreamUri
     )
-  }
-
-  def delete(request: DeleteForeignReliefsRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] =
-    request match {
-      case def1: Def1_DeleteForeignReliefsRequestData =>
-        import def1.*
-        completeRequest(nino, taxYear)
-    }
 
 }

@@ -17,11 +17,11 @@
 package v3.foreignReliefs.createAmend
 
 import play.api.libs.json.{JsValue, Json}
-import v3.foreignReliefs.createAmend.def1.model.request.*
+import v3.foreignReliefs.createAmend.model.request.*
 
 object CreateAndAmendForeignReliefsFixtures {
 
-  val foreignTaxCreditReliefModel: Def1_ForeignTaxCreditRelief = Def1_ForeignTaxCreditRelief(
+  val foreignTaxCreditReliefModel: ForeignTaxCreditRelief = ForeignTaxCreditRelief(
     amount = 1000.99
   )
 
@@ -33,7 +33,7 @@ object CreateAndAmendForeignReliefsFixtures {
        |""".stripMargin
   )
 
-  val foreignIncomeTaxCreditReliefModel: Def1_ForeignIncomeTaxCreditRelief = Def1_ForeignIncomeTaxCreditRelief(
+  val foreignIncomeTaxCreditReliefModel: ForeignIncomeTaxCreditRelief = ForeignIncomeTaxCreditRelief(
     countryCode = "FRA",
     foreignTaxPaid = Some(1000.99),
     taxableAmount = 2000.99,
@@ -51,7 +51,7 @@ object CreateAndAmendForeignReliefsFixtures {
        |""".stripMargin
   )
 
-  val foreignTaxForFtcrNotClaimedModel: Def1_ForeignTaxForFtcrNotClaimed = Def1_ForeignTaxForFtcrNotClaimed(
+  val foreignTaxForFtcrNotClaimedModel: ForeignTaxForFtcrNotClaimed = ForeignTaxForFtcrNotClaimed(
     amount = 1000.99
   )
 
@@ -63,7 +63,7 @@ object CreateAndAmendForeignReliefsFixtures {
        |""".stripMargin
   )
 
-  val requestBodyModel: Def1_CreateAndAmendForeignReliefsBody = Def1_CreateAndAmendForeignReliefsBody(
+  val requestBodyModel: CreateAndAmendForeignReliefsBody = CreateAndAmendForeignReliefsBody(
     foreignTaxCreditRelief = Some(foreignTaxCreditReliefModel),
     foreignIncomeTaxCreditRelief = Some(Seq(foreignIncomeTaxCreditReliefModel)),
     foreignTaxForFtcrNotClaimed = Some(foreignTaxForFtcrNotClaimedModel)

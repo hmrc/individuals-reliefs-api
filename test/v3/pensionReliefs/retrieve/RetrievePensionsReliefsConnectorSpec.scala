@@ -20,9 +20,8 @@ import api.connectors.ConnectorSpec
 import api.models.domain.*
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v3.pensionReliefs.retrieve.def1.model.request.Def1_RetrievePensionsReliefsRequestData
-import v3.pensionReliefs.retrieve.def1.model.response.{Def1_RetrievePensionsReliefsResponse, PensionsReliefs}
 import v3.pensionReliefs.retrieve.model.request.RetrievePensionsReliefsRequestData
+import v3.pensionReliefs.retrieve.model.response.{PensionsReliefs, RetrievePensionsReliefsResponse}
 
 import scala.concurrent.Future
 
@@ -41,13 +40,13 @@ class RetrievePensionsReliefsConnectorSpec extends ConnectorSpec {
     )
 
     protected val request: RetrievePensionsReliefsRequestData =
-      Def1_RetrievePensionsReliefsRequestData(
+      RetrievePensionsReliefsRequestData(
         nino = Nino(nino),
         taxYear = taxYear
       )
 
     val response =
-      Def1_RetrievePensionsReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), PensionsReliefs(None, None, None, None, None))
+      RetrievePensionsReliefsResponse(submittedOn = Timestamp("2021-01-02T01:20:30.000Z"), PensionsReliefs(None, None, None, None, None))
 
   }
 

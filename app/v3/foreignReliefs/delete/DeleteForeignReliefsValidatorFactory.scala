@@ -17,7 +17,6 @@
 package v3.foreignReliefs.delete
 
 import api.controllers.validators.Validator
-import v3.foreignReliefs.delete.def1.Def1_DeleteForeignReliefsValidator
 import v3.foreignReliefs.delete.model.DeleteForeignReliefsRequestData
 
 import javax.inject.Singleton
@@ -25,11 +24,7 @@ import javax.inject.Singleton
 @Singleton
 class DeleteForeignReliefsValidatorFactory {
 
-  def validator(nino: String, taxYear: String): Validator[DeleteForeignReliefsRequestData] = {
-
-    taxYear match {
-      case _ => new Def1_DeleteForeignReliefsValidator(nino, taxYear)
-    }
-  }
+  def validator(nino: String, taxYear: String): Validator[DeleteForeignReliefsRequestData] =
+    DeleteForeignReliefsValidator(nino, taxYear)
 
 }

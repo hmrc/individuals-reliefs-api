@@ -22,8 +22,8 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.otherReliefs.retrieve.def1.model.request.Def1_RetrieveOtherReliefsRequestData
-import v3.otherReliefs.retrieve.def1.model.response.*
+import v3.otherReliefs.retrieve.model.request.RetrieveOtherReliefsRequestData
+import v3.otherReliefs.retrieve.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -34,7 +34,7 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
   private val taxYear: String        = "2017-18"
   implicit val correlationId: String = "X-123"
 
-  private val fullResponseModel = Def1_RetrieveOtherReliefsResponse(
+  private val fullResponseModel = RetrieveOtherReliefsResponse(
     Timestamp("2020-06-17T10:53:38.000Z"),
     Some(NonDeductibleLoanInterest(Some("myref"), 763.00)),
     Some(PayrollGiving(Some("myref"), 154.00)),
@@ -53,7 +53,7 @@ class RetrieveOtherReliefsServiceSpec extends UnitSpec {
     Some(Seq(QualifyingLoanInterestPayments(Some("myref"), Some("Maurice"), 763.00)))
   )
 
-  private val requestData = Def1_RetrieveOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = RetrieveOtherReliefsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockRetrieveOtherReliefsConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

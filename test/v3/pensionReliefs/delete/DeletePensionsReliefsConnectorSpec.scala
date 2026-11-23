@@ -20,7 +20,6 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v3.pensionReliefs.delete.def1.model.request.Def1_DeletePensionsReliefsRequestData
 import v3.pensionReliefs.delete.model.request.DeletePensionsReliefsRequestData
 
 import scala.concurrent.Future
@@ -39,7 +38,7 @@ class DeletePensionsReliefsConnectorSpec extends ConnectorSpec {
       )
 
     protected val request: DeletePensionsReliefsRequestData =
-      Def1_DeletePensionsReliefsRequestData(nino = nino, taxYear = taxYear)
+      DeletePensionsReliefsRequestData(nino = nino, taxYear = taxYear)
 
   }
 

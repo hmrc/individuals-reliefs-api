@@ -18,8 +18,6 @@ package v3.pensionReliefs.createAmend
 
 import api.controllers.validators.Validator
 import play.api.libs.json.JsValue
-import v3.pensionReliefs.createAmend.CreateAmendPensionsReliefsSchema.Def1
-import v3.pensionReliefs.createAmend.def1.Def1_CreateAmendPensionsReliefsValidator
 import v3.pensionReliefs.createAmend.model.request.CreateAmendPensionsReliefsRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -27,11 +25,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class CreateAmendPensionsReliefsValidatorFactory @Inject() {
 
-  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendPensionsReliefsRequestData] = {
-    val schema = CreateAmendPensionsReliefsSchema.schema
-    schema match {
-      case Def1 => new Def1_CreateAmendPensionsReliefsValidator(nino, taxYear, body)
-    }
-  }
+  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendPensionsReliefsRequestData] =
+    CreateAmendPensionsReliefsValidator(nino, taxYear, body)
 
 }

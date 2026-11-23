@@ -17,7 +17,6 @@
 package v3.otherReliefs.retrieve
 
 import api.utils.UnitSpec
-import v3.otherReliefs.retrieve.def1.model.Def1_RetrieveOtherReliefsValidator
 
 class RetrieveOtherReliefsValidatorFactorySpec extends UnitSpec {
 
@@ -28,15 +27,15 @@ class RetrieveOtherReliefsValidatorFactorySpec extends UnitSpec {
   private val validatorFactory = new RetrieveOtherReliefsValidatorFactory
 
   "validator" should {
-    "return the Def1 validator" when {
+    "return the validator" when {
       "given any valid request" in {
         val result = validatorFactory.validator(validNino, validTaxYear)
-        result shouldBe a[Def1_RetrieveOtherReliefsValidator]
+        result shouldBe a[RetrieveOtherReliefsValidator]
       }
 
       "given any invalid tax year" in {
         val result = validatorFactory.validator(validNino, invalidTaxYear)
-        result shouldBe a[Def1_RetrieveOtherReliefsValidator]
+        result shouldBe a[RetrieveOtherReliefsValidator]
       }
     }
   }

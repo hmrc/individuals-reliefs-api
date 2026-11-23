@@ -1,0 +1,167 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package v3.otherReliefs.amend
+
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.*
+import api.models.errors.*
+import cats.data.Validated
+import cats.data.Validated.{Invalid, Valid}
+import cats.implicits.toFoldableOps
+import v3.otherReliefs.amend.model.request.*
+
+import java.time.LocalDate
+
+object AmendOtherReliefsRulesValidator extends RulesValidator[AmendOtherReliefsRequestData] {
+
+  private val resolveParsedNumber = ResolveParsedNumber()
+
+  private val customerReferenceRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
+  private val commonStringRegex      = "^.{1,105}$".r
+
+  private val minYear = 1900
+  private val maxYear = 2100
+
+  def validateBusinessRules(parsed: AmendOtherReliefsRequestData): Validated[Seq[MtdError], AmendOtherReliefsRequestData] = {
+    import parsed.body.*
+
+    combine(
+      nonDeductibleLoanInterest.traverse_(validateNonDeductibleLoanInterest),
+      payrollGiving.traverse_(validatePayrollGiving),
+      qualifyingDistributionRedemptionOfSharesAndSecurities.traverse_(validateQualifyingDistributionRedemptionOfSharesAndSecurities),
+      zipAndValidate(postCessationTradeReliefAndCertainOtherLosses, validatePostCessationTradeReliefAndCertainOtherLosses),
+      zipAndValidate(maintenancePayments, validateMaintenancePayments),
+      annualPaymentsMade.traverse_(validateAnnualPaymentsMade),
+      zipAndValidate(qualifyingLoanInterestPayments, validateQualifyingLoanInterestPayments)
+    ).onSuccess(parsed)
+  }
+
+  private def zipAndValidate[VALUE](maybeFields: Option[Seq[VALUE]],
+                                    validate: (VALUE, Int) => Validated[Seq[MtdError], Unit]): Validated[Seq[MtdError], Unit] =
+    maybeFields.traverse_(_.zipWithIndex.traverse_(validate.tupled))
+
+  private def validateNonDeductibleLoanInterest(nonDeductibleLoanInterest: NonDeductibleLoanInterest): Validated[Seq[MtdError], Unit] = {
+    import nonDeductibleLoanInterest.*
+
+    combine(
+      ResolveStringPattern(
+        customerReference,
+        customerReferenceRegex,
+        CustomerReferenceFormatError.withPath("/nonDeductibleLoanInterest/customerReference")),
+      resolveParsedNumber(reliefClaimed, "/nonDeductibleLoanInterest/reliefClaimed")
+    )
+  }
+
+  private def validatePayrollGiving(payrollGiving: PayrollGiving): Validated[Seq[MtdError], Unit] = {
+    import payrollGiving.*
+
+    combine(
+      ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath("/payrollGiving/customerReference")),
+      resolveParsedNumber(reliefClaimed, "/payrollGiving/reliefClaimed")
+    )
+  }
+
+  private def validateQualifyingDistributionRedemptionOfSharesAndSecurities(
+      qualifyingDistributionRedemptionOfSharesAndSecurities: QualifyingDistributionRedemptionOfSharesAndSecurities)
+      : Validated[Seq[MtdError], Unit] = {
+    import qualifyingDistributionRedemptionOfSharesAndSecurities.*
+
+    combine(
+      ResolveStringPattern(
+        customerReference,
+        customerReferenceRegex,
+        CustomerReferenceFormatError.withPath("/qualifyingDistributionRedemptionOfSharesAndSecurities/customerReference")
+      ),
+      resolveParsedNumber(amount, "/qualifyingDistributionRedemptionOfSharesAndSecurities/amount")
+    )
+  }
+
+  private def validatePostCessationTradeReliefAndCertainOtherLosses(
+      postCessationTradeReliefAndCertainOtherLosses: PostCessationTradeReliefAndCertainOtherLosses,
+      index: Int): Validated[Seq[MtdError], Unit] = {
+    import postCessationTradeReliefAndCertainOtherLosses.*
+    val dateBusinessCeasedPath = s"/postCessationTradeReliefAndCertainOtherLosses/$index/dateBusinessCeased"
+    combine(
+      ResolveStringPattern(
+        customerReference,
+        customerReferenceRegex,
+        CustomerReferenceFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/customerReference")
+      ),
+      ResolveStringPattern(
+        businessName,
+        commonStringRegex,
+        BusinessNameFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/businessName")),
+      dateBusinessCeased.traverse_(
+        ResolveIsoDate(_, DateFormatError.withPath(dateBusinessCeasedPath)).andThen(isDateInRange(_, dateBusinessCeasedPath))
+      ),
+      ResolveStringPattern(
+        natureOfTrade,
+        customerReferenceRegex,
+        NatureOfTradeFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/natureOfTrade")),
+      ResolveStringPattern(
+        incomeSource,
+        commonStringRegex,
+        IncomeSourceFormatError.withPath(s"/postCessationTradeReliefAndCertainOtherLosses/$index/incomeSource")),
+      resolveParsedNumber(amount, s"/postCessationTradeReliefAndCertainOtherLosses/$index/amount")
+    )
+  }
+
+  private def validateMaintenancePayments(maintenancePayments: MaintenancePayments, index: Int): Validated[Seq[MtdError], Unit] = {
+    import maintenancePayments.*
+
+    val exSpouseDateOfBirthPath = s"/maintenancePayments/$index/exSpouseDateOfBirth"
+    combine(
+      ResolveStringPattern(
+        customerReference,
+        customerReferenceRegex,
+        CustomerReferenceFormatError.withPath(s"/maintenancePayments/$index/customerReference")),
+      ResolveStringPattern(exSpouseName, commonStringRegex, ExSpouseNameFormatError.withPath(s"/maintenancePayments/$index/exSpouseName")),
+      exSpouseDateOfBirth.traverse_(
+        ResolveIsoDate(_, DateFormatError.withPath(exSpouseDateOfBirthPath)).andThen(isDateInRange(_, exSpouseDateOfBirthPath))
+      ),
+      resolveParsedNumber(amount, s"/maintenancePayments/$index/amount")
+    )
+  }
+
+  private def validateAnnualPaymentsMade(annualPaymentsMade: AnnualPaymentsMade): Validated[Seq[MtdError], Unit] = {
+    import annualPaymentsMade.*
+
+    combine(
+      ResolveStringPattern(customerReference, customerReferenceRegex, CustomerReferenceFormatError.withPath("/annualPaymentsMade/customerReference")),
+      resolveParsedNumber(reliefClaimed, "/annualPaymentsMade/reliefClaimed")
+    )
+  }
+
+  private def validateQualifyingLoanInterestPayments(qualifyingLoanInterestPayments: QualifyingLoanInterestPayments,
+                                                     index: Int): Validated[Seq[MtdError], Unit] = {
+    import qualifyingLoanInterestPayments.*
+
+    combine(
+      ResolveStringPattern(
+        customerReference,
+        customerReferenceRegex,
+        CustomerReferenceFormatError.withPath(s"/qualifyingLoanInterestPayments/$index/customerReference")),
+      ResolveStringPattern(lenderName, commonStringRegex, LenderNameFormatError.withPath(s"/qualifyingLoanInterestPayments/$index/lenderName")),
+      resolveParsedNumber(reliefClaimed, s"/qualifyingLoanInterestPayments/$index/reliefClaimed")
+    )
+  }
+
+  private def isDateInRange(date: LocalDate, path: String): Validated[Seq[MtdError], Unit] = {
+    if (date.getYear >= minYear && date.getYear < maxYear) Valid(()) else Invalid(List(DateFormatError.withPath(path)))
+  }
+
+}
